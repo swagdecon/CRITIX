@@ -1,8 +1,9 @@
 package com.popflix.repository;
-import org.springframework.data.repository.CrudRepository;
 import com.popflix.model.User;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface UserRepository extends CrudRepository<User, Long> {
- boolean existsByUsername(String username);
- User findByUsername(String username);
+import java.util.Optional;
+
+public interface UserRepository extends MongoRepository<User, String> {
+    Optional<User> findByUsername(String username);
 }
