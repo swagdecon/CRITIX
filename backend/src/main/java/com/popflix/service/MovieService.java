@@ -11,7 +11,6 @@ import com.popflix.repository.MovieRepository;
 @Service
 public class MovieService {
     @Autowired
-    private Movie movie;
     private MovieRepository movieRepository;
 
     public List<Movie> allMovies() {
