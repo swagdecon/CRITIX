@@ -1,6 +1,5 @@
 package com.popflix.model;
 
-import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -17,11 +16,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Movie {
     @Id
-    private ObjectId id;
+    private ObjectId mongo_id;
     private Boolean adult;
     private String backdrop_path;
     private List<Integer> genre_ids; 
-    private Integer tmdbId;
+    private Integer id;
     private String original_language;
     private String original_title;
     private String overview;
