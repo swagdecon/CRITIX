@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import static com.mongodb.client.model.Filters.eq;
 
 import org.bson.Document;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.net.HttpURLConnection;
 import java.net.URL;

@@ -18,9 +18,8 @@ public class MovieService {
         System.out.println(movieRepository.findAll().toString());
         return movieRepository.findAll();
     }
-
+    
     public Optional<Movie> singleMovie(Integer id) {
         return movieRepository.findMovieById(id);
     }
-    
 }
