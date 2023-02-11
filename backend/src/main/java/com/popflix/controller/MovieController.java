@@ -21,13 +21,23 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
-    @GetMapping
-    public ResponseEntity<List<Movie>> getAllMovies() {
-        return new ResponseEntity<List<Movie>>(movieService.allMovies(), HttpStatus.OK);
+    @GetMapping("/popular")
+    public ResponseEntity<List<Movie>> getPopularMovies() {
+        return new ResponseEntity<List<Movie>>(movieService.popularMovies("popular"), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<Movie>> getSingleMovie(@PathVariable Integer id) {
-        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(id), HttpStatus.OK);
+    @GetMapping("/upcoming")
+    public ResponseEntity<List<Movie>> getUpcomingMovies() {
+        return new ResponseEntity<List<Movie>>(movieService.upcomingMovies("upcoming_movies"), HttpStatus.OK);
     }
+
+    @GetMapping("/top_rated")
+    public ResponseEntity<List<Movie>> getTopRatedMovies() {
+        return new ResponseEntity<List<Movie>>(movieService.upcomingMovies("top_rated"), HttpStatus.OK);
+    }
+
+    // @GetMapping("/{id}")
+    // public ResponseEntity<Optional<Movie>> getSingleMovie(@PathVariable Integer id) {
+    //     return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(id), HttpStatus.OK);
+    // }
 }
