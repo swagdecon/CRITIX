@@ -10,26 +10,20 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.popflix.model.Movie;
-import com.popflix.repository.MovieRepository;
 
 @Service
 public class MovieService {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public List<Movie> upcomingMovies(String collectionName) {
-        Query query = new Query();
-        return mongoTemplate.find(query, Movie.class, collectionName);
-    }
-
-    public List<Movie> popularMovies(String collectionName) {
+    public List<Movie> allMovies(String collectionName) {
         Query query = new Query();
         return mongoTemplate.find(query, Movie.class, collectionName);
     }
     
-    // public Optional<Movie> singleMovie(Integer id, String collectionName) {
-    //     Query query = new Query();
-    //     query.addCriteria(Criteria.where("id").is(id));
-    //     return Optional.ofNullable(mongoTemplate.findOne(query, Movie.class, collectionName));
-    // }
+    public Optional<Movie> singleMovie(Integer id, String collectionName) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("id").is(id));
+        return Optional.ofNullable(mongoTemplate.findOne(query, Movie.class, collectionName));
+    }
 }
