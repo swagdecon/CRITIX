@@ -106,3 +106,4 @@ function Login() {
     </html>
   );
 }
+export default Login;

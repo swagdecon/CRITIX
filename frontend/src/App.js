@@ -1,26 +1,21 @@
 import React, { useState, useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
+import Login from "./components/login";
+import TopRated from "./components/top_rated";
+import NowPlaying from "./components/now_playing";
+import Popular from "./components/popular";
+import Upcoming from "./components/upcoming";
 
-const App = () => {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    // CHANGE THE ROUTE BASED ON THE CONTROLLER MAPPING:
-    fetch("/api/movies/top_rated")
-      .then((res) => res.json())
-      .then((res) => setData(res));
-  }, []);
-
+function App() {
   return (
-    <div>
-      {data.map((item) => (
-        <div key={item.id}>
-          {/* {item.id} */}
-          {item.title}
-          {/* {item.release_date} */}
-        </div>
-      ))}
-    </div>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/top_rated" element={<TopRated />} />
+      <Route path="/now_playing" element={<NowPlaying />} />
+      <Route path="/popular" element={<Popular />} />
+      <Route path="/upcoming" element={<Upcoming />} />
+    </Routes>
   );
-};
+}
 
 export default App;
