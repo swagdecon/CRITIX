@@ -37,7 +37,6 @@ public class AuthenticationService {
                                         .build();
                 } catch (MongoWriteException ex) {
                         throw new Exception("Error: Unable to save user. " + ex.getMessage());
-
                 }
         }
 

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 public class JwtService {
     Dotenv dotenv = Dotenv.load();
     private final String SECRET_KEY = dotenv.get("SECRET_KEY");
-
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
