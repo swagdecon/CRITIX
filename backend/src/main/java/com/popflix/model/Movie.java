@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document(collection = "upcoming_movies")
+@Document
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

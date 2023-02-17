@@ -11,5 +11,4 @@ import com.popflix.model.Movie;
 @Repository
 public interface MovieRepository extends MongoRepository<Movie, ObjectId> {
     Optional<Movie> findMovieById(Integer id);
-    
 }
