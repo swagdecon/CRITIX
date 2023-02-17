@@ -20,7 +20,7 @@ public class MovieService {
         Query query = new Query();
         return mongoTemplate.find(query, Movie.class, collectionName);
     }
-    
+
     public Optional<Movie> singleMovie(Integer id, String collectionName) {
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(id));

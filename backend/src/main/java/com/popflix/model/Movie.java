@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document
+@Document(collection = "upcoming_movies")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,7 +18,7 @@ public class Movie {
     private ObjectId mongo_id;
     private Boolean adult;
     private String backdrop_path;
-    private List<Integer> genre_ids; 
+    private List<Integer> genre_ids;
     private Integer id;
     private String original_language;
     private String original_title;
@@ -28,6 +28,6 @@ public class Movie {
     private String release_date;
     private String title;
     private Boolean video;
-    private Double vote_average; 
+    private Double vote_average;
     private Integer vote_count;
 }
