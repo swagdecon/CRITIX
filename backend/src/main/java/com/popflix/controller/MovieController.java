@@ -38,7 +38,7 @@ public class MovieController {
 
     @GetMapping("/upcoming/{id}")
     public ResponseEntity<Optional<Movie>> getUpcomingMovie(@PathVariable Integer id) {
-        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(id, "upcoming"), HttpStatus.OK);
+        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(id, "upcoming_movies"), HttpStatus.OK);
     }
 
     @GetMapping("/top_rated")
