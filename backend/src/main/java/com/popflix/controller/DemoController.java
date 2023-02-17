@@ -1,4 +1,4 @@
-package com.popflix.demo;
+package com.popflix.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

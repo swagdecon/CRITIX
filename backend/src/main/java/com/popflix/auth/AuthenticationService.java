@@ -3,13 +3,14 @@ package com.popflix.auth;
 import com.popflix.config.JwtService;
 import com.popflix.model.Role;
 import com.popflix.model.User;
-import com.popflix.model.UserRepository;
+import com.popflix.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +41,7 @@ public class AuthenticationService {
                                                 request.getEmail(),
                                                 request.getPassword()));
                 var user = repository.findByEmail(request.getEmail())
-                                .orElseThrow();
+                                .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
                 var jwtToken = jwtService.generateToken(user);
                 return AuthenticationResponse.builder()
                                 .token(jwtToken)
