@@ -1,5 +1,6 @@
 package com.popflix.config;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class JwtService {
     Dotenv dotenv = Dotenv.load();
-    private static final String SECRET_KEY = dotenv.get("SECRET_KEY");
+    private final String SECRET_KEY = dotenv.get("SECRET_KEY");
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
