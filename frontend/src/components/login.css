@@ -77,6 +77,12 @@ h6 {
 #right {
   flex: 1;
 }
+.homepage-logo {
+  margin-bottom: 10px;
+  position: relative;
+  height: 60px;
+  padding-bottom: 20px;
+}
 /* Button */
 .primary-btn {
   padding: 0.7rem 1rem;
@@ -92,6 +98,11 @@ h6 {
   text-align: center;
   transition: all 0.5s;
 }
+
+.hidden {
+  display: none;
+}
+
 .primary-btn:hover {
   background-color: #0096ff;
 }

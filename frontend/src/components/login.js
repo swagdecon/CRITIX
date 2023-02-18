@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import "./interface.css";
-
-function Login() {
+import "./login.css";
+import "./logo.scss";
+import Logo from "./logo.js";
+import Logo_Text from "./POPFLIX_LOGO_OFFICIAL.png";
+function Login(props) {
   const [showPassword, setShowPassword] = useState(false);
 
   const toggle = () => {
@@ -11,35 +13,36 @@ function Login() {
   return (
     <html lang="en">
       <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta charSet="UTF-8" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link
           rel="preload"
           href="https://www.youtube.com/embed/U3-iXA6H3Q0?start=155&autoplay=1&loop=1&mute=1&modestbranding=1&controls=0&autohide=1&vq=2160&playlist=U3-iXA6H3Q0"
           as="video"
         />
-        <link rel="stylesheet" href="/interface.css" />
+        <link rel="stylesheet" href="./login.css" />
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
         />
-        <link rel="icon" href="img/popflix_logo_2.png" />
+
         <title>Log in</title>
       </head>
       <body>
         <div id="wrapper">
           <div id="left">
             <div id="signin">
-              <div className="logo">
-                <img src="logo_black.png" alt="logo" />
+              <Logo />
+              <img src={Logo_Text} className="homepage-logo" alt="logo" />
+
+              <div className={props.error ? "alert alert-danger" : "hidden"}>
+                {props.error}
               </div>
-              <div className={param.error ? "alert alert-danger" : ""}>
-                Invalid username or password.
-              </div>
-              <div className={param.logout ? "alert alert-success" : ""}>
+              <div className={props.logout ? "alert alert-success" : "hidden"}>
                 Successfully logged out
               </div>
+
               <form action="/login" method="post">
                 <div>
                   <label htmlFor="username">Username</label>
@@ -93,6 +96,7 @@ function Login() {
                 <div className="wrapper">
                   <div className="frame-container">
                     <iframe
+                      title="LoginVideo"
                       src="https://www.youtube.com/embed/U3-iXA6H3Q0?start=155&end=232&autoplay=1&loop=1&mute=1&modestbranding=1&controls=0&autohide=1&vq=hd2160&playlist=U3-iXA6H3Q0"
                       frameborder="0"
                     ></iframe>
