@@ -3,6 +3,7 @@ import "../misc/login.css";
 import "../misc/logo.scss";
 import Logo from "./logo.js";
 import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
+import Popcorn from "../misc/popcorn_logo";
 // original login
 function SignUp(props) {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -85,9 +86,14 @@ function SignUp(props) {
                     ></i>
                   </span>
                 </div>
-                <button id="login" type="submit" className="primary-btn">
-                  Sign Up
-                </button>
+                <div class="css-button">
+                  <p class="css-button-text">SIGN UP</p>
+                  <div class="css-button-inner">
+                    <div class="reset-skew">
+                      <Popcorn class="css-button-inner-text"></Popcorn>
+                    </div>
+                  </div>
+                </div>
               </form>
               {/* REDIRECT TO LOG IN PAGE */}
               <div className="or">

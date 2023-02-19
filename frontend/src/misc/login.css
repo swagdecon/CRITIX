@@ -83,29 +83,120 @@ h6 {
   height: 60px;
   padding-bottom: 20px;
 }
-/* Button */
-.primary-btn {
-  padding: 0.7rem 1rem;
+
+.css-button {
+  border: 1px solid #0096ff;
   height: 2.7rem;
   display: block;
-  border: 0;
-  border-radius: 2px;
+  width: 218px;
   font-weight: 500;
-  background: #0096ff;
-  color: white;
-  text-decoration: none;
-  cursor: pointer;
+  position: relative;
+  margin: auto;
   text-align: center;
-  transition: all 0.5s;
+  overflow: hidden;
+  cursor: pointer;
+  color: #fff;
 }
 
+p.css-button-text {
+  width: 100%;
+  margin-top: 5%;
+  position: absolute;
+}
+
+.css-button-inner {
+  height: 70px;
+  width: 265px;
+  position: relative;
+  left: -4px;
+  top: -20px;
+  border: 1px solid #0096ff;
+  background-color: #0096ff;
+  text-align: center;
+  -webkit-transform: skew(-42deg) translate(300px, 0);
+  -moz-transform: skew(-42deg) translate(300px, 0);
+  -o-transform: skew(-42deg) translate(300px, 0);
+  transform: skew(-42deg) translate(300px, 0);
+  -webkit-animation-name: buttonx-out;
+  -webkit-animation-duration: 0.7s;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  -moz-animation-name: buttonx-out;
+  -moz-animation-duration: 0.7s;
+  -moz-animation-iteration-count: 1;
+  -moz-animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  animation-name: buttonx-out;
+  animation-duration: 0.7s;
+  animation-iteration-count: 1;
+  animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.reset-skew {
+  -moz-transform: skew(40deg);
+  -o-transform: skew(40deg);
+  transform: skew(40deg);
+}
+
+.css-button:hover > .css-button-inner {
+  -webkit-animation-name: buttonx-in;
+  -webkit-animation-duration: 0.6s;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  -moz-animation-name: buttonx-in;
+  -moz-animation-duration: 0.6s;
+  -moz-animation-iteration-count: 1;
+  -moz-animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  animation-name: buttonx-in;
+  animation-duration: 0.6s;
+  animation-iteration-count: 1;
+  animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  -moz-transform: skew(-42deg) translate(-20px, -0px);
+  -o-transform: skew(-42deg) translate(-20px, -0px);
+  transform: skew(-42deg) translate(-20px, -0px);
+}
+
+@keyframes buttonx-in {
+  from {
+    transform: skew(-42deg) translate(-300px, 0);
+  }
+  to {
+    transform: skew(-42deg) translate(-20px, -0px);
+  }
+}
+
+@keyframes buttonx-out {
+  from {
+    transform: skew(-42deg) translate(0, 0);
+  }
+  to {
+    transform: skew(-42deg) translate(300px, -0px);
+  }
+}
+
+@-webkit-keyframes buttonx-in {
+  from {
+    transform: skew(-42deg) translate(-300px, 0);
+  }
+  to {
+    transform: skew(-42deg) translate(-20px, -0px);
+  }
+}
+
+@-webkit-keyframes buttonx-out {
+  from {
+    transform: skew(-42deg) translate(0, 0);
+  }
+  to {
+    transform: skew(-42deg) translate(300px, -0px);
+  }
+}
 .hidden {
   display: none;
 }
 
-.primary-btn:hover {
+/* .primary-btn:hover {
   background-color: #0096ff;
-}
+} */
 .secondary-btn {
   padding: 0.7rem 1rem;
   height: 2.7rem;

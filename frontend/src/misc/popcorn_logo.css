@@ -1,0 +1,33 @@
+.mypopcorn {
+  padding: 25px;
+}
+.popcorn {
+  margin: auto;
+  position: absolute;
+  width: 85px;
+  overflow: hidden;
+  top: 60%;
+  right: 42%;
+}
+
+circle#popcrncirlce {
+  fill: #ffe477;
+  transform-origin: 0 0;
+  -webkit-transform-origin: 0 0;
+  -webkit-animation: rotate 1.5s cubic-bezier(0.49, 0.05, 0.32, 1.04) infinite
+    alternate;
+  animation: rotate2 1.5s cubic-bezier(0.49, 0.05, 0.32, 1.04) infinite
+    alternate;
+}
+
+@-webkit-keyframes rotate2 {
+  50% {
+    -webkit-transform: translate(0px, 100px);
+  }
+}
+
+@keyframes rotate2 {
+  50% {
+    transform: translate(0px, 100px);
+  }
+}
