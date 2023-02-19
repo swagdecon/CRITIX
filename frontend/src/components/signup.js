@@ -3,8 +3,8 @@ import "../misc/login.css";
 import "../misc/logo.scss";
 import Logo from "./logo.js";
 import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
-
-function Login(props) {
+// original login
+function SignUp(props) {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   function togglePasswordVisibility() {
@@ -28,7 +28,7 @@ function Login(props) {
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
         />
 
-        <title>Log in</title>
+        <title>Sign Up</title>
       </head>
       <body>
         <div id="wrapper">
@@ -44,7 +44,18 @@ function Login(props) {
                 Successfully logged out
               </div>
 
-              <form action="/login" method="post">
+              <form action="/users" method="post">
+                <div>
+                  <label htmlFor="email">Email Address</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    className="text-input"
+                    pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+                    required
+                  />
+                </div>
                 <div>
                   <label htmlFor="username">Username</label>
                   <input
@@ -75,16 +86,17 @@ function Login(props) {
                   </span>
                 </div>
                 <button id="login" type="submit" className="primary-btn">
-                  Log in
+                  Sign Up
                 </button>
               </form>
+              {/* REDIRECT TO LOG IN PAGE */}
               <div className="or">
                 <hr className="bar" />
                 <span>OR</span>
                 <hr className="bar" />
               </div>
-              <a href="/signup" className="secondary-btn">
-                Sign up
+              <a href="/" className="secondary-btn">
+                Log In
               </a>
             </div>
             <footer id="main-footer">
@@ -96,12 +108,11 @@ function Login(props) {
           </div>
           <div id="right">
             <div id="showcase">
-              <div className="showcase-content">
-                <div className="wrapper">
-                  <div className="frame-container">
+              <div class="showcase-content">
+                <div class="wrapper">
+                  <div class="frame-container">
                     <iframe
-                      title="LoginVideo"
-                      src="https://www.youtube.com/embed/U3-iXA6H3Q0?start=155&end=232&autoplay=1&loop=1&mute=1&modestbranding=1&controls=0&autohide=1&vq=hd2160&playlist=U3-iXA6H3Q0"
+                      src="https://www.youtube.com/embed/U3-iXA6H3Q0?start=17&end=234&autoplay=1&loop=1&mute=1&modestbranding=1&controls=0&autohide=1&vq=hd2160&playlist=U3-iXA6H3Q0"
                       frameborder="0"
                     ></iframe>
                   </div>
@@ -114,4 +125,4 @@ function Login(props) {
     </html>
   );
 }
-export default Login;
+export default SignUp;

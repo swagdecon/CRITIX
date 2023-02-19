@@ -53,4 +53,4 @@ function Error() {
     </div>
   );
 }
-export default Error;
+export default Error();
