@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import "./login.css";
-import "./logo.scss";
+import "../misc/login.css";
+import "../misc/logo.scss";
 import Logo from "./logo.js";
-import Logo_Text from "./POPFLIX_LOGO_OFFICIAL.png";
+import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
 function Login(props) {
-  const [showPassword, setShowPassword] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const toggle = () => {
-    setShowPassword(!showPassword);
-  };
+  function togglePasswordVisibility() {
+    setPasswordVisible(!passwordVisible);
+  }
 
   return (
     <html lang="en">
@@ -58,16 +58,19 @@ function Login(props) {
                 <div>
                   <label htmlFor="password">Password</label>
                   <input
-                    type={showPassword ? "text" : "password"}
+                    type={passwordVisible ? "text" : "password"}
                     id="password"
                     name="password"
                     className="text-input"
                     pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}"
                     required
                   />
-                  <span className="eye" onClick={toggle}>
-                    <i id="hide1" className="bi bi-eye"></i>
-                    <i id="hide2" className="bi bi-eye-slash"></i>
+
+                  <span className="eye" onClick={togglePasswordVisibility}>
+                    <i
+                      id="hide"
+                      className={`bi bi-eye${passwordVisible ? "-slash" : ""}`}
+                    ></i>
                   </span>
                 </div>
                 <button id="login" type="submit" className="primary-btn">
@@ -79,7 +82,7 @@ function Login(props) {
                 <span>OR</span>
                 <hr className="bar" />
               </div>
-              <a href="/users/new" className="secondary-btn">
+              <a href="/signup" className="secondary-btn">
                 Sign up
               </a>
             </div>

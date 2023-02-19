@@ -247,9 +247,6 @@ h6 {
   bottom: 220px;
 }
 
-#hide1 {
-  display: none;
-}
 .frame-container {
   position: relative;
   padding-bottom: 56.25%; /* 16:9 */

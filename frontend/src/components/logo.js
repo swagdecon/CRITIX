@@ -1,6 +1,6 @@
 import React from "react";
-import "./login.css";
-import "./logo.scss";
+import "../misc/login.css";
+import "../misc/logo.scss";
 
 function Loader() {
   return (
