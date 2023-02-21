@@ -86,11 +86,11 @@ function SignUp(props) {
                     ></i>
                   </span>
                 </div>
-                <div class="css-button">
-                  <p class="css-button-text">SIGN UP</p>
-                  <div class="css-button-inner">
-                    <div class="reset-skew">
-                      <Popcorn class="css-button-inner-text"></Popcorn>
+                <div className="css-button">
+                  <p className="css-button-text">SIGN UP</p>
+                  <div className="css-button-inner">
+                    <div className="reset-skew">
+                      <Popcorn className="css-button-inner-text"></Popcorn>
                     </div>
                   </div>
                 </div>
@@ -114,9 +114,9 @@ function SignUp(props) {
           </div>
           <div id="right">
             <div id="showcase">
-              <div class="showcase-content">
-                <div class="wrapper">
-                  <div class="frame-container">
+              <div className="showcase-content">
+                <div className="wrapper">
+                  <div className="frame-container">
                     <iframe
                       src="https://www.youtube.com/embed/U3-iXA6H3Q0?start=17&end=234&autoplay=1&loop=1&mute=1&modestbranding=1&controls=0&autohide=1&vq=hd2160&playlist=U3-iXA6H3Q0"
                       frameborder="0"

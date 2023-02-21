@@ -1,6 +1,6 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./index.js";
 import ReactDOM from "react-dom/client";
 import Login from "./components/login.js";
 import SignUp from "./components/signup.js";
@@ -15,7 +15,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route exact path="/" element={<Login />} />
+        <Route exact path="/login" element={<Login />} />
         <Route exact path="/signup" element={<SignUp />} />
         <Route path="/top_rated" element={<TopRated />} />
         <Route path="/now_playing" element={<NowPlaying />} />
@@ -26,7 +26,4 @@ function App() {
     </BrowserRouter>
   );
 }
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
-
 export default App;

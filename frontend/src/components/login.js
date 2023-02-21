@@ -4,6 +4,7 @@ import "../misc/logo.scss";
 import Logo from "./logo.js";
 import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
 import "../misc/clapperboard.css";
+
 function Login(props) {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -18,7 +19,6 @@ function Login(props) {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link
-          rel="preload"
           href="https://www.youtube.com/embed/U3-iXA6H3Q0?start=155&autoplay=1&loop=1&mute=1&modestbranding=1&controls=0&autohide=1&vq=2160&playlist=U3-iXA6H3Q0"
           as="video"
         />
@@ -74,11 +74,11 @@ function Login(props) {
                     ></i>
                   </span>
                 </div>
-                <div class="css-button">
-                  <p class="css-button-text">LOG IN</p>
-                  <div class="css-button-inner">
-                    <div class="reset-skew">
-                      <clapperboard-div class="css-button-inner-text"></clapperboard-div>
+                <div className="css-button">
+                  <p className="css-button-text">LOG IN</p>
+                  <div className="css-button-inner">
+                    <div className="reset-skew">
+                      <clapperboard-div className="css-button-inner-text"></clapperboard-div>
                     </div>
                   </div>
                 </div>
@@ -107,7 +107,6 @@ function Login(props) {
                     <iframe
                       title="LoginVideo"
                       src="https://www.youtube.com/embed/U3-iXA6H3Q0?start=155&end=232&autoplay=1&loop=1&mute=1&modestbranding=1&controls=0&autohide=1&vq=hd2160&playlist=U3-iXA6H3Q0"
-                      frameborder="0"
                     ></iframe>
                   </div>
                 </div>
