@@ -101,7 +101,7 @@ function SignUp(props) {
                 <span>OR</span>
                 <hr className="bar" />
               </div>
-              <a href="/" className="secondary-btn">
+              <a href="/login" className="secondary-btn">
                 LOG IN
               </a>
             </div>
