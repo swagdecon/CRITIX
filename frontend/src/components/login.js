@@ -3,7 +3,7 @@ import "../misc/login.css";
 import "../misc/logo.scss";
 import Logo from "./logo.js";
 import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
-import Popcorn from "../misc/popcorn_logo";
+import "../misc/clapperboard.css";
 function Login(props) {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -78,7 +78,7 @@ function Login(props) {
                   <p class="css-button-text">LOG IN</p>
                   <div class="css-button-inner">
                     <div class="reset-skew">
-                      <Popcorn class="css-button-inner-text"></Popcorn>
+                      <clapperboard-div class="css-button-inner-text"></clapperboard-div>
                     </div>
                   </div>
                 </div>

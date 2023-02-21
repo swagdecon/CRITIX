@@ -1,0 +1,74 @@
+clapperboard-div {
+  --time: 0.2s;
+  --timing: ease-in-out;
+  position: absolute;
+  top: 70%;
+  left: 40%;
+  width: 50vmin;
+  margin-top: 120px;
+  height: 5vmin;
+  transition: transform var(--time) var(--timing),
+    box-shadow var(--time) var(--timing);
+  background: repeating-linear-gradient(45deg, #222 0 12%, #ffd700 0 22%) 100%
+    0% / 80% 100%;
+
+  background-color: #222;
+  transform: translate(-50%, -15vmin) rotate(-5deg) scale(0.12, 0.12);
+}
+
+clapperboard-div::before {
+  content: "";
+  position: absolute;
+  top: calc(100% + 0.6vmin);
+  left: 0vmin;
+  width: 100%;
+  height: 31vmin;
+  box-sizing: border-box;
+  padding-top: 6.5vmin;
+  padding-left: 2vmin;
+  font-family: Arial, sans-serif;
+  font-size: 2.25vmin;
+  white-space: pre;
+  color: white;
+  transform: rotate(10deg);
+  transform-origin: top left;
+  transition: transform var(--time) var(--timing),
+    box-shadow var(--time) var(--timing);
+  background: repeating-linear-gradient(135deg, #222222 0 12%, #ffd700 0 22%)
+    100% 0% / 80% 5vmin;
+
+  background-repeat: no-repeat;
+  background-color: #333;
+}
+
+clapperboard-div::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -0.6vmin;
+  left: -0.6vmin;
+  width: 11vmin;
+  height: 12vmin;
+  transition: transform var(--time) var(--timing);
+
+  background: radial-gradient(closest-side, darkgray 90%, transparent 0) 25%
+      1.5vmin / 4vmin 4vmin,
+    radial-gradient(closest-side, darkgray 90%, transparent 0) 10% 7vmin / 4vmin
+      4vmin,
+    radial-gradient(closest-side, darkgray 90%, transparent 0) 90% 7vmin / 4vmin
+      4vmin;
+  background-repeat: no-repeat;
+  background-color: #000;
+  transform: rotate(10deg);
+
+  transform-origin: 10% 8vmin;
+}
+
+/* hover state */
+clapperboard-div:hover {
+  transform: translate(-50%, -15vmin) rotate(0deg) scale(0.12, 0.12);
+}
+
+clapperboard-div:hover::before {
+  transform: rotate(0deg);
+}
