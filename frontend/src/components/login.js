@@ -89,7 +89,7 @@ function Login(props) {
                 <hr className="bar" />
               </div>
               <a href="/signup" className="secondary-btn">
-                Sign up
+                SIGN UP
               </a>
             </div>
             <footer id="main-footer">
