@@ -45,7 +45,7 @@ function SignUp(props) {
                 Successfully logged out
               </div>
 
-              <form action="/users" method="post">
+              <form action="/api/v1/auth/register" method="post">
                 <div>
                   <label htmlFor="email">Email Address</label>
                   <input
@@ -86,14 +86,14 @@ function SignUp(props) {
                     ></i>
                   </span>
                 </div>
-                <div className="css-button">
+                <button type="submit" className="css-button">
                   <p className="css-button-text">SIGN UP</p>
                   <div className="css-button-inner">
                     <div className="reset-skew">
                       <Popcorn className="css-button-inner-text"></Popcorn>
                     </div>
                   </div>
-                </div>
+                </button>
               </form>
               {/* REDIRECT TO LOG IN PAGE */}
               <div className="or">

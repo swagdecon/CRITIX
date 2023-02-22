@@ -44,7 +44,7 @@ function Login(props) {
                 Successfully logged out
               </div>
 
-              <form action="/login" method="post">
+              <form action="/api/v1/auth/authenticate" method="post">
                 <div>
                   <label htmlFor="username">Username</label>
                   <input
@@ -74,14 +74,14 @@ function Login(props) {
                     ></i>
                   </span>
                 </div>
-                <div className="css-button">
+                <button type="submit" className="css-button">
                   <p className="css-button-text">LOG IN</p>
                   <div className="css-button-inner">
                     <div className="reset-skew">
                       <clapperboard-div className="css-button-inner-text"></clapperboard-div>
                     </div>
                   </div>
-                </div>
+                </button>
               </form>
               <div className="or">
                 <hr className="bar" />

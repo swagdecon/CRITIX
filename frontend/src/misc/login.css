@@ -83,7 +83,9 @@ h6 {
   height: 60px;
   padding-bottom: 20px;
 }
-
+button {
+  background-color: #ffffff00;
+}
 .css-button {
   border: 1px solid #0096ff;
   height: 2.7rem;

@@ -1,7 +1,7 @@
 import React from "react";
 import "../misc/error.css";
 
-function Error() {
+function Error404() {
   return (
     <div className="wrapper">
       <div id="container">
@@ -10,39 +10,35 @@ function Error() {
             <div className="404" style={{ fontSize: "30px" }}>
               <pre>
                 <code>
-                  &lt;!DOCTYPE html&gt;
-                  {"\n"} &lt;html lang="en"&gt;
-                  {"\n"}
-                  {"  "}
-                  &lt;body className="broken"&gt;
-                  {"\n"}
-                  {"    "}
-                  ERROR 404!
-                  {"\n"}
-                  {"    "}
-                  FILE NOT FOUND!
-                  {"\n"}
-                  {"    "}
-                  &lt;!-- page not found, time to go. --&gt;
-                  {"\n"}
-                  {"    "}
-                  &lt;a href="/" style={{ textDecoration: "none" }}&gt;
-                  {"\n"}
-                  {"      "}
-                  &lt;span className="red" style={{ textDecoration: "none" }}
-                  &gt;&gt;&lt;/span&gt;
-                  {"\n"}
-                  {"      "}
-                  &lt;input id="the_button" type="button" value="back home."
-                  /&gt;
-                  {"\n"}
-                  {"    "}
-                  &lt;/a&gt;
-                  {"\n"}
-                  {"  "}
-                  &lt;/body&gt;
-                  {"\n"}
-                  &lt;/html&gt;
+                  &lt;!
+                  <span className="red">DOCTYPE html</span>
+                  <span className="red">&gt;</span>
+                  <span className="blue">&lt;html</span>{" "}
+                  <span className="yellow">lang=</span>
+                  <span className="green">&quot;en&quot;</span>
+                  <span className="blue">&gt;</span>
+                  <span className="blue">&lt;body</span>{" "}
+                  <span className="yellow">class=</span>
+                  <span className="green">&quot;broken&quot;</span>
+                  <span className="blue">&gt;</span>
+                  <br />
+                  <br />
+                  ERROR 404! FILE NOT FOUND!
+                  <br />
+                  <br />
+                  <span className="comment">
+                    &lt;!-- page not found, time to go. --&gt;
+                  </span>
+                  <br />
+                  <br />
+                  <a href="/" style={{ textDecoration: "none" }}>
+                    <span className="red">&gt;</span>
+                    <input id="the_button" type="button" value="back home." />
+                  </a>
+                  <br />
+                  <br />
+                  <span className="blue">&nbsp;&lt;/body&gt;</span>
+                  <span className="blue">&lt;/html&gt;</span>
                 </code>
               </pre>
             </div>
@@ -53,4 +49,4 @@ function Error() {
     </div>
   );
 }
-export default Error();
+export default Error404;
