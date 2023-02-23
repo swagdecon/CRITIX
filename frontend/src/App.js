@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./index.js";
+import Login from "./components/login.js";
+import SignUp from "./components/signup.js";
 
-const App = () => {
-  const [data, setData] = useState([]);
+import TopRated from "./components/top_rated.js";
+import NowPlaying from "./components/now_playing.js";
+import Popular from "./components/popular.js";
+import Upcoming from "./components/upcoming.js";
 
-  useEffect(() => {
-    // CHANGE THE ROUTE BASED ON THE CONTROLLER MAPPING:
-    fetch("/api/movies/top_rated")
-      .then((res) => res.json())
-      .then((res) => setData(res));
-  }, []);
-
+function App() {
   return (
-    <div>
-      {data.map((item) => (
-        <div key={item.id}>
-          {/* {item.id} */}
-          {item.title}
-          {/* {item.release_date} */}
-        </div>
-      ))}
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/top_rated" element={<TopRated />} />
+        <Route path="/now_playing" element={<NowPlaying />} />
+        <Route path="/popular" element={<Popular />} />
+        <Route path="/upcoming" element={<Upcoming />} />
+      </Routes>
+    </BrowserRouter>
   );
-};
-
+}
 export default App;

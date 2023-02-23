@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 
-const TopRated = () => {
+const NowPlaying = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
     // CHANGE THE ROUTE BASED ON THE CONTROLLER MAPPING:
-    fetch("/api/movies/top_rated")
+    fetch("/api/movies/now_playing")
       .then((res) => res.json())
       .then((res) => setData(res));
   }, []);
@@ -23,4 +23,4 @@ const TopRated = () => {
   );
 };
 
-export default TopRated;
+export default NowPlaying;

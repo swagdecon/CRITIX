@@ -3,9 +3,9 @@ import "../misc/login.css";
 import "../misc/logo.scss";
 import Logo from "./logo.js";
 import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
-import "../misc/clapperboard.css";
-
-function Login(props) {
+import Popcorn from "../misc/popcorn_logo";
+// original login
+function SignUp(props) {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   function togglePasswordVisibility() {
@@ -19,6 +19,7 @@ function Login(props) {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link
+          rel="preload"
           href="https://www.youtube.com/embed/U3-iXA6H3Q0?start=155&autoplay=1&loop=1&mute=1&modestbranding=1&controls=0&autohide=1&vq=2160&playlist=U3-iXA6H3Q0"
           as="video"
         />
@@ -28,7 +29,7 @@ function Login(props) {
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
         />
 
-        <title>Log in</title>
+        <title>Sign Up</title>
       </head>
       <body>
         <div id="wrapper">
@@ -44,7 +45,18 @@ function Login(props) {
                 Successfully logged out
               </div>
 
-              <form action="/api/v1/auth/authenticate" method="post">
+              <form action="/api/v1/auth/register" method="post">
+                <div>
+                  <label htmlFor="email">Email Address</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    className="text-input"
+                    pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+                    required
+                  />
+                </div>
                 <div>
                   <label htmlFor="username">Username</label>
                   <input
@@ -75,21 +87,22 @@ function Login(props) {
                   </span>
                 </div>
                 <button type="submit" className="css-button">
-                  <p className="css-button-text">LOG IN</p>
+                  <p className="css-button-text">SIGN UP</p>
                   <div className="css-button-inner">
                     <div className="reset-skew">
-                      <clapperboard-div className="css-button-inner-text"></clapperboard-div>
+                      <Popcorn className="css-button-inner-text"></Popcorn>
                     </div>
                   </div>
                 </button>
               </form>
+              {/* REDIRECT TO LOG IN PAGE */}
               <div className="or">
                 <hr className="bar" />
                 <span>OR</span>
                 <hr className="bar" />
               </div>
-              <a href="/signup" className="secondary-btn">
-                SIGN UP
+              <a href="/login" className="secondary-btn">
+                LOG IN
               </a>
             </div>
             <footer id="main-footer">
@@ -105,8 +118,8 @@ function Login(props) {
                 <div className="wrapper">
                   <div className="frame-container">
                     <iframe
-                      title="LoginVideo"
-                      src="https://www.youtube.com/embed/U3-iXA6H3Q0?start=155&end=232&autoplay=1&loop=1&mute=1&modestbranding=1&controls=0&autohide=1&vq=hd2160&playlist=U3-iXA6H3Q0"
+                      src="https://www.youtube.com/embed/U3-iXA6H3Q0?start=17&end=234&autoplay=1&loop=1&mute=1&modestbranding=1&controls=0&autohide=1&vq=hd2160&playlist=U3-iXA6H3Q0"
+                      frameborder="0"
                     ></iframe>
                   </div>
                 </div>
@@ -118,4 +131,4 @@ function Login(props) {
     </html>
   );
 }
-export default Login;
+export default SignUp;
