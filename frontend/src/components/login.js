@@ -5,9 +5,11 @@ import Logo from "./logo.js";
 import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
 import "../misc/clapperboard.css";
 import { useNavigate } from "react-router-dom";
+import LocalState from "./localStorage.js";
 
 function Login(props) {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [jwt, setJwt] = LocalState("", "jwt");
 
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
@@ -35,8 +37,10 @@ function Login(props) {
           }),
         }
       );
+
       if (response.ok) {
-        navigate("/api/v1/demo-controller", { replace: true });
+        navigate("/homepage", { replace: true });
+        console.log(userData);
       } else {
         console.log("Error");
       }
@@ -44,6 +48,7 @@ function Login(props) {
       console.log(userData);
     }
   };
+
   return (
     <html lang="en">
       <head>
@@ -124,7 +129,7 @@ function Login(props) {
                 <span>OR</span>
                 <hr className="bar" />
               </div>
-              <a href="/signup" className="secondary-btn">
+              <a href="/" className="secondary-btn">
                 SIGN UP
               </a>
             </div>
