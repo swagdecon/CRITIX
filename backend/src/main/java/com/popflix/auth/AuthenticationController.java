@@ -19,6 +19,7 @@ public class AuthenticationController {
                         @RequestBody RegisterRequest request) {
                 // try {
                 return ResponseEntity.ok(service.register(request));
+
                 // } catch (Exception e) {
                 // return ResponseEntity.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
                 // }
