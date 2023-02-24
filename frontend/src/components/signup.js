@@ -4,14 +4,51 @@ import "../misc/logo.scss";
 import Logo from "./logo.js";
 import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
 import Popcorn from "../misc/popcorn_logo";
-// original login
+import { useNavigate } from "react-router-dom";
+
 function SignUp(props) {
   const [passwordVisible, setPasswordVisible] = useState(false);
-
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
   }
 
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const userData = { firstname, lastname, email, password };
+
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/v1/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firstname: firstname,
+            lastname: lastname,
+            email: email,
+            password: password,
+          }),
+        }
+      );
+      if (response.ok) {
+        navigate("/login", { replace: true });
+      } else {
+        console.log("Error");
+      }
+    } catch (error) {
+      console.log(userData);
+    }
+  };
   return (
     <html lang="en">
       <head>
@@ -45,7 +82,7 @@ function SignUp(props) {
                 Successfully logged out
               </div>
 
-              <form action="/api/v1/auth/register" method="post">
+              <form onSubmit={handleSubmit}>
                 <div>
                   <label htmlFor="email">Email Address</label>
                   <input
@@ -54,17 +91,34 @@ function SignUp(props) {
                     name="email"
                     className="text-input"
                     pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
                     required
                   />
                 </div>
                 <div>
-                  <label htmlFor="username">Username</label>
+                  <label htmlFor="firstName">First Name</label>
                   <input
                     type="text"
-                    id="username"
-                    name="username"
+                    id="firstName"
+                    name="firstName"
                     className="text-input"
                     autoComplete="off"
+                    value={firstname}
+                    onChange={(event) => setFirstName(event.target.value)}
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="lastName">Last Name</label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    className="text-input"
+                    autoComplete="off"
+                    value={lastname}
+                    onChange={(event) => setLastName(event.target.value)}
                     required
                   />
                 </div>
@@ -76,6 +130,8 @@ function SignUp(props) {
                     name="password"
                     className="text-input"
                     pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
                     required
                   />
 
@@ -86,7 +142,11 @@ function SignUp(props) {
                     ></i>
                   </span>
                 </div>
-                <button type="submit" className="css-button">
+                <button
+                  type="submit"
+                  onSubmit={handleSubmit}
+                  className="css-button"
+                >
                   <p className="css-button-text">SIGN UP</p>
                   <div className="css-button-inner">
                     <div className="reset-skew">
@@ -117,10 +177,7 @@ function SignUp(props) {
               <div className="showcase-content">
                 <div className="wrapper">
                   <div className="frame-container">
-                    <iframe
-                      src="https://www.youtube.com/embed/U3-iXA6H3Q0?start=17&end=234&autoplay=1&loop=1&mute=1&modestbranding=1&controls=0&autohide=1&vq=hd2160&playlist=U3-iXA6H3Q0"
-                      frameborder="0"
-                    ></iframe>
+                    <iframe src="https://www.youtube.com/embed/U3-iXA6H3Q0?start=17&end=234&autoplay=1&loop=1&mute=1&modestbranding=1&controls=0&autohide=1&vq=hd2160&playlist=U3-iXA6H3Q0"></iframe>
                   </div>
                 </div>
               </div>

@@ -4,6 +4,7 @@ import "../misc/logo.scss";
 import Logo from "./logo.js";
 import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
 import "../misc/clapperboard.css";
+import { useNavigate } from "react-router-dom";
 
 function Login(props) {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -11,7 +12,38 @@ function Login(props) {
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
   }
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const userData = { email, password };
+
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/v1/auth/authenticate",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        }
+      );
+      if (response.ok) {
+        navigate("/api/v1/demo-controller", { replace: true });
+      } else {
+        console.log("Error");
+      }
+    } catch (error) {
+      console.log(userData);
+    }
+  };
   return (
     <html lang="en">
       <head>
@@ -44,15 +76,17 @@ function Login(props) {
                 Successfully logged out
               </div>
 
-              <form action="/api/v1/auth/authenticate" method="post">
+              <form onSubmit={handleSubmit}>
                 <div>
-                  <label htmlFor="username">Username</label>
+                  <label htmlFor="email">Email</label>
                   <input
                     type="text"
-                    id="username"
-                    name="username"
+                    id="email"
+                    name="email"
                     className="text-input"
                     autoComplete="off"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
                     required
                   />
                 </div>
@@ -64,6 +98,8 @@ function Login(props) {
                     name="password"
                     className="text-input"
                     pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
                     required
                   />
 
