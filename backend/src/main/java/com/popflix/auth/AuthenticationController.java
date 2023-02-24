@@ -18,11 +18,11 @@ public class AuthenticationController {
         @PostMapping("/register")
         public ResponseEntity<AuthenticationResponse> register(
                         @RequestBody RegisterRequest request) {
-                try {
-                        return ResponseEntity.ok(service.register(request));
-                } catch (Exception e) {
-                        return ResponseEntity.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
-                }
+                // try {
+                return ResponseEntity.ok(service.register(request));
+                // } catch (Exception e) {
+                // return ResponseEntity.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+                // }
         }
 
         @PostMapping("/authenticate")
