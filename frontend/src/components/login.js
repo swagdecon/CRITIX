@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import { React, useState } from "react";
 import "../misc/login.css";
 import "../misc/logo.scss";
 import Logo from "./logo.js";
 import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
 import "../misc/clapperboard.css";
 import { useNavigate } from "react-router-dom";
-import LocalState from "./localStorage.js";
 
 function Login(props) {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [jwt, setJwt] = LocalState("", "jwt");
 
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
@@ -24,28 +22,33 @@ function Login(props) {
     const userData = { email, password };
 
     try {
-      const response = await fetch(
+      const myResponse = await fetch(
         "http://localhost:8080/api/v1/auth/authenticate",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
+          body: JSON.stringify(userData),
         }
       );
+      if (myResponse.ok) {
+        const responseJson = await myResponse.json();
+        const token = JSON.stringify(responseJson.token);
 
-      if (response.ok) {
+        if (typeof localStorage !== "undefined") {
+          localStorage.setItem("jwt", token);
+        } else if (typeof sessionStorage !== "undefined") {
+          sessionStorage.setItem("jwt", token);
+        } else {
+          console.error(
+            "Neither localStorage nor sessionStorage is available for storing JWT"
+          );
+        }
         navigate("/homepage", { replace: true });
-        console.log(userData);
-      } else {
-        console.log("Error");
       }
     } catch (error) {
-      console.log(userData);
+      console.log(error);
     }
   };
 

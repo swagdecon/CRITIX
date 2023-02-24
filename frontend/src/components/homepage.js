@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../misc/moviecard.scss";
 import LocalState from "./localStorage.js";
-import ajax from "./fetchService";
+import ajax from "./fetchService.js";
 
 const Homepage = () => {
   const [jwt, setJwt] = LocalState("", "jwt");
@@ -14,13 +14,10 @@ const Homepage = () => {
     });
   }, []);
 
-  console.log("JWT IS " + jwt);
-  console.log(movies);
-
-  const styles = {
-    backgroundImage:
-      "url(https://i.ibb.co/FDGqCmM/papers-co-ag74-interstellar-wide-space-film-movie-art-33-iphone6-wallpaper.jpg)",
-  };
+  //   const styles = {
+  //     backgroundImage:
+  //       "url(https://i.ibb.co/FDGqCmM/papers-co-ag74-interstellar-wide-space-film-movie-art-33-iphone6-wallpaper.jpg)",
+  //   };
 
   return (
     <div>
@@ -31,12 +28,7 @@ const Homepage = () => {
               <div className="menu">
                 <i className="material-icons"></i>
               </div>
-              <div
-                className="movie-img"
-                style={{
-                  backgroundImage: `url(https://image.tmdb.org/t/p/w500/{ext}(ext=${movie.poster_path}))`,
-                }}
-              ></div>
+              <div className="movie-img"></div>
               <div className="text-movie-cont">
                 <div className="mr-grid">
                   <div className="col1">

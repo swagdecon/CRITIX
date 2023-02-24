@@ -10,10 +10,10 @@ import Popular from "./components/popular.js";
 import Upcoming from "./components/upcoming.js";
 import Homepage from "./components/homepage.js";
 import PrivateRoute from "./components/privateRoutes.js";
-import LocalState from "./components/localStorage.js";
+// import LocalState from "./components/localStorage.js";
 
 function App() {
-  const [jwt, setJwt] = LocalState("", "jwt");
+  // const [jwt, setJwt] = LocalState("", "jwt");
 
   return (
     <BrowserRouter>
