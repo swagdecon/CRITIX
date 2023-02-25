@@ -5,7 +5,7 @@ import Logo from "./logo.js";
 import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
 import Popcorn from "../misc/popcorn_logo";
 import { useNavigate } from "react-router-dom";
-
+import SignUpPlayer from "./SignUpVideo.js";
 function SignUp(props) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   function togglePasswordVisibility() {
@@ -55,12 +55,7 @@ function SignUp(props) {
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link
-          rel="preload"
-          href="https://www.youtube.com/embed/U3-iXA6H3Q0?start=155&autoplay=1&loop=1&mute=1&modestbranding=1&controls=0&autohide=1&vq=2160&playlist=U3-iXA6H3Q0"
-          as="video"
-        />
-        <link rel="stylesheet" href="./login.css" />
+
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
@@ -175,10 +170,8 @@ function SignUp(props) {
           <div id="right">
             <div id="showcase">
               <div className="showcase-content">
-                <div className="wrapper">
-                  <div className="frame-container">
-                    <iframe src="https://www.youtube.com/embed/U3-iXA6H3Q0?start=17&end=234&autoplay=1&loop=1&mute=1&modestbranding=1&controls=0&autohide=1&vq=hd2160&playlist=U3-iXA6H3Q0"></iframe>
-                  </div>
+                <div className="overlay">
+                  <SignUpPlayer></SignUpPlayer>
                 </div>
               </div>
             </div>

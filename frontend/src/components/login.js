@@ -5,6 +5,7 @@ import Logo from "./logo.js";
 import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
 import "../misc/clapperboard.css";
 import { useNavigate } from "react-router-dom";
+import LoginPlayer from "./LoginVideo.js";
 
 function Login(props) {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -146,13 +147,8 @@ function Login(props) {
           <div id="right">
             <div id="showcase">
               <div className="showcase-content">
-                <div className="wrapper">
-                  <div className="frame-container">
-                    <iframe
-                      title="LoginVideo"
-                      src="https://www.youtube.com/embed/U3-iXA6H3Q0?start=155&end=232&autoplay=1&loop=1&mute=1&modestbranding=1&controls=0&autohide=1&vq=hd2160&playlist=U3-iXA6H3Q0"
-                    ></iframe>
-                  </div>
+                <div className="overlay">
+                  <LoginPlayer></LoginPlayer>
                 </div>
               </div>
             </div>
