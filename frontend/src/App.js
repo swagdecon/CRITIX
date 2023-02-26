@@ -10,11 +10,7 @@ import Popular from "./components/popular.js";
 import Upcoming from "./components/upcoming.js";
 import Homepage from "./components/homepage.js";
 import PrivateRoute from "./components/privateRoutes.js";
-// import LocalState from "./components/localStorage.js";
-
 function App() {
-  // const [jwt, setJwt] = LocalState("", "jwt");
-
   return (
     <BrowserRouter>
       <Routes>
@@ -29,6 +25,7 @@ function App() {
             </PrivateRoute>
           }
         />
+
         <Route path="/top_rated" element={<TopRated />} />
         <Route path="/now_playing" element={<NowPlaying />} />
         <Route path="/popular" element={<Popular />} />
