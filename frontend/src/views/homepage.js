@@ -3,7 +3,7 @@ import "../misc/moviecard.scss";
 import LocalState from "../components/localStorage.js";
 import ajax from "../components/fetchService.js";
 import "../misc/homepage.css";
-
+import truncateDescription from "../components/movieCardfunctions.js";
 const Homepage = () => {
   const [jwt, setJwt] = LocalState("", "jwt");
   const [movies, setMovies] = useState([]);
@@ -39,7 +39,8 @@ const Homepage = () => {
                 <div className="text-movie-cont">
                   <div className="mr-grid">
                     <div className="col1">
-                      <h1>{movie.title}</h1>
+                      {/* .replace ensures there is only one space inbetween words */}
+                      <h1>{movie.title.replace(/\s+/g, " ")}</h1>
                       <ul className="movie-gen">
                         <li>{movie.vote_average} /</li>
                         <li>2h 49min /</li>
@@ -64,7 +65,9 @@ const Homepage = () => {
                   </div>
                   <div className="mr-grid">
                     <div className="col1">
-                      <p className="movie-description">{movie.overview}</p>
+                      <p className="movie-description">
+                        {truncateDescription(movie.overview)}
+                      </p>
                     </div>
                   </div>
                   <div className="mr-grid actors-row">

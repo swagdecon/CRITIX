@@ -1,16 +1,9 @@
 // @import "../../node_modules/lib/compass";
 $accent-color: #e7e7e7;
-$brand-color: #fe4141;
+$brand-color: #0096ff;
 $dark-color: #1e1b26;
 
 body {
-  //   background: linear-gradient(
-  //     rgba(255, 255, 255, 0.95),
-  //     rgba(30, 27, 38, 0.95)
-  //   );
-  //   background-position: center;
-  //   background-size: cover;
-  //   background-repeat: repeat;
   overflow-y: auto;
 }
 
@@ -21,12 +14,15 @@ body {
   flex-wrap: wrap;
   justify-content: center;
 }
+.card-container {
+  display: inline-block;
+}
+
 .cellphone-container {
   width: 375px;
-  height: 650px;
+  height: 750px;
   background-color: #1e1b26;
   margin: 60px auto 0 auto;
-  box-shadow: 5px 5px 115px -14px black;
   border-radius: 4px;
 }
 .menu {
