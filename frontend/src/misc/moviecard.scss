@@ -124,6 +124,7 @@ body {
       float: left;
       line-height: 1;
     }
+    font-size: 14px;
   }
   display: block;
   border: 1px solid $brand-color;
@@ -325,13 +326,4 @@ h5 {
 }
 .col6rest {
   width: 80.3333333333%;
-}
-
-.dribbble-link {
-  width: 50px;
-  height: 50px;
-  position: fixed;
-  bottom: 15px;
-  right: 15px;
-  border-radius: 50px;
 }
