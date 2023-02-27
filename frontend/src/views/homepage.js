@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../misc/moviecard.scss";
-import LocalState from "./localStorage.js";
-import ajax from "./fetchService.js";
+import LocalState from "../components/localStorage.js";
+import ajax from "../components/fetchService.js";
 import "../misc/homepage.css";
 
 const Homepage = () => {
