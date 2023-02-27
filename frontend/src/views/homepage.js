@@ -40,7 +40,7 @@ const Homepage = () => {
                   <div className="mr-grid">
                     <div className="col1">
                       {/* .replace ensures there is only one space inbetween words */}
-                      <h1>{movie.title.replace(/\s+/g, " ")}</h1>
+                      {/* <h1>{movie.title.replace(/\s+/g, " ")}</h1> */}
                       <ul className="movie-gen">
                         <li>{movie.vote_average} /</li>
                         <li>2h 49min /</li>
