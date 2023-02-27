@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import React from "react";
 import "../misc/login.css";
 import "../misc/logo.scss";
 import Logo from "../components/logo.js";
@@ -6,7 +6,7 @@ import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
 import LoginPlayer from "../components/LoginVideo.js";
 import LoginFunctionality from "../components/loginFunctionality";
 
-function Login(props) {
+function Login() {
   return (
     <html lang="en">
       <head>
@@ -31,12 +31,6 @@ function Login(props) {
               <Logo />
               <img src={Logo_Text} className="homepage-logo" alt="logo" />
 
-              <div className={props.error ? "alert alert-danger" : "hidden"}>
-                {props.error}
-              </div>
-              <div className={props.logout ? "alert alert-success" : "hidden"}>
-                Successfully logged out
-              </div>
               <LoginFunctionality></LoginFunctionality>
               <div className="or">
                 <hr className="bar" />

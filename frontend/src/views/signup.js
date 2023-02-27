@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import "../misc/login.css";
 import "../misc/logo.scss";
 import Logo from "../components/logo.js";
 import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
 import SignUpPlayer from "../components/SignUpVideo.js";
 import SignupFunctionality from "../components/signupFunctionality.js";
-function SignUp(props) {
+function SignUp() {
   return (
     <html lang="en">
       <head>
@@ -27,12 +27,6 @@ function SignUp(props) {
               <Logo />
               <img src={Logo_Text} className="homepage-logo" alt="logo" />
 
-              <div className={props.error ? "alert alert-danger" : "hidden"}>
-                {props.error}
-              </div>
-              <div className={props.logout ? "alert alert-success" : "hidden"}>
-                Successfully logged out
-              </div>
               <SignupFunctionality></SignupFunctionality>
               {/* REDIRECT TO LOG IN PAGE */}
               <div className="or">

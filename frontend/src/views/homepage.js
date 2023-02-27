@@ -5,7 +5,7 @@ import ajax from "../components/fetchService.js";
 import "../misc/homepage.css";
 import truncateDescription from "../components/movieCardfunctions.js";
 const Homepage = () => {
-  const [jwt, setJwt] = LocalState("", "jwt");
+  const [jwt] = LocalState("", "jwt");
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
@@ -17,13 +17,15 @@ const Homepage = () => {
 
   return (
     <html>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      />
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        />
+      </head>
 
-      {movies.map((movie) => (
-        <div className="card-container">
+      {movies.map((movie, i) => (
+        <div className="card-container" key={i}>
           <div className="container">
             <div className="cellphone-container">
               <div className="movie">
