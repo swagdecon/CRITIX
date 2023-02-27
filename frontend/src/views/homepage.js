@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "../misc/moviecard.scss";
-import LocalState from "../components/localStorage.js";
 import ajax from "../components/fetchService.js";
 import "../misc/homepage.css";
 import truncateDescription from "../components/movieCardfunctions.js";
 const Homepage = () => {
-  const [jwt, setJwt] = LocalState("", "jwt");
+  // get JWT value from localStorage
+  const jwt = localStorage.getItem("jwt");
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
@@ -22,8 +22,8 @@ const Homepage = () => {
         href="https://fonts.googleapis.com/icon?family=Material+Icons"
       />
 
-      {movies.map((movie) => (
-        <div className="card-container">
+      {movies.map((movie, i) => (
+        <div className="card-container" key={i}>
           <div className="container">
             <div className="cellphone-container">
               <div className="movie">
