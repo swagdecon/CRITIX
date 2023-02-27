@@ -1,4 +1,4 @@
-import React from "react";
+import { React } from "react";
 import "../misc/login.css";
 import "../misc/logo.scss";
 import Logo from "../components/logo.js";
@@ -30,7 +30,6 @@ function Login() {
             <div id="signin">
               <Logo />
               <img src={Logo_Text} className="homepage-logo" alt="logo" />
-
               <LoginFunctionality></LoginFunctionality>
               <div className="or">
                 <hr className="bar" />

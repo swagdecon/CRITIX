@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "../misc/moviecard.scss";
-import LocalState from "../components/localStorage.js";
 import ajax from "../components/fetchService.js";
 import "../misc/homepage.css";
 import truncateDescription from "../components/movieCardfunctions.js";
+import useLocalState from "../components/localStorage";
 const Homepage = () => {
-  const [jwt] = LocalState("", "jwt");
+  const [jwt] = useLocalState("", "jwt");
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
