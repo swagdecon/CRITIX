@@ -356,6 +356,7 @@ video {
   transform: translate(-20px, -10px);
   bottom: 220px;
   color: #fff;
+  cursor: pointer;
 }
 
 .wrapper {

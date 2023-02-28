@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import "../misc/login.css";
 import Popcorn from "../misc/popcorn_logo";
 import Filter from "bad-words";
+
 function SignupFunctionality() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
   }
   const filter = new Filter();
-
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -22,7 +22,7 @@ function SignupFunctionality() {
     event.preventDefault();
 
     const userData = { firstname, lastname, email, password };
-    console.log(userData["firstname"]);
+
     const hasFirstNameProfanity = filter.isProfane(userData["firstname"]);
     const hasLastNameProfanity = filter.isProfane(userData["lastname"]);
     const hasEmailProfanity = filter.isProfane(userData["email"]);
