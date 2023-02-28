@@ -1,10 +1,15 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import PropTypes from "prop-types";
 import useLocalState from "./localStorage.js";
+import { Navigate } from "react-router-dom";
 
 const PrivateRoute = ({ children }) => {
-  const [jwt, setJwt] = useLocalState("", "jwt");
+  const jwt = useLocalState("jwt");
   return jwt ? children : <Navigate to="/login" />;
+};
+
+PrivateRoute.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default PrivateRoute;
