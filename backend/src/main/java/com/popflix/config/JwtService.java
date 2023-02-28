@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class JwtService {
     Dotenv dotenv = Dotenv.load();
     private final String SECRET_KEY = dotenv.get("SECRET_KEY");
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -39,7 +40,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24 * 7))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS512)
                 .compact();
     }

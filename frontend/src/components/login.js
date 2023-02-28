@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import { React, useState } from "react";
 import "../misc/login.css";
 import "../misc/logo.scss";
 import Logo from "./logo.js";
 import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
 import "../misc/clapperboard.css";
+import { useNavigate } from "react-router-dom";
+import LoginPlayer from "./LoginVideo.js";
 
 function Login(props) {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -11,6 +13,45 @@ function Login(props) {
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
   }
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const userData = { email, password };
+
+    try {
+      const myResponse = await fetch(
+        "http://localhost:8080/api/v1/auth/authenticate",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
+      if (myResponse.ok) {
+        const responseJson = await myResponse.json();
+        const token = JSON.stringify(responseJson.token);
+
+        if (typeof localStorage !== "undefined") {
+          localStorage.setItem("jwt", token);
+        } else if (typeof sessionStorage !== "undefined") {
+          sessionStorage.setItem("jwt", token);
+        } else {
+          console.error(
+            "Neither localStorage nor sessionStorage is available for storing JWT"
+          );
+        }
+        navigate("/homepage", { replace: true });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <html lang="en">
@@ -44,15 +85,17 @@ function Login(props) {
                 Successfully logged out
               </div>
 
-              <form action="/api/v1/auth/authenticate" method="post">
+              <form onSubmit={handleSubmit}>
                 <div>
-                  <label htmlFor="username">Username</label>
+                  <label htmlFor="email">Email</label>
                   <input
                     type="text"
-                    id="username"
-                    name="username"
+                    id="email"
+                    name="email"
                     className="text-input"
                     autoComplete="off"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
                     required
                   />
                 </div>
@@ -64,6 +107,8 @@ function Login(props) {
                     name="password"
                     className="text-input"
                     pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
                     required
                   />
 
@@ -88,7 +133,7 @@ function Login(props) {
                 <span>OR</span>
                 <hr className="bar" />
               </div>
-              <a href="/signup" className="secondary-btn">
+              <a href="/" className="secondary-btn">
                 SIGN UP
               </a>
             </div>
@@ -102,13 +147,8 @@ function Login(props) {
           <div id="right">
             <div id="showcase">
               <div className="showcase-content">
-                <div className="wrapper">
-                  <div className="frame-container">
-                    <iframe
-                      title="LoginVideo"
-                      src="https://www.youtube.com/embed/U3-iXA6H3Q0?start=155&end=232&autoplay=1&loop=1&mute=1&modestbranding=1&controls=0&autohide=1&vq=hd2160&playlist=U3-iXA6H3Q0"
-                    ></iframe>
-                  </div>
+                <div className="overlay">
+                  <LoginPlayer></LoginPlayer>
                 </div>
               </div>
             </div>

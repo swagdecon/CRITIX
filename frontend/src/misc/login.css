@@ -7,7 +7,6 @@
 }
 html {
   -webkit-tap-highlight-color: transparent;
-  -webkit-user-select: none;
 }
 body {
   font-family: "Roboto", sans-serif;
@@ -27,6 +26,7 @@ h6 {
 #wrapper {
   display: flex;
 }
+
 #left {
   background-color: #1818184e;
   z-index: 1;
@@ -277,22 +277,31 @@ p.css-button-text {
   background-position: absolute;
   background-size: fill;
   background-repeat: no-repeat;
-  width: 100%;
-  height: 100%;
   display: flex;
   object-fit: fill;
   justify-content: center;
   align-items: center;
   text-align: center;
-}
-#showcase .showcase-content {
-  pointer-events: none;
-  overflow: visible;
-  right: 0;
-  bottom: 0;
   min-width: 100%;
   min-height: 100%;
 }
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+video {
+  object-fit: cover;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
 #showcase .showcase-text {
   font-size: 3rem;
   width: 100%;
@@ -338,23 +347,6 @@ p.css-button-text {
   position: absolute;
   transform: translate(-20px);
   bottom: 220px;
-}
-
-.frame-container {
-  position: relative;
-  padding-bottom: 56.25%; /* 16:9 */
-  padding-top: 25px;
-  width: 300%; /* enlarge beyond browser width */
-  left: -100%; /* center */
-}
-
-.frame-container iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 0px;
 }
 
 .wrapper {
