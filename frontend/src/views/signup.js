@@ -35,7 +35,7 @@ function SignUp() {
                 <hr className="bar" />
               </div>
               <a href="/login" className="secondary-btn">
-                LOG IN
+                <p className="css-button-text-2">LOG IN</p>
               </a>
             </div>
             <footer id="main-footer">
