@@ -9,7 +9,6 @@ import Popular from "./views/popular.js";
 import Upcoming from "./views/upcoming.js";
 import Homepage from "./views/homepage.js";
 import PrivateRoute from "./components/privateRoutes.js";
-
 function App() {
   return (
     <BrowserRouter>
