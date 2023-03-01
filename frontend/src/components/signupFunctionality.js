@@ -44,7 +44,7 @@ function SignupFunctionality() {
   };
   return (
     <form onSubmit={handleSubmit}>
-      {/* {error && <div className="error">{error}</div>} */}
+      {error && <div className="error">{error}</div>}
       <div>
         <label htmlFor="email">Email Address</label>
         <input
