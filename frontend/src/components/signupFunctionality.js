@@ -34,6 +34,8 @@ function SignupFunctionality() {
       hasPasswordProfanity
     ) {
       setProfanityErrorMessage("*Input(s) cannot contain profanity*");
+      setError("");
+
       return;
     } else {
       setProfanityErrorMessage("");
@@ -51,7 +53,6 @@ function SignupFunctionality() {
       );
       if (response.ok) {
         navigate("/login", { replace: true });
-        setError("");
       } else {
         const errorBody = await response.text();
         setError(errorBody);
