@@ -1,0 +1,33 @@
+/* Search */
+.Search {
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.Search input {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  height: 37px;
+  width: 20%;
+  background: transparent;
+  color: #ffffff;
+  appearance: none;
+  border: 0;
+  border: 2px solid rgba(128, 128, 128, 0.1);
+  outline: none;
+  border-radius: 37px;
+  padding: 0 10px;
+  pointer-events: all;
+  transition: border 0.25s ease, width 0.125s ease 0.125s;
+}
+
+.Search input:focus {
+  border: 2px solid #0096FF;
+  width: 30%;
+}
