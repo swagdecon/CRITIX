@@ -2,16 +2,19 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../misc/login.css";
 import Popcorn from "../misc/popcorn_logo";
+import Filter from "bad-words";
+
 function SignupFunctionality() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
   }
-
+  const filter = new Filter();
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -20,6 +23,22 @@ function SignupFunctionality() {
 
     const userData = { firstname, lastname, email, password };
 
+    const hasFirstNameProfanity = filter.isProfane(userData["firstname"]);
+    const hasLastNameProfanity = filter.isProfane(userData["lastname"]);
+    const hasEmailProfanity = filter.isProfane(userData["email"]);
+    const hasPasswordProfanity = filter.isProfane(userData["password"]);
+
+    if (
+      hasEmailProfanity ||
+      hasFirstNameProfanity ||
+      hasLastNameProfanity ||
+      hasPasswordProfanity
+    ) {
+      setErrorMessage("*Input(s) cannot contain profanity*");
+      return;
+    } else {
+      setErrorMessage("");
+    }
     try {
       const response = await fetch(
         "http://localhost:8080/api/v1/auth/register",
@@ -47,6 +66,7 @@ function SignupFunctionality() {
   };
   return (
     <form onSubmit={handleSubmit}>
+      {errorMessage && <div-error>{errorMessage}</div-error>}
       <div>
         <label htmlFor="email">Email Address</label>
         <input
