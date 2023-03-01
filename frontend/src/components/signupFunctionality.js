@@ -12,6 +12,7 @@ function SignupFunctionality() {
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
@@ -28,25 +29,22 @@ function SignupFunctionality() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            firstname: firstname,
-            lastname: lastname,
-            email: email,
-            password: password,
-          }),
+          body: JSON.stringify(userData),
         }
       );
       if (response.ok) {
         navigate("/login", { replace: true });
       } else {
-        console.log("Error");
+        const errorBody = await response.text();
+        setError(errorBody);
       }
     } catch (error) {
-      console.log(userData);
+      navigate("/error", { replace: true });
     }
   };
   return (
     <form onSubmit={handleSubmit}>
+      {/* {error && <div className="error">{error}</div>} */}
       <div>
         <label htmlFor="email">Email Address</label>
         <input

@@ -78,6 +78,11 @@ h6 {
 #right {
   flex: 1;
 }
+.error {
+  color: red;
+  margin-bottom: 1rem;
+}
+
 .homepage-logo {
   margin-bottom: 10px;
   position: relative;
