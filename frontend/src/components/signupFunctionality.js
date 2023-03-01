@@ -2,25 +2,42 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../misc/login.css";
 import Popcorn from "../misc/popcorn_logo";
+import Filter from "bad-words";
+
 function SignupFunctionality() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
   }
-
+  const filter = new Filter();
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-
+  const [error, setError] = useState(false);
+  const [profanityErrorMessage, setProfanityErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const userData = { firstname, lastname, email, password };
+    const hasFirstNameProfanity = filter.isProfane(userData["firstname"]);
+    const hasLastNameProfanity = filter.isProfane(userData["lastname"]);
+    const hasEmailProfanity = filter.isProfane(userData["email"]);
+    const hasPasswordProfanity = filter.isProfane(userData["password"]);
 
+    if (
+      hasEmailProfanity ||
+      hasFirstNameProfanity ||
+      hasLastNameProfanity ||
+      hasPasswordProfanity
+    ) {
+      setProfanityErrorMessage("*Input(s) cannot contain profanity*");
+      return;
+    } else {
+      setProfanityErrorMessage("");
+    }
     try {
       const response = await fetch(
         "http://localhost:8080/api/v1/auth/register",
@@ -34,9 +51,11 @@ function SignupFunctionality() {
       );
       if (response.ok) {
         navigate("/login", { replace: true });
+        setError("");
       } else {
         const errorBody = await response.text();
         setError(errorBody);
+        return;
       }
     } catch (error) {
       navigate("/error", { replace: true });
@@ -44,7 +63,9 @@ function SignupFunctionality() {
   };
   return (
     <form onSubmit={handleSubmit}>
-      {error && <div className="error">{error}</div>}
+      <div-error>{error}</div-error>
+      <br></br>
+      <div-error>{profanityErrorMessage}</div-error>
       <div>
         <label htmlFor="email">Email Address</label>
         <input

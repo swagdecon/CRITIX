@@ -2,21 +2,34 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../misc/login.css";
 import "../misc/clapperboard.css";
+import Filter from "bad-words";
+
 function LoginFunctionality() {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
   }
+
+  const filter = new Filter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const userData = { email, password };
-
+    const hasEmailProfanity = filter.isProfane(userData["email"]);
+    const hasPasswordProfanity = filter.isProfane(userData["password"]);
+    if (hasEmailProfanity || hasPasswordProfanity) {
+      setErrorMessage("*Input(s) cannot contain profanity*");
+      return;
+    } else {
+      setErrorMessage("");
+    }
     try {
       const myResponse = await fetch(
         "http://localhost:8080/api/v1/auth/authenticate",
@@ -49,6 +62,7 @@ function LoginFunctionality() {
   };
   return (
     <form onSubmit={handleSubmit}>
+      {errorMessage && <div-error>{errorMessage}</div-error>}
       <div>
         <label htmlFor="email">Email</label>
         <input
