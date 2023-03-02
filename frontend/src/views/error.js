@@ -78,12 +78,11 @@ function Error404() {
                 </pre>
               </div>
             </div>
-            <span className="fnf" />
           </div>
+          <span className="fnf"></span>
         </div>
       </div>
     </div>
   );
 }
-
 export default Error404;

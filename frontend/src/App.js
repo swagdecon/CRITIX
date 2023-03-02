@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.js";
 import Login from "./views/login.js";
 import SignUp from "./views/signup.js";
@@ -14,13 +9,14 @@ import Popular from "./views/popular.js";
 import Upcoming from "./views/upcoming.js";
 import Homepage from "./views/homepage.js";
 import PrivateRoute from "./components/privateRoutes.js";
-import Error404 from "./views/error.js";
+
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
+
         <Route
           path="/homepage"
           element={
@@ -29,14 +25,13 @@ function App() {
             </PrivateRoute>
           }
         />
+
         <Route path="/top_rated" element={<TopRated />} />
         <Route path="/now_playing" element={<NowPlaying />} />
         <Route path="/popular" element={<Popular />} />
         <Route path="/upcoming" element={<Upcoming />} />
-        <Route path="*" element={<Error404 />} />
-        <Route component={<Navigate replace to="/404" />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 export default App;
