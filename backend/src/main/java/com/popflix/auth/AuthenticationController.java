@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.popflix.config.customExceptions.UserAlreadyExistsException;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -15,14 +17,13 @@ public class AuthenticationController {
         private final AuthenticationService service;
 
         @PostMapping("/register")
-        public ResponseEntity<AuthenticationResponse> register(
+        public ResponseEntity<?> register(
                         @RequestBody RegisterRequest request) {
-                // try {
-                return ResponseEntity.ok(service.register(request));
-
-                // } catch (Exception e) {
-                // return ResponseEntity.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
-                // }
+                try {
+                        return ResponseEntity.ok(service.register(request));
+                } catch (UserAlreadyExistsException ex) {
+                        return ResponseEntity.badRequest().body("*A User with this email already exists*");
+                }
         }
 
         @PostMapping("/authenticate")
