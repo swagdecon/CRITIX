@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.popflix.config.JwtService;
+import com.popflix.config.customExceptions.UserAlreadyExistsException;
 import com.popflix.model.Role;
 import com.popflix.model.User;
 import com.popflix.repository.UserRepository;
@@ -21,6 +22,11 @@ public class AuthenticationService {
         private final AuthenticationManager authenticationManager;
 
         public AuthenticationResponse register(RegisterRequest request) {
+
+                if (repository.findByEmail(request.getEmail()).isPresent()) {
+                        throw new UserAlreadyExistsException("A user with this email already exists");
+                }
+
                 var user = User.builder()
                                 .firstname(request.getFirstname())
                                 .lastname(request.getLastname())

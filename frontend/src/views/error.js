@@ -1,53 +1,89 @@
 import React from "react";
-import "../misc/error.css";
 import { Link } from "react-router-dom";
+import "../misc/error.css";
+// import { Link } from "react-router-dom";
 
 function Error404() {
   return (
-    <div className="wrapper">
-      <div id="container">
-        <div className="error">
-          <div className="wrap">
-            <div className="404" style={{ fontSize: "30px" }}>
-              <pre>
-                <code>
-                  &lt;!
-                  <span className="red">DOCTYPE html</span>
-                  <span className="red">&gt;</span>
-                  <span className="blue">&lt;html</span>{" "}
-                  <span className="yellow">lang=</span>
-                  <span className="green">&quot;en&quot;</span>
-                  <span className="blue">&gt;</span>
-                  <span className="blue">&lt;body</span>{" "}
-                  <span className="yellow">class=</span>
-                  <span className="green">&quot;broken&quot;</span>
-                  <span className="blue">&gt;</span>
-                  <br />
-                  <br />
-                  ERROR 404! FILE NOT FOUND!
-                  <br />
-                  <br />
-                  <span className="comment">
-                    &lt;!-- page not found, time to go. --&gt;
-                  </span>
-                  <br />
-                  <br />
-                  <Link to="/" style={{ textDecoration: "none" }}>
-                    <input id="the_button" type="button" value="back home." />
-                  </Link>
-                  <span className="red">&gt;</span>
-                  <br />
-                  <br />
-                  <span className="blue">&nbsp;&lt;/body&gt;</span>
-                  <span className="blue">&lt;/html&gt;</span>
-                </code>
-              </pre>
+    <div>
+      <div className="wrapper">
+        <div id="container">
+          <div className="error">
+            <div className="wrap">
+              <div className={404} style={{ fontSize: "30px" }}>
+                <pre>
+                  <code>
+                    {"\n"}
+                    {"  "}
+                    <span className="red">&lt;!</span>
+                    <span>DOCTYPE html</span>
+                    <span className="red">&gt;</span>
+                    {"\n"}
+                    {"    "}
+                    <span className="blue">
+                      &lt;html <span className="yellow">lang=</span>
+                      <span className="green">&#34;en&#34;</span>&gt;
+                    </span>
+                    {"\n"}
+                    {"      "}
+                    <span className="blue">
+                      &lt;body <span className="yellow">class=</span>
+                      <span className="green">&#34;broken&#34;</span>&gt;
+                    </span>
+                    {"\n"}
+                    {"  "}
+                    {"\n"}
+                    {"      "}
+                    <span>
+                      ERROR 404! {"\n"}
+                      {"        "}FILE NOT FOUND!
+                    </span>
+                    {"\n"}
+                    {"        "}
+                    {"\n"}
+                    {"        "}
+                    <span className="comment">
+                      &lt;!-- page not found,{"\n"}
+                      {"        "}time to go.--&gt;
+                    </span>
+                    {"\n"}
+                    {"          "}
+                    {"\n"}
+                    {"        "}
+                    <Link to="/" style={{ textDecoration: "none" }}>
+                      {"\n"}
+                      {"        "}
+                      <span className="red" style={{ textDecoration: "none" }}>
+                        &gt;
+                      </span>{" "}
+                      {"\n"}
+                      {"        "}
+                      <input
+                        id="the_button"
+                        type="button"
+                        defaultValue="back home."
+                      />
+                      {"\n"}
+                      {"        "}
+                    </Link>
+                    {"\n"}
+                    {"      "}
+                    <span className="blue">&nbsp;&lt;/body&gt;</span>
+                    {"\n"}
+                    {"    "}
+                    <span className="blue">&lt;/html&gt;</span>
+                    {"\n"}
+                    {"    "}
+                  </code>
+                </pre>
+              </div>
             </div>
+            <span className="fnf" />
           </div>
-          <span className="fnf"></span>
         </div>
       </div>
     </div>
   );
 }
+
 export default Error404;

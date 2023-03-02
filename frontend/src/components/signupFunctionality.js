@@ -14,8 +14,8 @@ function SignupFunctionality() {
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-
+  const [error, setError] = useState(false);
+  const [profanityErrorMessage, setProfanityErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -34,11 +34,13 @@ function SignupFunctionality() {
       hasLastNameProfanity ||
       hasPasswordProfanity
     ) {
-      setErrorMessage("*Input(s) cannot contain profanity*");
+      setProfanityErrorMessage("*Input(s) cannot contain profanity*");
+      setError("");
       return;
     } else {
-      setErrorMessage("");
+      setProfanityErrorMessage("");
     }
+
     try {
       const response = await fetch(
         "http://localhost:8080/api/v1/auth/register",
@@ -47,26 +49,26 @@ function SignupFunctionality() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            firstname: firstname,
-            lastname: lastname,
-            email: email,
-            password: password,
-          }),
+          body: JSON.stringify(userData),
         }
       );
+
       if (response.ok) {
         navigate("/login", { replace: true });
       } else {
-        console.log("Error");
+        const errorBody = await response.text();
+        setError(errorBody);
+        return;
       }
     } catch (error) {
-      console.log(userData);
+      navigate("/error", { replace: true });
     }
   };
   return (
     <form onSubmit={handleSubmit}>
-      {errorMessage && <div-error>{errorMessage}</div-error>}
+      <div-error>{error}</div-error>
+      <br></br>
+      <div-error>{profanityErrorMessage}</div-error>
       <div>
         <label htmlFor="email">Email Address</label>
         <input
