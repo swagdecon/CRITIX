@@ -4,7 +4,6 @@ import "../misc/error.css";
 function Error404() {
   return (
     <div>
-      <link rel="stylesheet" href="/error.css" />
       <div className="wrapper">
         <div id="container">
           <div className="error">
