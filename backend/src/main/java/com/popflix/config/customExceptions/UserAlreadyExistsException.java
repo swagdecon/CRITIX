@@ -1,4 +1,4 @@
-package com.popflix.controller;
+package com.popflix.config.customExceptions;
 
 public class UserAlreadyExistsException extends RuntimeException {
     public UserAlreadyExistsException(String message) {
