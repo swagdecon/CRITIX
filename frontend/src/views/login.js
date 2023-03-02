@@ -1,4 +1,5 @@
 import { React } from "react";
+import { Link } from "react-router-dom";
 import "../misc/login.css";
 import "../misc/logo.scss";
 import Logo from "../components/logo.js";
@@ -36,14 +37,15 @@ function Login() {
                 <span>OR</span>
                 <hr className="bar" />
               </div>
-              <a href="/" className="secondary-btn">
+              <Link to="/" className="secondary-btn">
                 SIGN UP
-              </a>
+              </Link>
             </div>
             <footer id="main-footer">
               <p>Copyright &copy; 2022, All Rights Reserved By POPFLIX</p>
               <div>
-                <a href="#">Terms of Use</a> | <a href="#">Privacy Policy</a>
+                <Link to="#">Terms of Use</Link> |{" "}
+                <Link to="#">Privacy Policy</Link>
               </div>
             </footer>
           </div>

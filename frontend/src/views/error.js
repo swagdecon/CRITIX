@@ -1,5 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../misc/error.css";
+// import { Link } from "react-router-dom";
 
 function Error404() {
   return (
@@ -48,7 +50,7 @@ function Error404() {
                     {"          "}
                     {"\n"}
                     {"        "}
-                    <a href="/" style={{ textDecoration: "none" }}>
+                    <Link to="/" style={{ textDecoration: "none" }}>
                       {"\n"}
                       {"        "}
                       <span className="red" style={{ textDecoration: "none" }}>
@@ -63,7 +65,7 @@ function Error404() {
                       />
                       {"\n"}
                       {"        "}
-                    </a>
+                    </Link>
                     {"\n"}
                     {"      "}
                     <span className="blue">&nbsp;&lt;/body&gt;</span>
