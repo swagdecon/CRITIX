@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.popflix.repository.UserAlreadyExistsException;
+import com.popflix.config.customExceptions.UserAlreadyExistsException;
 
 @RestController
 @RequestMapping("/api/v1/auth")
