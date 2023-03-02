@@ -1,5 +1,6 @@
 import React from "react";
 import "../misc/error.css";
+import { Link } from "react-router-dom";
 
 function Error404() {
   return (
@@ -31,10 +32,10 @@ function Error404() {
                   </span>
                   <br />
                   <br />
-                  <a href="/" style={{ textDecoration: "none" }}>
-                    <span className="red">&gt;</span>
+                  <Link to="/" style={{ textDecoration: "none" }}>
                     <input id="the_button" type="button" value="back home." />
-                  </a>
+                  </Link>
+                  <span className="red">&gt;</span>
                   <br />
                   <br />
                   <span className="blue">&nbsp;&lt;/body&gt;</span>
