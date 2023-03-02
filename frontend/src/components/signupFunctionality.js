@@ -22,6 +22,7 @@ function SignupFunctionality() {
     event.preventDefault();
 
     const userData = { firstname, lastname, email, password };
+
     const hasFirstNameProfanity = filter.isProfane(userData["firstname"]);
     const hasLastNameProfanity = filter.isProfane(userData["lastname"]);
     const hasEmailProfanity = filter.isProfane(userData["email"]);
@@ -35,11 +36,11 @@ function SignupFunctionality() {
     ) {
       setProfanityErrorMessage("*Input(s) cannot contain profanity*");
       setError("");
-
       return;
     } else {
       setProfanityErrorMessage("");
     }
+
     try {
       const response = await fetch(
         "http://localhost:8080/api/v1/auth/register",
@@ -51,6 +52,7 @@ function SignupFunctionality() {
           body: JSON.stringify(userData),
         }
       );
+
       if (response.ok) {
         navigate("/login", { replace: true });
       } else {
