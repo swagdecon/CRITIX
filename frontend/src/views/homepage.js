@@ -21,7 +21,7 @@ const Homepage = () => {
   }, []);
 
   return (
-    <div>
+    <div style={{ overflowY: "auto" }}>
       {/* NavBar */}
       {/* <Navbar /> */}
       <Container />
