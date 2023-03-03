@@ -3,6 +3,10 @@ div-wrapper-carousel {
   width: 10%;
   padding: 30;
 }
+html {
+  overflow-y: auto;
+}
 body {
   background-color: black;
+  overflow-y: auto;
 }
