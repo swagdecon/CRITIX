@@ -3,14 +3,14 @@ import "../misc/moviecard.scss";
 import ajax from "../components/fetchService.js";
 import "../misc/homepage.css";
 import truncateDescription from "../components/movieCardfunctions.js";
-import useLocalState from "../components/localStorage";
+import useSessionState from "../components/sessionStorage";
 import HeroCarousel from "../components/HeroCarousel";
 // import Navbar from "../components/NavBar/Navbar";
 // import Header from "../components/Header/Header";
 import Container from "../components/Container/Container";
 
 const Homepage = () => {
-  const [jwt] = useLocalState("", "jwt");
+  const [jwt] = useSessionState("", "jwt");
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {

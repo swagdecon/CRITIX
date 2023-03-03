@@ -45,14 +45,13 @@ function LoginFunctionality() {
         const responseJson = await myResponse.json();
         const token = JSON.stringify(responseJson.token);
 
-        if (typeof localStorage !== "undefined") {
-          localStorage.setItem("jwt", token);
-        } else if (typeof sessionStorage !== "undefined") {
+        if (typeof sessionStorage !== "undefined") {
           sessionStorage.setItem("jwt", token);
         } else {
           console.error(
             "Neither localStorage nor sessionStorage is available for storing JWT"
           );
+          navigate("/403", { replace: true });
         }
         navigate("/homepage", { replace: true });
       }
