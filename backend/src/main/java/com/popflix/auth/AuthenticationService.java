@@ -54,11 +54,15 @@ public class AuthenticationService {
                 var user = repository.findByEmail(request.getEmail())
                                 .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
                 try {
-                        String fingerprint = httpRequest.getHeader("X-Fingerprint");
-                        String expectedFingerprint = FingerprintGenerator.generate(httpRequest);
+                        String fingerprint = request.getFingerprint();
+                        System.out.println(fingerprint);
+
+                        String expectedFingerprint = httpRequest.getHeader("X-Fingerprint");
+                        System.out.println(expectedFingerprint);
 
                         if (fingerprint == null || !fingerprint.equals(expectedFingerprint)) {
                                 throw new RuntimeException("Invalid fingerprint");
+
                         }
 
                         var jwtToken = jwtService.generateToken(user);
@@ -69,5 +73,4 @@ public class AuthenticationService {
                         throw new RuntimeException("Error generating fingerprint", e);
                 }
         }
-
 }
