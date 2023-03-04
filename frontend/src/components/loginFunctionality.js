@@ -4,6 +4,7 @@ import "../misc/login.css";
 import "../misc/clapperboard.css";
 import Filter from "bad-words";
 import sha256 from "crypto-js/sha256";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 function LoginFunctionality() {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -49,15 +50,13 @@ function LoginFunctionality() {
         const responseJson = await myResponse.json();
         const { token, context } = responseJson;
 
-        const fingerprint = sha256(context);
+        const fingerprint = sha256(context + result.visitorId); // Generate fingerprint based on context and visitor ID
         const tokenWithFingerprint = JSON.stringify({ token, fingerprint });
 
         if (typeof sessionStorage !== "undefined") {
           sessionStorage.setItem("jwt", tokenWithFingerprint);
         } else {
-          console.error(
-            "Neither localStorage nor sessionStorage is available for storing JWT"
-          );
+          console.error("SessionStorage is not available for storing JWT");
           navigate("/403", { replace: true });
         }
 
