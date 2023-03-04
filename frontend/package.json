@@ -14,6 +14,7 @@
     "cors": "^2.8.5",
     "crypto-js": "^4.1.1",
     "install": "^0.13.0",
+    "lodash": "^4.17.21",
     "npm": "^9.5.1",
     "profanity-cleaner": "^0.0.3",
     "react": "^18.2.0",

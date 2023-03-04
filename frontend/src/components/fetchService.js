@@ -8,6 +8,7 @@ function ajax(url, reqMethod, jwt, requestBody) {
 
   if (jwt) {
     fetchData.headers.Authorization = `Bearer ${jwt}`;
+    fetchData.headers.Authorization = `X-Fingerprint ${fingerprint}`;
   }
 
   if (requestBody) {
