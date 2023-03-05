@@ -1,6 +1,16 @@
+.carousel {
+  width: 100%;
+  position: relative;
+}
+
+.carousel-container {
+  position: relative;
+}
+
 .carousel-item {
   text-align: center;
 }
-.carousel {
-  width: 100%;
+.carousel-inner {
+  width: flex;
+  margin: 0 auto;
 }
