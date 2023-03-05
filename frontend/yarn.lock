@@ -1216,6 +1216,13 @@
   "resolved" "https://registry.npmjs.org/@eslint/js/-/js-8.35.0.tgz"
   "version" "8.35.0"
 
+"@fingerprintjs/fingerprintjs@^3.4.0":
+  "integrity" "sha512-B+Eaoo5onQnFI0eYrAZ9WNHr/AjfTKqAF/h9wkWC9W0+ZCr6s/jTJRE8RdJGFyzapBniDsi0NvgualYq+1Ui5w=="
+  "resolved" "https://registry.npmjs.org/@fingerprintjs/fingerprintjs/-/fingerprintjs-3.4.0.tgz"
+  "version" "3.4.0"
+  dependencies:
+    "tslib" "^2.4.1"
+
 "@gar/promisify@^1.1.3":
   "integrity" "sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw=="
   "resolved" "https://registry.npmjs.org/@gar/promisify/-/promisify-1.1.3.tgz"
@@ -10342,7 +10349,7 @@
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   "version" "1.14.1"
 
-"tslib@^2.0.3", "tslib@^2.4.0":
+"tslib@^2.0.3", "tslib@^2.4.0", "tslib@^2.4.1":
   "integrity" "sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg=="
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.5.0.tgz"
   "version" "2.5.0"

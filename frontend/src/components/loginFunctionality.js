@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../misc/login.css";
 import "../misc/clapperboard.css";
@@ -8,6 +8,12 @@ import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 function LoginFunctionality() {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState("");
+  const [fingerprint, setFingerprint] = useState("");
+  const navigate = useNavigate();
 
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
@@ -15,12 +21,15 @@ function LoginFunctionality() {
 
   const filter = new Filter();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [error, setError] = useState("");
-
-  const navigate = useNavigate();
+  useEffect(() => {
+    const getFingerprint = async () => {
+      const fp = await FingerprintJS.load();
+      const result = await fp.get();
+      const fingerprint = sha256(result.visitorId).toString();
+      setFingerprint(fingerprint);
+    };
+    getFingerprint();
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -42,15 +51,15 @@ function LoginFunctionality() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "X-Fingerprint": fingerprint,
           },
           body: JSON.stringify(userData),
         }
       );
       if (myResponse.ok) {
         const responseJson = await myResponse.json();
-        const { token, context } = responseJson;
+        const { token } = responseJson;
 
-        const fingerprint = sha256(context + result.visitorId); // Generate fingerprint based on context and visitor ID
         const tokenWithFingerprint = JSON.stringify({ token, fingerprint });
 
         if (typeof sessionStorage !== "undefined") {
