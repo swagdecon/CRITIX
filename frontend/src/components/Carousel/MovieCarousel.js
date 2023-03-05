@@ -48,7 +48,7 @@ const MovieCarousel = ({ endpoint }) => {
   }, [endpoint]);
 
   return (
-    <Carousel indicators={false} slide="false">
+    <Carousel indicators={false} interval={null}>
       {movieChunks.map((chunk, i) => (
         <Carousel.Item key={i}>
           {chunk.map((movie, j) => (
