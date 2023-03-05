@@ -1,5 +1,6 @@
-.carousel-container {
-  margin: 0 auto;
-  max-width: 800px; /* set the maximum width of the carousel */
-  align-items: center;
+.carousel-item {
+  text-align: center;
+}
+.carousel {
+  width: 100%;
 }
