@@ -1,8 +1,8 @@
 import React from "react";
 import "../misc/moviecard.scss";
 import "../misc/homepage.css";
-import HeroCarousel from "../components/HeroCarousel";
-import MovieCarousel from "../components/MovieCarousel";
+import HeroCarousel from "../components/Carousel/HeroCarousel";
+import MovieCarousel from "../components/Carousel/MovieCarousel";
 // import Navbar from "../components/NavBar/Navbar";
 // import Header from "../components/Header/Header";
 import Container from "../components/Container/Container";

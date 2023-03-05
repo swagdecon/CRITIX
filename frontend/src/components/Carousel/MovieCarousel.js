@@ -1,12 +1,14 @@
 import { React, useState, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
-import truncateDescription from "../components/movieCardfunctions.js";
+import truncateDescription from "../movieCardfunctions.js";
 import PropTypes from "prop-types";
+import "./MovieCarousel.css";
 // Library that can perform array manipulation, in this case, splitting the movie into chunks of 5 to then loop over:
 import { chunk } from "lodash";
-
+import { useNavigate } from "react-router-dom";
 const MovieCarousel = ({ endpoint }) => {
   const [movies, setMovies] = useState([]);
+  const navigate = useNavigate();
 
   const movieChunks = chunk(movies, 5);
   //The chunk() method takes two arguments: the first argument is the array to be chunked, and the second argument (optional) is the size of each chunk. In this case, we pass 5 as the size of each chunk.
@@ -34,8 +36,10 @@ const MovieCarousel = ({ endpoint }) => {
           setMovies(responseJson);
         } else {
           console.log(`HTTP error! status: ${myResponse.status}`);
+          navigate("/403", { replace: true });
         }
       } catch (error) {
+        navigate("/403", { replace: true });
         console.log(error);
       }
     }
@@ -44,7 +48,7 @@ const MovieCarousel = ({ endpoint }) => {
   }, [endpoint]);
 
   return (
-    <Carousel>
+    <Carousel indicators={false}>
       {movieChunks.map((chunk, i) => (
         <Carousel.Item key={i}>
           {chunk.map((movie, j) => (

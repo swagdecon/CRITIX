@@ -25,7 +25,10 @@ function LoginFunctionality() {
     const getFingerprint = async () => {
       const fp = await FingerprintJS.load();
       const result = await fp.get();
-      const fingerprint = sha256(result.visitorId).toString();
+      const { userAgent, language } = window.navigator;
+      const fingerprint = sha256(
+        `${result.visitorId}${userAgent}${language}`
+      ).toString();
       setFingerprint(fingerprint);
     };
     getFingerprint();
@@ -91,7 +94,7 @@ function LoginFunctionality() {
           id="email"
           name="email"
           className="text-input"
-          autoComplete="off"
+          autoComplete="current-email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           required
@@ -106,6 +109,7 @@ function LoginFunctionality() {
           className="text-input"
           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}"
           value={password}
+          autoComplete="current-password"
           onChange={(event) => setPassword(event.target.value)}
           required
         />
