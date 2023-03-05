@@ -55,13 +55,12 @@ public class AuthenticationService {
                                 .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
                 try {
                         String fingerprint = httpRequest.getHeader("X-Fingerprint");
-                        String expectedFingerprint = FingerprintGenerator.generate(httpRequest);
 
-                        if (fingerprint == null || !fingerprint.equals(expectedFingerprint)) {
+                        if (fingerprint == null) {
                                 throw new RuntimeException("Invalid fingerprint");
                         }
 
-                        var jwtToken = jwtService.generateToken(user);
+                        var jwtToken = jwtService.generateToken(user, fingerprint);
                         return AuthenticationResponse.builder()
                                         .token(jwtToken)
                                         .build();

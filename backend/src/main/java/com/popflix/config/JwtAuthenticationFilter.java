@@ -29,15 +29,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
+        final String fingerprint;
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
         jwt = authHeader.substring(7);
         userEmail = jwtService.extractUsername(jwt);
+        fingerprint = jwtService.extractClaim(jwt, claims -> claims.get("fingerprint", String.class));
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            if (jwtService.isTokenValid(jwt, userDetails)) {
+            if (jwtService.isTokenValid(jwt, userDetails, fingerprint)) {
+                // Verify fingerprint
+                String clientFingerprint = request.getHeader("X-Fingerprint");
+                if (clientFingerprint == null || !clientFingerprint.equals(fingerprint)) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid fingerprint");
+                    return;
+                }
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
