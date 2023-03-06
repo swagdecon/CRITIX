@@ -22,7 +22,16 @@ const Homepage = () => {
           {/* Hero Carousel */}
           <HeroCarousel />
           {/* Movie Cards Below */}
-          <MovieCarousel endpoint="/api/movies/popular" />
+          <MovieCarousel
+            flickerL={"L"}
+            title="Popular right now"
+            endpoint="/api/movies/popular"
+          />
+          <MovieCarousel
+            flickerL={"L"}
+            title="Popular right now"
+            endpoint="/api/movies/popular"
+          />
         </div>
       </body>
     </html>

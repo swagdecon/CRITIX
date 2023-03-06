@@ -6,7 +6,8 @@ import "./MovieCarousel.css";
 // Library that can perform array manipulation, in this case, splitting the movie into chunks of 5 to then loop over:
 import { chunk } from "lodash";
 import { useNavigate } from "react-router-dom";
-const MovieCarousel = ({ endpoint }) => {
+import "./title.scss";
+const MovieCarousel = ({ title, flickerL, endpoint }) => {
   const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
 
@@ -15,9 +16,14 @@ const MovieCarousel = ({ endpoint }) => {
 
   // The chunk() method returns an array of sub-arrays, where each sub-array contains 5 movies or less. We then use the same map() method as before to render the carousel slides and movie cards.
   MovieCarousel.propTypes = {
+    title: PropTypes.array.isRequired,
+  };
+  MovieCarousel.propTypes = {
+    flickerL: PropTypes.array.isRequired,
+  };
+  MovieCarousel.propTypes = {
     endpoint: PropTypes.array.isRequired,
   };
-
   useEffect(() => {
     async function fetchData() {
       try {
@@ -48,93 +54,97 @@ const MovieCarousel = ({ endpoint }) => {
   }, [endpoint]);
 
   return (
-    <Carousel indicators={false} interval={null}>
-      {movieChunks.map((chunk, i) => (
-        <Carousel.Item key={i}>
-          {chunk.map((movie, j) => (
-            <div className="card-container" key={`${i}-${j}`}>
-              <div className="container">
-                <div className="cellphone-container">
-                  <div className="movie">
-                    <div className="menu">
-                      <i className="material-icons"></i>
-                    </div>
-                    <div
-                      className="movie-img"
-                      style={{
-                        backgroundImage: `url(https://image.tmdb.org/t/p/w500/${movie.poster_path})`,
-                      }}
-                    ></div>
-                    <div className="text-movie-cont">
-                      <div className="mr-grid">
-                        <div className="col1">
-                          {/* .replace ensures there is only one space inbetween words */}
-                          {/* <h1>{movie.title.replace(/\s+/g, " ")}</h1> */}
-                          <ul className="movie-gen">
-                            <li>{movie.vote_average} /</li>
-                            <li>2h 49min /</li>
-                            <li>Adventure, Drama, Sci-Fi,</li>
-                          </ul>
-                        </div>
+    <body>
+      <h3-title data-heading={flickerL}>{title}</h3-title>
+      <Carousel indicators={false} interval={null}>
+        {movieChunks.map((chunk, i) => (
+          <Carousel.Item key={i}>
+            {chunk.map((movie, j) => (
+              <div className="card-container" key={`${i}-${j}`}>
+                <div className="container">
+                  <div className="cellphone-container">
+                    <div className="movie">
+                      <div className="menu">
+                        <i className="material-icons"></i>
                       </div>
-                      <div className="mr-grid summary-row">
-                        <div className="col2">
-                          <h5>SUMMARY</h5>
-                        </div>
-                        <div className="col2">
-                          <ul className="movie-likes">
-                            <li>
-                              <i className="material-icons">&#xE813;</i>
-                              124
-                            </li>
-                            <li>
-                              <i className="material-icons">&#xE813;</i>3
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                      <div className="mr-grid">
-                        <div className="col1">
-                          <p className="movie-description">
-                            {truncateDescription(movie.overview)}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="mr-grid actors-row">
-                        <div className="col1">
-                          <p className="movie-actors">
-                            Matthew McConaughey, Anne Hathaway, Jessica Chastain
-                          </p>
-                        </div>
-                      </div>
-                      <div className="mr-grid action-row">
-                        <div className="col2">
-                          <div className="watch-btn">
-                            <h3>
-                              <i className="material-icons">&#xE037;</i>
-                              WATCH TRAILER
-                            </h3>
+                      <div
+                        className="movie-img"
+                        style={{
+                          backgroundImage: `url(https://image.tmdb.org/t/p/w500/${movie.poster_path})`,
+                        }}
+                      ></div>
+                      <div className="text-movie-cont">
+                        <div className="mr-grid">
+                          <div className="col1">
+                            {/* .replace ensures there is only one space inbetween words */}
+                            {/* <h1>{movie.title.replace(/\s+/g, " ")}</h1> */}
+                            <ul className="movie-gen">
+                              <li>{movie.vote_average} /</li>
+                              <li>2h 49min /</li>
+                              <li>Adventure, Drama, Sci-Fi,</li>
+                            </ul>
                           </div>
                         </div>
-                        <div className="col6 action-btn">
-                          <i className="material-icons">&#xE161;</i>
+                        <div className="mr-grid summary-row">
+                          <div className="col2">
+                            <h5>SUMMARY</h5>
+                          </div>
+                          <div className="col2">
+                            <ul className="movie-likes">
+                              <li>
+                                <i className="material-icons">&#xE813;</i>
+                                124
+                              </li>
+                              <li>
+                                <i className="material-icons">&#xE813;</i>3
+                              </li>
+                            </ul>
+                          </div>
                         </div>
-                        <div className="col6 action-btn">
-                          <i className="material-icons">&#xE866;</i>
+                        <div className="mr-grid">
+                          <div className="col1">
+                            <p className="movie-description">
+                              {truncateDescription(movie.overview)}
+                            </p>
+                          </div>
                         </div>
-                        <div className="col6 action-btn">
-                          <i className="material-icons">&#xE80D;</i>
+                        <div className="mr-grid actors-row">
+                          <div className="col1">
+                            <p className="movie-actors">
+                              Matthew McConaughey, Anne Hathaway, Jessica
+                              Chastain
+                            </p>
+                          </div>
+                        </div>
+                        <div className="mr-grid action-row">
+                          <div className="col2">
+                            <div className="watch-btn">
+                              <h3>
+                                <i className="material-icons">&#xE037;</i>
+                                WATCH TRAILER
+                              </h3>
+                            </div>
+                          </div>
+                          <div className="col6 action-btn">
+                            <i className="material-icons">&#xE161;</i>
+                          </div>
+                          <div className="col6 action-btn">
+                            <i className="material-icons">&#xE866;</i>
+                          </div>
+                          <div className="col6 action-btn">
+                            <i className="material-icons">&#xE80D;</i>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </Carousel.Item>
-      ))}
-    </Carousel>
+            ))}
+          </Carousel.Item>
+        ))}
+      </Carousel>
+    </body>
   );
 };
 
