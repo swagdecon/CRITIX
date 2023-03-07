@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.popflix.config.FingerprintGenerator;
 import com.popflix.config.JwtService;
 import com.popflix.config.customExceptions.FingerprintGeneratorException;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
