@@ -9,24 +9,10 @@ h3-title {
   font-size: 2vw;
   text-align: center;
   line-height: 1;
-  margin: 0;
-  transform: translate(45%);
-  position: absolute;
+  margin-left: 11%;
+  position: relative;
   color: $h3;
   letter-spacing: -0.5rem;
-
-  &:before {
-    content: attr(data-heading);
-    position: absolute;
-    overflow: hidden;
-    color: $yellow;
-    width: 100%;
-    z-index: 5;
-    text-shadow: none;
-    left: 26%;
-    text-align: left;
-    animation: flicker 3s linear infinite;
-  }
 }
 
 @keyframes flicker {

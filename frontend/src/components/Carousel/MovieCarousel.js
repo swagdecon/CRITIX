@@ -16,13 +16,13 @@ const MovieCarousel = ({ title, flickerL, endpoint }) => {
 
   // The chunk() method returns an array of sub-arrays, where each sub-array contains 5 movies or less. We then use the same map() method as before to render the carousel slides and movie cards.
   MovieCarousel.propTypes = {
-    title: PropTypes.array.isRequired,
+    title: PropTypes.string.isRequired,
   };
   MovieCarousel.propTypes = {
-    flickerL: PropTypes.array.isRequired,
+    flickerL: PropTypes.string.isRequired,
   };
   MovieCarousel.propTypes = {
-    endpoint: PropTypes.array.isRequired,
+    endpoint: PropTypes.string.isRequired,
   };
   useEffect(() => {
     async function fetchData() {
@@ -54,9 +54,9 @@ const MovieCarousel = ({ title, flickerL, endpoint }) => {
   }, [endpoint]);
 
   return (
-    <body>
+    <body-1>
       <h3-title data-heading={flickerL}>{title}</h3-title>
-      <Carousel indicators={false} interval={null}>
+      <Carousel className="carousel-movie" indicators={false} interval={null}>
         {movieChunks.map((chunk, i) => (
           <Carousel.Item key={i}>
             {chunk.map((movie, j) => (
@@ -144,7 +144,7 @@ const MovieCarousel = ({ title, flickerL, endpoint }) => {
           </Carousel.Item>
         ))}
       </Carousel>
-    </body>
+    </body-1>
   );
 };
 

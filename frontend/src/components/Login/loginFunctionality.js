@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../misc/login.css";
-import "../misc/clapperboard.css";
+import "./login.css";
+import "../../misc/clapperboard.css";
 import Filter from "bad-words";
 import sha256 from "crypto-js/sha256";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";

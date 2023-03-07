@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../misc/login.css";
-import Popcorn from "../misc/popcorn_logo";
+import "../Login/login.css";
+import Popcorn from "../../misc/popcorn_logo";
 import Filter from "bad-words";
 
 function SignupFunctionality() {

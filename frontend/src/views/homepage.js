@@ -13,7 +13,6 @@ const Homepage = () => {
         href="https://fonts.googleapis.com/icon?family=Material+Icons"
         rel="stylesheet"
       />
-
       <body>
         <div>
           {/* NavBar */}
@@ -23,14 +22,12 @@ const Homepage = () => {
           <HeroCarousel />
           {/* Movie Cards Below */}
           <MovieCarousel
-            flickerL={"L"}
             title="Popular right now"
             endpoint="/api/movies/popular"
           />
           <MovieCarousel
-            flickerL={"L"}
-            title="Popular right now"
-            endpoint="/api/movies/popular"
+            title="Now Playing"
+            endpoint="/api/movies/now_playing"
           />
         </div>
       </body>
