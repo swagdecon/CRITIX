@@ -29,6 +29,10 @@ const Homepage = () => {
             title="Now Playing"
             endpoint="/api/movies/now_playing"
           />
+          {/* <MovieCarousel
+            title="Releasing Soon"
+            endpoint="/api/movies/upcoming"
+          /> */}
         </div>
       </body>
     </html>

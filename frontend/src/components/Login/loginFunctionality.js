@@ -25,10 +25,17 @@ function LoginFunctionality() {
     const getFingerprint = async () => {
       const fp = await FingerprintJS.load();
       const result = await fp.get();
-      const { userAgent, language } = window.navigator;
+      const {
+        userAgent,
+        language,
+        hardwareConcurrency,
+        doNotTrack,
+        maxTouchPoints,
+      } = window.navigator;
       const fingerprint = sha256(
-        `${result.visitorId}${userAgent}${language}`
+        `${result.visitorId}${userAgent}${language}${hardwareConcurrency}${doNotTrack}${maxTouchPoints}`
       ).toString();
+
       setFingerprint(fingerprint);
     };
     getFingerprint();

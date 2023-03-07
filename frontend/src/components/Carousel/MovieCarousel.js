@@ -7,7 +7,7 @@ import "./MovieCarousel.css";
 import { chunk } from "lodash";
 import { useNavigate } from "react-router-dom";
 import "./title.scss";
-const MovieCarousel = ({ title, flickerL, endpoint }) => {
+const MovieCarousel = ({ title, endpoint }) => {
   const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
 
@@ -55,7 +55,7 @@ const MovieCarousel = ({ title, flickerL, endpoint }) => {
 
   return (
     <body-1>
-      <h3-title data-heading={flickerL}>{title}</h3-title>
+      <h3-title>{title}</h3-title>
       <Carousel className="carousel-movie" indicators={false} interval={null}>
         {movieChunks.map((chunk, i) => (
           <Carousel.Item key={i}>
