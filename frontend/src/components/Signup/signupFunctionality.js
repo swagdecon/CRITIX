@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../misc/login.css";
-import Popcorn from "../misc/popcorn_logo";
+import "../Login/login.css";
+import Popcorn from "../../misc/popcorn_logo";
 import Filter from "bad-words";
 
 function SignupFunctionality() {
@@ -77,6 +77,7 @@ function SignupFunctionality() {
           name="email"
           className="text-input"
           pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+          autoComplete="current-email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           required
@@ -116,6 +117,7 @@ function SignupFunctionality() {
           name="password"
           className="text-input"
           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}"
+          autoComplete="current-password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           required

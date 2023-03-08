@@ -1,12 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../misc/login.css";
-import "../misc/clapperboard.css";
+import "./login.css";
+import "../../misc/clapperboard.css";
 import Filter from "bad-words";
 import sha256 from "crypto-js/sha256";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 function LoginFunctionality() {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState("");
+  const [fingerprint, setFingerprint] = useState("");
+  const navigate = useNavigate();
 
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
@@ -14,12 +21,25 @@ function LoginFunctionality() {
 
   const filter = new Filter();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [error, setError] = useState("");
+  useEffect(() => {
+    const getFingerprint = async () => {
+      const fp = await FingerprintJS.load();
+      const result = await fp.get();
+      const {
+        userAgent,
+        language,
+        hardwareConcurrency,
+        doNotTrack,
+        maxTouchPoints,
+      } = window.navigator;
+      const fingerprint = sha256(
+        `${result.visitorId}${userAgent}${language}${hardwareConcurrency}${doNotTrack}${maxTouchPoints}`
+      ).toString();
 
-  const navigate = useNavigate();
+      setFingerprint(fingerprint);
+    };
+    getFingerprint();
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -41,23 +61,21 @@ function LoginFunctionality() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "X-Fingerprint": fingerprint,
           },
           body: JSON.stringify(userData),
         }
       );
       if (myResponse.ok) {
         const responseJson = await myResponse.json();
-        const { token, context } = responseJson;
+        const { token } = responseJson;
 
-        const fingerprint = sha256(context);
         const tokenWithFingerprint = JSON.stringify({ token, fingerprint });
 
         if (typeof sessionStorage !== "undefined") {
           sessionStorage.setItem("jwt", tokenWithFingerprint);
         } else {
-          console.error(
-            "Neither localStorage nor sessionStorage is available for storing JWT"
-          );
+          console.error("SessionStorage is not available for storing JWT");
           navigate("/403", { replace: true });
         }
 
@@ -83,7 +101,7 @@ function LoginFunctionality() {
           id="email"
           name="email"
           className="text-input"
-          autoComplete="off"
+          autoComplete="current-email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           required
@@ -98,6 +116,7 @@ function LoginFunctionality() {
           className="text-input"
           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}"
           value={password}
+          autoComplete="current-password"
           onChange={(event) => setPassword(event.target.value)}
           required
         />

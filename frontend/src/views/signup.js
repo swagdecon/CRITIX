@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../misc/login.css";
+import "../components/Login/login.css";
 import "../misc/logo.scss";
 import Logo from "../components/logo.js";
 import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
-import SignUpPlayer from "../components/SignUpVideo.js";
-import SignupFunctionality from "../components/signupFunctionality.js";
+import SignUpPlayer from "../components/Signup/SignUpVideo.js";
+import SignupFunctionality from "../components/Signup/signupFunctionality.js";
 function SignUp() {
   return (
     <html lang="en">
