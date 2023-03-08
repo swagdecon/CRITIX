@@ -5,8 +5,6 @@ import "../misc/homepage.css";
 import truncateDescription from "../components/movieCardfunctions.js";
 import useLocalState from "../components/localStorage";
 import HeroCarousel from "../components/HeroCarousel";
-// import Navbar from "../components/NavBar/Navbar";
-// import Header from "../components/Header/Header";
 import Container from "../components/Container/Container";
 
 const Homepage = () => {
@@ -14,7 +12,7 @@ const Homepage = () => {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
-    ajax("api/movies/popular", "GET", jwt).then((data) => {
+    ajax("api/movies/top_rated", "GET", jwt).then((data) => {
       console.log(data);
       setMovies(data);
     });
@@ -23,7 +21,6 @@ const Homepage = () => {
   return (
     <div>
       {/* NavBar */}
-      {/* <Navbar /> */}
       <Container />
 
       {/* Hero Carousel */}
@@ -38,26 +35,29 @@ const Homepage = () => {
                 <div className="menu">
                   <i className="material-icons"></i>
                 </div>
-                <div
-                  className="movie-img"
-                  style={{
-                    backgroundImage: `url(https://image.tmdb.org/t/p/w500/${movie.poster_path})`,
-                  }}
-                ></div>
+                <div className="movie-img">
+                  <img
+                    src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+                    alt={movie.title}
+                  />
+                </div>
                 <div className="text-movie-cont">
                   <div className="mr-grid">
                     <div className="col1">
                       {/* .replace ensures there is only one space inbetween words */}
                       {/* <h1>{movie.title.replace(/\s+/g, " ")}</h1> */}
                       <ul className="movie-gen">
-                        <li>{movie.vote_average} /</li>
-                        <li>2h 49min /</li>
-                        <li>Adventure, Drama, Sci-Fi,</li>
+                        <li>{Math.round(movie.vote_average * 10) / 10} </li>
+                        <li>{movie.runtime} mins</li>
+                        <li>{movie.genres.join(", ")}</li>
                       </ul>
                     </div>
                   </div>
                   <div className="mr-grid summary-row">
                     <div className="col2">
+                      <h2>{movie.title}</h2>
+                      {/* <p>{movie.release_date}</p> */}
+                      {/* <p>{movie.tagline}</p> */}
                       <h5>SUMMARY</h5>
                     </div>
                     <div className="col2">
@@ -81,18 +81,32 @@ const Homepage = () => {
                   <div className="mr-grid actors-row">
                     <div className="col1">
                       <p className="movie-actors">
-                        Matthew McConaughey, Anne Hathaway, Jessica Chastain
+                        {movie.actors.slice(0, 3).map((actor, index) => {
+                          if (index === 0) {
+                            return actor;
+                          } else if (index < 3) {
+                            return `, ${actor}`;
+                          } else {
+                            return "";
+                          }
+                        })}
                       </p>
                     </div>
                   </div>
                   <div className="mr-grid action-row">
                     <div className="col2">
-                      <div className="watch-btn">
+                      <button
+                        className="watch-btn"
+                        type="button"
+                        onClick={() =>
+                          (window.location.href = `https://www.youtube.com/watch?v=${movie.video[0]}`)
+                        }
+                      >
                         <h3>
-                          <i className="material-icons">&#xE037;</i>WATCH
-                          TRAILER
+                          <i className="material-icons">&#xE037;</i>
+                          WATCH TRAILER
                         </h3>
-                      </div>
+                      </button>
                     </div>
                     <div className="col6 action-btn">
                       <i className="material-icons">&#xE161;</i>

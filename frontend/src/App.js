@@ -9,6 +9,7 @@ import Popular from "./views/popular.js";
 import Upcoming from "./views/upcoming.js";
 import Homepage from "./views/homepage.js";
 import PrivateRoute from "./components/privateRoutes.js";
+import MovieDetails from "./components/MovieDetails/MovieDetails.js";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/single" element={<MovieDetails />} />
 
         <Route
           path="/homepage"

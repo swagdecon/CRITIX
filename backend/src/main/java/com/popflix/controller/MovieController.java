@@ -23,6 +23,7 @@ public class MovieController {
 
     @GetMapping("/popular")
     public ResponseEntity<List<Movie>> getPopularMovies() {
+        movieService.updateMovieDetails("popular");
         return new ResponseEntity<List<Movie>>(movieService.allMovies("popular"), HttpStatus.OK);
     }
 
@@ -45,6 +46,7 @@ public class MovieController {
 
     @GetMapping("/top_rated")
     public ResponseEntity<List<Movie>> getTopRatedMovies() {
+        movieService.updateMovieDetails("top_rated");
         return new ResponseEntity<List<Movie>>(movieService.allMovies("top_rated"), HttpStatus.OK);
     }
 
