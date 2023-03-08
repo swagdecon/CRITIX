@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../misc/login.css";
 import "../misc/clapperboard.css";
 import Filter from "bad-words";
+import sha256 from "crypto-js/sha256";
 
 function LoginFunctionality() {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -16,6 +17,8 @@ function LoginFunctionality() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -30,6 +33,7 @@ function LoginFunctionality() {
     } else {
       setErrorMessage("");
     }
+
     try {
       const myResponse = await fetch(
         "http://localhost:8080/api/v1/auth/authenticate",
@@ -43,26 +47,35 @@ function LoginFunctionality() {
       );
       if (myResponse.ok) {
         const responseJson = await myResponse.json();
-        const token = JSON.stringify(responseJson.token);
+        const { token, context } = responseJson;
 
-        if (typeof localStorage !== "undefined") {
-          localStorage.setItem("jwt", token);
-        } else if (typeof sessionStorage !== "undefined") {
-          sessionStorage.setItem("jwt", token);
+        const fingerprint = sha256(context);
+        const tokenWithFingerprint = JSON.stringify({ token, fingerprint });
+
+        if (typeof sessionStorage !== "undefined") {
+          sessionStorage.setItem("jwt", tokenWithFingerprint);
         } else {
           console.error(
             "Neither localStorage nor sessionStorage is available for storing JWT"
           );
+          navigate("/403", { replace: true });
         }
+
         navigate("/homepage", { replace: true });
+      } else {
+        setError("*Invalid Username or Password*");
       }
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <form onSubmit={handleSubmit}>
-      {errorMessage && <div-error>{errorMessage}</div-error>}
+      <div-error>{error}</div-error>
+
+      <br></br>
+      <div-error>{errorMessage}</div-error>
       <div>
         <label htmlFor="email">Email</label>
         <input

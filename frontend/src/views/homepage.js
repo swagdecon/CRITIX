@@ -1,33 +1,53 @@
 import React, { useState, useEffect } from "react";
 import "../misc/moviecard.scss";
-import ajax from "../components/fetchService.js";
 import "../misc/homepage.css";
 import truncateDescription from "../components/movieCardfunctions.js";
-import useLocalState from "../components/localStorage";
 import HeroCarousel from "../components/HeroCarousel";
+
 // import Navbar from "../components/NavBar/Navbar";
 // import Header from "../components/Header/Header";
 import Container from "../components/Container/Container";
 
 const Homepage = () => {
-  const [jwt] = useLocalState("", "jwt");
+  // const [jwt] = useSessionState("", "jwt");
   const [movies, setMovies] = useState([]);
-
+  // console.log(jwt);
   useEffect(() => {
-    ajax("api/movies/popular", "GET", jwt).then((data) => {
-      console.log(data);
-      setMovies(data);
-    });
+    async function fetchData() {
+      try {
+        const tokenWithFingerprint = sessionStorage.getItem("jwt");
+        const { token, fingerprint } = JSON.parse(tokenWithFingerprint);
+        console.log(token);
+        console.log(fingerprint);
+
+        const myResponse = await fetch("/api/movies/popular", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "X-Fingerprint": fingerprint,
+          },
+        });
+
+        if (myResponse.ok) {
+          const responseJson = await myResponse.json();
+          setMovies(responseJson);
+        } else {
+          console.log(`HTTP error! status: ${myResponse.status}`);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchData();
   }, []);
 
   return (
     <html>
-      <head>
-        <link
-          href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          rel="stylesheet"
-        ></link>
-      </head>
+      <link
+        href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet"
+      />
+
       <body>
         <div>
           {/* NavBar */}
