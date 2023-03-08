@@ -1,10 +1,11 @@
 import { React } from "react";
-import "../misc/login.css";
+import { Link } from "react-router-dom";
+import "../components/Login/login.css";
 import "../misc/logo.scss";
 import Logo from "../components/logo.js";
 import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
-import LoginPlayer from "../components/LoginVideo.js";
-import LoginFunctionality from "../components/loginFunctionality";
+import LoginPlayer from "../components/Login/LoginVideo";
+import LoginFunctionality from "../components/Login/loginFunctionality";
 
 function Login() {
   return (
@@ -36,14 +37,15 @@ function Login() {
                 <span>OR</span>
                 <hr className="bar" />
               </div>
-              <a href="/" className="secondary-btn">
+              <Link to="/" className="secondary-btn">
                 SIGN UP
-              </a>
+              </Link>
             </div>
             <footer id="main-footer">
               <p>Copyright &copy; 2022, All Rights Reserved By POPFLIX</p>
               <div>
-                <a href="#">Terms of Use</a> | <a href="#">Privacy Policy</a>
+                <Link to="#">Terms of Use</Link> |{" "}
+                <Link to="#">Privacy Policy</Link>
               </div>
             </footer>
           </div>

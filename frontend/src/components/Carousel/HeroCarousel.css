@@ -1,8 +1,11 @@
-.hero_header,
 .hero_tagline {
   text-align: left;
   font-family: "Poppins", sans-serif;
 }
+.hero_header {
+  margin-bottom: -1%;
+}
+
 /* HERO_HEADER */
 
 .carousel-inner img {
@@ -13,13 +16,13 @@ body {
 }
 .hero_caption {
   font-family: "Open Sans", sans-serif;
-  bottom: 50px;
   left: 50px;
   text-align: left;
 }
 
 h1 {
   /* font-size: 60px; */
+  top: 5%;
   font-weight: bold;
   padding: 0 0 40px 0;
 }
@@ -38,7 +41,7 @@ h1 {
   display: flex;
   justify-content: left;
   text-decoration: none;
-  padding: 20px 0 0 0;
+  margin-bottom: 8%;
   font-family: "Poppins", sans-serif;
 }
 

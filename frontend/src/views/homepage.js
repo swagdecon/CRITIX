@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "../misc/moviecard.scss";
-import ajax from "../components/fetchService.js";
 import "../misc/homepage.css";
 import truncateDescription from "../components/movieCardfunctions.js";
-import useLocalState from "../components/localStorage";
-import HeroCarousel from "../components/HeroCarousel";
+import HeroCarousel from "../components/Carousel/HeroCarousel";
+import MovieCarousel from "../components/Carousel/MovieCarousel";
+// import Navbar from "../components/NavBar/Navbar";
+// import Header from "../components/Header/Header";
 import Container from "../components/Container/Container";
-
 const Homepage = () => {
   const [jwt] = useLocalState("", "jwt");
   const [movies, setMovies] = useState([]);
@@ -122,9 +122,35 @@ const Homepage = () => {
               </div>
             </div>
           </div>
+  return (
+    <html>
+      <link
+        href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet"
+      />
+      <body>
+        <div>
+          {/* NavBar */}
+          {/* <Navbar /> */}
+          <Container />
+          {/* Hero Carousel */}
+          <HeroCarousel />
+          {/* Movie Cards Below */}
+          <MovieCarousel
+            title="Popular right now"
+            endpoint="/api/movies/popular"
+          />
+          <MovieCarousel
+            title="Now Playing"
+            endpoint="/api/movies/now_playing"
+          />
+          {/* <MovieCarousel
+            title="Releasing Soon"
+            endpoint="/api/movies/upcoming"
+          /> */}
         </div>
-      ))}
-    </div>
+      </body>
+    </html>
   );
 };
 

@@ -7,9 +7,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.popflix.config.JwtService;
+import com.popflix.config.customExceptions.FingerprintGeneratorException;
+import com.popflix.config.customExceptions.UserAlreadyExistsException;
 import com.popflix.model.Role;
 import com.popflix.model.User;
 import com.popflix.repository.UserRepository;
+
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -21,6 +25,11 @@ public class AuthenticationService {
         private final AuthenticationManager authenticationManager;
 
         public AuthenticationResponse register(RegisterRequest request) {
+
+                if (repository.findByEmail(request.getEmail()).isPresent()) {
+                        throw new UserAlreadyExistsException("A user with this email already exists");
+                }
+
                 var user = User.builder()
                                 .firstname(request.getFirstname())
                                 .lastname(request.getLastname())
@@ -35,16 +44,28 @@ public class AuthenticationService {
                                 .build();
         }
 
-        public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        public AuthenticationResponse authenticate(AuthenticationRequest request, HttpServletRequest httpRequest) {
                 authenticationManager.authenticate(
                                 new UsernamePasswordAuthenticationToken(
                                                 request.getEmail(),
                                                 request.getPassword()));
+
                 var user = repository.findByEmail(request.getEmail())
                                 .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
-                var jwtToken = jwtService.generateToken(user);
-                return AuthenticationResponse.builder()
-                                .token(jwtToken)
-                                .build();
+                try {
+                        String fingerprint = httpRequest.getHeader("X-Fingerprint");
+
+                        if (fingerprint == null) {
+                                throw new RuntimeException("Invalid fingerprint");
+                        }
+
+                        var jwtToken = jwtService.generateToken(user, fingerprint);
+                        return AuthenticationResponse.builder()
+                                        .token(jwtToken)
+                                        .build();
+                } catch (FingerprintGeneratorException e) {
+                        throw new RuntimeException("Error generating fingerprint", e);
+                }
         }
+
 }

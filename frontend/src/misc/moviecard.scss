@@ -5,6 +5,9 @@ $dark-color: #1e1b26;
 
 body {
   overflow-y: auto;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
 }
 
 .container {
@@ -144,8 +147,8 @@ body {
 /* TYPOGRAPHY STARTS */
 
 /* Fonts */
-@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800,300italic,400italic,600italic,700italic,800italic);
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,700");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800,300italic,400italic,600italic,700italic,800italic");
 
 $heading-font-family: "Montserrat", sans-serif;
 $paragraph-font-family: "Open Sans", sans-serif;

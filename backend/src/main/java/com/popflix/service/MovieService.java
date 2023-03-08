@@ -1,6 +1,5 @@
 package com.popflix.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,13 +10,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.popflix.model.Movie;
-
-import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.model.Credits;
-import info.movito.themoviedbapi.model.Genre;
-import info.movito.themoviedbapi.model.MovieDb;
-import info.movito.themoviedbapi.model.Video;
-import info.movito.themoviedbapi.model.people.PersonCast;
 
 @Service
 public class MovieService {
@@ -90,7 +82,6 @@ public class MovieService {
       }
 
       mongoTemplate.save(movie, collectionName);
-
     }
   }
 }

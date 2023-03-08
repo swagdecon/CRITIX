@@ -34,8 +34,6 @@ public class MovieController {
 
     @GetMapping("/upcoming")
     public ResponseEntity<List<Movie>> getUpcomingMovies() {
-        // update movie details before retrieving the list of movies
-        movieService.updateMovieDetails("upcoming_movies");
         return new ResponseEntity<List<Movie>>(movieService.allMovies("upcoming_movies"), HttpStatus.OK);
     }
 

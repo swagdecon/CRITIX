@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import "./index.js";
 import Login from "./views/login.js";
 import SignUp from "./views/signup.js";
@@ -10,15 +15,19 @@ import Upcoming from "./views/upcoming.js";
 import Homepage from "./views/homepage.js";
 import PrivateRoute from "./components/privateRoutes.js";
 import MovieDetails from "./components/MovieDetails/MovieDetails.js";
+import Error403 from "./views/403error.js";
+import Error404 from "./views/404error.js";
+
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
         <Route path="/" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/single" element={<MovieDetails />} />
 
+        <Route path="/single" element={<MovieDetails />} />
+        
         <Route
           path="/homepage"
           element={
@@ -27,13 +36,15 @@ function App() {
             </PrivateRoute>
           }
         />
-
         <Route path="/top_rated" element={<TopRated />} />
         <Route path="/now_playing" element={<NowPlaying />} />
         <Route path="/popular" element={<Popular />} />
         <Route path="/upcoming" element={<Upcoming />} />
+        <Route path="/403" element={<Error403 />} />
+        <Route path="*" element={<Error404 />} />
+        <Route component={<Navigate replace to="/404" />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 export default App;

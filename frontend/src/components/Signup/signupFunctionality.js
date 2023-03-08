@@ -1,24 +1,45 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../misc/login.css";
-import Popcorn from "../misc/popcorn_logo";
+import "../Login/login.css";
+import Popcorn from "../../misc/popcorn_logo";
+import Filter from "bad-words";
+
 function SignupFunctionality() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
   }
-
+  const filter = new Filter();
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [error, setError] = useState(false);
+  const [profanityErrorMessage, setProfanityErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const userData = { firstname, lastname, email, password };
+
+    const hasFirstNameProfanity = filter.isProfane(userData["firstname"]);
+    const hasLastNameProfanity = filter.isProfane(userData["lastname"]);
+    const hasEmailProfanity = filter.isProfane(userData["email"]);
+    const hasPasswordProfanity = filter.isProfane(userData["password"]);
+
+    if (
+      hasEmailProfanity ||
+      hasFirstNameProfanity ||
+      hasLastNameProfanity ||
+      hasPasswordProfanity
+    ) {
+      setProfanityErrorMessage("*Input(s) cannot contain profanity*");
+      setError("");
+      return;
+    } else {
+      setProfanityErrorMessage("");
+    }
 
     try {
       const response = await fetch(
@@ -28,25 +49,26 @@ function SignupFunctionality() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            firstname: firstname,
-            lastname: lastname,
-            email: email,
-            password: password,
-          }),
+          body: JSON.stringify(userData),
         }
       );
+
       if (response.ok) {
         navigate("/login", { replace: true });
       } else {
-        console.log("Error");
+        const errorBody = await response.text();
+        setError(errorBody);
+        return;
       }
     } catch (error) {
-      console.log(userData);
+      navigate("/error", { replace: true });
     }
   };
   return (
     <form onSubmit={handleSubmit}>
+      <div-error>{error}</div-error>
+      <br></br>
+      <div-error>{profanityErrorMessage}</div-error>
       <div>
         <label htmlFor="email">Email Address</label>
         <input
@@ -55,6 +77,7 @@ function SignupFunctionality() {
           name="email"
           className="text-input"
           pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+          autoComplete="current-email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           required
@@ -94,6 +117,7 @@ function SignupFunctionality() {
           name="password"
           className="text-input"
           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}"
+          autoComplete="current-password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           required

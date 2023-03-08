@@ -1,5 +1,5 @@
 import React from "react";
-import "../misc/login.css";
+import "./Login/login.css";
 import "../misc/logo.scss";
 
 function Loader() {

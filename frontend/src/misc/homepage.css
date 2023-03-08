@@ -1,8 +1,9 @@
 div-wrapper-carousel {
-  display: "block";
+  display: block;
   width: 10%;
   padding: 30;
 }
-body {
-  background-color: black;
+html {
+  overflow-y: auto;
+  background-color: aliceblue;
 }
