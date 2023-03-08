@@ -14,8 +14,10 @@ import Popular from "./views/popular.js";
 import Upcoming from "./views/upcoming.js";
 import Homepage from "./views/homepage.js";
 import PrivateRoute from "./components/privateRoutes.js";
+import MovieDetails from "./components/MovieDetails/MovieDetails.js";
 import Error403 from "./views/403error.js";
 import Error404 from "./views/404error.js";
+
 
 function App() {
   return (
@@ -23,6 +25,9 @@ function App() {
       <Routes>
         <Route path="/" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
+
+        <Route path="/single" element={<MovieDetails />} />
+        
         <Route
           path="/homepage"
           element={
