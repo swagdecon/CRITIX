@@ -5,9 +5,6 @@ $dark-color: #1e1b26;
 
 body {
   overflow-y: auto;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
 }
 
 .container {
@@ -24,7 +21,7 @@ body {
 }
 
 .cellphone-container {
-  width: 375px;
+  width: 450px;
   height: 920px;
   background-color: #1e1b26;
   margin: 60px auto 0 auto;
@@ -95,7 +92,7 @@ body {
   background-size: contain;
   background-size: cover;
   z-index: 1 !important;
-  width: 375px;
+  width: 450px;
   height: 900px;
   display: flex;
   flex-direction: column;
@@ -173,6 +170,7 @@ h5 {
   font-family: $heading-font-family;
   color: $accent-color;
   margin: 0px;
+  text-align: left;
 }
 
 h1 {
@@ -250,6 +248,7 @@ h5 {
   color: $accent-color;
   font-style: italic;
   @extend .elements-distance;
+  text-align: left;
 }
 
 /* TYPOGRAPHY ENDS */

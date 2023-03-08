@@ -7,6 +7,7 @@ import "./MovieCarousel.css";
 import { chunk } from "lodash";
 import { useNavigate } from "react-router-dom";
 import "./title.scss";
+import "../../misc/moviecard.scss";
 const MovieCarousel = ({ title, endpoint }) => {
   const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
@@ -79,14 +80,19 @@ const MovieCarousel = ({ title, endpoint }) => {
                             {/* .replace ensures there is only one space inbetween words */}
                             {/* <h1>{movie.title.replace(/\s+/g, " ")}</h1> */}
                             <ul className="movie-gen">
-                              <li>{movie.vote_average} /</li>
-                              <li>2h 49min /</li>
-                              <li>Adventure, Drama, Sci-Fi,</li>
+                              <li>
+                                {Math.round(movie.vote_average * 10) / 10}{" "}
+                              </li>
+                              <li>{movie.runtime} mins</li>
+                              <li>{movie.genres.join(", ")}</li>
                             </ul>
                           </div>
                         </div>
                         <div className="mr-grid summary-row">
                           <div className="col2">
+                            {/* <h2>{movie.title}</h2> */}
+                            {/* <p>{movie.release_date}</p> */}
+                            {/* <p>{movie.tagline}</p> */}
                             <h5>SUMMARY</h5>
                           </div>
                           <div className="col2">
@@ -111,19 +117,32 @@ const MovieCarousel = ({ title, endpoint }) => {
                         <div className="mr-grid actors-row">
                           <div className="col1">
                             <p className="movie-actors">
-                              Matthew McConaughey, Anne Hathaway, Jessica
-                              Chastain
+                              {movie.actors.slice(0, 3).map((actor, index) => {
+                                if (index === 0) {
+                                  return actor;
+                                } else if (index < 3) {
+                                  return `, ${actor}`;
+                                } else {
+                                  return "";
+                                }
+                              })}
                             </p>
                           </div>
                         </div>
                         <div className="mr-grid action-row">
                           <div className="col2">
-                            <div className="watch-btn">
+                            <button
+                              className="watch-btn"
+                              type="button"
+                              onClick={() =>
+                                (window.location.href = `https://www.youtube.com/watch?v=${movie.video[0]}`)
+                              }
+                            >
                               <h3>
                                 <i className="material-icons">&#xE037;</i>
                                 WATCH TRAILER
                               </h3>
-                            </div>
+                            </button>
                           </div>
                           <div className="col6 action-btn">
                             <i className="material-icons">&#xE161;</i>
