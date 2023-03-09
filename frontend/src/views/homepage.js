@@ -13,7 +13,7 @@ const Homepage = () => {
         href="https://fonts.googleapis.com/icon?family=Material+Icons"
         rel="stylesheet"
       />
-      <body>
+      <body style={{ marginTop: 80 }}>
         <div>
           {/* NavBar */}
           {/* <Navbar /> */}
