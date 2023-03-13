@@ -1,0 +1,123 @@
+import { React } from "react";
+import "../components/ind_movie/Hero_movie_header";
+import "../components/ind_movie/ind_movie.css";
+
+function Movie() {
+  return (
+    <html>
+      <ind-movie-body>
+        <div className="ind-movie-wrapper">
+          <a href="#">
+            <ind-movie-h1>Ideum</ind-movie-h1>
+          </a>
+          <ind-movie-nav>
+            <form className="ind-movie-search" action="#" method="post">
+              <div className="ind-movie_search__anim"></div>
+              <button
+                type="submit"
+                className="ind-movie-search"
+                value="Submit"
+              ></button>
+              <input type="text" name="name" placeholder="Search" />
+            </form>
+            <a className="filter" href="#">
+              Filter
+            </a>
+          </ind-movie-nav>
+          <div className="poster">
+            <img src="https://i.imgur.com/mD9R6IQ.jpg" alt="ava" />
+          </div>
+          <a className="arrow__container" href="#">
+            <svg version="1.1" id="arrow">
+              <rect x="0" y="8" width="65.7" height="2" />
+              <rect
+                x="56.5"
+                y="4.2"
+                transform="matrix(0.7071 0.7071 -0.7071 0.7071 22.0808 -42.8911)"
+                width="12.7"
+                height="2"
+              />
+              <rect
+                x="56.5"
+                y="11.8"
+                transform="matrix(0.7071 -0.7071 0.7071 0.7071 9.3503 48.1621)"
+                width="12.7"
+                height="2"
+              />
+            </svg>
+            <p>Nope, next!</p>
+          </a>
+          <div id="fade" className="container-margin">
+            <div className="ind-movie-header ">
+              <div className="movie__score">93%</div>
+              <div className="movie__title__container">
+                <h2 className="movie__title">Ex Machina</h2>
+                <div className="movie__year">2015</div>
+              </div>
+              <ul className="movie__type">
+                <li>Sci-fi</li>
+                <li>Drama</li>
+                <li>Mystery</li>
+              </ul>
+              <p className="movie__description">
+                A young programmer is selected to participate in a
+                ground-breaking experiment in artificial intelligence by
+                evaluating the human qualities of a breath-taking female A.I.
+              </p>
+              <a className="ind_movie__trailer">
+                <svg version="1.1">
+                  <path d="M0.8,1.4L11.5,8L0.8,14.6V1.4 M0,0v16l13-8L0,0L0,0z" />
+                </svg>
+                <p>Trailer</p>
+              </a>
+            </div>
+            <div className="ind_movie_review">
+              <h3 className="ind_review__title">Reviews</h3>
+              <ul>
+                <li>
+                  <div className="review__score">95%</div>
+                  <p className="review__description">
+                    &quot;Ex Machina&quot; deals with a familiar theme in a very
+                    unique way. It doesn&apos;t bombard you with effects or
+                    superficial action (although the robot effects are
+                    exceptional). Rather, its focus and beauty lie in the subtle
+                    and nuanced performances of its tiny cast as the film
+                    explores what it means to be human.
+                  </p>
+                </li>
+                <li>
+                  <div className="review__score">91%</div>
+                  <p className="review__description">
+                    Quiet dialogue scenes between two characters are filmed in
+                    such an impactful, making them feel hauntingly austere,
+                    sweet and innocent, or terrible and frightening, through
+                    meticulous use of composition, light and sound. The film
+                    really does run the gamut of emotions, surprisingly funny
+                    one minute and gut-wrenchingly tense and weird the next,
+                    while the script twists and turns, constantly unsettling
+                    your assumptions about what will happen.
+                  </p>
+                </li>
+                <li>
+                  <div className="review__score">89%</div>
+                  <p className="review__description">
+                    The performances are excellent, most notably Alicia Vikander
+                    as the beguiling Ava, who absolutely passes for being
+                    &apos;almost human &apos;. Her precise movements -walking,
+                    standing or stooping to pull on a pair of stockings- have
+                    just that slight tinge of the uncanny about them to suggest
+                    a mechanical skeleton, yet she is undeniably seductive. You
+                    can really understand Caleb &apos;s mental plight as she
+                    begins to show signs of a sexual interest in him!
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <canvas id="bg"></canvas>
+        </div>
+      </ind-movie-body>
+    </html>
+  );
+}
+export default Movie;
