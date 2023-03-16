@@ -64,7 +64,7 @@ const MovieCarousel = ({ title, endpoint }) => {
           <Carousel.Item key={i}>
             {chunk.map((movie, j) => (
               <div className="card-container" key={`${i}-${j}`}>
-                <Link to={`/movie/${movie.id}`}>
+                <Link to={`${endpoint}/${movie.id}`}>
                   <div className="container">
                     <div className="cellphone-container">
                       <div className="movie">

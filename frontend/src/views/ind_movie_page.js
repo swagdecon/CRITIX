@@ -1,18 +1,19 @@
 import { React, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useParams } from "react-router-dom";
 import "../components/ind_movie/Hero_movie_header";
 import "../components/ind_movie/ind_movie.css";
-const indMovie = () => {
+
+const IndMovie = () => {
   const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
+  const { id } = useParams();
   useEffect(() => {
     async function fetchData() {
       try {
         const tokenWithFingerprint = sessionStorage.getItem("jwt");
         const { token, fingerprint } = JSON.parse(tokenWithFingerprint);
-
-        const myResponse = await fetch("/api/movies/popular/842544", {
+        console.log(id);
+        const myResponse = await fetch(`/api/movies/popular/1013870`, {
           headers: {
             Authorization: `Bearer ${token}`,
             "X-Fingerprint": fingerprint,
@@ -34,7 +35,7 @@ const indMovie = () => {
     }
 
     fetchData();
-  }, ["/api/movies/popular/842544"]);
+  }, [`/api/movies/popular/1013870`]);
 
   return (
     <html>
@@ -161,4 +162,4 @@ const indMovie = () => {
   );
 };
 
-export default indMovie;
+export default IndMovie;
