@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../components/ind_movie/ind_movie.css";
-
+import { MovieGenres, getYearFromDate } from "../components/movieCardfunctions";
 const IndMovie = () => {
   const [movie, setMovie] = useState({});
   const navigate = useNavigate();
@@ -65,15 +65,18 @@ const IndMovie = () => {
               </div>
               <div className="movie__title__container">
                 <h2 className="movie__title">{movie.title}</h2>
-                <div className="movie__year">{movie.release_date}</div>
+                <div className="movie__year">
+                  {getYearFromDate(movie.release_date)}
+                </div>
               </div>
-              <ul className="movie__type">
-                <li>{movie.genres}</li>
-                <li>Drama</li>
-                <li>Mystery</li>
-              </ul>
+              <MovieGenres genres={movie.genres} />
               <p className="movie__description">{movie.overview}</p>
-              <a className="ind_movie__trailer">
+              <a
+                className="ind_movie__trailer"
+                // onClick={() =>
+                //   (window.location.href = `https://www.youtube.com/watch?v=${movie.video[0]}`)
+                // }
+              >
                 <svg version="1.1">
                   <path d="M0.8,1.4L11.5,8L0.8,14.6V1.4 M0,0v16l13-8L0,0L0,0z" />
                 </svg>

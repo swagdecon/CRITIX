@@ -1,3 +1,6 @@
+import React from "react";
+import PropTypes from "prop-types";
+
 function truncateDescription(description) {
   const words = description.split(" ");
 
@@ -9,4 +12,27 @@ function truncateDescription(description) {
   return description;
 }
 
-export { truncateDescription };
+function getYearFromDate(dateString) {
+  if (!dateString) {
+    return null;
+  }
+  const year = dateString.split("-")[0];
+  return year;
+}
+function MovieGenres({ genres }) {
+  if (!genres) {
+    return "";
+  }
+  MovieGenres.propTypes = {
+    genres: PropTypes.arrayOf(PropTypes.string),
+  };
+  return (
+    <ul className="movie__type">
+      {genres.map((genre) => (
+        <li key={genre}>{genre}</li>
+      ))}
+    </ul>
+  );
+}
+
+export { truncateDescription, getYearFromDate, MovieGenres };
