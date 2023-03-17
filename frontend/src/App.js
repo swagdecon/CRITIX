@@ -37,7 +37,7 @@ function App() {
         <Route path="/now_playing" element={<NowPlaying />} />
         <Route path="/popular" element={<Popular />} />
         <Route path="/upcoming" element={<Upcoming />} />
-        <Route path="/api/movies/upcoming/:id" element={<IndMovie />} />
+        <Route path="/api/movies/:endpoint/:id" element={<IndMovie />} />
         <Route path="/403" element={<Error403 />} />
         <Route path="*" element={<Error404 />} />
         <Route component={<Navigate replace to="/404" />} />

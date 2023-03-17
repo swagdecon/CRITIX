@@ -8,4 +8,5 @@ function truncateDescription(description) {
 
   return description;
 }
-export default truncateDescription;
+
+export { truncateDescription };

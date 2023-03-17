@@ -54,39 +54,21 @@ const IndMovie = () => {
               Filter
             </a>
           </ind-movie-nav>
-          <div
-            className="poster"
-            src={`https://image.tmdb.org/t/p/w500${movie.poster}`}
-          ></div>
-          <a className="arrow__container" href="#">
-            <svg version="1.1" id="arrow">
-              <rect x="0" y="8" width="65.7" height="2" />
-              <rect
-                x="56.5"
-                y="4.2"
-                transform="matrix(0.7071 0.7071 -0.7071 0.7071 22.0808 -42.8911)"
-                width="12.7"
-                height="2"
-              />
-              <rect
-                x="56.5"
-                y="11.8"
-                transform="matrix(0.7071 -0.7071 0.7071 0.7071 9.3503 48.1621)"
-                width="12.7"
-                height="2"
-              />
-            </svg>
-            <p>Nope, next!</p>
-          </a>
+          <div className="poster">
+            <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
+          </div>
+
           <div id="fade" className="container-margin">
             <div className="ind-movie-header ">
-              <div className="movie__score">93%</div>
+              <div className="movie__score">
+                {Math.round(movie.vote_average * 10)}%
+              </div>
               <div className="movie__title__container">
                 <h2 className="movie__title">{movie.title}</h2>
                 <div className="movie__year">{movie.release_date}</div>
               </div>
               <ul className="movie__type">
-                <li>Sci-fi</li>
+                <li>{movie.genres}</li>
                 <li>Drama</li>
                 <li>Mystery</li>
               </ul>

@@ -2,7 +2,7 @@ import { React, useState, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-import truncateDescription from "../movieCardfunctions.js";
+import { truncateDescription } from "../movieCardfunctions.js";
 import PropTypes from "prop-types";
 import "./MovieCarousel.css";
 // Library that can perform array manipulation, in this case, splitting the movie into chunks of 5 to then loop over:
