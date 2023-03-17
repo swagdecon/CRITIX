@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../components/ind_movie/ind_movie.css";
-import { MovieGenres, getYearFromDate } from "../components/movieCardfunctions";
+import {
+  MovieGenres,
+  MovieTrailer,
+  getYearFromDate,
+} from "../components/movieCardfunctions";
 const IndMovie = () => {
   const [movie, setMovie] = useState({});
   const navigate = useNavigate();
@@ -38,6 +42,13 @@ const IndMovie = () => {
 
   return (
     <html>
+      <div-image
+        style={{
+          backgroundImage: `url(
+            https://image.tmdb.org/t/p/w500/${movie.backdrop_path}
+          )`,
+        }}
+      ></div-image>
       <ind-movie-body>
         <div className="ind-movie-wrapper">
           <ind-movie-nav>
@@ -73,9 +84,7 @@ const IndMovie = () => {
               <p className="movie__description">{movie.overview}</p>
               <a
                 className="ind_movie__trailer"
-                // onClick={() =>
-                //   (window.location.href = `https://www.youtube.com/watch?v=${movie.video[0]}`)
-                // }
+                onClick={() => MovieTrailer(movie.video[0])}
               >
                 <svg version="1.1">
                   <path d="M0.8,1.4L11.5,8L0.8,14.6V1.4 M0,0v16l13-8L0,0L0,0z" />
@@ -126,7 +135,6 @@ const IndMovie = () => {
               </ul>
             </div>
           </div>
-          <canvas id="bg"></canvas>
         </div>
       </ind-movie-body>
     </html>

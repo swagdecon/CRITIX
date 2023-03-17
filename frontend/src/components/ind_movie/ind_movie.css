@@ -15,9 +15,13 @@ ind-movie-body {
 a {
   color: #fff;
 }
+ind-movie-wrapper {
+  position: relative;
+}
 
-.blur-container {
-  filter: blur(5px);
+div-image {
+  background-size: cover;
+  background-position: center center;
 }
 .poster {
   position: fixed;

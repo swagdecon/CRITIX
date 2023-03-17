@@ -19,6 +19,12 @@ function getYearFromDate(dateString) {
   const year = dateString.split("-")[0];
   return year;
 }
+function MovieTrailer(url) {
+  if (!url) {
+    return;
+  }
+  return window.open(`https://www.youtube.com/watch?v=${url}`);
+}
 function MovieGenres({ genres }) {
   if (!genres) {
     return "";
@@ -35,4 +41,4 @@ function MovieGenres({ genres }) {
   );
 }
 
-export { truncateDescription, getYearFromDate, MovieGenres };
+export { truncateDescription, getYearFromDate, MovieTrailer, MovieGenres };
