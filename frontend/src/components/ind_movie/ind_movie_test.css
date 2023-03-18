@@ -5,52 +5,34 @@
   clear: both;
   visibility: hidden;
 }
-
 ind-movie-html,
 ind-movie-body {
-  font-family: "Open Sans", sans-serif;
-  color: #fff;
   width: 100%;
   height: 100%;
-  position: relative;
+  font-family: "Open Sans", sans-serif;
+  color: #fff;
 }
 a {
   color: #fff;
 }
-html,
-body {
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  position: absolute;
-  background-size: cover;
-  background-repeat: no-repeat;
+ind-movie-body {
+  background-color: #000;
+  position: relative;
 }
-
-.ind-movie-wrapper {
-  position: absolute;
-  z-index: 2;
-}
-.background {
-  position: absolute;
-  background-size: cover;
-  background-repeat: no-repeat;
-  width: 100%;
-  height: 100%;
-  filter: blur(10px) brightness(0.35);
-}
-
 .poster {
   position: fixed;
   z-index: 999;
-  left: 55%;
-  top: 5vh;
-  height: 100%;
+  left: 60%;
+  top: 0;
+  height: 90%;
   width: auto;
 }
+/* .background-overlay {
+  backdrop-filter: brightness(0.5) blur(10px);
+} */
 .poster img {
   width: auto;
-  height: 90%;
+  height: 100%;
   display: block;
   margin: 0 auto;
 }
@@ -67,8 +49,13 @@ body {
     top: auto;
   }
 }
-
-ind-movie-h1 {
+#bg {
+  top: 0;
+  left: 0;
+  position: fixed;
+  z-index: -998;
+}
+h1 {
   z-index: 1;
   font-weight: 300;
   text-transform: uppercase;
@@ -78,7 +65,7 @@ ind-movie-h1 {
   left: 4rem;
 }
 @media screen and (max-width: 600px) {
-  ind-movie-h1 {
+  h1 {
     top: 1.2rem;
     left: 1rem;
   }
@@ -103,9 +90,9 @@ ind-movie-nav {
   float: right;
   position: relative;
 }
-.search input:focus,
-.search .search:hover input,
-.search:hover .search input {
+.ind-movie-search input:focus,
+.ind-movie-search .ind-movie-search:hover input,
+.ind-movie-search:hover .ind-movie-search input {
   padding: 0.2rem 1rem 0.2rem 1rem;
   width: 10rem;
 }
@@ -195,7 +182,7 @@ ind-movie-nav {
     padding: 1rem 1rem 0 1rem;
   }
 }
-.ind-movie-header {
+.movie {
   max-width: 1150px;
   width: 100%;
   margin: 0 auto;
@@ -258,7 +245,7 @@ ind-movie-nav {
   padding-right: 1.5rem;
   padding-top: 1.5rem;
   float: left;
-  color: #ffffff;
+  color: #857f7f;
   font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 0.1rem;
@@ -275,7 +262,7 @@ ind-movie-nav {
   margin: 0 0;
   float: none;
   display: block;
-  color: #ffffff;
+  color: #979596;
   font-size: 1.1rem;
   padding-top: 3rem;
   line-height: 2rem;
@@ -310,7 +297,7 @@ ind-movie-nav {
   transition: 0.3s all;
   font-size: 0.95rem;
 }
-.ind_movie__trailerr:hover {
+.ind_movie__trailer:hover {
   border-color: #fff;
 }
 .ind_movie__trailer:hover svg {

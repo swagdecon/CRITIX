@@ -25,6 +25,13 @@ function MovieTrailer(url) {
   }
   return window.open(`https://www.youtube.com/watch?v=${url}`);
 }
+function MovieAverage(vote_average) {
+  if (!vote_average) {
+    return "No Rating";
+  }
+  return vote_average;
+}
+
 function MovieGenres({ genres }) {
   if (!genres) {
     return "";
@@ -41,4 +48,10 @@ function MovieGenres({ genres }) {
   );
 }
 
-export { truncateDescription, getYearFromDate, MovieTrailer, MovieGenres };
+export {
+  truncateDescription,
+  getYearFromDate,
+  MovieTrailer,
+  MovieAverage,
+  MovieGenres,
+};
