@@ -93,6 +93,7 @@ const IndMovie = () => {
                     type="submit"
                     onClick={() => MovieTrailer(movie.video[0])}
                     className="css-button"
+                    style={{ right: "40.5%", marginTop: "2%" }}
                   >
                     <p className="css-button-text">WATCH TRAILER</p>
                     <div className="css-button-inner">

@@ -112,10 +112,6 @@ ind-movie-nav {
   float: right;
 }
 
-.css-button {
-  margin-top: 2%;
-  right: 40.5%;
-}
 .ind-movie_search__anim::after {
   content: "";
   width: 2px;
