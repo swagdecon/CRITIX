@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../components/ind_movie/ind_movie.css";
+import Container from "../components/Container/Container";
+
 import {
   MovieGenres,
   MovieTrailer,
@@ -45,6 +47,7 @@ const IndMovie = () => {
 
   return (
     <html>
+      <Container />
       <body>
         <div
           className="background"
@@ -68,7 +71,7 @@ const IndMovie = () => {
                 Filter
               </a>
             </ind-movie-nav>
-            <div className="poster">
+            <div className="poster" style={{ marginTop: 40 }}>
               <img
                 src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
               />
