@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../components/ind_movie/ind_movie.css";
 import Container from "../components/Container/Container";
-
+import ReactPlayer from "react-player";
 import {
   MovieGenres,
   MovieTrailer,
@@ -57,21 +57,7 @@ const IndMovie = () => {
         ></div>
         <ind-movie-body>
           <div className="ind-movie-wrapper">
-            <ind-movie-nav>
-              <form className="ind-movie-search" action="#" method="post">
-                <div className="ind-movie_search__anim"></div>
-                <button
-                  type="submit"
-                  className="ind-movie-search"
-                  value="Submit"
-                ></button>
-                <input type="text" name="name" placeholder="Search" />
-              </form>
-              <a className="filter" href="#">
-                Filter
-              </a>
-            </ind-movie-nav>
-            <div className="poster" style={{ marginTop: 40 }}>
+            <div className="hero-poster" style={{ marginTop: 40 }}>
               <img
                 src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
               />
@@ -151,6 +137,124 @@ const IndMovie = () => {
                 </ul>
               </div>
             </div>
+            <section id="slide-1" className="homeSlide">
+              <div
+                className="bcg"
+                data-center="background-position: 50% 0px;"
+                data-top-bottom="background-position: 50% -100px;"
+                data-anchor-target="#slide-1"
+              >
+                <div className="hsContainer">
+                  <div
+                    className="hsContent"
+                    data-center="opacity: 1"
+                    data-top="opacity: 0"
+                    data-anchor-target="#slide-1 h2"
+                  >
+                    <ReactPlayer
+                      className="indMovieEmbeddedTrailer"
+                      url={`https://www.youtube.com/watch?v=${movie.video}`}
+                      controls={true}
+                      width={"1500px"}
+                      height={"750px"}
+                    />
+                    <img
+                      className="ind-movie-poster"
+                      src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                    />
+                  </div>
+                  <h1>Cast Members:</h1>
+                  <section className="CastMembers">
+                    <div className="profile-container">
+                      <div className="card card0">
+                        <div className="border">
+                          <h3 className="profile-person">Al Pacino</h3>
+                          <div className="icons">
+                            <i className="fa fa-codepen" aria-hidden="true"></i>
+                            <i
+                              className="fa fa-instagram"
+                              aria-hidden="true"
+                            ></i>
+                            <i
+                              className="fa fa-dribbble"
+                              aria-hidden="true"
+                            ></i>
+                            <i className="fa fa-twitter" aria-hidden="true"></i>
+                            <i
+                              className="fa fa-facebook"
+                              aria-hidden="true"
+                            ></i>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="card card1">
+                        <div className="border">
+                          <h3 className="profile-person">Ben Stiller</h3>
+                          <div className="icons">
+                            <i className="fa fa-codepen" aria-hidden="true"></i>
+                            <i
+                              className="fa fa-instagram"
+                              aria-hidden="true"
+                            ></i>
+                            <i
+                              className="fa fa-dribbble"
+                              aria-hidden="true"
+                            ></i>
+                            <i className="fa fa-twitter" aria-hidden="true"></i>
+                            <i
+                              className="fa fa-facebook"
+                              aria-hidden="true"
+                            ></i>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="card card2">
+                        <div className="border">
+                          <h3 className="profile-person">Patrick Stewart</h3>
+                          <div className="icons">
+                            <i className="fa fa-codepen" aria-hidden="true"></i>
+                            <i
+                              className="fa fa-instagram"
+                              aria-hidden="true"
+                            ></i>
+                            <i
+                              className="fa fa-dribbble"
+                              aria-hidden="true"
+                            ></i>
+                            <i className="fa fa-twitter" aria-hidden="true"></i>
+                            <i
+                              className="fa fa-facebook"
+                              aria-hidden="true"
+                            ></i>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="card card3">
+                        <div className="border">
+                          <h3 className="profile-person">Emma Stone</h3>
+                          <div className="icons">
+                            <i className="fa fa-codepen" aria-hidden="true"></i>
+                            <i
+                              className="fa fa-instagram"
+                              aria-hidden="true"
+                            ></i>
+                            <i
+                              className="fa fa-dribbble"
+                              aria-hidden="true"
+                            ></i>
+                            <i className="fa fa-twitter" aria-hidden="true"></i>
+                            <i
+                              className="fa fa-facebook"
+                              aria-hidden="true"
+                            ></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              </div>
+            </section>
           </div>
         </ind-movie-body>
       </body>
