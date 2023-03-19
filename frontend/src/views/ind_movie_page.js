@@ -7,6 +7,8 @@ import {
   MovieAverage,
   getYearFromDate,
 } from "../components/movieCardfunctions";
+import Popcorn from "../misc/popcorn_logo";
+import "../misc/popcorn_logo.css";
 const IndMovie = () => {
   const [movie, setMovie] = useState({});
   const navigate = useNavigate();
@@ -85,16 +87,21 @@ const IndMovie = () => {
                 </div>
                 <MovieGenres genres={movie.genres} />
                 <p className="movie__description">{movie.overview}</p>
-                <a
-                  className="ind_movie__trailer"
-                  onClick={() => MovieTrailer(movie.video[0])}
-                >
-                  <svg version="1.1">
-                    <path d="M0.8,1.4L11.5,8L0.8,14.6V1.4 M0,0v16l13-8L0,0L0,0z" />
-                  </svg>
 
-                  <p>Trailer</p>
-                </a>
+                <div className="btn-wrapper">
+                  <button
+                    type="submit"
+                    onClick={() => MovieTrailer(movie.video[0])}
+                    className="css-button"
+                  >
+                    <p className="css-button-text">WATCH TRAILER</p>
+                    <div className="css-button-inner">
+                      <div className="reset-skew">
+                        <Popcorn className="css-button-inner-text"></Popcorn>
+                      </div>
+                    </div>
+                  </button>
+                </div>
               </div>
               <div className="ind_movie_review">
                 <h3 className="ind_review__title">Reviews</h3>

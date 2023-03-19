@@ -111,6 +111,11 @@ ind-movie-nav {
   position: relative;
   float: right;
 }
+
+.css-button {
+  margin-top: 2%;
+  right: 40.5%;
+}
 .ind-movie_search__anim::after {
   content: "";
   width: 2px;
@@ -154,18 +159,7 @@ ind-movie-nav {
   letter-spacing: 0.15rem;
   text-decoration: none;
 }
-#arrow {
-  fill: #fff;
-  width: 68px;
-  height: 18px;
-  float: right;
-}
-.arrow__container {
-  position: fixed;
-  bottom: 4rem;
-  right: 4rem;
-  z-index: 1;
-}
+
 @media screen and (max-width: 600px) {
   .arrow__container {
     bottom: 1rem;
