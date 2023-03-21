@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../components/ind_movie/ind_movie.css";
+import "font-awesome/css/font-awesome.min.css";
+
 import Container from "../components/Container/Container";
 import ReactPlayer from "react-player";
 import {
@@ -8,14 +10,15 @@ import {
   MovieTrailer,
   MovieAverage,
   getYearFromDate,
+  // ActorList,
 } from "../components/movieCardfunctions";
 import Popcorn from "../misc/popcorn_logo";
 import "../misc/popcorn_logo.css";
+
 const IndMovie = () => {
   const [movie, setMovie] = useState({});
   const navigate = useNavigate();
   const { id } = useParams();
-
   useEffect(() => {
     async function fetchData() {
       try {
@@ -44,7 +47,6 @@ const IndMovie = () => {
 
     fetchData();
   }, []);
-
   return (
     <html>
       <Container />
@@ -155,6 +157,7 @@ const IndMovie = () => {
                       className="indMovieEmbeddedTrailer"
                       url={`https://www.youtube.com/watch?v=${movie.video}`}
                       controls={true}
+                      playing={false}
                       width={"1500px"}
                       height={"750px"}
                     />
@@ -163,13 +166,14 @@ const IndMovie = () => {
                       src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
                     />
                   </div>
-                  <h1>Cast Members:</h1>
+                  <h1 className="cast-title-1">Cast Members:</h1>
                   <section className="CastMembers">
                     <div className="profile-container">
+                      {/* <div> {ActorList(movie.actors)}</div> */}
                       <div className="card card0">
                         <div className="border">
-                          <h3 className="profile-person">Al Pacino</h3>
-                          <div className="icons">
+                          <h3 className="profile-person">{movie.actors}</h3>
+                          <div className="ind-movie-cast-icons">
                             <i className="fa fa-codepen" aria-hidden="true"></i>
                             <i
                               className="fa fa-instagram"
@@ -189,8 +193,8 @@ const IndMovie = () => {
                       </div>
                       <div className="card card1">
                         <div className="border">
-                          <h3 className="profile-person">Ben Stiller</h3>
-                          <div className="icons">
+                          <h3 className="profile-person">Example 2</h3>
+                          <div className="ind-movie-cast-icons">
                             <i className="fa fa-codepen" aria-hidden="true"></i>
                             <i
                               className="fa fa-instagram"
@@ -211,7 +215,7 @@ const IndMovie = () => {
                       <div className="card card2">
                         <div className="border">
                           <h3 className="profile-person">Patrick Stewart</h3>
-                          <div className="icons">
+                          <div className="ind-movie-cast-icons">
                             <i className="fa fa-codepen" aria-hidden="true"></i>
                             <i
                               className="fa fa-instagram"
@@ -232,7 +236,7 @@ const IndMovie = () => {
                       <div className="card card3">
                         <div className="border">
                           <h3 className="profile-person">Emma Stone</h3>
-                          <div className="icons">
+                          <div className="ind-movie-cast-icons">
                             <i className="fa fa-codepen" aria-hidden="true"></i>
                             <i
                               className="fa fa-instagram"

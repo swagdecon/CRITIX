@@ -83,7 +83,6 @@ public class MovieService {
           break;
         }
       }
-
       // Set the main trailer video key for the movie
       if (mainTrailerKey != null) {
         List<String> videoKeys = new ArrayList<>();

@@ -48,10 +48,37 @@ function MovieGenres({ genres }) {
   );
 }
 
+// function ActorList(cast) {
+//   const firstFourActors = cast.actors.slice(0, 4);
+
+//   return (
+//     <div>
+//       <h1>First Four Actors:</h1>
+//       <ul>
+//         {firstFourActors.map((actor, i) => (
+//           <div key={i} className="card card0">
+//             <div className="border">
+//               <h3 className="profile-person">{actor}</h3>
+//               <div className="ind-movie-cast-icons">
+//                 <i className="fa fa-codepen" aria-hidden="true"></i>
+//                 <i className="fa fa-instagram" aria-hidden="true"></i>
+//                 <i className="fa fa-dribbble" aria-hidden="true"></i>
+//                 <i className="fa fa-twitter" aria-hidden="true"></i>
+//                 <i className="fa fa-facebook" aria-hidden="true"></i>
+//               </div>
+//             </div>
+//           </div>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// }
+
 export {
   truncateDescription,
   getYearFromDate,
   MovieTrailer,
   MovieAverage,
   MovieGenres,
+  // ActorList,
 };
