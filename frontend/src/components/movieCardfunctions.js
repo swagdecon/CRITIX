@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import "./ind_movie/ind_movie.css";
 
 function truncateDescription(description) {
   const words = description.split(" ");
@@ -48,31 +49,61 @@ function MovieGenres({ genres }) {
   );
 }
 
-// function ActorList(cast) {
-//   const firstFourActors = cast.actors.slice(0, 4);
+const MovieActors = ({ actors, images }) => {
+  if (!images || !actors) {
+    return;
+  }
+  MovieActors.propTypes = {
+    actors: PropTypes.arrayOf(PropTypes.string),
+    images: PropTypes.arrayOf(PropTypes.string),
+  };
 
-//   return (
-//     <div>
-//       <h1>First Four Actors:</h1>
-//       <ul>
-//         {firstFourActors.map((actor, i) => (
-//           <div key={i} className="card card0">
-//             <div className="border">
-//               <h3 className="profile-person">{actor}</h3>
-//               <div className="ind-movie-cast-icons">
-//                 <i className="fa fa-codepen" aria-hidden="true"></i>
-//                 <i className="fa fa-instagram" aria-hidden="true"></i>
-//                 <i className="fa fa-dribbble" aria-hidden="true"></i>
-//                 <i className="fa fa-twitter" aria-hidden="true"></i>
-//                 <i className="fa fa-facebook" aria-hidden="true"></i>
-//               </div>
-//             </div>
-//           </div>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// }
+  return (
+    <>
+      {actors.slice(0, 4).map((actor, index) => (
+        <div
+          key={index}
+          className="card card1"
+          style={{
+            background: `url(https://image.tmdb.org/t/p/w500${images[index]}) center center no-repeat`,
+            backgroundSize: "300px",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = `url(https://image.tmdb.org/t/p/w500${images[index]}) left center no-repeat `;
+            e.currentTarget.style.backgroundSize = "600px";
+            e.currentTarget.querySelector("h2").style.opacity = 1;
+            Array.from(e.currentTarget.querySelectorAll(".fa")).forEach(
+              (icon) => {
+                icon.style.opacity = 1;
+              }
+            );
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = `url(https://image.tmdb.org/t/p/w500${images[index]}) center center no-repeat `;
+            e.currentTarget.style.backgroundSize = "300px";
+            e.currentTarget.querySelector("h2").style.opacity = 0;
+            Array.from(e.currentTarget.querySelectorAll(".fa")).forEach(
+              (icon) => {
+                icon.style.opacity = 0;
+              }
+            );
+          }}
+        >
+          <div className="border">
+            <h3 className="profile-person">{actor}</h3>
+            <div className="ind-movie-cast-icons">
+              <i className="fa fa-codepen" aria-hidden="true"></i>
+              <i className="fa fa-instagram" aria-hidden="true"></i>
+              <i className="fa fa-dribbble" aria-hidden="true"></i>
+              <i className="fa fa-twitter" aria-hidden="true"></i>
+              <i className="fa fa-facebook" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+      ))}
+    </>
+  );
+};
 
 export {
   truncateDescription,
@@ -80,5 +111,5 @@ export {
   MovieTrailer,
   MovieAverage,
   MovieGenres,
-  // ActorList,
+  MovieActors,
 };

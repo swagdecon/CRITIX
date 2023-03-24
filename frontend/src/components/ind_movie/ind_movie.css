@@ -393,16 +393,16 @@ ind-movie-nav {
   width: 100vw;
   max-height: 800px;
   max-width: 1280px;
-  min-height: 100%;
-  min-width: 115%;
+  min-height: 600px;
+  min-width: 1000px;
   display: flex;
   justify-content: space-around;
   align-items: center;
   margin: 0 auto;
 }
 .border {
-  height: 100%;
-  width: 100%;
+  height: 369px;
+  width: 290px;
   background: transparent;
   border-radius: 10px;
   transition: border 1s;
@@ -414,89 +414,23 @@ ind-movie-nav {
 .card {
   height: 379px;
   width: 300px;
-  background: #808080;
+  background: grey;
   border-radius: 10px;
   transition: background 0.8s;
   overflow: hidden;
-  background: #000;
-  box-shadow: 0 70px 63px -60px #000;
+  background: black;
+  box-shadow: 0 70px 63px -60px #000000;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
 }
-.card0 {
-  background: url("https://i.pinimg.com/736x/8f/a0/51/8fa051251f5ac2d0b756027089fbffde--terry-o-neill-al-pacino.jpg")
-    center center no-repeat;
-  background-size: 300px;
-}
-.card0:hover {
-  background: url("https://i.pinimg.com/736x/8f/a0/51/8fa051251f5ac2d0b756027089fbffde--terry-o-neill-al-pacino.jpg")
-    left center no-repeat;
-  background-size: 600px;
-}
-.card0:hover,
-.profile-person h2 {
-  opacity: 1;
-}
-.card0:hover .profile-person,
-.fa {
-  opacity: 1;
-}
-.card1 {
-  background: url("https://i.pinimg.com/originals/28/d2/e6/28d2e684e7859a0dd17fbd0cea00f8a9.jpg")
-    center center no-repeat;
-  background-size: 300px;
-}
-.card1:hover {
-  background: url("https://i.pinimg.com/originals/28/d2/e6/28d2e684e7859a0dd17fbd0cea00f8a9.jpg")
-    left center no-repeat;
-  background-size: 600px;
-}
-.card1:hover,
-.profile-person h2 {
-  opacity: 1;
-}
+
 .card1:hover .profile-person,
 .fa {
   opacity: 1;
 }
-.card2 {
-  background: url("https://i.pinimg.com/originals/ee/85/08/ee850842e68cfcf6e3943c048f45c6d1.jpg")
-    center center no-repeat;
-  background-size: 300px;
-}
-.card2:hover {
-  background: url("https://i.pinimg.com/originals/ee/85/08/ee850842e68cfcf6e3943c048f45c6d1.jpg")
-    left center no-repeat;
-  background-size: 600px;
-}
-.card2:hover,
-.profile-person h2 {
-  opacity: 1;
-}
-.card2:hover .profile-person,
-.fa {
-  opacity: 1;
-}
-.card3 {
-  background: url("https://i.pinimg.com/564x/51/ab/74/51ab741b23154b0f06814fa864bea405.jpg")
-    center center no-repeat;
-  background-size: 300px;
-}
-.card3:hover {
-  background: url("https://i.pinimg.com/564x/51/ab/74/51ab741b23154b0f06814fa864bea405.jpg")
-    left center no-repeat;
-  background-size: 600px;
-}
-.card3:hover,
-.profile-person h2 {
-  opacity: 1;
-}
-.card3:hover .profile-person,
-.fa {
-  opacity: 1;
-}
+
 h1.cast-title-1 {
   position: absolute;
   top: 62%;
@@ -514,7 +448,7 @@ h1.cast-title-1 {
 .border h3 {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #fff;
-  margin: 20px;
+  margin: 10px;
   opacity: 0;
   transition: opacity 1s;
 }

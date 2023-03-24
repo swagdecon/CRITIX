@@ -10,15 +10,18 @@ import {
   MovieTrailer,
   MovieAverage,
   getYearFromDate,
-  // ActorList,
+  MovieActors,
 } from "../components/movieCardfunctions";
 import Popcorn from "../misc/popcorn_logo";
 import "../misc/popcorn_logo.css";
 
 const IndMovie = () => {
   const [movie, setMovie] = useState({});
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const [requestSent, setRequestSent] = useState(false); // new state
   const navigate = useNavigate();
   const { id } = useParams();
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -35,6 +38,7 @@ const IndMovie = () => {
         if (myResponse.ok) {
           const responseData = await myResponse.json();
           setMovie(responseData);
+          setDataLoaded(true);
         } else {
           console.log(`HTTP error! status: ${myResponse.status}`);
           navigate("/403", { replace: true });
@@ -45,8 +49,17 @@ const IndMovie = () => {
       }
     }
 
-    fetchData();
-  }, []);
+    if (!requestSent) {
+      // check if request has been sent before
+      fetchData();
+      setRequestSent(true); // set state to indicate that request has been sent
+    }
+  }, [requestSent, id, navigate]);
+
+  if (!dataLoaded) {
+    return <div>Loading...</div>;
+  }
+  console.log(`https://image.tmdb.org/t/p/w500${movie.actorImagePaths[0]}`);
   return (
     <html>
       <Container />
@@ -54,14 +67,14 @@ const IndMovie = () => {
         <div
           className="background"
           style={{
-            backgroundImage: `url(https://image.tmdb.org/t/p/w500/${movie.backdrop_path}) `,
+            backgroundImage: `url(https://image.tmdb.org/t/p/w500${movie.backdrop_path}) `,
           }}
         ></div>
         <ind-movie-body>
           <div className="ind-movie-wrapper">
             <div className="hero-poster" style={{ marginTop: 40 }}>
               <img
-                src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
               />
             </div>
 
@@ -169,91 +182,10 @@ const IndMovie = () => {
                   <h1 className="cast-title-1">Cast Members:</h1>
                   <section className="CastMembers">
                     <div className="profile-container">
-                      {/* <div> {ActorList(movie.actors)}</div> */}
-                      <div className="card card0">
-                        <div className="border">
-                          <h3 className="profile-person">{movie.actors}</h3>
-                          <div className="ind-movie-cast-icons">
-                            <i className="fa fa-codepen" aria-hidden="true"></i>
-                            <i
-                              className="fa fa-instagram"
-                              aria-hidden="true"
-                            ></i>
-                            <i
-                              className="fa fa-dribbble"
-                              aria-hidden="true"
-                            ></i>
-                            <i className="fa fa-twitter" aria-hidden="true"></i>
-                            <i
-                              className="fa fa-facebook"
-                              aria-hidden="true"
-                            ></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="card card1">
-                        <div className="border">
-                          <h3 className="profile-person">Example 2</h3>
-                          <div className="ind-movie-cast-icons">
-                            <i className="fa fa-codepen" aria-hidden="true"></i>
-                            <i
-                              className="fa fa-instagram"
-                              aria-hidden="true"
-                            ></i>
-                            <i
-                              className="fa fa-dribbble"
-                              aria-hidden="true"
-                            ></i>
-                            <i className="fa fa-twitter" aria-hidden="true"></i>
-                            <i
-                              className="fa fa-facebook"
-                              aria-hidden="true"
-                            ></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="card card2">
-                        <div className="border">
-                          <h3 className="profile-person">Patrick Stewart</h3>
-                          <div className="ind-movie-cast-icons">
-                            <i className="fa fa-codepen" aria-hidden="true"></i>
-                            <i
-                              className="fa fa-instagram"
-                              aria-hidden="true"
-                            ></i>
-                            <i
-                              className="fa fa-dribbble"
-                              aria-hidden="true"
-                            ></i>
-                            <i className="fa fa-twitter" aria-hidden="true"></i>
-                            <i
-                              className="fa fa-facebook"
-                              aria-hidden="true"
-                            ></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="card card3">
-                        <div className="border">
-                          <h3 className="profile-person">Emma Stone</h3>
-                          <div className="ind-movie-cast-icons">
-                            <i className="fa fa-codepen" aria-hidden="true"></i>
-                            <i
-                              className="fa fa-instagram"
-                              aria-hidden="true"
-                            ></i>
-                            <i
-                              className="fa fa-dribbble"
-                              aria-hidden="true"
-                            ></i>
-                            <i className="fa fa-twitter" aria-hidden="true"></i>
-                            <i
-                              className="fa fa-facebook"
-                              aria-hidden="true"
-                            ></i>
-                          </div>
-                        </div>
-                      </div>
+                      <MovieActors
+                        actors={movie.actors}
+                        images={movie.actorImagePaths}
+                      />
                     </div>
                   </section>
                 </div>
