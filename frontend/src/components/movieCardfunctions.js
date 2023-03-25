@@ -50,13 +50,36 @@ function MovieGenres({ genres }) {
 }
 
 const MovieActors = ({ actors, images }) => {
-  if (!images || !actors) {
-    return null;
-  }
   MovieActors.propTypes = {
     actors: PropTypes.arrayOf(PropTypes.string),
     images: PropTypes.arrayOf(PropTypes.string),
   };
+
+  if (!images || !actors) {
+    return (
+      <div className="profile-container">
+        {actors.slice(0, 4).map((actor, index) => (
+          <div
+            key={index}
+            className="card card1"
+            style={{
+              background: `url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg)  center no-repeat`,
+              backgroundSize: "fill",
+            }}
+          >
+            <div className="border">
+              <h3 className="profile-person">{actor}</h3>
+              <div className="ind-movie-cast-icons">
+                <i className="fa fa-instagram" aria-hidden="true"></i>
+                <i className="fa fa-twitter" aria-hidden="true"></i>
+                <i className="fa fa-facebook" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="profile-container">

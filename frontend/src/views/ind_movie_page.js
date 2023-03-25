@@ -59,7 +59,7 @@ const IndMovie = () => {
   if (!dataLoaded) {
     return <div>Loading...</div>;
   }
-  console.log(`https://image.tmdb.org/t/p/w500${movie.actorImagePaths[0]}`);
+
   return (
     <html>
       <Container />
