@@ -51,7 +51,7 @@ function MovieGenres({ genres }) {
 
 const MovieActors = ({ actors, images }) => {
   if (!images || !actors) {
-    return;
+    return null;
   }
   MovieActors.propTypes = {
     actors: PropTypes.arrayOf(PropTypes.string),
@@ -59,19 +59,20 @@ const MovieActors = ({ actors, images }) => {
   };
 
   return (
-    <>
+    <div className="profile-container">
       {actors.slice(0, 4).map((actor, index) => (
         <div
           key={index}
           className="card card1"
           style={{
             background: `url(https://image.tmdb.org/t/p/w500${images[index]}) center center no-repeat`,
-            backgroundSize: "300px",
+            backgroundSize: "350px",
+            filter: " grayscale(100%)",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.background = `url(https://image.tmdb.org/t/p/w500${images[index]}) left center no-repeat `;
             e.currentTarget.style.backgroundSize = "600px";
-            e.currentTarget.querySelector("h2").style.opacity = 1;
+            e.currentTarget.querySelector("h3").style.opacity = 1;
             Array.from(e.currentTarget.querySelectorAll(".fa")).forEach(
               (icon) => {
                 icon.style.opacity = 1;
@@ -81,7 +82,7 @@ const MovieActors = ({ actors, images }) => {
           onMouseLeave={(e) => {
             e.currentTarget.style.background = `url(https://image.tmdb.org/t/p/w500${images[index]}) center center no-repeat `;
             e.currentTarget.style.backgroundSize = "300px";
-            e.currentTarget.querySelector("h2").style.opacity = 0;
+            e.currentTarget.querySelector("h3").style.opacity = 0;
             Array.from(e.currentTarget.querySelectorAll(".fa")).forEach(
               (icon) => {
                 icon.style.opacity = 0;
@@ -92,16 +93,14 @@ const MovieActors = ({ actors, images }) => {
           <div className="border">
             <h3 className="profile-person">{actor}</h3>
             <div className="ind-movie-cast-icons">
-              <i className="fa fa-codepen" aria-hidden="true"></i>
               <i className="fa fa-instagram" aria-hidden="true"></i>
-              <i className="fa fa-dribbble" aria-hidden="true"></i>
               <i className="fa fa-twitter" aria-hidden="true"></i>
               <i className="fa fa-facebook" aria-hidden="true"></i>
             </div>
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
 };
 

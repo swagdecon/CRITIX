@@ -181,12 +181,10 @@ const IndMovie = () => {
                   </div>
                   <h1 className="cast-title-1">Cast Members:</h1>
                   <section className="CastMembers">
-                    <div className="profile-container">
-                      <MovieActors
-                        actors={movie.actors}
-                        images={movie.actorImagePaths}
-                      />
-                    </div>
+                    <MovieActors
+                      actors={movie.actors}
+                      images={movie.actorImagePaths}
+                    />
                   </section>
                 </div>
               </div>

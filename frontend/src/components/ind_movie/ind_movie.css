@@ -386,13 +386,14 @@ ind-movie-nav {
 .CastMembers {
   position: absolute;
   top: 51%;
-  right: 13%;
+  right: 8%;
+  display: relative;
 }
 .profile-container {
   height: 100vh;
   width: 100vw;
   max-height: 800px;
-  max-width: 1280px;
+  max-width: 1400px;
   min-height: 600px;
   min-width: 1000px;
   display: flex;
@@ -400,17 +401,7 @@ ind-movie-nav {
   align-items: center;
   margin: 0 auto;
 }
-.border {
-  height: 369px;
-  width: 290px;
-  background: transparent;
-  border-radius: 10px;
-  transition: border 1s;
-  position: relative;
-}
-.border:hover {
-  border: 1px solid #fff;
-}
+
 .card {
   height: 379px;
   width: 300px;
@@ -424,6 +415,20 @@ ind-movie-nav {
   justify-content: center;
   align-items: center;
   position: relative;
+}
+
+.border {
+  height: 369px;
+  width: 290px;
+  opacity: 0;
+  background: transparent;
+  border-radius: 10px;
+  transition: border 1s;
+  position: relative;
+}
+.border:hover {
+  border: 1px solid #fff;
+  opacity: 1;
 }
 
 .card1:hover .profile-person,
