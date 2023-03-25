@@ -67,7 +67,6 @@ const MovieActors = ({ actors, images }) => {
           style={{
             background: `url(https://image.tmdb.org/t/p/w500${images[index]}) center center no-repeat`,
             backgroundSize: "350px",
-            filter: " grayscale(100%)",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.background = `url(https://image.tmdb.org/t/p/w500${images[index]}) left center no-repeat `;
