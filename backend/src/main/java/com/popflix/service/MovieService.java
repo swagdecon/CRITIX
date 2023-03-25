@@ -9,9 +9,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-
 import com.popflix.model.Movie;
-
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.model.Credits;
 import info.movito.themoviedbapi.model.Genre;
@@ -36,59 +34,69 @@ public class MovieService {
     return Optional.ofNullable(mongoTemplate.findOne(query, Movie.class, collectionName));
   }
 
-  // THIS WILL NEED EXTRACTING AND SAVING TO ITS OWN FILE / SERVICE IN FUTURE -
-  // TO BE PAIRED WITH A FILE THAT CONTROLS A PERIODIC FETCH OF NEW DATA FROM THE
-  // API TO SAVE TO OUR DB EVERY # DAYS.
-
-  // THIS METHOD LOOKS UP EACH MOVIE WITHIN A SPECIFIED COLLECTION AGAINST THE API
-  // IN ORDER TO SAVE ADDITIONAL DETAILS
-  // ABOUT EACH MOVIE TO OUR DB THAT WERE NOT PRESENT AS PART OF THE LIST.
   public void updateMovieDetails(String collectionName) {
     List<Movie> movies = allMovies(collectionName);
     for (Movie movie : movies) {
       MovieDb movieDb = tmdbApi.getMovies().getMovie(movie.getId(), "en-US");
-      movie.setBudget(movieDb.getBudget());
-      movie.setTagline(movieDb.getTagline());
-      movie.setRevenue(movieDb.getRevenue());
-      movie.setRuntime(movieDb.getRuntime());
 
-      // Get the movie genres
-      List<Genre> genres = movieDb.getGenres();
-
-      // Extract the movie genre names
-      List<String> genreNames = new ArrayList<>();
-      for (Genre genre : genres) {
-        genreNames.add(genre.getName());
+      // Initialize fields if they don't exist
+      if (movie.getBudget() == null) {
+        movie.setBudget(movieDb.getBudget());
       }
-      movie.setGenres(genreNames);
-
-      // Get the movie credits
-      Credits movieCredits = tmdbApi.getMovies().getCredits(movie.getId());
-
-      // Extract the actor names
-      List<String> actorNames = new ArrayList<>();
-      for (PersonCast cast : movieCredits.getCast()) {
-        actorNames.add(cast.getName());
+      if (movie.getTagline() == null) {
+        movie.setTagline(movieDb.getTagline());
       }
-      movie.setActors(actorNames);
+      if (movie.getRevenue() == null) {
+        movie.setRevenue(movieDb.getRevenue());
+      }
+      if (movie.getRuntime() == null) {
+        movie.setRuntime(movieDb.getRuntime());
+      }
+      if (movie.getGenres() == null || movie.getGenres().isEmpty()) {
+        // Get the movie genres
+        List<Genre> genres = movieDb.getGenres();
 
-      // Get the movie videos
-      List<Video> movieVideos = tmdbApi.getMovies().getVideos(movie.getId(), "en-US");
-
-      // Extract the video key for the main trailer
-      String mainTrailerKey = null;
-      for (Video video : movieVideos) {
-        if (video.getType().equals("Trailer") && video.getSite().equals("YouTube")) {
-          mainTrailerKey = video.getKey();
-          break;
+        // Extract the movie genre names
+        List<String> genreNames = new ArrayList<>();
+        for (Genre genre : genres) {
+          genreNames.add(genre.getName());
         }
+        movie.setGenres(genreNames);
       }
 
-      // Set the main trailer video key for the movie
-      if (mainTrailerKey != null) {
-        List<String> videoKeys = new ArrayList<>();
-        videoKeys.add(mainTrailerKey);
-        movie.setVideo(videoKeys);
+      if (movie.getActors() == null || movie.getActors().isEmpty() || movie.getActorImagePaths() == null
+          || movie.getActorImagePaths().isEmpty()) {
+        Credits movieCredits = tmdbApi.getMovies().getCredits(movie.getId());
+        List<PersonCast> castList = movieCredits.getCast();
+        List<String> actorNames = new ArrayList<>();
+        List<String> actorImagePaths = new ArrayList<>(); // add new list
+
+        for (PersonCast cast : castList) {
+          actorNames.add(cast.getName());
+          actorImagePaths.add(cast.getProfilePath()); // add image path to the new list
+        }
+        movie.setActors(actorNames);
+        movie.setActorImagePaths(actorImagePaths); // set the new list on the movie object
+
+      }
+      if (movie.getVideo() == null || movie.getVideo().isEmpty()) {
+        // Get the movie videos
+        List<Video> movieVideos = tmdbApi.getMovies().getVideos(movie.getId(), "en-US");
+
+        // Extract the video key for the main trailer
+        String mainTrailerKey = null;
+        for (Video video : movieVideos) {
+          if (video.getType().equals("Trailer") && video.getSite().equals("YouTube")) {
+            mainTrailerKey = video.getKey();
+            break;
+          }
+        }
+        // Set the main trailer video key for the movie
+        if (mainTrailerKey != null) {
+          List<String> videoKeys = new ArrayList<>();
+          videoKeys.add(mainTrailerKey);
+          movie.setVideo(videoKeys);
+        }
       }
 
       mongoTemplate.save(movie, collectionName);

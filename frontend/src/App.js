@@ -17,17 +17,14 @@ import PrivateRoute from "./components/privateRoutes.js";
 import MovieDetails from "./components/MovieDetails/MovieDetails.js";
 import Error403 from "./views/403error.js";
 import Error404 from "./views/404error.js";
-
-
+import IndMovie from "./views/ind_movie_page.js";
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-
         <Route path="/single" element={<MovieDetails />} />
-        
         <Route
           path="/homepage"
           element={
@@ -40,6 +37,7 @@ function App() {
         <Route path="/now_playing" element={<NowPlaying />} />
         <Route path="/popular" element={<Popular />} />
         <Route path="/upcoming" element={<Upcoming />} />
+        <Route path="/api/movies/:endpoint/:id" element={<IndMovie />} />
         <Route path="/403" element={<Error403 />} />
         <Route path="*" element={<Error404 />} />
         <Route component={<Navigate replace to="/404" />} />
