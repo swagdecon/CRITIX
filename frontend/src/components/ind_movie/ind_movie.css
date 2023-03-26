@@ -248,9 +248,19 @@ ind-movie-nav {
     max-width: 100%;
   }
 }
-.movie__description,
+.movie__description {
+  width: 100%;
+  max-width: 55%;
+  margin: 0 0;
+  display: block;
+  color: #ffffff;
+  font-size: 1.1rem;
+  padding-top: 3rem;
+  line-height: 2rem;
+  text-align: justify;
+}
+
 .review__description {
-  max-width: 100%;
   width: 100%;
   margin: 0 0;
   display: block;
@@ -261,9 +271,11 @@ ind-movie-nav {
   text-align: justify;
 }
 @media screen and (max-width: 600px) {
-  .movie__description,
+  .movie__description {
+    max-width: 55%;
+  }
   .review__description {
-    max-width: 50%;
+    max-width: 100%;
   }
 }
 

@@ -36,4 +36,6 @@ public class Movie {
     private Integer runtime;
     private List<String> actors;
     private List<String> actorImagePaths;
+    private List<String> reviews;
+
 }

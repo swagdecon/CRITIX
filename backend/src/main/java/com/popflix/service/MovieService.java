@@ -14,6 +14,7 @@ import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.model.Credits;
 import info.movito.themoviedbapi.model.Genre;
 import info.movito.themoviedbapi.model.MovieDb;
+import info.movito.themoviedbapi.model.Reviews;
 import info.movito.themoviedbapi.model.Video;
 import info.movito.themoviedbapi.model.people.PersonCast;
 
@@ -69,18 +70,33 @@ public class MovieService {
         Credits movieCredits = tmdbApi.getMovies().getCredits(movie.getId());
         List<PersonCast> castList = movieCredits.getCast();
         List<String> actorNames = new ArrayList<>();
-        List<String> actorImagePaths = new ArrayList<>(); // add new list
-
+        List<String> actorImagePaths = new ArrayList<>();
         for (PersonCast cast : castList) {
           actorNames.add(cast.getName());
-          actorImagePaths.add(cast.getProfilePath()); // add image path to the new list
+        }
+        for (int i = 0; i < Math.min(castList.size(), 5); i++) {
+          PersonCast cast = castList.get(i);
+          actorImagePaths.add(cast.getProfilePath());
         }
         movie.setActors(actorNames);
-        movie.setActorImagePaths(actorImagePaths); // set the new list on the movie object
-
+        movie.setActorImagePaths(actorImagePaths);
       }
+      if (movie.getReviews() == null || movie.getReviews().isEmpty()) {
+        List<Reviews> reviews = tmdbApi.getReviews().getReviews(movie.getId(), "en-US", 1).getResults();
+
+        // Extract the review text for each review
+        List<String> reviewTexts = new ArrayList<>();
+        for (Reviews review : reviews) {
+          String content = review.getContent();
+          if (content.split("\\s+").length < 200 && !content.contains("SPOILER-FREE")) {
+            reviewTexts.add(content);
+          }
+        }
+
+        movie.setReviews(reviewTexts);
+      }
+
       if (movie.getVideo() == null || movie.getVideo().isEmpty()) {
-        // Get the movie videos
         List<Video> movieVideos = tmdbApi.getMovies().getVideos(movie.getId(), "en-US");
 
         // Extract the video key for the main trailer
@@ -102,4 +118,5 @@ public class MovieService {
       mongoTemplate.save(movie, collectionName);
     }
   }
+
 }
