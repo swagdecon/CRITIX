@@ -341,7 +341,7 @@ ind-movie-nav {
   }
 }
 .review__description {
-  padding-top: 1rem;
+  padding: 1rem;
 }
 
 /* Scrolling css */
@@ -454,6 +454,8 @@ ind-movie-nav {
 .card1:hover .profile-person,
 .fa {
   opacity: 1;
+  color: #0096ff;
+  font-family: "CoreCircus", sans-serif;
 }
 
 h1.cast-title-1 {
@@ -483,8 +485,8 @@ h1.cast-title-1 {
 }
 .ind-movie-cast-icons {
   position: absolute;
-  fill: #fff;
-  color: #fff;
+  fill: #0096ff;
+  color: #0096ff;
   height: 130px;
   top: 226px;
   width: 50px;

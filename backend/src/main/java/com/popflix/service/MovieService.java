@@ -88,7 +88,8 @@ public class MovieService {
         List<String> reviewTexts = new ArrayList<>();
         for (Reviews review : reviews) {
           String content = review.getContent();
-          if (content.split("\\s+").length < 200 && !content.contains("SPOILER-FREE")) {
+          if (content.split("\\s+").length < 200 && !content.contains("SPOILER-FREE")
+              && content.split("\\s+").length > 100) {
             reviewTexts.add(content);
           }
         }

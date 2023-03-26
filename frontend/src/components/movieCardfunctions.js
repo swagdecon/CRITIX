@@ -131,7 +131,7 @@ function MovieReviews({ reviews }) {
   MovieReviews.propTypes = {
     reviews: PropTypes.arrayOf(PropTypes.string),
   };
-  if (!reviews) {
+  if (!reviews || reviews === "" || reviews == null) {
     return <div>N/A</div>;
   }
   const [maxHeight, setMaxHeight] = useState(500);
