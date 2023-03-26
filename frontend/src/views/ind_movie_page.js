@@ -10,6 +10,7 @@ import {
   MovieAverage,
   getYearFromDate,
   MovieActors,
+  MovieReviews,
 } from "../components/movieCardfunctions";
 import Popcorn from "../misc/popcorn_logo";
 import "../misc/popcorn_logo.css";
@@ -109,46 +110,8 @@ const IndMovie = () => {
               </div>
               <div className="ind_movie_review">
                 <h3 className="ind_review__title">Reviews</h3>
-                <ul>
-                  <li>
-                    <div className="review__score">95%</div>
-                    <p className="review__description">
-                      &quot;Ex Machina&quot; deals with a familiar theme in a
-                      very unique way. It doesn&apos;t bombard you with effects
-                      or superficial action (although the robot effects are
-                      exceptional). Rather, its focus and beauty lie in the
-                      subtle and nuanced performances of its tiny cast as the
-                      film explores what it means to be human.
-                    </p>
-                  </li>
-                  <li>
-                    <div className="review__score">91%</div>
-                    <p className="review__description">
-                      Quiet dialogue scenes between two characters are filmed in
-                      such an impactful, making them feel hauntingly austere,
-                      sweet and innocent, or terrible and frightening, through
-                      meticulous use of composition, light and sound. The film
-                      really does run the gamut of emotions, surprisingly funny
-                      one minute and gut-wrenchingly tense and weird the next,
-                      while the script twists and turns, constantly unsettling
-                      your assumptions about what will happen.
-                    </p>
-                  </li>
-                  <li>
-                    <div className="review__score">89%</div>
-                    <p className="review__description">
-                      The performances are excellent, most notably Alicia
-                      Vikander as the beguiling Ava, who absolutely passes for
-                      being &apos;almost human &apos;. Her precise movements
-                      -walking, standing or stooping to pull on a pair of
-                      stockings- have just that slight tinge of the uncanny
-                      about them to suggest a mechanical skeleton, yet she is
-                      undeniably seductive. You can really understand Caleb
-                      &apos;s mental plight as she begins to show signs of a
-                      sexual interest in him!
-                    </p>
-                  </li>
-                </ul>
+
+                <MovieReviews reviews={movie.reviews} />
               </div>
             </div>
             <section id="slide-1" className="homeSlide">

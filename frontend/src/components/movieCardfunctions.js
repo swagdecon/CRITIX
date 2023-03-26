@@ -1,6 +1,7 @@
-import React from "react";
+import { React, useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./ind_movie/ind_movie.css";
+import ReactTextCollapse from "../../node_modules/react-text-collapse/dist/ReactTextCollapse";
 
 function truncateDescription(description) {
   const words = description.split(" ");
@@ -126,6 +127,52 @@ const MovieActors = ({ actors, images }) => {
   );
 };
 
+function MovieReviews({ reviews }) {
+  MovieReviews.propTypes = {
+    reviews: PropTypes.arrayOf(PropTypes.string),
+  };
+  if (!reviews) {
+    return <div>N/A</div>;
+  }
+  const [maxHeight, setMaxHeight] = useState(500);
+
+  const reviewRef = useRef(null);
+  useEffect(() => {
+    if (reviewRef.current) {
+      const reviewHeight = reviewRef.current.offsetHeight;
+      setMaxHeight(reviewHeight);
+    }
+  }, [reviews]);
+
+  const TEXT_COLLAPSE_OPTIONS = {
+    collapse: false,
+    collapseText: "... show more",
+    expandText: "show less",
+    minHeight: 210,
+    maxHeight: 500,
+    textStyle: {
+      color: "white",
+      fontSize: "20px",
+    },
+  };
+  return (
+    <div className="review__wrapper">
+      {reviews.slice(0, 3).map((review, index) => (
+        <ReactTextCollapse
+          key={index}
+          options={{ ...TEXT_COLLAPSE_OPTIONS, maxHeight }}
+        >
+          <div className="scroll scroll4">
+            {/* <div className="review__score">{review.rating}%</div> */}
+            <p className="review__description">{review}</p>
+            <br />
+          </div>
+        </ReactTextCollapse>
+      ))}
+    </div>
+  );
+}
+
 export {
   truncateDescription,
   getYearFromDate,
@@ -133,4 +180,5 @@ export {
   MovieAverage,
   MovieGenres,
   MovieActors,
+  MovieReviews,
 };

@@ -167,6 +167,7 @@ ind-movie-nav {
 }
 .container-margin {
   padding: 0 10rem;
+  min-height: 110%;
 }
 @media screen and (max-width: 600px) {
   .container-margin {
@@ -249,21 +250,46 @@ ind-movie-nav {
 }
 .movie__description,
 .review__description {
-  max-width: 55%;
+  max-width: 100%;
   width: 100%;
   margin: 0 0;
-  float: none;
   display: block;
   color: #ffffff;
   font-size: 1.1rem;
   padding-top: 3rem;
   line-height: 2rem;
+  text-align: justify;
 }
 @media screen and (max-width: 600px) {
   .movie__description,
   .review__description {
-    max-width: 100%;
+    max-width: 50%;
   }
+}
+
+.review__wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 50%;
+}
+.scroll {
+  overflow: auto;
+  float: left;
+  margin: 10px;
+}
+
+.scroll4::-webkit-scrollbar {
+  width: 10px;
+}
+
+.scroll4::-webkit-scrollbar-thumb {
+  background: #666;
+  border-radius: 20px;
+}
+
+.scroll4::-webkit-scrollbar-track {
+  background: #ddd;
+  border-radius: 20px;
 }
 .ind_movie__trailer {
   margin-top: 3rem;
@@ -321,7 +347,7 @@ ind-movie-nav {
   }
 }
 .review__description {
-  padding-top: 1rem;
+  padding-top: 0.1rem;
 }
 
 /* Scrolling css */
