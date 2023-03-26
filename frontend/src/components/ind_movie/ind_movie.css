@@ -282,27 +282,9 @@ ind-movie-nav {
 .review__wrapper {
   display: flex;
   flex-direction: column;
-  max-width: 50%;
-}
-.scroll {
-  overflow: auto;
-  float: left;
-  margin: 10px;
+  max-width: 55%;
 }
 
-.scroll4::-webkit-scrollbar {
-  width: 10px;
-}
-
-.scroll4::-webkit-scrollbar-thumb {
-  background: #666;
-  border-radius: 20px;
-}
-
-.scroll4::-webkit-scrollbar-track {
-  background: #ddd;
-  border-radius: 20px;
-}
 .ind_movie__trailer {
   margin-top: 3rem;
   display: inline-block;
@@ -359,7 +341,7 @@ ind-movie-nav {
   }
 }
 .review__description {
-  padding-top: 0.1rem;
+  padding-top: 1rem;
 }
 
 /* Scrolling css */

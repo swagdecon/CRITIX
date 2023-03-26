@@ -162,11 +162,9 @@ function MovieReviews({ reviews }) {
           key={index}
           options={{ ...TEXT_COLLAPSE_OPTIONS, maxHeight }}
         >
-          <div className="scroll scroll4">
-            {/* <div className="review__score">{review.rating}%</div> */}
-            <p className="review__description">{review}</p>
-            <br />
-          </div>
+          {/* <div className="review__score">{review.rating}%</div> */}
+          <p className="review__description">{review}</p>
+          <br />
         </ReactTextCollapse>
       ))}
     </div>
