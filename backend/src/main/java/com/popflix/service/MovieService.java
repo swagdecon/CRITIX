@@ -3,11 +3,13 @@ package com.popflix.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import com.popflix.model.Movie;
 import info.movito.themoviedbapi.TmdbApi;
@@ -23,6 +25,15 @@ public class MovieService {
   @Autowired
   private MongoTemplate mongoTemplate;
   private final TmdbApi tmdbApi = new TmdbApi("d84f9365179dc98dc69ab22833381835");
+
+  @Scheduled(cron = "0 0 0 * * ?")
+  public void updateMovieDetailsScheduled() {
+    updateMovieDetails("movies");
+    updateMovieDetails("now_playing");
+    updateMovieDetails("popular");
+    updateMovieDetails("top_rated");
+    updateMovieDetails("upcoming_movies");
+  }
 
   public List<Movie> allMovies(String collectionName) {
     Query query = new Query();
