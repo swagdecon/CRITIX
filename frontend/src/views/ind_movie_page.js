@@ -14,7 +14,10 @@ import {
 } from "../components/movieCardfunctions";
 import Popcorn from "../misc/popcorn_logo";
 import "../misc/popcorn_logo.css";
-
+import { RiMoneyDollarBoxFill } from "react-icons/ri";
+import { BsWallet2 } from "react-icons/bs";
+import { FaLanguage } from "react-icons/fa";
+import { AiOutlineClockCircle } from "react-icons/ai";
 const IndMovie = () => {
   const [movie, setMovie] = useState({});
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -137,7 +140,52 @@ const IndMovie = () => {
                     />
                     <section className="movieDetailsContainer">
                       <div className="ind-movie-details-card">
-                        <div className="card-overlay">text</div>
+                        <div className="card-overlay">
+                          <div className="movie-Details-Title">
+                            Movie Details
+                          </div>
+                          <div className="movie-details-list">
+                            <div className="ind_movie_watch_providers"></div>
+                            <div className="ind_movie_runtime">
+                              <div className="ind_movie_details_title">
+                                Runtime
+                              </div>
+                              <AiOutlineClockCircle size={50} />
+                              <div className="movie_info_text">
+                                {movie.runtime} minutes
+                              </div>
+                            </div>
+                            <div className="ind_movie_revenue">
+                              <div className="ind_movie_details_title">
+                                Revenue
+                              </div>
+                              <RiMoneyDollarBoxFill size={50} />
+                              <div className="movie_info_text">
+                                ${movie.revenue}
+                              </div>
+                            </div>
+                            <div className="ind_movie_budget">
+                              <div className="ind_movie_details_title">
+                                Budget
+                              </div>
+                              <BsWallet2 size={50} />
+                              <div className="movie_info_text">
+                                ${movie.budget}
+                              </div>
+                            </div>
+                            <div className="ind_movie_language">
+                              <div className="ind_movie_details_title">
+                                Language
+                              </div>
+                              <FaLanguage size={50} />
+                              <div className="movie_info_text">
+                                {movie.original_language}
+                              </div>
+                            </div>
+                            <div className="ind_movie_production_company"></div>
+                            <div className="ind_movie_status"></div>
+                          </div>
+                        </div>
                       </div>
                     </section>
                   </div>
