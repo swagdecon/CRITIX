@@ -110,7 +110,6 @@ const IndMovie = () => {
               </div>
               <div className="ind_movie_review">
                 <h3 className="ind_review__title">Reviews</h3>
-
                 <MovieReviews reviews={movie.reviews} />
               </div>
             </div>
@@ -136,10 +135,11 @@ const IndMovie = () => {
                       width={"1500px"}
                       height={"750px"}
                     />
-                    <img
-                      className="ind-movie-poster"
-                      src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                    />
+                    <section className="movieDetailsContainer">
+                      <div className="ind-movie-details-card">
+                        <div className="card-overlay">text</div>
+                      </div>
+                    </section>
                   </div>
                   <h1 className="cast-title-1">Cast Members:</h1>
                   <section className="CastMembers">

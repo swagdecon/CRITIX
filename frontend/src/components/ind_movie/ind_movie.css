@@ -318,6 +318,86 @@ ind-movie-nav {
 .ind_movie__trailer:hover p {
   color: #fff;
 }
+
+/* Glowing Card css */
+
+.ind-movie-details-card {
+  z-index: 2;
+  border-radius: 8px;
+  position: absolute;
+  margin: 70px auto 0;
+  width: 400px;
+  height: 300px;
+  text-align: center;
+}
+.card-overlay {
+  width: 400px;
+  height: 300px;
+  border-radius: 8px;
+  background-color: #000;
+  z-index: 999;
+}
+
+.ind-movie-details-card ul li:nth-child(1) {
+  color: #0000ff;
+  filter: blur(10px);
+  animation: child1 2s alternate infinite;
+}
+.ind-movie-details-card ul li:nth-child(2) {
+  color: #00ffff;
+  filter: blur(5px);
+  animation: child2 2s alternate infinite;
+}
+
+.ind-movie-details-card ul li:nth-child(3) {
+  color: #000;
+  filter: blur(0px);
+}
+@keyframes child1 {
+  0%,
+  100% {
+    filter: blur(10px);
+  }
+  50% {
+    filter: none;
+  }
+}
+@keyframes child2 {
+  0%,
+  100% {
+    filter: blur(5px);
+  }
+  50% {
+    filter: blur(1px);
+  }
+}
+.ind-movie-details-card:before,
+.ind-movie-details-card:after {
+  content: "";
+  border-radius: 10px;
+  position: absolute;
+  left: -2px;
+  top: -2px;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  background-image: linear-gradient(45deg, #0000ff, #00ffff);
+  background-size: 400%;
+  z-index: -5;
+  animation: move 10s alternate infinite;
+}
+.ind-movie-details-card:after {
+  filter: blur(10px);
+}
+@keyframes move {
+  0%,
+  100% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 100% 0;
+  }
+}
+
 .ind_movie_review {
   max-width: 1150px;
   width: 100%;
