@@ -3,8 +3,6 @@ package com.popflix.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ScheduledExecutorService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -16,6 +14,7 @@ import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.model.Credits;
 import info.movito.themoviedbapi.model.Genre;
 import info.movito.themoviedbapi.model.MovieDb;
+import info.movito.themoviedbapi.model.ProductionCompany;
 import info.movito.themoviedbapi.model.Reviews;
 import info.movito.themoviedbapi.model.Video;
 import info.movito.themoviedbapi.model.people.PersonCast;
@@ -92,6 +91,7 @@ public class MovieService {
         movie.setActors(actorNames);
         movie.setActorImagePaths(actorImagePaths);
       }
+
       if (movie.getReviews() == null || movie.getReviews().isEmpty()) {
         List<Reviews> reviews = tmdbApi.getReviews().getReviews(movie.getId(), "en-US", 1).getResults();
 
@@ -108,6 +108,23 @@ public class MovieService {
         movie.setReviews(reviewTexts);
       }
 
+      if (movie.getProductionCompanies() == null || movie.getProductionCompanies().isEmpty()) {
+        // Get the movie production companies
+        List<ProductionCompany> productionCompaniesList = movieDb.getProductionCompanies();
+
+        // Extract the movie production company names
+        List<String> productionCompanies = new ArrayList<>();
+        for (ProductionCompany productionCompany : productionCompaniesList) {
+          productionCompanies.add(productionCompany.getName());
+        }
+        movie.setProductionCompanies(productionCompanies);
+      }
+
+      if (movie.getMovieStatus() == null || movie.getMovieStatus().isEmpty()) {
+        String movieStatus = tmdbApi.getMovies().getMovie(movie.getId(), "en-US").getStatus();
+        movie.setMovieStatus(movieStatus);
+      }
+
       if (movie.getVideo() == null || movie.getVideo().isEmpty()) {
         List<Video> movieVideos = tmdbApi.getMovies().getVideos(movie.getId(), "en-US");
 
@@ -119,6 +136,7 @@ public class MovieService {
             break;
           }
         }
+
         // Set the main trailer video key for the movie
         if (mainTrailerKey != null) {
           List<String> videoKeys = new ArrayList<>();
