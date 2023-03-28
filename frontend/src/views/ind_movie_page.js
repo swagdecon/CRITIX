@@ -18,6 +18,8 @@ import { RiMoneyDollarBoxFill } from "react-icons/ri";
 import { BsWallet2 } from "react-icons/bs";
 import { FaLanguage } from "react-icons/fa";
 import { AiOutlineClockCircle } from "react-icons/ai";
+import { MdOutlineMovie } from "react-icons/md";
+import { RiMovie2Line } from "react-icons/ri";
 const IndMovie = () => {
   const [movie, setMovie] = useState({});
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -144,46 +146,84 @@ const IndMovie = () => {
                           <div className="movie-Details-Title">
                             Movie Details
                           </div>
-                          <div className="movie-details-list">
-                            <div className="ind_movie_watch_providers"></div>
-                            <div className="ind_movie_runtime">
-                              <div className="ind_movie_details_title">
-                                Runtime
+                          <div className="movie-info-row">
+                            <ul className="movie-column">
+                              <ul className="ind_movie_runtime">
+                                {/* <div className="ind_movie_details_title"> */}
+                                {/* Runtime */}
+                                {/* </div> */}
+                                <AiOutlineClockCircle
+                                  className="movie_info_logo"
+                                  size={50}
+                                />
+                                <div className="movie_info_text">
+                                  {movie.runtime} minutes
+                                </div>
+                              </ul>
+                              <br />
+                              <ul className="ind_movie_revenue">
+                                {/* <div className="ind_movie_details_title"> */}
+                                {/* Revenue */}
+                                {/* </div> */}
+                                <RiMoneyDollarBoxFill
+                                  className="movie_info_logo"
+                                  size={50}
+                                />
+                                <div className="movie_info_text">
+                                  ${movie.revenue}
+                                </div>
+                              </ul>
+                              <br />
+                              <ul className="ind_movie_budget">
+                                {/* <div className="ind_movie_details_title"> */}
+                                {/* Budget */}
+                                {/* </div> */}
+                                <BsWallet2
+                                  className="movie_info_logo"
+                                  size={50}
+                                />
+                                <div className="movie_info_text">
+                                  ${movie.budget}
+                                </div>
+                              </ul>
+                              <br />
+                              <ul className="ind_movie_language">
+                                {/* <div className="ind_movie_details_title"> */}
+                                {/* Language */}
+                                {/* </div> */}
+                                <FaLanguage
+                                  className="movie_info_logo"
+                                  size={50}
+                                />
+                                <div className="movie_info_text">
+                                  {movie.original_language}
+                                </div>
+                              </ul>
+                            </ul>
+                            <ul className="movie-column">
+                              <ul className="ind_movie_production_company">
+                                <div className="ind_movie_details_title">
+                                  {/* Production Companies */}
+                                </div>
+                                <MdOutlineMovie
+                                  className="movie_info_logo"
+                                  size={50}
+                                />
+                                <div className="movie_info_text">
+                                  {movie.productionCompanies}
+                                </div>
+                              </ul>
+                              <br />
+                              <div className="ind_movie_status">
+                                <RiMovie2Line
+                                  size={50}
+                                  className="movie_info_logo"
+                                />
+                                <div className="movie_info_text">
+                                  {movie.movieStatus}
+                                </div>
                               </div>
-                              <AiOutlineClockCircle size={50} />
-                              <div className="movie_info_text">
-                                {movie.runtime} minutes
-                              </div>
-                            </div>
-                            <div className="ind_movie_revenue">
-                              <div className="ind_movie_details_title">
-                                Revenue
-                              </div>
-                              <RiMoneyDollarBoxFill size={50} />
-                              <div className="movie_info_text">
-                                ${movie.revenue}
-                              </div>
-                            </div>
-                            <div className="ind_movie_budget">
-                              <div className="ind_movie_details_title">
-                                Budget
-                              </div>
-                              <BsWallet2 size={50} />
-                              <div className="movie_info_text">
-                                ${movie.budget}
-                              </div>
-                            </div>
-                            <div className="ind_movie_language">
-                              <div className="ind_movie_details_title">
-                                Language
-                              </div>
-                              <FaLanguage size={50} />
-                              <div className="movie_info_text">
-                                {movie.original_language}
-                              </div>
-                            </div>
-                            <div className="ind_movie_production_company"></div>
-                            <div className="ind_movie_status"></div>
+                            </ul>
                           </div>
                         </div>
                       </div>
