@@ -18,7 +18,7 @@ import { RiMoneyDollarBoxFill } from "react-icons/ri";
 import { BsWallet2 } from "react-icons/bs";
 import { FaLanguage } from "react-icons/fa";
 import { AiOutlineClockCircle } from "react-icons/ai";
-import { MdOutlineMovie } from "react-icons/md";
+import { MdOutlineMovie, MdDateRange } from "react-icons/md";
 import { RiMovie2Line } from "react-icons/ri";
 const IndMovie = () => {
   const [movie, setMovie] = useState({});
@@ -140,6 +140,7 @@ const IndMovie = () => {
                       width={"1500px"}
                       height={"750px"}
                     />
+
                     <section className="movieDetailsContainer">
                       <div className="ind-movie-details-card">
                         <div className="card-overlay">
@@ -221,6 +222,16 @@ const IndMovie = () => {
                                 />
                                 <div className="movie_info_text">
                                   {movie.movieStatus}
+                                </div>
+                              </div>
+                              <br />
+                              <div className="ind_movie_date">
+                                <MdDateRange
+                                  size={50}
+                                  className="movie_info_logo"
+                                />
+                                <div className="movie_info_text">
+                                  {movie.release_date}
                                 </div>
                               </div>
                             </ul>
