@@ -37,5 +37,6 @@ public class Movie {
     private List<String> actors;
     private List<String> actorImagePaths;
     private List<String> reviews;
-
+    private List<String> productionCompanies;
+    private String movieStatus;
 }
