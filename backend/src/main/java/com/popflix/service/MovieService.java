@@ -140,4 +140,23 @@ public class MovieService {
     }
   }
 
+  @Scheduled(fixedDelay = 86400000) // 24 hours in milliseconds
+  public void saveUpcomingMovies() {
+    List<MovieDb> upcomingMovies = tmdbApi.getMovies().getUpcoming("en-US", 1, "").getResults();
+    List<Movie> movies = new ArrayList<>();
+
+    mongoTemplate.dropCollection("upcoming_movies"); // Remove the existing collection
+
+    for (MovieDb movieDb : upcomingMovies) {
+      Movie movie = new Movie();
+      movie.setId(movieDb.getId());
+      movie.setTitle(movieDb.getTitle());
+      movie.setOverview(movieDb.getOverview());
+      movie.setPosterPath(movieDb.getPosterPath());
+      movie.setReleaseDate(movieDb.getReleaseDate());
+      movies.add(movie);
+      mongoTemplate.save(movie, "upcoming_movies");
+    }
+  }
+
 }

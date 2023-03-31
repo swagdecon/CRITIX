@@ -24,8 +24,8 @@ public class Movie {
     private String original_title;
     private String overview;
     private Double popularity;
-    private String poster_path;
-    private String release_date;
+    private String posterPath;
+    private String releaseDate;
     private String title;
     private List<String> video;
     private Double vote_average;
