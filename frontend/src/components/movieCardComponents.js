@@ -188,10 +188,10 @@ function MovieDetails({
     runtime: PropTypes.arrayOf(PropTypes.string),
   };
   MovieDetails.propTypes = {
-    revenue: PropTypes.arrayOf(PropTypes.string),
+    revenue: PropTypes.arrayOf(PropTypes.integer),
   };
   MovieDetails.propTypes = {
-    budget: PropTypes.arrayOf(PropTypes.string),
+    budget: PropTypes.arrayOf(PropTypes.integer),
   };
   MovieDetails.propTypes = {
     language: PropTypes.arrayOf(PropTypes.string),
@@ -247,7 +247,7 @@ function MovieDetails({
                 <div className="ind_movie_details_title"></div>
                 <MdOutlineMovie className="movie_info_logo" size={50} />
                 <div className="movie_info_text">
-                  {productionCompanies ? productionCompanies : "N/A"}
+                  {productionCompanies ? productionCompanies[0] : "N/A"}
                 </div>
               </ul>
               <br />
