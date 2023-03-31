@@ -1,8 +1,13 @@
 import { React, useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./ind_movie/ind_movie.css";
-import ReactTextCollapse from "../../node_modules/react-text-collapse/dist/ReactTextCollapse";
-
+import ReactTextCollapse from "react-text-collapse/dist/ReactTextCollapse";
+import { RiMoneyDollarBoxFill } from "react-icons/ri";
+import { BsWallet2 } from "react-icons/bs";
+import { FaLanguage } from "react-icons/fa";
+import { AiOutlineClockCircle } from "react-icons/ai";
+import { MdOutlineMovie, MdDateRange } from "react-icons/md";
+import { RiMovie2Line } from "react-icons/ri";
 function truncateDescription(description) {
   const words = description.split(" ");
 
@@ -170,7 +175,102 @@ function MovieReviews({ reviews }) {
     </div>
   );
 }
+function MovieDetails({
+  runtime,
+  revenue,
+  budget,
+  language,
+  productionCompanies,
+  movieStatus,
+  releaseDate,
+}) {
+  MovieDetails.propTypes = {
+    runtime: PropTypes.arrayOf(PropTypes.string),
+  };
+  MovieDetails.propTypes = {
+    revenue: PropTypes.arrayOf(PropTypes.string),
+  };
+  MovieDetails.propTypes = {
+    budget: PropTypes.arrayOf(PropTypes.string),
+  };
+  MovieDetails.propTypes = {
+    language: PropTypes.arrayOf(PropTypes.string),
+  };
+  MovieDetails.propTypes = {
+    productionCompanies: PropTypes.arrayOf(PropTypes.string),
+  };
+  MovieDetails.propTypes = {
+    movieStatus: PropTypes.arrayOf(PropTypes.string),
+  };
+  MovieDetails.propTypes = {
+    releaseDate: PropTypes.arrayOf(PropTypes.string),
+  };
 
+  return (
+    <section className="movieDetailsContainer">
+      <div className="ind-movie-details-card">
+        <div className="card-overlay">
+          <div className="movie-Details-Title">Movie Details</div>
+          <div className="movie-info-row">
+            <ul className="movie-column">
+              <ul className="ind_movie_runtime">
+                <AiOutlineClockCircle className="movie_info_logo" size={50} />
+
+                <div className="movie_info_text">
+                  {runtime ? `${runtime} minutes` : "N/A"}
+                </div>
+              </ul>
+              <br />
+              <ul className="ind_movie_revenue">
+                <RiMoneyDollarBoxFill className="movie_info_logo" size={50} />
+                <div className="movie_info_text">
+                  {revenue ? `$${revenue}` : "N/A"}
+                </div>
+              </ul>
+              <br />
+              <ul className="ind_movie_budget">
+                <BsWallet2 className="movie_info_logo" size={50} />
+                <div className="movie_info_text">
+                  {budget ? `$${budget}` : "N/A"}
+                </div>
+              </ul>
+              <br />
+              <ul className="ind_movie_language">
+                <FaLanguage className="movie_info_logo" size={50} />
+                <div className="movie_info_text">
+                  {language ? language : "N/A"}
+                </div>
+              </ul>
+            </ul>
+            <ul className="movie-column">
+              <ul className="ind_movie_production_company">
+                <div className="ind_movie_details_title"></div>
+                <MdOutlineMovie className="movie_info_logo" size={50} />
+                <div className="movie_info_text">
+                  {productionCompanies ? productionCompanies : "N/A"}
+                </div>
+              </ul>
+              <br />
+              <div className="ind_movie_status">
+                <RiMovie2Line size={50} className="movie_info_logo" />
+                <div className="movie_info_text">
+                  {movieStatus ? movieStatus : "N/A"}
+                </div>
+              </div>
+              <br />
+              <div className="ind_movie_date">
+                <MdDateRange size={50} className="movie_info_logo" />
+                <div className="movie_info_text">
+                  {releaseDate ? releaseDate : "N/A"}
+                </div>
+              </div>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 export {
   truncateDescription,
   getYearFromDate,
@@ -179,4 +279,5 @@ export {
   MovieGenres,
   MovieActors,
   MovieReviews,
+  MovieDetails,
 };

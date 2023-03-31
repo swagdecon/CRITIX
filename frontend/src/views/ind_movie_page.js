@@ -11,15 +11,11 @@ import {
   getYearFromDate,
   MovieActors,
   MovieReviews,
-} from "../components/movieCardfunctions";
+  MovieDetails,
+} from "../components/movieCardComponents";
 import Popcorn from "../misc/popcorn_logo";
 import "../misc/popcorn_logo.css";
-import { RiMoneyDollarBoxFill } from "react-icons/ri";
-import { BsWallet2 } from "react-icons/bs";
-import { FaLanguage } from "react-icons/fa";
-import { AiOutlineClockCircle } from "react-icons/ai";
-import { MdOutlineMovie, MdDateRange } from "react-icons/md";
-import { RiMovie2Line } from "react-icons/ri";
+
 const IndMovie = () => {
   const [movie, setMovie] = useState({});
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -140,105 +136,15 @@ const IndMovie = () => {
                       width={"1500px"}
                       height={"750px"}
                     />
-
-                    <section className="movieDetailsContainer">
-                      <div className="ind-movie-details-card">
-                        <div className="card-overlay">
-                          <div className="movie-Details-Title">
-                            Movie Details
-                          </div>
-                          <div className="movie-info-row">
-                            <ul className="movie-column">
-                              <ul className="ind_movie_runtime">
-                                {/* <div className="ind_movie_details_title"> */}
-                                {/* Runtime */}
-                                {/* </div> */}
-                                <AiOutlineClockCircle
-                                  className="movie_info_logo"
-                                  size={50}
-                                />
-                                <div className="movie_info_text">
-                                  {movie.runtime} minutes
-                                </div>
-                              </ul>
-                              <br />
-                              <ul className="ind_movie_revenue">
-                                {/* <div className="ind_movie_details_title"> */}
-                                {/* Revenue */}
-                                {/* </div> */}
-                                <RiMoneyDollarBoxFill
-                                  className="movie_info_logo"
-                                  size={50}
-                                />
-                                <div className="movie_info_text">
-                                  ${movie.revenue}
-                                </div>
-                              </ul>
-                              <br />
-                              <ul className="ind_movie_budget">
-                                {/* <div className="ind_movie_details_title"> */}
-                                {/* Budget */}
-                                {/* </div> */}
-                                <BsWallet2
-                                  className="movie_info_logo"
-                                  size={50}
-                                />
-                                <div className="movie_info_text">
-                                  ${movie.budget}
-                                </div>
-                              </ul>
-                              <br />
-                              <ul className="ind_movie_language">
-                                {/* <div className="ind_movie_details_title"> */}
-                                {/* Language */}
-                                {/* </div> */}
-                                <FaLanguage
-                                  className="movie_info_logo"
-                                  size={50}
-                                />
-                                <div className="movie_info_text">
-                                  {movie.original_language}
-                                </div>
-                              </ul>
-                            </ul>
-                            <ul className="movie-column">
-                              <ul className="ind_movie_production_company">
-                                <div className="ind_movie_details_title">
-                                  {/* Production Companies */}
-                                </div>
-                                <MdOutlineMovie
-                                  className="movie_info_logo"
-                                  size={50}
-                                />
-                                <div className="movie_info_text">
-                                  {movie.productionCompanies}
-                                </div>
-                              </ul>
-                              <br />
-                              <div className="ind_movie_status">
-                                <RiMovie2Line
-                                  size={50}
-                                  className="movie_info_logo"
-                                />
-                                <div className="movie_info_text">
-                                  {movie.movieStatus}
-                                </div>
-                              </div>
-                              <br />
-                              <div className="ind_movie_date">
-                                <MdDateRange
-                                  size={50}
-                                  className="movie_info_logo"
-                                />
-                                <div className="movie_info_text">
-                                  {movie.release_date}
-                                </div>
-                              </div>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </section>
+                    <MovieDetails
+                      runtime={movie.runtime}
+                      revenue={movie.revenue}
+                      budget={movie.budget}
+                      language={movie.original_language}
+                      productionCompanies={movie.productionCompanies}
+                      movieStatus={movie.status}
+                      releaseDate={movie.release_date}
+                    />
                   </div>
                   <h1 className="cast-title-1">Cast Members:</h1>
                   <section className="CastMembers">
