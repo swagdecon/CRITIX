@@ -25,15 +25,6 @@ public class MovieService {
   private MongoTemplate mongoTemplate;
   private final TmdbApi tmdbApi = new TmdbApi("d84f9365179dc98dc69ab22833381835");
 
-  @Scheduled(cron = "0 0 0 * * ?")
-  public void updateMovieDetailsScheduled() {
-    updateMovieDetails("movies");
-    updateMovieDetails("now_playing");
-    updateMovieDetails("popular");
-    updateMovieDetails("top_rated");
-    updateMovieDetails("upcoming_movies");
-  }
-
   public List<Movie> allMovies(String collectionName) {
     Query query = new Query();
     return mongoTemplate.find(query, Movie.class, collectionName);
