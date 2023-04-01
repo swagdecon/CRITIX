@@ -74,7 +74,7 @@ const MovieCarousel = ({ title, endpoint }) => {
                         <div
                           className="movie-img"
                           style={{
-                            backgroundImage: `url(https://image.tmdb.org/t/p/w500/${movie.poster_path})`,
+                            backgroundImage: `url(https://image.tmdb.org/t/p/w500/${movie.posterPath})`,
                           }}
                         ></div>
                         <div className="text-movie-cont">
@@ -84,7 +84,7 @@ const MovieCarousel = ({ title, endpoint }) => {
                               {/* <h1>{movie.title.replace(/\s+/g, " ")}</h1> */}
                               <ul className="movie-gen">
                                 <li>
-                                  {Math.round(movie.vote_average * 10) / 10}{" "}
+                                  {Math.round(movie.voteAverage * 10) / 10}{" "}
                                 </li>
                                 <li>{movie.runtime} mins</li>
                                 <li>{movie.genres.join(", ")}</li>
@@ -93,9 +93,6 @@ const MovieCarousel = ({ title, endpoint }) => {
                           </div>
                           <div className="mr-grid summary-row">
                             <div className="col2">
-                              {/* <h2>{movie.title}</h2> */}
-                              {/* <p>{movie.release_date}</p> */}
-                              {/* <p>{movie.tagline}</p> */}
                               <h5>SUMMARY</h5>
                             </div>
                             <div className="col2">

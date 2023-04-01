@@ -68,26 +68,24 @@ const IndMovie = () => {
         <div
           className="background"
           style={{
-            backgroundImage: `url(https://image.tmdb.org/t/p/w500${movie.backdrop_path}) `,
+            backgroundImage: `url(https://image.tmdb.org/t/p/w500${movie.backdropPath}) `,
           }}
         ></div>
         <ind-movie-body>
           <div className="ind-movie-wrapper">
             <div className="hero-poster" style={{ marginTop: 40 }}>
-              <img
-                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              />
+              <img src={`https://image.tmdb.org/t/p/w500${movie.posterPath}`} />
             </div>
 
             <div id="fade" className="container-margin">
               <div className="ind-movie-header ">
                 <div className="movie__score">
-                  {MovieAverage(movie.vote_average)}
+                  {MovieAverage(movie.voteAverage)}
                 </div>
                 <div className="movie__title__container">
                   <h2 className="movie__title">{movie.title}</h2>
                   <div className="movie__year">
-                    {getYearFromDate(movie.release_date)}
+                    {getYearFromDate(movie.releaseDate)}
                   </div>
                 </div>
                 <MovieGenres genres={movie.genres} />
@@ -143,7 +141,7 @@ const IndMovie = () => {
                       language={movie.original_language}
                       productionCompanies={movie.productionCompanies}
                       movieStatus={movie.status}
-                      releaseDate={movie.release_date}
+                      releaseDate={movie.releaseDate}
                     />
                   </div>
                   <h1 className="cast-title-1">Cast Members:</h1>

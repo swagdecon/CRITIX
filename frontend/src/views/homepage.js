@@ -25,10 +25,7 @@ const Homepage = () => {
             title="Popular right now"
             endpoint="/api/movies/popular"
           />
-          <MovieCarousel
-            title="Now Playing"
-            endpoint="/api/movies/now_playing"
-          />
+          <MovieCarousel title="Top Rated" endpoint="/api/movies/top_rated" />
           <MovieCarousel
             title="Releasing Soon"
             endpoint="/api/movies/upcoming"
