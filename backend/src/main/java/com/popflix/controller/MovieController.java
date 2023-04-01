@@ -34,7 +34,6 @@ public class MovieController {
 
     @GetMapping("/upcoming")
     public ResponseEntity<List<Movie>> getUpcomingMovies() {
-        // movieService.saveNewMovies("upcoming_movies");
         // movieService.updateMovieDetails("upcoming_movies");
         return new ResponseEntity<List<Movie>>(movieService.allMovies("upcoming_movies"), HttpStatus.OK);
     }

@@ -36,6 +36,19 @@ public class MovieService {
     return Optional.ofNullable(mongoTemplate.findOne(query, Movie.class, collectionName));
   }
 
+  @Scheduled(fixedRate = 24 * 60 * 60 * 1000, initialDelay = 0)
+  public void updateMovies() {
+    saveNowPlayingMovies();
+    savePopularMovies();
+    saveTopRatedMovies();
+    saveUpcomingMovies();
+    updateMovieDetails("now_playing");
+    updateMovieDetails("popular");
+    updateMovieDetails("top_rated");
+    updateMovieDetails("upcoming_movies");
+
+  }
+
   public void updateMovieDetails(String collectionName) {
     List<Movie> movies = allMovies(collectionName);
     for (Movie movie : movies) {
@@ -140,9 +153,88 @@ public class MovieService {
     }
   }
 
-  @Scheduled(fixedDelay = 86400000) // 24 hours in milliseconds
+  public void saveNowPlayingMovies() {
+    List<MovieDb> upcomingMovies = tmdbApi.getMovies().getNowPlayingMovies("en-US", 1, "").getResults();
+    List<Movie> movies = new ArrayList<>();
+
+    mongoTemplate.dropCollection("now_playing"); // Remove the existing collection
+
+    for (MovieDb movieDb : upcomingMovies) {
+      Movie movie = new Movie();
+      movie.setId(movieDb.getId());
+      movie.setAdult(movieDb.isAdult());
+      movie.setTitle(movieDb.getOriginalTitle());
+      movie.setOriginalLanguage(movieDb.getOriginalLanguage());
+      movie.setOverview(movieDb.getOverview());
+      movie.setPopularity(movieDb.getPopularity());
+      movie.setPosterPath(movieDb.getPosterPath());
+      movie.setBackdropPath(movieDb.getBackdropPath());
+      movie.setReleaseDate(movieDb.getReleaseDate());
+      movie.setVideo(movie.getVideo());
+      movie.setVoteAverage(movie.getVoteAverage());
+      movie.setVoteCount(movie.getVoteCount());
+      movies.add(movie);
+
+      movies.add(movie);
+      mongoTemplate.save(movie, "now_playing");
+    }
+  }
+
+  public void savePopularMovies() {
+    List<MovieDb> upcomingMovies = tmdbApi.getMovies().getPopularMovies("en-US", 1).getResults();
+    List<Movie> movies = new ArrayList<>();
+
+    mongoTemplate.dropCollection("popular"); // Remove the existing collection
+
+    for (MovieDb movieDb : upcomingMovies) {
+      Movie movie = new Movie();
+      movie.setId(movieDb.getId());
+      movie.setAdult(movieDb.isAdult());
+      movie.setTitle(movieDb.getOriginalTitle());
+      movie.setOriginalLanguage(movieDb.getOriginalLanguage());
+      movie.setOverview(movieDb.getOverview());
+      movie.setPopularity(movieDb.getPopularity());
+      movie.setPosterPath(movieDb.getPosterPath());
+      movie.setBackdropPath(movieDb.getBackdropPath());
+      movie.setReleaseDate(movieDb.getReleaseDate());
+      movie.setVideo(movie.getVideo());
+      movie.setVoteAverage(movie.getVoteAverage());
+      movie.setVoteCount(movie.getVoteCount());
+      movies.add(movie);
+
+      movies.add(movie);
+      mongoTemplate.save(movie, "popular");
+    }
+  }
+
+  public void saveTopRatedMovies() {
+    List<MovieDb> upcomingMovies = tmdbApi.getMovies().getTopRatedMovies("en-US", 1).getResults();
+    List<Movie> movies = new ArrayList<>();
+
+    mongoTemplate.dropCollection("top_rated"); // Remove the existing collection
+
+    for (MovieDb movieDb : upcomingMovies) {
+      Movie movie = new Movie();
+      movie.setId(movieDb.getId());
+      movie.setAdult(movieDb.isAdult());
+      movie.setVoteAverage(movieDb.getVoteAverage());
+      movie.setTitle(movieDb.getOriginalTitle());
+      movie.setOriginalLanguage(movieDb.getOriginalLanguage());
+      movie.setOverview(movieDb.getOverview());
+      movie.setPopularity(movieDb.getPopularity());
+      movie.setPosterPath(movieDb.getPosterPath());
+      movie.setBackdropPath(movieDb.getBackdropPath());
+      movie.setReleaseDate(movieDb.getReleaseDate());
+      movie.setVideo(movie.getVideo());
+      movie.setVoteAverage(movie.getVoteAverage());
+      movie.setVoteCount(movie.getVoteCount());
+      movies.add(movie);
+      mongoTemplate.save(movie, "top_rated");
+    }
+  }
+
   public void saveUpcomingMovies() {
-    List<MovieDb> upcomingMovies = tmdbApi.getMovies().getUpcoming("en-US", 1, "").getResults();
+    List<MovieDb> upcomingMovies = tmdbApi.getMovies().getUpcoming("en-US", 1, "GB").getResults();
     List<Movie> movies = new ArrayList<>();
 
     mongoTemplate.dropCollection("upcoming_movies"); // Remove the existing collection
@@ -150,11 +242,19 @@ public class MovieService {
     for (MovieDb movieDb : upcomingMovies) {
       Movie movie = new Movie();
       movie.setId(movieDb.getId());
-      movie.setTitle(movieDb.getTitle());
+      movie.setAdult(movieDb.isAdult());
+      movie.setTitle(movieDb.getOriginalTitle());
+      movie.setOriginalLanguage(movieDb.getOriginalLanguage());
       movie.setOverview(movieDb.getOverview());
+      movie.setPopularity(movieDb.getPopularity());
       movie.setPosterPath(movieDb.getPosterPath());
+      movie.setBackdropPath(movieDb.getBackdropPath());
       movie.setReleaseDate(movieDb.getReleaseDate());
+      movie.setVideo(movie.getVideo());
+      movie.setVoteAverage(movie.getVoteAverage());
+      movie.setVoteCount(movie.getVoteCount());
       movies.add(movie);
+
       mongoTemplate.save(movie, "upcoming_movies");
     }
   }

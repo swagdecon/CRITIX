@@ -16,20 +16,20 @@ public class Movie {
     @Id
     private ObjectId mongo_id;
     private Boolean adult;
-    private String backdrop_path;
-    private List<Integer> genre_ids;
+    private String backdropPath;
+    private List<Integer> genreIds;
     private List<String> genres;
     private Integer id;
-    private String original_language;
-    private String original_title;
+    private String originalLanguage;
+    private String originalTitle;
     private String overview;
-    private Double popularity;
+    private Float popularity;
     private String posterPath;
     private String releaseDate;
     private String title;
     private List<String> video;
-    private Double vote_average;
-    private Integer vote_count;
+    private Float voteAverage;
+    private Integer voteCount;
     private Long budget;
     private String tagline;
     private Long revenue;
