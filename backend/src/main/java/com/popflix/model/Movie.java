@@ -30,6 +30,7 @@ public class Movie {
     private List<String> video;
     private Float voteAverage;
     private Integer voteCount;
+    private String imdbId;
     private Long budget;
     private String tagline;
     private Long revenue;

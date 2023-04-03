@@ -111,6 +111,17 @@ public class MovieService {
 
         movie.setReviews(reviewTexts);
       }
+      if (movie.getVoteAverage() == null) {
+        float voteAverage = movieDb.getVoteAverage();
+
+        movie.setVoteAverage(voteAverage);
+      }
+
+      if (movie.getImdbId() == null) {
+        String imdbId = movieDb.getImdbID();
+
+        movie.setImdbId(imdbId);
+      }
 
       if (movie.getProductionCompanies() == null || movie.getProductionCompanies().isEmpty()) {
         // Get the movie production companies
