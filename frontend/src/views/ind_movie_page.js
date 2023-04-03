@@ -19,7 +19,7 @@ import "../misc/popcorn_logo.css";
 const IndMovie = () => {
   const [movie, setMovie] = useState({});
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [requestSent, setRequestSent] = useState(false); // new state
+  const [requestSent, setRequestSent] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -68,13 +68,15 @@ const IndMovie = () => {
         <div
           className="background"
           style={{
-            backgroundImage: `url(https://image.tmdb.org/t/p/w500${movie.backdropPath}) `,
+            backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdropPath}) `,
           }}
         ></div>
         <ind-movie-body>
           <div className="ind-movie-wrapper">
-            <div className="hero-poster" style={{ marginTop: 40 }}>
-              <img src={`https://image.tmdb.org/t/p/w500${movie.posterPath}`} />
+            <div className="hero-poster">
+              <img
+                src={`https://image.tmdb.org/t/p/original${movie.posterPath}`}
+              />
             </div>
 
             <div id="fade" className="container-margin">
@@ -96,7 +98,6 @@ const IndMovie = () => {
                     type="submit"
                     onClick={() => MovieTrailer(movie.video[0])}
                     className="css-button"
-                    style={{ right: "40.5%", marginTop: "2%" }}
                   >
                     <p className="css-button-text">WATCH TRAILER</p>
                     <div className="css-button-inner">

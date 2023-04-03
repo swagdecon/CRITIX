@@ -15,12 +15,8 @@ const Homepage = () => {
       />
       <body style={{ marginTop: 80 }}>
         <div>
-          {/* NavBar */}
-          {/* <Navbar /> */}
           <Container />
-          {/* Hero Carousel */}
           <HeroCarousel />
-          {/* Movie Cards Below */}
           <MovieCarousel
             title="Popular right now"
             endpoint="/api/movies/popular"

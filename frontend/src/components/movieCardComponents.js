@@ -12,6 +12,9 @@ function truncateDescription(description) {
   const words = description.split(" ");
 
   if (words.length > 30) {
+    if (!words) {
+      return "No Description Available";
+    }
     const truncated = words.slice(0, 30).join(" ");
     return truncated + "...";
   }
@@ -137,7 +140,7 @@ function MovieReviews({ reviews }) {
     reviews: PropTypes.arrayOf(PropTypes.string),
   };
   if (!reviews || reviews === "" || reviews == null) {
-    return <div>N/A</div>;
+    return <div>No Reviews Available</div>;
   }
   const [maxHeight, setMaxHeight] = useState(500);
 
