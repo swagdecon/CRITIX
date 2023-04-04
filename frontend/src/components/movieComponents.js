@@ -8,7 +8,8 @@ import { FaLanguage } from "react-icons/fa";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { MdOutlineMovie, MdDateRange } from "react-icons/md";
 import { RiMovie2Line } from "react-icons/ri";
-function truncateDescription(description) {
+
+function TruncateDescription({ description }) {
   const words = description.split(" ");
 
   if (words.length > 30) {
@@ -21,7 +22,12 @@ function truncateDescription(description) {
 
   return description;
 }
-
+function MovieRuntime({ runtime }) {
+  if (!runtime) {
+    return "No Runtime Available";
+  }
+  return `${runtime} mins`;
+}
 function getYearFromDate(dateString) {
   if (!dateString) {
     return null;
@@ -58,7 +64,12 @@ function MovieGenres({ genres }) {
     </ul>
   );
 }
-
+function MovieCardGenres({ genres }) {
+  if (!genres) {
+    return "No genres available";
+  }
+  return genres.join(" | ");
+}
 const MovieActors = ({ actors, images }) => {
   MovieActors.propTypes = {
     actors: PropTypes.arrayOf(PropTypes.string),
@@ -135,6 +146,26 @@ const MovieActors = ({ actors, images }) => {
     </div>
   );
 };
+function MovieCardActors({ actors }) {
+  MovieCardActors.propTypes = {
+    actors: PropTypes.arrayOf(PropTypes.string),
+  };
+
+  const top3Actors = actors.slice(0, 3);
+  return (
+    <span>
+      {top3Actors.map((actor, index) => {
+        if (index === 0) {
+          return actor;
+        } else if (index < 3) {
+          return `, ${actor}`;
+        } else {
+          return "";
+        }
+      })}
+    </span>
+  );
+}
 
 function MovieReviews({ reviews }) {
   MovieReviews.propTypes = {
@@ -276,12 +307,15 @@ function MovieDetails({
   );
 }
 export {
-  truncateDescription,
+  TruncateDescription,
   getYearFromDate,
+  MovieRuntime,
   MovieTrailer,
   MovieAverage,
   MovieGenres,
+  MovieCardGenres,
   MovieActors,
+  MovieCardActors,
   MovieReviews,
   MovieDetails,
 };

@@ -2,14 +2,19 @@ import { React, useState, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-import { truncateDescription } from "../movieComponents.js";
+import {
+  MovieRuntime,
+  MovieAverage,
+  TruncateDescription,
+  MovieCardGenres,
+  MovieCardActors,
+} from "../movieComponents.js";
 import PropTypes from "prop-types";
 import "./MovieCarousel.css";
 import { chunk } from "lodash";
 import { useNavigate } from "react-router-dom";
 import "./title.scss";
 import "../../misc/moviecard.scss";
-import { MovieAverage } from "../movieComponents.js";
 const MovieCarousel = ({ title, endpoint }) => {
   const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
@@ -86,8 +91,12 @@ const MovieCarousel = ({ title, endpoint }) => {
                                     voteAverage={movie.voteAverage}
                                   />
                                 </li>
-                                <li>{movie.runtime} mins</li>
-                                <li>{movie.genres.join(", ")}</li>
+                                <li>
+                                  <MovieRuntime runtime={movie.runtime} />
+                                </li>
+                                <li>
+                                  <MovieCardGenres genres={movie.genres} />
+                                </li>
                               </ul>
                             </div>
                           </div>
@@ -110,24 +119,16 @@ const MovieCarousel = ({ title, endpoint }) => {
                           <div className="mr-grid">
                             <div className="col1">
                               <p className="movie-description">
-                                {truncateDescription(movie.overview)}
+                                <TruncateDescription
+                                  description={movie.overview}
+                                />
                               </p>
                             </div>
                           </div>
                           <div className="mr-grid actors-row">
                             <div className="col1">
                               <p className="movie-actors">
-                                {movie.actors
-                                  .slice(0, 3)
-                                  .map((actor, index) => {
-                                    if (index === 0) {
-                                      return actor;
-                                    } else if (index < 3) {
-                                      return `, ${actor}`;
-                                    } else {
-                                      return "";
-                                    }
-                                  })}
+                                <MovieCardActors actors={movie.actors} />
                               </p>
                             </div>
                           </div>
