@@ -8,6 +8,7 @@ import { FaLanguage } from "react-icons/fa";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { MdOutlineMovie, MdDateRange } from "react-icons/md";
 import { RiMovie2Line } from "react-icons/ri";
+import MovieCarousel from "./Carousel/MovieCarousel";
 
 function TruncateDescription({ description }) {
   const words = description.split(" ");
@@ -306,6 +307,13 @@ function MovieDetails({
     </section>
   );
 }
+function RecommendedCarousel(movieId) {
+  return (
+    <MovieCarousel
+      endpoint={`https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=d84f9365179dc98dc69ab22833381835&language=en-US&page=1`}
+    />
+  );
+}
 export {
   TruncateDescription,
   getYearFromDate,
@@ -318,4 +326,5 @@ export {
   MovieCardActors,
   MovieReviews,
   MovieDetails,
+  RecommendedCarousel,
 };

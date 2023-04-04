@@ -12,7 +12,7 @@ import {
   MovieActors,
   MovieReviews,
   MovieDetails,
-  // RecommendedCarousel,
+  RecommendedCarousel,
 } from "../components/movieComponents";
 import Popcorn from "../misc/popcorn_logo";
 import "../misc/popcorn_logo.css";
@@ -156,9 +156,9 @@ const IndMovie = () => {
                 </div>
               </div>
             </section>
-            {/* <section className="recommended_movies">
+            <section className="recommended_movies">
               <RecommendedCarousel movieId={movie.id} />
-            </section> */}
+            </section>
           </div>
         </ind-movie-body>
       </body>

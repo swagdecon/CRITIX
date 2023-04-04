@@ -39,6 +39,7 @@ const MovieCarousel = ({ title, endpoint }) => {
         const myResponse = await fetch(endpoint, {
           headers: {
             Authorization: `Bearer ${token}`,
+
             "X-Fingerprint": fingerprint,
           },
         });
