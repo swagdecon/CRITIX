@@ -2,22 +2,20 @@ import { React, useState, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-import { truncateDescription } from "../movieCardComponents.js";
+import { truncateDescription } from "../movieComponents.js";
 import PropTypes from "prop-types";
 import "./MovieCarousel.css";
-// Library that can perform array manipulation, in this case, splitting the movie into chunks of 5 to then loop over:
 import { chunk } from "lodash";
 import { useNavigate } from "react-router-dom";
 import "./title.scss";
 import "../../misc/moviecard.scss";
+import { MovieAverage } from "../movieComponents.js";
 const MovieCarousel = ({ title, endpoint }) => {
   const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
 
   const movieChunks = chunk(movies, 5);
-  //The chunk() method takes two arguments: the first argument is the array to be chunked, and the second argument (optional) is the size of each chunk. In this case, we pass 5 as the size of each chunk.
 
-  // The chunk() method returns an array of sub-arrays, where each sub-array contains 5 movies or less. We then use the same map() method as before to render the carousel slides and movie cards.
   MovieCarousel.propTypes = {
     title: PropTypes.string.isRequired,
   };
@@ -84,7 +82,9 @@ const MovieCarousel = ({ title, endpoint }) => {
                               {/* <h1>{movie.title.replace(/\s+/g, " ")}</h1> */}
                               <ul className="movie-gen">
                                 <li>
-                                  {Math.round(movie.voteAverage * 10) / 10}{" "}
+                                  <MovieAverage
+                                    voteAverage={movie.voteAverage}
+                                  />
                                 </li>
                                 <li>{movie.runtime} mins</li>
                                 <li>{movie.genres.join(", ")}</li>

@@ -35,11 +35,12 @@ function MovieTrailer(url) {
   }
   return window.open(`https://www.youtube.com/watch?v=${url}`);
 }
-function MovieAverage(voteAverage) {
+function MovieAverage({ voteAverage }) {
   if (!voteAverage) {
     return "No Rating";
   }
-  return voteAverage;
+  let rating = voteAverage.toFixed(1);
+  return rating;
 }
 
 function MovieGenres({ genres }) {

@@ -12,7 +12,8 @@ import {
   MovieActors,
   MovieReviews,
   MovieDetails,
-} from "../components/movieCardComponents";
+  // RecommendedCarousel,
+} from "../components/movieComponents";
 import Popcorn from "../misc/popcorn_logo";
 import "../misc/popcorn_logo.css";
 
@@ -58,7 +59,7 @@ const IndMovie = () => {
   }, [requestSent, id, navigate]);
 
   if (!dataLoaded) {
-    return <div>Loading...</div>;
+    return <div>Loading </div>;
   }
 
   return (
@@ -82,7 +83,7 @@ const IndMovie = () => {
             <div id="fade" className="container-margin">
               <div className="ind-movie-header ">
                 <div className="movie__score">
-                  {MovieAverage(movie.voteAverage)}
+                  <MovieAverage voteAverage={movie.voteAverage} />
                 </div>
                 <div className="movie__title__container">
                   <h2 className="movie__title">{movie.title}</h2>
@@ -97,7 +98,7 @@ const IndMovie = () => {
                   <button
                     type="submit"
                     onClick={() => MovieTrailer(movie.video[0])}
-                    className="css-button"
+                    className="css-button trailer-btn"
                   >
                     <p className="css-button-text">WATCH TRAILER</p>
                     <div className="css-button-inner">
@@ -155,6 +156,9 @@ const IndMovie = () => {
                 </div>
               </div>
             </section>
+            {/* <section className="recommended_movies">
+              <RecommendedCarousel movieId={movie.id} />
+            </section> */}
           </div>
         </ind-movie-body>
       </body>
