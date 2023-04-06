@@ -118,7 +118,8 @@ const MovieList = ({ url }) => {
 
 export default MovieList;
 
-
 // When you use the MovieList component, pass the URL as a prop:
-<MovieList url="api/movies/top_rated" />
-<MovieList url="api/movies/upcoming" />
+{
+  /* <MovieList url="api/movies/top_rated" />
+<MovieList url="api/movies/upcoming" /> */
+}

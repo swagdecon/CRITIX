@@ -15,6 +15,7 @@ import { chunk } from "lodash";
 import { useNavigate } from "react-router-dom";
 import "./title.scss";
 import "../../misc/moviecard.scss";
+
 const MovieCarousel = ({ title, endpoint }) => {
   const [movies, setMovies] = useState([]);
   const navigate = useNavigate();

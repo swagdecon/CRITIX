@@ -65,6 +65,10 @@ const IndMovie = () => {
 
   return (
     <html>
+      <link
+        href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet"
+      />
       <Container />
       <body>
         <div

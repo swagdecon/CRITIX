@@ -6,6 +6,7 @@ import MovieCarousel from "../components/Carousel/MovieCarousel";
 // import Navbar from "../components/NavBar/Navbar";
 // import Header from "../components/Header/Header";
 import Container from "../components/Container/Container";
+
 const Homepage = () => {
   return (
     <html>
@@ -13,6 +14,7 @@ const Homepage = () => {
         href="https://fonts.googleapis.com/icon?family=Material+Icons"
         rel="stylesheet"
       />
+
       <body style={{ marginTop: 80 }}>
         <div>
           <Container />
