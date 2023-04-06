@@ -4,6 +4,7 @@ import "../components/IndMovie/ind_movie.css";
 import "font-awesome/css/font-awesome.min.css";
 import Container from "../components/Container/Container";
 import ReactPlayer from "react-player";
+import axios from "axios";
 import {
   MovieGenres,
   MovieTrailer,
@@ -31,21 +32,14 @@ const IndMovie = () => {
         const tokenWithFingerprint = sessionStorage.getItem("jwt");
         const { token, fingerprint } = JSON.parse(tokenWithFingerprint);
 
-        const myResponse = await fetch(`${id}`, {
+        const response = await axios.get(`${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
             "X-Fingerprint": fingerprint,
           },
         });
-
-        if (myResponse.ok) {
-          const responseData = await myResponse.json();
-          setMovie(responseData);
-          setDataLoaded(true);
-        } else {
-          console.log(`HTTP error! status: ${myResponse.status}`);
-          navigate("/403", { replace: true });
-        }
+        setMovie(response.data);
+        setDataLoaded(true);
       } catch (error) {
         navigate("/403", { replace: true });
         console.log(error);

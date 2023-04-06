@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 import {
   MovieRuntime,
@@ -37,21 +38,13 @@ const MovieCarousel = ({ title, endpoint }) => {
         const tokenWithFingerprint = sessionStorage.getItem("jwt");
         const { token, fingerprint } = JSON.parse(tokenWithFingerprint);
 
-        const myResponse = await fetch(endpoint, {
+        const response = await axios.get(endpoint, {
           headers: {
             Authorization: `Bearer ${token}`,
-
             "X-Fingerprint": fingerprint,
           },
         });
-
-        if (myResponse.ok) {
-          const responseJson = await myResponse.json();
-          setMovies(responseJson);
-        } else {
-          console.log(`HTTP error! status: ${myResponse.status}`);
-          navigate("/403", { replace: true });
-        }
+        setMovies(response.data);
       } catch (error) {
         navigate("/403", { replace: true });
         console.log(error);
