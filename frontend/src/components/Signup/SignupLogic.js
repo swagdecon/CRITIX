@@ -4,7 +4,7 @@ import "../Login/login.css";
 import Popcorn from "../../misc/popcorn_logo";
 import Filter from "bad-words";
 
-function SignupFunctionality() {
+function SignUpFunctionality() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
@@ -67,7 +67,7 @@ function SignupFunctionality() {
   return (
     <form onSubmit={handleSubmit}>
       <div-error>{error}</div-error>
-      <br></br>
+      <br />
       <div-error>{profanityErrorMessage}</div-error>
       <div>
         <label htmlFor="email">Email Address</label>
@@ -134,11 +134,11 @@ function SignupFunctionality() {
         <p className="css-button-text">SIGN UP</p>
         <div className="css-button-inner">
           <div className="reset-skew">
-            <Popcorn className="css-button-inner-text"></Popcorn>
+            <Popcorn className="css-button-inner-text" />
           </div>
         </div>
       </button>
     </form>
   );
 }
-export default SignupFunctionality;
+export default SignUpFunctionality;

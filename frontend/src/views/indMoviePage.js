@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import "../components/ind_movie/ind_movie.css";
+import "../components/IndMovie/ind_movie.css";
 import "font-awesome/css/font-awesome.min.css";
 import Container from "../components/Container/Container";
 import ReactPlayer from "react-player";
@@ -60,7 +60,7 @@ const IndMovie = () => {
   }, [requestSent, id, navigate]);
 
   if (!dataLoaded) {
-    return <div>Loading </div>;
+    return <div>Loading...</div>;
   }
 
   return (

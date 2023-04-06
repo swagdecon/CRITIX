@@ -375,7 +375,7 @@ ind-movie-nav {
 .movie-info-row {
   display: flex;
 }
-.movie_info_text {
+.movie-info-text {
   display: inline-flex;
   align-items: center;
   margin-left: 10%;
@@ -389,7 +389,7 @@ ind-movie-nav {
   font-size: 1vw;
   padding: 4vh;
 }
-.ind_movie_production_company {
+.ind-movie-production-company {
   padding-right: 3%;
 }
 .ind-movie-details-card ul li:nth-child(1) {

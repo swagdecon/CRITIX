@@ -62,7 +62,7 @@ const MovieCarousel = ({ title, endpoint }) => {
   }, [endpoint]);
 
   return (
-    <body-1>
+    <section>
       <h3-title>{title}</h3-title>
       <Carousel className="carousel-movie" indicators={false} interval={null}>
         {movieChunks.map((chunk, i) => (
@@ -167,7 +167,7 @@ const MovieCarousel = ({ title, endpoint }) => {
           </Carousel.Item>
         ))}
       </Carousel>
-    </body-1>
+    </section>
   );
 };
 

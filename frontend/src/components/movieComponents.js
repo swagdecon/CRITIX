@@ -1,6 +1,6 @@
 import { React, useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import "./ind_movie/ind_movie.css";
+import "./IndMovie/ind_movie.css";
 import ReactTextCollapse from "react-text-collapse/dist/ReactTextCollapse";
 import { RiMoneyDollarBoxFill } from "react-icons/ri";
 import { BsWallet2 } from "react-icons/bs";
@@ -27,12 +27,14 @@ function TruncateDescription({ description }) {
 
   return description;
 }
+
 function MovieRuntime({ runtime }) {
   if (!runtime) {
     return "No Runtime Available";
   }
   return `${runtime} mins`;
 }
+
 function getYearFromDate(dateString) {
   if (!dateString) {
     return null;
@@ -46,6 +48,7 @@ function MovieTrailer(url) {
   }
   return window.open(`https://www.youtube.com/watch?v=${url}`);
 }
+
 function MovieAverage({ voteAverage }) {
   if (!voteAverage) {
     return "No Rating";
@@ -69,12 +72,14 @@ function MovieGenres({ genres }) {
     </ul>
   );
 }
+
 function MovieCardGenres({ genres }) {
   if (!genres) {
     return "No genres available";
   }
   return genres.join(" | ");
 }
+
 const MovieActors = ({ actors, images }) => {
   MovieActors.propTypes = {
     actors: PropTypes.arrayOf(PropTypes.string),
@@ -152,6 +157,7 @@ const MovieActors = ({ actors, images }) => {
     </div>
   );
 };
+
 function MovieCardActors({ actors }) {
   if (!actors) {
     return "No Actors Available";
@@ -204,6 +210,7 @@ function MovieReviews({ reviews }) {
       fontSize: "20px",
     },
   };
+
   return (
     <div className="review__wrapper">
       {reviews.slice(0, 3).map((review, index) => (
@@ -257,53 +264,53 @@ function MovieDetails({
           <div className="movie-Details-Title">Movie Details</div>
           <div className="movie-info-row">
             <ul className="movie-column">
-              <ul className="ind_movie_runtime">
-                <AiOutlineClockCircle className="movie_info_logo" size={50} />
+              <ul className="ind-movie-runtime">
+                <AiOutlineClockCircle className="movie-info-logo" size={50} />
 
-                <div className="movie_info_text">
+                <div className="movie-info-text">
                   {runtime ? `${runtime} minutes` : "N/A"}
                 </div>
               </ul>
               <br />
-              <ul className="ind_movie_revenue">
-                <RiMoneyDollarBoxFill className="movie_info_logo" size={50} />
-                <div className="movie_info_text">
+              <ul className="ind-movie-revenue">
+                <RiMoneyDollarBoxFill className="movie-info-logo" size={50} />
+                <div className="movie-info-text">
                   {revenue ? `$${revenue}` : "N/A"}
                 </div>
               </ul>
               <br />
-              <ul className="ind_movie_budget">
-                <BsWallet2 className="movie_info_logo" size={50} />
-                <div className="movie_info_text">
+              <ul className="ind-movie-budget">
+                <BsWallet2 className="movie-info-logo" size={50} />
+                <div className="movie-info-text">
                   {budget ? `$${budget}` : "N/A"}
                 </div>
               </ul>
               <br />
-              <ul className="ind_movie_language">
-                <FaLanguage className="movie_info_logo" size={50} />
-                <div className="movie_info_text">
+              <ul className="ind-movie-language">
+                <FaLanguage className="movie-info-logo" size={50} />
+                <div className="movie-info-text">
                   {language ? language : "N/A"}
                 </div>
               </ul>
             </ul>
             <ul className="movie-column">
-              <ul className="ind_movie_production_company">
-                <MdOutlineMovie className="movie_info_logo" size={50} />
-                <div className="movie_info_text">
+              <ul className="ind-movie-production-company">
+                <MdOutlineMovie className="movie-info-logo" size={50} />
+                <div className="movie-info-text">
                   {productionCompanies ? productionCompanies[0] : "N/A"}
                 </div>
               </ul>
               <br />
-              <div className="ind_movie_status">
-                <RiMovie2Line size={50} className="movie_info_logo" />
-                <div className="movie_info_text">
+              <div className="ind-movie-status">
+                <RiMovie2Line size={50} className="movie-info-logo" />
+                <div className="movie-info-text">
                   {movieStatus ? movieStatus : "N/A"}
                 </div>
               </div>
               <br />
-              <div className="ind_movie_date">
-                <MdDateRange size={50} className="movie_info_logo" />
-                <div className="movie_info_text">
+              <div className="ind-movie-date">
+                <MdDateRange size={50} className="movie-info-logo" />
+                <div className="movie-info-text">
                   {releaseDate ? releaseDate : "N/A"}
                 </div>
               </div>

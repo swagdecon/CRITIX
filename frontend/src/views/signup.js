@@ -5,7 +5,8 @@ import "../misc/logo.scss";
 import Logo from "../components/logo.js";
 import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
 import SignUpPlayer from "../components/Signup/SignUpVideo.js";
-import SignupFunctionality from "../components/Signup/signupFunctionality.js";
+import SignUpFunctionality from "../components/Signup/SignupLogic.js";
+
 function SignUp() {
   return (
     <html lang="en">
@@ -28,7 +29,7 @@ function SignUp() {
               <Logo />
               <img src={Logo_Text} className="homepage-logo" alt="logo" />
 
-              <SignupFunctionality></SignupFunctionality>
+              <SignUpFunctionality />
               {/* REDIRECT TO LOG IN PAGE */}
               <div className="or">
                 <hr className="bar" />
@@ -51,7 +52,7 @@ function SignUp() {
             <div id="showcase">
               <div className="showcase-content">
                 <div className="overlay">
-                  <SignUpPlayer></SignUpPlayer>
+                  <SignUpPlayer />
                 </div>
               </div>
             </div>
