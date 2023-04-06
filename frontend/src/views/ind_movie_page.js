@@ -21,6 +21,7 @@ const IndMovie = () => {
   const [movie, setMovie] = useState({});
   const [dataLoaded, setDataLoaded] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
+
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -157,7 +158,9 @@ const IndMovie = () => {
               </div>
             </section>
             <section className="recommended_movies">
-              <RecommendedCarousel movieId={movie.id} />
+              <div>
+                <RecommendedCarousel movieId={movie.id} />
+              </div>
             </section>
           </div>
         </ind-movie-body>

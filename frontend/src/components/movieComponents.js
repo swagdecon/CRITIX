@@ -8,13 +8,16 @@ import { FaLanguage } from "react-icons/fa";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { MdOutlineMovie, MdDateRange } from "react-icons/md";
 import { RiMovie2Line } from "react-icons/ri";
-import MovieCarousel from "./Carousel/MovieCarousel";
+import { chunk } from "lodash";
+import { Carousel } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import getRecommendations from "../axios/getRecommendations";
 
 function TruncateDescription({ description }) {
   const words = description.split(" ");
 
   if (words.length > 30) {
-    if (!words) {
+    if (!words || words === null || words.length === 0) {
       return "No Description Available";
     }
     const truncated = words.slice(0, 30).join(" ");
@@ -307,11 +310,127 @@ function MovieDetails({
     </section>
   );
 }
-function RecommendedCarousel(movieId) {
+function RecommendedCarousel({ movieId }) {
+  RecommendedCarousel.propTypes = {
+    movieId: PropTypes.arrayOf(PropTypes.string),
+  };
+  const [recommendations, setRecommendations] = useState([]);
+  const movieChunks = chunk(recommendations, 5);
+
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      const data = await getRecommendations(movieId);
+      setRecommendations(data.results);
+    };
+    fetchRecommendations();
+  }, [movieId]);
+
   return (
-    <MovieCarousel
-      endpoint={`https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=d84f9365179dc98dc69ab22833381835&language=en-US&page=1`}
-    />
+    <div>
+      <Carousel className="carousel-movie" indicators={false} interval={null}>
+        {movieChunks.map((chunk, i) => (
+          <Carousel.Item key={i}>
+            {chunk.map((movie, j) => (
+              <div className="card-container" key={`${i}-${j}`}>
+                <Link to={`movie/${movie.id}`}>
+                  <div className="container">
+                    <div className="cellphone-container">
+                      <div className="movie">
+                        <div className="menu">
+                          <i className="material-icons"></i>
+                        </div>
+                        <div
+                          className="movie-img"
+                          style={{
+                            backgroundImage: `url(https://image.tmdb.org/t/p/w500/${movie.poster_path})`,
+                          }}
+                        ></div>
+                        <div className="text-movie-cont">
+                          <div className="mr-grid">
+                            <div className="col1">
+                              <ul className="movie-gen">
+                                <li>
+                                  <MovieAverage
+                                    voteAverage={movie.vote_average}
+                                  />
+                                </li>
+                                <li>
+                                  <MovieRuntime runtime={movie.runtime} />
+                                </li>
+                                <li>
+                                  <MovieCardGenres genres={movie.genres} />
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div className="mr-grid summary-row">
+                            <div className="col2">
+                              <h5>SUMMARY</h5>
+                            </div>
+                            <div className="col2">
+                              <ul className="movie-likes">
+                                <li>
+                                  <i className="material-icons">&#xE813;</i>
+                                  124
+                                </li>
+                                <li>
+                                  <i className="material-icons">&#xE813;</i>3
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div className="mr-grid">
+                            <div className="col1">
+                              <p className="movie-description">
+                                <TruncateDescription
+                                  description={movie.overview}
+                                />
+                              </p>
+                            </div>
+                          </div>
+                          <div className="mr-grid actors-row">
+                            <div className="col1">
+                              <p className="movie-actors">
+                                {/* <MovieCardActors actors={movie.actors} /> */}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="mr-grid action-row">
+                            <div className="col2">
+                              <button
+                                className="watch-btn"
+                                type="button"
+                                onClick={() =>
+                                  (window.location.href = `https://www.youtube.com/watch?v=${movie.video[0]}`)
+                                }
+                              >
+                                <h3>
+                                  <i className="material-icons">&#xE037;</i>
+                                  WATCH TRAILER
+                                </h3>
+                              </button>
+                            </div>
+                            <div className="col6 action-btn">
+                              <i className="material-icons">&#xE161;</i>
+                            </div>
+                            <div className="col6 action-btn">
+                              <i className="material-icons">&#xE866;</i>
+                            </div>
+                            <div className="col6 action-btn">
+                              <i className="material-icons">&#xE80D;</i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </Carousel.Item>
+        ))}
+      </Carousel>
+    </div>
   );
 }
 export {

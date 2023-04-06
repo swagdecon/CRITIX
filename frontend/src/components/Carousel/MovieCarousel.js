@@ -84,8 +84,6 @@ const MovieCarousel = ({ title, endpoint }) => {
                         <div className="text-movie-cont">
                           <div className="mr-grid">
                             <div className="col1">
-                              {/* .replace ensures there is only one space inbetween words */}
-                              {/* <h1>{movie.title.replace(/\s+/g, " ")}</h1> */}
                               <ul className="movie-gen">
                                 <li>
                                   <MovieAverage
