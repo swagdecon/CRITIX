@@ -323,16 +323,30 @@ ind-movie-nav {
   color: #fff;
 }
 /* Glowing Card css */
+
 .ind-movie-details-card {
   z-index: 1;
   border-radius: 8px;
-  position: absolute;
+  position: relative;
   margin: 70px auto 0;
   width: 50rem;
   height: 40vh;
-  margin-top: -15%;
-  margin-left: -6%;
   text-align: center;
+}
+
+@media only screen and (max-width: 600px) {
+  .ind-movie-details-card {
+    width: 90%;
+    margin: 50px auto 0;
+  }
+}
+
+/* Move card to the left and up */
+@media only screen and (min-width: 600px) {
+  .ind-movie-details-card {
+    margin-bottom: 85%;
+    margin-left: -20%;
+  }
 }
 
 .card-overlay {
@@ -510,7 +524,7 @@ ind-movie-nav {
 }
 .indMovieEmbeddedTrailer {
   position: absolute;
-  bottom: 35rem;
+  bottom: 32rem;
   left: 58rem;
 }
 .ind-movie-poster {
@@ -530,7 +544,7 @@ ind-movie-nav {
 .CastMembers {
   position: absolute;
   top: 51%;
-  right: 8%;
+  right: 6%;
   display: relative;
 }
 .profile-container {
@@ -583,15 +597,13 @@ ind-movie-nav {
 }
 
 h1.cast-title-1 {
-  position: absolute;
+  position: relative;
   top: 62%;
   right: 61%;
-
   font-family: "CoreCircus", sans-serif;
-  font-size: 2vw;
+  font-size: 1.75vw;
   text-align: center;
   line-height: 1;
-  margin-left: 3%;
   position: relative;
   color: #0096ff;
   letter-spacing: -0.5rem;

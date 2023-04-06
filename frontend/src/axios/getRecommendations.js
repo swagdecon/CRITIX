@@ -6,7 +6,7 @@ const getRecommendations = async (movieId) => {
   const page = 1;
 
   const response = await axios.get(
-    `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${api_key}&language=${language}&page=${page}`
+    `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${api_key}&language=${language}&page=${page}&include_adult=false`
   );
 
   return response.data;

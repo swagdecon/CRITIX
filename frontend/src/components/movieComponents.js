@@ -12,6 +12,7 @@ import { chunk } from "lodash";
 import { Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import getRecommendations from "../axios/getRecommendations";
+import "../components/Carousel/MovieCarousel.css";
 
 function TruncateDescription({ description }) {
   const words = description.split(" ");
@@ -81,6 +82,7 @@ const MovieActors = ({ actors, images }) => {
   };
 
   if (!images || !actors) {
+    actors = [1, 2, 3, 4];
     return (
       <div className="profile-container">
         {actors.slice(0, 4).map((actor, index) => (
@@ -151,6 +153,9 @@ const MovieActors = ({ actors, images }) => {
   );
 };
 function MovieCardActors({ actors }) {
+  if (!actors) {
+    return "No Actors Available";
+  }
   MovieCardActors.propTypes = {
     actors: PropTypes.arrayOf(PropTypes.string),
   };
@@ -391,7 +396,7 @@ function RecommendedCarousel({ movieId }) {
                           <div className="mr-grid actors-row">
                             <div className="col1">
                               <p className="movie-actors">
-                                {/* <MovieCardActors actors={movie.actors} /> */}
+                                <MovieCardActors actors={movie.actors} />
                               </p>
                             </div>
                           </div>
