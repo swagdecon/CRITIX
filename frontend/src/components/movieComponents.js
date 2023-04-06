@@ -288,7 +288,6 @@ function MovieDetails({
             </ul>
             <ul className="movie-column">
               <ul className="ind_movie_production_company">
-                <div className="ind_movie_details_title"></div>
                 <MdOutlineMovie className="movie_info_logo" size={50} />
                 <div className="movie_info_text">
                   {productionCompanies ? productionCompanies[0] : "N/A"}
