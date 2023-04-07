@@ -1,22 +1,7 @@
-.carousel-movie {
-  top: 1%;
-  padding-bottom: 2%;
-  width: 100%;
-  position: flex;
-  flex-direction: column;
-}
-
-.carousel-container {
-  position: relative;
-}
-
 .carousel-item {
   text-align: center;
 }
-.carousel-inner {
-  width: flex;
-  margin: 0 auto;
-}
+
 .carousel-control-prev {
   left: -6%;
 }

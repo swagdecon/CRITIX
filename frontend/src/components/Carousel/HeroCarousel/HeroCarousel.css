@@ -11,11 +11,7 @@
 .carousel-inner img {
   margin: auto;
 }
-body {
-  background-color: black;
-  display: block;
-  width: inherit;
-}
+
 .hero_caption {
   font-family: "Open Sans", sans-serif;
   left: 50px;
