@@ -20,6 +20,7 @@ import info.movito.themoviedbapi.model.Video;
 import info.movito.themoviedbapi.model.people.PersonCast;
 
 @Service
+
 public class MovieService {
   @Autowired
   private MongoTemplate mongoTemplate;
