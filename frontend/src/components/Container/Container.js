@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Header from "../Header/Header";
 import "./Container.css";
-
 class Container extends Component {
   constructor(props) {
     super(props);
@@ -32,12 +31,6 @@ class Container extends Component {
     return (
       <section>
         <Header />
-        <div className="Search">
-          <form onSubmit={this.performSearch}>
-            <input type="text" ref={(input) => (this.searchInput = input)} />
-            <button type="submit">Search</button>
-          </form>
-        </div>
       </section>
     );
   }

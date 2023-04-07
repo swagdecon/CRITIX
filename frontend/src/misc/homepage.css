@@ -6,3 +6,6 @@ div-wrapper-carousel {
 html {
   overflow-y: auto;
 }
+body {
+  margin-top: 2.5vh !important;
+}

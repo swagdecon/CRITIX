@@ -10,25 +10,22 @@ import Container from "../components/Container/Container";
 const Homepage = () => {
   return (
     <html>
-      <link
-        href="https://fonts.googleapis.com/icon?family=Material+Icons"
-        rel="stylesheet"
-      />
+      <head>
+        <link
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet"
+        />
+      </head>
 
-      <body style={{ marginTop: 80 }}>
-        <div>
-          <Container />
-          <HeroCarousel />
-          <MovieCarousel
-            title="Popular right now"
-            endpoint="/api/movies/popular"
-          />
-          <MovieCarousel title="Top Rated" endpoint="/api/movies/top_rated" />
-          <MovieCarousel
-            title="Releasing Soon"
-            endpoint="/api/movies/upcoming"
-          />
-        </div>
+      <body>
+        <Container />
+        <HeroCarousel />
+        <MovieCarousel
+          title="Popular right now"
+          endpoint="/api/movies/popular"
+        />
+        <MovieCarousel title="Top Rated" endpoint="/api/movies/top_rated" />
+        <MovieCarousel title="Releasing Soon" endpoint="/api/movies/upcoming" />
       </body>
     </html>
   );

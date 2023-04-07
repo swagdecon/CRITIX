@@ -13,6 +13,8 @@
 }
 body {
   background-color: black;
+  display: block;
+  width: inherit;
 }
 .hero_caption {
   font-family: "Open Sans", sans-serif;
