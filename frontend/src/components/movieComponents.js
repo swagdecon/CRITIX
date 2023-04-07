@@ -86,17 +86,54 @@ const MovieActors = ({ actors, images }) => {
     images: PropTypes.arrayOf(PropTypes.string),
   };
 
-  if (!images || !actors) {
-    actors = [1, 2, 3, 4];
-    return (
-      <div className="profile-container">
-        {actors.slice(0, 4).map((actor, index) => (
+  const defaultImage = `url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg) center center no-repeat`;
+  return (
+    <div className="profile-container">
+      {actors.slice(0, 4).map((actor, index) => {
+        let image = images ? images[index] : null;
+        let actorImage = `url(https://image.tmdb.org/t/p/w500${image}) center center no-repeat`;
+
+        if (image === null) {
+          image = defaultImage;
+        }
+
+        const style = image
+          ? {
+              background: actorImage,
+              backgroundSize: "300px",
+            }
+          : {
+              background: defaultImage,
+            };
+
+        return (
           <div
             key={index}
             className="card card1"
-            style={{
-              background: `url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg)  center no-repeat`,
-              backgroundSize: "fill",
+            style={style}
+            onMouseEnter={(e) => {
+              if (image) {
+                e.currentTarget.style.background = `url(https://image.tmdb.org/t/p/w500${image}) left center no-repeat `;
+                e.currentTarget.style.backgroundSize = "600px";
+              }
+              e.currentTarget.querySelector("h3").style.opacity = 1;
+              Array.from(e.currentTarget.querySelectorAll(".fa")).forEach(
+                (icon) => {
+                  icon.style.opacity = 1;
+                }
+              );
+            }}
+            onMouseLeave={(e) => {
+              if (image) {
+                e.currentTarget.style.background = actorImage;
+                e.currentTarget.style.backgroundSize = "300px";
+              }
+              e.currentTarget.querySelector("h3").style.opacity = 0;
+              Array.from(e.currentTarget.querySelectorAll(".fa")).forEach(
+                (icon) => {
+                  icon.style.opacity = 0;
+                }
+              );
             }}
           >
             <div className="border">
@@ -108,52 +145,8 @@ const MovieActors = ({ actors, images }) => {
               </div>
             </div>
           </div>
-        ))}
-      </div>
-    );
-  }
-
-  return (
-    <div className="profile-container">
-      {actors.slice(0, 4).map((actor, index) => (
-        <div
-          key={index}
-          className="card card1"
-          style={{
-            background: `url(https://image.tmdb.org/t/p/w500${images[index]}) center center no-repeat`,
-            backgroundSize: "350px",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = `url(https://image.tmdb.org/t/p/w500${images[index]}) left center no-repeat `;
-            e.currentTarget.style.backgroundSize = "600px";
-            e.currentTarget.querySelector("h3").style.opacity = 1;
-            Array.from(e.currentTarget.querySelectorAll(".fa")).forEach(
-              (icon) => {
-                icon.style.opacity = 1;
-              }
-            );
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = `url(https://image.tmdb.org/t/p/w500${images[index]}) center center no-repeat `;
-            e.currentTarget.style.backgroundSize = "300px";
-            e.currentTarget.querySelector("h3").style.opacity = 0;
-            Array.from(e.currentTarget.querySelectorAll(".fa")).forEach(
-              (icon) => {
-                icon.style.opacity = 0;
-              }
-            );
-          }}
-        >
-          <div className="border">
-            <h3 className="profile-person">{actor}</h3>
-            <div className="ind-movie-cast-icons">
-              <i className="fa fa-instagram" aria-hidden="true"></i>
-              <i className="fa fa-twitter" aria-hidden="true"></i>
-              <i className="fa fa-facebook" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
