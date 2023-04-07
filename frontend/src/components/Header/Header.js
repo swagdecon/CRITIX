@@ -16,6 +16,6 @@ const Header = (props) => {
   );
 };
 Header.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func,
 };
 export default Header;

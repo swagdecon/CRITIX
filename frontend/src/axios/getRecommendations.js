@@ -9,6 +9,20 @@ const getRecommendations = async (movieId) => {
     `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${api_key}&language=${language}&page=${page}&include_adult=false`
   );
 
-  return response.data;
+  const recommendations = response.data.results;
+
+  // Fetch details for each recommended movie
+  const recommendedMovies = await Promise.all(
+    recommendations.map(async (movie) => {
+      const detailsResponse = await axios.get(
+        `https://api.themoviedb.org/3/movie/${movie.id}?api_key=${api_key}&language=${language}`
+      );
+      return { ...movie, details: detailsResponse.data };
+    })
+  );
+  console.log(recommendedMovies);
+
+  return recommendedMovies;
 };
+
 export default getRecommendations;

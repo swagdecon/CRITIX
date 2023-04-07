@@ -9,6 +9,6 @@ const Search = (props) => {
   );
 };
 Search.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func,
 };
 export default Search;

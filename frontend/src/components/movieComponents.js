@@ -235,28 +235,6 @@ function MovieDetails({
   movieStatus,
   releaseDate,
 }) {
-  MovieDetails.propTypes = {
-    runtime: PropTypes.arrayOf(PropTypes.string),
-  };
-  MovieDetails.propTypes = {
-    revenue: PropTypes.arrayOf(PropTypes.integer),
-  };
-  MovieDetails.propTypes = {
-    budget: PropTypes.arrayOf(PropTypes.integer),
-  };
-  MovieDetails.propTypes = {
-    language: PropTypes.arrayOf(PropTypes.string),
-  };
-  MovieDetails.propTypes = {
-    productionCompanies: PropTypes.arrayOf(PropTypes.string),
-  };
-  MovieDetails.propTypes = {
-    movieStatus: PropTypes.arrayOf(PropTypes.string),
-  };
-  MovieDetails.propTypes = {
-    releaseDate: PropTypes.arrayOf(PropTypes.string),
-  };
-
   return (
     <section className="movieDetailsContainer">
       <div className="ind-movie-details-card">
@@ -321,10 +299,16 @@ function MovieDetails({
     </section>
   );
 }
+MovieDetails.propTypes = {
+  runtime: PropTypes.number,
+  revenue: PropTypes.number,
+  budget: PropTypes.number,
+  language: PropTypes.string,
+  productionCompanies: PropTypes.arrayOf(PropTypes.string),
+  movieStatus: PropTypes.string,
+  releaseDate: PropTypes.string,
+};
 function RecommendedCarousel({ movieId }) {
-  RecommendedCarousel.propTypes = {
-    movieId: PropTypes.arrayOf(PropTypes.string),
-  };
   const [recommendations, setRecommendations] = useState([]);
   const movieChunks = chunk(recommendations, 5);
 
@@ -444,6 +428,9 @@ function RecommendedCarousel({ movieId }) {
     </div>
   );
 }
+RecommendedCarousel.propTypes = {
+  movieId: PropTypes.number,
+};
 export {
   TruncateDescription,
   getYearFromDate,
