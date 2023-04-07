@@ -7,7 +7,7 @@
 }
 html {
   -webkit-tap-highlight-color: transparent;
-  overflow-y: hidden !important;
+  background-color: #181818;
 }
 body {
   font-family: "Roboto", sans-serif;
