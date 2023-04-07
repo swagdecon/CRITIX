@@ -12,7 +12,7 @@ import { chunk } from "lodash";
 import { Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import getRecommendations from "../axios/getRecommendations";
-import "../components/Carousel/MovieCarousel.css";
+import "../components/Carousel/MovieCarousel/MovieCarousel.css";
 
 function TruncateDescription({ description }) {
   const words = description.split(" ");

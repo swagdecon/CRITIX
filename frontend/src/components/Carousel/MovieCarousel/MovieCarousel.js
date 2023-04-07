@@ -9,13 +9,13 @@ import {
   TruncateDescription,
   MovieCardGenres,
   MovieCardActors,
-} from "../movieComponents.js";
+} from "../../movieComponents.js";
 import PropTypes from "prop-types";
 import "./MovieCarousel.css";
 import { chunk } from "lodash";
 import { useNavigate } from "react-router-dom";
-import "./title.scss";
-import "../../misc/moviecard.scss";
+import "../title.scss";
+import "../../../misc/moviecard.scss";
 
 const MovieCarousel = ({ title, endpoint }) => {
   const [movies, setMovies] = useState([]);

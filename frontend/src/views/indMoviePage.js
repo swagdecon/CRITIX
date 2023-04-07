@@ -59,12 +59,14 @@ const IndMovie = () => {
 
   return (
     <html>
-      <link
-        href="https://fonts.googleapis.com/icon?family=Material+Icons"
-        rel="stylesheet"
-      />
-      <Container />
+      <head>
+        <link
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet"
+        />
+      </head>
       <body>
+        <Container />
         <div
           className="background"
           style={{
