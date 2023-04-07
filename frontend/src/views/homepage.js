@@ -5,7 +5,6 @@ import HeroCarousel from "../components/Carousel/HeroCarousel/HeroCarousel.js";
 import MovieCarousel from "../components/Carousel/MovieCarousel/MovieCarousel.js";
 // import Navbar from "../components/NavBar/Navbar";
 // import Header from "../components/Header/Header";
-import Container from "../components/Container/Container";
 
 const Homepage = () => {
   return (
@@ -18,7 +17,6 @@ const Homepage = () => {
       </head>
 
       <body>
-        <Container />
         <HeroCarousel />
         <MovieCarousel
           title="Popular right now"

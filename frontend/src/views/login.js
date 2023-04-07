@@ -22,35 +22,33 @@ function Login() {
         <title>Log in</title>
       </head>
       <body>
-        <div id="wrapper">
-          <div id="left">
-            <div id="signin">
-              <Logo />
-              <img src={Logo_Text} className="homepage-logo" alt="logo" />
-              <LoginFunctionality></LoginFunctionality>
-              <div className="or">
-                <hr className="bar" />
-                <span>OR</span>
-                <hr className="bar" />
-              </div>
-              <Link to="/" className="secondary-btn">
-                SIGN UP
-              </Link>
+        <div id="left">
+          <div id="signin">
+            <Logo />
+            <img src={Logo_Text} className="homepage-logo" alt="logo" />
+            <LoginFunctionality />
+            <div className="or">
+              <hr className="bar" />
+              <span>OR</span>
+              <hr className="bar" />
             </div>
-            <footer id="main-footer">
-              <p>Copyright &copy; 2022, All Rights Reserved By POPFLIX</p>
-              <div>
-                <Link to="#">Terms of Use</Link> |{" "}
-                <Link to="#">Privacy Policy</Link>
-              </div>
-            </footer>
+            <Link to="/" className="secondary-btn">
+              SIGN UP
+            </Link>
           </div>
-          <div id="right">
-            <div id="showcase">
-              <div className="showcase-content">
-                <div className="overlay">
-                  <LoginPlayer></LoginPlayer>
-                </div>
+          <footer id="main-footer">
+            <p>Copyright &copy; 2022, All Rights Reserved By POPFLIX</p>
+            <div>
+              <Link to="#">Terms of Use</Link> |{" "}
+              <Link to="#">Privacy Policy</Link>
+            </div>
+          </footer>
+        </div>
+        <div id="right">
+          <div id="showcase">
+            <div className="showcase-content">
+              <div className="overlay">
+                <LoginPlayer />
               </div>
             </div>
           </div>
