@@ -20,8 +20,6 @@ const getRecommendations = async (movieId) => {
       return { ...movie, details: detailsResponse.data };
     })
   );
-  console.log(recommendedMovies);
-
   return recommendedMovies;
 };
 

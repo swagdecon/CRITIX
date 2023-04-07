@@ -53,7 +53,7 @@ function MovieAverage({ voteAverage }) {
   if (!voteAverage) {
     return "No Rating";
   }
-  let rating = voteAverage.toFixed(1);
+  let rating = parseFloat(voteAverage).toFixed(1);
   return rating;
 }
 
@@ -74,7 +74,7 @@ function MovieGenres({ genres }) {
 }
 
 function MovieCardGenres({ genres }) {
-  if (!genres) {
+  if (!Array.isArray(genres)) {
     return "No genres available";
   }
   return genres.join(" | ");
@@ -152,17 +152,17 @@ const MovieActors = ({ actors, images }) => {
 };
 
 function MovieCardActors({ actors }) {
-  if (!actors) {
+  if (!Array.isArray(actors)) {
     return "No Actors Available";
   }
   MovieCardActors.propTypes = {
     actors: PropTypes.arrayOf(PropTypes.string),
   };
 
-  const top3Actors = actors.slice(0, 3);
+  const topActors = actors.slice(0, 3);
   return (
     <span>
-      {top3Actors.map((actor, index) => {
+      {topActors.map((actor, index) => {
         if (index === 0) {
           return actor;
         } else if (index < 3) {
@@ -308,11 +308,12 @@ function RecommendedCarousel({ movieId }) {
   useEffect(() => {
     const fetchRecommendations = async () => {
       const data = await getRecommendations(movieId);
-      setRecommendations(data.results);
+      setRecommendations(data);
     };
     fetchRecommendations();
   }, [movieId]);
-
+  console.log(movieId);
+  console.log(recommendations);
   return (
     <div>
       <Carousel className="carousel-movie" indicators={false} interval={null}>
@@ -339,14 +340,30 @@ function RecommendedCarousel({ movieId }) {
                               <ul className="movie-gen">
                                 <li>
                                   <MovieAverage
-                                    voteAverage={movie.vote_average}
+                                    voteAverage={
+                                      movie.vote_average
+                                        ? movie.vote_average
+                                        : "No Movie Score Available"
+                                    }
                                   />
                                 </li>
                                 <li>
-                                  <MovieRuntime runtime={movie.runtime} />
+                                  <MovieRuntime
+                                    runtime={
+                                      movie.runtime
+                                        ? movie.runtime
+                                        : "No Runtime Available"
+                                    }
+                                  />
                                 </li>
                                 <li>
-                                  <MovieCardGenres genres={movie.genres} />
+                                  <MovieCardGenres
+                                    genres={
+                                      movie.genres
+                                        ? movie.genres
+                                        : "No Genres Available"
+                                    }
+                                  />
                                 </li>
                               </ul>
                             </div>
@@ -371,7 +388,11 @@ function RecommendedCarousel({ movieId }) {
                             <div className="col1">
                               <p className="movie-description">
                                 <TruncateDescription
-                                  description={movie.overview}
+                                  description={
+                                    movie.overview
+                                      ? movie.overview
+                                      : "No Overview Available"
+                                  }
                                 />
                               </p>
                             </div>
@@ -379,7 +400,13 @@ function RecommendedCarousel({ movieId }) {
                           <div className="mr-grid actors-row">
                             <div className="col1">
                               <p className="movie-actors">
-                                <MovieCardActors actors={movie.actors} />
+                                <MovieCardActors
+                                  actors={
+                                    movie.actors
+                                      ? movie.actors
+                                      : "No Actors Available"
+                                  }
+                                />
                               </p>
                             </div>
                           </div>

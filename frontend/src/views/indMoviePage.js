@@ -56,7 +56,8 @@ const IndMovie = () => {
   if (!dataLoaded) {
     return <div>Loading...</div>;
   }
-
+  let movieBackdrop = `url(https://image.tmdb.org/t/p/original${movie.backdropPath}) `;
+  let moviePosterPath = `https://image.tmdb.org/t/p/original${movie.posterPath}`;
   return (
     <html>
       <head>
@@ -73,15 +74,13 @@ const IndMovie = () => {
         <div
           className="background"
           style={{
-            backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdropPath}) `,
+            backgroundImage: movieBackdrop,
           }}
         ></div>
         <ind-movie-body>
           <div className="ind-movie-wrapper">
             <div className="hero-poster">
-              <img
-                src={`https://image.tmdb.org/t/p/original${movie.posterPath}`}
-              />
+              <img src={moviePosterPath} />
             </div>
 
             <div id="fade" className="container-margin">

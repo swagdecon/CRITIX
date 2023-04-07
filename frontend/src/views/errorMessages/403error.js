@@ -1,5 +1,5 @@
 import React from "react";
-import "../misc/403.css";
+import "../../misc/403.css";
 
 function Error403() {
   return (
