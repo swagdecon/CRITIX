@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const getRecommendations = async (movieId) => {
+export default async function getRecommendations(movieId) {
   const api_key = "d84f9365179dc98dc69ab22833381835";
   const language = "en-US";
   const page = 1;
@@ -21,6 +21,4 @@ const getRecommendations = async (movieId) => {
     })
   );
   return recommendedMovies;
-};
-
-export default getRecommendations;
+}

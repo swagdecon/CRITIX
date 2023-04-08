@@ -7,7 +7,7 @@ import sha256 from "crypto-js/sha256";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import LoginStyles from "../Login/login.module.css";
 
-function LoginFunctionality() {
+export default function LoginFunctionality() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -140,4 +140,3 @@ function LoginFunctionality() {
     </form>
   );
 }
-export default LoginFunctionality;

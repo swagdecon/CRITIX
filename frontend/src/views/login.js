@@ -8,7 +8,7 @@ import LoginPlayer from "../components/Login/LoginVideo";
 import LoginFunctionality from "../components/Login/loginFunctionality";
 import LoginStyles from "../components/Login/login.module.css";
 
-function Login() {
+export default function Login() {
   return (
     <html lang="en">
       <head>
@@ -62,4 +62,3 @@ function Login() {
     </html>
   );
 }
-export default Login;

@@ -13,7 +13,8 @@ import PrivateRoute from "./components/privateRoutes.js";
 import Error403 from "./views/errorMessages/403error.js";
 import Error404 from "./views/errorMessages/404error.js";
 import IndMovie from "./views/indMoviePage.js";
-function App() {
+
+export default function App() {
   return (
     <Router>
       <Routes>
@@ -35,4 +36,3 @@ function App() {
     </Router>
   );
 }
-export default App;

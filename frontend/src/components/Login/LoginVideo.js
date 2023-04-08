@@ -3,11 +3,10 @@ import React from "react";
 import PopflixTrailer2 from "./Popflix_Trailer2.mp4";
 import "./login.module.css";
 
-function LoginPlayer() {
+export default function LoginPlayer() {
   return (
     <div>
       <video autoPlay loop muted src={PopflixTrailer2} type="video/mp4"></video>
     </div>
   );
 }
-export default LoginPlayer;

@@ -8,7 +8,7 @@ import SignUpPlayer from "../components/Signup/SignUpVideo.js";
 import SignUpFunctionality from "../components/Signup/SignupLogic.js";
 import SignUpStyles from "../components/Login/login.module.css";
 
-function SignUp() {
+export default function SignUp() {
   return (
     <html lang="en">
       <head>
@@ -65,5 +65,3 @@ function SignUp() {
     </html>
   );
 }
-
-export default SignUp;

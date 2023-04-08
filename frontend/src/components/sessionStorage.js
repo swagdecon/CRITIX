@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function useSessionState(defaultValue, key) {
+export default function useSessionState(defaultValue, key) {
   const [value, setValue] = useState(() => {
     const sessionStorageValue = sessionStorage.getItem(key);
 
@@ -15,5 +15,3 @@ function useSessionState(defaultValue, key) {
 
   return [value, setValue];
 }
-
-export default useSessionState;

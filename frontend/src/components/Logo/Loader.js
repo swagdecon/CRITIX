@@ -2,7 +2,7 @@ import React from "react";
 import "../Login/login.module.css";
 import LoaderStyles from "./logo.module.scss";
 
-function Loader() {
+export default function Loader() {
   return (
     <div className="logo-wrapper">
       <div className="homepage-logo">
@@ -29,7 +29,3 @@ function Loader() {
     </div>
   );
 }
-
-export default Loader;
-
-// CSS can be included separately in a CSS file or added as inline styles. Example of inline styles:

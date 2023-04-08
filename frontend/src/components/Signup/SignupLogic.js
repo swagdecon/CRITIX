@@ -4,9 +4,8 @@ import "../Login/login.module.css";
 import Popcorn from "../../misc/popcorn_logo";
 import Filter from "bad-words";
 import SignUpStyles from "../Login/login.module.css";
-// import axios from "axios";
 
-function SignUpFunctionality() {
+export default function SignUpFunctionality() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
@@ -147,4 +146,3 @@ function SignUpFunctionality() {
     </form>
   );
 }
-export default SignUpFunctionality;

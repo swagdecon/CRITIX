@@ -18,7 +18,7 @@ import {
 import Popcorn from "../misc/popcorn_logo";
 import "../misc/popcorn_logo.css";
 
-const IndMovie = () => {
+export default function IndMovie() {
   const [movie, setMovie] = useState({});
   const [dataLoaded, setDataLoaded] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
@@ -167,6 +167,4 @@ const IndMovie = () => {
       </body>
     </html>
   );
-};
-
-export default IndMovie;
+}

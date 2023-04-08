@@ -7,7 +7,7 @@ import MovieCarousel from "../components/Carousel/MovieCarousel/MovieCarousel.js
 // import Header from "../components/Header/Header";
 import Container from "../components/Container/Container";
 
-const Homepage = () => {
+export default function Homepage() {
   return (
     <html>
       <head>
@@ -29,6 +29,4 @@ const Homepage = () => {
       </body>
     </html>
   );
-};
-
-export default Homepage;
+}
