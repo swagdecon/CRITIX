@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import "../components/IndMovie/ind_movie.css";
+import IndMovieStyle from "../components/IndMovie/ind_movie.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import Container from "../components/Container/Container";
 import ReactPlayer from "react-player";
@@ -17,6 +17,7 @@ import {
 } from "../components/movieComponents";
 import Popcorn from "../misc/popcorn_logo";
 import "../misc/popcorn_logo.css";
+import SignUpStyles from "../components/Login/login.module.css";
 
 export default function IndMovie() {
   const [movie, setMovie] = useState({});
@@ -69,102 +70,106 @@ export default function IndMovie() {
           rel="stylesheet"
         />
       </head>
-      <body>
-        <Container />
-        <div
-          className="background"
-          style={{
-            backgroundImage: movieBackdrop,
-          }}
-        ></div>
-        <ind-movie-body>
-          <div className="ind-movie-wrapper">
-            <div className="hero-poster">
-              <img src={moviePosterPath} />
-            </div>
-
-            <div id="fade" className="container-margin">
-              <div className="ind-movie-header ">
-                <div className="movie__score">
-                  <MovieAverage voteAverage={movie.voteAverage} />
-                </div>
-                <div className="movie__title__container">
-                  <h2 className="movie__title">{movie.title}</h2>
-                  <div className="movie__year">
-                    {getYearFromDate(movie.releaseDate)}
-                  </div>
-                </div>
-                <MovieGenres genres={movie.genres} />
-                <p className="movie__description">{movie.overview}</p>
-
-                <div className="btn-wrapper">
-                  <button
-                    type="submit"
-                    onClick={() => MovieTrailer(movie.video[0])}
-                    className="css-button trailer-btn"
-                  >
-                    <p className="css-button-text">WATCH TRAILER</p>
-                    <div className="css-button-inner">
-                      <div className="reset-skew">
-                        <Popcorn className="css-button-inner-text"></Popcorn>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-              </div>
-              <div className="ind_movie_review">
-                <h3 className="ind_review__title">Reviews</h3>
-                <MovieReviews reviews={movie.reviews} />
-              </div>
-            </div>
-            <section id="slide-1" className="homeSlide">
-              <div
-                className="bcg"
-                data-center="background-position: 50% 0px;"
-                data-top-bottom="background-position: 50% -100px;"
-                data-anchor-target="#slide-1"
-              >
-                <div className="hsContainer">
-                  <div
-                    className="hsContent"
-                    data-center="opacity: 1"
-                    data-top="opacity: 0"
-                    data-anchor-target="#slide-1 h2"
-                  >
-                    <ReactPlayer
-                      className="indMovieEmbeddedTrailer"
-                      url={`https://www.youtube.com/watch?v=${movie.video}`}
-                      controls={true}
-                      playing={false}
-                      width={"1500px"}
-                      height={"750px"}
-                    />
-                    <MovieDetails
-                      runtime={movie.runtime}
-                      revenue={movie.revenue}
-                      budget={movie.budget}
-                      language={movie.original_language}
-                      productionCompanies={movie.productionCompanies}
-                      movieStatus={movie.status}
-                      releaseDate={movie.releaseDate}
-                    />
-                  </div>
-                  <h1 className="cast-title-1">Cast Members:</h1>
-                  <section className="CastMembers">
-                    <MovieActors
-                      actors={movie.actors}
-                      images={movie.actorImagePaths}
-                    />
-                  </section>
-                </div>
-              </div>
-            </section>
-            <section className="recommended_movies">
-              <RecommendedCarousel movieId={movie.id} />
-            </section>
+      <Container />
+      <div
+        className={IndMovieStyle.background}
+        style={{
+          backgroundImage: movieBackdrop,
+        }}
+      ></div>
+      <ind-movie-body>
+        <div className={IndMovieStyle["ind-movie-wrapper"]}>
+          <div className={IndMovieStyle["hero-poster"]}>
+            <img src={moviePosterPath} />
           </div>
-        </ind-movie-body>
-      </body>
+
+          <div id="fade" className={IndMovieStyle["container-margin"]}>
+            <div className={IndMovieStyle["ind-movie-header"]}>
+              <div className={IndMovieStyle.movie__score}>
+                <MovieAverage voteAverage={movie.voteAverage} />
+              </div>
+              <div className={IndMovieStyle.movie__title__container}>
+                <h2 className={IndMovieStyle.movie__title}>{movie.title}</h2>
+                <div className={IndMovieStyle.movie__year}>
+                  {getYearFromDate(movie.releaseDate)}
+                </div>
+              </div>
+              <MovieGenres genres={movie.genres} />
+              <p className={IndMovieStyle.movie__description}>
+                {movie.overview}
+              </p>
+
+              <div className={IndMovieStyle["btn-wrapper"]}>
+                <button
+                  type="submit"
+                  onClick={() => MovieTrailer(movie.video[0])}
+                  className={SignUpStyles["css-button"]}
+                >
+                  <p className={SignUpStyles["css-button-text"]}>
+                    WATCH TRAILER
+                  </p>
+                  <div className={SignUpStyles["css-button-inner"]}>
+                    <div className={SignUpStyles["reset-skew"]}>
+                      <Popcorn
+                        className={SignUpStyles["css-button-inner-text"]}
+                      />
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+            <div className={IndMovieStyle.ind_movie_review}>
+              <h3 className={IndMovieStyle.ind_review__title}>Reviews</h3>
+              <MovieReviews reviews={movie.reviews} />
+            </div>
+          </div>
+          <section id="slide-1" className={IndMovieStyle["homeSlide"]}>
+            <div
+              className={IndMovieStyle.bcg}
+              data-center="background-position: 50% 0px;"
+              data-top-bottom="background-position: 50% -100px;"
+              data-anchor-target="#slide-1"
+            >
+              <div className={IndMovieStyle.hsContainer}>
+                <div
+                  className={IndMovieStyle.hsContent}
+                  data-center="opacity: 1"
+                  data-top="opacity: 0"
+                  data-anchor-target="#slide-1 h2"
+                >
+                  <ReactPlayer
+                    className={IndMovieStyle.indMovieEmbeddedTrailer}
+                    url={`https://www.youtube.com/watch?v=${movie.video}`}
+                    controls={true}
+                    playing={false}
+                    width={"1500px"}
+                    height={"750px"}
+                  />
+                  <MovieDetails
+                    runtime={movie.runtime}
+                    revenue={movie.revenue}
+                    budget={movie.budget}
+                    language={movie.original_language}
+                    productionCompanies={movie.productionCompanies}
+                    movieStatus={movie.status}
+                    releaseDate={movie.releaseDate}
+                  />
+                </div>
+                <h1 className={IndMovieStyle["cast-title-1"]}>Cast Members:</h1>
+                <section className={IndMovieStyle.CastMembers}>
+                  <MovieActors
+                    actors={movie.actors}
+                    images={movie.actorImagePaths}
+                  />
+                </section>
+              </div>
+            </div>
+          </section>
+          <section className={IndMovieStyle.recommended_movies}>
+            <RecommendedCarousel movieId={movie.id} />
+          </section>
+        </div>
+      </ind-movie-body>
     </html>
   );
 }

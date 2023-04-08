@@ -5,14 +5,15 @@
   clear: both;
   visibility: hidden;
 }
-
-ind-movie-html,
+html {
+  overflow: auto;
+  overflow-x: hidden;
+}
 ind-movie-body {
   font-family: "Open Sans", sans-serif;
   color: #fff;
   width: 100%;
   height: 100%;
-  overflow-y: auto;
   position: absolute;
   background-size: cover;
   background-repeat: no-repeat;
@@ -112,10 +113,11 @@ ind-movie-nav {
   position: relative;
   float: right;
 }
-.trailer-btn {
-  right: 40.5%;
-  margin-top: 2%;
+.btn-wrapper {
+  margin-top: 1%;
+  float: left;
 }
+
 .ind-movie_search__anim::after {
   content: "";
   width: 2px;
@@ -501,7 +503,6 @@ ind-movie-nav {
   table-layout: fixed;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   position: relative;
 }
 

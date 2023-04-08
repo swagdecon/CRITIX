@@ -1,6 +1,6 @@
 import { React, useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import "./IndMovie/ind_movie.css";
+import IndMovieStyle from "./IndMovie/ind_movie.module.css";
 import ReactTextCollapse from "react-text-collapse/dist/ReactTextCollapse";
 import { RiMoneyDollarBoxFill } from "react-icons/ri";
 import { BsWallet2 } from "react-icons/bs";
@@ -65,7 +65,7 @@ function MovieGenres({ genres }) {
     genres: PropTypes.arrayOf(PropTypes.string),
   };
   return (
-    <ul className="movie__type">
+    <ul className={IndMovieStyle.movie__type}>
       {genres.map((genre) => (
         <li key={genre}>{genre}</li>
       ))}
@@ -87,11 +87,9 @@ const MovieActors = ({ actors, images }) => {
   };
 
   const defaultImage = `url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg) center center no-repeat`;
-  // if (!actors) {
-  //   return "Actor information unavailable";
-  // }
+
   return (
-    <div className="profile-container">
+    <div className={IndMovieStyle["profile-container"]}>
       {actors.slice(0, 4).map((actor, index) => {
         let image = images ? images[index] : null;
         let actorImage = `url(https://image.tmdb.org/t/p/w500${image}) center center no-repeat`;
@@ -112,7 +110,7 @@ const MovieActors = ({ actors, images }) => {
         return (
           <div
             key={index}
-            className="card card1"
+            className={`${IndMovieStyle["card"]} ${IndMovieStyle["card1"]}`}
             style={style}
             onMouseEnter={(e) => {
               if (image) {
@@ -139,12 +137,21 @@ const MovieActors = ({ actors, images }) => {
               );
             }}
           >
-            <div className="border">
-              <h3 className="profile-person">{actor}</h3>
-              <div className="ind-movie-cast-icons">
-                <i className="fa fa-instagram" aria-hidden="true"></i>
-                <i className="fa fa-twitter" aria-hidden="true"></i>
-                <i className="fa fa-facebook" aria-hidden="true"></i>
+            <div className={IndMovieStyle.border}>
+              <h3 className={IndMovieStyle["profile-person"]}>{actor}</h3>
+              <div className={IndMovieStyle["ind-movie-cast-icons"]}>
+                <i
+                  className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-instagram"]}`}
+                  aria-hidden="true"
+                ></i>
+                <i
+                  className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-twitter"]}`}
+                  aria-hidden="true"
+                ></i>
+                <i
+                  className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-facebook"]}`}
+                  aria-hidden="true"
+                ></i>
               </div>
             </div>
           </div>
@@ -208,14 +215,14 @@ function MovieReviews({ reviews }) {
   };
 
   return (
-    <div className="review__wrapper">
+    <div className={IndMovieStyle.review__wrapper}>
       {reviews.slice(0, 3).map((review, index) => (
         <ReactTextCollapse
           key={index}
           options={{ ...TEXT_COLLAPSE_OPTIONS, maxHeight }}
         >
           {/* <div className="review__score">{review.rating}%</div> */}
-          <p className="review__description">{review}</p>
+          <p className={IndMovieStyle.review__description}>{review}</p>
           <br />
         </ReactTextCollapse>
       ))}
@@ -232,59 +239,82 @@ function MovieDetails({
   releaseDate,
 }) {
   return (
-    <section className="movieDetailsContainer">
-      <div className="ind-movie-details-card">
-        <div className="card-overlay">
-          <div className="movie-Details-Title">Movie Details</div>
-          <div className="movie-info-row">
-            <ul className="movie-column">
-              <ul className="ind-movie-runtime">
-                <AiOutlineClockCircle className="movie-info-logo" size={50} />
+    <section className={IndMovieStyle.movieDetailsContainer}>
+      <div className={IndMovieStyle["ind-movie-details-card"]}>
+        <div className={IndMovieStyle["card-overlay"]}>
+          <div className={IndMovieStyle["movie-Details-Title"]}>
+            Movie Details
+          </div>
+          <div className={IndMovieStyle["movie-info-row"]}>
+            <ul className={IndMovieStyle["movie-column"]}>
+              <ul className={IndMovieStyle["ind-movie-runtime"]}>
+                <AiOutlineClockCircle
+                  className={IndMovieStyle["movie-info-logo"]}
+                  size={50}
+                />
 
-                <div className="movie-info-text">
+                <div className={IndMovieStyle["movie-info-text"]}>
                   {runtime ? `${runtime} minutes` : "N/A"}
                 </div>
               </ul>
               <br />
-              <ul className="ind-movie-revenue">
-                <RiMoneyDollarBoxFill className="movie-info-logo" size={50} />
-                <div className="movie-info-text">
+              <ul className={IndMovieStyle["ind-movie-revenue"]}>
+                <RiMoneyDollarBoxFill
+                  className={IndMovieStyle["movie-info-logo"]}
+                  size={50}
+                />
+                <div className={IndMovieStyle["movie-info-text"]}>
                   {revenue ? `$${revenue}` : "N/A"}
                 </div>
               </ul>
               <br />
-              <ul className="ind-movie-budget">
-                <BsWallet2 className="movie-info-logo" size={50} />
-                <div className="movie-info-text">
+              <ul className={IndMovieStyle["ind-movie-budget"]}>
+                <BsWallet2
+                  className={IndMovieStyle["movie-info-logo"]}
+                  size={50}
+                />
+                <div className={IndMovieStyle["movie-info-text"]}>
                   {budget ? `$${budget}` : "N/A"}
                 </div>
               </ul>
               <br />
-              <ul className="ind-movie-language">
-                <FaLanguage className="movie-info-logo" size={50} />
-                <div className="movie-info-text">
+              <ul className={IndMovieStyle["ind-movie-language"]}>
+                <FaLanguage
+                  className={IndMovieStyle["movie-info-logo"]}
+                  size={50}
+                />
+                <div className={IndMovieStyle["movie-info-text"]}>
                   {language ? language : "N/A"}
                 </div>
               </ul>
             </ul>
-            <ul className="movie-column">
-              <ul className="ind-movie-production-company">
-                <MdOutlineMovie className="movie-info-logo" size={50} />
-                <div className="movie-info-text">
+            <ul className={IndMovieStyle["movie-column"]}>
+              <ul className={IndMovieStyle["ind-movie-production-company"]}>
+                <MdOutlineMovie
+                  className={IndMovieStyle["movie-info-logo"]}
+                  size={50}
+                />
+                <div className={IndMovieStyle["movie-info-text"]}>
                   {productionCompanies ? productionCompanies[0] : "N/A"}
                 </div>
               </ul>
               <br />
-              <div className="ind-movie-status">
-                <RiMovie2Line size={50} className="movie-info-logo" />
-                <div className="movie-info-text">
+              <div className={IndMovieStyle["ind-movie-status"]}>
+                <RiMovie2Line
+                  size={50}
+                  className={IndMovieStyle["movie-info-logo"]}
+                />
+                <div className={IndMovieStyle["movie-info-text"]}>
                   {movieStatus ? movieStatus : "N/A"}
                 </div>
               </div>
               <br />
-              <div className="ind-movie-date">
-                <MdDateRange size={50} className="movie-info-logo" />
-                <div className="movie-info-text">
+              <div className={IndMovieStyle["ind-movie-date"]}>
+                <MdDateRange
+                  size={50}
+                  className={IndMovieStyle["movie-info-logo"]}
+                />
+                <div className={IndMovieStyle["movie-info-text"]}>
                   {releaseDate ? releaseDate : "N/A"}
                 </div>
               </div>
