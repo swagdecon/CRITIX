@@ -1,26 +1,26 @@
 import React from "react";
 import "../Login/login.module.css";
-import "./logo.scss";
+import LoaderStyles from "./logo.module.scss";
 
 function Loader() {
   return (
     <div className="logo-wrapper">
       <div className="homepage-logo">
-        <div className="loader__container">
-          <div className="loader__film">
+        <div className={LoaderStyles.loader__container}>
+          <div className={LoaderStyles.loader__film}>
             <img
-              className="loader__film-img"
+              className={LoaderStyles["loader__film-img"]}
               src="https://www.dropbox.com/s/o4p5i3nfw92rhfz/film.png?raw=1"
               alt=""
             />
             <img
-              className="loader__film-img"
+              className={LoaderStyles["loader__film-img"]}
               src="https://www.dropbox.com/s/o4p5i3nfw92rhfz/film.png?raw=1"
               alt=""
             />
           </div>
           <img
-            className="loader__camera"
+            className={LoaderStyles["loader__camera"]}
             src="https://www.dropbox.com/s/348z6yvtt9hbos2/camera.png?raw=1"
             alt=""
           />

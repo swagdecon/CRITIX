@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../components/Login/login.module.css";
-import "../components/Logo/logo.scss";
+import "../components/Logo/logo.module.scss";
 import Logo from "../components/Logo/Loader.js";
 import Logo_Text from "../components/Logo/POPFLIX_LOGO_OFFICIAL.png";
 import SignUpPlayer from "../components/Signup/SignUpVideo.js";
