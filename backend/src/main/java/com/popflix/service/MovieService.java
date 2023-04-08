@@ -42,6 +42,9 @@ public class MovieService {
     return Optional.ofNullable(mongoTemplate.findOne(query, Movie.class, collectionName));
   }
 
+  // ScheduledExecutorService is created in the init method and a task is
+  // scheduled to run every 24 hours using scheduleAtFixedRate. The updateMovies
+  // method will be called by the scheduled task.
   private ScheduledExecutorService executor;
 
   @PostConstruct
