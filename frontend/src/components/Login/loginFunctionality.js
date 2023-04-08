@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./login.css";
+import "./login.module.css";
 import "../../misc/clapperboard.css";
 import Filter from "bad-words";
 import sha256 from "crypto-js/sha256";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
+import LoginStyles from "../Login/login.module.css";
 
 function LoginFunctionality() {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -53,7 +54,6 @@ function LoginFunctionality() {
     } else {
       setErrorMessage("");
     }
-
     try {
       const myResponse = await fetch(
         "http://localhost:8080/api/v1/auth/authenticate",
@@ -79,7 +79,7 @@ function LoginFunctionality() {
           navigate("/403", { replace: true });
         }
 
-        navigate("/homepage", { replace: true });
+        navigate("/home", { replace: true });
       } else {
         setError("*Invalid Username or Password*");
       }
@@ -87,20 +87,19 @@ function LoginFunctionality() {
       console.log(error);
     }
   };
-
   return (
     <form onSubmit={handleSubmit}>
-      <div-error>{error}</div-error>
+      <div className={LoginStyles.error}>{error}</div>
 
-      <br></br>
-      <div-error>{errorMessage}</div-error>
+      <br />
+      <div className={LoginStyles.error}>{errorMessage}</div>
       <div>
         <label htmlFor="email">Email</label>
         <input
           type="text"
           id="email"
           name="email"
-          className="text-input"
+          className={LoginStyles["text-input"]}
           autoComplete="current-email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
@@ -113,7 +112,7 @@ function LoginFunctionality() {
           type={passwordVisible ? "text" : "password"}
           id="password"
           name="password"
-          className="text-input"
+          className={LoginStyles["text-input"]}
           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}"
           value={password}
           autoComplete="current-password"
@@ -121,18 +120,20 @@ function LoginFunctionality() {
           required
         />
 
-        <span className="eye" onClick={togglePasswordVisibility}>
+        <span className={LoginStyles.eye} onClick={togglePasswordVisibility}>
           <i
             id="hide"
             className={`bi bi-eye${passwordVisible ? "-slash" : ""}`}
           ></i>
         </span>
       </div>
-      <button type="submit" className="css-button">
-        <p className="css-button-text">LOG IN</p>
-        <div className="css-button-inner">
-          <div className="reset-skew">
-            <clapperboard-div className="css-button-inner-text"></clapperboard-div>
+      <button type="submit" className={LoginStyles["css-button"]}>
+        <p className={LoginStyles["css-button-text"]}>LOG IN</p>
+        <div className={LoginStyles["css-button-inner"]}>
+          <div className={LoginStyles["reset-skew"]}>
+            <clapperboard-div
+              className={LoginStyles["css-button-inner-text"]}
+            ></clapperboard-div>
           </div>
         </div>
       </button>

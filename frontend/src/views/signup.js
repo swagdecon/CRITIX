@@ -1,11 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../components/Login/login.css";
-import "../misc/logo.scss";
-import Logo from "../components/logo.js";
-import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
+import "../components/Login/login.module.css";
+import "../components/Logo/logo.scss";
+import Logo from "../components/Logo/Loader.js";
+import Logo_Text from "../components/Logo/POPFLIX_LOGO_OFFICIAL.png";
 import SignUpPlayer from "../components/Signup/SignUpVideo.js";
 import SignUpFunctionality from "../components/Signup/SignupLogic.js";
+import SignUpStyles from "../components/Login/login.module.css";
 
 function SignUp() {
   return (
@@ -21,35 +22,39 @@ function SignUp() {
         <title>Sign Up</title>
       </head>
       <body>
-        <div id="wrapper">
-          <div id="left">
-            <div id="signin">
+        <div id={SignUpStyles.wrapper}>
+          <div id={SignUpStyles.left}>
+            <div id={SignUpStyles.signin}>
               <Logo />
-              <img src={Logo_Text} className="homepage-logo" alt="logo" />
+              <img
+                src={Logo_Text}
+                className={SignUpStyles["homepage-logo"]}
+                alt="logo"
+              />
 
               <SignUpFunctionality />
               {/* REDIRECT TO LOG IN PAGE */}
-              <div className="or">
-                <hr className="bar" />
+              <div className={SignUpStyles.or}>
+                <hr className={SignUpStyles.bar} />
                 <span>OR</span>
-                <hr className="bar" />
+                <hr className={SignUpStyles.bar} />
               </div>
-              <Link to="/login" className="secondary-btn">
-                <p className="css-button-text-2">LOG IN</p>
+              <Link to="/login" className={SignUpStyles["secondary-btn"]}>
+                <p className={SignUpStyles["css-button-text-2"]}>LOG IN</p>
               </Link>
             </div>
-            <footer id="main-footer">
-              <p>Copyright &copy; 2022, All Rights Reserved By POPFLIX</p>
+            <footer id={SignUpStyles["main-footer"]}>
+              <p>&copy; 2022 POPFLIX, All Rights Reserved</p>
               <div>
                 <Link to="#">Terms of Use</Link> |{" "}
                 <Link to="#">Privacy Policy</Link>
               </div>
             </footer>
           </div>
-          <div id="right">
-            <div id="showcase">
-              <div className="showcase-content">
-                <div className="overlay">
+          <div id={SignUpStyles.right}>
+            <div id={SignUpStyles.showcase}>
+              <div className={SignUpStyles["showcase-content"]}>
+                <div className={SignUpStyles.overlay}>
                   <SignUpPlayer />
                 </div>
               </div>
@@ -60,4 +65,5 @@ function SignUp() {
     </html>
   );
 }
+
 export default SignUp;

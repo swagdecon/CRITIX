@@ -87,6 +87,9 @@ const MovieActors = ({ actors, images }) => {
   };
 
   const defaultImage = `url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg) center center no-repeat`;
+  // if (!actors) {
+  //   return "Actor information unavailable";
+  // }
   return (
     <div className="profile-container">
       {actors.slice(0, 4).map((actor, index) => {
@@ -312,8 +315,7 @@ function RecommendedCarousel({ movieId }) {
     };
     fetchRecommendations();
   }, [movieId]);
-  console.log(movieId);
-  console.log(recommendations);
+
   return (
     <div>
       <Carousel className="carousel-movie" indicators={false} interval={null}>
@@ -321,7 +323,7 @@ function RecommendedCarousel({ movieId }) {
           <Carousel.Item key={i}>
             {chunk.map((movie, j) => (
               <div className="card-container" key={`${i}-${j}`}>
-                <Link to={`movie/${movie.id}`}>
+                <Link to={`/api/movies/movie/${movie.id}`}>
                   <div className="container">
                     <div className="cellphone-container">
                       <div className="movie">

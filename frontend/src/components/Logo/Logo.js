@@ -1,6 +1,6 @@
 import React from "react";
-import PopflixLogo from "../../misc/POPFLIX_LOGO_OFFICIAL.png"
-import "./Logo.css"
+import PopflixLogo from "./POPFLIX_LOGO_OFFICIAL.png";
+import "./Logo.css";
 
 const Logo = () => {
   return (

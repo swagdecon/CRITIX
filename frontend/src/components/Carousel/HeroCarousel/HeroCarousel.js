@@ -2,7 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import Carousel from "react-bootstrap/Carousel";
 import "./HeroCarousel.css";
-import "../../logo.js";
+import "../../Logo/Loader.js";
 export default function HeroCarousel() {
   return (
     <Carousel>

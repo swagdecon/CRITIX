@@ -1,7 +1,7 @@
 import "../../../node_modules/video-react/dist/video-react.css";
 import React from "react";
 import PopflixTrailer2 from "./Popflix_Trailer2.mp4";
-import "./login.css";
+import "./login.module.css";
 
 function LoginPlayer() {
   return (

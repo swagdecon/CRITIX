@@ -1,11 +1,12 @@
 import { React } from "react";
 import { Link } from "react-router-dom";
-import "../components/Login/login.css";
-import "../misc/logo.scss";
-import Logo from "../components/logo.js";
-import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
+import "../components/Login/login.module.css";
+import "../components/Logo/logo.scss";
+import Logo from "../components/Logo/Loader.js";
+import Logo_Text from "../components/Logo/POPFLIX_LOGO_OFFICIAL.png";
 import LoginPlayer from "../components/Login/LoginVideo";
 import LoginFunctionality from "../components/Login/loginFunctionality";
+import LoginStyles from "../components/Login/login.module.css";
 
 function Login() {
   return (
@@ -22,32 +23,36 @@ function Login() {
         <title>Log in</title>
       </head>
       <body>
-        <div id="left">
-          <div id="signin">
+        <div id={LoginStyles.left}>
+          <div id={LoginStyles.signin}>
             <Logo />
-            <img src={Logo_Text} className="homepage-logo" alt="logo" />
+            <img
+              src={Logo_Text}
+              className={LoginStyles["homepage-logo"]}
+              alt="logo"
+            />
             <LoginFunctionality />
-            <div className="or">
-              <hr className="bar" />
+            <div className={LoginStyles.or}>
+              <hr className={LoginStyles.bar} />
               <span>OR</span>
-              <hr className="bar" />
+              <hr className={LoginStyles.bar} />
             </div>
-            <Link to="/" className="secondary-btn">
+            <Link to="/" className={LoginStyles["secondary-btn"]}>
               SIGN UP
             </Link>
           </div>
-          <footer id="main-footer">
-            <p>Copyright &copy; 2022, All Rights Reserved By POPFLIX</p>
+          <footer id={LoginStyles["main-footer"]}>
+            <p>&copy; 2022, All Rights Reserved By POPFLIX</p>
             <div>
               <Link to="#">Terms of Use</Link> |{" "}
               <Link to="#">Privacy Policy</Link>
             </div>
           </footer>
         </div>
-        <div id="right">
-          <div id="showcase">
-            <div className="showcase-content">
-              <div className="overlay">
+        <div id={LoginStyles.right}>
+          <div id={LoginStyles.showcase}>
+            <div className={LoginStyles["showcase-content"]}>
+              <div className={LoginStyles.overlay}>
                 <LoginPlayer />
               </div>
             </div>

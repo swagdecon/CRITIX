@@ -82,10 +82,11 @@ h6 {
 }
 
 .homepage-logo {
+  margin-top: 5%;
   margin-bottom: 10px;
   position: relative;
   height: 60px;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
 }
 button {
   background-color: #ffffff00;
