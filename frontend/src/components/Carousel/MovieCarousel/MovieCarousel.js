@@ -15,7 +15,7 @@ import "./MovieCarousel.css";
 import { chunk } from "lodash";
 import { useNavigate } from "react-router-dom";
 import "../title.scss";
-import "../../../misc/moviecard.scss";
+import MovieCardStyle from "../../../misc/moviecard.module.scss";
 
 export default function MovieCarousel({ title, endpoint }) {
   const [movies, setMovies] = useState([]);
@@ -61,24 +61,27 @@ export default function MovieCarousel({ title, endpoint }) {
         {movieChunks.map((chunk, i) => (
           <Carousel.Item key={i}>
             {chunk.map((movie, j) => (
-              <div className="card-container" key={`${i}-${j}`}>
+              <div
+                className={MovieCardStyle["card-container"]}
+                key={`${i}-${j}`}
+              >
                 <Link to={`${endpoint}/${movie.id}`}>
                   <div className="container">
-                    <div className="cellphone-container">
-                      <div className="movie">
-                        <div className="menu">
+                    <div className={MovieCardStyle["cellphone-container"]}>
+                      <div className={MovieCardStyle.movie}>
+                        <div className={MovieCardStyle.menu}>
                           <i className="material-icons"></i>
                         </div>
                         <div
-                          className="movie-img"
+                          className={MovieCardStyle["movie-img"]}
                           style={{
                             backgroundImage: `url(https://image.tmdb.org/t/p/w500/${movie.posterPath})`,
                           }}
                         ></div>
-                        <div className="text-movie-cont">
-                          <div className="mr-grid">
-                            <div className="col1">
-                              <ul className="movie-gen">
+                        <div className={MovieCardStyle["text-movie-cont"]}>
+                          <div className={MovieCardStyle["mr-grid"]}>
+                            <div className={MovieCardStyle.col1}>
+                              <ul className={MovieCardStyle["movie-gen"]}>
                                 <li>
                                   <MovieAverage
                                     voteAverage={movie.voteAverage}
@@ -93,12 +96,14 @@ export default function MovieCarousel({ title, endpoint }) {
                               </ul>
                             </div>
                           </div>
-                          <div className="mr-grid summary-row">
-                            <div className="col2">
+                          <div
+                            className={`${MovieCardStyle["mr-grid"]} ${MovieCardStyle["summary-row"]}`}
+                          >
+                            <div className={MovieCardStyle.col2}>
                               <h5>SUMMARY</h5>
                             </div>
-                            <div className="col2">
-                              <ul className="movie-likes">
+                            <div className={MovieCardStyle.col2}>
+                              <ul className={MovieCardStyle["movie-likes"]}>
                                 <li>
                                   <i className="material-icons">&#xE813;</i>
                                   124
@@ -109,26 +114,32 @@ export default function MovieCarousel({ title, endpoint }) {
                               </ul>
                             </div>
                           </div>
-                          <div className="mr-grid">
-                            <div className="col1">
-                              <p className="movie-description">
+                          <div className={MovieCardStyle["mr-grid"]}>
+                            <div className={MovieCardStyle.col1}>
+                              <p
+                                className={MovieCardStyle["movie-description"]}
+                              >
                                 <TruncateDescription
                                   description={movie.overview}
                                 />
                               </p>
                             </div>
                           </div>
-                          <div className="mr-grid actors-row">
-                            <div className="col1">
-                              <p className="movie-actors">
+                          <div
+                            className={`${MovieCardStyle["mr-grid"]} ${MovieCardStyle["actors-row"]}`}
+                          >
+                            <div className={MovieCardStyle.col1}>
+                              <p className={MovieCardStyle["movie-actors"]}>
                                 <MovieCardActors actors={movie.actors} />
                               </p>
                             </div>
                           </div>
-                          <div className="mr-grid action-row">
-                            <div className="col2">
+                          <div
+                            className={`${MovieCardStyle["mr-grid"]} ${MovieCardStyle["action-row"]}`}
+                          >
+                            <div className={MovieCardStyle.col2}>
                               <button
-                                className="watch-btn"
+                                className={MovieCardStyle["watch-btn"]}
                                 type="button"
                                 onClick={() =>
                                   (window.location.href = `https://www.youtube.com/watch?v=${movie.video[0]}`)
@@ -140,13 +151,19 @@ export default function MovieCarousel({ title, endpoint }) {
                                 </h3>
                               </button>
                             </div>
-                            <div className="col6 action-btn">
+                            <div
+                              className={`${MovieCardStyle["col6"]} ${MovieCardStyle["action-btn"]}`}
+                            >
                               <i className="material-icons">&#xE161;</i>
                             </div>
-                            <div className="col6 action-btn">
+                            <div
+                              className={`${MovieCardStyle["col6"]} ${MovieCardStyle["action-btn"]}`}
+                            >
                               <i className="material-icons">&#xE866;</i>
                             </div>
-                            <div className="col6 action-btn">
+                            <div
+                              className={`${MovieCardStyle["col6"]} ${MovieCardStyle["action-btn"]}`}
+                            >
                               <i className="material-icons">&#xE80D;</i>
                             </div>
                           </div>
