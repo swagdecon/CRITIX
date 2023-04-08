@@ -3,6 +3,10 @@ package com.popflix.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -18,6 +22,7 @@ import info.movito.themoviedbapi.model.ProductionCompany;
 import info.movito.themoviedbapi.model.Reviews;
 import info.movito.themoviedbapi.model.Video;
 import info.movito.themoviedbapi.model.people.PersonCast;
+import jakarta.annotation.PostConstruct;
 
 @Service
 
@@ -35,6 +40,18 @@ public class MovieService {
     Query query = new Query();
     query.addCriteria(Criteria.where("id").is(id));
     return Optional.ofNullable(mongoTemplate.findOne(query, Movie.class, collectionName));
+  }
+
+  private ScheduledExecutorService executor;
+
+  @PostConstruct
+  public void init() {
+    executor = Executors.newScheduledThreadPool(1);
+    executor.scheduleAtFixedRate(this::updateMovies, 0, 24, TimeUnit.HOURS);
+  }
+
+  public void shutdown() {
+    executor.shutdown();
   }
 
   @Scheduled(fixedRate = 24 * 60 * 60 * 1000, initialDelay = 0)
