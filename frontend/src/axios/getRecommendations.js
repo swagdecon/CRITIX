@@ -16,7 +16,7 @@ export default async function getRecommendations(movieId) {
       const detailsResponse = await axios.get(
         `https://api.themoviedb.org/3/movie/${movie.id}?api_key=${api_key}&language=${language}`
       );
-      return { ...movie, details: detailsResponse.data };
+      return { ...movie, ...detailsResponse.data };
     })
   );
   console.log(recommendedMovies);

@@ -28,7 +28,7 @@ function MovieRuntime({ runtime }) {
   if (!runtime) {
     return "No Runtime Available";
   }
-  return `${runtime} mins`;
+  return `${runtime} mins |`;
 }
 
 function getYearFromDate(dateString) {
@@ -50,7 +50,7 @@ function MovieAverage({ voteAverage }) {
     return "No Rating";
   }
   let rating = parseFloat(voteAverage).toFixed(1);
-  return rating;
+  return rating + " | ";
 }
 
 function MovieGenres({ genres }) {
@@ -70,10 +70,33 @@ function MovieGenres({ genres }) {
 }
 
 function MovieCardGenres({ genres }) {
-  if (!Array.isArray(genres)) {
+  if (!genres) {
+    // If genres is falsy, return "No genres available"
     return "No genres available";
   }
-  return genres.join(" | ");
+  if (Array.isArray(genres)) {
+    // If genres is an array, proceed with checking if it's nested or not
+    const nestedGenres = genres.filter((genre) => typeof genre === "object"); // Filter the nested genres by checking if their type is an object
+    if (nestedGenres.length > 0) {
+      // If there are nested genres, flatten the array and join them using " | "
+      const flattenedGenres = genres.flatMap((genre) => {
+        if (typeof genre === "object") {
+          // If genre is an object, return the name property
+          return genre.name;
+        } else {
+          // Otherwise, return the genre
+          return genre;
+        }
+      });
+      return flattenedGenres.join(" | ");
+    } else {
+      // If there are no nested genres, join the genres array using " | "
+      return genres.join(" | ");
+    }
+  } else {
+    // If genres is not an array, return "No genres available"
+    return "No genres available";
+  }
 }
 
 function MovieCardActors({ actors }) {
