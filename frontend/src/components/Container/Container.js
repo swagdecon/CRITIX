@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
-import Header from '../Header/Header';
-import "./Container.css"
-
+import React, { Component } from "react";
+import Header from "../Header/Header";
+import "./Container.css";
 class Container extends Component {
   constructor(props) {
     super(props);
-    this.apiKey = '87dfa1c669eea853da609d4968d294be';
+    this.apiKey = "87dfa1c669eea853da609d4968d294be";
     this.state = { data: [] };
   }
 
@@ -13,15 +12,15 @@ class Container extends Component {
     e.preventDefault();
     const val = this.searchInput.value;
     const requestUrl =
-      'https://api.themoviedb.org/3/search/multi?query=' +
+      "https://api.themoviedb.org/3/search/multi?query=" +
       val +
-      '&api_key=' +
+      "&api_key=" +
       this.apiKey;
 
     fetch(requestUrl)
-      .then(response => response.json())
-      .then(data => this.setState({ data: data }))
-      .catch(error => console.error(error));
+      .then((response) => response.json())
+      .then((data) => this.setState({ data: data }))
+      .catch((error) => console.error(error));
   };
 
   render() {
@@ -30,15 +29,9 @@ class Container extends Component {
     }
 
     return (
-      <div>
+      <section>
         <Header />
-        <div className="Search">
-          <form onSubmit={this.performSearch}>
-            <input type="text" ref={input => this.searchInput = input} />
-            <button type="submit">Search</button>
-          </form>
-        </div>
-      </div>
+      </section>
     );
   }
 }

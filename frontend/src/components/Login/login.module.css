@@ -7,13 +7,14 @@
 }
 html {
   -webkit-tap-highlight-color: transparent;
+  background-color: #000000;
+  /* overflow-y: hidden !important; */
 }
 body {
   font-family: "Roboto", sans-serif;
   font-weight: 300;
-  background: #181818;
+  background: #000000;
   color: #fff;
-  overflow: hidden;
 }
 h1,
 h2,
@@ -23,15 +24,13 @@ h5,
 h6 {
   font-weight: 300;
 }
-#wrapper {
-  display: flex;
-}
 
 #left {
+  left: 0;
+  top: 0;
   background-color: #1818184e;
   z-index: 1;
   position: absolute;
-  flex: 1;
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -84,10 +83,11 @@ h6 {
 }
 
 .homepage-logo {
+  margin-top: 5%;
   margin-bottom: 10px;
   position: relative;
   height: 60px;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
 }
 button {
   background-color: #ffffff00;
@@ -369,5 +369,4 @@ video {
 .creditIcon {
   width: 20px;
   height: 20px;
-  /* background-color: rgb(57, 57, 57); */
 }

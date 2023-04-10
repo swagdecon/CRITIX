@@ -7,11 +7,21 @@ const Navigation = () => {
     <div id="navigation" className="Navigation">
       <nav>
         <ul>
-          <Link className="nav-link" to="/homepage">HOME</Link>
-          <Link className="nav-link" to="#">IN THEATRES</Link>
-          <Link className="nav-link" to="#">UPCOMING</Link>
-          <Link className="nav-link" to="#">MOST POPULAR</Link>
-          <Link className="nav-link" to="#">WATCHLIST</Link>
+          <Link className="nav-link" to="/home">
+            HOME
+          </Link>
+          <Link className="nav-link" to="#">
+            IN THEATRES
+          </Link>
+          <Link className="nav-link" to="#">
+            UPCOMING
+          </Link>
+          <Link className="nav-link" to="#">
+            MOST POPULAR
+          </Link>
+          <Link className="nav-link" to="#">
+            WATCHLIST
+          </Link>
         </ul>
       </nav>
     </div>

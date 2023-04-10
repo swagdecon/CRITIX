@@ -1,23 +1,28 @@
 import { React, useState, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
-import { truncateDescription } from "../movieCardComponents.js";
+import {
+  MovieRuntime,
+  MovieAverage,
+  TruncateDescription,
+  MovieCardGenres,
+  MovieCardActors,
+} from "../../movieComponents.js";
 import PropTypes from "prop-types";
 import "./MovieCarousel.css";
-// Library that can perform array manipulation, in this case, splitting the movie into chunks of 5 to then loop over:
 import { chunk } from "lodash";
 import { useNavigate } from "react-router-dom";
-import "./title.scss";
-import "../../misc/moviecard.scss";
-const MovieCarousel = ({ title, endpoint }) => {
+import "../title.scss";
+import MovieCardStyle from "../../../misc/moviecard.module.scss";
+
+export default function MovieCarousel({ title, endpoint }) {
   const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
 
   const movieChunks = chunk(movies, 5);
-  //The chunk() method takes two arguments: the first argument is the array to be chunked, and the second argument (optional) is the size of each chunk. In this case, we pass 5 as the size of each chunk.
 
-  // The chunk() method returns an array of sub-arrays, where each sub-array contains 5 movies or less. We then use the same map() method as before to render the carousel slides and movie cards.
   MovieCarousel.propTypes = {
     title: PropTypes.string.isRequired,
   };
@@ -33,20 +38,13 @@ const MovieCarousel = ({ title, endpoint }) => {
         const tokenWithFingerprint = sessionStorage.getItem("jwt");
         const { token, fingerprint } = JSON.parse(tokenWithFingerprint);
 
-        const myResponse = await fetch(endpoint, {
+        const response = await axios.get(endpoint, {
           headers: {
             Authorization: `Bearer ${token}`,
             "X-Fingerprint": fingerprint,
           },
         });
-
-        if (myResponse.ok) {
-          const responseJson = await myResponse.json();
-          setMovies(responseJson);
-        } else {
-          console.log(`HTTP error! status: ${myResponse.status}`);
-          navigate("/403", { replace: true });
-        }
+        setMovies(response.data);
       } catch (error) {
         navigate("/403", { replace: true });
         console.log(error);
@@ -57,49 +55,55 @@ const MovieCarousel = ({ title, endpoint }) => {
   }, [endpoint]);
 
   return (
-    <body-1>
+    <section>
       <h3-title>{title}</h3-title>
       <Carousel className="carousel-movie" indicators={false} interval={null}>
         {movieChunks.map((chunk, i) => (
           <Carousel.Item key={i}>
             {chunk.map((movie, j) => (
-              <div className="card-container" key={`${i}-${j}`}>
+              <div
+                className={MovieCardStyle["card-container"]}
+                key={`${i}-${j}`}
+              >
                 <Link to={`${endpoint}/${movie.id}`}>
                   <div className="container">
-                    <div className="cellphone-container">
-                      <div className="movie">
-                        <div className="menu">
+                    <div className={MovieCardStyle["cellphone-container"]}>
+                      <div className={MovieCardStyle.movie}>
+                        <div className={MovieCardStyle.menu}>
                           <i className="material-icons"></i>
                         </div>
                         <div
-                          className="movie-img"
+                          className={MovieCardStyle["movie-img"]}
                           style={{
-                            backgroundImage: `url(https://image.tmdb.org/t/p/w500/${movie.poster_path})`,
+                            backgroundImage: `url(https://image.tmdb.org/t/p/w500/${movie.posterPath})`,
                           }}
                         ></div>
-                        <div className="text-movie-cont">
-                          <div className="mr-grid">
-                            <div className="col1">
-                              {/* .replace ensures there is only one space inbetween words */}
-                              {/* <h1>{movie.title.replace(/\s+/g, " ")}</h1> */}
-                              <ul className="movie-gen">
+                        <div className={MovieCardStyle["text-movie-cont"]}>
+                          <div className={MovieCardStyle["mr-grid"]}>
+                            <div className={MovieCardStyle.col1}>
+                              <ul className={MovieCardStyle["movie-gen"]}>
                                 <li>
-                                  {Math.round(movie.vote_average * 10) / 10}{" "}
+                                  <MovieAverage
+                                    voteAverage={movie.voteAverage}
+                                  />
                                 </li>
-                                <li>{movie.runtime} mins</li>
-                                <li>{movie.genres.join(", ")}</li>
+                                <li>
+                                  <MovieRuntime runtime={movie.runtime} />
+                                </li>
+                                <li>
+                                  <MovieCardGenres genres={movie.genres} />
+                                </li>
                               </ul>
                             </div>
                           </div>
-                          <div className="mr-grid summary-row">
-                            <div className="col2">
-                              {/* <h2>{movie.title}</h2> */}
-                              {/* <p>{movie.release_date}</p> */}
-                              {/* <p>{movie.tagline}</p> */}
+                          <div
+                            className={`${MovieCardStyle["mr-grid"]} ${MovieCardStyle["summary-row"]}`}
+                          >
+                            <div className={MovieCardStyle.col2}>
                               <h5>SUMMARY</h5>
                             </div>
-                            <div className="col2">
-                              <ul className="movie-likes">
+                            <div className={MovieCardStyle.col2}>
+                              <ul className={MovieCardStyle["movie-likes"]}>
                                 <li>
                                   <i className="material-icons">&#xE813;</i>
                                   124
@@ -110,34 +114,32 @@ const MovieCarousel = ({ title, endpoint }) => {
                               </ul>
                             </div>
                           </div>
-                          <div className="mr-grid">
-                            <div className="col1">
-                              <p className="movie-description">
-                                {truncateDescription(movie.overview)}
+                          <div className={MovieCardStyle["mr-grid"]}>
+                            <div className={MovieCardStyle.col1}>
+                              <p
+                                className={MovieCardStyle["movie-description"]}
+                              >
+                                <TruncateDescription
+                                  description={movie.overview}
+                                />
                               </p>
                             </div>
                           </div>
-                          <div className="mr-grid actors-row">
-                            <div className="col1">
-                              <p className="movie-actors">
-                                {movie.actors
-                                  .slice(0, 3)
-                                  .map((actor, index) => {
-                                    if (index === 0) {
-                                      return actor;
-                                    } else if (index < 3) {
-                                      return `, ${actor}`;
-                                    } else {
-                                      return "";
-                                    }
-                                  })}
+                          <div
+                            className={`${MovieCardStyle["mr-grid"]} ${MovieCardStyle["actors-row"]}`}
+                          >
+                            <div className={MovieCardStyle.col1}>
+                              <p className={MovieCardStyle["movie-actors"]}>
+                                <MovieCardActors actors={movie.actors} />
                               </p>
                             </div>
                           </div>
-                          <div className="mr-grid action-row">
-                            <div className="col2">
+                          <div
+                            className={`${MovieCardStyle["mr-grid"]} ${MovieCardStyle["action-row"]}`}
+                          >
+                            <div className={MovieCardStyle.col2}>
                               <button
-                                className="watch-btn"
+                                className={MovieCardStyle["watch-btn"]}
                                 type="button"
                                 onClick={() =>
                                   (window.location.href = `https://www.youtube.com/watch?v=${movie.video[0]}`)
@@ -149,13 +151,19 @@ const MovieCarousel = ({ title, endpoint }) => {
                                 </h3>
                               </button>
                             </div>
-                            <div className="col6 action-btn">
+                            <div
+                              className={`${MovieCardStyle["col6"]} ${MovieCardStyle["action-btn"]}`}
+                            >
                               <i className="material-icons">&#xE161;</i>
                             </div>
-                            <div className="col6 action-btn">
+                            <div
+                              className={`${MovieCardStyle["col6"]} ${MovieCardStyle["action-btn"]}`}
+                            >
                               <i className="material-icons">&#xE866;</i>
                             </div>
-                            <div className="col6 action-btn">
+                            <div
+                              className={`${MovieCardStyle["col6"]} ${MovieCardStyle["action-btn"]}`}
+                            >
                               <i className="material-icons">&#xE80D;</i>
                             </div>
                           </div>
@@ -169,8 +177,6 @@ const MovieCarousel = ({ title, endpoint }) => {
           </Carousel.Item>
         ))}
       </Carousel>
-    </body-1>
+    </section>
   );
-};
-
-export default MovieCarousel;
+}

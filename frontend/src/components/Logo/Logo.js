@@ -1,13 +1,11 @@
 import React from "react";
-import PopflixLogo from "../../misc/POPFLIX_LOGO_OFFICIAL.png"
-import "./Logo.css"
+import PopflixLogo from "./POPFLIX_LOGO_OFFICIAL.png";
+import AnimatedLogo from "./logo.module.css";
 
-const Logo = () => {
+export default function Logo() {
   return (
-    <div id="logo" className="Logo">
-      <img src={PopflixLogo} className="Logo" alt="logo" />
+    <div id="logo" className={AnimatedLogo.Logo}>
+      <img src={PopflixLogo} className={AnimatedLogo.Logo} alt="logo" />
     </div>
   );
-};
-
-export default Logo;
+}

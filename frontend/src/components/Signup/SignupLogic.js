@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../Login/login.css";
+import "../Login/login.module.css";
 import Popcorn from "../../misc/popcorn_logo";
 import Filter from "bad-words";
+import SignUpStyles from "../Login/login.module.css";
 
-function SignupFunctionality() {
+export default function SignUpFunctionality() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
@@ -40,7 +41,6 @@ function SignupFunctionality() {
     } else {
       setProfanityErrorMessage("");
     }
-
     try {
       const response = await fetch(
         "http://localhost:8080/api/v1/auth/register",
@@ -64,18 +64,19 @@ function SignupFunctionality() {
       navigate("/error", { replace: true });
     }
   };
+
   return (
     <form onSubmit={handleSubmit}>
-      <div-error>{error}</div-error>
-      <br></br>
-      <div-error>{profanityErrorMessage}</div-error>
+      <div className={SignUpStyles.error}>{error}</div>
+      <br />
+      <div className={SignUpStyles.error}>{profanityErrorMessage}</div>
       <div>
         <label htmlFor="email">Email Address</label>
         <input
           type="email"
           id="email"
           name="email"
-          className="text-input"
+          className={SignUpStyles["text-input"]}
           pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
           autoComplete="current-email"
           value={email}
@@ -89,7 +90,7 @@ function SignupFunctionality() {
           type="text"
           id="firstName"
           name="firstName"
-          className="text-input"
+          className={SignUpStyles["text-input"]}
           autoComplete="off"
           value={firstname}
           onChange={(event) => setFirstName(event.target.value)}
@@ -102,7 +103,7 @@ function SignupFunctionality() {
           type="text"
           id="lastName"
           name="lastName"
-          className="text-input"
+          className={SignUpStyles["text-input"]}
           autoComplete="off"
           value={lastname}
           onChange={(event) => setLastName(event.target.value)}
@@ -115,7 +116,7 @@ function SignupFunctionality() {
           type={passwordVisible ? "text" : "password"}
           id="password"
           name="password"
-          className="text-input"
+          className={SignUpStyles["text-input"]}
           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}"
           autoComplete="current-password"
           value={password}
@@ -123,22 +124,25 @@ function SignupFunctionality() {
           required
         />
 
-        <span className="eye" onClick={togglePasswordVisibility}>
+        <span className={SignUpStyles.eye} onClick={togglePasswordVisibility}>
           <i
             id="hide"
             className={`bi bi-eye${passwordVisible ? "-slash" : ""}`}
           ></i>
         </span>
       </div>
-      <button type="submit" onSubmit={handleSubmit} className="css-button">
-        <p className="css-button-text">SIGN UP</p>
-        <div className="css-button-inner">
-          <div className="reset-skew">
-            <Popcorn className="css-button-inner-text"></Popcorn>
+      <button
+        type="submit"
+        onSubmit={handleSubmit}
+        className={SignUpStyles["css-button"]}
+      >
+        <p className={SignUpStyles["css-button-text"]}>SIGN UP</p>
+        <div className={SignUpStyles["css-button-inner"]}>
+          <div className={SignUpStyles["reset-skew"]}>
+            <Popcorn className={SignUpStyles["css-button-inner-text"]} />
           </div>
         </div>
       </button>
     </form>
   );
 }
-export default SignupFunctionality;

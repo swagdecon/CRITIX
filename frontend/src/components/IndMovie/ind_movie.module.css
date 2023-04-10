@@ -5,14 +5,15 @@
   clear: both;
   visibility: hidden;
 }
-
-ind-movie-html,
+html {
+  overflow: auto;
+  overflow-x: hidden;
+}
 ind-movie-body {
   font-family: "Open Sans", sans-serif;
   color: #fff;
   width: 100%;
   height: 100%;
-  overflow-y: auto;
   position: absolute;
   background-size: cover;
   background-repeat: no-repeat;
@@ -41,7 +42,7 @@ a {
   left: 55%;
   top: 5vh;
   height: 100%;
-  width: auto;
+  margin-top: 40px;
 }
 .hero-poster img {
   width: auto;
@@ -111,6 +112,10 @@ ind-movie-nav {
   border: solid 2px #979596;
   position: relative;
   float: right;
+}
+.btn-wrapper {
+  margin-top: 1%;
+  float: left;
 }
 
 .ind-movie_search__anim::after {
@@ -320,16 +325,30 @@ ind-movie-nav {
   color: #fff;
 }
 /* Glowing Card css */
+
 .ind-movie-details-card {
   z-index: 1;
   border-radius: 8px;
-  position: absolute;
+  position: relative;
   margin: 70px auto 0;
   width: 50rem;
   height: 40vh;
-  margin-top: -15%;
-  margin-left: -6%;
   text-align: center;
+}
+
+@media only screen and (max-width: 600px) {
+  .ind-movie-details-card {
+    width: 90%;
+    margin: 50px auto 0;
+  }
+}
+
+/* Move card to the left and up */
+@media only screen and (min-width: 600px) {
+  .ind-movie-details-card {
+    margin-bottom: 85%;
+    margin-left: -20%;
+  }
 }
 
 .card-overlay {
@@ -343,6 +362,9 @@ ind-movie-nav {
 .movie-column {
   float: left;
   width: 50%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 /* Clear floats after the columns */
@@ -355,8 +377,9 @@ ind-movie-nav {
 .movie-info-row {
   display: flex;
 }
-.movie_info_text {
+.movie-info-text {
   display: inline-flex;
+  align-items: center;
   margin-left: 10%;
   min-width: 7rem;
 }
@@ -368,7 +391,9 @@ ind-movie-nav {
   font-size: 1vw;
   padding: 4vh;
 }
-
+.ind-movie-production-company {
+  padding-right: 3%;
+}
 .ind-movie-details-card ul li:nth-child(1) {
   color: #0096ff;
   filter: blur(10px);
@@ -478,7 +503,6 @@ ind-movie-nav {
   table-layout: fixed;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   position: relative;
 }
 
@@ -507,7 +531,7 @@ ind-movie-nav {
 }
 .indMovieEmbeddedTrailer {
   position: absolute;
-  bottom: 35rem;
+  bottom: 32rem;
   left: 58rem;
 }
 .ind-movie-poster {
@@ -525,42 +549,34 @@ ind-movie-nav {
 }
 /* CAST MEMBERS */
 .CastMembers {
-  position: absolute;
-  top: 51%;
-  right: 8%;
-  display: relative;
+  position: flex;
+  align-items: center;
+  justify-content: center;
+  width: 95rem;
+  transform: translateY(215%) translateX(-22%);
 }
 .profile-container {
-  height: 100vh;
-  width: 100vw;
-  max-height: 800px;
-  max-width: 1400px;
-  min-height: 600px;
-  min-width: 1000px;
   display: flex;
-  justify-content: space-around;
   align-items: center;
-  margin: 0 auto;
+  justify-content: space-around;
 }
 
 .card {
-  height: 379px;
-  width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
   background: grey;
   border-radius: 10px;
   transition: background 0.8s;
   overflow: hidden;
   background: black;
   box-shadow: 0 70px 63px -60px #000000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
 }
 
 .border {
-  height: 369px;
-  width: 290px;
+  height: 370px;
+  width: 295px;
   opacity: 0;
   background: transparent;
   border-radius: 10px;
@@ -580,15 +596,13 @@ ind-movie-nav {
 }
 
 h1.cast-title-1 {
-  position: absolute;
+  position: relative;
   top: 62%;
   right: 61%;
-
   font-family: "CoreCircus", sans-serif;
-  font-size: 2vw;
+  font-size: 1.75vw;
   text-align: center;
   line-height: 1;
-  margin-left: 3%;
   position: relative;
   color: #0096ff;
   letter-spacing: -0.5rem;

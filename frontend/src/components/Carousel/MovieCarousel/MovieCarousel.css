@@ -1,0 +1,11 @@
+.carousel-item {
+  text-align: center;
+}
+
+.carousel-movie .carousel-control-prev {
+  left: -6%;
+}
+
+.carousel-movie .carousel-control-next {
+  right: -6%;
+}

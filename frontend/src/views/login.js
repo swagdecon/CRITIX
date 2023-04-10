@@ -1,23 +1,20 @@
 import { React } from "react";
 import { Link } from "react-router-dom";
-import "../components/Login/login.css";
-import "../misc/logo.scss";
-import Logo from "../components/logo.js";
-import Logo_Text from "../misc/POPFLIX_LOGO_OFFICIAL.png";
+import "../components/Login/login.module.css";
+import "../components/Logo/logo.module.scss";
+import Logo from "../components/Logo/Loader.js";
+import Logo_Text from "../components/Logo/POPFLIX_LOGO_OFFICIAL.png";
 import LoginPlayer from "../components/Login/LoginVideo";
 import LoginFunctionality from "../components/Login/loginFunctionality";
+import LoginStyles from "../components/Login/login.module.css";
 
-function Login() {
+export default function Login() {
   return (
     <html lang="en">
       <head>
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link
-          href="https://www.youtube.com/embed/U3-iXA6H3Q0?start=155&autoplay=1&loop=1&mute=1&modestbranding=1&controls=0&autohide=1&vq=2160&playlist=U3-iXA6H3Q0"
-          as="video"
-        />
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
@@ -26,35 +23,37 @@ function Login() {
         <title>Log in</title>
       </head>
       <body>
-        <div id="wrapper">
-          <div id="left">
-            <div id="signin">
-              <Logo />
-              <img src={Logo_Text} className="homepage-logo" alt="logo" />
-              <LoginFunctionality></LoginFunctionality>
-              <div className="or">
-                <hr className="bar" />
-                <span>OR</span>
-                <hr className="bar" />
-              </div>
-              <Link to="/" className="secondary-btn">
-                SIGN UP
-              </Link>
+        <div id={LoginStyles.left}>
+          <div id={LoginStyles.signin}>
+            <Logo />
+            <img
+              src={Logo_Text}
+              className={LoginStyles["homepage-logo"]}
+              alt="logo"
+            />
+            <LoginFunctionality />
+            <div className={LoginStyles.or}>
+              <hr className={LoginStyles.bar} />
+              <span>OR</span>
+              <hr className={LoginStyles.bar} />
             </div>
-            <footer id="main-footer">
-              <p>Copyright &copy; 2022, All Rights Reserved By POPFLIX</p>
-              <div>
-                <Link to="#">Terms of Use</Link> |{" "}
-                <Link to="#">Privacy Policy</Link>
-              </div>
-            </footer>
+            <Link to="/" className={LoginStyles["secondary-btn"]}>
+              SIGN UP
+            </Link>
           </div>
-          <div id="right">
-            <div id="showcase">
-              <div className="showcase-content">
-                <div className="overlay">
-                  <LoginPlayer></LoginPlayer>
-                </div>
+          <footer id={LoginStyles["main-footer"]}>
+            <p>&copy; 2022, All Rights Reserved By POPFLIX</p>
+            <div>
+              <Link to="#">Terms of Use</Link> |{" "}
+              <Link to="#">Privacy Policy</Link>
+            </div>
+          </footer>
+        </div>
+        <div id={LoginStyles.right}>
+          <div id={LoginStyles.showcase}>
+            <div className={LoginStyles["showcase-content"]}>
+              <div className={LoginStyles.overlay}>
+                <LoginPlayer />
               </div>
             </div>
           </div>
@@ -63,4 +62,3 @@ function Login() {
     </html>
   );
 }
-export default Login;

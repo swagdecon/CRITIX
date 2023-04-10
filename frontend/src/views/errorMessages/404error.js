@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../misc/error.css";
-// import { Link } from "react-router-dom";
+import "../../misc/error.css";
 
 function Error404() {
   return (

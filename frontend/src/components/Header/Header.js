@@ -5,7 +5,7 @@ import Search from "../Search/Search";
 import UserProfile from "../UserProfile/UserProfile";
 import "./Header.css";
 import PropTypes from "prop-types";
-const Header = (props) => {
+export default function Header(props) {
   return (
     <header className="Header">
       <Logo />
@@ -14,8 +14,7 @@ const Header = (props) => {
       <UserProfile />
     </header>
   );
-};
+}
 Header.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func,
 };
-export default Header;
