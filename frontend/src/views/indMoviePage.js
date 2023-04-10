@@ -12,8 +12,8 @@ import {
   getYearFromDate,
   MovieReviews,
   MovieDetails,
-  RecommendedCarousel,
 } from "../components/movieComponents";
+import RecommendedCarousel from "../components/Carousel/RecommendedCarousel/RecommendedCarousel";
 import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel";
 import Popcorn from "../misc/popcorn_logo";
 import "../misc/popcorn_logo.css";
