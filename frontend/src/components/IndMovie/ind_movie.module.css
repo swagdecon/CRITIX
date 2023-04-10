@@ -549,42 +549,34 @@ ind-movie-nav {
 }
 /* CAST MEMBERS */
 .CastMembers {
-  position: absolute;
-  top: 51%;
-  right: 6%;
-  display: relative;
+  position: flex;
+  align-items: center;
+  justify-content: center;
+  width: 95rem;
+  transform: translateY(215%) translateX(-22%);
 }
 .profile-container {
-  height: 100vh;
-  width: 100vw;
-  max-height: 800px;
-  max-width: 1400px;
-  min-height: 600px;
-  min-width: 1000px;
   display: flex;
-  justify-content: space-around;
   align-items: center;
-  margin: 0 auto;
+  justify-content: space-around;
 }
 
 .card {
-  height: 379px;
-  width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
   background: grey;
   border-radius: 10px;
   transition: background 0.8s;
   overflow: hidden;
   background: black;
   box-shadow: 0 70px 63px -60px #000000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
 }
 
 .border {
-  height: 369px;
-  width: 290px;
+  height: 370px;
+  width: 295px;
   opacity: 0;
   background: transparent;
   border-radius: 10px;
