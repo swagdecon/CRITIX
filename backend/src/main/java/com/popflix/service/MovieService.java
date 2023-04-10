@@ -108,7 +108,7 @@ public class MovieService {
         for (PersonCast cast : castList) {
           actorNames.add(cast.getName());
         }
-        for (int i = 0; i < Math.min(castList.size(), 5); i++) {
+        for (int i = 0; i < castList.size(); i++) {
           PersonCast cast = castList.get(i);
           actorImagePaths.add(cast.getProfilePath());
         }
