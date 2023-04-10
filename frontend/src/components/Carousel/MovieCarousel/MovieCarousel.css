@@ -2,10 +2,10 @@
   text-align: center;
 }
 
-.carousel-control-prev {
+.carousel-movie .carousel-control-prev {
   left: -6%;
 }
 
-.carousel-control-next {
+.carousel-movie .carousel-control-next {
   right: -6%;
 }

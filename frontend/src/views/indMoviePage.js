@@ -10,11 +10,11 @@ import {
   MovieTrailer,
   MovieAverage,
   getYearFromDate,
-  MovieActors,
   MovieReviews,
   MovieDetails,
   RecommendedCarousel,
 } from "../components/movieComponents";
+import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel";
 import Popcorn from "../misc/popcorn_logo";
 import "../misc/popcorn_logo.css";
 import SignUpStyles from "../components/Login/login.module.css";
