@@ -14,7 +14,7 @@ ind-movie-body {
   color: #fff;
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: flex;
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -23,11 +23,11 @@ a {
 }
 
 .ind-movie-wrapper {
-  position: absolute;
+  position: flex;
   z-index: 2;
 }
 .background {
-  position: fixed;
+  position: absolute;
   background-size: cover;
   background-repeat: no-repeat;
   width: 100%;
@@ -39,16 +39,12 @@ a {
 .hero-poster {
   position: absolute;
   z-index: 999;
-  left: 55%;
-  top: 5vh;
-  height: 100%;
-  margin-top: 40px;
+  transform: translateX(55vw) translateY(9vh);
+
+  height: 90%;
 }
 .hero-poster img {
-  width: auto;
-  height: 90%;
-  display: block;
-  margin: 0 auto;
+  height: 100%;
 }
 @media screen and (max-width: 600px) {
   .poster img {
@@ -67,7 +63,7 @@ ind-movie-h1 {
   font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 0.15rem;
-  position: fixed;
+  position: flex;
   top: 4.2rem;
   left: 4rem;
 }
@@ -80,7 +76,7 @@ ind-movie-h1 {
 
 ind-movie-nav {
   z-index: 1;
-  position: fixed;
+  position: flex;
   top: 4rem;
   right: 4rem;
 }
@@ -105,20 +101,20 @@ ind-movie-nav {
   padding: 0.2rem 1rem 0.2rem 1rem;
   width: 10rem;
 }
-.ind-movie_search__anim {
+/* .ind-movie_search__anim {
   width: 16px;
   height: 16px;
   border-radius: 50%;
   border: solid 2px #979596;
   position: relative;
   float: right;
-}
+} */
 .btn-wrapper {
   margin-top: 1%;
   float: left;
 }
 
-.ind-movie_search__anim::after {
+/* .ind-movie_search__anim::after {
   content: "";
   width: 2px;
   height: 12px;
@@ -127,8 +123,8 @@ ind-movie-nav {
   top: 12px;
   left: 18px;
   transform: rotate(135deg);
-}
-.ind-movie-search input {
+} */
+/* .ind-movie-search input {
   float: right;
   border: 0;
   padding: 0.2rem 0 0.2rem 0;
@@ -143,8 +139,8 @@ ind-movie-nav {
   background-color: rgba(255, 255, 255, 0.1);
   -webkit-appearance: none;
   outline: none;
-}
-@media screen and (max-width: 600px) {
+} */
+/* @media screen and (max-width: 600px) {
   .ind-movie-search button {
     position: flex;
     top: 0;
@@ -154,7 +150,7 @@ ind-movie-nav {
     cursor: pointer;
     opacity: 0;
   }
-}
+} */
 @media screen and (max-width: 600px) {
   .arrow__container {
     bottom: 1rem;
@@ -180,14 +176,14 @@ ind-movie-nav {
   }
 }
 .ind-movie-header {
-  max-width: 1150px;
-  width: 100%;
+  max-width: 45.5vw;
+
   margin: 0 auto;
 }
 
 .movie__score,
 .review__score {
-  max-width: 55%;
+  max-width: 100%;
   width: 100%;
   margin: 0 0;
   padding-top: 30vh;
@@ -215,7 +211,6 @@ ind-movie-nav {
 .movie__title__container {
   max-width: 55%;
   width: 100%;
-  margin: 0 0;
   padding-top: 1rem;
   transform: translateX(-0.25rem);
 }
@@ -226,7 +221,7 @@ ind-movie-nav {
 }
 .movie__year {
   font-size: 4.5rem;
-  display: inline;
+  display: flex;
   color: #979596;
 }
 @media screen and (max-width: 600px) {
@@ -258,7 +253,7 @@ ind-movie-nav {
   width: 100%;
   max-width: 55%;
   margin: 0 0;
-  display: block;
+  display: flex;
   color: #ffffff;
   font-size: 1.1rem;
   padding-top: 3rem;
@@ -269,12 +264,13 @@ ind-movie-nav {
 .review__description {
   width: 100%;
   margin: 0 0;
-  display: block;
+
+  display: flex;
   color: #ffffff;
   font-size: 1.1rem;
   padding-top: 3rem;
   line-height: 2rem;
-  text-align: justify;
+  text-align: start;
 }
 @media screen and (max-width: 600px) {
   .movie__description {
@@ -291,9 +287,9 @@ ind-movie-nav {
   max-width: 55%;
 }
 
-.ind_movie__trailer {
+/* .ind_movie__trailer {
   margin-top: 3rem;
-  display: inline-block;
+  display: flex;
   padding: 1.2rem 2.5rem 1.2rem 2.5rem;
   border: solid 1px #494646;
   cursor: pointer;
@@ -323,7 +319,7 @@ ind-movie-nav {
 }
 .ind_movie__trailer:hover p {
   color: #fff;
-}
+} */
 /* Glowing Card css */
 
 .ind-movie-details-card {
@@ -331,8 +327,8 @@ ind-movie-nav {
   border-radius: 8px;
   position: relative;
   margin: 70px auto 0;
-  width: 50rem;
-  height: 40vh;
+  width: 33vw;
+  transform: translateY(-55vh);
   text-align: center;
 }
 
@@ -353,15 +349,13 @@ ind-movie-nav {
 
 .card-overlay {
   z-index: 2;
-  width: 50rem;
-  height: 40vh;
   border-radius: 8px;
   background-color: #000000;
 }
 
 .movie-column {
   float: left;
-  width: 50%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -381,7 +375,7 @@ ind-movie-nav {
   display: inline-flex;
   align-items: center;
   margin-left: 10%;
-  min-width: 7rem;
+  min-width: 5vw;
 }
 
 .movie-Details-Title {
@@ -391,9 +385,7 @@ ind-movie-nav {
   font-size: 1vw;
   padding: 4vh;
 }
-.ind-movie-production-company {
-  padding-right: 3%;
-}
+
 .ind-movie-details-card ul li:nth-child(1) {
   color: #0096ff;
   filter: blur(10px);
@@ -455,7 +447,7 @@ ind-movie-nav {
 }
 
 .ind_movie_review {
-  max-width: 1150px;
+  max-width: 46vw;
   width: 100%;
   margin: 0 auto;
   padding-top: 5rem;
@@ -530,23 +522,22 @@ ind-movie-nav {
   color: #b2b2b2;
 }
 .indMovieEmbeddedTrailer {
-  position: absolute;
-  bottom: 32rem;
-  left: 58rem;
+  position: flex;
+  transform: translateX(28.5vw) translateY(2vh);
 }
-.ind-movie-poster {
-  position: absolute;
+/* .ind-movie-poster {
+  position: flex;
   bottom: 40%;
   left: 1%;
-}
+} */
 
-.budget_icons_container {
+/* .budget_icons_container {
   display: flex;
   align-items: left;
 }
 .budget-text {
   margin-left: 0.5rem;
-}
+} */
 /* CAST MEMBERS */
 .CastMembers {
   position: flex;
@@ -575,7 +566,7 @@ ind-movie-nav {
 }
 
 .border {
-  height: 370px;
+  height: 28vh;
   width: 295px;
   opacity: 0;
   background: transparent;
@@ -597,13 +588,11 @@ ind-movie-nav {
 
 h1.cast-title-1 {
   position: relative;
-  top: 62%;
-  right: 61%;
+  transform: translateX(-31vw) translateY(53vh);
   font-family: "CoreCircus", sans-serif;
   font-size: 1.75vw;
   text-align: center;
   line-height: 1;
-  position: relative;
   color: #0096ff;
   letter-spacing: -0.5rem;
 }
@@ -614,7 +603,7 @@ h1.cast-title-1 {
   opacity: 0;
   transition: opacity 1s;
 }
-.fa {
+/* .fa {
   opacity: 0;
   transition: opacity 1s;
 }
@@ -630,4 +619,4 @@ h1.cast-title-1 {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-}
+} */

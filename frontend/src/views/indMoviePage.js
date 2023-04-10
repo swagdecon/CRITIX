@@ -142,8 +142,8 @@ export default function IndMovie() {
                     url={`https://www.youtube.com/watch?v=${movie.video}`}
                     controls={true}
                     playing={false}
-                    width={"1500px"}
-                    height={"750px"}
+                    width={"62vw"}
+                    height={"55vh"}
                   />
                   <MovieDetails
                     runtime={movie.runtime}
