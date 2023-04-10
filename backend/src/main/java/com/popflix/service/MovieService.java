@@ -57,7 +57,6 @@ public class MovieService {
     executor.shutdown();
   }
 
-  @Scheduled(fixedRate = 24 * 60 * 60 * 1000, initialDelay = 0)
   public void updateMovies() {
     saveNowPlayingMovies();
     savePopularMovies();
