@@ -21,6 +21,11 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
+    @GetMapping("/movie/{id}")
+    public ResponseEntity<Optional<Movie>> getSingleMovie(@PathVariable Integer id) {
+        return new ResponseEntity<Optional<Movie>>(movieService.singleTmdbMovie(id), HttpStatus.OK);
+    }
+
     @GetMapping("/popular")
     public ResponseEntity<List<Movie>> getPopularMovies() {
         return new ResponseEntity<List<Movie>>(movieService.allMovies("popular"), HttpStatus.OK);

@@ -46,7 +46,7 @@ export default function IndMovie() {
         console.log(error);
       }
     }
-
+    // fetchTmdbData();
     if (!requestSent) {
       // check if request has been sent before
       fetchData();
@@ -57,7 +57,10 @@ export default function IndMovie() {
   if (!dataLoaded) {
     return <div>Loading...</div>;
   }
-  let movieBackdrop = `url(https://image.tmdb.org/t/p/original${movie.backdropPath}) `;
+
+  let movieBackdrop =
+    `url(https://image.tmdb.org/t/p/original${movie.backdropPath}) ` ||
+    `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`;
   let moviePosterPath = `https://image.tmdb.org/t/p/original${movie.posterPath}`;
   return (
     <html>
