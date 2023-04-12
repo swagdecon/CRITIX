@@ -24,7 +24,6 @@ export default function RecommendedCarousel({ movieId }) {
     };
     fetchRecommendations();
   }, [movieId]);
-
   return (
     <section>
       <Carousel className="carousel-movie" indicators={false} interval={null}>
