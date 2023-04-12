@@ -6,12 +6,10 @@ import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import com.popflix.model.Movie;
 import info.movito.themoviedbapi.TmdbApi;
@@ -40,6 +38,40 @@ public class MovieService {
     Query query = new Query();
     query.addCriteria(Criteria.where("id").is(id));
     return Optional.ofNullable(mongoTemplate.findOne(query, Movie.class, collectionName));
+  }
+
+  public Optional<Movie> singleTmdbMovie(Integer id) {
+    Movie movie = new Movie();
+    movie.setId(id);
+
+    MovieDb movieDb = tmdbApi.getMovies().getMovie(movie.getId(), "en-US");
+
+    movie.setAdult(movieDb.isAdult());
+    movie.setTitle(movieDb.getOriginalTitle());
+    movie.setOriginalLanguage(movieDb.getOriginalLanguage());
+    movie.setOverview(movieDb.getOverview());
+    movie.setPopularity(movieDb.getPopularity());
+    movie.setPosterPath(movieDb.getPosterPath());
+    movie.setBackdropPath(movieDb.getBackdropPath());
+    movie.setImdbId(movieDb.getImdbID());
+    movie.setReleaseDate(movieDb.getReleaseDate());
+    movie.setVideo(movie.getVideo());
+    movie.setVoteAverage(movie.getVoteAverage());
+    movie.setVoteCount(movie.getVoteCount());
+    updateTmdbMovieDetails(movie);
+
+    // movie.setTagline(tmdbMovie.getTagline());
+    // movie.setRevenue(tmdbMovie.getRevenue());
+    // movie.setRuntime(tmdbMovie.getRuntime());
+    // movie.setMovieStatus(tmdbMovie.getStatus());
+
+    // movie.setProductionCompanies(tmdbMovie.getProductionCompanies());
+    // movie.setActors(tmdbMovie.getActors());
+    // movie.setReviews(tmdbMovie.getReviews());
+    // movie.setVideo(tmdbMovie.getVideo());
+    // movie.setVoteAverage(tmdbMovie.getVoteAverage());
+    // movie.setVoteCount(tmdbMovie.getVoteCount());
+    return Optional.of(movie);
   }
 
   // ScheduledExecutorService is created in the init method and a task is
@@ -108,7 +140,7 @@ public class MovieService {
         for (PersonCast cast : castList) {
           actorNames.add(cast.getName());
         }
-        for (int i = 0; i < Math.min(castList.size(), 5); i++) {
+        for (int i = 0; i < castList.size(); i++) {
           PersonCast cast = castList.get(i);
           actorImagePaths.add(cast.getProfilePath());
         }
@@ -184,6 +216,121 @@ public class MovieService {
     }
   }
 
+  public void updateTmdbMovieDetails(Movie movie) {
+    MovieDb movieDb = tmdbApi.getMovies().getMovie(movie.getId(), "en-US");
+
+    if (movie.getBudget() == null) {
+      movie.setBudget(movieDb.getBudget());
+    }
+    if (movie.getTagline() == null) {
+      movie.setTagline(movieDb.getTagline());
+    }
+    if (movie.getRevenue() == null) {
+      movie.setRevenue(movieDb.getRevenue());
+    }
+    if (movie.getRuntime() == null) {
+      movie.setRuntime(movieDb.getRuntime());
+    }
+    if (movie.getGenres() == null || movie.getGenres().isEmpty()) {
+      // Get the movie genres
+      List<Genre> genres = movieDb.getGenres();
+
+      // Extract the movie genre names
+      List<String> genreNames = new ArrayList<>();
+      for (Genre genre : genres) {
+        genreNames.add(genre.getName());
+      }
+      movie.setGenres(genreNames);
+    }
+
+    if (movie.getActors() == null || movie.getActors().isEmpty() ||
+        movie.getActorImagePaths() == null
+        || movie.getActorImagePaths().isEmpty()) {
+      Credits movieCredits = tmdbApi.getMovies().getCredits(movie.getId());
+      List<PersonCast> castList = movieCredits.getCast();
+      List<String> actorNames = new ArrayList<>();
+      List<String> actorImagePaths = new ArrayList<>();
+      for (PersonCast cast : castList) {
+        actorNames.add(cast.getName());
+      }
+      for (int i = 0; i < castList.size(); i++) {
+        PersonCast cast = castList.get(i);
+        actorImagePaths.add(cast.getProfilePath());
+      }
+      movie.setActors(actorNames);
+      movie.setActorImagePaths(actorImagePaths);
+    }
+
+    if (movie.getReviews() == null || movie.getReviews().isEmpty()) {
+      List<Reviews> reviews = tmdbApi.getReviews().getReviews(movie.getId(),
+          "en-US", 1).getResults();
+
+      // Extract the review text for each review
+      List<String> reviewTexts = new ArrayList<>();
+      for (Reviews review : reviews) {
+        String content = review.getContent();
+        if (content.split("\\s+").length < 300 && !content.contains("SPOILER-FREE")
+            && content.split("\\s+").length > 20) {
+          reviewTexts.add(content);
+        }
+      }
+
+      movie.setReviews(reviewTexts);
+    }
+
+    if (movie.getVoteAverage() == null) {
+      float voteAverage = movieDb.getVoteAverage();
+
+      movie.setVoteAverage(voteAverage);
+    }
+
+    if (movie.getImdbId() == null) {
+      String imdbId = movieDb.getImdbID();
+
+      movie.setImdbId(imdbId);
+    }
+
+    if (movie.getProductionCompanies() == null ||
+        movie.getProductionCompanies().isEmpty()) {
+      // Get the movie production companies
+      List<ProductionCompany> productionCompaniesList = movieDb.getProductionCompanies();
+
+      // Extract the movie production company names
+      List<String> productionCompanies = new ArrayList<>();
+      for (ProductionCompany productionCompany : productionCompaniesList) {
+        productionCompanies.add(productionCompany.getName());
+      }
+      movie.setProductionCompanies(productionCompanies);
+    }
+
+    if (movie.getMovieStatus() == null || movie.getMovieStatus().isEmpty()) {
+      String movieStatus = tmdbApi.getMovies().getMovie(movie.getId(),
+          "en-US").getStatus();
+      movie.setMovieStatus(movieStatus);
+    }
+
+    if (movie.getVideo() == null || movie.getVideo().isEmpty()) {
+      List<Video> movieVideos = tmdbApi.getMovies().getVideos(movie.getId(),
+          "en-US");
+
+      // Extract the video key for the main trailer
+      String mainTrailerKey = null;
+      for (Video video : movieVideos) {
+        if (video.getType().equals("Trailer") && video.getSite().equals("YouTube")) {
+          mainTrailerKey = video.getKey();
+          break;
+        }
+      }
+
+      // Set the main trailer video key for the movie
+      if (mainTrailerKey != null) {
+        List<String> videoKeys = new ArrayList<>();
+        videoKeys.add(mainTrailerKey);
+        movie.setVideo(videoKeys);
+      }
+    }
+  }
+
   public void saveNowPlayingMovies() {
     List<MovieDb> upcomingMovies = tmdbApi.getMovies().getNowPlayingMovies("en-US", 1, "").getResults();
     List<Movie> movies = new ArrayList<>();
@@ -204,8 +351,6 @@ public class MovieService {
       movie.setVideo(movie.getVideo());
       movie.setVoteAverage(movie.getVoteAverage());
       movie.setVoteCount(movie.getVoteCount());
-      movies.add(movie);
-
       movies.add(movie);
       mongoTemplate.save(movie, "now_playing");
     }
@@ -233,7 +378,6 @@ public class MovieService {
       movie.setVoteCount(movie.getVoteCount());
       movies.add(movie);
 
-      movies.add(movie);
       mongoTemplate.save(movie, "popular");
     }
   }

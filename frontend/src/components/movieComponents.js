@@ -50,7 +50,7 @@ function MovieAverage({ voteAverage }) {
     return "No Rating";
   }
   let rating = parseFloat(voteAverage).toFixed(1);
-  return rating + " | ";
+  return rating;
 }
 
 function MovieGenres({ genres }) {

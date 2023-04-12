@@ -23,6 +23,7 @@ export default function IndMovie() {
   const [movie, setMovie] = useState({});
   const [dataLoaded, setDataLoaded] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
+  const [prevId, setPrevId] = useState(null); // add previous id state variable (needed for recommended movies)
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -47,17 +48,26 @@ export default function IndMovie() {
       }
     }
 
-    if (!requestSent) {
-      // check if request has been sent before
-      fetchData();
-      setRequestSent(true); // set state to indicate that request has been sent
+    if (prevId !== id) {
+      // compare current url id with previous url id
+      setRequestSent(false); // reset requestSent state variable
+      setDataLoaded(false); // reset dataLoaded state variable
+      setPrevId(id); // update previous id state variable
     }
-  }, [requestSent, id, navigate]);
+
+    if (!requestSent) {
+      fetchData();
+      setRequestSent(true);
+    }
+  }, [requestSent, id, navigate, prevId]); // add prevId as a dependency
 
   if (!dataLoaded) {
     return <div>Loading...</div>;
   }
-  let movieBackdrop = `url(https://image.tmdb.org/t/p/original${movie.backdropPath}) `;
+
+  let movieBackdrop =
+    `url(https://image.tmdb.org/t/p/original${movie.backdropPath}) ` ||
+    `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`;
   let moviePosterPath = `https://image.tmdb.org/t/p/original${movie.posterPath}`;
   return (
     <html>
@@ -142,8 +152,8 @@ export default function IndMovie() {
                     url={`https://www.youtube.com/watch?v=${movie.video}`}
                     controls={true}
                     playing={false}
-                    width={"1500px"}
-                    height={"750px"}
+                    width={"62vw"}
+                    height={"55vh"}
                   />
                   <MovieDetails
                     runtime={movie.runtime}
