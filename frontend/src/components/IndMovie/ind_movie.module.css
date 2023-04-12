@@ -328,6 +328,7 @@ ind-movie-nav {
   position: relative;
   margin: 70px auto 0;
   width: 33vw;
+  height: 38vh;
   transform: translateY(-55vh);
   text-align: center;
 }
@@ -350,6 +351,7 @@ ind-movie-nav {
 .card-overlay {
   z-index: 2;
   border-radius: 8px;
+  height: inherit;
   background-color: #000000;
 }
 

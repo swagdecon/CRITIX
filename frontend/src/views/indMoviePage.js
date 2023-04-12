@@ -62,7 +62,7 @@ export default function IndMovie() {
   }, [requestSent, id, navigate, prevId]); // add prevId as a dependency
 
   if (!dataLoaded) {
-    return <div></div>;
+    return <div>Loading...</div>;
   }
 
   let movieBackdrop =
