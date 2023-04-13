@@ -175,9 +175,11 @@ export default function IndMovie() {
               </div>
             </div>
           </section>
-          <section className={IndMovieStyle.recommended_movies}>
-            <RecommendedCarousel movieId={movie.id} />
-          </section>
+          {RecommendedCarousel && (
+            <section className={IndMovieStyle.recommended_movies}>
+              <RecommendedCarousel movieId={movie.id} />
+            </section>
+          )}
         </div>
       </ind-movie-body>
     </html>
