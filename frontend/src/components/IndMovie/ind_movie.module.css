@@ -11,12 +11,6 @@ html {
 }
 ind-movie-body {
   font-family: "Open Sans", sans-serif;
-  color: #fff;
-  width: 100%;
-  height: fit-content;
-  position: flex;
-  background-size: cover;
-  background-repeat: no-repeat;
 }
 a {
   color: #fff;
@@ -24,15 +18,13 @@ a {
 
 .ind-movie-wrapper {
   position: flex;
-  z-index: 2;
+  z-index: 1;
 }
 .background {
   position: absolute;
   background-size: cover;
-  background-repeat: no-repeat;
   width: 100%;
   height: 100%;
-  z-index: 1;
   filter: blur(10px) brightness(0.35);
 }
 
@@ -40,7 +32,6 @@ a {
   position: absolute;
   z-index: 999;
   transform: translateX(55vw) translateY(9vh);
-
   height: 90%;
 }
 .hero-poster img {
@@ -263,7 +254,6 @@ ind-movie-nav {
 .review__description {
   width: 100%;
   margin: 0 0;
-
   display: flex;
   color: #ffffff;
   font-size: 1.1rem;
@@ -322,7 +312,6 @@ ind-movie-nav {
 /* Glowing Card css */
 
 .ind-movie-details-card {
-  z-index: 1;
   border-radius: 8px;
   position: relative;
   margin: 70px auto 0;
@@ -359,7 +348,6 @@ ind-movie-nav {
   width: 100%;
   display: flex;
   flex-direction: column;
-  height: 100%;
 }
 
 /* Clear floats after the columns */
@@ -484,12 +472,7 @@ ind-movie-nav {
 }
 
 .bcg {
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
   height: 100%;
-  width: 100%;
   background-color: #000000;
 }
 
@@ -497,18 +480,13 @@ ind-movie-nav {
   display: table;
   table-layout: fixed;
   width: 100%;
-  height: 100%;
   position: relative;
 }
 
 .hsContent {
-  max-width: 450px;
-  margin: -150px auto 0 auto;
   display: table-cell;
   vertical-align: middle;
-  color: #ebebeb;
   padding: 0 8%;
-  text-align: center;
 }
 
 .hsContent h2,
@@ -528,19 +506,7 @@ ind-movie-nav {
   position: flex;
   transform: translateX(28.5vw) translateY(2vh);
 }
-/* .ind-movie-poster {
-  position: flex;
-  bottom: 40%;
-  left: 1%;
-} */
 
-/* .budget_icons_container {
-  display: flex;
-  align-items: left;
-}
-.budget-text {
-  margin-left: 0.5rem;
-} */
 /* CAST MEMBERS */
 .CastMembers {
   position: flex;
@@ -559,7 +525,6 @@ ind-movie-nav {
   display: flex;
   align-items: center;
   justify-content: space-around;
-
   background: grey;
   border-radius: 10px;
   transition: background 0.8s;
@@ -591,7 +556,7 @@ ind-movie-nav {
 
 h1.cast-title-1 {
   position: relative;
-  transform: translateX(-31vw) translateY(55vh);
+  transform: translateX(-31vw) translateY(63vh);
   font-family: "CoreCircus", sans-serif;
   font-size: 1.75vw;
   text-align: center;

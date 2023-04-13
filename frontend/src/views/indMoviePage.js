@@ -134,12 +134,7 @@ export default function IndMovie() {
             </div>
           </div>
           <section id="slide-1" className={IndMovieStyle["homeSlide"]}>
-            <div
-              className={IndMovieStyle.bcg}
-              data-center="background-position: 50% 0px;"
-              data-top-bottom="background-position: 50% -100px;"
-              data-anchor-target="#slide-1"
-            >
+            <div className={IndMovieStyle.bcg}>
               <div className={IndMovieStyle.hsContainer}>
                 <div
                   className={IndMovieStyle.hsContent}
@@ -168,7 +163,6 @@ export default function IndMovie() {
               </div>
             </div>
           </section>
-
           <section className={IndMovieStyle.recommended_movies}>
             <RecommendedCarousel movieId={movie.id} />
           </section>
