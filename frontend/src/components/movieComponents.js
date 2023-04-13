@@ -127,8 +127,10 @@ function MovieReviews({ reviews }) {
   MovieReviews.propTypes = {
     reviews: PropTypes.arrayOf(PropTypes.string),
   };
-  if (!reviews || reviews === "" || reviews == null) {
-    return <div>No Reviews Available</div>;
+  if (!reviews.length) {
+    return (
+      <div className={IndMovieStyle["no-reviews"]}>No Reviews Available</div>
+    );
   }
   const [maxHeight, setMaxHeight] = useState(500);
 

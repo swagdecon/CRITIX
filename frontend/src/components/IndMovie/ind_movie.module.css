@@ -476,7 +476,9 @@ ind-movie-nav {
 .review__description {
   padding: 1rem;
 }
-
+.no-reviews {
+  padding-top: 1vh;
+}
 /* Scrolling css */
 .homeSlide {
   height: 100vh;
