@@ -15,13 +15,19 @@ export default async function getRecommendations(movieId) {
       const detailsResponse = await axios.get(
         `https://api.themoviedb.org/3/movie/${movie.id}?api_key=${api_key}&language=${language}`
       );
-      return { ...movie, ...detailsResponse.data };
+      const castResponse = await axios.get(
+        `https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${api_key}`
+      );
+      const actors = castResponse.data.cast
+        .slice(0, 5)
+        .map((actor) => actor.name);
+
+      return { ...movie, ...detailsResponse.data, actors };
     })
   );
-
+  console.log(recommendedMovies);
   if (response.data.results.length === 0) {
     return null;
   }
-  console.log(response);
   return recommendedMovies;
 }

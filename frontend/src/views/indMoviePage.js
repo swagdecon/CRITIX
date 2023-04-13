@@ -3,13 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import IndMovieStyle from "../components/IndMovie/ind_movie.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import Container from "../components/Container/Container";
-import ReactPlayer from "react-player";
 import axios from "axios";
 import {
   MovieGenres,
   MovieTrailer,
   MovieAverage,
   getYearFromDate,
+  EmbeddedMovieTrailer,
   MovieReviews,
   MovieDetails,
 } from "../components/movieComponents";
@@ -147,14 +147,7 @@ export default function IndMovie() {
                   data-top="opacity: 0"
                   data-anchor-target="#slide-1 h2"
                 >
-                  <ReactPlayer
-                    className={IndMovieStyle.indMovieEmbeddedTrailer}
-                    url={`https://www.youtube.com/watch?v=${movie.video}`}
-                    controls={true}
-                    playing={false}
-                    width={"60vw"}
-                    height={"60vh"}
-                  />
+                  <EmbeddedMovieTrailer video={movie.video} />
                   <MovieDetails
                     runtime={movie.runtime}
                     revenue={movie.revenue}
