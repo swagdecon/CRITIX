@@ -152,8 +152,8 @@ export default function IndMovie() {
                     url={`https://www.youtube.com/watch?v=${movie.video}`}
                     controls={true}
                     playing={false}
-                    width={"62vw"}
-                    height={"55vh"}
+                    width={"60vw"}
+                    height={"60vh"}
                   />
                   <MovieDetails
                     runtime={movie.runtime}
@@ -175,11 +175,10 @@ export default function IndMovie() {
               </div>
             </div>
           </section>
-          {RecommendedCarousel && (
-            <section className={IndMovieStyle.recommended_movies}>
-              <RecommendedCarousel movieId={movie.id} />
-            </section>
-          )}
+
+          <section className={IndMovieStyle.recommended_movies}>
+            <RecommendedCarousel movieId={movie.id} />
+          </section>
         </div>
       </ind-movie-body>
     </html>

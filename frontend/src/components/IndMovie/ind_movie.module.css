@@ -91,16 +91,16 @@ ind-movie-nav {
   position: relative;
   height: 100vh;
 }
-.ind-movie-search {
+/* .ind-movie-search {
   float: right;
   position: relative;
-}
-.search input:focus,
+} */
+/* .search input:focus,
 .search .search:hover input,
 .search:hover .search input {
   padding: 0.2rem 1rem 0.2rem 1rem;
   width: 10rem;
-}
+} */
 /* .ind-movie_search__anim {
   width: 16px;
   height: 16px;
@@ -176,8 +176,7 @@ ind-movie-nav {
   }
 }
 .ind-movie-header {
-  max-width: 45.5vw;
-
+  max-width: 45.9vw;
   margin: 0 auto;
 }
 
@@ -592,7 +591,7 @@ ind-movie-nav {
 
 h1.cast-title-1 {
   position: relative;
-  transform: translateX(-31vw) translateY(53vh);
+  transform: translateX(-31vw) translateY(55vh);
   font-family: "CoreCircus", sans-serif;
   font-size: 1.75vw;
   text-align: center;
