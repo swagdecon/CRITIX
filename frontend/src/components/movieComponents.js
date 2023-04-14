@@ -188,6 +188,7 @@ function MovieReviews({ reviews }) {
     </div>
   );
 }
+
 function MovieDetails({
   runtime,
   revenue,

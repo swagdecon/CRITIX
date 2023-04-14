@@ -18,6 +18,7 @@ import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel";
 import Popcorn from "../misc/popcorn_logo";
 import "../misc/popcorn_logo.css";
 import SignUpStyles from "../components/Login/login.module.css";
+import LoadingPage from "./LoadingPage";
 
 export default function IndMovie() {
   const [movie, setMovie] = useState({});
@@ -62,7 +63,7 @@ export default function IndMovie() {
   }, [requestSent, id, navigate, prevId]); // add prevId as a dependency
 
   if (!dataLoaded) {
-    return <div>Loading...</div>;
+    return <LoadingPage />;
   }
 
   let movieBackdrop =
