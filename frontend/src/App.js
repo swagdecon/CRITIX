@@ -13,7 +13,7 @@ import PrivateRoute from "./components/privateRoutes.js";
 import Error403 from "./views/errorMessages/403error.js";
 import Error404 from "./views/errorMessages/404error.js";
 import IndMovie from "./views/indMoviePage.js";
-
+import LoadingPage from "./views/LoadingPage.js";
 export default function App() {
   return (
     <Router>
@@ -30,6 +30,7 @@ export default function App() {
         />
         <Route path="/api/movies/:endpoint/:id" element={<IndMovie />} />
         <Route path="/api/movies/movie/:id" element={<IndMovie />} />
+        <Route path="/test" element={<LoadingPage />} />
 
         <Route path="/403" element={<Error403 />} />
         <Route path="*" element={<Error404 />} />
