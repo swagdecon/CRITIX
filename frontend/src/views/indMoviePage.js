@@ -92,7 +92,6 @@ export default function IndMovie() {
           <div className={IndMovieStyle["hero-poster"]}>
             <img src={moviePosterPath} />
           </div>
-
           <div id="fade" className={IndMovieStyle["container-margin"]}>
             <div className={IndMovieStyle["ind-movie-header"]}>
               <div className={IndMovieStyle.movie__score}>
@@ -133,7 +132,7 @@ export default function IndMovie() {
               <MovieReviews reviews={movie.reviews} />
             </div>
           </div>
-          <section id="slide-1" className={IndMovieStyle["homeSlide"]}>
+          <section id="slide-1" className={IndMovieStyle.homeSlide}>
             <div className={IndMovieStyle.bcg}>
               <div className={IndMovieStyle.hsContainer}>
                 <div
@@ -163,6 +162,7 @@ export default function IndMovie() {
               </div>
             </div>
           </section>
+
           <section className={IndMovieStyle.recommended_movies}>
             <RecommendedCarousel movieId={movie.id} />
           </section>

@@ -17,8 +17,9 @@ a {
 }
 
 .ind-movie-wrapper {
-  position: flex;
+  position: relative;
   z-index: 1;
+  height: 100vh;
 }
 .background {
   position: absolute;
@@ -78,10 +79,6 @@ ind-movie-nav {
   }
 }
 
-.ind-movie-wrapper {
-  position: relative;
-  height: 100vh;
-}
 /* .ind-movie-search {
   float: right;
   position: relative;
@@ -468,11 +465,11 @@ ind-movie-nav {
 }
 /* Scrolling css */
 .homeSlide {
-  height: 100vh;
+  height: 100%;
 }
 
 .bcg {
-  height: 100%;
+  height: inherit;
   background-color: #000000;
 }
 
@@ -480,7 +477,6 @@ ind-movie-nav {
   display: table;
   table-layout: fixed;
   width: 100%;
-  position: relative;
 }
 
 .hsContent {
@@ -571,6 +567,7 @@ h1.cast-title-1 {
   opacity: 0;
   transition: opacity 1s;
 }
+
 /* .fa {
   opacity: 0;
   transition: opacity 1s;

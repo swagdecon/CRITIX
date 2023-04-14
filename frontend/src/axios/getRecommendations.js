@@ -25,7 +25,6 @@ export default async function getRecommendations(movieId) {
       return { ...movie, ...detailsResponse.data, actors };
     })
   );
-  console.log(recommendedMovies);
   if (response.data.results.length === 0) {
     return null;
   }

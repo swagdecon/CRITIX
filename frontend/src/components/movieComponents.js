@@ -127,8 +127,6 @@ function EmbeddedMovieTrailer({ video }) {
   EmbeddedMovieTrailer.propTypes = {
     video: PropTypes.arrayOf(PropTypes.string),
   };
-
-  console.log(video !== null);
   // if (video !== null) {
   return (
     <ReactPlayer
