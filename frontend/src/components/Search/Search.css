@@ -2,7 +2,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  position: absolute; /* Changed to relative */
+  position: absolute;
   display: flex;
   justify-content: center;
   pointer-events: none;
@@ -41,6 +41,7 @@
   width: fit-content;
   display: flex;
   flex-direction: column;
+  pointer-events: auto;
   padding: 0;
   margin: 0;
 }
@@ -52,21 +53,26 @@
   margin: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  cursor: auto;
   font-family: "Open Sans", sans-serif;
 }
-/* #63636360 */
+
 .result-text {
   display: inline;
   padding-left: 3%;
   text-align: center;
 }
-/* .ind-search-result:hover {
-  background-color: #71b3ff7d;
-} */
+
 .result-rating {
   display: inline;
   float: right;
   color: #0096ff;
   font-weight: bold;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  color: inherit;
 }

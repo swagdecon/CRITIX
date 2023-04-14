@@ -2,8 +2,8 @@ import { React, useState } from "react";
 import "./Search.css";
 import axios from "axios";
 import PropTypes from "prop-types";
-// import { MovieAverage } from "../movieComponents";
-// import getSearch from "../../axios/getSearch";
+import { Link } from "react-router-dom";
+
 const Search = (props) => {
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
@@ -31,15 +31,17 @@ const Search = (props) => {
         {movies.slice(0, 5).map((movie) => {
           if (movie.poster_path && movie.vote_average) {
             return (
-              <li className="ind-search-result" key={movie.id}>
-                <img
-                  src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
-                />
-                <div className="result-text">{movie.title}</div>
-                <div className="result-rating">
-                  {movie.vote_average.toFixed(1)}
-                </div>
-              </li>
+              <Link to={`/api/movies/movie/${movie.id}`} key={movie.id}>
+                <li className="ind-search-result">
+                  <img
+                    src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
+                  />
+                  <div className="result-text">{movie.title}</div>
+                  <div className="result-rating">
+                    {movie.vote_average.toFixed(1)}
+                  </div>
+                </li>
+              </Link>
             );
           } else {
             return null; // Skip over movies without poster or rating
