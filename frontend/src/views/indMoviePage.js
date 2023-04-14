@@ -3,13 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import IndMovieStyle from "../components/IndMovie/ind_movie.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import Container from "../components/Container/Container";
-import ReactPlayer from "react-player";
 import axios from "axios";
 import {
   MovieGenres,
   MovieTrailer,
   MovieAverage,
   getYearFromDate,
+  EmbeddedMovieTrailer,
   MovieReviews,
   MovieDetails,
 } from "../components/movieComponents";
@@ -92,7 +92,6 @@ export default function IndMovie() {
           <div className={IndMovieStyle["hero-poster"]}>
             <img src={moviePosterPath} />
           </div>
-
           <div id="fade" className={IndMovieStyle["container-margin"]}>
             <div className={IndMovieStyle["ind-movie-header"]}>
               <div className={IndMovieStyle.movie__score}>
@@ -133,13 +132,8 @@ export default function IndMovie() {
               <MovieReviews reviews={movie.reviews} />
             </div>
           </div>
-          <section id="slide-1" className={IndMovieStyle["homeSlide"]}>
-            <div
-              className={IndMovieStyle.bcg}
-              data-center="background-position: 50% 0px;"
-              data-top-bottom="background-position: 50% -100px;"
-              data-anchor-target="#slide-1"
-            >
+          <section id="slide-1" className={IndMovieStyle.homeSlide}>
+            <div className={IndMovieStyle.bcg}>
               <div className={IndMovieStyle.hsContainer}>
                 <div
                   className={IndMovieStyle.hsContent}
@@ -147,14 +141,7 @@ export default function IndMovie() {
                   data-top="opacity: 0"
                   data-anchor-target="#slide-1 h2"
                 >
-                  <ReactPlayer
-                    className={IndMovieStyle.indMovieEmbeddedTrailer}
-                    url={`https://www.youtube.com/watch?v=${movie.video}`}
-                    controls={true}
-                    playing={false}
-                    width={"62vw"}
-                    height={"55vh"}
-                  />
+                  <EmbeddedMovieTrailer video={movie.video} />
                   <MovieDetails
                     runtime={movie.runtime}
                     revenue={movie.revenue}
@@ -175,6 +162,7 @@ export default function IndMovie() {
               </div>
             </div>
           </section>
+
           <section className={IndMovieStyle.recommended_movies}>
             <RecommendedCarousel movieId={movie.id} />
           </section>

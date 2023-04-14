@@ -8,6 +8,7 @@ import { FaLanguage } from "react-icons/fa";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { MdOutlineMovie, MdDateRange } from "react-icons/md";
 import { RiMovie2Line } from "react-icons/ri";
+import ReactPlayer from "react-player";
 
 import "../components/Carousel/MovieCarousel/MovieCarousel.css";
 function TruncateDescription({ description }) {
@@ -122,13 +123,33 @@ function MovieCardActors({ actors }) {
     </span>
   );
 }
-
+function EmbeddedMovieTrailer({ video }) {
+  EmbeddedMovieTrailer.propTypes = {
+    video: PropTypes.arrayOf(PropTypes.string),
+  };
+  // if (video !== null) {
+  return (
+    <ReactPlayer
+      className={IndMovieStyle.indMovieEmbeddedTrailer}
+      url={`https://www.youtube.com/watch?v=${video}`}
+      controls={true}
+      playing={false}
+      width={"60vw"}
+      height={"60vh"}
+    />
+  );
+  // } else {
+  //   // return <div>No Trailer Available</div>;
+  // }
+}
 function MovieReviews({ reviews }) {
   MovieReviews.propTypes = {
     reviews: PropTypes.arrayOf(PropTypes.string),
   };
-  if (!reviews || reviews === "" || reviews == null) {
-    return <div>No Reviews Available</div>;
+  if (!reviews.length) {
+    return (
+      <div className={IndMovieStyle["no-reviews"]}>No Reviews Available</div>
+    );
   }
   const [maxHeight, setMaxHeight] = useState(500);
 
@@ -279,6 +300,7 @@ export {
   MovieRuntime,
   MovieTrailer,
   MovieAverage,
+  EmbeddedMovieTrailer,
   MovieGenres,
   MovieCardGenres,
   MovieCardActors,
