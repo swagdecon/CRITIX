@@ -6,10 +6,10 @@ import {
   Navigate,
 } from "react-router-dom";
 import "./index.js";
-import Login from "./views/login.js";
-import SignUp from "./views/signup.js";
+import Login from "./views/Signin.js";
+import SignUp from "./views/Signup.js";
 import Homepage from "./views/homepage.js";
-import PrivateRoute from "./components/privateRoutes.js";
+import PrivateRoute from "./components/Other/privateRoutes.js";
 import Error403 from "./views/errorMessages/403error.js";
 import Error404 from "./views/errorMessages/404error.js";
 import IndMovie from "./views/indMoviePage.js";

@@ -9,7 +9,7 @@ import {
   TruncateDescription,
   MovieCardGenres,
   MovieCardActors,
-} from "../../movieComponents.js";
+} from "../../Other/movieComponents.js";
 import PropTypes from "prop-types";
 import "./MovieCarousel.css";
 import { chunk } from "lodash";

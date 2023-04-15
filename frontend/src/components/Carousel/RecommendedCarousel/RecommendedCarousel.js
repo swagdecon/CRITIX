@@ -11,7 +11,7 @@ import {
   MovieAverage,
   MovieCardGenres,
   MovieCardActors,
-} from "../../movieComponents";
+} from "../../Other/movieComponents";
 
 export default function RecommendedCarousel({ movieId }) {
   const [recommendations, setRecommendations] = useState([]);

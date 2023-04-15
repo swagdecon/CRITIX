@@ -15,12 +15,11 @@ export default function LoginFunctionality() {
   const [error, setError] = useState("");
   const [fingerprint, setFingerprint] = useState("");
   const navigate = useNavigate();
+  const filter = new Filter();
 
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
   }
-
-  const filter = new Filter();
 
   useEffect(() => {
     const getFingerprint = async () => {
@@ -124,7 +123,7 @@ export default function LoginFunctionality() {
           <i
             id="hide"
             className={`bi bi-eye${passwordVisible ? "-slash" : ""}`}
-          ></i>
+          />
         </span>
       </div>
       <button type="submit" className={LoginStyles["css-button"]}>
@@ -133,7 +132,7 @@ export default function LoginFunctionality() {
           <div className={LoginStyles["reset-skew"]}>
             <clapperboard-div
               className={LoginStyles["css-button-inner-text"]}
-            ></clapperboard-div>
+            />
           </div>
         </div>
       </button>
