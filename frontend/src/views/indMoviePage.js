@@ -12,7 +12,7 @@ import {
   EmbeddedMovieTrailer,
   MovieReviews,
   MovieDetails,
-} from "../components/movieComponents";
+} from "../components/Other/movieComponents";
 import RecommendedCarousel from "../components/Carousel/RecommendedCarousel/RecommendedCarousel";
 import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel";
 import Popcorn from "../misc/popcorn_logo";
@@ -24,8 +24,7 @@ export default function IndMovie() {
   const [movie, setMovie] = useState({});
   const [dataLoaded, setDataLoaded] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
-  const [prevId, setPrevId] = useState(null); // add previous id state variable (needed for recommended movies)
-
+  const [prevId, setPrevId] = useState(null);
   const navigate = useNavigate();
   const { id } = useParams();
 

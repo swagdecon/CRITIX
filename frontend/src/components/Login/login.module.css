@@ -355,8 +355,7 @@ video {
 
 .eye {
   position: absolute;
-  transform: translate(-20px, -10px);
-  bottom: 220px;
+  transform: translate(-25px, 7px);
   color: #fff;
   cursor: pointer;
 }

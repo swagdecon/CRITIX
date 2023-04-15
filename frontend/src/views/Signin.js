@@ -8,8 +8,7 @@ import Logo_Text from "../components/Logo/POPFLIX_LOGO_OFFICIAL.png";
 import LoginPlayer from "../components/Login/LoginVideo";
 import LoginFunctionality from "../components/Login/loginFunctionality";
 import LoginStyles from "../components/Login/login.module.css";
-
-export default function Login() {
+export default function LogIn() {
   return (
     <html lang="en">
       <head>
@@ -19,8 +18,7 @@ export default function Login() {
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
-        />
-
+        />{" "}
         <title>Log in</title>
       </head>
       <body>

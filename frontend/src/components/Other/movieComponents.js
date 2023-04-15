@@ -1,6 +1,6 @@
 import { React, useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import IndMovieStyle from "./IndMovie/ind_movie.module.css";
+import IndMovieStyle from "../IndMovie/ind_movie.module.css";
 import ReactTextCollapse from "react-text-collapse/dist/ReactTextCollapse";
 import { RiMoneyDollarBoxFill } from "react-icons/ri";
 import { BsWallet2 } from "react-icons/bs";
@@ -10,7 +10,7 @@ import { MdOutlineMovie, MdDateRange } from "react-icons/md";
 import { RiMovie2Line } from "react-icons/ri";
 import ReactPlayer from "react-player";
 
-import "../components/Carousel/MovieCarousel/MovieCarousel.css";
+import "../Carousel/MovieCarousel/MovieCarousel.css";
 function TruncateDescription({ description }) {
   const words = description.split(" ");
 

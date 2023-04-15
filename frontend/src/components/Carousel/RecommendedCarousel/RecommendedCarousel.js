@@ -11,7 +11,7 @@ import {
   MovieAverage,
   MovieCardGenres,
   MovieCardActors,
-} from "../../movieComponents";
+} from "../../Other/movieComponents";
 
 export default function RecommendedCarousel({ movieId }) {
   const [recommendations, setRecommendations] = useState([]);
@@ -33,7 +33,7 @@ export default function RecommendedCarousel({ movieId }) {
         <Carousel.Item key={i}>
           {chunk.map((movie, j) => (
             <div className={MovieCardStyle["card-container"]} key={`${i}-${j}`}>
-              <Link to={`/api/movies/movie/${movie.id}`}>
+              <Link to={`/movies/movie/${movie.id}`}>
                 <div className="container">
                   <div className={MovieCardStyle["cellphone-container"]}>
                     <div className={MovieCardStyle.movie}>
