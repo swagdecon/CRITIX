@@ -22,12 +22,9 @@ export default function Homepage() {
       <body>
         <Container />
         <HeroCarousel />
-        <MovieCarousel
-          title="Popular right now"
-          endpoint="/api/movies/popular"
-        />
-        <MovieCarousel title="Top Rated" endpoint="/api/movies/top_rated" />
-        <MovieCarousel title="Releasing Soon" endpoint="/api/movies/upcoming" />
+        <MovieCarousel title="Popular right now" endpoint="/movies/popular" />
+        <MovieCarousel title="Top Rated" endpoint="/movies/top_rated" />
+        <MovieCarousel title="Releasing Soon" endpoint="/movies/upcoming" />
       </body>
     </html>
   );

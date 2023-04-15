@@ -55,7 +55,7 @@ export default function LoginFunctionality() {
     }
     try {
       const myResponse = await fetch(
-        "http://localhost:8080/api/v1/auth/authenticate",
+        "http://localhost:8080/v1/auth/authenticate",
         {
           method: "POST",
           headers: {

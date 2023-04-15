@@ -28,8 +28,8 @@ export default function App() {
             </PrivateRoute>
           }
         />
-        <Route path="/api/movies/:endpoint/:id" element={<IndMovie />} />
-        <Route path="/api/movies/movie/:id" element={<IndMovie />} />
+        <Route path="/movies/:endpoint/:id" element={<IndMovie />} />
+        <Route path="/movies/movie/:id" element={<IndMovie />} />
         <Route path="/test" element={<LoadingPage />} />
 
         <Route path="/403" element={<Error403 />} />
