@@ -32,7 +32,7 @@ public class SecurityConfiguration {
                 .cors()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**")
+                .requestMatchers("/v1/auth/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

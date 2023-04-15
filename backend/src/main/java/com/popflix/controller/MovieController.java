@@ -15,7 +15,7 @@ import com.popflix.model.Movie;
 import com.popflix.service.MovieService;
 
 @RestController
-@RequestMapping("/api/movies")
+@RequestMapping("/movies")
 public class MovieController {
 
     @Autowired
