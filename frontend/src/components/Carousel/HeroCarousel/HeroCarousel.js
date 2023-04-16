@@ -2,13 +2,15 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import Carousel from "react-bootstrap/Carousel";
 import "./HeroCarousel.css";
+import WatchTrailerBtn from "./WatchTrailerbtn";
 import "../../Logo/Loader.js";
+import "./WatchTrailerBtn.css";
 import { Link } from "react-router-dom";
 export default function HeroCarousel() {
   return (
     <Carousel>
       <Carousel.Item interval={5000}>
-        <Link to={`/api/movies/movie/335984`} className="hero-movie-page">
+        <Link to={`/movies/movie/335984`} className="hero-movie-page">
           <img
             className="d-block w-100"
             src="https://www.themoviedb.org/t/p/original/sAtoMqDVhNDQBc3QJL3RF6hlhGq.jpg"
@@ -29,7 +31,8 @@ export default function HeroCarousel() {
               href="https://www.youtube.com/watch?v=gCcx85zbxz4"
             >
               <button type="button" className="btn btn-warning">
-                WATCH TRAILER<i className="bi bi-play-circle"></i>
+                <WatchTrailerBtn />
+                WATCH TRAILER
               </button>
             </a>
           </Carousel.Caption>
@@ -37,7 +40,7 @@ export default function HeroCarousel() {
       </Carousel.Item>
 
       <Carousel.Item interval={5000}>
-        <Link to={`/api/movies/movie/330459`} className="hero-movie-page">
+        <Link to={`/movies/movie/330459`} className="hero-movie-page">
           <img
             className="d-block w-100"
             src="https://www.themoviedb.org/t/p/original/6t8ES1d12OzWyCGxBeDYLHoaDrT.jpg"
@@ -56,7 +59,8 @@ export default function HeroCarousel() {
               href="https://www.youtube.com/watch?v=frdj1zb9sMY"
             >
               <button type="button" className="btn btn-warning ">
-                WATCH TRAILER<i className="bi bi-play-circle"></i>
+                <WatchTrailerBtn />
+                WATCH TRAILER
               </button>
             </a>
           </Carousel.Caption>
@@ -64,7 +68,7 @@ export default function HeroCarousel() {
       </Carousel.Item>
 
       <Carousel.Item interval={5000}>
-        <Link to={`/api/movies/movie/157336`} className="hero-movie-page">
+        <Link to={`/movies/movie/157336`} className="hero-movie-page">
           <img
             className="d-block w-100"
             src="https://www.themoviedb.org/t/p/original/xJHokMbljvjADYdit5fK5VQsXEG.jpg"
@@ -85,7 +89,8 @@ export default function HeroCarousel() {
               href="https://www.youtube.com/watch?v=zSWdZVtXT7E"
             >
               <button type="button" className="btn btn-warning ">
-                WATCH TRAILER<i className="bi bi-play-circle"></i>
+                <WatchTrailerBtn />
+                WATCH TRAILER
               </button>
             </a>
           </Carousel.Caption>
@@ -93,7 +98,7 @@ export default function HeroCarousel() {
       </Carousel.Item>
 
       <Carousel.Item interval={5000}>
-        <Link to={`/api/movies/movie/286217`} className="hero-movie-page">
+        <Link to={`/movies/movie/286217`} className="hero-movie-page">
           <img
             className="d-block w-100"
             src="https://www.themoviedb.org/t/p/original/lzMS0CI3FLQYC5EgJoWeIaEt0lm.jpg"
@@ -112,7 +117,8 @@ export default function HeroCarousel() {
               href="https://www.youtube.com/watch?v=ej3ioOneTy8"
             >
               <button type="button" className="btn btn-warning">
-                WATCH TRAILER<i className="bi bi-play-circle"></i>
+                <WatchTrailerBtn />
+                WATCH TRAILER
               </button>
             </a>
           </Carousel.Caption>
@@ -120,7 +126,7 @@ export default function HeroCarousel() {
       </Carousel.Item>
 
       <Carousel.Item interval={5000}>
-        <Link to={`/api/movies/movie/27205`} className="hero-movie-page">
+        <Link to={`/movies/movie/27205`} className="hero-movie-page">
           <img
             className="d-block w-100"
             src="https://www.themoviedb.org/t/p/original/s3TBrRGB1iav7gFOCNx3H31MoES.jpg"
@@ -139,7 +145,8 @@ export default function HeroCarousel() {
               href="https://www.youtube.com/watch?v=YoHD9XEInc0"
             >
               <button type="button" className="btn btn-warning">
-                WATCH TRAILER<i className="bi bi-play-circle"></i>
+                <WatchTrailerBtn />
+                WATCH TRAILER
               </button>
             </a>
           </Carousel.Caption>
