@@ -31,7 +31,7 @@ const Search = (props) => {
         {movies.slice(0, 5).map((movie) => {
           if (movie.poster_path && movie.vote_average) {
             return (
-              <Link to={`/api/movies/movie/${movie.id}`} key={movie.id}>
+              <Link to={`/movies/movie/${movie.id}`} key={movie.id}>
                 <li className="ind-search-result">
                   <img
                     src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
