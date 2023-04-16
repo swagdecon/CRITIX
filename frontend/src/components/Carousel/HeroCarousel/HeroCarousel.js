@@ -10,7 +10,7 @@ export default function HeroCarousel() {
   return (
     <Carousel>
       <Carousel.Item interval={5000}>
-        <Link to={`/api/movies/movie/335984`} className="hero-movie-page">
+        <Link to={`/movies/movie/335984`} className="hero-movie-page">
           <img
             className="d-block w-100"
             src="https://www.themoviedb.org/t/p/original/sAtoMqDVhNDQBc3QJL3RF6hlhGq.jpg"
@@ -40,7 +40,7 @@ export default function HeroCarousel() {
       </Carousel.Item>
 
       <Carousel.Item interval={5000}>
-        <Link to={`/api/movies/movie/330459`} className="hero-movie-page">
+        <Link to={`/movies/movie/330459`} className="hero-movie-page">
           <img
             className="d-block w-100"
             src="https://www.themoviedb.org/t/p/original/6t8ES1d12OzWyCGxBeDYLHoaDrT.jpg"
@@ -68,7 +68,7 @@ export default function HeroCarousel() {
       </Carousel.Item>
 
       <Carousel.Item interval={5000}>
-        <Link to={`/api/movies/movie/157336`} className="hero-movie-page">
+        <Link to={`/movies/movie/157336`} className="hero-movie-page">
           <img
             className="d-block w-100"
             src="https://www.themoviedb.org/t/p/original/xJHokMbljvjADYdit5fK5VQsXEG.jpg"
@@ -98,7 +98,7 @@ export default function HeroCarousel() {
       </Carousel.Item>
 
       <Carousel.Item interval={5000}>
-        <Link to={`/api/movies/movie/286217`} className="hero-movie-page">
+        <Link to={`/movies/movie/286217`} className="hero-movie-page">
           <img
             className="d-block w-100"
             src="https://www.themoviedb.org/t/p/original/lzMS0CI3FLQYC5EgJoWeIaEt0lm.jpg"
@@ -126,7 +126,7 @@ export default function HeroCarousel() {
       </Carousel.Item>
 
       <Carousel.Item interval={5000}>
-        <Link to={`/api/movies/movie/27205`} className="hero-movie-page">
+        <Link to={`/movies/movie/27205`} className="hero-movie-page">
           <img
             className="d-block w-100"
             src="https://www.themoviedb.org/t/p/original/s3TBrRGB1iav7gFOCNx3H31MoES.jpg"
