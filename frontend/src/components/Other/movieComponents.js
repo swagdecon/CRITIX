@@ -104,8 +104,15 @@ function MovieCardActors({ actors }) {
   if (!Array.isArray(actors)) {
     return "No Actors Available";
   }
+
   MovieCardActors.propTypes = {
-    actors: PropTypes.arrayOf(PropTypes.string),
+    actors: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        person_id: PropTypes.number.isRequired,
+        profilePath: PropTypes.string,
+      })
+    ),
   };
 
   const topActors = actors.slice(0, 3);
@@ -113,9 +120,9 @@ function MovieCardActors({ actors }) {
     <span>
       {topActors.map((actor, index) => {
         if (index === 0) {
-          return actor;
+          return actor.name;
         } else if (index < 3) {
-          return `, ${actor}`;
+          return `, ${actor.name}`;
         } else {
           return "";
         }
@@ -123,6 +130,7 @@ function MovieCardActors({ actors }) {
     </span>
   );
 }
+
 function EmbeddedMovieTrailer({ video }) {
   EmbeddedMovieTrailer.propTypes = {
     video: PropTypes.arrayOf(PropTypes.string),

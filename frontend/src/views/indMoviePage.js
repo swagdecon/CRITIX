@@ -64,7 +64,7 @@ export default function IndMovie() {
   if (!dataLoaded) {
     return <LoadingPage />;
   }
-
+  console.log(movie);
   let movieBackdrop =
     `url(https://image.tmdb.org/t/p/original${movie.backdropPath}) ` ||
     `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`;
@@ -154,10 +154,7 @@ export default function IndMovie() {
                 </div>
                 <h1 className={IndMovieStyle["cast-title-1"]}>Cast Members:</h1>
                 <section className={IndMovieStyle.CastMembers}>
-                  <MovieActors
-                    actors={movie.actors}
-                    images={movie.actorImagePaths}
-                  />
+                  <MovieActors actors={movie.actors} />
                 </section>
               </div>
             </div>

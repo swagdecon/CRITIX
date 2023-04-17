@@ -6,12 +6,17 @@ import "./ActorCarousel.css";
 import PropTypes from "prop-types";
 import IndMovieStyle from "../../IndMovie/ind_movie.module.css";
 
-export default function MovieActors({ actors, images }) {
+export default function MovieActors({ actors }) {
   MovieActors.propTypes = {
-    actors: PropTypes.arrayOf(PropTypes.string),
+    actors: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        person_id: PropTypes.number.isRequired,
+        profilePath: PropTypes.string,
+      })
+    ),
     images: PropTypes.arrayOf(PropTypes.string),
   };
-
   const defaultImage = `url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg) center center no-repeat`;
   const actorChunks = chunk(actors, 5);
 
@@ -22,10 +27,11 @@ export default function MovieActors({ actors, images }) {
           <Carousel.Item key={chunkIndex}>
             <div className={IndMovieStyle["profile-container"]}>
               {chunk.map((actor, index) => {
-                let image = images ? images[chunkIndex * 5 + index] : null;
-                let actorImage = `url(https://image.tmdb.org/t/p/w500${image}) center center no-repeat`;
+                let image = actor.profilePath ? actor.profilePath : null;
 
-                if (image === null) {
+                let actorImage = `url(https://image.tmdb.org/t/p/w500${image}) center center no-repeat`;
+                console.log(actorImage);
+                if (!image) {
                   image = defaultImage;
                 }
 
@@ -70,7 +76,7 @@ export default function MovieActors({ actors, images }) {
                   >
                     <div className={IndMovieStyle.border}>
                       <h3 className={IndMovieStyle["profile-person"]}>
-                        {actor}
+                        {actor.name}
                       </h3>
                       <div className={IndMovieStyle["ind-movie-cast-icons"]}>
                         <i
