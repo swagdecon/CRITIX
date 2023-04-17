@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import com.popflix.model.Movie;
+import com.popflix.model.Person;
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.model.Credits;
 import info.movito.themoviedbapi.model.Genre;
@@ -59,18 +60,6 @@ public class MovieService {
     movie.setVoteAverage(movie.getVoteAverage());
     movie.setVoteCount(movie.getVoteCount());
     updateTmdbMovieDetails(movie);
-
-    // movie.setTagline(tmdbMovie.getTagline());
-    // movie.setRevenue(tmdbMovie.getRevenue());
-    // movie.setRuntime(tmdbMovie.getRuntime());
-    // movie.setMovieStatus(tmdbMovie.getStatus());
-
-    // movie.setProductionCompanies(tmdbMovie.getProductionCompanies());
-    // movie.setActors(tmdbMovie.getActors());
-    // movie.setReviews(tmdbMovie.getReviews());
-    // movie.setVideo(tmdbMovie.getVideo());
-    // movie.setVoteAverage(tmdbMovie.getVoteAverage());
-    // movie.setVoteCount(tmdbMovie.getVoteCount());
     return Optional.of(movie);
   }
 
@@ -131,21 +120,15 @@ public class MovieService {
         movie.setGenres(genreNames);
       }
 
-      if (movie.getActors() == null || movie.getActors().isEmpty() || movie.getActorImagePaths() == null
-          || movie.getActorImagePaths().isEmpty()) {
+      if (movie.getActors() == null || movie.getActors().isEmpty() ||
+          movie.getActorImagePaths() == null || movie.getActorImagePaths().isEmpty()) {
         Credits movieCredits = tmdbApi.getMovies().getCredits(movie.getId());
         List<PersonCast> castList = movieCredits.getCast();
-        List<String> actorNames = new ArrayList<>();
-        List<String> actorImagePaths = new ArrayList<>();
+        List<Person> actors = new ArrayList<>();
         for (PersonCast cast : castList) {
-          actorNames.add(cast.getName());
+          actors.add(new Person(cast.getName(), cast.getCastId(), cast.getProfilePath()));
         }
-        for (int i = 0; i < castList.size(); i++) {
-          PersonCast cast = castList.get(i);
-          actorImagePaths.add(cast.getProfilePath());
-        }
-        movie.setActors(actorNames);
-        movie.setActorImagePaths(actorImagePaths);
+        movie.setActors(actors);
       }
 
       if (movie.getReviews() == null || movie.getReviews().isEmpty()) {
@@ -244,21 +227,14 @@ public class MovieService {
     }
 
     if (movie.getActors() == null || movie.getActors().isEmpty() ||
-        movie.getActorImagePaths() == null
-        || movie.getActorImagePaths().isEmpty()) {
+        movie.getActorImagePaths() == null || movie.getActorImagePaths().isEmpty()) {
       Credits movieCredits = tmdbApi.getMovies().getCredits(movie.getId());
       List<PersonCast> castList = movieCredits.getCast();
-      List<String> actorNames = new ArrayList<>();
-      List<String> actorImagePaths = new ArrayList<>();
+      List<Person> actors = new ArrayList<>();
       for (PersonCast cast : castList) {
-        actorNames.add(cast.getName());
+        actors.add(new Person(cast.getName(), cast.getCastId(), cast.getProfilePath()));
       }
-      for (int i = 0; i < castList.size(); i++) {
-        PersonCast cast = castList.get(i);
-        actorImagePaths.add(cast.getProfilePath());
-      }
-      movie.setActors(actorNames);
-      movie.setActorImagePaths(actorImagePaths);
+      movie.setActors(actors);
     }
 
     if (movie.getReviews() == null || movie.getReviews().isEmpty()) {

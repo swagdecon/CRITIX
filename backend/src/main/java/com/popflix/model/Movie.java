@@ -1,6 +1,7 @@
 package com.popflix.model;
 
 import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -35,7 +36,7 @@ public class Movie {
     private String tagline;
     private Long revenue;
     private Integer runtime;
-    private List<String> actors;
+    private List<Person> actors;
     private List<String> actorImagePaths;
     private List<String> reviews;
     private List<String> productionCompanies;
