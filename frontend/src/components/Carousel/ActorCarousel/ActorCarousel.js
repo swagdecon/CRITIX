@@ -30,11 +30,11 @@ export default function MovieActors({ actors }) {
                 let image = actor.profilePath ? actor.profilePath : null;
 
                 let actorImage = `url(https://image.tmdb.org/t/p/w500${image}) center center no-repeat`;
-                console.log(actorImage);
-                if (!image) {
-                  image = defaultImage;
-                }
 
+                if (image === null) {
+                  actorImage = defaultImage;
+                }
+                console.log(image);
                 const style = image
                   ? {
                       background: actorImage,
