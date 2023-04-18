@@ -126,7 +126,11 @@ public class MovieService {
         List<PersonCast> castList = movieCredits.getCast();
         List<Person> actors = new ArrayList<>();
         for (PersonCast cast : castList) {
-          actors.add(new Person(cast.getName(), cast.getCastId(), cast.getProfilePath()));
+          Person person = new Person();
+          person.setId(cast.getCastId());
+          person.setName(cast.getName());
+          person.setProfilePath(cast.getProfilePath());
+          actors.add(person);
         }
         movie.setActors(actors);
       }
@@ -232,7 +236,11 @@ public class MovieService {
       List<PersonCast> castList = movieCredits.getCast();
       List<Person> actors = new ArrayList<>();
       for (PersonCast cast : castList) {
-        actors.add(new Person(cast.getName(), cast.getCastId(), cast.getProfilePath()));
+        Person person = new Person();
+        person.setId(cast.getCastId());
+        person.setName(cast.getName());
+        person.setProfilePath(cast.getProfilePath());
+        actors.add(person);
       }
       movie.setActors(actors);
     }

@@ -11,7 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Person {
+    private int id;
     private String name;
-    private int person_id;
+    private String birthday;
+    private String placeOfBirth;
+    private String biography;
+    private String knownForDepartment;
+    private int gender;
     private String profilePath;
+    private String deathday;
+    private Float popularity;
 }
