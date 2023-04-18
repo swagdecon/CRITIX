@@ -1,27 +1,18 @@
 package com.popflix.service;
 
 import java.util.Optional;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-
 import com.popflix.model.Person;
-
 import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.model.people.PersonCast;
 import info.movito.themoviedbapi.model.people.PersonPeople;
-import info.movito.themoviedbapi.model.people.PersonType;
-import jakarta.annotation.PostConstruct;
 
 @Service
-
 public class PersonService {
+
     @Autowired
     private MongoTemplate mongoTemplate;
     private final TmdbApi tmdbApi = new TmdbApi("d84f9365179dc98dc69ab22833381835");
@@ -36,7 +27,7 @@ public class PersonService {
         Person person = new Person();
         person.setId(id);
 
-        PersonPeople personDb = tmdbApi.getPeople().getPerson(person.getId());
+        PersonPeople personDb = tmdbApi.getPeople().getPersonInfo(person.getId());
 
         person.setName(personDb.getName());
         person.setBirthday(personDb.getBirthday());
@@ -44,24 +35,53 @@ public class PersonService {
         person.setGender(personDb.getGender());
         person.setBiography(personDb.getBiography());
         person.setPopularity(personDb.getPopularity());
+        person.setPlaceOfBirth(personDb.getBirthplace());
         person.setProfilePath(personDb.getProfilePath());
+        person.setImdbId(personDb.getImdbId());
         updateTmdbPersonDetails(person);
         return Optional.of(person);
     }
 
-    // ScheduledExecutorService is created in the init method and a task is
-    // scheduled to run every 24 hours using scheduleAtFixedRate. The updateMovies
-    // method will be called by the scheduled task.
-    private ScheduledExecutorService executor;
+    // private ScheduledExecutorService executor;
 
-    @PostConstruct
-    public void init() {
-        executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(this::updatePeople, 0, 24, TimeUnit.HOURS);
+    // @PostConstruct
+    // public void init() {
+    // executor = Executors.newScheduledThreadPool(1);
+    // executor.scheduleAtFixedRate(this::updateTmdbPersonDetails, 0, 24,
+    // TimeUnit.HOURS);
+    // }
+
+    // public void shutdown() {
+    // executor.shutdown();
+    // }
+
+    public void updateTmdbPersonDetails(Person person) {
+        PersonPeople personDb = tmdbApi.getPeople().getPersonInfo(person.getId());
+
+        if (person.getBirthday() == null) {
+            person.setBirthday(personDb.getBirthday());
+        }
+        if (person.getKnownForDepartment() == null) {
+            person.setKnownForDepartment(personDb.getKnownForDepartment());
+        }
+        if (person.getDeathday() == null) {
+            person.setDeathday(personDb.getDeathday());
+        }
+        if (person.getGender() == null) {
+            person.setGender(personDb.getGender());
+        }
+        if (person.getBiography() == null) {
+            person.setBiography(personDb.getBiography());
+        }
+
+        if (person.getPopularity() == null) {
+            float popularity = personDb.getPopularity();
+            person.setPopularity(popularity);
+        }
+
+        if (person.getImdbId() == null) {
+            String imdbId = personDb.getImdbId();
+            person.setImdbId(imdbId);
+        }
     }
-
-    public void shutdown() {
-        executor.shutdown();
-    }
-
 }
