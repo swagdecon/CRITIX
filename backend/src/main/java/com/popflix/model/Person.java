@@ -22,5 +22,6 @@ public class Person {
     private String deathday;
     private Float popularity;
     private String imdbId;
+    private String job;
 
 }

@@ -17,10 +17,10 @@ public class PersonService {
     private MongoTemplate mongoTemplate;
     private final TmdbApi tmdbApi = new TmdbApi("d84f9365179dc98dc69ab22833381835");
 
-    public Optional<Person> singlePerson(Integer id, String collectionName) {
+    public Optional<Person> singlePerson(Integer id) {
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(id));
-        return Optional.ofNullable(mongoTemplate.findOne(query, Person.class, collectionName));
+        return Optional.ofNullable(mongoTemplate.findOne(query, Person.class));
     }
 
     public Optional<Person> singleTmdbPerson(Integer id) {
@@ -35,6 +35,8 @@ public class PersonService {
         person.setGender(personDb.getGender());
         person.setBiography(personDb.getBiography());
         person.setPopularity(personDb.getPopularity());
+        person.setKnownForDepartment(personDb.getKnownForDepartment());
+        person.setJob(personDb.getJob());
         person.setPlaceOfBirth(personDb.getBirthplace());
         person.setProfilePath(personDb.getProfilePath());
         person.setImdbId(personDb.getImdbId());
