@@ -8,11 +8,12 @@ import IndMovieStyle from "../../IndMovie/ind_movie.module.css";
 import { Link } from "react-router-dom";
 
 export default function MovieActors({ actors }) {
+  console.log(actors);
   MovieActors.propTypes = {
     actors: PropTypes.arrayOf(
       PropTypes.shape({
         name: PropTypes.string.isRequired,
-        person_id: PropTypes.number.isRequired,
+        id: PropTypes.number.isRequired,
         profilePath: PropTypes.string,
       })
     ),
@@ -72,7 +73,7 @@ export default function MovieActors({ actors }) {
                       });
                     }}
                   >
-                    <Link to={`/person/${actor.person_id}`}>
+                    <Link to={`/person/${actor.id}`}>
                       <div className={IndMovieStyle.border}>
                         <h3 className={IndMovieStyle["profile-person"]}>
                           {actor.name}
