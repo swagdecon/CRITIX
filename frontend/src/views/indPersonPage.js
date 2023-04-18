@@ -35,7 +35,6 @@ export default function IndPerson() {
         console.log(error);
       }
     }
-
     if (prevId !== id) {
       // compare current url id with previous url id
       setRequestSent(false); // reset requestSent state variable

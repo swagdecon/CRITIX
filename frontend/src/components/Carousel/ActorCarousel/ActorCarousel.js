@@ -8,7 +8,6 @@ import IndMovieStyle from "../../IndMovie/ind_movie.module.css";
 import { Link } from "react-router-dom";
 
 export default function MovieActors({ actors }) {
-  console.log(actors);
   MovieActors.propTypes = {
     actors: PropTypes.arrayOf(
       PropTypes.shape({
