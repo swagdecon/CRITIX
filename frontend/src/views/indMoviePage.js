@@ -64,7 +64,6 @@ export default function IndMovie() {
   if (!dataLoaded) {
     return <LoadingPage />;
   }
-  console.log(movie);
   let movieBackdrop =
     `url(https://image.tmdb.org/t/p/original${movie.backdropPath}) ` ||
     `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`;

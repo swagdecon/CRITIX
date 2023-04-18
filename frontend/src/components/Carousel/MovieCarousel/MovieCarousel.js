@@ -61,7 +61,7 @@ export default function MovieCarousel({ title, endpoint }) {
           <Carousel.Item key={i}>
             {chunk.map((movie, j) => (
               <div
-                className={MovieCardStyle["card-container"]}
+                className={MovieCardStyle["main-card-container"]}
                 key={`${i}-${j}`}
               >
                 <Link to={`${endpoint}/${movie.id}`}>

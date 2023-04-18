@@ -5,6 +5,7 @@ import { chunk } from "lodash";
 import "./ActorCarousel.css";
 import PropTypes from "prop-types";
 import IndMovieStyle from "../../IndMovie/ind_movie.module.css";
+import { Link } from "react-router-dom";
 
 export default function MovieActors({ actors }) {
   MovieActors.propTypes = {
@@ -19,7 +20,6 @@ export default function MovieActors({ actors }) {
   };
   const defaultImage = `url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg) center center no-repeat`;
   const actorChunks = chunk(actors, 5);
-
   return (
     <Carousel className="carousel-actors" interval={null} indicators={false}>
       {actorChunks.map((chunk, chunkIndex) => {
@@ -28,13 +28,11 @@ export default function MovieActors({ actors }) {
             <div className={IndMovieStyle["profile-container"]}>
               {chunk.map((actor, index) => {
                 let image = actor.profilePath ? actor.profilePath : null;
-
                 let actorImage = `url(https://image.tmdb.org/t/p/w500${image}) center center no-repeat`;
 
                 if (image === null) {
                   actorImage = defaultImage;
                 }
-                console.log(image);
                 const style = image
                   ? {
                       background: actorImage,
@@ -74,25 +72,27 @@ export default function MovieActors({ actors }) {
                       });
                     }}
                   >
-                    <div className={IndMovieStyle.border}>
-                      <h3 className={IndMovieStyle["profile-person"]}>
-                        {actor.name}
-                      </h3>
-                      <div className={IndMovieStyle["ind-movie-cast-icons"]}>
-                        <i
-                          className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-instagram"]}`}
-                          aria-hidden="true"
-                        ></i>
-                        <i
-                          className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-twitter"]}`}
-                          aria-hidden="true"
-                        ></i>
-                        <i
-                          className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-facebook"]}`}
-                          aria-hidden="true"
-                        ></i>
+                    <Link to={`/person/${actor.person_id}`}>
+                      <div className={IndMovieStyle.border}>
+                        <h3 className={IndMovieStyle["profile-person"]}>
+                          {actor.name}
+                        </h3>
+                        <div className={IndMovieStyle["ind-movie-cast-icons"]}>
+                          <i
+                            className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-instagram"]}`}
+                            aria-hidden="true"
+                          ></i>
+                          <i
+                            className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-twitter"]}`}
+                            aria-hidden="true"
+                          ></i>
+                          <i
+                            className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-facebook"]}`}
+                            aria-hidden="true"
+                          ></i>
+                        </div>
                       </div>
-                    </div>
+                    </Link>
                   </div>
                 );
               })}

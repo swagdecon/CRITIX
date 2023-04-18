@@ -13,8 +13,13 @@ body {
   justify-content: center;
 }
 
-.card-container {
+.main-card-container {
   transform: translateY(-8%);
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+}
+.recommended-card-container {
   display: inline-block;
   align-items: center;
   justify-content: center;
