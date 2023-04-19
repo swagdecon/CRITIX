@@ -4,14 +4,10 @@ Popflix is a web application built with React and Java where users can browse th
 
 Features
 
-Browse movies and TV shows by title, genre, release year, and rating
 View movie details, including the synopsis, release year, runtime, and user reviews
-Add movies and TV shows to a personal watchlist
-Rate and review movies and TV shows
 Search for movies and TV shows by title, actor, or director
-View a list of the most popular movies and TV shows of the moment
-Get recommendations based on previously watched movies and TV shows
-Create a user account and log in to access personalized features
+View a list of the most popular movies and TV shows at the moment
+Get recommendations based on currently selected movies
 Technologies Used
 React for the front-end
 Java for the back-end
