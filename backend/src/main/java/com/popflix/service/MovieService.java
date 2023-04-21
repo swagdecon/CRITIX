@@ -1,5 +1,6 @@
 package com.popflix.service;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -79,10 +80,11 @@ public class MovieService {
   }
 
   public void updateMovies() {
-    saveNowPlayingMovies();
-    savePopularMovies();
-    saveTopRatedMovies();
-    saveUpcomingMovies();
+    saveMovieDetails("now_playing");
+    saveMovieDetails("popular");
+    saveMovieDetails("top_rated");
+    saveMovieDetails("upcoming_movies");
+
     updateMovieDetails("now_playing");
     updateMovieDetails("popular");
     updateMovieDetails("top_rated");
@@ -127,7 +129,8 @@ public class MovieService {
         List<Person> actors = new ArrayList<>();
         for (PersonCast cast : castList) {
           Person person = new Person();
-          person.setId(cast.getCastId());
+          // This sets the Id of the person to the PersonId, not the CastId
+          person.setId(cast.getId());
           person.setName(cast.getName());
           person.setProfilePath(cast.getProfilePath());
           actors.add(person);
@@ -315,13 +318,29 @@ public class MovieService {
     }
   }
 
-  public void saveNowPlayingMovies() {
-    List<MovieDb> upcomingMovies = tmdbApi.getMovies().getNowPlayingMovies("en-US", 1, "").getResults();
+  public void saveMovieDetails(String collectionName) {
     List<Movie> movies = new ArrayList<>();
+    List<MovieDb> collection = null;
+    mongoTemplate.dropCollection(collectionName);
 
-    mongoTemplate.dropCollection("now_playing"); // Remove the existing collection
+    switch (collectionName) {
+      case "now_playing":
+        collection = tmdbApi.getMovies().getNowPlayingMovies("en-US", 1, "").getResults();
+        break;
+      case "popular":
+        collection = tmdbApi.getMovies().getPopularMovies("en-US", 1).getResults();
+        break;
+      case "top_rated":
+        collection = tmdbApi.getMovies().getTopRatedMovies("en-US", 1).getResults();
+        break;
+      case "upcoming_movies":
+        collection = tmdbApi.getMovies().getUpcoming("en-US", 1, "").getResults();
+        break;
+      default:
+        throw new IllegalArgumentException("Invalid method name: " + collectionName);
+    }
 
-    for (MovieDb movieDb : upcomingMovies) {
+    for (MovieDb movieDb : collection) {
       Movie movie = new Movie();
       movie.setId(movieDb.getId());
       movie.setAdult(movieDb.isAdult());
@@ -336,86 +355,8 @@ public class MovieService {
       movie.setVoteAverage(movie.getVoteAverage());
       movie.setVoteCount(movie.getVoteCount());
       movies.add(movie);
-      mongoTemplate.save(movie, "now_playing");
+      mongoTemplate.save(movie, collectionName);
+
     }
   }
-
-  public void savePopularMovies() {
-    List<MovieDb> upcomingMovies = tmdbApi.getMovies().getPopularMovies("en-US", 1).getResults();
-    List<Movie> movies = new ArrayList<>();
-
-    mongoTemplate.dropCollection("popular"); // Remove the existing collection
-
-    for (MovieDb movieDb : upcomingMovies) {
-      Movie movie = new Movie();
-      movie.setId(movieDb.getId());
-      movie.setAdult(movieDb.isAdult());
-      movie.setTitle(movieDb.getOriginalTitle());
-      movie.setOriginalLanguage(movieDb.getOriginalLanguage());
-      movie.setOverview(movieDb.getOverview());
-      movie.setPopularity(movieDb.getPopularity());
-      movie.setPosterPath(movieDb.getPosterPath());
-      movie.setBackdropPath(movieDb.getBackdropPath());
-      movie.setReleaseDate(movieDb.getReleaseDate());
-      movie.setVideo(movie.getVideo());
-      movie.setVoteAverage(movie.getVoteAverage());
-      movie.setVoteCount(movie.getVoteCount());
-      movies.add(movie);
-
-      mongoTemplate.save(movie, "popular");
-    }
-  }
-
-  public void saveTopRatedMovies() {
-    List<MovieDb> upcomingMovies = tmdbApi.getMovies().getTopRatedMovies("en-US", 1).getResults();
-    List<Movie> movies = new ArrayList<>();
-
-    mongoTemplate.dropCollection("top_rated"); // Remove the existing collection
-
-    for (MovieDb movieDb : upcomingMovies) {
-      Movie movie = new Movie();
-      movie.setId(movieDb.getId());
-      movie.setAdult(movieDb.isAdult());
-      movie.setVoteAverage(movieDb.getVoteAverage());
-      movie.setTitle(movieDb.getOriginalTitle());
-      movie.setOriginalLanguage(movieDb.getOriginalLanguage());
-      movie.setOverview(movieDb.getOverview());
-      movie.setPopularity(movieDb.getPopularity());
-      movie.setPosterPath(movieDb.getPosterPath());
-      movie.setBackdropPath(movieDb.getBackdropPath());
-      movie.setReleaseDate(movieDb.getReleaseDate());
-      movie.setVideo(movie.getVideo());
-      movie.setVoteAverage(movie.getVoteAverage());
-      movie.setVoteCount(movie.getVoteCount());
-      movies.add(movie);
-      mongoTemplate.save(movie, "top_rated");
-    }
-  }
-
-  public void saveUpcomingMovies() {
-    List<MovieDb> upcomingMovies = tmdbApi.getMovies().getUpcoming("en-US", 1, "GB").getResults();
-    List<Movie> movies = new ArrayList<>();
-
-    mongoTemplate.dropCollection("upcoming_movies"); // Remove the existing collection
-
-    for (MovieDb movieDb : upcomingMovies) {
-      Movie movie = new Movie();
-      movie.setId(movieDb.getId());
-      movie.setAdult(movieDb.isAdult());
-      movie.setTitle(movieDb.getOriginalTitle());
-      movie.setOriginalLanguage(movieDb.getOriginalLanguage());
-      movie.setOverview(movieDb.getOverview());
-      movie.setPopularity(movieDb.getPopularity());
-      movie.setPosterPath(movieDb.getPosterPath());
-      movie.setBackdropPath(movieDb.getBackdropPath());
-      movie.setReleaseDate(movieDb.getReleaseDate());
-      movie.setVideo(movie.getVideo());
-      movie.setVoteAverage(movie.getVoteAverage());
-      movie.setVoteCount(movie.getVoteCount());
-      movies.add(movie);
-
-      mongoTemplate.save(movie, "upcoming_movies");
-    }
-  }
-
 }

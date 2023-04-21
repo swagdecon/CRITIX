@@ -1,29 +1,31 @@
 package com.popflix.service;
 
+import java.net.http.HttpResponse;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import com.popflix.model.Person;
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.model.people.PersonPeople;
 
+import com.popflix.service.imdbRequests.*;
+
 @Service
 public class PersonService {
 
-    @Autowired
-    private MongoTemplate mongoTemplate;
     private final TmdbApi tmdbApi = new TmdbApi("d84f9365179dc98dc69ab22833381835");
 
-    public Optional<Person> singlePerson(Integer id) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("id").is(id));
-        return Optional.ofNullable(mongoTemplate.findOne(query, Person.class));
+    private final AllActorImages allActorImages = new AllActorImages();
+
+    public String getAllImdbActorImages(String imdbId) throws java.io.IOException, InterruptedException {
+
+        String response = allActorImages.imdbActorImageRequest(imdbId);
+        return response;
+
     }
 
-    public Optional<Person> singleTmdbPerson(Integer id) {
+    public Optional<Person> singlePerson(Integer id) throws java.io.IOException, InterruptedException {
         Person person = new Person();
         person.setId(id);
 
@@ -40,6 +42,11 @@ public class PersonService {
         person.setPlaceOfBirth(personDb.getBirthplace());
         person.setProfilePath(personDb.getProfilePath());
         person.setImdbId(personDb.getImdbId());
+
+        // Get actor's images from IMDB
+        String imdbId = person.getImdbId();
+        String images = getAllImdbActorImages(imdbId);
+        person.setActorImdbImages(images);
         updateTmdbPersonDetails(person);
         return Optional.of(person);
     }
@@ -60,19 +67,19 @@ public class PersonService {
     public void updateTmdbPersonDetails(Person person) {
         PersonPeople personDb = tmdbApi.getPeople().getPersonInfo(person.getId());
 
-        if (person.getBirthday() == null) {
+        if (person.getBirthday() == null || person.getBirthday().isEmpty()) {
             person.setBirthday(personDb.getBirthday());
         }
-        if (person.getKnownForDepartment() == null) {
+        if (person.getKnownForDepartment() == null || person.getKnownForDepartment().isEmpty()) {
             person.setKnownForDepartment(personDb.getKnownForDepartment());
         }
-        if (person.getDeathday() == null) {
+        if (person.getDeathday() == null || person.getDeathday().isEmpty()) {
             person.setDeathday(personDb.getDeathday());
         }
         if (person.getGender() == null) {
             person.setGender(personDb.getGender());
         }
-        if (person.getBiography() == null) {
+        if (person.getBiography() == null || person.getBiography().isEmpty()) {
             person.setBiography(personDb.getBiography());
         }
 
@@ -81,7 +88,7 @@ public class PersonService {
             person.setPopularity(popularity);
         }
 
-        if (person.getImdbId() == null) {
+        if (person.getImdbId() == null || person.getImdbId().isEmpty()) {
             String imdbId = personDb.getImdbId();
             person.setImdbId(imdbId);
         }

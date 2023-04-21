@@ -130,9 +130,9 @@ ind-person-nav {
   }
 }
 .person__title {
-  font-size: 4.5rem;
-  display: inline;
-  margin-right: 1rem;
+  font-weight: 500;
+  font-size: 8rem;
+  color: #fff;
 }
 
 @media screen and (max-width: 600px) {
@@ -141,10 +141,11 @@ ind-person-nav {
   }
 }
 .person__title__container {
-  max-width: 55%;
+  font-family: "IBM Plex Sans", sans-serif;
   width: 100%;
+  display: flex;
   padding-top: 1rem;
-  transform: translateX(-0.25rem);
+  transform: translateX(-15vw);
 }
 @media screen and (max-width: 600px) {
   .person__title__container {
@@ -156,86 +157,8 @@ ind-person-nav {
   display: flex;
   color: #979596;
 }
-@media screen and (max-width: 600px) {
-  .person__year {
-    font-size: 2rem;
-    max-width: 100%;
-  }
-}
-.person__type {
-  max-width: 55%;
-  width: 100%;
-  margin: 0 0;
-}
-.person__type li {
-  padding-right: 1.5rem;
-  padding-top: 1.5rem;
-  float: left;
-  color: #ffffff;
-  font-weight: 300;
-  text-transform: uppercase;
-  letter-spacing: 0.1rem;
-}
-@media screen and (max-width: 600px) {
-  .person__type {
-    max-width: 100%;
-  }
-}
-.person__description {
-  width: 100%;
-  max-width: 55%;
-  margin: 0 0;
-  display: flex;
-  color: #ffffff;
-  font-size: 1.1rem;
-  padding-top: 3rem;
-  line-height: 2rem;
-  text-align: justify;
-}
-
-.review__description {
-  width: 100%;
-  margin: 0 0;
-  display: flex;
-  color: #ffffff;
-  font-size: 1.1rem;
-  padding-top: 3rem;
-  line-height: 2rem;
-  text-align: start;
-}
-@media screen and (max-width: 600px) {
-  .person__description {
-    max-width: 100%;
-  }
-  .review__description {
-    max-width: 100%;
-  }
-}
-
-.review__wrapper {
-  display: flex;
-  flex-direction: column;
-  max-width: 55%;
-}
 
 /* Glowing Card css */
-
-.ind-person-details-card {
-  border-radius: 8px;
-  position: relative;
-  margin: 70px auto 0;
-  width: 33vw;
-  height: 38vh;
-  transform: translateY(-55vh);
-  text-align: center;
-}
-
-@media only screen and (max-width: 600px) {
-  .ind-person-details-card {
-    width: 90%;
-    margin: 50px auto 0;
-  }
-}
 
 /* Move card to the left and up */
 @media only screen and (min-width: 600px) {

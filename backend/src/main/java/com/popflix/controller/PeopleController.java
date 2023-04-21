@@ -1,5 +1,6 @@
 package com.popflix.controller;
 
+import java.io.IOException;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,8 @@ public class PeopleController {
     private PersonService PersonService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Person>> getSinglePerson(@PathVariable Integer id) {
-        return new ResponseEntity<Optional<Person>>(PersonService.singleTmdbPerson(id), HttpStatus.OK);
+    public ResponseEntity<Optional<Person>> singlePerson(@PathVariable Integer id)
+            throws IOException, InterruptedException {
+        return new ResponseEntity<Optional<Person>>(PersonService.singlePerson(id), HttpStatus.OK);
     }
 }

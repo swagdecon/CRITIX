@@ -4,6 +4,7 @@ import IndPersonStyle from "../components/IndPerson/ind_person.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import Container from "../components/Container/Container";
 import axios from "axios";
+import "typeface-ibm-plex-sans";
 
 import "../misc/popcorn_logo.css";
 import LoadingPage from "./LoadingPage";
@@ -35,6 +36,7 @@ export default function IndPerson() {
         console.log(error);
       }
     }
+
     if (prevId !== id) {
       // compare current url id with previous url id
       setRequestSent(false); // reset requestSent state variable
@@ -55,7 +57,8 @@ export default function IndPerson() {
   let personBackdrop =
     `url(https://image.tmdb.org/t/p/original${person.backdropPath}) ` ||
     `url(https://image.tmdb.org/t/p/original${person.backdrop_path})`;
-  let personPosterPath = `https://image.tmdb.org/t/p/original${person.posterPath}`;
+  let personPosterPath = `https://image.tmdb.org/t/p/original${person.profilePath}`;
+  console.log(person);
   return (
     <html>
       <head>
@@ -83,12 +86,14 @@ export default function IndPerson() {
             <div className={IndPersonStyle["ind-person-header"]}>
               <div className={IndPersonStyle.person__score}></div>
               <div className={IndPersonStyle.person__title__container}>
-                <h2 className={IndPersonStyle.person__title}>{person.title}</h2>
+                <h2 className={IndPersonStyle.person__jobs}>
+                  {/* {person.attributes()} */}
+                </h2>
+                <h2 className={IndPersonStyle.person__title}>
+                  {person.name.toUpperCase()}
+                </h2>
                 <div className={IndPersonStyle.person__year}></div>
               </div>
-            </div>
-            <div className={IndPersonStyle.ind_person_review}>
-              <h3 className={IndPersonStyle.ind_review__title}>Reviews</h3>
             </div>
           </div>
           <section id="slide-1" className={IndPersonStyle.homeSlide}>

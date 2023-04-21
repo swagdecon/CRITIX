@@ -1,7 +1,7 @@
 package com.popflix.model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
-
+import org.springframework.data.annotation.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Person {
+    @Id
     private Integer id;
     private String name;
     private String birthday;
@@ -23,5 +24,5 @@ public class Person {
     private Float popularity;
     private String imdbId;
     private String job;
-
+    private String actorImdbImages;
 }
