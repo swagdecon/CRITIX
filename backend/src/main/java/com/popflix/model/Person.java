@@ -29,5 +29,6 @@ public class Person {
     private String job;
     private List<String> actorImdbImages;
     private List<String> actorJobs;
+    private Integer actorFilmAppearances;
 
 }

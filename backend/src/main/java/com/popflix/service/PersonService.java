@@ -27,12 +27,18 @@ public class PersonService {
         return jobs;
     }
 
+    public Integer getAllActorFilmAppearances(String imdbId) throws java.io.IOException, InterruptedException {
+        AllActorFilmAppearances allActorAppearances = new AllActorFilmAppearances();
+        Integer numOfFilmsStarredIn = allActorAppearances.actorFilmAppearances(imdbId);
+        return numOfFilmsStarredIn;
+    }
+
     public Optional<Person> singlePerson(Integer id) throws java.io.IOException, InterruptedException {
         Person person = new Person();
         person.setId(id);
 
         PersonPeople personDb = tmdbApi.getPeople().getPersonInfo(person.getId());
-
+        // Information from TMDB
         person.setName(personDb.getName());
         person.setBirthday(personDb.getBirthday());
         person.setDeathday(personDb.getDeathday());
@@ -49,9 +55,11 @@ public class PersonService {
         String imdbId = person.getImdbId();
         List<String> images = getAllImdbActorImages(imdbId);
         List<String> actorJobs = getAllImdbActorJobs(imdbId);
+        Integer actorFilmAppearances = getAllActorFilmAppearances(imdbId);
 
         person.setActorImdbImages(images);
         person.setActorJobs(actorJobs);
+        person.setActorFilmAppearances(actorFilmAppearances);
         updateTmdbPersonDetails(person);
         return Optional.of(person);
     }
