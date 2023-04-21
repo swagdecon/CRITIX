@@ -5,7 +5,11 @@ import "font-awesome/css/font-awesome.min.css";
 import Container from "../components/Container/Container";
 import axios from "axios";
 import "typeface-ibm-plex-sans";
-import { PersonTitle, PersonJobs } from "../components/Other/PersonComponents";
+import {
+  PersonTitle,
+  PersonJobs,
+  PersonRoles,
+} from "../components/Other/PersonComponents";
 import "../misc/popcorn_logo.css";
 import LoadingPage from "./LoadingPage";
 export default function IndPerson() {
@@ -90,7 +94,11 @@ export default function IndPerson() {
                 <h2 className={IndPersonStyle.person__title}>
                   <PersonTitle name={person.name} />
                 </h2>
+
                 <div className={IndPersonStyle.person__year}></div>
+                <PersonRoles
+                  actorFilmAppearances={person.actorFilmAppearances}
+                />
               </div>
             </div>
           </div>

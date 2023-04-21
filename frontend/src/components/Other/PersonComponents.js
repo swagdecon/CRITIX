@@ -1,6 +1,9 @@
-import { React } from "react";
+import { React, useRef, useEffect } from "react";
+
 import { propTypes } from "react-bootstrap/esm/Image";
 import IndPersonStyle from "../IndPerson/ind_person.module.css";
+import CountUp from "react-countup";
+
 function PersonTitle({ name }) {
   PersonTitle.propTypes = {
     name: propTypes.string,
@@ -17,30 +20,22 @@ function PersonJobs({ jobs }) {
     ));
 }
 
-function PersonRoles(actorFilmAppearances) {
-  let valueDisplays = document.querySelectorAll(".num");
-  let interval = 5000;
+function PersonRoles() {
+  const countUpRef = useRef(null);
 
-  valueDisplays.forEach((valueDisplay) => {
-    let startValue = 0;
-    let endValue = parseInt(valueDisplay.getAttribute("data-val"));
-    let duration = Math.floor(interval / endValue);
-    let counter = setInterval(function() {
-      startValue += 1;
-      valueDisplay.textContent = startValue;
-      if (startValue == endValue) {
-        clearInterval(counter);
-      }
-    }, duration);
-  });
-  <div className={IndPersonStyle["roles-wrapper"]}>
-    <div className={IndPersonStyle["roles-container"]}>
-      <i className="fas fa-people-arrows"></i>
-      <span className="num" data-val={actorFilmAppearances}>
-        000
-      </span>
-      <span className="text">Film Appearances</span>
-    </div>
-  </div>;
+  useEffect(() => {
+    if (countUpRef.current) {
+      countUpRef.current.start();
+    }
+  }, []);
+  return (
+    <CountUp start={0} end={10000} delay={0}>
+      {({ countUpRef }) => (
+        <div>
+          <span ref={countUpRef} />
+        </div>
+      )}
+    </CountUp>
+  );
 }
 export { PersonTitle, PersonJobs, PersonRoles };
