@@ -5,10 +5,9 @@ import "font-awesome/css/font-awesome.min.css";
 import Container from "../components/Container/Container";
 import axios from "axios";
 import "typeface-ibm-plex-sans";
-
+import { PersonTitle, PersonJobs } from "../components/Other/PersonComponents";
 import "../misc/popcorn_logo.css";
 import LoadingPage from "./LoadingPage";
-
 export default function IndPerson() {
   const [person, setPerson] = useState({});
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -53,12 +52,11 @@ export default function IndPerson() {
   if (!dataLoaded) {
     return <LoadingPage />;
   }
-
-  let personBackdrop =
-    `url(https://image.tmdb.org/t/p/original${person.backdropPath}) ` ||
-    `url(https://image.tmdb.org/t/p/original${person.backdrop_path})`;
-  let personPosterPath = `https://image.tmdb.org/t/p/original${person.profilePath}`;
   console.log(person);
+  let personBackdrop =
+    `url(${person.actorImdbImages[1]}) ` || `url(${person.backdrop_path})`;
+
+  let personPosterPath = `https://image.tmdb.org/t/p/original${person.profilePath}`;
   return (
     <html>
       <head>
@@ -86,11 +84,11 @@ export default function IndPerson() {
             <div className={IndPersonStyle["ind-person-header"]}>
               <div className={IndPersonStyle.person__score}></div>
               <div className={IndPersonStyle.person__title__container}>
-                <h2 className={IndPersonStyle.person__jobs}>
-                  {/* {person.attributes()} */}
-                </h2>
+                <div className={IndPersonStyle.person_job_wrapper}>
+                  <PersonJobs jobs={person.actorJobs} />
+                </div>
                 <h2 className={IndPersonStyle.person__title}>
-                  {person.name.toUpperCase()}
+                  <PersonTitle name={person.name} />
                 </h2>
                 <div className={IndPersonStyle.person__year}></div>
               </div>

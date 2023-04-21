@@ -17,7 +17,6 @@ export default function Homepage() {
           rel="stylesheet"
         />
       </head>
-      <isLoading />
 
       <body>
         <Container />
