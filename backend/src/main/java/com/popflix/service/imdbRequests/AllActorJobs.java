@@ -11,29 +11,24 @@ import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class AllActorImages {
-    public List<String> imdbActorImageRequest(String imdbId) throws IOException, InterruptedException {
+public class AllActorJobs {
+    public List<String> imdbActorJobs(String imdbId) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://imdb8.p.rapidapi.com/actors/get-all-images?nconst=" + imdbId))
+                .uri(URI.create("https://imdb8.p.rapidapi.com/actors/get-interesting-jobs?nconst=" + imdbId))
                 .header("X-RapidAPI-Key", "349136b942msh6c632fc990fca08p1625c1jsn9838599cbe73")
                 .header("X-RapidAPI-Host", "imdb8.p.rapidapi.com")
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
-
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-
         ObjectMapper mapper = new ObjectMapper();
         JsonNode rootNode = mapper.readTree(response.body());
-        List<String> images = new ArrayList<>();
+        List<String> jobs = new ArrayList<>();
 
-        JsonNode imagesNode = rootNode.path("resource").path("images");
-        int limit = 20;
-        for (int i = 0; i < imagesNode.size() && i < limit; i++) {
-            JsonNode imageNode = imagesNode.get(i);
-            String imageUrl = imageNode.path("url").asText();
-            images.add(imageUrl);
+        for (int i = 0; i < rootNode.size() && i < 5; i++) {
+            JsonNode imageNode = rootNode.get(i);
+            String actorJobs = imageNode.asText();
+            jobs.add(actorJobs);
         }
-        return images;
+        return jobs;
     }
-
 }

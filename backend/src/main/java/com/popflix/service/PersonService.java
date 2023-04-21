@@ -1,9 +1,7 @@
 package com.popflix.service;
 
-import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.popflix.model.Person;
 import info.movito.themoviedbapi.TmdbApi;
@@ -18,11 +16,15 @@ public class PersonService {
 
     private final AllActorImages allActorImages = new AllActorImages();
 
-    public String getAllImdbActorImages(String imdbId) throws java.io.IOException, InterruptedException {
-
-        String response = allActorImages.imdbActorImageRequest(imdbId);
+    public List<String> getAllImdbActorImages(String imdbId) throws java.io.IOException, InterruptedException {
+        List<String> response = allActorImages.imdbActorImageRequest(imdbId);
         return response;
+    }
 
+    public List<String> getAllImdbActorJobs(String imdbId) throws java.io.IOException, InterruptedException {
+        AllActorJobs allActorJobs = new AllActorJobs();
+        List<String> jobs = allActorJobs.imdbActorJobs(imdbId);
+        return jobs;
     }
 
     public Optional<Person> singlePerson(Integer id) throws java.io.IOException, InterruptedException {
@@ -45,8 +47,11 @@ public class PersonService {
 
         // Get actor's images from IMDB
         String imdbId = person.getImdbId();
-        String images = getAllImdbActorImages(imdbId);
+        List<String> images = getAllImdbActorImages(imdbId);
+        List<String> actorJobs = getAllImdbActorJobs(imdbId);
+
         person.setActorImdbImages(images);
+        person.setActorJobs(actorJobs);
         updateTmdbPersonDetails(person);
         return Optional.of(person);
     }

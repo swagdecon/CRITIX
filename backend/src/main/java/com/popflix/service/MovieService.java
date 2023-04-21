@@ -1,6 +1,5 @@
 package com.popflix.service;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -240,7 +239,8 @@ public class MovieService {
       List<Person> actors = new ArrayList<>();
       for (PersonCast cast : castList) {
         Person person = new Person();
-        person.setId(cast.getCastId());
+        // This sets the Id of the person to the PersonId, not the CastId
+        person.setId(cast.getId());
         person.setName(cast.getName());
         person.setProfilePath(cast.getProfilePath());
         actors.add(person);
