@@ -20,7 +20,10 @@ function PersonJobs({ jobs }) {
     ));
 }
 
-function PersonRoles() {
+function PersonRoles({ actorFilmAppearances }) {
+  PersonRoles.propTypes = {
+    actorFilmAppearances: propTypes.integer,
+  };
   const countUpRef = useRef(null);
 
   useEffect(() => {
@@ -28,14 +31,20 @@ function PersonRoles() {
       countUpRef.current.start();
     }
   }, []);
+  console.log(actorFilmAppearances);
   return (
-    <CountUp start={0} end={10000} delay={0}>
-      {({ countUpRef }) => (
-        <div>
-          <span ref={countUpRef} />
-        </div>
-      )}
-    </CountUp>
+    <div className={IndPersonStyle["person-role-wrapper"]}>
+      <CountUp start={0} end={actorFilmAppearances} delay={1}>
+        {({ countUpRef }) => (
+          <div>
+            <span ref={countUpRef} />
+            <div className={IndPersonStyle["person-role-text"]}>
+              Film Performances
+            </div>
+          </div>
+        )}
+      </CountUp>
+    </div>
   );
 }
 export { PersonTitle, PersonJobs, PersonRoles };

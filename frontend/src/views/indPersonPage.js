@@ -56,7 +56,7 @@ export default function IndPerson() {
   if (!dataLoaded) {
     return <LoadingPage />;
   }
-  console.log(person);
+
   let personBackdrop =
     `url(${person.actorImdbImages[1]}) ` || `url(${person.backdrop_path})`;
 
