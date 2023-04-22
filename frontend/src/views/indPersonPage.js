@@ -56,9 +56,9 @@ export default function IndPerson() {
   if (!dataLoaded) {
     return <LoadingPage />;
   }
-
+  console.log(person);
   let personBackdrop =
-    `url(${person.actorImdbImages[1]}) ` || `url(${person.backdrop_path})`;
+    `url(${person.imdbPersonImages[1]}) ` || `url(${person.backdrop_path})`;
 
   let personPosterPath = `https://image.tmdb.org/t/p/original${person.profilePath}`;
   return (
@@ -89,7 +89,7 @@ export default function IndPerson() {
               <div className={IndPersonStyle.person__score}></div>
               <div className={IndPersonStyle.person__title__container}>
                 <div className={IndPersonStyle.person_job_wrapper}>
-                  <PersonJobs jobs={person.actorJobs} />
+                  <PersonJobs jobs={person.imdbPersonJobs} />
                 </div>
                 <h2 className={IndPersonStyle.person__title}>
                   <PersonTitle name={person.name} />
@@ -97,7 +97,7 @@ export default function IndPerson() {
 
                 <div className={IndPersonStyle.person__year}></div>
                 <PersonRoles
-                  actorFilmAppearances={person.actorFilmAppearances}
+                  actorFilmAppearances={person.imdbPersonFilmAppearances}
                 />
               </div>
             </div>
