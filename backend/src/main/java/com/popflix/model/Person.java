@@ -27,8 +27,8 @@ public class Person {
     private Float popularity;
     private String imdbId;
     private String job;
-    private List<String> actorImdbImages;
-    private List<String> actorJobs;
-    private Integer actorFilmAppearances;
+    private List<String> imdbPersonImages;
+    private List<String> imdbPersonJobs;
+    private Integer imdbPersonFilmAppearances;
 
 }

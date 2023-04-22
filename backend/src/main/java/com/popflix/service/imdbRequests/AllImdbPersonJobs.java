@@ -11,8 +11,8 @@ import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class AllActorJobs {
-    public List<String> imdbActorJobs(String imdbId) throws IOException, InterruptedException {
+public class AllImdbPersonJobs {
+    public List<String> imdbPersonJobs(String imdbId) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://imdb8.p.rapidapi.com/actors/get-interesting-jobs?nconst=" + imdbId))
                 .header("X-RapidAPI-Key", "349136b942msh6c632fc990fca08p1625c1jsn9838599cbe73")
@@ -26,8 +26,8 @@ public class AllActorJobs {
 
         for (int i = 0; i < rootNode.size() && i < 5; i++) {
             JsonNode imageNode = rootNode.get(i);
-            String actorJobs = imageNode.asText();
-            jobs.add(actorJobs);
+            String personJobs = imageNode.asText();
+            jobs.add(personJobs);
         }
         return jobs;
     }

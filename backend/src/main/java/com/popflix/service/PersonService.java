@@ -14,22 +14,22 @@ public class PersonService {
 
     private final TmdbApi tmdbApi = new TmdbApi("d84f9365179dc98dc69ab22833381835");
 
-    private final AllActorImages allActorImages = new AllActorImages();
+    private final AllImdbPersonImages allPersonImages = new AllImdbPersonImages();
 
-    public List<String> getAllImdbActorImages(String imdbId) throws java.io.IOException, InterruptedException {
-        List<String> response = allActorImages.imdbActorImageRequest(imdbId);
+    public List<String> getAllImdbPersonImages(String imdbId) throws java.io.IOException, InterruptedException {
+        List<String> response = allPersonImages.imdbPersonImageRequest(imdbId);
         return response;
     }
 
-    public List<String> getAllImdbActorJobs(String imdbId) throws java.io.IOException, InterruptedException {
-        AllActorJobs allActorJobs = new AllActorJobs();
-        List<String> jobs = allActorJobs.imdbActorJobs(imdbId);
+    public List<String> getAllImdbPersonJobs(String imdbId) throws java.io.IOException, InterruptedException {
+        AllImdbPersonJobs allPersonJobs = new AllImdbPersonJobs();
+        List<String> jobs = allPersonJobs.imdbPersonJobs(imdbId);
         return jobs;
     }
 
-    public Integer getAllActorFilmAppearances(String imdbId) throws java.io.IOException, InterruptedException {
-        AllActorFilmAppearances allActorAppearances = new AllActorFilmAppearances();
-        Integer numOfFilmsStarredIn = allActorAppearances.actorFilmAppearances(imdbId);
+    public Integer getAllPersonFilmAppearances(String imdbId) throws java.io.IOException, InterruptedException {
+        PersonImdbJobInfo allPersonAppearances = new PersonImdbJobInfo();
+        Integer numOfFilmsStarredIn = allPersonAppearances.personMoviesProduced(imdbId);
         return numOfFilmsStarredIn;
     }
 
@@ -53,13 +53,13 @@ public class PersonService {
 
         // Get actor's images from IMDB
         String imdbId = person.getImdbId();
-        List<String> images = getAllImdbActorImages(imdbId);
-        List<String> actorJobs = getAllImdbActorJobs(imdbId);
-        Integer actorFilmAppearances = getAllActorFilmAppearances(imdbId);
+        List<String> images = getAllImdbPersonImages(imdbId);
+        List<String> actorJobs = getAllImdbPersonJobs(imdbId);
+        Integer actorFilmAppearances = getAllPersonFilmAppearances(imdbId);
 
-        person.setActorImdbImages(images);
-        person.setActorJobs(actorJobs);
-        person.setActorFilmAppearances(actorFilmAppearances);
+        person.setImdbPersonImages(images);
+        person.setImdbPersonJobs(actorJobs);
+        person.setImdbPersonFilmAppearances(actorFilmAppearances);
         updateTmdbPersonDetails(person);
         return Optional.of(person);
     }

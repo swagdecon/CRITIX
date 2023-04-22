@@ -11,8 +11,8 @@ import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class AllActorImages {
-    public List<String> imdbActorImageRequest(String imdbId) throws IOException, InterruptedException {
+public class AllImdbPersonImages {
+    public List<String> imdbPersonImageRequest(String imdbId) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://imdb8.p.rapidapi.com/actors/get-all-images?nconst=" + imdbId))
                 .header("X-RapidAPI-Key", "349136b942msh6c632fc990fca08p1625c1jsn9838599cbe73")
