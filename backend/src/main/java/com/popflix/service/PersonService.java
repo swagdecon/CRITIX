@@ -29,8 +29,14 @@ public class PersonService {
 
     public Integer getAllPersonFilmAppearances(String imdbId) throws java.io.IOException, InterruptedException {
         PersonImdbJobInfo allPersonAppearances = new PersonImdbJobInfo();
-        Integer numOfFilmsStarredIn = allPersonAppearances.personMoviesProduced(imdbId);
+        Integer numOfFilmsStarredIn = allPersonAppearances.personFilmAppearances(imdbId);
         return numOfFilmsStarredIn;
+    }
+
+    public Integer getAllpersonMoviesProduced(String imdbId) throws java.io.IOException, InterruptedException {
+        PersonImdbJobInfo allPersonMoviesProduced = new PersonImdbJobInfo();
+        Integer numOfFilmsProduced = allPersonMoviesProduced.personMoviesProduced(imdbId);
+        return numOfFilmsProduced;
     }
 
     public Optional<Person> singlePerson(Integer id) throws java.io.IOException, InterruptedException {
@@ -54,12 +60,14 @@ public class PersonService {
         // Get actor's images from IMDB
         String imdbId = person.getImdbId();
         List<String> images = getAllImdbPersonImages(imdbId);
-        List<String> actorJobs = getAllImdbPersonJobs(imdbId);
-        Integer actorFilmAppearances = getAllPersonFilmAppearances(imdbId);
-
+        List<String> personJobs = getAllImdbPersonJobs(imdbId);
+        Integer personFilmAppearances = getAllPersonFilmAppearances(imdbId);
+        Integer personFilmsProduced = getAllpersonMoviesProduced(imdbId);
         person.setImdbPersonImages(images);
-        person.setImdbPersonJobs(actorJobs);
-        person.setImdbPersonFilmAppearances(actorFilmAppearances);
+        person.setImdbPersonJobs(personJobs);
+        person.setImdbPersonFilmAppearances(personFilmAppearances);
+        person.setImdbFilmsProduced(personFilmsProduced);
+
         updateTmdbPersonDetails(person);
         return Optional.of(person);
     }

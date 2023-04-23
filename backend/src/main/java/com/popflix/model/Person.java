@@ -30,5 +30,6 @@ public class Person {
     private List<String> imdbPersonImages;
     private List<String> imdbPersonJobs;
     private Integer imdbPersonFilmAppearances;
+    private Integer imdbFilmsProduced;
 
 }
