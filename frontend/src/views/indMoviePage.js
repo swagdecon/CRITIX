@@ -8,7 +8,7 @@ import {
   MovieGenres,
   MovieTrailer,
   MovieAverage,
-  getYearFromDate,
+  GetYearFromDate,
   EmbeddedMovieTrailer,
   MovieReviews,
   MovieDetails,
@@ -99,7 +99,7 @@ export default function IndMovie() {
               <div className={IndMovieStyle.movie__title__container}>
                 <h2 className={IndMovieStyle.movie__title}>{movie.title}</h2>
                 <div className={IndMovieStyle.movie__year}>
-                  {getYearFromDate(movie.releaseDate)}
+                  {GetYearFromDate(movie.releaseDate)}
                 </div>
               </div>
               <MovieGenres genres={movie.genres} />

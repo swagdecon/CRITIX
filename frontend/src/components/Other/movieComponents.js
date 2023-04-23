@@ -32,7 +32,7 @@ function MovieRuntime({ runtime }) {
   return `${runtime} mins |`;
 }
 
-function getYearFromDate(dateString) {
+function GetYearFromDate(dateString) {
   if (!dateString) {
     return null;
   }
@@ -305,7 +305,7 @@ MovieDetails.propTypes = {
 
 export {
   TruncateDescription,
-  getYearFromDate,
+  GetYearFromDate,
   MovieRuntime,
   MovieTrailer,
   MovieAverage,

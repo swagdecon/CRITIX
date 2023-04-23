@@ -22,6 +22,7 @@
     "lodash": "^4.17.21",
     "npm": "^9.5.1",
     "profanity-cleaner": "^0.0.3",
+    "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
     "react-countup": "^6.4.2",
