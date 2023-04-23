@@ -32,7 +32,10 @@ export default function RecommendedCarousel({ movieId }) {
       {movieChunks.map((chunk, i) => (
         <Carousel.Item key={i}>
           {chunk.map((movie, j) => (
-            <div className={MovieCardStyle["card-container"]} key={`${i}-${j}`}>
+            <div
+              className={MovieCardStyle["recommended-card-container"]}
+              key={`${i}-${j}`}
+            >
               <Link to={`/movies/movie/${movie.id}`}>
                 <div className="container">
                   <div className={MovieCardStyle["cellphone-container"]}>

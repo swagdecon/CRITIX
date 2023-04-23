@@ -8,7 +8,7 @@ import {
   MovieGenres,
   MovieTrailer,
   MovieAverage,
-  getYearFromDate,
+  GetYearFromDate,
   EmbeddedMovieTrailer,
   MovieReviews,
   MovieDetails,
@@ -64,7 +64,6 @@ export default function IndMovie() {
   if (!dataLoaded) {
     return <LoadingPage />;
   }
-
   let movieBackdrop =
     `url(https://image.tmdb.org/t/p/original${movie.backdropPath}) ` ||
     `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`;
@@ -100,7 +99,7 @@ export default function IndMovie() {
               <div className={IndMovieStyle.movie__title__container}>
                 <h2 className={IndMovieStyle.movie__title}>{movie.title}</h2>
                 <div className={IndMovieStyle.movie__year}>
-                  {getYearFromDate(movie.releaseDate)}
+                  {GetYearFromDate(movie.releaseDate)}
                 </div>
               </div>
               <MovieGenres genres={movie.genres} />
@@ -154,10 +153,7 @@ export default function IndMovie() {
                 </div>
                 <h1 className={IndMovieStyle["cast-title-1"]}>Cast Members:</h1>
                 <section className={IndMovieStyle.CastMembers}>
-                  <MovieActors
-                    actors={movie.actors}
-                    images={movie.actorImagePaths}
-                  />
+                  <MovieActors actors={movie.actors} />
                 </section>
               </div>
             </div>
