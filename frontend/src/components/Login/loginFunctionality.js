@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.module.css";
 import "../../misc/clapperboard.css";
 import Filter from "bad-words";
-import sha256 from "crypto-js/sha256";
-import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import LoginStyles from "../Login/login.module.css";
 
 export default function LoginFunctionality() {
@@ -13,33 +11,12 @@ export default function LoginFunctionality() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [error, setError] = useState("");
-  const [fingerprint, setFingerprint] = useState("");
   const navigate = useNavigate();
   const filter = new Filter();
 
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
   }
-
-  useEffect(() => {
-    const getFingerprint = async () => {
-      const fp = await FingerprintJS.load();
-      const result = await fp.get();
-      const {
-        userAgent,
-        language,
-        hardwareConcurrency,
-        doNotTrack,
-        maxTouchPoints,
-      } = window.navigator;
-      const fingerprint = sha256(
-        `${result.visitorId}${userAgent}${language}${hardwareConcurrency}${doNotTrack}${maxTouchPoints}`
-      ).toString();
-
-      setFingerprint(fingerprint);
-    };
-    getFingerprint();
-  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -60,7 +37,6 @@ export default function LoginFunctionality() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "X-Fingerprint": fingerprint,
           },
           body: JSON.stringify(userData),
         }
@@ -69,7 +45,7 @@ export default function LoginFunctionality() {
         const responseJson = await myResponse.json();
         const { token } = responseJson;
 
-        const tokenWithFingerprint = JSON.stringify({ token, fingerprint });
+        const tokenWithFingerprint = JSON.stringify({ token });
 
         if (typeof sessionStorage !== "undefined") {
           sessionStorage.setItem("jwt", tokenWithFingerprint);
