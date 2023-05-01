@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.popflix.config.JwtService;
+import com.popflix.config.customExceptions.UserAlreadyExistsException;
 import com.popflix.model.Role;
 import com.popflix.model.User;
 import com.popflix.repository.UserRepository;
@@ -22,10 +23,9 @@ public class AuthenticationService {
 
         public AuthenticationResponse register(RegisterRequest request) {
 
-                // if (repository.findByEmail(request.getEmail()).isPresent()) {
-                // throw new UserAlreadyExistsException("*A User With This Email Already
-                // Exists*");
-                // }
+                if (repository.findByEmail(request.getEmail()).isPresent()) {
+                        throw new UserAlreadyExistsException("*A User With This Email Already Exists*");
+                }
 
                 var user = User.builder()
                                 .firstname(request.getFirstname())
