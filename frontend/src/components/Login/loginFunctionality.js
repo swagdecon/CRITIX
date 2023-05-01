@@ -24,6 +24,7 @@ export default function LoginFunctionality() {
     const userData = { email, password };
     const hasEmailProfanity = filter.isProfane(userData["email"]);
     const hasPasswordProfanity = filter.isProfane(userData["password"]);
+
     if (hasEmailProfanity || hasPasswordProfanity) {
       setErrorMessage("*Input(s) cannot contain profanity*");
       return;
@@ -45,21 +46,16 @@ export default function LoginFunctionality() {
         const responseJson = await myResponse.json();
         const { token } = responseJson;
 
-        const tokenWithFingerprint = JSON.stringify({ token });
+        const stringToken = JSON.stringify({ token });
 
-        if (typeof sessionStorage !== "undefined") {
-          sessionStorage.setItem("jwt", tokenWithFingerprint);
-        } else {
-          console.error("SessionStorage is not available for storing JWT");
-          navigate("/403", { replace: true });
-        }
-
-        navigate("/home", { replace: true });
-      } else {
-        setError("*Invalid Username or Password*");
+        typeof sessionStorage !== "undefined"
+          ? sessionStorage.setItem("jwt", stringToken)
+          : console.error("SessionStorage is not available for storing JWT");
+        navigate("/403");
       }
+      navigate("/home");
     } catch (error) {
-      console.log(error);
+      setError(error);
     }
   };
 

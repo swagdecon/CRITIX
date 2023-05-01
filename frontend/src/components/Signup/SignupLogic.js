@@ -6,18 +6,19 @@ import Filter from "bad-words";
 import SignUpStyles from "../Login/login.module.css";
 
 export default function SignUpFunctionality() {
-  const [passwordVisible, setPasswordVisible] = useState(false);
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
   }
+
   const filter = new Filter();
+  const navigate = useNavigate();
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [profanityErrorMessage, setProfanityErrorMessage] = useState("");
-  const navigate = useNavigate();
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -50,15 +51,10 @@ export default function SignUpFunctionality() {
         body: JSON.stringify(userData),
       });
 
-      if (response.ok) {
-        navigate("/login", { replace: true });
-      } else {
-        const errorBody = await response.text();
-        setError(errorBody);
-        return;
-      }
+      response.ok ? navigate("/login") : setError(await response.text());
+      return;
     } catch (error) {
-      navigate("/error", { replace: true });
+      navigate("/error");
     }
   };
 
