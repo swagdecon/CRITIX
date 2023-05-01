@@ -23,12 +23,9 @@ public class User implements UserDetails {
 
     @Id
     private String id;
-
     private String firstname;
     private String lastname;
-
     private String email;
-
     private String password;
 
     @Enumerated(EnumType.STRING)

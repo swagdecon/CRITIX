@@ -3,6 +3,7 @@ package com.popflix.auth;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ public class AuthenticationController {
                 try {
                         return ResponseEntity.ok(service.register(request));
                 } catch (UserAlreadyExistsException ex) {
-                        return ResponseEntity.badRequest().body("*A User with this email already exists*");
+                        return ResponseEntity.badRequest().body("*A User With This Email Already Exists*");
                 }
         }
 
