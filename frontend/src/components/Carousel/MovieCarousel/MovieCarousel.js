@@ -35,13 +35,11 @@ export default function MovieCarousel({ title, endpoint }) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const tokenWithFingerprint = sessionStorage.getItem("jwt");
-        const { token, fingerprint } = JSON.parse(tokenWithFingerprint);
+        const { token } = JSON.parse(sessionStorage.getItem("jwt"));
 
         const response = await axios.get(endpoint, {
           headers: {
             Authorization: `Bearer ${token}`,
-            "X-Fingerprint": fingerprint,
           },
         });
         setMovies(response.data);
