@@ -41,7 +41,7 @@ export default function LogIn() {
             </Link>
           </div>
           <footer id={LoginStyles["main-footer"]}>
-            <p>&copy; 2022, All Rights Reserved By POPFLIX</p>
+            <p>&copy; 2023, All Rights Reserved By POPFLIX</p>
             <div>
               <Link to="#">Terms of Use</Link> |{" "}
               <Link to="#">Privacy Policy</Link>
