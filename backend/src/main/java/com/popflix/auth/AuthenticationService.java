@@ -1,7 +1,9 @@
 package com.popflix.auth;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,12 @@ import com.popflix.model.User;
 import com.popflix.model.Token;
 import com.popflix.repository.TokenRepository;
 import com.popflix.repository.UserRepository;
+import com.fasterxml.jackson.core.exc.StreamWriteException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -39,13 +46,14 @@ public class AuthenticationService {
                                 .role(Role.USER)
                                 .build();
                 userRepository.save(user);
-                var jwtToken = jwtService.generateToken(user);
                 var savedUser = userRepository.save(user);
-
+                var jwtToken = jwtService.generateToken(user);
+                var refreshToken = jwtService.generateRefreshToken(user);
                 saveUserToken(savedUser, jwtToken);
 
                 return AuthenticationResponse.builder()
-                                .token(jwtToken)
+                                .accessToken(jwtToken)
+                                .refreshToken(refreshToken)
                                 .build();
         }
 
@@ -59,10 +67,12 @@ public class AuthenticationService {
                                 .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
 
                 var jwtToken = jwtService.generateToken(user);
+                var refreshToken = jwtService.generateRefreshToken(user);
                 revokeAllUserTokens(user);
                 saveUserToken(user, jwtToken);
                 return AuthenticationResponse.builder()
-                                .token(jwtToken)
+                                .accessToken(jwtToken)
+                                .refreshToken(refreshToken)
                                 .build();
 
         }
@@ -89,5 +99,31 @@ public class AuthenticationService {
                                 .build();
                 tokenRepository.save(token);
 
+        }
+
+        public void refreshToken(HttpServletRequest request, HttpServletResponse response)
+                        throws IOException, StreamWriteException, DatabindException, java.io.IOException {
+                final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+                final String refreshToken;
+                final String userEmail;
+                if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                        return;
+                }
+                refreshToken = authHeader.substring(7);
+                userEmail = jwtService.extractUsername(refreshToken);
+                if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                        var user = this.userRepository.findByEmail(userEmail).orElseThrow();
+
+                        if (jwtService.isTokenValid(refreshToken, user)) {
+                                var accessToken = jwtService.generateToken(user);
+                                revokeAllUserTokens(user);
+                                saveUserToken(user, accessToken);
+                                var authResponse = AuthenticationResponse.builder()
+                                                .accessToken(accessToken)
+                                                .refreshToken(refreshToken)
+                                                .build();
+                                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+                        }
+                }
         }
 }

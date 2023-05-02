@@ -8,6 +8,8 @@ import java.util.function.Function;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -16,8 +18,10 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
-
-    private static final String SECRET_KEY = "4528482B4B6250655368566D597133743677397A24432646294A404E635166546A576E5A7234753778214125442A472D4B6150645367566B5870327335763879";
+    Dotenv dotenv = Dotenv.load();
+    private String SECRET_KEY = dotenv.get("SECRET_KEY");
+    private Long jwtExpiration = Long.parseLong(dotenv.get("SECRET_KEY_EXPIRATION"));
+    private Long refreshExpiration = Long.parseLong(dotenv.get("REFRESH_TOKEN_EXPIRATION"));
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -26,6 +30,7 @@ public class JwtService {
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
+
     }
 
     public String generateToken(UserDetails userDetails) {
@@ -35,13 +40,22 @@ public class JwtService {
     public String generateToken(
             Map<String, Object> extraClaims,
             UserDetails userDetails) {
+        return buildToken(extraClaims, userDetails, jwtExpiration);
+    }
 
+    public String generateRefreshToken(
+            UserDetails userDetails) {
+        return buildToken(new HashMap<>(), userDetails, refreshExpiration);
+    }
+
+    private String buildToken(Map<String, Object> extraClaims,
+            UserDetails userDetails, Long expiration) {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
