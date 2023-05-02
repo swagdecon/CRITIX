@@ -7,7 +7,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import java.util.Collection;
 import java.util.List;
 import lombok.AllArgsConstructor;

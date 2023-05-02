@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,12 +15,15 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.popflix.repository.TokenRepository;
+
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final TokenRepository tokenRepository;
 
     @Override
     protected void doFilterInternal(
@@ -44,15 +46,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         userEmail = jwtService.extractUsername(jwt);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            if (jwtService.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
-                        null, userDetails.getAuthorities());
+            var token = tokenRepository.findByToken(jwt);
+            if (token.isPresent() && !token.get().isExpired() && !token.get().isRevoked()) {
+                if (jwtService.isTokenValid(jwt, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
+                            null, userDetails.getAuthorities());
 
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                    filterChain.doFilter(request, response);
+                    return;
+                }
             }
         }
-        filterChain.doFilter(request, response);
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired token");
     }
+
 }
