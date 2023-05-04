@@ -50,6 +50,9 @@ public class JwtService {
 
     private String buildToken(Map<String, Object> extraClaims,
             UserDetails userDetails, Long expiration) {
+        System.out.println(refreshExpiration);
+        System.out.println(jwtExpiration);
+
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
@@ -58,6 +61,7 @@ public class JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS512)
                 .compact();
+
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {

@@ -49,8 +49,8 @@ public class AuthenticationService {
                 var savedUser = userRepository.save(user);
                 var jwtToken = jwtService.generateToken(user);
                 var refreshToken = jwtService.generateRefreshToken(user);
-                saveUserToken(savedUser, jwtToken);
-
+                saveAccessToken(savedUser, jwtToken);
+                saveRefreshToken(user, refreshToken);
                 return AuthenticationResponse.builder()
                                 .accessToken(jwtToken)
                                 .refreshToken(refreshToken)
@@ -66,12 +66,13 @@ public class AuthenticationService {
                 var user = userRepository.findByEmail(request.getEmail())
                                 .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
 
-                var jwtToken = jwtService.generateToken(user);
+                var accessToken = jwtService.generateToken(user);
                 var refreshToken = jwtService.generateRefreshToken(user);
                 revokeAllUserTokens(user);
-                saveUserToken(user, jwtToken);
+                saveAccessToken(user, accessToken);
+                saveRefreshToken(user, refreshToken);
                 return AuthenticationResponse.builder()
-                                .accessToken(jwtToken)
+                                .accessToken(accessToken)
                                 .refreshToken(refreshToken)
                                 .build();
 
@@ -88,12 +89,24 @@ public class AuthenticationService {
                 tokenRepository.saveAll(validUserTokens);
         }
 
-        private void saveUserToken(User user, String jwtToken) {
+        private void saveAccessToken(User user, String accessToken) {
                 var token = Token.builder()
                                 .user(user)
                                 .userId(user.getId())
-                                .token(jwtToken)
+                                .token(accessToken)
                                 .tokenType(TokenType.BEARER)
+                                .expired(false)
+                                .revoked(false)
+                                .build();
+                tokenRepository.save(token);
+        }
+
+        private void saveRefreshToken(User user, String refreshToken) {
+                var token = Token.builder()
+                                .user(user)
+                                .userId(user.getId())
+                                .token(refreshToken)
+                                .tokenType(TokenType.REFRESH)
                                 .expired(false)
                                 .revoked(false)
                                 .build();
@@ -101,7 +114,9 @@ public class AuthenticationService {
 
         }
 
-        public void refreshToken(HttpServletRequest request, HttpServletResponse response)
+        public void refreshToken(
+                        HttpServletRequest request,
+                        HttpServletResponse response)
                         throws IOException, StreamWriteException, DatabindException, java.io.IOException {
                 final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
                 final String refreshToken;
@@ -111,19 +126,20 @@ public class AuthenticationService {
                 }
                 refreshToken = authHeader.substring(7);
                 userEmail = jwtService.extractUsername(refreshToken);
-                if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                        var user = this.userRepository.findByEmail(userEmail).orElseThrow();
-
+                if (userEmail != null) {
+                        var user = this.userRepository.findByEmail(userEmail)
+                                        .orElseThrow();
                         if (jwtService.isTokenValid(refreshToken, user)) {
                                 var accessToken = jwtService.generateToken(user);
                                 revokeAllUserTokens(user);
-                                saveUserToken(user, accessToken);
+                                saveAccessToken(user, accessToken);
                                 var authResponse = AuthenticationResponse.builder()
                                                 .accessToken(accessToken)
                                                 .refreshToken(refreshToken)
                                                 .build();
                                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
                         }
+
                 }
         }
 }
