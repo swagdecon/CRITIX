@@ -101,7 +101,10 @@ function MovieCardGenres({ genres }) {
 }
 
 function MovieCardActors({ actors }) {
-  if (!Array.isArray(actors)) {
+  if (
+    !Array.isArray(actors) ||
+    actors.some((actor) => typeof actor !== "object" || actor === null)
+  ) {
     return "No Actors Available";
   }
 

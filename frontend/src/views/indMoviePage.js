@@ -31,13 +31,11 @@ export default function IndMovie() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const tokenWithFingerprint = sessionStorage.getItem("jwt");
-        const { token, fingerprint } = JSON.parse(tokenWithFingerprint);
+        const token = JSON.parse(localStorage.getItem("refreshToken"));
 
         const response = await axios.get(`${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
-            "X-Fingerprint": fingerprint,
           },
         });
         setMovie(response.data);
@@ -86,84 +84,87 @@ export default function IndMovie() {
           backgroundImage: movieBackdrop,
         }}
       ></div>
-      <ind-movie-body>
-        <div className={IndMovieStyle["ind-movie-wrapper"]}>
-          <div className={IndMovieStyle["hero-poster"]}>
-            <img src={moviePosterPath} />
-          </div>
-          <div id="fade" className={IndMovieStyle["container-margin"]}>
-            <div className={IndMovieStyle["ind-movie-header"]}>
-              <div className={IndMovieStyle.movie__score}>
-                <MovieAverage voteAverage={movie.voteAverage} />
-              </div>
-              <div className={IndMovieStyle.movie__title__container}>
-                <h2 className={IndMovieStyle.movie__title}>{movie.title}</h2>
-                <div className={IndMovieStyle.movie__year}>
-                  {GetYearFromDate(movie.releaseDate)}
+      <div>
+        <ind-movie-body>
+          <div className={IndMovieStyle["ind-movie-wrapper"]}>
+            <div className={IndMovieStyle["hero-poster"]}>
+              <img src={moviePosterPath} />
+            </div>
+            <div id="fade" className={IndMovieStyle["container-margin"]}>
+              <div className={IndMovieStyle["ind-movie-header"]}>
+                <div className={IndMovieStyle.movie__score}>
+                  <MovieAverage voteAverage={movie.voteAverage} />
                 </div>
-              </div>
-              <MovieGenres genres={movie.genres} />
-              <p className={IndMovieStyle.movie__description}>
-                {movie.overview}
-              </p>
-
-              <div className={IndMovieStyle["btn-wrapper"]}>
-                <button
-                  type="submit"
-                  onClick={() => MovieTrailer(movie.video[0])}
-                  className={SignUpStyles["css-button"]}
-                >
-                  <p className={SignUpStyles["css-button-text"]}>
-                    WATCH TRAILER
-                  </p>
-                  <div className={SignUpStyles["css-button-inner"]}>
-                    <div className={SignUpStyles["reset-skew"]}>
-                      <Popcorn
-                        className={SignUpStyles["css-button-inner-text"]}
-                      />
-                    </div>
+                <div className={IndMovieStyle.movie__title__container}>
+                  <h2 className={IndMovieStyle.movie__title}>{movie.title}</h2>
+                  <div className={IndMovieStyle.movie__year}>
+                    {GetYearFromDate(movie.releaseDate)}
                   </div>
-                </button>
-              </div>
-            </div>
-            <div className={IndMovieStyle.ind_movie_review}>
-              <h3 className={IndMovieStyle.ind_review__title}>Reviews</h3>
-              <MovieReviews reviews={movie.reviews} />
-            </div>
-          </div>
-          <section id="slide-1" className={IndMovieStyle.homeSlide}>
-            <div className={IndMovieStyle.bcg}>
-              <div className={IndMovieStyle.hsContainer}>
-                <div
-                  className={IndMovieStyle.hsContent}
-                  data-center="opacity: 1"
-                  data-top="opacity: 0"
-                  data-anchor-target="#slide-1 h2"
-                >
-                  <EmbeddedMovieTrailer video={movie.video} />
-                  <MovieDetails
-                    runtime={movie.runtime}
-                    revenue={movie.revenue}
-                    budget={movie.budget}
-                    language={movie.original_language}
-                    productionCompanies={movie.productionCompanies}
-                    movieStatus={movie.status}
-                    releaseDate={movie.releaseDate}
-                  />
                 </div>
-                <h1 className={IndMovieStyle["cast-title-1"]}>Cast Members:</h1>
-                <section className={IndMovieStyle.CastMembers}>
-                  <MovieActors actors={movie.actors} />
-                </section>
+                <MovieGenres genres={movie.genres} />
+                <p className={IndMovieStyle.movie__description}>
+                  {movie.overview}
+                </p>
+
+                <div className={IndMovieStyle["btn-wrapper"]}>
+                  <button
+                    type="submit"
+                    onClick={() => MovieTrailer(movie.video[0])}
+                    className={SignUpStyles["css-button"]}
+                  >
+                    <p className={SignUpStyles["css-button-text"]}>
+                      WATCH TRAILER
+                    </p>
+                    <div className={SignUpStyles["css-button-inner"]}>
+                      <div className={SignUpStyles["reset-skew"]}>
+                        <Popcorn
+                          className={SignUpStyles["css-button-inner-text"]}
+                        />
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+              <div className={IndMovieStyle.ind_movie_review}>
+                <h3 className={IndMovieStyle.ind_review__title}>Reviews</h3>
+                <MovieReviews reviews={movie.reviews} />
               </div>
             </div>
-          </section>
-
-          <section className={IndMovieStyle.recommended_movies}>
-            <RecommendedCarousel movieId={movie.id} />
-          </section>
-        </div>
-      </ind-movie-body>
+            <section id="slide-1" className={IndMovieStyle.homeSlide}>
+              <div className={IndMovieStyle.bcg}>
+                <div className={IndMovieStyle.hsContainer}>
+                  <div
+                    className={IndMovieStyle.hsContent}
+                    data-center="opacity: 1"
+                    data-top="opacity: 0"
+                    data-anchor-target="#slide-1 h2"
+                  >
+                    <EmbeddedMovieTrailer video={movie.video} />
+                    <MovieDetails
+                      runtime={movie.runtime}
+                      revenue={movie.revenue}
+                      budget={movie.budget}
+                      language={movie.original_language}
+                      productionCompanies={movie.productionCompanies}
+                      movieStatus={movie.status}
+                      releaseDate={movie.releaseDate}
+                    />
+                  </div>
+                  <h1 className={IndMovieStyle["cast-title-1"]}>
+                    Cast Members:
+                  </h1>
+                  <section className={IndMovieStyle.CastMembers}>
+                    <MovieActors actors={movie.actors} />
+                  </section>
+                </div>
+              </div>
+            </section>
+            <section className={IndMovieStyle.recommended_movies}>
+              <RecommendedCarousel movieId={movie.id} />
+            </section>
+          </div>
+        </ind-movie-body>
+      </div>
     </html>
   );
 }

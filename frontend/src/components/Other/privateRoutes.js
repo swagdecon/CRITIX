@@ -1,11 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
-import useSessionState from "./sessionStorage.js";
+import useLocalState from "./localStorage.js";
 import { Navigate } from "react-router-dom";
 
 export default function PrivateRoute({ children }) {
-  const [jwt] = useSessionState("", "jwt");
-  return jwt ? children : <Navigate to="/403" />;
+  const accessToken = useLocalState("", "accessToken");
+  const refreshToken = useLocalState("", "refreshToken");
+
+  return accessToken && refreshToken ? children : <Navigate to="/403" />;
 }
 
 PrivateRoute.propTypes = {

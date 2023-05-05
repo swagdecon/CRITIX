@@ -24,6 +24,7 @@ export default function LoginFunctionality() {
     const userData = { email, password };
     const hasEmailProfanity = filter.isProfane(userData["email"]);
     const hasPasswordProfanity = filter.isProfane(userData["password"]);
+    const token = JSON.parse(localStorage.getItem("accessToken"));
 
     if (hasEmailProfanity || hasPasswordProfanity) {
       setErrorMessage("*Input(s) cannot contain profanity*");
@@ -32,30 +33,29 @@ export default function LoginFunctionality() {
       setErrorMessage("");
     }
     try {
-      const myResponse = await fetch(
+      const response = await fetch(
         "http://localhost:8080/v1/auth/authenticate",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(userData),
         }
       );
-      if (myResponse.ok) {
-        const responseJson = await myResponse.json();
-        const { token } = responseJson;
-
-        const stringToken = JSON.stringify({ token });
-
-        typeof sessionStorage !== "undefined"
-          ? sessionStorage.setItem("jwt", stringToken)
-          : console.error("SessionStorage is not available for storing JWT");
-        navigate("/403");
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("accessToken", JSON.stringify(data.access_token));
+        localStorage.setItem(
+          "refreshToken",
+          JSON.stringify(data.refresh_token)
+        );
+        navigate("/home");
       }
-      navigate("/home");
     } catch (error) {
       setError(error);
+      navigate("/");
     }
   };
 

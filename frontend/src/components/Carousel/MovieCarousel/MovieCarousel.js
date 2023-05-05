@@ -35,10 +35,11 @@ export default function MovieCarousel({ title, endpoint }) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const { token } = JSON.parse(sessionStorage.getItem("jwt"));
+        const token = JSON.parse(localStorage.getItem("refreshToken"));
 
         const response = await axios.get(endpoint, {
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });

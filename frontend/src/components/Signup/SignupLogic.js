@@ -51,13 +51,22 @@ export default function SignUpFunctionality() {
         body: JSON.stringify(userData),
       });
 
-      response.ok ? navigate("/login") : setError(await response.text());
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("accessToken", JSON.stringify(data.access_token));
+        localStorage.setItem(
+          "refreshToken",
+          JSON.stringify(data.refresh_token)
+        );
+        navigate("/login");
+      } else {
+        setError(await response.text());
+      }
       return;
     } catch (error) {
       navigate("/error");
     }
   };
-
   return (
     <form onSubmit={handleSubmit}>
       <div className={SignUpStyles.error}>{error}</div>
