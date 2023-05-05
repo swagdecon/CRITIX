@@ -101,35 +101,27 @@ function MovieCardGenres({ genres }) {
 }
 
 function MovieCardActors({ actors }) {
-  if (
-    !Array.isArray(actors) ||
-    actors.some((actor) => typeof actor !== "object" || actor === null)
-  ) {
-    return "No Actors Available";
-  }
-
   MovieCardActors.propTypes = {
     actors: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        person_id: PropTypes.number.isRequired,
-        profilePath: PropTypes.string,
-      })
-    ),
+      PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.shape({
+          name: PropTypes.string,
+          role: PropTypes.string,
+        }),
+      ])
+    ).isRequired,
   };
 
   const topActors = actors.slice(0, 3);
+
   return (
     <span>
-      {topActors.map((actor, index) => {
-        if (index === 0) {
-          return actor.name;
-        } else if (index < 3) {
-          return `, ${actor.name}`;
-        } else {
-          return "";
-        }
-      })}
+      {topActors.map((actor, index) => (
+        <span key={actor.id || index}>
+          {index === 0 ? actor.name : `, ${actor.name}`}
+        </span>
+      ))}
     </span>
   );
 }

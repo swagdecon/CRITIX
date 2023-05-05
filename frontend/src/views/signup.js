@@ -10,58 +10,44 @@ import SignUpStyles from "../components/Login/login.module.css";
 
 export default function SignUp() {
   return (
-    <html lang="en">
-      <head>
-        <meta charSet="UTF-8" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
-        />
-        <title>Sign Up</title>
-      </head>
-      <body>
-        <div id={SignUpStyles.wrapper}>
-          <div id={SignUpStyles.left}>
-            <div id={SignUpStyles.signin}>
-              <Logo />
-              <img
-                src={Logo_Text}
-                className={SignUpStyles["homepage-logo"]}
-                alt="logo"
-              />
+    <div id={SignUpStyles.wrapper}>
+      <div id={SignUpStyles.left}>
+        <div id={SignUpStyles.signin}>
+          <Logo />
+          <img
+            src={Logo_Text}
+            className={SignUpStyles["homepage-logo"]}
+            alt="logo"
+          />
 
-              <SignUpFunctionality />
-              {/* REDIRECT TO LOG IN PAGE */}
-              <div className={SignUpStyles.or}>
-                <hr className={SignUpStyles.bar} />
-                <span>OR</span>
-                <hr className={SignUpStyles.bar} />
-              </div>
-              <Link to="/login" className={SignUpStyles["secondary-btn"]}>
-                <p className={SignUpStyles["css-button-text-2"]}>LOG IN</p>
-              </Link>
-            </div>
-            <footer id={SignUpStyles["main-footer"]}>
-              <p>&copy; 2022 POPFLIX, All Rights Reserved</p>
-              <div>
-                <Link to="#">Terms of Use</Link> |{" "}
-                <Link to="#">Privacy Policy</Link>
-              </div>
-            </footer>
+          <SignUpFunctionality />
+          {/* REDIRECT TO LOG IN PAGE */}
+          <div className={SignUpStyles.or}>
+            <hr className={SignUpStyles.bar} />
+            <span>OR</span>
+            <hr className={SignUpStyles.bar} />
           </div>
-          <div id={SignUpStyles.right}>
-            <div id={SignUpStyles.showcase}>
-              <div className={SignUpStyles["showcase-content"]}>
-                <div className={SignUpStyles.overlay}>
-                  <SignUpPlayer />
-                </div>
-              </div>
+          <Link to="/login" className={SignUpStyles["secondary-btn"]}>
+            <p className={SignUpStyles["css-button-text-2"]}>LOG IN</p>
+          </Link>
+        </div>
+        <footer id={SignUpStyles["main-footer"]}>
+          <p>&copy; 2022 POPFLIX, All Rights Reserved</p>
+          <div>
+            <Link to="#">Terms of Use</Link> |{" "}
+            <Link to="#">Privacy Policy</Link>
+          </div>
+        </footer>
+      </div>
+      <div id={SignUpStyles.right}>
+        <div id={SignUpStyles.showcase}>
+          <div className={SignUpStyles["showcase-content"]}>
+            <div className={SignUpStyles.overlay}>
+              <SignUpPlayer />
             </div>
           </div>
         </div>
-      </body>
-    </html>
+      </div>
+    </div>
   );
 }

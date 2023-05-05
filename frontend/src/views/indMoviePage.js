@@ -67,16 +67,7 @@ export default function IndMovie() {
     `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`;
   let moviePosterPath = `https://image.tmdb.org/t/p/original${movie.posterPath}`;
   return (
-    <html>
-      <head>
-        <meta charSet="UTF-8" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link
-          href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          rel="stylesheet"
-        />
-      </head>
+    <div className={IndMovieStyle["ind-movie-page-wrapper"]}>
       <Container />
       <div
         className={IndMovieStyle.background}
@@ -165,6 +156,6 @@ export default function IndMovie() {
           </div>
         </ind-movie-body>
       </div>
-    </html>
+    </div>
   );
 }

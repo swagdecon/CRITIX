@@ -62,9 +62,9 @@ export default function LoginFunctionality() {
   return (
     <form onSubmit={handleSubmit}>
       <div className={LoginStyles.error}>{error}</div>
-
       <br />
       <div className={LoginStyles.error}>{errorMessage}</div>
+
       <div>
         <label htmlFor="email">Email</label>
         <input
@@ -78,6 +78,7 @@ export default function LoginFunctionality() {
           required
         />
       </div>
+
       <div>
         <label htmlFor="password">Password</label>
         <input

@@ -5,17 +5,7 @@
   padding: 0;
   box-sizing: border-box;
 }
-html {
-  -webkit-tap-highlight-color: transparent;
-  background-color: #000000;
-  /* overflow-y: hidden !important; */
-}
-body {
-  font-family: "Roboto", sans-serif;
-  font-weight: 300;
-  background: #000000;
-  color: #fff;
-}
+
 h1,
 h2,
 h3,
@@ -210,12 +200,11 @@ div-error {
   font-weight: bold;
 }
 .secondary-btn {
-  padding: 0.7rem 1rem;
+  padding: 0.55rem 1rem;
   height: 2.7rem;
   display: block;
   border: 1px solid #f4f4f4;
   border-radius: 2px;
-  font-weight: 500;
   background: none;
   color: #fff;
   text-decoration: none;
@@ -223,6 +212,7 @@ div-error {
   text-align: center;
   transition: all 0.5s;
 }
+
 .secondary-btn:hover {
   border-color: #0096ff;
   color: #0096ff;

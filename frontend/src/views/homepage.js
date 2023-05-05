@@ -10,21 +10,12 @@ import Container from "../components/Container/Container";
 
 export default function Homepage() {
   return (
-    <html>
-      <head>
-        <link
-          href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          rel="stylesheet"
-        />
-      </head>
-
-      <body>
-        <Container />
-        <HeroCarousel />
-        <MovieCarousel title="Popular right now" endpoint="/movies/popular" />
-        <MovieCarousel title="Top Rated" endpoint="/movies/top_rated" />
-        <MovieCarousel title="Releasing Soon" endpoint="/movies/upcoming" />
-      </body>
-    </html>
+    <div>
+      <Container />
+      <HeroCarousel />
+      <MovieCarousel title="Popular right now" endpoint="/movies/popular" />
+      <MovieCarousel title="Top Rated" endpoint="/movies/top_rated" />
+      <MovieCarousel title="Releasing Soon" endpoint="/movies/upcoming" />
+    </div>
   );
 }

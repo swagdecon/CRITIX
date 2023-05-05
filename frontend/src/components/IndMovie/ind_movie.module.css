@@ -5,9 +5,11 @@
   clear: both;
   visibility: hidden;
 }
-html {
-  overflow-x: hidden;
+.ind-movie-page-wrapper {
   overflow-y: auto;
+}
+.ind-movie-page-wrapper::-webkit-scrollbar {
+  display: none;
 }
 ind-movie-body {
   font-family: "Open Sans", sans-serif;
