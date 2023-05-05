@@ -35,7 +35,7 @@ public class SecurityConfiguration {
                 .cors()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/v1/auth/**", "/movies/**")
+                .requestMatchers("/v1/auth/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

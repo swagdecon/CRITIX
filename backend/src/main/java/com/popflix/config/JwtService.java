@@ -50,8 +50,6 @@ public class JwtService {
 
     private String buildToken(Map<String, Object> extraClaims,
             UserDetails userDetails, Long expiration) {
-        System.out.println(refreshExpiration);
-        System.out.println(jwtExpiration);
 
         return Jwts
                 .builder()
