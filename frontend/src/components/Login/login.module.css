@@ -55,6 +55,10 @@ h6 {
   color: #fff;
   transform: translateX(0.5vw);
 }
+#signin ::placeholder {
+  font-size: smaller;
+  color: #adadad;
+}
 #signin .text-input {
   margin-bottom: 1.3rem;
   width: 100%;

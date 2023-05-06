@@ -66,7 +66,7 @@ export default function LoginFunctionality() {
       <div className={LoginStyles.error}>{errorMessage}</div>
 
       <div>
-        <label htmlFor="email">Email</label>
+        {/* <label htmlFor="email">Email</label> */}
         <input
           type="text"
           id="email"
@@ -76,11 +76,12 @@ export default function LoginFunctionality() {
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           required
+          placeholder="Email"
         />
       </div>
 
       <div>
-        <label htmlFor="password">Password</label>
+        {/* <label htmlFor="password">Password</label> */}
         <input
           type={passwordVisible ? "text" : "password"}
           id="password"
@@ -90,6 +91,7 @@ export default function LoginFunctionality() {
           value={password}
           autoComplete="current-password"
           onChange={(event) => setPassword(event.target.value)}
+          placeholder="Password"
           required
         />
 

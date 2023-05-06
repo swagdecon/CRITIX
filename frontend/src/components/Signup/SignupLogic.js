@@ -73,7 +73,7 @@ export default function SignUpFunctionality() {
       <br />
       <div className={SignUpStyles.error}>{profanityErrorMessage}</div>
       <div>
-        <label htmlFor="email">Email Address</label>
+        {/* <label htmlFor="email">Email Address</label> */}
         <input
           type="email"
           id="email"
@@ -83,24 +83,26 @@ export default function SignUpFunctionality() {
           autoComplete="current-email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
+          placeholder="Email Address"
           required
         />
       </div>
       <div>
-        <label htmlFor="firstName">First Name</label>
+        {/* <label htmlFor="firstName">First Name</label> */}
         <input
           type="text"
           id="firstName"
           name="firstName"
           className={SignUpStyles["text-input"]}
-          autoComplete="off"
+          autoComplete="on"
           value={firstname}
           onChange={(event) => setFirstName(event.target.value)}
+          placeholder="First Name"
           required
         />
       </div>
       <div>
-        <label htmlFor="lastName">Last Name</label>
+        {/* <label htmlFor="lastName">Last Name</label> */}
         <input
           type="text"
           id="lastName"
@@ -109,11 +111,12 @@ export default function SignUpFunctionality() {
           autoComplete="off"
           value={lastname}
           onChange={(event) => setLastName(event.target.value)}
+          placeholder="Last Name"
           required
         />
       </div>
       <div>
-        <label htmlFor="password">Password</label>
+        {/* <label htmlFor="password">Password</label> */}
         <input
           type={passwordVisible ? "text" : "password"}
           id="password"
@@ -123,14 +126,14 @@ export default function SignUpFunctionality() {
           autoComplete="current-password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
+          placeholder="Password"
           required
         />
-
         <span className={SignUpStyles.eye} onClick={togglePasswordVisibility}>
           <i
             id="hide"
             className={`bi bi-eye${passwordVisible ? "-slash" : ""}`}
-          ></i>
+          />
         </span>
       </div>
       <button
