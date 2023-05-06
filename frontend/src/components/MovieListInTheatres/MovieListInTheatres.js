@@ -6,13 +6,17 @@ import { useNavigate } from "react-router-dom";
 import MovieCardStyle from "../../misc/moviecard.module.scss";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+
 import {
   MovieRuntime,
   MovieAverage,
   TruncateDescription,
-  MovieCardGenres,
-  MovieCardActors,
 } from "../Other/movieComponents.js";
+
+import {
+  MovieCardActors,
+  MovieCardGenres,
+} from "../Other/MovieCardComponents.js";
 export default function MovieListInTheatres() {
   const [movie, setMovie] = useState({});
   const [dataLoaded, setDataLoaded] = useState(false);

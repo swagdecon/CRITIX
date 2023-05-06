@@ -7,9 +7,11 @@ import {
   MovieRuntime,
   MovieAverage,
   TruncateDescription,
-  MovieCardGenres,
-  MovieCardActors,
 } from "../../Other/movieComponents.js";
+import {
+  MovieCardActors,
+  MovieCardGenres,
+} from "../../Other/MovieCardComponents.js";
 import PropTypes from "prop-types";
 import "./MovieCarousel.css";
 import { chunk } from "lodash";

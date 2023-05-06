@@ -9,10 +9,11 @@ import {
   TruncateDescription,
   MovieRuntime,
   MovieAverage,
-  MovieCardGenres,
-  MovieCardActors,
 } from "../../Other/movieComponents";
-
+import {
+  MovieCardActors,
+  MovieCardGenres,
+} from "../../Other/MovieCardComponents.js";
 export default function RecommendedCarousel({ movieId }) {
   const [recommendations, setRecommendations] = useState([]);
   const movieChunks = chunk(recommendations, 5);

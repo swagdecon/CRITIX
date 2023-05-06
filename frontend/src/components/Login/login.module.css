@@ -53,12 +53,13 @@ h6 {
   line-height: 2rem;
   font-weight: 500;
   color: #fff;
+  transform: translateX(0.5vw);
 }
 #signin .text-input {
   margin-bottom: 1.3rem;
   width: 100%;
-  border-radius: 2px;
-  background: #000000be;
+  border-radius: 20px;
+  background: #0000006c;
   border: 1px solid #555;
   color: #ccc;
   padding: 0.5rem 1rem;
@@ -84,6 +85,7 @@ button {
 }
 .css-button {
   border: 1px solid #0096ff;
+  border-radius: 20px;
   height: 2.7rem;
   display: block;
   width: 218px;
@@ -201,10 +203,11 @@ div-error {
 }
 .secondary-btn {
   padding: 0.55rem 1rem;
+  width: 100%;
   height: 2.7rem;
   display: block;
   border: 1px solid #f4f4f4;
-  border-radius: 2px;
+  border-radius: 20px;
   background: none;
   color: #fff;
   text-decoration: none;
