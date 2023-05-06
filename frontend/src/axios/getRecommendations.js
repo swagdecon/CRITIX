@@ -20,7 +20,7 @@ export default async function getRecommendations(movieId) {
       );
       const actors = castResponse.data.cast
         .slice(0, 5)
-        .map((actor) => actor.name);
+        .map((actor) => ({ id: actor.id, name: actor.name }));
 
       return { ...movie, ...detailsResponse.data, actors };
     })
