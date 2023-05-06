@@ -210,7 +210,7 @@ function MovieDetails({
           </div>
           <div className={IndMovieStyle["movie-info-row"]}>
             <ul className={IndMovieStyle["movie-column"]}>
-              <ul className={IndMovieStyle["ind-movie-runtime"]}>
+              <div className={IndMovieStyle["ind-movie-runtime"]}>
                 <AiOutlineClockCircle
                   className={IndMovieStyle["movie-info-logo"]}
                   size={50}
@@ -219,9 +219,9 @@ function MovieDetails({
                 <div className={IndMovieStyle["movie-info-text"]}>
                   {runtime ? `${runtime} minutes` : "N/A"}
                 </div>
-              </ul>
+              </div>
               <br />
-              <ul className={IndMovieStyle["ind-movie-revenue"]}>
+              <div className={IndMovieStyle["ind-movie-revenue"]}>
                 <RiMoneyDollarBoxFill
                   className={IndMovieStyle["movie-info-logo"]}
                   size={50}
@@ -229,9 +229,9 @@ function MovieDetails({
                 <div className={IndMovieStyle["movie-info-text"]}>
                   {revenue ? `$${revenue}` : "N/A"}
                 </div>
-              </ul>
+              </div>
               <br />
-              <ul className={IndMovieStyle["ind-movie-budget"]}>
+              <div className={IndMovieStyle["ind-movie-budget"]}>
                 <BsWallet2
                   className={IndMovieStyle["movie-info-logo"]}
                   size={50}
@@ -239,9 +239,9 @@ function MovieDetails({
                 <div className={IndMovieStyle["movie-info-text"]}>
                   {budget ? `$${budget}` : "N/A"}
                 </div>
-              </ul>
+              </div>
               <br />
-              <ul className={IndMovieStyle["ind-movie-language"]}>
+              <div className={IndMovieStyle["ind-movie-language"]}>
                 <FaLanguage
                   className={IndMovieStyle["movie-info-logo"]}
                   size={50}
@@ -249,10 +249,10 @@ function MovieDetails({
                 <div className={IndMovieStyle["movie-info-text"]}>
                   {language ? language : "N/A"}
                 </div>
-              </ul>
+              </div>
             </ul>
             <ul className={IndMovieStyle["movie-column"]}>
-              <ul className={IndMovieStyle["ind-movie-production-company"]}>
+              <div className={IndMovieStyle["ind-movie-production-company"]}>
                 <MdOutlineMovie
                   className={IndMovieStyle["movie-info-logo"]}
                   size={50}
@@ -260,7 +260,7 @@ function MovieDetails({
                 <div className={IndMovieStyle["movie-info-text"]}>
                   {productionCompanies ? productionCompanies[0] : "N/A"}
                 </div>
-              </ul>
+              </div>
               <br />
               <div className={IndMovieStyle["ind-movie-status"]}>
                 <RiMovie2Line
