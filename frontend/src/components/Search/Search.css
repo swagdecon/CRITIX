@@ -49,6 +49,8 @@
 .ind-search-result {
   background-color: #2a2a2ac8;
   backdrop-filter: blur(10px);
+  display: flex;
+  align-items: flex-start;
   width: 30vw;
   padding: 5px;
   margin: 5px;
@@ -59,16 +61,20 @@
 .ind-search-result:hover {
   border: 3px solid #0096ff;
 }
-
-.result-text {
-  display: inline;
+.result-title-data {
+  transform: translateY(4vh);
   padding-left: 3%;
-  text-align: center;
+}
+.result-title {
+  padding-bottom: 1vh;
+}
+.result-title-year {
+  color: grey;
 }
 
 .result-rating {
-  display: inline;
-  float: right;
+  margin-left: auto;
+  margin-top: 0;
   color: #0096ff;
   font-weight: bold;
 }

@@ -106,7 +106,7 @@ function MovieCardActors({ actors }) {
       PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.shape({
-          name: PropTypes.string,
+          name: PropTypes.string.isRequired,
           role: PropTypes.string,
         }),
       ])
@@ -118,9 +118,7 @@ function MovieCardActors({ actors }) {
   return (
     <span>
       {topActors.map((actor, index) => (
-        <span key={actor.id || index}>
-          {index === 0 ? actor.name : `, ${actor.name}`}
-        </span>
+        <span key={index}>{index === 0 ? actor.name : `, ${actor.name}`}</span>
       ))}
     </span>
   );

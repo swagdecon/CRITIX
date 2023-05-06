@@ -52,7 +52,6 @@ export default function MovieCarousel({ title, endpoint }) {
 
     fetchData();
   }, [endpoint]);
-  console.log(movies);
   return (
     <section>
       <h3-title>{title}</h3-title>
