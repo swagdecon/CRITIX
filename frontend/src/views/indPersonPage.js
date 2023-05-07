@@ -10,7 +10,6 @@ import {
   PersonJobs,
   PersonRoles,
 } from "../components/Other/PersonComponents";
-import "../misc/popcorn_logo.css";
 import LoadingPage from "./LoadingPage";
 export default function IndPerson() {
   const [person, setPerson] = useState({});

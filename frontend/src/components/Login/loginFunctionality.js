@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.module.css";
-import "../../misc/clapperboard.css";
 import Filter from "bad-words";
 import LoginStyles from "../Login/login.module.css";
-
+import MovieButton from "../Btn/Button";
 export default function LoginFunctionality() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [email, setEmail] = useState("");
@@ -102,16 +101,7 @@ export default function LoginFunctionality() {
           />
         </span>
       </div>
-      <button type="submit" className={LoginStyles["css-button"]}>
-        <p className={LoginStyles["css-button-text"]}>LOG IN</p>
-        <div className={LoginStyles["css-button-inner"]}>
-          <div className={LoginStyles["reset-skew"]}>
-            <clapperboard-div
-              className={LoginStyles["css-button-inner-text"]}
-            />
-          </div>
-        </div>
-      </button>
+      <MovieButton innerIcon="clapperboard" />
     </form>
   );
 }

@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Login/login.module.css";
-import Popcorn from "../../misc/popcorn_logo";
 import Filter from "bad-words";
 import SignUpStyles from "../Login/login.module.css";
-
+import MovieButton from "../Btn/Button";
 export default function SignUpFunctionality() {
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
@@ -136,7 +135,7 @@ export default function SignUpFunctionality() {
           />
         </span>
       </div>
-      <button
+      {/* <button
         type="submit"
         onSubmit={handleSubmit}
         className={SignUpStyles["css-button"]}
@@ -144,10 +143,11 @@ export default function SignUpFunctionality() {
         <p className={SignUpStyles["css-button-text"]}>SIGN UP</p>
         <div className={SignUpStyles["css-button-inner"]}>
           <div className={SignUpStyles["reset-skew"]}>
-            <Popcorn className={SignUpStyles["css-button-inner-text"]} />
+            <Popcorn />
           </div>
         </div>
-      </button>
+      </button> */}
+      <MovieButton innerIcon="popcorn" onSubmit={handleSubmit} />
     </form>
   );
 }

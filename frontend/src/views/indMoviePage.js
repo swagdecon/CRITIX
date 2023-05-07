@@ -15,10 +15,8 @@ import {
 } from "../components/Other/movieComponents";
 import RecommendedCarousel from "../components/Carousel/RecommendedCarousel/RecommendedCarousel";
 import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel";
-import Popcorn from "../misc/popcorn_logo";
-import "../misc/popcorn_logo.css";
-import SignUpStyles from "../components/Login/login.module.css";
 import LoadingPage from "./LoadingPage";
+import MovieButton from "../components/Btn/Button";
 
 export default function IndMovie() {
   const [movie, setMovie] = useState({});
@@ -98,22 +96,10 @@ export default function IndMovie() {
                 </p>
 
                 <div className={IndMovieStyle["btn-wrapper"]}>
-                  <button
-                    type="submit"
+                  <MovieButton
+                    innerIcon="trailer"
                     onClick={() => MovieTrailer(movie.video[0])}
-                    className={SignUpStyles["css-button"]}
-                  >
-                    <p className={SignUpStyles["css-button-text"]}>
-                      WATCH TRAILER
-                    </p>
-                    <div className={SignUpStyles["css-button-inner"]}>
-                      <div className={SignUpStyles["reset-skew"]}>
-                        <Popcorn
-                          className={SignUpStyles["css-button-inner-text"]}
-                        />
-                      </div>
-                    </div>
-                  </button>
+                  />
                 </div>
               </div>
               <div className={IndMovieStyle.ind_movie_review}>
