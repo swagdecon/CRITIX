@@ -5,7 +5,7 @@
   padding: 0;
   box-sizing: border-box;
 }
-
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css");
 h1,
 h2,
 h3,
@@ -89,11 +89,6 @@ h6 {
   display: none;
 }
 
-div-error {
-  color: rgb(255, 0, 0);
-  text-align: center;
-  font-weight: bold;
-}
 .secondary-btn {
   padding: 0.55rem 1rem;
   width: 100%;
@@ -188,6 +183,16 @@ div-error {
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+.error-msg {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 3px 3px 3px 3px;
+}
+.error-msg {
+  color: #d8000c;
+  background-color: #ffbaba;
 }
 video {
   object-fit: cover;

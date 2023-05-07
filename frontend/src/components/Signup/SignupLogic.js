@@ -11,8 +11,8 @@ export default function SignUpFunctionality() {
 
   const filter = new Filter();
   const navigate = useNavigate();
-  const [firstname, setFirstName] = useState("");
-  const [lastname, setLastName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
@@ -22,10 +22,10 @@ export default function SignUpFunctionality() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const userData = { firstname, lastname, email, password };
+    const userData = { firstName, lastName, email, password };
 
-    const hasFirstNameProfanity = filter.isProfane(userData["firstname"]);
-    const hasLastNameProfanity = filter.isProfane(userData["lastname"]);
+    const hasFirstNameProfanity = filter.isProfane(userData["firstName"]);
+    const hasLastNameProfanity = filter.isProfane(userData["lastName"]);
     const hasEmailProfanity = filter.isProfane(userData["email"]);
     const hasPasswordProfanity = filter.isProfane(userData["password"]);
 
@@ -68,9 +68,18 @@ export default function SignUpFunctionality() {
   };
   return (
     <form onSubmit={handleSubmit}>
-      <div className={SignUpStyles.error}>{error}</div>
+      {error ? (
+        <div className={SignUpStyles["error-msg"]}>
+          <i className="fa fa-times-circle" />
+          {error}
+        </div>
+      ) : null}
       <br />
-      <div className={SignUpStyles.error}>{profanityErrorMessage}</div>
+      {profanityErrorMessage ? (
+        <div className={SignUpStyles["error-msg"]}>
+          <i className="fa fa-times-circle" /> {profanityErrorMessage}
+        </div>
+      ) : null}
       <div>
         {/* <label htmlFor="email">Email Address</label> */}
         <input
@@ -94,7 +103,7 @@ export default function SignUpFunctionality() {
           name="firstName"
           className={SignUpStyles["text-input"]}
           autoComplete="on"
-          value={firstname}
+          value={firstName}
           onChange={(event) => setFirstName(event.target.value)}
           placeholder="First Name"
           required
@@ -108,7 +117,7 @@ export default function SignUpFunctionality() {
           name="lastName"
           className={SignUpStyles["text-input"]}
           autoComplete="off"
-          value={lastname}
+          value={lastName}
           onChange={(event) => setLastName(event.target.value)}
           placeholder="Last Name"
           required
@@ -135,18 +144,7 @@ export default function SignUpFunctionality() {
           />
         </span>
       </div>
-      {/* <button
-        type="submit"
-        onSubmit={handleSubmit}
-        className={SignUpStyles["css-button"]}
-      >
-        <p className={SignUpStyles["css-button-text"]}>SIGN UP</p>
-        <div className={SignUpStyles["css-button-inner"]}>
-          <div className={SignUpStyles["reset-skew"]}>
-            <Popcorn />
-          </div>
-        </div>
-      </button> */}
+
       <MovieButton innerIcon="popcorn" onSubmit={handleSubmit} />
     </form>
   );

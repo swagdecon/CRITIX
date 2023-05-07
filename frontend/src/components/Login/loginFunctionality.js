@@ -23,7 +23,6 @@ export default function LoginFunctionality() {
     const userData = { email, password };
     const hasEmailProfanity = filter.isProfane(userData["email"]);
     const hasPasswordProfanity = filter.isProfane(userData["password"]);
-    const token = JSON.parse(localStorage.getItem("accessToken"));
 
     if (hasEmailProfanity || hasPasswordProfanity) {
       setErrorMessage("*Input(s) cannot contain profanity*");
@@ -38,7 +37,6 @@ export default function LoginFunctionality() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(userData),
         }
@@ -51,7 +49,10 @@ export default function LoginFunctionality() {
           JSON.stringify(data.refresh_token)
         );
         navigate("/home");
+      } else {
+        setError(await response.text());
       }
+      return;
     } catch (error) {
       setError(error);
       navigate("/");
@@ -60,10 +61,20 @@ export default function LoginFunctionality() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className={LoginStyles.error}>{error}</div>
-      <br />
-      <div className={LoginStyles.error}>{errorMessage}</div>
+      {error ? (
+        <div className={LoginStyles["error-msg"]}>
+          <i className="fa fa-times-circle" />
+          {error}
+        </div>
+      ) : null}
 
+      {/* <div className={LoginStyles.error}>{error}</div> */}
+      <br />
+      {errorMessage ? (
+        <div className={LoginStyles["error-msg"]}>
+          <i className="fa fa-times-circle" /> {errorMessage}
+        </div>
+      ) : null}
       <div>
         {/* <label htmlFor="email">Email</label> */}
         <input
