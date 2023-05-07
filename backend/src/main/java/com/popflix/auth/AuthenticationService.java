@@ -3,12 +3,12 @@ package com.popflix.auth;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.popflix.config.JwtService;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
+import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
 import com.popflix.model.Role;
 import com.popflix.model.TokenType;
 import com.popflix.model.User;
@@ -35,12 +35,12 @@ public class AuthenticationService {
         public AuthenticationResponse register(RegisterRequest request) {
 
                 if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-                        throw new UserAlreadyExistsException("*A User With This Email Already Exists*");
+                        throw new UserAlreadyExistsException("A User With This Email Already Exists");
                 }
 
                 var user = User.builder()
-                                .firstname(request.getFirstname())
-                                .lastname(request.getLastname())
+                                .firstName(request.getFirstName())
+                                .lastName(request.getLastName())
                                 .email(request.getEmail())
                                 .password(passwordEncoder.encode(request.getPassword()))
                                 .role(Role.USER)
@@ -58,13 +58,19 @@ public class AuthenticationService {
         }
 
         public AuthenticationResponse authenticate(AuthenticationRequest request, HttpServletRequest httpRequest) {
+
+                User user = userRepository.findByEmail(request.getEmail())
+                                .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
+                if (user.getLoggedIn() == true) {
+                        throw new UserAlreadyLoggedInException("This User is already logged in");
+                }
+                user.setLoggedIn(true);
+                userRepository.save(user);
+
                 authenticationManager.authenticate(
                                 new UsernamePasswordAuthenticationToken(
                                                 request.getEmail(),
                                                 request.getPassword()));
-
-                var user = userRepository.findByEmail(request.getEmail())
-                                .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
 
                 var accessToken = jwtService.generateToken(user);
                 var refreshToken = jwtService.generateRefreshToken(user);
