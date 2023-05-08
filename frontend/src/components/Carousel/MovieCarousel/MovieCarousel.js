@@ -2,7 +2,7 @@ import { React, useState, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
-
+import isExpired from "../../Other/isTokenExpired.js";
 import {
   MovieRuntime,
   MovieAverage,
@@ -18,7 +18,7 @@ import { chunk } from "lodash";
 import { useNavigate } from "react-router-dom";
 import "../title.scss";
 import MovieCardStyle from "../../../misc/moviecard.module.scss";
-
+import Cookies from "js-cookie";
 export default function MovieCarousel({ title, endpoint }) {
   const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
@@ -27,18 +27,14 @@ export default function MovieCarousel({ title, endpoint }) {
 
   MovieCarousel.propTypes = {
     title: PropTypes.string.isRequired,
-  };
-  MovieCarousel.propTypes = {
     flickerL: PropTypes.string.isRequired,
-  };
-  MovieCarousel.propTypes = {
     endpoint: PropTypes.string.isRequired,
   };
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const token = JSON.parse(localStorage.getItem("refreshToken"));
 
+  useEffect(() => {
+    async function fetchData(endpoint) {
+      try {
+        let token = Cookies.get("accessToken");
         const response = await axios.get(endpoint, {
           headers: {
             "Content-Type": "application/json",
@@ -47,13 +43,27 @@ export default function MovieCarousel({ title, endpoint }) {
         });
         setMovies(response.data);
       } catch (error) {
-        navigate("/403", { replace: true });
-        console.log(error);
+        if (error.response && error.response.status === 403) {
+          // Token expired, get a new token and retry the request
+          try {
+            const token = await isExpired(); // Get a new access token
+            const response = await axios.get(endpoint, {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            setMovies(response.data);
+          } catch (error) {
+            navigate("/403", { replace: true });
+            console.log(error);
+          }
+        }
       }
     }
-
-    fetchData();
+    fetchData(endpoint);
   }, [endpoint]);
+
   return (
     <section>
       <h3-title>{title}</h3-title>

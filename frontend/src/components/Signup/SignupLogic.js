@@ -4,6 +4,7 @@ import "../Login/login.module.css";
 import Filter from "bad-words";
 import SignUpStyles from "../Login/login.module.css";
 import MovieButton from "../Btn/Button";
+import Cookies from "js-cookie";
 export default function SignUpFunctionality() {
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
@@ -52,11 +53,8 @@ export default function SignUpFunctionality() {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("accessToken", JSON.stringify(data.access_token));
-        localStorage.setItem(
-          "refreshToken",
-          JSON.stringify(data.refresh_token)
-        );
+        Cookies.set("accessToken", data.access_token, { expires: 0.5 });
+        Cookies.set("refreshToken", data.refresh_token, { expires: 7 });
         navigate("/login");
       } else {
         setError(await response.text());

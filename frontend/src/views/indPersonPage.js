@@ -5,6 +5,8 @@ import "font-awesome/css/font-awesome.min.css";
 import Container from "../components/Container/Container";
 import axios from "axios";
 import "typeface-ibm-plex-sans";
+import Cookies from "js-cookie";
+import isExpired from "../components/Other/isTokenExpired";
 import {
   PersonTitle,
   PersonJobs,
@@ -22,8 +24,7 @@ export default function IndPerson() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const token = JSON.parse(localStorage.getItem("refreshToken"));
-
+        let token = Cookies.get("accessToken");
         const response = await axios.get(`${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -32,8 +33,23 @@ export default function IndPerson() {
         setPerson(response.data);
         setDataLoaded(true);
       } catch (error) {
-        navigate("/403", { replace: true });
-        console.log(error);
+        if (error.response && error.response.status === 403) {
+          // Token expired, get a new token and retry the request
+          try {
+            const token = await isExpired(); // Get a new access token
+            const response = await axios.get(`${id}`, {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            setPerson(response.data);
+            setDataLoaded(true);
+          } catch (error) {
+            navigate("/403", { replace: true });
+            console.log(error);
+          }
+        }
       }
     }
 

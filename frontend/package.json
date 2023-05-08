@@ -19,6 +19,8 @@
     "fingerprintjs2": "^2.1.4",
     "font-awesome": "^4.7.0",
     "install": "^0.13.0",
+    "js-cookie": "^3.0.5",
+    "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "npm": "^9.5.1",
     "profanity-cleaner": "^0.0.3",

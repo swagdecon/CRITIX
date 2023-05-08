@@ -4,6 +4,8 @@ import IndMovieStyle from "../components/IndMovie/ind_movie.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import Container from "../components/Container/Container";
 import axios from "axios";
+import Cookies from "js-cookie";
+import isExpired from "../components/Other/isTokenExpired";
 import {
   MovieGenres,
   MovieTrailer,
@@ -29,8 +31,7 @@ export default function IndMovie() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const token = JSON.parse(localStorage.getItem("refreshToken"));
-
+        let token = Cookies.get("accessToken");
         const response = await axios.get(`${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -39,11 +40,24 @@ export default function IndMovie() {
         setMovie(response.data);
         setDataLoaded(true);
       } catch (error) {
-        navigate("/403", { replace: true });
-        console.log(error);
+        if (error.response && error.response.status === 403) {
+          try {
+            const token = await isExpired(); // Get a new access token
+            const response = await axios.get(`${id}`, {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            setMovie(response.data);
+            setDataLoaded(true);
+          } catch (error) {
+            navigate("/403", { replace: true });
+            console.log(error);
+          }
+        }
       }
     }
-
     if (prevId !== id) {
       // compare current url id with previous url id
       setRequestSent(false); // reset requestSent state variable

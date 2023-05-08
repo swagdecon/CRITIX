@@ -4,6 +4,8 @@ import "./login.module.css";
 import Filter from "bad-words";
 import LoginStyles from "../Login/login.module.css";
 import MovieButton from "../Btn/Button";
+import Cookies from "js-cookie";
+
 export default function LoginFunctionality() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [email, setEmail] = useState("");
@@ -43,11 +45,8 @@ export default function LoginFunctionality() {
       );
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("accessToken", JSON.stringify(data.access_token));
-        localStorage.setItem(
-          "refreshToken",
-          JSON.stringify(data.refresh_token)
-        );
+        Cookies.set("accessToken", data.access_token, { expires: 0.5 });
+        Cookies.set("refreshToken", data.refresh_token, { expires: 7 });
         navigate("/home");
       } else {
         setError(await response.text());
