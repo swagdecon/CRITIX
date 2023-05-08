@@ -1,6 +1,7 @@
 import React from "react";
 import "./UserProfile.css";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const UserProfile = () => {
   const navigate = useNavigate();
@@ -8,7 +9,7 @@ const UserProfile = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const token = JSON.parse(localStorage.getItem("refreshToken"));
+    let token = Cookies.get("accessToken");
 
     try {
       const response = await fetch("http://localhost:8080/v1/auth/logout", {
