@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import "./login.module.css";
 import Filter from "bad-words";
 import LoginStyles from "../Login/login.module.css";
-import MovieButton from "../Btn/Button";
+import MovieButton from "../Other/btn/Button.js";
 import Cookies from "js-cookie";
 
-export default function LoginFunctionality() {
+export default function LoginLogic() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -67,7 +67,6 @@ export default function LoginFunctionality() {
         </div>
       ) : null}
 
-      {/* <div className={LoginStyles.error}>{error}</div> */}
       <br />
       {errorMessage ? (
         <div className={LoginStyles["error-msg"]}>
@@ -75,7 +74,6 @@ export default function LoginFunctionality() {
         </div>
       ) : null}
       <div>
-        {/* <label htmlFor="email">Email</label> */}
         <input
           type="text"
           id="email"
@@ -90,7 +88,6 @@ export default function LoginFunctionality() {
       </div>
 
       <div>
-        {/* <label htmlFor="password">Password</label> */}
         <input
           type={passwordVisible ? "text" : "password"}
           id="password"

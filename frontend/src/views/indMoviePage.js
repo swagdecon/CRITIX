@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import IndMovieStyle from "../components/IndMovie/ind_movie.module.css";
 import "font-awesome/css/font-awesome.min.css";
-import Container from "../components/Container/Container";
+import NavBar from "../components/NavBar/NavBar.js";
 import axios from "axios";
 import Cookies from "js-cookie";
-import isExpired from "../components/Other/isTokenExpired";
+import isExpired from "../components/Other/IsTokenExpired.js";
 import {
   MovieGenres,
   MovieTrailer,
@@ -14,11 +14,11 @@ import {
   EmbeddedMovieTrailer,
   MovieReviews,
   MovieDetails,
-} from "../components/Other/movieComponents";
+} from "../components/Other/MovieComponents";
 import RecommendedCarousel from "../components/Carousel/RecommendedCarousel/RecommendedCarousel";
 import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel";
 import LoadingPage from "./LoadingPage";
-import MovieButton from "../components/Btn/Button";
+import MovieButton from "../components/Other/btn/Button";
 
 export default function IndMovie() {
   const [movie, setMovie] = useState({});
@@ -80,7 +80,7 @@ export default function IndMovie() {
   let moviePosterPath = `https://image.tmdb.org/t/p/original${movie.posterPath}`;
   return (
     <div className={IndMovieStyle["ind-movie-page-wrapper"]}>
-      <Container />
+      <NavBar />
       <div
         className={IndMovieStyle.background}
         style={{

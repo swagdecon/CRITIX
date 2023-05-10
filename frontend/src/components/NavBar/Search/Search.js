@@ -3,7 +3,7 @@ import "./Search.css";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { GetYearFromDate } from "../Other/movieComponents";
+import { GetYearFromDate } from "../../Other/MovieComponents";
 const Search = (props) => {
   const [query, setQuery] = useState("");
   const [detailedMovies, setDetailedMovies] = useState([]);

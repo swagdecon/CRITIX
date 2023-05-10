@@ -8,12 +8,12 @@ import {
 import "./index.js";
 import Login from "./views/Signin.js";
 import SignUp from "./views/Signup.js";
-import Homepage from "./views/homepage.js";
-import PrivateRoute from "./components/Other/privateRoutes.js";
+import Homepage from "./views/Homepage.js";
+import PrivateRoute from "./components/Other/SecuredRoutes.js";
 import Error403 from "./views/errorMessages/403error.js";
 import Error404 from "./views/errorMessages/404error.js";
-import IndMovie from "./views/indMoviePage.js";
-import IndPerson from "./views/indPersonPage.js";
+import IndMovie from "./views/IndMoviePage.js";
+import IndPerson from "./views/IndPersonPage.js";
 import MovieListInTheatres from "./components/MovieListInTheatres/MovieListInTheatres.js";
 export default function App() {
   return (

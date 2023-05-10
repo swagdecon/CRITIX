@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from "react";
-import getRecommendations from "../../../axios/getRecommendations";
+import getRecommendations from "../../../axios/GetRecommendations.js";
 import { Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { chunk } from "lodash";
@@ -9,7 +9,7 @@ import {
   TruncateDescription,
   MovieRuntime,
   MovieAverage,
-} from "../../Other/movieComponents";
+} from "../../Other/MovieComponents.js";
 import {
   MovieCardActors,
   MovieCardGenres,

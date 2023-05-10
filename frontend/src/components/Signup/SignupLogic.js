@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../Login/login.module.css";
 import Filter from "bad-words";
 import SignUpStyles from "../Login/login.module.css";
-import MovieButton from "../Btn/Button";
+import MovieButton from "../Other/btn/Button.js";
 import Cookies from "js-cookie";
 export default function SignUpFunctionality() {
   function togglePasswordVisibility() {

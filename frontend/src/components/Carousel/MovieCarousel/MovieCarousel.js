@@ -2,12 +2,12 @@ import { React, useState, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import isExpired from "../../Other/isTokenExpired.js";
+import isExpired from "../../Other/IsTokenExpired.js";
 import {
   MovieRuntime,
   MovieAverage,
   TruncateDescription,
-} from "../../Other/movieComponents.js";
+} from "../../Other/MovieComponents.js";
 import {
   MovieCardActors,
   MovieCardGenres,

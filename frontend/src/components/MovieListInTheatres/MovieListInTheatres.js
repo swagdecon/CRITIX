@@ -11,7 +11,7 @@ import {
   MovieRuntime,
   MovieAverage,
   TruncateDescription,
-} from "../Other/movieComponents.js";
+} from "../Other/MovieComponents.js";
 
 import {
   MovieCardActors,

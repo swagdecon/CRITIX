@@ -1,7 +1,7 @@
 import React from "react";
-import Header from "../Header/Header";
-import "./Container.css";
-export default function Container() {
+import Header from "./Header/Header";
+import "./NavBar.css";
+export default function NavBar() {
   // constructor(props) {
   //   super(props);
   //   this.apiKey = "87dfa1c669eea853da609d4968d294be";

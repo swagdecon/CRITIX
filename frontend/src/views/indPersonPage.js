@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import IndPersonStyle from "../components/IndPerson/ind_person.module.css";
 import "font-awesome/css/font-awesome.min.css";
-import Container from "../components/Container/Container";
+import NavBar from "../components/NavBar/NavBar.js";
 import axios from "axios";
 import "typeface-ibm-plex-sans";
 import Cookies from "js-cookie";
-import isExpired from "../components/Other/isTokenExpired";
+import isExpired from "../components/Other/IsTokenExpired.js";
 import {
   PersonTitle,
   PersonJobs,
@@ -85,7 +85,7 @@ export default function IndPerson() {
           rel="stylesheet"
         />
       </head>
-      <Container />
+      <NavBar />
       <div
         className={IndPersonStyle.background}
         style={{

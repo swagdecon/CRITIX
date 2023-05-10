@@ -6,7 +6,7 @@ import "../components/Logo/logo.module.css";
 import Logo from "../components/Logo/Loader.js";
 import Logo_Text from "../components/Logo/POPFLIX_LOGO_OFFICIAL.png";
 import LoginPlayer from "../components/Login/LoginVideo";
-import LoginFunctionality from "../components/Login/loginFunctionality";
+import LoginFunctionality from "../components/Login/LoginLogic.js";
 import LoginStyles from "../components/Login/login.module.css";
 export default function LogIn() {
   return (

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import useLocalState from "./localStorage.js";
+import useLocalState from "./LocalStorage.js";
 import { Navigate } from "react-router-dom";
 
 export default function PrivateRoute({ children }) {
