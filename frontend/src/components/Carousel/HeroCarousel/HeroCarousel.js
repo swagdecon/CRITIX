@@ -56,7 +56,6 @@ const heroMovies = [
   },
 ];
 export default function HeroCarousel() {
-  console.log(heroMovies);
   return (
     <Carousel>
       {heroMovies.map((movie) => (

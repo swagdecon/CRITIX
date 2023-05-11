@@ -21,10 +21,9 @@ export default async function isExpired() {
       }
     );
     const newAccessToken = refreshResponse.data.access_token;
-    Cookies.set("accessToken", newAccessToken, { expires: 0.5 });
+    Cookies.set("accessToken", newAccessToken, { expires: 1 });
     const newDecodedToken = jwt_decode(newAccessToken);
     if (newDecodedToken.exp < currentTime) {
-      //   throw new Error("Refresh token expired"); // Refresh token is also expired, handle the error
       navigate("/login");
     }
     return newAccessToken;
