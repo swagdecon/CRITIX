@@ -136,16 +136,19 @@ public class AuthenticationService {
                         var user = this.userRepository.findByEmail(userEmail)
                                         .orElseThrow();
                         if (jwtService.isTokenValid(refreshToken, user)) {
-                                var accessToken = jwtService.generateToken(user);
                                 revokeAllUserTokens(user);
+
+                                var accessToken = jwtService.generateToken(user);
+                                var newRefreshToken = jwtService.generateRefreshToken(user);
+
                                 saveAccessToken(user, accessToken);
+                                saveRefreshToken(user, newRefreshToken);
                                 var authResponse = AuthenticationResponse.builder()
                                                 .accessToken(accessToken)
-                                                .refreshToken(refreshToken)
+                                                .refreshToken(newRefreshToken)
                                                 .build();
                                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
                         }
-
                 }
         }
 }
