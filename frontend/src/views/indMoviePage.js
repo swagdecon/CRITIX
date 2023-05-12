@@ -32,32 +32,32 @@ export default function IndMovie() {
     async function fetchData() {
       try {
         let token = Cookies.get("accessToken");
+
         const response = await axios.get(id, {
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
         setMovie(response.data);
         setDataLoaded(true);
       } catch (error) {
-        if (error.response && error.response.status === 403) {
-          try {
-            const token = await isExpired(navigate); // Pass navigate function as a parameter
-            const response = await axios.get(id, {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-            });
-            const data = await response.json();
-            Cookies.set("accessToken", data.access_token, { expires: 0.5 });
-            Cookies.set("refreshToken", data.refresh_token, { expires: 7 });
-            setMovie(response.data);
-            setDataLoaded(true);
-          } catch (error) {
-            navigate("/403", { replace: true });
-            console.log(error);
-          }
+        await isExpired();
+        try {
+          // Token expired, get a new token and retry the request
+
+          let newAccessToken = Cookies.get("accessToken");
+          const response = await axios.get(id, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${newAccessToken}`,
+            },
+          });
+          setMovie(response.data);
+          setDataLoaded(true);
+        } catch (error) {
+          navigate("/403", { replace: true });
+          console.log(error);
         }
       }
     }

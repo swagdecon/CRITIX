@@ -18,13 +18,9 @@ import { chunk } from "lodash";
 import "../title.scss";
 import MovieCardStyle from "../../../misc/moviecard.module.scss";
 import Cookies from "js-cookie";
-// import { useNavigate } from "react-router-dom";
-
 export default function MovieCarousel({ title, endpoint }) {
   const [movies, setMovies] = useState([]);
-  // const navigate = useNavigate();
   const movieChunks = chunk(movies, 5);
-
   MovieCarousel.propTypes = {
     title: PropTypes.string.isRequired,
     endpoint: PropTypes.string.isRequired,
@@ -44,17 +40,15 @@ export default function MovieCarousel({ title, endpoint }) {
         setMovies(response.data);
       } catch (error) {
         // Token expired, get a new token and retry the request
-        await isExpired(); // Get a new access token
+        await isExpired();
         try {
           let newAccessToken = Cookies.get("accessToken");
-          console.log("This is the new access token", newAccessToken);
           const response = await axios.get(endpoint, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${newAccessToken}`,
             },
           });
-          console.log(`Bearer ${newAccessToken}`);
           setMovies(response.data);
         } catch (error) {
           console.log(error);

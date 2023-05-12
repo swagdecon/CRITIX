@@ -7,8 +7,6 @@ export default async function isExpired() {
   console.log(isRefreshingToken);
   const token = Cookies.get("accessToken");
   const refreshToken = Cookies.get("refreshToken");
-  console.log("Access Token in isExpired pre request", token);
-  console.log("Access Token in isExpired pre request", refreshToken);
 
   const decodedToken = jwt_decode(token);
   const currentTime = Date.now() / 1000;
@@ -26,7 +24,6 @@ export default async function isExpired() {
         }
       );
       const body = await refreshResponse.json();
-      console.log(body);
       Cookies.set("accessToken", body.access_token, { expires: 0.5 });
       Cookies.set("refreshToken", body.refresh_token, { expires: 7 });
     } catch (error) {
