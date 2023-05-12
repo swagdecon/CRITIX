@@ -1,31 +1,38 @@
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
-import { useNavigate } from "react-router-dom";
-export default async function isExpired() {
-  const navigate = useNavigate();
-  const token = Cookies.get("accessToken");
-  const decodedToken = jwt_decode(token);
-  const currentTime = Date.now() / 1000; // Convert to seconds
 
-  if (decodedToken.exp < currentTime) {
-    // Token is expired, make a call to the refresh token endpoint
-    const refreshToken = Cookies.get("refreshToken");
-    const refreshResponse = await fetch(
-      "http://localhost:8080/v1/auth/refresh-token",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${refreshToken}`,
-        },
-      }
-    );
-    const newAccessToken = refreshResponse.data.access_token;
-    Cookies.set("accessToken", newAccessToken, { expires: 1 });
-    const newDecodedToken = jwt_decode(newAccessToken);
-    if (newDecodedToken.exp < currentTime) {
-      navigate("/login");
+let isRefreshingToken = false;
+
+export default async function isExpired() {
+  console.log(isRefreshingToken);
+  const token = Cookies.get("accessToken");
+  const refreshToken = Cookies.get("refreshToken");
+  console.log("Access Token in isExpired pre request", token);
+  console.log("Access Token in isExpired pre request", refreshToken);
+
+  const decodedToken = jwt_decode(token);
+  const currentTime = Date.now() / 1000;
+
+  if (decodedToken.exp < currentTime && !isRefreshingToken) {
+    isRefreshingToken = true;
+    try {
+      const refreshResponse = await fetch(
+        "http://localhost:8080/v1/auth/refresh-token",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${refreshToken}`,
+          },
+        }
+      );
+      const body = await refreshResponse.json();
+      console.log(body);
+      Cookies.set("accessToken", body.access_token, { expires: 0.5 });
+      Cookies.set("refreshToken", body.refresh_token, { expires: 7 });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      isRefreshingToken = false;
     }
-    return newAccessToken;
   }
 }

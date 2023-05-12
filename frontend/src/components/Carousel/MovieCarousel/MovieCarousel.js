@@ -15,19 +15,18 @@ import {
 import PropTypes from "prop-types";
 import "./MovieCarousel.css";
 import { chunk } from "lodash";
-import { useNavigate } from "react-router-dom";
 import "../title.scss";
 import MovieCardStyle from "../../../misc/moviecard.module.scss";
 import Cookies from "js-cookie";
+// import { useNavigate } from "react-router-dom";
+
 export default function MovieCarousel({ title, endpoint }) {
   const [movies, setMovies] = useState([]);
-  const navigate = useNavigate();
-
+  // const navigate = useNavigate();
   const movieChunks = chunk(movies, 5);
 
   MovieCarousel.propTypes = {
     title: PropTypes.string.isRequired,
-    flickerL: PropTypes.string.isRequired,
     endpoint: PropTypes.string.isRequired,
   };
 
@@ -35,6 +34,7 @@ export default function MovieCarousel({ title, endpoint }) {
     async function fetchData(endpoint) {
       try {
         let token = Cookies.get("accessToken");
+
         const response = await axios.get(endpoint, {
           headers: {
             "Content-Type": "application/json",
@@ -43,21 +43,21 @@ export default function MovieCarousel({ title, endpoint }) {
         });
         setMovies(response.data);
       } catch (error) {
-        if (error.response && error.response.status === 403) {
-          // Token expired, get a new token and retry the request
-          try {
-            const token = await isExpired(); // Get a new access token
-            const response = await axios.get(endpoint, {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-            });
-            setMovies(response.data);
-          } catch (error) {
-            navigate("/403", { replace: true });
-            console.log(error);
-          }
+        // Token expired, get a new token and retry the request
+        await isExpired(); // Get a new access token
+        try {
+          let newAccessToken = Cookies.get("accessToken");
+          console.log("This is the new access token", newAccessToken);
+          const response = await axios.get(endpoint, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${newAccessToken}`,
+            },
+          });
+          console.log(`Bearer ${newAccessToken}`);
+          setMovies(response.data);
+        } catch (error) {
+          console.log(error);
         }
       }
     }
