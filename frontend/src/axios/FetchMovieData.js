@@ -2,8 +2,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import isExpired from "../components/Other/IsTokenExpired";
-export default function fetchData(endpoint) {
-  const [movies, setMovies] = useState([]);
+import { useNavigate } from "react-router-dom";
+
+export default function useFetchData(endpoint) {
+  const [data, setData] = useState({});
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const [requestSent, setRequestSent] = useState(false);
+  const [prevEndpoint, setPrevEndpoint] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
@@ -16,7 +22,8 @@ export default function fetchData(endpoint) {
             Authorization: `Bearer ${token}`,
           },
         });
-        setMovies(await response.data);
+        setData(await response.data);
+        setDataLoaded(true);
       } catch (error) {
         // Token expired, get a new token and retry the request
         await isExpired();
@@ -28,14 +35,25 @@ export default function fetchData(endpoint) {
               Authorization: `Bearer ${newAccessToken}`,
             },
           });
-          setMovies(await response.data);
+          setData(response.data);
+          setDataLoaded(true);
         } catch (error) {
           console.log(error);
         }
       }
     }
-    fetchData();
-  }, [endpoint]);
+    if (prevEndpoint !== endpoint) {
+      // compare current endpoint with previous endpoint
+      setRequestSent(false); // reset requestSent state variable
+      setDataLoaded(false); // reset dataLoaded state variable
+      setPrevEndpoint(endpoint); // update previous endpoint state variable
+    }
 
-  return movies;
+    if (!requestSent) {
+      fetchData();
+      setRequestSent(true);
+    }
+  }, [requestSent, endpoint, navigate, prevEndpoint]);
+
+  return { data, dataLoaded };
 }
