@@ -6,12 +6,12 @@ import NavBar from "../components/NavBar/NavBar.js";
 import axios from "axios";
 import "typeface-ibm-plex-sans";
 import Cookies from "js-cookie";
-import isExpired from "../components/Other/IsTokenExpired.js";
+import isExpired from "../security/IsTokenExpired.js";
 import {
   PersonTitle,
   PersonJobs,
   PersonRoles,
-} from "../components/Other/PersonComponents";
+} from "../components/Person/PersonComponents";
 import LoadingPage from "./LoadingPage";
 export default function IndPerson() {
   const [person, setPerson] = useState({});

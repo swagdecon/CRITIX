@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./login.module.css";
 import Filter from "bad-words";
 import LoginStyles from "../Login/login.module.css";
-import MovieButton from "../Other/btn/Button.js";
+import MovieButton from "../Other/btn//MovieButton/Button.js";
 import Cookies from "js-cookie";
 
 export default function LoginLogic() {

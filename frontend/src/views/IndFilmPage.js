@@ -16,8 +16,8 @@ import {
 import RecommendedCarousel from "../components/Carousel/RecommendedCarousel/RecommendedCarousel";
 import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel";
 import LoadingPage from "./LoadingPage";
-import MovieButton from "../components/Other/btn/Button";
-import fetchData from "../axios/FetchMovieData";
+import MovieButton from "../components/Other/btn/MovieButton/Button";
+import fetchData from "../security/FetchMovieData";
 export default function IndMovie() {
   const { id } = useParams();
   const { data: movie, dataLoaded: dataLoaded } = fetchData(id);

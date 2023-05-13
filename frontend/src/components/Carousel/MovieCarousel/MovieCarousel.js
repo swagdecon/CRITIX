@@ -6,8 +6,7 @@ import { chunk } from "lodash";
 import PropTypes from "prop-types";
 import MovieCardStyle from "../../MovieCard/moviecard.module.scss";
 import MovieCard from "../../MovieCard/MovieCard.js";
-import fetchData from "../../../axios/FetchMovieData.js";
-// import LoadingPage from "../../../views/LoadingPage";
+import fetchData from "../../../security/FetchMovieData.js";
 export default function MovieCarousel({ title, endpoint }) {
   MovieCarousel.propTypes = {
     title: PropTypes.string.isRequired,

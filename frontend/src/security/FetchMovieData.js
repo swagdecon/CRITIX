@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import isExpired from "../components/Other/IsTokenExpired";
+import isExpired from "./IsTokenExpired";
 import { useNavigate } from "react-router-dom";
 
 export default function useFetchData(endpoint) {
@@ -15,7 +15,6 @@ export default function useFetchData(endpoint) {
     async function fetchData() {
       try {
         let token = Cookies.get("accessToken");
-
         const response = await axios.get(endpoint, {
           headers: {
             "Content-Type": "application/json",
