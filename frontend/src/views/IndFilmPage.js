@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React from "react";
+import { useParams } from "react-router-dom";
 import IndMovieStyle from "../components/IndMovie/ind_movie.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import NavBar from "../components/NavBar/NavBar.js";
-import axios from "axios";
-import Cookies from "js-cookie";
-import isExpired from "../components/Other/IsTokenExpired.js";
+
 import {
   MovieGenres,
   MovieTrailer,
@@ -19,60 +17,10 @@ import RecommendedCarousel from "../components/Carousel/RecommendedCarousel/Reco
 import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel";
 import LoadingPage from "./LoadingPage";
 import MovieButton from "../components/Other/btn/Button";
-
+import fetchIndMovieData from "../axios/FetchIndMovieData";
 export default function IndMovie() {
-  const [movie, setMovie] = useState({});
-  const [dataLoaded, setDataLoaded] = useState(false);
-  const [requestSent, setRequestSent] = useState(false);
-  const [prevId, setPrevId] = useState(null);
-  const navigate = useNavigate();
   const { id } = useParams();
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        let token = Cookies.get("accessToken");
-
-        const response = await axios.get(id, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setMovie(await response.data);
-        setDataLoaded(true);
-      } catch (error) {
-        await isExpired();
-        try {
-          // Token expired, get a new token and retry the request
-
-          let newAccessToken = Cookies.get("accessToken");
-          const response = await axios.get(id, {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${newAccessToken}`,
-            },
-          });
-          setMovie(response.data);
-          setDataLoaded(true);
-        } catch (error) {
-          navigate("/403", { replace: true });
-          console.log(error);
-        }
-      }
-    }
-    if (prevId !== id) {
-      // compare current url id with previous url id
-      setRequestSent(false); // reset requestSent state variable
-      setDataLoaded(false); // reset dataLoaded state variable
-      setPrevId(id); // update previous id state variable
-    }
-
-    if (!requestSent) {
-      fetchData();
-      setRequestSent(true);
-    }
-  }, [requestSent, id, navigate, prevId]); // add prevId as a dependency
+  const { movie, dataLoaded } = fetchIndMovieData(id);
 
   if (!dataLoaded) {
     return <LoadingPage />;
