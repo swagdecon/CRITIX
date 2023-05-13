@@ -39,7 +39,7 @@ export default function IndMovie() {
             Authorization: `Bearer ${token}`,
           },
         });
-        setMovie(response.data);
+        setMovie(await response.data);
         setDataLoaded(true);
       } catch (error) {
         await isExpired();

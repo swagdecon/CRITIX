@@ -1,43 +1,41 @@
-export default function fetchMovieData(data) {
-  const [movie, setMovie] = useState({});
-  const [dataLoaded, setDataLoaded] = useState(false);
-  const [requestSent, setRequestSent] = useState(false);
-  const [prevId, setPrevId] = useState(null);
-  const navigate = useNavigate();
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
+import isExpired from "../components/Other/IsTokenExpired";
+export default function fetchData(endpoint) {
+  const [movies, setMovies] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const token = JSON.parse(localStorage.getItem("refreshToken"));
+        let token = Cookies.get("accessToken");
 
-        const response = await axios.get(`${data}`, {
+        const response = await axios.get(endpoint, {
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
-        setMovie(response.data);
-        setDataLoaded(true);
+        setMovies(await response.data);
       } catch (error) {
-        navigate("/403", { replace: true });
-        console.log(error);
+        // Token expired, get a new token and retry the request
+        await isExpired();
+        try {
+          let newAccessToken = Cookies.get("accessToken");
+          const response = await axios.get(endpoint, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${newAccessToken}`,
+            },
+          });
+          setMovies(await response.data);
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
+    fetchData();
+  }, [endpoint]);
 
-    if (prevId !== data) {
-      // compare current url id with previous url id
-      setRequestSent(false); // reset requestSent state variable
-      setDataLoaded(false); // reset dataLoaded state variable
-      setPrevId(data); // update previous id state variable
-    }
-
-    if (!requestSent) {
-      fetchData();
-      setRequestSent(true);
-    }
-  }, [requestSent, data, navigate, prevId]); // add prevId as a dependency
-
-  if (!dataLoaded) {
-    return <LoadingPage />;
-  }
-  return movie;
+  return movies;
 }

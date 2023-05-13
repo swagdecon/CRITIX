@@ -1,55 +1,20 @@
-import { React, useState, useEffect } from "react";
+import { React } from "react";
 import { Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import isExpired from "../../Other/IsTokenExpired.js";
-import PropTypes from "prop-types";
-import "./MovieCarousel.css";
-import { chunk } from "lodash";
 import "../title.scss";
+import { chunk } from "lodash";
+import PropTypes from "prop-types";
 import MovieCardStyle from "../../MovieCard/moviecard.module.scss";
-import Cookies from "js-cookie";
 import MovieCard from "../../MovieCard/MovieCard.js";
-
+import fetchData from "../../../axios/FetchImdbMovieData.js";
 export default function MovieCarousel({ title, endpoint }) {
-  const [movies, setMovies] = useState([]);
-  const movieChunks = chunk(movies, 5);
   MovieCarousel.propTypes = {
     title: PropTypes.string.isRequired,
     endpoint: PropTypes.string.isRequired,
   };
-  useEffect(() => {
-    async function fetchData(endpoint) {
-      try {
-        let token = Cookies.get("accessToken");
+  const movies = fetchData(endpoint);
+  const movieChunks = chunk(movies, 5);
 
-        const response = await axios.get(endpoint, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setMovies(await response.data);
-      } catch (error) {
-        // Token expired, get a new token and retry the request
-        await isExpired();
-        console.log(Cookies.get("accessToken"), Cookies.get("refreshToken"));
-        try {
-          let newAccessToken = Cookies.get("accessToken");
-          const response = await axios.get(endpoint, {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${newAccessToken}`,
-            },
-          });
-          setMovies(await response.data);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-    fetchData(endpoint);
-  }, [endpoint]);
   return (
     <section>
       <h3-title>{title}</h3-title>
