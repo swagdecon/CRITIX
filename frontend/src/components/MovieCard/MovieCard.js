@@ -3,6 +3,7 @@ import {
   MovieRuntime,
   MovieAverage,
   TruncateDescription,
+  MovieTrailer,
 } from "../Other/MovieComponents.js";
 import {
   MovieCardActors,
@@ -22,13 +23,17 @@ export default function MovieCard({
 }) {
   MovieCard.propTypes = {
     poster: PropTypes.string,
-    rating: PropTypes.string,
-    runtime: PropTypes.string,
+    rating: PropTypes.number,
+    runtime: PropTypes.number,
     overview: PropTypes.string,
-    video: PropTypes.string,
-
+    video: PropTypes.arrayOf(PropTypes.string),
     genres: PropTypes.arrayOf(PropTypes.string),
-    actors: PropTypes.arrayOf(PropTypes.string),
+    actors: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+        character: PropTypes.string,
+      })
+    ),
   };
   return (
     <div className="container">
@@ -101,7 +106,10 @@ export default function MovieCard({
                   className={MovieCardStyle["watch-btn"]}
                   type="button"
                   onClick={() =>
-                    (window.location.href = `https://www.youtube.com/watch?v=${video}`)
+                    video[0]
+                      ? // video is saved in the db as an array, (for recommended carouseL) but for ind_movie it is just ${video}
+                        MovieTrailer(video[0])
+                      : MovieTrailer(video)
                   }
                 >
                   <h3>
