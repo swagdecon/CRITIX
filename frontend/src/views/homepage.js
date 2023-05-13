@@ -1,5 +1,5 @@
 import React from "react";
-import "../misc/moviecard.module.scss";
+import "../components/MovieCard/moviecard.module.scss";
 import HeroCarousel from "../components/Carousel/HeroCarousel/HeroCarousel";
 import MovieCarousel from "../components/Carousel/MovieCarousel/MovieCarousel.js";
 import NavBar from "../components/NavBar/NavBar.js";

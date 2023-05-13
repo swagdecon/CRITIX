@@ -3,7 +3,7 @@ import getRecommendations from "../../../axios/GetRecommendations.js";
 import { Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { chunk } from "lodash";
-import MovieCardStyle from "../../../misc/moviecard.module.scss";
+import MovieCardStyle from "../../MovieCard/moviecard.module.scss";
 import PropTypes from "prop-types";
 import {
   TruncateDescription,
