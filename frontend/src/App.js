@@ -6,13 +6,13 @@ import {
   Navigate,
 } from "react-router-dom";
 import "./index.js";
-import Login from "./views/Signin.js";
-import SignUp from "./views/Signup.js";
+import Login from "./views/SigninPage.js";
+import SignUp from "./views/SignupPage.js";
 import Homepage from "./views/Homepage.js";
 import PrivateRoute from "./components/Other/SecuredRoutes.js";
 import Error403 from "./views/errorMessages/403/403error.js";
 import Error404 from "./views/errorMessages/404/404error.js";
-import IndMovie from "./views/IndMoviePage.js";
+import IndMovie from "./views/IndFilmPage.js";
 import IndPerson from "./views/IndPersonPage.js";
 import MovieListInTheatres from "./components/MovieListInTheatres/MovieListInTheatres.js";
 export default function App() {

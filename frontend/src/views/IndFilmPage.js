@@ -14,7 +14,7 @@ import {
   EmbeddedMovieTrailer,
   MovieReviews,
   MovieDetails,
-} from "../components/Other/MovieComponents";
+} from "../components/IndMovie/MovieComponents";
 import RecommendedCarousel from "../components/Carousel/RecommendedCarousel/RecommendedCarousel";
 import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel";
 import LoadingPage from "./LoadingPage";

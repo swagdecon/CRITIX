@@ -1,6 +1,5 @@
 import { React, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-// import Container from "../components/Container/Container";
 import LoadingPage from "../../views/LoadingPage";
 import { useNavigate } from "react-router-dom";
 import MovieCardStyle from "../MovieCard/moviecard.module.scss";
@@ -11,12 +10,12 @@ import {
   MovieRuntime,
   MovieAverage,
   TruncateDescription,
-} from "../Other/MovieComponents.js";
+} from "../IndMovie/MovieComponents.js";
 
 import {
   MovieCardActors,
   MovieCardGenres,
-} from "../Other/MovieCardComponents.js";
+} from "../MovieCard/MovieCardComponents.js";
 export default function MovieListInTheatres() {
   const [movie, setMovie] = useState({});
   const [dataLoaded, setDataLoaded] = useState(false);

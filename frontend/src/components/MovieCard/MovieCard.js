@@ -4,11 +4,8 @@ import {
   MovieAverage,
   TruncateDescription,
   MovieTrailer,
-} from "../Other/MovieComponents.js";
-import {
-  MovieCardActors,
-  MovieCardGenres,
-} from "../Other/MovieCardComponents.js";
+} from "../IndMovie/MovieComponents.js";
+import { MovieCardActors, MovieCardGenres } from "./MovieCardComponents.js";
 import MovieCardStyle from "./moviecard.module.scss";
 import PropTypes from "prop-types";
 

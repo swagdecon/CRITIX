@@ -3,7 +3,7 @@ import "./Search.css";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { GetYearFromDate } from "../../Other/MovieComponents";
+import { GetYearFromDate } from "../../IndMovie/MovieComponents";
 // import { debounce } from "lodash";
 
 const Search = (props) => {
