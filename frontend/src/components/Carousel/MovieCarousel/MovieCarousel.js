@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import isExpired from "../../Other/IsTokenExpired.js";
 import PropTypes from "prop-types";
@@ -18,7 +18,6 @@ export default function MovieCarousel({ title, endpoint }) {
     title: PropTypes.string.isRequired,
     endpoint: PropTypes.string.isRequired,
   };
-  const navigate = useNavigate();
   useEffect(() => {
     async function fetchData(endpoint) {
       try {
@@ -34,6 +33,7 @@ export default function MovieCarousel({ title, endpoint }) {
       } catch (error) {
         // Token expired, get a new token and retry the request
         await isExpired();
+        console.log(Cookies.get("accessToken"), Cookies.get("refreshToken"));
         try {
           let newAccessToken = Cookies.get("accessToken");
           const response = await axios.get(endpoint, {
@@ -44,7 +44,6 @@ export default function MovieCarousel({ title, endpoint }) {
           });
           setMovies(await response.data);
         } catch (error) {
-          navigate("/403");
           console.log(error);
         }
       }
