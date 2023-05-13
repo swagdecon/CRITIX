@@ -1,11 +1,11 @@
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
-
+import CookieManager from "./CookieManager";
 let isRefreshingToken = false;
 
 export default async function isExpired() {
-  const token = Cookies.get("accessToken");
-  const refreshToken = Cookies.get("refreshToken");
+  const token = CookieManager.decryptCookie("accessToken");
+  const refreshToken = CookieManager.decryptCookie("refreshToken");
 
   if (token) {
     const decodedToken = jwt_decode(token);

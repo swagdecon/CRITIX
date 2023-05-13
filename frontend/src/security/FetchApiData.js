@@ -3,7 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import isExpired from "./IsTokenExpired";
 import { useNavigate } from "react-router-dom";
-
+import CookieManager from "./CookieManager";
 export default function useFetchData(endpoint) {
   const [data, setData] = useState({});
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -14,7 +14,8 @@ export default function useFetchData(endpoint) {
   useEffect(() => {
     async function fetchData() {
       try {
-        let token = Cookies.get("accessToken");
+        let token = CookieManager.decryptCookie("accessToken");
+
         const response = await axios.get(endpoint, {
           headers: {
             "Content-Type": "application/json",
