@@ -24,7 +24,12 @@ export default function MovieCard({
     runtime: PropTypes.number,
     overview: PropTypes.string,
     video: PropTypes.arrayOf(PropTypes.string),
-    genres: PropTypes.arrayOf(PropTypes.string),
+    genres: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+      })
+    ),
+
     actors: PropTypes.arrayOf(
       PropTypes.shape({
         name: PropTypes.string,

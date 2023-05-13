@@ -22,9 +22,6 @@ export default function RecommendedCarousel({ movieId }) {
   if (!recommendations) {
     return;
   }
-  {
-    console.log(recommendations);
-  }
 
   return (
     <Carousel className="carousel-movie" indicators={false} interval={null}>
@@ -35,7 +32,6 @@ export default function RecommendedCarousel({ movieId }) {
               className={MovieCardStyle["recommended-card-container"]}
               key={`${i}-${j}`}
             >
-              {console.log(movie.video)}
               <Link to={`/movies/movie/${movie.id}`}>
                 <MovieCard
                   poster={movie.poster_path}
