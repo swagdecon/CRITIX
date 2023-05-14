@@ -1,4 +1,3 @@
-import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 import CookieManager from "./CookieManager";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +24,7 @@ export default async function isExpired() {
         );
         const data = await refreshResponse.json();
         CookieManager.encryptCookie("accessToken", data.access_token, {
-          expires: 0.5,
+          expires: 7,
         });
         CookieManager.encryptCookie("refreshToken", data.refresh_token, {
           expires: 7,
@@ -36,26 +35,6 @@ export default async function isExpired() {
       } finally {
         isRefreshingToken = false;
       }
-    }
-  } else {
-    isRefreshingToken = true;
-    try {
-      const refreshResponse = await fetch(
-        "http://localhost:8080/v1/auth/refresh-token",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${refreshToken}`,
-          },
-        }
-      );
-      const body = await refreshResponse.json();
-      Cookies.set("accessToken", body.access_token, { expires: 0.5 });
-      Cookies.set("refreshToken", body.refresh_token, { expires: 7 });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      isRefreshingToken = false;
     }
   }
 }
