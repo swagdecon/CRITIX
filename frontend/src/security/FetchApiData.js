@@ -3,45 +3,70 @@ import axios from "axios";
 import isExpired from "./IsTokenExpired";
 import { useNavigate } from "react-router-dom";
 import CookieManager from "./CookieManager";
+import jwt_decode from "jwt-decode";
+
 export default function useFetchData(endpoint) {
   const [data, setData] = useState({});
   const [dataLoaded, setDataLoaded] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
   const [prevEndpoint, setPrevEndpoint] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
-      try {
-        let token = CookieManager.decryptCookie("accessToken");
+      // try {
+      let token = CookieManager.decryptCookie("accessToken");
 
+      const decodedToken = jwt_decode(token);
+      const currentTime = Date.now() / 1000;
+      if (decodedToken.exp > currentTime) {
         const response = await axios.get(endpoint, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
-        setData(await response.data);
+        setData(response.data);
         setDataLoaded(true);
-      } catch (error) {
-        // Token expired, get a new token and retry the request
+        setRequestSent(true);
+      } else {
         await isExpired();
         try {
-          let newAccessToken = CookieManager.decryptCookie("accessToken");
           const response = await axios.get(endpoint, {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${newAccessToken}`,
+              Authorization: `Bearer ${token}`,
             },
           });
           setData(response.data);
           setDataLoaded(true);
+          setRequestSent(true);
         } catch (error) {
+          fetchData();
           console.log(error);
-          navigate("/403");
         }
       }
+      // } catch (error) {
+      //   // Token expired, get a new token and retry the request
+      //   await isExpired();
+      //   try {
+      //     let newAccessToken = CookieManager.decryptCookie("accessToken");
+      //     const response = await axios.get(endpoint, {
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //         Authorization: `Bearer ${newAccessToken}`,
+      //       },
+      //     });
+      //     setData(response.data);
+      //     setDataLoaded(true);
+      //   } catch (error) {
+      //     console.log(error);
+      //     navigate("/403");
+      //   }
+      // }
     }
+    fetchData();
     if (prevEndpoint !== endpoint) {
       // compare current endpoint with previous endpoint
       setRequestSent(false); // reset requestSent state variable
