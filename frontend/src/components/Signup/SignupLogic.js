@@ -93,7 +93,7 @@ export default function SignUpFunctionality() {
           name="email"
           className={SignUpStyles["text-input"]}
           pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
-          autoComplete="current-email"
+          autoComplete="on"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           placeholder="Email Address"

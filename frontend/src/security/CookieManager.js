@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
 
-const ENCRYPTION_KEY = "PopflixSuperSecretCookieSecurityKey";
+const ENCRYPTION_KEY = process.env.REACT_APP_COOKIE_ENCRYPTION_KEY;
 
 const CookieManager = {
   encryptCookie(name, value, options = {}) {
