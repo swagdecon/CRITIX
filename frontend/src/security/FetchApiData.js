@@ -47,24 +47,6 @@ export default function useFetchData(endpoint) {
           console.log(error);
         }
       }
-      // } catch (error) {
-      //   // Token expired, get a new token and retry the request
-      //   await isExpired();
-      //   try {
-      //     let newAccessToken = CookieManager.decryptCookie("accessToken");
-      //     const response = await axios.get(endpoint, {
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //         Authorization: `Bearer ${newAccessToken}`,
-      //       },
-      //     });
-      //     setData(response.data);
-      //     setDataLoaded(true);
-      //   } catch (error) {
-      //     console.log(error);
-      //     navigate("/403");
-      //   }
-      // }
     }
     fetchData();
     if (prevEndpoint !== endpoint) {
@@ -80,5 +62,5 @@ export default function useFetchData(endpoint) {
     }
   }, [requestSent, endpoint, navigate, prevEndpoint]);
 
-  return { data, dataLoaded };
+  return { data, dataLoaded, requestSent };
 }
