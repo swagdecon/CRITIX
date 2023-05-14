@@ -39,6 +39,7 @@ export default function useFetchData(endpoint) {
           setDataLoaded(true);
         } catch (error) {
           console.log(error);
+          navigate("/403");
         }
       }
     }

@@ -1,31 +1,50 @@
 import React from "react";
 import "./UserProfile.css";
-import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-
+import isExpired from "../../../security/IsTokenExpired";
+import { useNavigate } from "react-router-dom";
+import CookieManager from "../../../security/CookieManager";
 const UserProfile = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    let token = Cookies.get("accessToken");
+    async function logout() {
+      try {
+        let token = CookieManager.decryptCookie("accessToken");
 
-    try {
-      const response = await fetch("http://localhost:8080/v1/auth/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.ok) {
+        await fetch("http://localhost:8080/v1/auth/logout", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
         navigate("/login");
+      } catch (error) {
+        // Token expired, get a new token and retry the request
+        await isExpired();
+        try {
+          let newAccessToken = Cookies.get("accessToken");
+          await fetch("http://localhost:8080/v1/auth/logout", {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${newAccessToken}`,
+            },
+          });
+
+          navigate("/login");
+        } catch (error) {
+          console.log(error);
+        }
       }
-    } catch (error) {
-      navigate("/403");
     }
+
+    // Call the logout function when the user clicks the button
+    logout();
   };
+
   return (
     <div className="UserProfile">
       <div className="User">

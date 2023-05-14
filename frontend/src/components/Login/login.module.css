@@ -72,10 +72,6 @@ h6 {
 #right {
   flex: 1;
 }
-.error {
-  color: red;
-  margin-bottom: 1rem;
-}
 
 .homepage-logo {
   margin-top: 5%;
@@ -187,13 +183,15 @@ h6 {
 
 .error-msg {
   margin: 10px 0;
-  padding: 10px;
-  border-radius: 3px 3px 3px 3px;
-}
-.error-msg {
+  padding: 5px;
+  padding-left: 5%;
+  border-radius: 20px;
+  max-width: 100%;
+  font-size: 13px;
   color: #d8000c;
   background-color: #ffbaba;
 }
+
 video {
   object-fit: cover;
   width: 100%;
