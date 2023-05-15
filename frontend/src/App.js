@@ -24,7 +24,7 @@ export default function App() {
         <Route
           path="/home"
           element={
-            <PrivateRoute requestSent={false}>
+            <PrivateRoute>
               <Homepage />
             </PrivateRoute>
           }

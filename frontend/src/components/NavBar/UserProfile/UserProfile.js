@@ -20,6 +20,8 @@ const UserProfile = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+        Cookies.remove("accessToken");
+        Cookies.remove("refreshToken");
 
         navigate("/login");
       } catch (error) {
@@ -33,7 +35,8 @@ const UserProfile = () => {
               Authorization: `Bearer ${newAccessToken}`,
             },
           });
-
+          Cookies.remove("accessToken");
+          Cookies.remove("refreshToken");
           navigate("/login");
         } catch (error) {
           console.log(error);
