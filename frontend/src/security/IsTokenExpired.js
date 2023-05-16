@@ -36,5 +36,7 @@ export default async function isExpired() {
         isRefreshingToken = false;
       }
     }
+  } else {
+    return;
   }
 }

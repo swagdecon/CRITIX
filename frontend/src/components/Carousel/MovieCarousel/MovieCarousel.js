@@ -6,13 +6,13 @@ import { chunk } from "lodash";
 import PropTypes from "prop-types";
 import MovieCardStyle from "../../MovieCard/moviecard.module.scss";
 import MovieCard from "../../MovieCard/MovieCard.js";
-import fetchData from "../../../security/FetchApiData.js";
+import useFetchData from "../../../security/FetchApiData.js";
 export default function MovieCarousel({ title, endpoint }) {
   MovieCarousel.propTypes = {
     title: PropTypes.string.isRequired,
     endpoint: PropTypes.string.isRequired,
   };
-  const { data: movies } = fetchData(endpoint);
+  const { data: movies } = useFetchData(endpoint);
   const movieChunks = chunk(movies, 5);
 
   return (
