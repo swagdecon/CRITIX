@@ -14,30 +14,34 @@ const UserProfile = () => {
       try {
         let token = CookieManager.decryptCookie("accessToken");
 
-        await fetch("http://localhost:8080/v1/auth/logout", {
+        const response = await fetch("http://localhost:8080/v1/auth/logout", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
-        Cookies.remove("accessToken");
-        Cookies.remove("refreshToken");
+        if (response.ok) {
+          Cookies.remove("accessToken");
+          Cookies.remove("refreshToken");
 
-        navigate("/login");
+          navigate("/login");
+        }
       } catch (error) {
         // Token expired, get a new token and retry the request
         await isExpired();
         try {
-          let newAccessToken = Cookies.get("accessToken");
-          await fetch("http://localhost:8080/v1/auth/logout", {
+          let token = CookieManager.decryptCookie("accessToken");
+          const response = await fetch("http://localhost:8080/v1/auth/logout", {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${newAccessToken}`,
+              Authorization: `Bearer ${token}`,
             },
           });
-          Cookies.remove("accessToken");
-          Cookies.remove("refreshToken");
-          navigate("/login");
+          if (response.ok) {
+            Cookies.remove("accessToken");
+            Cookies.remove("refreshToken");
+            navigate("/login");
+          }
         } catch (error) {
           console.log(error);
         }
