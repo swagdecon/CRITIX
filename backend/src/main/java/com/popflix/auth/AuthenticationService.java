@@ -1,71 +1,154 @@
 package com.popflix.auth;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.popflix.config.JwtService;
-import com.popflix.config.customExceptions.FingerprintGeneratorException;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
+import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
 import com.popflix.model.Role;
+import com.popflix.model.TokenType;
 import com.popflix.model.User;
+import com.popflix.model.Token;
+import com.popflix.repository.TokenRepository;
 import com.popflix.repository.UserRepository;
-
+import com.fasterxml.jackson.core.exc.StreamWriteException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-        private final UserRepository repository;
+        private final UserRepository userRepository;
+        private final TokenRepository tokenRepository;
         private final PasswordEncoder passwordEncoder;
         private final JwtService jwtService;
         private final AuthenticationManager authenticationManager;
 
         public AuthenticationResponse register(RegisterRequest request) {
 
-                if (repository.findByEmail(request.getEmail()).isPresent()) {
-                        throw new UserAlreadyExistsException("A user with this email already exists");
+                if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+                        throw new UserAlreadyExistsException("A User With This Email Already Exists");
                 }
 
                 var user = User.builder()
-                                .firstname(request.getFirstname())
-                                .lastname(request.getLastname())
+                                .firstName(request.getFirstName())
+                                .lastName(request.getLastName())
                                 .email(request.getEmail())
                                 .password(passwordEncoder.encode(request.getPassword()))
                                 .role(Role.USER)
                                 .build();
-                repository.save(user);
+                userRepository.save(user);
+                var savedUser = userRepository.save(user);
                 var jwtToken = jwtService.generateToken(user);
+                var refreshToken = jwtService.generateRefreshToken(user);
+                saveAccessToken(savedUser, jwtToken);
+                saveRefreshToken(user, refreshToken);
                 return AuthenticationResponse.builder()
-                                .token(jwtToken)
+                                .accessToken(jwtToken)
+                                .refreshToken(refreshToken)
                                 .build();
         }
 
         public AuthenticationResponse authenticate(AuthenticationRequest request, HttpServletRequest httpRequest) {
+
+                User user = userRepository.findByEmail(request.getEmail())
+                                .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
+                if (user.getLoggedIn() == true) {
+                        throw new UserAlreadyLoggedInException("This User is already logged in");
+                }
+                user.setLoggedIn(true);
+                userRepository.save(user);
+
                 authenticationManager.authenticate(
                                 new UsernamePasswordAuthenticationToken(
                                                 request.getEmail(),
                                                 request.getPassword()));
 
-                var user = repository.findByEmail(request.getEmail())
-                                .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
-                try {
-                        String fingerprint = httpRequest.getHeader("X-Fingerprint");
+                var accessToken = jwtService.generateToken(user);
+                var refreshToken = jwtService.generateRefreshToken(user);
+                revokeAllUserTokens(user);
+                saveAccessToken(user, accessToken);
+                saveRefreshToken(user, refreshToken);
+                return AuthenticationResponse.builder()
+                                .accessToken(accessToken)
+                                .refreshToken(refreshToken)
+                                .build();
 
-                        if (fingerprint == null) {
-                                throw new RuntimeException("Invalid fingerprint");
-                        }
-
-                        var jwtToken = jwtService.generateToken(user, fingerprint);
-                        return AuthenticationResponse.builder()
-                                        .token(jwtToken)
-                                        .build();
-                } catch (FingerprintGeneratorException e) {
-                        throw new RuntimeException("Error generating fingerprint", e);
-                }
         }
 
+        private void revokeAllUserTokens(User user) {
+                var validUserTokens = tokenRepository.findAllValidTokensByUser(user.getId());
+                if (validUserTokens.isEmpty())
+                        return;
+                validUserTokens.forEach(t -> {
+                        t.setExpired(true);
+                        t.setRevoked(true);
+                });
+                tokenRepository.saveAll(validUserTokens);
+        }
+
+        private void saveAccessToken(User user, String accessToken) {
+                var token = Token.builder()
+                                .user(user)
+                                .userId(user.getId())
+                                .token(accessToken)
+                                .tokenType(TokenType.BEARER)
+                                .expired(false)
+                                .revoked(false)
+                                .build();
+                tokenRepository.save(token);
+        }
+
+        private void saveRefreshToken(User user, String refreshToken) {
+                var token = Token.builder()
+                                .user(user)
+                                .userId(user.getId())
+                                .token(refreshToken)
+                                .tokenType(TokenType.REFRESH)
+                                .expired(false)
+                                .revoked(false)
+                                .build();
+                tokenRepository.save(token);
+
+        }
+
+        public void refreshToken(
+                        HttpServletRequest request,
+                        HttpServletResponse response)
+                        throws IOException, StreamWriteException, DatabindException, java.io.IOException {
+                final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+                final String refreshToken;
+                final String userEmail;
+                if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                        return;
+                }
+                refreshToken = authHeader.substring(7);
+                userEmail = jwtService.extractUsername(refreshToken);
+                if (userEmail != null) {
+                        var user = this.userRepository.findByEmail(userEmail)
+                                        .orElseThrow();
+                        if (jwtService.isTokenValid(refreshToken, user)) {
+                                revokeAllUserTokens(user);
+
+                                var accessToken = jwtService.generateToken(user);
+                                var newRefreshToken = jwtService.generateRefreshToken(user);
+
+                                saveAccessToken(user, accessToken);
+                                saveRefreshToken(user, newRefreshToken);
+                                var authResponse = AuthenticationResponse.builder()
+                                                .accessToken(accessToken)
+                                                .refreshToken(newRefreshToken)
+                                                .build();
+                                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+                        }
+                }
+        }
 }

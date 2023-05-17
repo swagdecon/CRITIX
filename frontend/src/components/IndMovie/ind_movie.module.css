@@ -5,9 +5,11 @@
   clear: both;
   visibility: hidden;
 }
-html {
-  overflow-x: hidden;
+.ind-movie-page-wrapper {
   overflow-y: auto;
+}
+.ind-movie-page-wrapper::-webkit-scrollbar {
+  display: none;
 }
 ind-movie-body {
   font-family: "Open Sans", sans-serif;
@@ -548,6 +550,7 @@ ind-movie-nav {
   opacity: 1;
   color: #0096ff;
   font-family: "CoreCircus", sans-serif;
+  font-size: 1vw;
 }
 
 h1.cast-title-1 {

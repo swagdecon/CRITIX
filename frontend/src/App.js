@@ -6,14 +6,15 @@ import {
   Navigate,
 } from "react-router-dom";
 import "./index.js";
-import Login from "./views/Signin.js";
-import SignUp from "./views/Signup.js";
-import Homepage from "./views/homepage.js";
-import PrivateRoute from "./components/Other/privateRoutes.js";
-import Error403 from "./views/errorMessages/403error.js";
-import Error404 from "./views/errorMessages/404error.js";
-import IndMovie from "./views/indMoviePage.js";
-import IndPerson from "./views/indPersonPage.js";
+import Login from "./views/SigninPage.js";
+import SignUp from "./views/SignupPage.js";
+import Homepage from "./views/Homepage.js";
+import PrivateRoute from "./security/SecuredRoutes.js";
+import Error403 from "./views/errorMessages/403/403error.js";
+import Error404 from "./views/errorMessages/404/404error.js";
+import IndMovie from "./views/IndFilmPage.js";
+import IndPerson from "./views/IndPersonPage.js";
+import MovieListInTheatres from "./components/MovieListInTheatres/MovieListInTheatres.js";
 export default function App() {
   return (
     <Router>
@@ -28,6 +29,7 @@ export default function App() {
             </PrivateRoute>
           }
         />
+        <Route path="/now_playing" element={<MovieListInTheatres />} />
         <Route path="/movies/:endpoint/:id" element={<IndMovie />} />
         <Route path="/movies/movie/:id" element={<IndMovie />} />
         <Route path="/person/:id" element={<IndPerson />} />

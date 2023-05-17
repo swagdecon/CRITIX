@@ -20,9 +20,14 @@ export default async function getRecommendations(movieId) {
       );
       const actors = castResponse.data.cast
         .slice(0, 5)
-        .map((actor) => actor.name);
+        .map((actor) => ({ id: actor.id, name: actor.name }));
 
-      return { ...movie, ...detailsResponse.data, actors };
+      const videoResponse = await axios.get(
+        `https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=${api_key}&site="Youtube"`
+      );
+      const trailer = videoResponse.data.results.map((movie) => movie.key);
+
+      return { ...movie, ...detailsResponse.data, actors, trailer };
     })
   );
   if (response.data.results.length === 0) {

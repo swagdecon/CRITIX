@@ -1,0 +1,32 @@
+import React from "react";
+import Header from "./Header/Header";
+import "./NavBar.css";
+export default function NavBar() {
+  // constructor(props) {
+  //   super(props);
+  //   this.apiKey = "87dfa1c669eea853da609d4968d294be";
+  //   this.state = { data: [] };
+  // }
+
+  // performSearch = (e) => {
+  //   e.preventDefault();
+  //   const val = this.searchInput.value;
+  //   const requestUrl =
+  //     "https://api.themoviedb.org/3/search/multi?query=" +
+  //     val +
+  //     "&api_key=" +
+  //     this.apiKey;
+
+  //   fetch(requestUrl)
+  //     .then((response) => response.json())
+  //     .then((data) => this.setState({ data: data }))
+  //     .catch((error) => console.error(error));
+  // };
+
+  // render() {
+  //   if (this.state.data.results) {
+  //     console.log(this.state.data);
+  //   }
+
+  return <Header />;
+}
