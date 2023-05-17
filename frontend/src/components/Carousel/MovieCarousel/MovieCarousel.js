@@ -18,30 +18,36 @@ export default function MovieCarousel({ title, endpoint }) {
   return (
     <section>
       <h3-title>{title}</h3-title>
-      <Carousel className="carousel-movie" indicators={false} interval={null}>
-        {movieChunks.map((chunk, i) => (
-          <Carousel.Item key={i}>
-            {chunk.map((movie, j) => (
-              <div
-                className={MovieCardStyle["main-card-container"]}
-                key={`${i}-${j}`}
-              >
-                <Link to={`${endpoint}/${movie.id}`}>
-                  <MovieCard
-                    poster={movie.posterPath}
-                    rating={movie.voteAverage}
-                    runtime={movie.runtime}
-                    genres={movie.genres}
-                    overview={movie.overview}
-                    actors={movie.actors}
-                    video={movie.video}
-                  />
-                </Link>
-              </div>
-            ))}
-          </Carousel.Item>
-        ))}
-      </Carousel>
+      <div className={MovieCardStyle["wrapper"]}>
+        <Carousel
+          className="carousel-movie "
+          indicators={false}
+          interval={null}
+        >
+          {movieChunks.map((chunk, i) => (
+            <Carousel.Item key={i}>
+              {chunk.map((movie, j) => (
+                <div
+                  className={MovieCardStyle["main-card-container"]}
+                  key={`${i}-${j}`}
+                >
+                  <Link to={`${endpoint}/${movie.id}`}>
+                    <MovieCard
+                      poster={movie.posterPath}
+                      rating={movie.voteAverage}
+                      runtime={movie.runtime}
+                      genres={movie.genres}
+                      overview={movie.overview}
+                      actors={movie.actors}
+                      video={movie.video}
+                    />
+                  </Link>
+                </div>
+              ))}
+            </Carousel.Item>
+          ))}
+        </Carousel>
+      </div>
     </section>
   );
 }
