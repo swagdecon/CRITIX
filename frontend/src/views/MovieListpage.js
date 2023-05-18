@@ -1,40 +1,17 @@
 import React from "react";
+import MovieList from "../components/MovieList/MovieList";
+import NavBar from "../components/NavBar/NavBar";
+import PropTypes from "prop-types";
 
-import LoadingPage from "./LoadingPage";
-import MovieCard from "../components/MovieCard/MovieCard";
-import useFetchData from "../security/FetchApiData";
-export default function MovieList(endpoint) {
-  const { data: movies, dataLoaded: dataLoaded } = useFetchData(endpoint);
-
-  if (!dataLoaded) {
-    return <LoadingPage />;
-  }
-  console.log(movies);
+export default function MovieListPage({ title, endpoint }) {
+  MovieListPage.propTypes = {
+    title: PropTypes.string.isRequired,
+    endpoint: PropTypes.string.isRequired,
+  };
   return (
-    <html>
-      <head>
-        <link
-          href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          rel="stylesheet"
-        />
-      </head>
-      <body>
-        <li>
-          {movies.map((movie, i) => (
-            <div key={i}>
-              <MovieCard
-                poster={movie.posterPath}
-                rating={movie.voteAverage}
-                runtime={movie.runtime}
-                genres={movie.genres}
-                overview={movie.overview}
-                actors={movie.actors}
-                video={movie.video}
-              />
-            </div>
-          ))}
-        </li>
-      </body>
-    </html>
+    <div>
+      <NavBar />
+      <MovieList title={title} endpoint={endpoint} />
+    </div>
   );
 }

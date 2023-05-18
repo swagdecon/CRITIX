@@ -14,7 +14,7 @@ import Error403 from "./views/errorMessages/403/403error.js";
 import Error404 from "./views/errorMessages/404/404error.js";
 import IndMovie from "./views/IndFilmPage.js";
 import IndPerson from "./views/IndPersonPage.js";
-import MovieListPage from "./views/MovieListpage.js";
+import MovieListPage from "./views/MovieListPage.js";
 export default function App() {
   return (
     <Router>
@@ -29,7 +29,35 @@ export default function App() {
             </PrivateRoute>
           }
         />
-        <Route path="/popular" element={<MovieListPage />} />
+        <Route
+          path="/popular"
+          element={
+            <MovieListPage
+              title={
+                "Popular Movies: Discover What Everyone Is Watching Right Now"
+              }
+              endpoint={"/movies/popular"}
+            />
+          }
+        />
+        <Route
+          path="/upcoming"
+          element={
+            <MovieListPage
+              title={"Upcoming Movies: Get a Sneak Peek of What's Coming Soon"}
+              endpoint={"/movies/upcoming"}
+            />
+          }
+        />
+        <Route
+          path="/now_playing"
+          element={
+            <MovieListPage
+              title={"In Theatres: he Latest Movies on the Big Screen"}
+              endpoint={"/movies/now_playing"}
+            />
+          }
+        />
         <Route path="/movies/:endpoint/:id" element={<IndMovie />} />
         <Route path="/movies/movie/:id" element={<IndMovie />} />
         <Route path="/person/:id" element={<IndPerson />} />

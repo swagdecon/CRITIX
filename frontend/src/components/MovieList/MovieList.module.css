@@ -1,0 +1,10 @@
+.container {
+  margin: 7% auto;
+  transform: translateY(-2%);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.title-container {
+  transform: translateY(10vh);
+}
