@@ -5,12 +5,12 @@ import MovieCarousel from "../components/Carousel/MovieCarousel/MovieCarousel.js
 import NavBar from "../components/NavBar/NavBar.js";
 import LoadingPage from "./LoadingPage";
 export default function Homepage() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLoad = () => {
-    setIsLoading(false);
+    setIsLoading(true);
   };
-  return !isLoading ? (
+  return isLoading ? (
     <LoadingPage />
   ) : (
     <div>

@@ -15,23 +15,11 @@ export default function useFetchData(endpoint) {
 
   useEffect(() => {
     async function fetchData() {
-      // try {
       let token = CookieManager.decryptCookie("accessToken");
-
       const decodedToken = jwt_decode(token);
       const currentTime = Date.now() / 1000;
+
       if (decodedToken.exp > currentTime) {
-        const response = await axios.get(endpoint, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setData(response.data);
-        setDataLoaded(true);
-        setRequestSent(true);
-      } else {
-        await isExpired();
         try {
           const response = await axios.get(endpoint, {
             headers: {
@@ -39,21 +27,37 @@ export default function useFetchData(endpoint) {
               Authorization: `Bearer ${token}`,
             },
           });
+
           setData(response.data);
           setDataLoaded(true);
           setRequestSent(true);
         } catch (error) {
-          fetchData();
+          console.log(error);
+        }
+      } else {
+        await isExpired();
+
+        try {
+          const response = await axios.get(endpoint, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          setData(response.data);
+          setDataLoaded(true);
+          setRequestSent(true);
+        } catch (error) {
           console.log(error);
         }
       }
     }
-    fetchData();
+
     if (prevEndpoint !== endpoint) {
-      // compare current endpoint with previous endpoint
-      setRequestSent(false); // reset requestSent state variable
-      setDataLoaded(false); // reset dataLoaded state variable
-      setPrevEndpoint(endpoint); // update previous endpoint state variable
+      setRequestSent(false);
+      setDataLoaded(false);
+      setPrevEndpoint(endpoint);
     }
 
     if (!requestSent) {

@@ -16,7 +16,6 @@ import IndMovie from "./views/IndFilmPage.js";
 import IndPerson from "./views/IndPersonPage.js";
 import MovieListPage from "./views/MovieListPage.js";
 export default function App() {
-  const api_key = "d84f9365179dc98dc69ab22833381835";
   return (
     <Router>
       <Routes>
@@ -32,33 +31,15 @@ export default function App() {
         />
         <Route
           path="/popular"
-          element={
-            <MovieListPage
-              title={"Popular Movies:"}
-              caption={"Discover What Everyone Is Watching Right Now"}
-              endpoint={"/movies/popular"}
-            />
-          }
+          element={<MovieListPage endpointName={"popular"} />}
         />
         <Route
           path="/upcoming"
-          element={
-            <MovieListPage
-              title={"Upcoming Movies:"}
-              caption={"Get a Sneak Peek of What's Coming Soon"}
-              endpoint={"/movies/upcoming"}
-            />
-          }
+          element={<MovieListPage endpointName={"upcoming"} />}
         />
         <Route
           path="/now_playing"
-          element={
-            <MovieListPage
-              title={"In Theatres:"}
-              caption={"The Latest Movies on the Big Screen"}
-              endpoint={`https://api.themoviedb.org/3/movie/now_playing?api_key=${api_key}&language=en-US&page=1`}
-            />
-          }
+          element={<MovieListPage endpointName={"now_playing"} />}
         />
         <Route path="/movies/:endpoint/:id" element={<IndMovie />} />
         <Route path="/movies/movie/:id" element={<IndMovie />} />
