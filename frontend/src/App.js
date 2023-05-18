@@ -16,6 +16,7 @@ import IndMovie from "./views/IndFilmPage.js";
 import IndPerson from "./views/IndPersonPage.js";
 import MovieListPage from "./views/MovieListPage.js";
 export default function App() {
+  const api_key = "d84f9365179dc98dc69ab22833381835";
   return (
     <Router>
       <Routes>
@@ -55,7 +56,7 @@ export default function App() {
             <MovieListPage
               title={"In Theatres:"}
               caption={"The Latest Movies on the Big Screen"}
-              endpoint={"/movies/now_playing"}
+              endpoint={`https://api.themoviedb.org/3/movie/now_playing?api_key=${api_key}&language=en-US&page=1`}
             />
           }
         />

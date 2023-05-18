@@ -1,5 +1,4 @@
 import { React, useEffect, useState } from "react";
-import getRecommendations from "../../../axios/GetRecommendations.js";
 import { Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { chunk } from "lodash";
@@ -7,6 +6,7 @@ import MovieCardStyle from "../../MovieCard/moviecard.module.scss";
 import PropTypes from "prop-types";
 
 import MovieCard from "../../MovieCard/MovieCard.js";
+import getDetailedMovie from "../../../axios/GetDetailedMovie.js";
 
 export default function RecommendedCarousel({ movieId }) {
   const [recommendations, setRecommendations] = useState([]);
@@ -14,7 +14,7 @@ export default function RecommendedCarousel({ movieId }) {
 
   useEffect(() => {
     const fetchRecommendations = async () => {
-      const data = await getRecommendations(movieId);
+      const data = await getDetailedMovie("recommendations", movieId);
       setRecommendations(data);
     };
     fetchRecommendations();

@@ -7,17 +7,28 @@ import useFetchData from "../../security/FetchApiData";
 import { Link } from "react-router-dom";
 import "../Carousel/title.scss";
 
-export default function MovieList({ title, caption, endpoint }) {
+export default async function MovieList({ title, caption, endpoint }) {
   MovieList.propTypes = {
     title: PropTypes.string.isRequired,
     caption: PropTypes.string.isRequired,
     endpoint: PropTypes.string.isRequired,
   };
-  const { data: movies, dataLoaded: dataLoaded } = useFetchData(endpoint);
+  const [movie, setMovie] = useState([]);
+  const { data: moviesData, dataLoaded: dataLoaded } = useFetchData(endpoint);
+
+  const fetchMovie = async () => {
+    const data = await getDetailedMovie(
+      "recommendations",
+      moviesData.results.movieId
+    );
+    setMovie(data);
+  };
+  fetchMovie();
 
   if (!dataLoaded) {
     return <LoadingPage />;
   }
+
   return (
     <html>
       <head>
