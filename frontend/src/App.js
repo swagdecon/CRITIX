@@ -33,9 +33,8 @@ export default function App() {
           path="/popular"
           element={
             <MovieListPage
-              title={
-                "Popular Movies: Discover What Everyone Is Watching Right Now"
-              }
+              title={"Popular Movies:"}
+              caption={"Discover What Everyone Is Watching Right Now"}
               endpoint={"/movies/popular"}
             />
           }
@@ -44,7 +43,8 @@ export default function App() {
           path="/upcoming"
           element={
             <MovieListPage
-              title={"Upcoming Movies: Get a Sneak Peek of What's Coming Soon"}
+              title={"Upcoming Movies:"}
+              caption={"Get a Sneak Peek of What's Coming Soon"}
               endpoint={"/movies/upcoming"}
             />
           }
@@ -53,7 +53,8 @@ export default function App() {
           path="/now_playing"
           element={
             <MovieListPage
-              title={"In Theatres: he Latest Movies on the Big Screen"}
+              title={"In Theatres:"}
+              caption={"The Latest Movies on the Big Screen"}
               endpoint={"/movies/now_playing"}
             />
           }

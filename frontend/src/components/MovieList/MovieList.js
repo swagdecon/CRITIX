@@ -7,9 +7,10 @@ import useFetchData from "../../security/FetchApiData";
 import { Link } from "react-router-dom";
 import "../Carousel/title.scss";
 
-export default function MovieList({ title, endpoint }) {
+export default function MovieList({ title, caption, endpoint }) {
   MovieList.propTypes = {
     title: PropTypes.string.isRequired,
+    caption: PropTypes.string.isRequired,
     endpoint: PropTypes.string.isRequired,
   };
   const { data: movies, dataLoaded: dataLoaded } = useFetchData(endpoint);
@@ -28,6 +29,7 @@ export default function MovieList({ title, endpoint }) {
       <body>
         <div className={MovieListStyle["title-container"]}>
           <h3-title>{title}</h3-title>
+          <div className={MovieListStyle["title-caption"]}>{caption}</div>
         </div>
         <div className={MovieListStyle["container"]}>
           {movies.map((movie, i) => (
