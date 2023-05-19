@@ -11,11 +11,14 @@ export default function GlassCard({ name, value, icon, iconString }) {
   };
   let data;
   if (iconString === "&#xef63;") {
-    // Budget - $
+    // Budget
     data = `$ ${value}`;
-    // Minutes
   } else if (iconString === "&#xe8b5;") {
+    // Minutes
     data = ` ${value} minutes`;
+  } else if (iconString === "&#xf041;") {
+    // Minutes
+    data = `$ ${value} `;
   }
 
   return (

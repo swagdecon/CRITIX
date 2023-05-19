@@ -134,7 +134,7 @@ function MovieReviews({ reviews }) {
 
 function MovieDetails({
   runtime,
-  //   revenue,
+  revenue,
   budget,
   //   language,
   //   productionCompanies,
@@ -142,7 +142,7 @@ function MovieDetails({
   //   releaseDate,
 }) {
   return (
-    <div>
+    <div className="info-container">
       <GlassCard
         name={"Runtime"}
         value={runtime}
@@ -154,6 +154,12 @@ function MovieDetails({
         value={budget}
         iconString={"&#xef63;"}
         icon="&#xef63;"
+      />
+      <GlassCard
+        name={"Revenue"}
+        value={revenue}
+        iconString={"&#xf041;"}
+        icon="&#xf041;"
       />
 
       {/* <GlassCard name={"Revenue"} icon={null} value={revenue} />
