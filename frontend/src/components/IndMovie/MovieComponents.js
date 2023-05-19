@@ -65,7 +65,9 @@ function MovieGenres({ genres }) {
     </ul>
   );
 }
-
+function ParseNumber(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 function EmbeddedMovieTrailer({ video }) {
   EmbeddedMovieTrailer.propTypes = {
     video: PropTypes.arrayOf(PropTypes.string),
@@ -204,6 +206,7 @@ MovieDetails.propTypes = {
   revenue: PropTypes.number,
   budget: PropTypes.number,
   voteCount: PropTypes.number,
+
   language: PropTypes.string,
   productionCompanies: PropTypes.arrayOf(PropTypes.string),
   movieStatus: PropTypes.string,
@@ -214,6 +217,7 @@ export {
   TruncateDescription,
   GetYearFromDate,
   MovieRuntime,
+  ParseNumber,
   MovieTrailer,
   MovieAverage,
   EmbeddedMovieTrailer,

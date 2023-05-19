@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./GlassCard.css";
-
+import { ParseNumber } from "./MovieComponents";
 export default function GlassCard({ name, value, icon, iconString }) {
   GlassCard.propTypes = {
     name: PropTypes.string,
@@ -13,16 +13,16 @@ export default function GlassCard({ name, value, icon, iconString }) {
   !value ? (value = "N/A") : value;
   if (iconString === "&#xef63;") {
     // Budget
-    data = `$ ${value}`;
+    data = `$ ` + ParseNumber(value);
   } else if (iconString === "&#xe8b5;") {
     // Minutes
     data = ` ${value} minutes`;
   } else if (iconString === "&#xf041;") {
     // Revenue
-    data = `$ ${value} `;
+    data = `$ ` + ParseNumber(value);
   } else if (iconString === "&#xe175;") {
     // Vote Count
-    data = ` ${value} `;
+    data = ParseNumber(value);
   } else if (iconString === "&#xe8e2;") {
     // Language
     data = ` ${value} `;
