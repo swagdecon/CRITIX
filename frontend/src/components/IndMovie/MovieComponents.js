@@ -2,15 +2,11 @@ import { React, useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import IndMovieStyle from "../IndMovie/ind_movie.module.css";
 import ReactTextCollapse from "react-text-collapse/dist/ReactTextCollapse";
-import { RiMoneyDollarBoxFill } from "react-icons/ri";
-import { BsWallet2 } from "react-icons/bs";
-import { FaLanguage } from "react-icons/fa";
-import { AiOutlineClockCircle } from "react-icons/ai";
-import { MdOutlineMovie, MdDateRange } from "react-icons/md";
-import { RiMovie2Line } from "react-icons/ri";
+
 import ReactPlayer from "react-player";
 
 import "../Carousel/MovieCarousel/MovieCarousel.css";
+import GlassCard from "./GlassCard";
 function TruncateDescription({ description }) {
   const words = description.split(" ");
 
@@ -138,98 +134,46 @@ function MovieReviews({ reviews }) {
 
 function MovieDetails({
   runtime,
-  revenue,
+  //   revenue,
   budget,
-  language,
-  productionCompanies,
-  movieStatus,
-  releaseDate,
+  //   language,
+  //   productionCompanies,
+  //   movieStatus,
+  //   releaseDate,
 }) {
   return (
-    <section className={IndMovieStyle.movieDetailsContainer}>
-      <div className={IndMovieStyle["ind-movie-details-card"]}>
-        <div className={IndMovieStyle["card-overlay"]}>
-          <div className={IndMovieStyle["movie-Details-Title"]}>
-            Movie Details
-          </div>
-          <div className={IndMovieStyle["movie-info-row"]}>
-            <ul className={IndMovieStyle["movie-column"]}>
-              <div className={IndMovieStyle["ind-movie-runtime"]}>
-                <AiOutlineClockCircle
-                  className={IndMovieStyle["movie-info-logo"]}
-                  size={50}
-                />
+    <div>
+      <GlassCard
+        name={"Runtime"}
+        value={runtime}
+        icon="&#xe8b5;"
+        iconString={"&#xe8b5;"}
+      />
+      <GlassCard
+        name={"Budget"}
+        value={budget}
+        iconString={"&#xef63;"}
+        icon="&#xef63;"
+      />
 
-                <div className={IndMovieStyle["movie-info-text"]}>
-                  {runtime ? `${runtime} minutes` : "N/A"}
-                </div>
-              </div>
-              <br />
-              <div className={IndMovieStyle["ind-movie-revenue"]}>
-                <RiMoneyDollarBoxFill
-                  className={IndMovieStyle["movie-info-logo"]}
-                  size={50}
-                />
-                <div className={IndMovieStyle["movie-info-text"]}>
-                  {revenue ? `$${revenue}` : "N/A"}
-                </div>
-              </div>
-              <br />
-              <div className={IndMovieStyle["ind-movie-budget"]}>
-                <BsWallet2
-                  className={IndMovieStyle["movie-info-logo"]}
-                  size={50}
-                />
-                <div className={IndMovieStyle["movie-info-text"]}>
-                  {budget ? `$${budget}` : "N/A"}
-                </div>
-              </div>
-              <br />
-              <div className={IndMovieStyle["ind-movie-language"]}>
-                <FaLanguage
-                  className={IndMovieStyle["movie-info-logo"]}
-                  size={50}
-                />
-                <div className={IndMovieStyle["movie-info-text"]}>
-                  {language ? language : "N/A"}
-                </div>
-              </div>
-            </ul>
-            <ul className={IndMovieStyle["movie-column"]}>
-              <div className={IndMovieStyle["ind-movie-production-company"]}>
-                <MdOutlineMovie
-                  className={IndMovieStyle["movie-info-logo"]}
-                  size={50}
-                />
-                <div className={IndMovieStyle["movie-info-text"]}>
-                  {productionCompanies ? productionCompanies[0] : "N/A"}
-                </div>
-              </div>
-              <br />
-              <div className={IndMovieStyle["ind-movie-status"]}>
-                <RiMovie2Line
-                  size={50}
-                  className={IndMovieStyle["movie-info-logo"]}
-                />
-                <div className={IndMovieStyle["movie-info-text"]}>
-                  {movieStatus ? movieStatus : "N/A"}
-                </div>
-              </div>
-              <br />
-              <div className={IndMovieStyle["ind-movie-date"]}>
-                <MdDateRange
-                  size={50}
-                  className={IndMovieStyle["movie-info-logo"]}
-                />
-                <div className={IndMovieStyle["movie-info-text"]}>
-                  {releaseDate ? releaseDate : "N/A"}
-                </div>
-              </div>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
+      {/* <GlassCard name={"Revenue"} icon={null} value={revenue} />
+      <GlassCard name={"Budget"} icon={null} value={budget} />
+      <GlassCard name={"Language"} icon={icon} value={language} />
+      <GlassCard
+        name={"Production Companies"}
+        icon={icon}
+        value={productionCompanies}
+      />
+      <GlassCard name={"Movie Status"} icon={icon} value={movieStatus} />
+      <GlassCard name={"releaseDate"} icon={icon} value={releaseDate} />
+      {runtime ? `${runtime} minutes` : "N/A"}
+      {revenue ? `$${revenue}` : "N/A"}
+      {budget ? `$${budget}` : "N/A"}
+      {language ? language : "N/A"}
+      {productionCompanies ? productionCompanies[0] : "N/A"}
+      {movieStatus ? movieStatus : "N/A"}
+      {releaseDate ? releaseDate : "N/A"} */}
+    </div>
   );
 }
 MovieDetails.propTypes = {
