@@ -6,6 +6,9 @@ import "../Carousel/title.scss";
 import PropTypes from "prop-types";
 import getDetailedMovie from "../../axios/GetDetailedMovie";
 import LoadingPage from "../../views/LoadingPage";
+import SortByButton from "../Other/Dropdown/SortByDropdown/SortByDropdown";
+import FilterByButton from "../Other/Dropdown/FilterByDropdown/FilterByDropdown";
+
 export default function MovieList({ endpoint }) {
   MovieList.propTypes = {
     endpoint: PropTypes.string.isRequired,
@@ -44,6 +47,7 @@ export default function MovieList({ endpoint }) {
         <h3-title>{title}</h3-title>
         <div className={MovieListStyle["title-caption"]}>{caption}</div>
       </div>
+      <SortByButton /> <FilterByButton />
       <div className={MovieListStyle["container"]}>
         {movies.map((movie, i) => (
           <div key={i}>
