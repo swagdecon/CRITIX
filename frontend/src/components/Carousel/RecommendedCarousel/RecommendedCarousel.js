@@ -9,12 +9,15 @@ import MovieCard from "../../MovieCard/MovieCard.js";
 import getDetailedMovie from "../../../axios/GetDetailedMovie.js";
 
 export default function RecommendedCarousel({ movieId }) {
+  RecommendedCarousel.propTypes = {
+    movieId: PropTypes.number,
+  };
   const [recommendations, setRecommendations] = useState([]);
   const movieChunks = chunk(recommendations, 5);
 
   useEffect(() => {
     const fetchRecommendations = async () => {
-      const data = await getDetailedMovie("recommendations", movieId);
+      const data = await getDetailedMovie("recommendations", null, movieId);
       setRecommendations(data);
     };
     fetchRecommendations();
@@ -50,6 +53,3 @@ export default function RecommendedCarousel({ movieId }) {
     </Carousel>
   );
 }
-RecommendedCarousel.propTypes = {
-  movieId: PropTypes.number,
-};

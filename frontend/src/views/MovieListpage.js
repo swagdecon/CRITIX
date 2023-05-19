@@ -4,9 +4,9 @@ import NavBar from "../components/NavBar/NavBar";
 
 export default function MovieListPage(endpoint) {
   return (
-    <html>
+    <div>
       <NavBar />
       <MovieList endpoint={endpoint} />
-    </html>
+    </div>
   );
 }

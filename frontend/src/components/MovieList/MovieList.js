@@ -17,13 +17,14 @@ export default function MovieList({ endpoint }) {
   const [dataLoaded, setDataLoaded] = useState(true);
 
   useEffect(() => {
-    async function getDetailedMovieData() {
-      const data = await getDetailedMovie(endpoint.endpointName);
+    async function getDetailedMovieData(endpoint) {
+      const data = await getDetailedMovie(endpoint);
       setMovies(data);
+
       setDataLoaded(true);
     }
 
-    getDetailedMovieData();
+    getDetailedMovieData(endpoint.endpointName);
   }, [endpoint.endpointName]);
   if (!dataLoaded) {
     return <LoadingPage />;
@@ -41,13 +42,51 @@ export default function MovieList({ endpoint }) {
     caption = "Popular Movies:";
   }
 
+  const handleSortByChange = async (selectedValue) => {
+    const data = await getDetailedMovie(endpoint.endpointName);
+
+    if (selectedValue === "A-Z") {
+      const sortedMovieTitleAscending = data.sort((a, b) =>
+        a.title.localeCompare(b.title)
+      );
+      setMovies(sortedMovieTitleAscending);
+    } else if (selectedValue === "Z-A") {
+      const sortedMovieTitleDescending = data.sort((a, b) =>
+        b.title.localeCompare(a.title)
+      );
+      setMovies(sortedMovieTitleDescending);
+    } else if (selectedValue === "Popularity Asc.") {
+      const sortedMoviePopularityAscending = data.sort(
+        (a, b) => a.popularity - b.popularity
+      );
+      setMovies(sortedMoviePopularityAscending);
+    } else if (selectedValue === "Popularity Desc.") {
+      const sortedMoviePopularityDescending = data.sort(
+        (a, b) => b.popularity - a.popularity
+      );
+      setMovies(sortedMoviePopularityDescending);
+    } else if (selectedValue === "Vote Average Asc.") {
+      const sortedMovieVoteAverageAscending = data.sort(
+        (a, b) => a.vote_average - b.vote_average
+      );
+      setMovies(sortedMovieVoteAverageAscending);
+    } else if (selectedValue === "Vote Average Desc.") {
+      const sortedMovieVoteAverageDescending = data.sort(
+        (a, b) => b.vote_average - a.vote_average
+      );
+      setMovies(sortedMovieVoteAverageDescending);
+    } else {
+      return;
+    }
+  };
+
   return (
     <div>
       <div className={MovieListStyle["title-container"]}>
         <h3-title>{title}</h3-title>
         <div className={MovieListStyle["title-caption"]}>{caption}</div>
       </div>
-      <SortByButton /> <FilterByButton />
+      <SortByButton onSelectSortBy={handleSortByChange} /> <FilterByButton />
       <div className={MovieListStyle["container"]}>
         {movies.map((movie, i) => (
           <div key={i}>

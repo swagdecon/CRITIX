@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default async function getDetailedMovie(endpoint, movieId) {
+export default async function getDetailedMovie(endpoint, options, movieId) {
   const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
   const language = "en-US";
   const page = 1;
@@ -8,13 +8,15 @@ export default async function getDetailedMovie(endpoint, movieId) {
   // This is checking if movieId is present, which we need for the recommended carousel for indMovie, as it takes the moveId of that movie to show appropriate recommendations
   if (movieId) {
     response = await axios.get(
-      `https://api.themoviedb.org/3/movie/${movieId}/${endpoint}?api_key=${API_KEY}&language=${language}&page=${page}&per_page=20&include_adult=false`
+      `https://api.themoviedb.org/3/movie/${movieId}/${endpoint}?api_key=${API_KEY}&language=${language}&page=${page}&per_page=20&include_adult=false${options}`
     );
   } else {
     // Otherwise it will show a list of movies, not taking in the moveId, such as for the list movie page where we want to return a colleciton of movies.
     response = await axios.get(
-      `https://api.themoviedb.org/3/movie/${endpoint}?api_key=${API_KEY}&language=${language}&page=${page}&per_page=20&include_adult=false`
+      `https://api.themoviedb.org/3/movie/${endpoint}?api_key=${API_KEY}&language=${language}&page=${page}&per_page=20${options}&include_adult=false`
     );
+    console.log(response);
+    console.log(response.data);
   }
 
   const details = response.data.results.slice(0, 20);
@@ -41,5 +43,11 @@ export default async function getDetailedMovie(endpoint, movieId) {
   if (response.data.results.length === 0) {
     return null;
   }
+  // console.log("sorting test:", detailedMovies.sort("title"));
+
+  // const nameAscending = detailedMovies.sort((a, b) =>
+  //   a.title.localeCompare(b.title)
+  // );
+
   return detailedMovies;
 }
