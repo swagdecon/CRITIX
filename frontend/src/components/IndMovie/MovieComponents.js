@@ -136,49 +136,66 @@ function MovieDetails({
   runtime,
   revenue,
   budget,
-  //   language,
-  //   productionCompanies,
-  //   movieStatus,
-  //   releaseDate,
+  voteCount,
+  language,
+  productionCompanies,
+  movieStatus,
+  releaseDate,
 }) {
   return (
-    <div className="info-container">
-      <GlassCard
-        name={"Runtime"}
-        value={runtime}
-        icon="&#xe8b5;"
-        iconString={"&#xe8b5;"}
-      />
-      <GlassCard
-        name={"Budget"}
-        value={budget}
-        iconString={"&#xef63;"}
-        icon="&#xef63;"
-      />
-      <GlassCard
-        name={"Revenue"}
-        value={revenue}
-        iconString={"&#xf041;"}
-        icon="&#xf041;"
-      />
-
-      {/* <GlassCard name={"Revenue"} icon={null} value={revenue} />
-      <GlassCard name={"Budget"} icon={null} value={budget} />
-      <GlassCard name={"Language"} icon={icon} value={language} />
-      <GlassCard
-        name={"Production Companies"}
-        icon={icon}
-        value={productionCompanies}
-      />
-      <GlassCard name={"Movie Status"} icon={icon} value={movieStatus} />
-      <GlassCard name={"releaseDate"} icon={icon} value={releaseDate} />
-      {runtime ? `${runtime} minutes` : "N/A"}
-      {revenue ? `$${revenue}` : "N/A"}
-      {budget ? `$${budget}` : "N/A"}
-      {language ? language : "N/A"}
-      {productionCompanies ? productionCompanies[0] : "N/A"}
-      {movieStatus ? movieStatus : "N/A"}
-      {releaseDate ? releaseDate : "N/A"} */}
+    <div>
+      <div className="info-container-1">
+        <GlassCard
+          name={"RUNTIME"}
+          value={runtime}
+          icon="&#xe8b5;"
+          iconString={"&#xe8b5;"}
+        />
+        <GlassCard
+          name={"BUDGET"}
+          value={budget}
+          iconString={"&#xef63;"}
+          icon="&#xef63;"
+        />
+        <GlassCard
+          name={"REVENUE"}
+          value={revenue}
+          iconString={"&#xf041;"}
+          icon="&#xf041;"
+        />
+        <GlassCard
+          name={"VOTE COUNT"}
+          value={voteCount}
+          iconString={"&#xe175;"}
+          icon="&#xe175;"
+        />
+      </div>
+      <div className="info-container-2">
+        <GlassCard
+          name={"LANGUAGE"}
+          value={language}
+          iconString={"&#xe8e2;"}
+          icon="&#xe8e2;"
+        />
+        <GlassCard
+          name={"PRODUCTION"}
+          value={productionCompanies}
+          iconString={"&#xe04b;"}
+          icon="&#xe04b;"
+        />
+        <GlassCard
+          name={"MOVIE STATUS"}
+          value={movieStatus}
+          iconString={"&#xf7f3;"}
+          icon="&#xf7f3;"
+        />
+        <GlassCard
+          name={"Release Date"}
+          value={releaseDate}
+          iconString={"&#xebcc;"}
+          icon="&#xebcc;"
+        />
+      </div>
     </div>
   );
 }
@@ -186,6 +203,7 @@ MovieDetails.propTypes = {
   runtime: PropTypes.number,
   revenue: PropTypes.number,
   budget: PropTypes.number,
+  voteCount: PropTypes.number,
   language: PropTypes.string,
   productionCompanies: PropTypes.arrayOf(PropTypes.string),
   movieStatus: PropTypes.string,

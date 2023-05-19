@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import IndMovieStyle from "../components/IndMovie/ind_movie.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import NavBar from "../components/NavBar/NavBar.js";
-
 import {
   MovieGenres,
   MovieTrailer,
@@ -29,6 +28,8 @@ export default function IndMovie() {
     `url(https://image.tmdb.org/t/p/original${movie.backdropPath}) ` ||
     `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`;
   let moviePosterPath = `https://image.tmdb.org/t/p/original${movie.posterPath}`;
+  console.log(movie);
+
   return (
     <div className={IndMovieStyle["ind-movie-page-wrapper"]}>
       <NavBar />
@@ -86,7 +87,8 @@ export default function IndMovie() {
                       runtime={movie.runtime}
                       revenue={movie.revenue}
                       budget={movie.budget}
-                      language={movie.original_language}
+                      voteCount={movie.voteCount}
+                      language={movie.originalLanguage}
                       productionCompanies={movie.productionCompanies}
                       movieStatus={movie.status}
                       releaseDate={movie.releaseDate}

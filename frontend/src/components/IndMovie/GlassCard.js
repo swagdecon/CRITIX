@@ -6,10 +6,11 @@ export default function GlassCard({ name, value, icon, iconString }) {
   GlassCard.propTypes = {
     name: PropTypes.string,
     icon: PropTypes.string,
-    value: PropTypes.number || PropTypes.string,
+    value: PropTypes.number || PropTypes.string || PropTypes.array,
     iconString: PropTypes.string,
   };
   let data;
+  !value ? (value = "N/A") : value;
   if (iconString === "&#xef63;") {
     // Budget
     data = `$ ${value}`;
@@ -17,8 +18,23 @@ export default function GlassCard({ name, value, icon, iconString }) {
     // Minutes
     data = ` ${value} minutes`;
   } else if (iconString === "&#xf041;") {
-    // Minutes
+    // Revenue
     data = `$ ${value} `;
+  } else if (iconString === "&#xe175;") {
+    // Vote Count
+    data = ` ${value} `;
+  } else if (iconString === "&#xe8e2;") {
+    // Language
+    data = ` ${value} `;
+  } else if (iconString === "&#xe04b;") {
+    // Production Companies - Gets the first one
+    data = ` ${value[0]} `;
+  } else if (iconString === "&#xf7f3;") {
+    // Movie Status
+    data = ` ${value} `;
+  } else if (iconString === "&#xebcc;") {
+    // Release Date
+    data = ` ${value} `;
   }
 
   return (
