@@ -154,8 +154,11 @@ public class MovieService {
       }
       if (movie.getVoteAverage() == null) {
         float voteAverage = movieDb.getVoteAverage();
-
         movie.setVoteAverage(voteAverage);
+      }
+      if (movie.getVoteCount() == null) {
+        Integer voteCount = movieDb.getVoteCount();
+        movie.setVoteCount(voteCount);
       }
 
       if (movie.getImdbId() == null) {
@@ -270,7 +273,10 @@ public class MovieService {
 
       movie.setVoteAverage(voteAverage);
     }
-
+    if (movie.getVoteCount() == null) {
+      Integer voteCount = movieDb.getVoteCount();
+      movie.setVoteCount(voteCount);
+    }
     if (movie.getImdbId() == null) {
       String imdbId = movieDb.getImdbID();
 

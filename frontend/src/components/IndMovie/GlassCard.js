@@ -6,9 +6,14 @@ export default function GlassCard({ name, value, icon, iconString }) {
   GlassCard.propTypes = {
     name: PropTypes.string,
     icon: PropTypes.string,
-    value: PropTypes.number || PropTypes.string || PropTypes.array,
+    value: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+      PropTypes.array
+    ]),
     iconString: PropTypes.string,
   };
+  
   let data;
   !value ? (value = "N/A") : value;
   if (iconString === "&#xef63;") {

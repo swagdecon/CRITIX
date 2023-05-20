@@ -16,6 +16,8 @@
 }
 
 .content {
+  pointer-events: none;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -25,7 +27,6 @@
 
 .material-symbols-outlined {
   transform: translateY(2.5vh);
-
   font-size: 60px; /* Adjust the size as per your requirement */
   font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 0;
 }

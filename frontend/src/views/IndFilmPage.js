@@ -90,7 +90,7 @@ export default function IndMovie() {
                       voteCount={movie.voteCount}
                       language={movie.originalLanguage}
                       productionCompanies={movie.productionCompanies}
-                      movieStatus={movie.status}
+                      movieStatus={movie.movieStatus}
                       releaseDate={movie.releaseDate}
                     />
                   </div>

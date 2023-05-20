@@ -396,6 +396,8 @@ ind-movie-nav {
 
 h1.cast-title-1 {
   position: relative;
+  pointer-events: none;
+
   transform: translateX(-31vw) translateY(63vh);
   font-family: "CoreCircus", sans-serif;
   font-size: 1.75vw;
