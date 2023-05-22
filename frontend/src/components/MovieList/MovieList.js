@@ -8,24 +8,28 @@ import getDetailedMovie from "../../axios/GetDetailedMovie";
 import LoadingPage from "../../views/LoadingPage";
 import SortByButton from "../Other/Dropdown/SortByDropdown/SortByDropdown";
 import FilterByButton from "../Other/Dropdown/FilterByDropdown/FilterByDropdown";
-
+import Pagination from '@mui/material/Pagination';
 export default function MovieList({ endpoint }) {
   MovieList.propTypes = {
     endpoint: PropTypes.string.isRequired,
   };
   const [movies, setMovies] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(true);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  
   useEffect(() => {
-    async function getDetailedMovieData(endpoint) {
-      const data = await getDetailedMovie(endpoint);
-      setMovies(data);
+    async function getDetailedMovieData(endpoint, options) {
+      const data = await getDetailedMovie(endpoint, options);
+      console.log(data)
 
+      setMovies(data.detailedMovies);
+      setTotalPages(10);
       setDataLoaded(true);
     }
-
-    getDetailedMovieData(endpoint.endpointName);
-  }, [endpoint.endpointName]);
+    getDetailedMovieData(endpoint.endpointName, { page: currentPage });
+  }, [endpoint.endpointName, currentPage]);
+    
   if (!dataLoaded) {
     return <LoadingPage />;
   }
@@ -41,7 +45,6 @@ export default function MovieList({ endpoint }) {
     title = "Discover What Everyone Is Watching Right Now";
     caption = "Popular Movies:";
   }
-
   const handleSortByChange = async (selectedValue) => {
     const data = await getDetailedMovie(endpoint.endpointName);
 
@@ -79,7 +82,10 @@ export default function MovieList({ endpoint }) {
       return;
     }
   };
-
+  const handlePageChange = async (event, newPage) => {
+    setCurrentPage(newPage);
+    setDataLoaded(false);
+  };
   return (
     <div>
       <div className={MovieListStyle["title-container"]}>
@@ -103,6 +109,11 @@ export default function MovieList({ endpoint }) {
             </Link>
           </div>
         ))}
+  <Pagination
+      count={totalPages}
+      page={currentPage}
+      onChange={handlePageChange}
+    />
       </div>
     </div>
   );

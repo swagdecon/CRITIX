@@ -13,19 +13,20 @@ export default function RecommendedCarousel({ movieId }) {
     movieId: PropTypes.number,
   };
   const [recommendations, setRecommendations] = useState([]);
+
   const movieChunks = chunk(recommendations, 5);
 
   useEffect(() => {
     const fetchRecommendations = async () => {
-      const data = await getDetailedMovie("recommendations", null, movieId);
-      setRecommendations(data);
+      const data = await getDetailedMovie("recommendations", {page: 1}, movieId);
+      setRecommendations(data.detailedMovies);
     };
     fetchRecommendations();
   }, [movieId]);
   if (!recommendations) {
     return;
   }
-
+console.log(recommendations);
   return (
     <Carousel className="carousel-movie" indicators={false} interval={null}>
       {movieChunks.map((chunk, i) => (

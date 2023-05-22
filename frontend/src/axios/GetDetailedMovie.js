@@ -3,7 +3,8 @@ import axios from "axios";
 export default async function getDetailedMovie(endpoint, options, movieId) {
   const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
   const language = "en-US";
-  const page = 1;
+  console.log(options.page)
+  const page = options.page || 1
   let response;
   // This is checking if movieId is present, which we need for the recommended carousel for indMovie, as it takes the moveId of that movie to show appropriate recommendations
   if (movieId) {
@@ -15,10 +16,8 @@ export default async function getDetailedMovie(endpoint, options, movieId) {
     response = await axios.get(
       `https://api.themoviedb.org/3/movie/${endpoint}?api_key=${API_KEY}&language=${language}&page=${page}&per_page=20${options}&include_adult=false`
     );
-    console.log(response);
-    console.log(response.data);
   }
-
+let totalPages = response.data.total_pages
   const details = response.data.results.slice(0, 20);
   const detailedMovies = await Promise.all(
     details.map(async (movie) => {
@@ -37,17 +36,13 @@ export default async function getDetailedMovie(endpoint, options, movieId) {
       );
       const trailer = videoResponse.data.results.map((movie) => movie.key);
 
-      return { ...movie, ...detailsResponse.data, actors, trailer };
+      return { ...movie, ...detailsResponse.data, actors, trailer};
     })
   );
   if (response.data.results.length === 0) {
     return null;
   }
-  // console.log("sorting test:", detailedMovies.sort("title"));
 
-  // const nameAscending = detailedMovies.sort((a, b) =>
-  //   a.title.localeCompare(b.title)
-  // );
 
-  return detailedMovies;
+return {totalPages,detailedMovies};
 }
