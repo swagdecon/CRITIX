@@ -109,11 +109,10 @@ export default function MovieList({ endpoint }) {
             </Link>
           </div>
         ))}
-  <Pagination
-      count={totalPages}
-      page={currentPage}
-      onChange={handlePageChange}
-    />
+        <div style={{backgroundColor:"white", transform: "translateY(3vh)", borderRadius:"5px"}}>
+        <Pagination onClick={handlePageChange} count={totalPages}
+          page={currentPage} color="primary" />
+</div>
       </div>
     </div>
   );
