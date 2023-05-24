@@ -21,6 +21,7 @@ export default function IndMovie() {
   const { id } = useParams();
   const { data: movie, dataLoaded: dataLoaded } = fetchData(id);
   const [recommendedMoviesLoaded, setRecommendedMoviesLoaded] = useState(false);
+  
   const handleRecommendedMoviesLoaded = () => {
     setRecommendedMoviesLoaded(true);
   };

@@ -18,12 +18,14 @@ export default function MovieList({ endpoint }) {
   const [dataLoaded, setDataLoaded] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  let title;
+  let caption;
+
   useEffect(() => {
     async function getDetailedMovieData(endpoint) {
       const data = await getDetailedMovie(endpoint);
       setMovies(data.detailedMovies);
       setTotalPages(data.totalPages);
-
       setDataLoaded(true);
     }
 
@@ -32,8 +34,7 @@ export default function MovieList({ endpoint }) {
   if (!dataLoaded) {
     return <LoadingPage />;
   }
-  let title;
-  let caption;
+ 
   switch (endpoint.endpointName) {
     case "now_playing":
       title = "In Theatres:";
@@ -96,10 +97,18 @@ export default function MovieList({ endpoint }) {
       return;
     }
   };
-  const handlePageChange = async (event, newPage) => {
-    setCurrentPage(newPage);
-    setDataLoaded(false);
+  const handlePageChange = async (event) => {
+    event.preventDefault();
+    setDataLoaded(false); 
+    setCurrentPage(event.target.textContent)
+  
+    const data = await getDetailedMovie(endpoint.endpointName, { page: currentPage }).then(
+      (data) => data.detailedMovies
+    );
+    setMovies(data);
+    setDataLoaded(true); 
   };
+
   return (
     <div>
       <div className={MovieListStyle["title-container"]}>
@@ -124,8 +133,8 @@ export default function MovieList({ endpoint }) {
           </div>
         ))}
           <div className={MovieListStyle["pagination-container"]}>
-        <Pagination onClick={handlePageChange} count={totalPages}
-          page={currentPage} color="primary" />
+          <Pagination onClick={handlePageChange} count={totalPages} page={currentPage} color="primary" />
+          
 </div>
       </div>
     </div>

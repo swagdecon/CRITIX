@@ -16,8 +16,7 @@ export default async function getDetailedMovie(endpoint, options, movieId) {
     response = await axios.get(
       `https://api.themoviedb.org/3/movie/${endpoint}?api_key=${API_KEY}&language=${language}&page=${page}&per_page=20&include_adult=false${options}`
     );
-    console.log(response);
-    console.log(response.data);
+
   }
 
   let totalPages = response.data.total_pages
