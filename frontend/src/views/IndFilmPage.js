@@ -1,4 +1,4 @@
-import {React, useState} from "react";
+import { React, useState } from "react";
 import { useParams } from "react-router-dom";
 import IndMovieStyle from "../components/IndMovie/ind_movie.module.css";
 import "font-awesome/css/font-awesome.min.css";
@@ -21,7 +21,7 @@ export default function IndMovie() {
   const { id } = useParams();
   const { data: movie, dataLoaded: dataLoaded } = fetchData(id);
   const [recommendedMoviesLoaded, setRecommendedMoviesLoaded] = useState(false);
-  
+
   const handleRecommendedMoviesLoaded = () => {
     setRecommendedMoviesLoaded(true);
   };
@@ -108,7 +108,7 @@ export default function IndMovie() {
             </section>
             <section className={IndMovieStyle.recommended_movies}>
               <RecommendedCarousel movieId={movie.id} onRecommendedMoviesLoad={handleRecommendedMoviesLoaded}
- />
+              />
             </section>
           </div>
         </ind-movie-body>

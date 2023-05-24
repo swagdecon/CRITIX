@@ -9,6 +9,8 @@ import LoadingPage from "../../views/LoadingPage";
 import SortByButton from "../Other/Dropdown/SortByDropdown/SortByDropdown";
 // import FilterByButton from "../Other/Dropdown/FilterByDropdown/FilterByDropdown";
 import Pagination from '@mui/material/Pagination';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+// import { Box } from '@mui/material';
 
 export default function MovieList({ endpoint }) {
   MovieList.propTypes = {
@@ -35,6 +37,14 @@ export default function MovieList({ endpoint }) {
   if (!dataLoaded) {
     return <LoadingPage />;
   }
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#0096ff",
+      },
+
+    },
+  });
 
   switch (endpoint.endpointName) {
     case "now_playing":
@@ -139,7 +149,15 @@ export default function MovieList({ endpoint }) {
           </div>
         ))}
         <div className={MovieListStyle["pagination-container"]}>
-          <Pagination onClick={handlePageChange} count={totalPages} siblingCount={4} boundaryCount={1} page={currentPage} size="large" color="primary" />
+          <ThemeProvider theme={theme}>
+            {/* <Box sx={{ backgroundColor: '#1e1b26' }}> */}
+            <Pagination onClick={handlePageChange} count={totalPages} siblingCount={4} boundaryCount={1} page={currentPage} size="large" color="primary" sx={{
+              '& .MuiPaginationItem-root': {
+                color: '#ffffff', // Set the font color to white
+              },
+            }} />
+            {/* </Box> */}
+          </ThemeProvider>
         </div>
       </div>
     </div>

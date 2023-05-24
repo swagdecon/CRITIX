@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import MovieCard from "../../MovieCard/MovieCard.js";
 import getDetailedMovie from "../../../axios/GetDetailedMovie.js";
 
-export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad } ) {
+export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }) {
   RecommendedCarousel.propTypes = {
     movieId: PropTypes.number,
     onRecommendedMoviesLoad: PropTypes.func,
@@ -20,7 +20,7 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
 
   useEffect(() => {
     const fetchRecommendations = async () => {
-      const data = await getDetailedMovie("recommendations", {page: 1}, movieId);
+      const data = await getDetailedMovie("recommendations", { page: 1 }, movieId);
       setRecommendations(data.detailedMovies);
     };
     onRecommendedMoviesLoad()
@@ -29,7 +29,7 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
   if (!recommendations) {
     return;
   }
-  
+
   return (
     <Carousel className="carousel-movie" indicators={false} interval={null}>
       {movieChunks.map((chunk, i) => (
@@ -39,7 +39,7 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
               className={MovieCardStyle["recommended-card-container"]}
               key={`${i}-${j}`}
             >
-              <Link to={`/movies/movie/${movie.id}`}>
+              <Link to={`/movies/movie/${movie.id}`} onClick={() => window.location.reload()}>
                 <MovieCard
                   poster={movie.poster_path}
                   rating={movie.vote_average}
