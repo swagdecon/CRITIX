@@ -8,9 +8,11 @@ import PropTypes from "prop-types";
 import MovieCard from "../../MovieCard/MovieCard.js";
 import getDetailedMovie from "../../../axios/GetDetailedMovie.js";
 
-export default function RecommendedCarousel({ movieId }) {
+export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad } ) {
   RecommendedCarousel.propTypes = {
     movieId: PropTypes.number,
+    onRecommendedMoviesLoad: PropTypes.func,
+
   };
   const [recommendations, setRecommendations] = useState([]);
 
@@ -21,12 +23,13 @@ export default function RecommendedCarousel({ movieId }) {
       const data = await getDetailedMovie("recommendations", {page: 1}, movieId);
       setRecommendations(data.detailedMovies);
     };
+    onRecommendedMoviesLoad()
     fetchRecommendations();
   }, [movieId]);
   if (!recommendations) {
     return;
   }
-console.log(recommendations);
+  
   return (
     <Carousel className="carousel-movie" indicators={false} interval={null}>
       {movieChunks.map((chunk, i) => (

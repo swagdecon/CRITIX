@@ -106,7 +106,7 @@ export default function IndMovie() {
               </div>
             </section>
             <section className={IndMovieStyle.recommended_movies}>
-              <RecommendedCarousel movieId={movie.id}          onRecommendedMoviesLoad={handleRecommendedMoviesLoaded}
+              <RecommendedCarousel movieId={movie.id} onRecommendedMoviesLoad={handleRecommendedMoviesLoaded}
  />
             </section>
           </div>
