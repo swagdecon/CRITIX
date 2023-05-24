@@ -1,6 +1,5 @@
 import { React, useEffect, useState } from "react";
 import { Carousel } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { chunk } from "lodash";
 import MovieCardStyle from "../../MovieCard/moviecard.module.scss";
 import PropTypes from "prop-types";
@@ -39,7 +38,7 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
               className={MovieCardStyle["recommended-card-container"]}
               key={`${i}-${j}`}
             >
-              <Link to={`/movies/movie/${movie.id}`} onClick={() => window.location.reload()}>
+              <a href={`/movies/movie/${movie.id}`}>
                 <MovieCard
                   poster={movie.poster_path}
                   rating={movie.vote_average}
@@ -49,11 +48,12 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
                   actors={movie.actors}
                   video={movie.trailer}
                 />
-              </Link>
+              </a>
             </div>
           ))}
         </Carousel.Item>
-      ))}
-    </Carousel>
+      ))
+      }
+    </Carousel >
   );
 }
