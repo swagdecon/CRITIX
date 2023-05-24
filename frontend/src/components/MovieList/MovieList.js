@@ -9,6 +9,7 @@ import LoadingPage from "../../views/LoadingPage";
 import SortByButton from "../Other/Dropdown/SortByDropdown/SortByDropdown";
 import FilterByButton from "../Other/Dropdown/FilterByDropdown/FilterByDropdown";
 import Pagination from '@mui/material/Pagination';
+
 export default function MovieList({ endpoint }) {
   MovieList.propTypes = {
     endpoint: PropTypes.string.isRequired,
@@ -17,36 +18,49 @@ export default function MovieList({ endpoint }) {
   const [dataLoaded, setDataLoaded] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  
   useEffect(() => {
-    async function getDetailedMovieData(endpoint, options) {
-      const data = await getDetailedMovie(endpoint, options);
-      console.log(data)
-
+    async function getDetailedMovieData(endpoint) {
+      const data = await getDetailedMovie(endpoint);
       setMovies(data.detailedMovies);
-      setTotalPages(10);
+      setTotalPages(data.totalPages);
+
       setDataLoaded(true);
     }
-    getDetailedMovieData(endpoint.endpointName, { page: currentPage });
-  }, [endpoint.endpointName, currentPage]);
-    
+
+    getDetailedMovieData(endpoint.endpointName);
+  }, [endpoint.endpointName]);
   if (!dataLoaded) {
     return <LoadingPage />;
   }
   let title;
   let caption;
-  if (endpoint.endpointName === "now_playing") {
-    title = "In Theatres:";
-    caption = "The Latest Movies on the Big Screen";
-  } else if (endpoint.endpointName === "upcoming") {
-    title = "Upcoming Movies:";
-    caption = "Get a Sneak Peek of What's Coming Soon";
-  } else if (endpoint.endpointName === "popular") {
-    title = "Discover What Everyone Is Watching Right Now";
-    caption = "Popular Movies:";
+  switch (endpoint.endpointName) {
+    case "now_playing":
+      title = "In Theatres:";
+      caption = "The Latest Movies on the Big Screen";
+      break;
+    case "upcoming":
+      title = "Upcoming Movies:";
+      caption = "Get a Sneak Peek of What's Coming Soon";
+      break;
+    case "popular":
+      title = "Discover What Everyone Is Watching Right Now";
+      caption = "Popular Movies:";
+      break;
+    case "top_rated":
+      title = "Top Rated Movies:";
+      caption = "Popular Movies:";
+      break;
+    case "now_playing_and_upcoming":
+      title = "In Theatres:";
+      caption = "The Latest Movies on the Big Screen";
+      break;
+    case "now_playing_and_popular":
+      title = "In Theatres:";
   }
+
   const handleSortByChange = async (selectedValue) => {
-    const data = await getDetailedMovie(endpoint.endpointName);
+    const data = await getDetailedMovie(endpoint.endpointName).then(data => data.detailedMovies);
 
     if (selectedValue === "A-Z") {
       const sortedMovieTitleAscending = data.sort((a, b) =>
@@ -109,7 +123,7 @@ export default function MovieList({ endpoint }) {
             </Link>
           </div>
         ))}
-        <div style={{backgroundColor:"white", transform: "translateY(3vh)", borderRadius:"5px"}}>
+          <div className={MovieListStyle["pagination-container"]}>
         <Pagination onClick={handlePageChange} count={totalPages}
           page={currentPage} color="primary" />
 </div>

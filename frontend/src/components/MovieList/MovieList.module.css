@@ -15,3 +15,8 @@
   line-height: 2;
   margin-left: 3.1%;
 }
+.pagination-container {
+  background-color:white; 
+  transform: translateY(3vh); 
+  border-radius:5px;
+}

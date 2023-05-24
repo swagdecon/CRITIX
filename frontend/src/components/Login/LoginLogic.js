@@ -45,7 +45,7 @@ export default function LoginLogic() {
       if (response.ok) {
         const data = await response.json();
         CookieManager.encryptCookie("accessToken", data.access_token, {
-          expires: 0.5,
+          expires: 1,
         });
         CookieManager.encryptCookie("refreshToken", data.refresh_token, {
           expires: 7,
