@@ -10,7 +10,6 @@ import SortByButton from "../Other/Dropdown/SortByDropdown/SortByDropdown";
 // import FilterByButton from "../Other/Dropdown/FilterByDropdown/FilterByDropdown";
 import Pagination from '@mui/material/Pagination';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-// import { Box } from '@mui/material';
 
 export default function MovieList({ endpoint }) {
   MovieList.propTypes = {
@@ -19,9 +18,10 @@ export default function MovieList({ endpoint }) {
   let title;
   let caption;
   const [movies, setMovies] = useState([]);
-  const [dataLoaded, setDataLoaded] = useState(true);
+  const [dataLoaded, setDataLoaded] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
 
   useEffect(() => {
     async function getDetailedMovieData(endpoint) {
