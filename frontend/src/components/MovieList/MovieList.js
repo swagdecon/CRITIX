@@ -20,7 +20,6 @@ export default function MovieList({ endpoint }) {
   const [totalPages, setTotalPages] = useState(1);
   let title;
   let caption;
-
   useEffect(() => {
     async function getDetailedMovieData(endpoint) {
       const data = await getDetailedMovie(endpoint);
@@ -97,16 +96,16 @@ export default function MovieList({ endpoint }) {
       return;
     }
   };
-  const handlePageChange = async (event) => {
-    event.preventDefault();
-    setDataLoaded(false); 
-    setCurrentPage(event.target.textContent)
-  
-    const data = await getDetailedMovie(endpoint.endpointName, { page: currentPage }).then(
+  const handlePageChange = async (event, newPage) => {
+    setDataLoaded(false);
+     newPage = event.target.textContent
+    setCurrentPage(newPage);
+
+    const data = await getDetailedMovie(endpoint.endpointName, { page: newPage }).then(
       (data) => data.detailedMovies
     );
     setMovies(data);
-    setDataLoaded(true); 
+    setDataLoaded(true);
   };
 
   return (
@@ -119,7 +118,7 @@ export default function MovieList({ endpoint }) {
       <div className={MovieListStyle["container"]}>
         {movies.map((movie, i) => (
           <div key={i}>
-            <Link to={`/movies/${endpoint.endpointName}/${movie.id}`}>
+            <Link to={`/movies/movie/${movie.id}`}>
               <MovieCard
                 poster={movie.poster_path}
                 rating={movie.vote_average}
@@ -133,7 +132,7 @@ export default function MovieList({ endpoint }) {
           </div>
         ))}
           <div className={MovieListStyle["pagination-container"]}>
-          <Pagination onClick={handlePageChange} count={totalPages} page={currentPage} color="primary" />
+          <Pagination onClick={handlePageChange} count={totalPages} defaultPage={1} siblingCount={2} boundaryCount={2}  size="large" page={currentPage} color="primary" />
           
 </div>
       </div>
