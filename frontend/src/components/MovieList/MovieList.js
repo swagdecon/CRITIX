@@ -7,25 +7,27 @@ import PropTypes from "prop-types";
 import getDetailedMovie from "../../axios/GetDetailedMovie";
 import LoadingPage from "../../views/LoadingPage";
 import SortByButton from "../Other/Dropdown/SortByDropdown/SortByDropdown";
-import FilterByButton from "../Other/Dropdown/FilterByDropdown/FilterByDropdown";
+// import FilterByButton from "../Other/Dropdown/FilterByDropdown/FilterByDropdown";
 import Pagination from '@mui/material/Pagination';
 
 export default function MovieList({ endpoint }) {
   MovieList.propTypes = {
     endpoint: PropTypes.string.isRequired,
   };
+  let title;
+  let caption;
   const [movies, setMovies] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  let title;
-  let caption;
+
   useEffect(() => {
     async function getDetailedMovieData(endpoint) {
       const data = await getDetailedMovie(endpoint);
       setMovies(data.detailedMovies);
       setTotalPages(data.totalPages);
       setDataLoaded(true);
+      setCurrentPage(1);
     }
 
     getDetailedMovieData(endpoint.endpointName);
@@ -33,7 +35,7 @@ export default function MovieList({ endpoint }) {
   if (!dataLoaded) {
     return <LoadingPage />;
   }
- 
+
   switch (endpoint.endpointName) {
     case "now_playing":
       title = "In Theatres:";
@@ -96,9 +98,11 @@ export default function MovieList({ endpoint }) {
       return;
     }
   };
-  const handlePageChange = async (event, newPage) => {
+
+  async function handlePageChange(event) {
     setDataLoaded(false);
-     newPage = event.target.textContent
+    const newPage = parseInt(event.target.textContent);
+
     setCurrentPage(newPage);
 
     const data = await getDetailedMovie(endpoint.endpointName, { page: newPage }).then(
@@ -106,7 +110,9 @@ export default function MovieList({ endpoint }) {
     );
     setMovies(data);
     setDataLoaded(true);
-  };
+  }
+
+
 
   return (
     <div>
@@ -114,7 +120,8 @@ export default function MovieList({ endpoint }) {
         <h3-title>{title}</h3-title>
         <div className={MovieListStyle["title-caption"]}>{caption}</div>
       </div>
-      <SortByButton onSelectSortBy={handleSortByChange} /> <FilterByButton />
+      <SortByButton onSelectSortBy={handleSortByChange} />
+      {/* <FilterByButton /> */}
       <div className={MovieListStyle["container"]}>
         {movies.map((movie, i) => (
           <div key={i}>
@@ -131,10 +138,9 @@ export default function MovieList({ endpoint }) {
             </Link>
           </div>
         ))}
-          <div className={MovieListStyle["pagination-container"]}>
-          <Pagination onClick={handlePageChange} count={totalPages} defaultPage={1} siblingCount={2} boundaryCount={2}  size="large" page={currentPage} color="primary" />
-          
-</div>
+        <div className={MovieListStyle["pagination-container"]}>
+          <Pagination onClick={handlePageChange} count={totalPages} siblingCount={4} boundaryCount={1} page={currentPage} size="large" color="primary" />
+        </div>
       </div>
     </div>
   );
