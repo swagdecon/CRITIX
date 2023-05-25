@@ -13,7 +13,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 export default function MovieList({ endpoint }) {
   MovieList.propTypes = {
-    endpoint: PropTypes.string.isRequired,
+    endpoint: PropTypes.object,
   };
   let title;
   let caption;
@@ -150,13 +150,11 @@ export default function MovieList({ endpoint }) {
         ))}
         <div className={MovieListStyle["pagination-container"]}>
           <ThemeProvider theme={theme}>
-            {/* <Box sx={{ backgroundColor: '#1e1b26' }}> */}
             <Pagination onClick={handlePageChange} count={totalPages} siblingCount={4} boundaryCount={1} page={currentPage} size="large" color="primary" sx={{
               '& .MuiPaginationItem-root': {
                 color: '#ffffff', // Set the font color to white
               },
             }} />
-            {/* </Box> */}
           </ThemeProvider>
         </div>
       </div>
