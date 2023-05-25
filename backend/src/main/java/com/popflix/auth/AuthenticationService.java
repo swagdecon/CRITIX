@@ -45,7 +45,6 @@ public class AuthenticationService {
                                 .password(passwordEncoder.encode(request.getPassword()))
                                 .role(Role.USER)
                                 .build();
-                userRepository.save(user);
                 var savedUser = userRepository.save(user);
                 var jwtToken = jwtService.generateToken(user);
                 var refreshToken = jwtService.generateRefreshToken(user);
