@@ -1,22 +1,28 @@
 import { React, useEffect, useState } from "react";
-import getRecommendations from "../../../axios/GetRecommendations.js";
 import { Carousel } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { chunk } from "lodash";
 import MovieCardStyle from "../../MovieCard/moviecard.module.scss";
 import PropTypes from "prop-types";
 
 import MovieCard from "../../MovieCard/MovieCard.js";
+import getDetailedMovie from "../../../axios/GetDetailedMovie.js";
 
-export default function RecommendedCarousel({ movieId }) {
+export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }) {
+  RecommendedCarousel.propTypes = {
+    movieId: PropTypes.number,
+    onRecommendedMoviesLoad: PropTypes.func,
+
+  };
   const [recommendations, setRecommendations] = useState([]);
+
   const movieChunks = chunk(recommendations, 5);
 
   useEffect(() => {
     const fetchRecommendations = async () => {
-      const data = await getRecommendations(movieId);
-      setRecommendations(data);
+      const data = await getDetailedMovie("recommendations", { page: 1 }, movieId);
+      setRecommendations(data.detailedMovies);
     };
+    onRecommendedMoviesLoad()
     fetchRecommendations();
   }, [movieId]);
   if (!recommendations) {
@@ -32,7 +38,7 @@ export default function RecommendedCarousel({ movieId }) {
               className={MovieCardStyle["recommended-card-container"]}
               key={`${i}-${j}`}
             >
-              <Link to={`/movies/movie/${movie.id}`}>
+              <a href={`/movies/movie/${movie.id}`}>
                 <MovieCard
                   poster={movie.poster_path}
                   rating={movie.vote_average}
@@ -42,14 +48,12 @@ export default function RecommendedCarousel({ movieId }) {
                   actors={movie.actors}
                   video={movie.trailer}
                 />
-              </Link>
+              </a>
             </div>
           ))}
         </Carousel.Item>
-      ))}
-    </Carousel>
+      ))
+      }
+    </Carousel >
   );
 }
-RecommendedCarousel.propTypes = {
-  movieId: PropTypes.number,
-};

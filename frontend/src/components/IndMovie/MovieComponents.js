@@ -2,15 +2,11 @@ import { React, useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import IndMovieStyle from "../IndMovie/ind_movie.module.css";
 import ReactTextCollapse from "react-text-collapse/dist/ReactTextCollapse";
-import { RiMoneyDollarBoxFill } from "react-icons/ri";
-import { BsWallet2 } from "react-icons/bs";
-import { FaLanguage } from "react-icons/fa";
-import { AiOutlineClockCircle } from "react-icons/ai";
-import { MdOutlineMovie, MdDateRange } from "react-icons/md";
-import { RiMovie2Line } from "react-icons/ri";
+
 import ReactPlayer from "react-player";
 
 import "../Carousel/MovieCarousel/MovieCarousel.css";
+import GlassCard from "./GlassCard";
 function TruncateDescription({ description }) {
   const words = description.split(" ");
 
@@ -69,7 +65,9 @@ function MovieGenres({ genres }) {
     </ul>
   );
 }
-
+function ParseNumber(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 function EmbeddedMovieTrailer({ video }) {
   EmbeddedMovieTrailer.propTypes = {
     video: PropTypes.arrayOf(PropTypes.string),
@@ -140,102 +138,75 @@ function MovieDetails({
   runtime,
   revenue,
   budget,
+  voteCount,
   language,
   productionCompanies,
   movieStatus,
   releaseDate,
 }) {
   return (
-    <section className={IndMovieStyle.movieDetailsContainer}>
-      <div className={IndMovieStyle["ind-movie-details-card"]}>
-        <div className={IndMovieStyle["card-overlay"]}>
-          <div className={IndMovieStyle["movie-Details-Title"]}>
-            Movie Details
-          </div>
-          <div className={IndMovieStyle["movie-info-row"]}>
-            <ul className={IndMovieStyle["movie-column"]}>
-              <div className={IndMovieStyle["ind-movie-runtime"]}>
-                <AiOutlineClockCircle
-                  className={IndMovieStyle["movie-info-logo"]}
-                  size={50}
-                />
-
-                <div className={IndMovieStyle["movie-info-text"]}>
-                  {runtime ? `${runtime} minutes` : "N/A"}
-                </div>
-              </div>
-              <br />
-              <div className={IndMovieStyle["ind-movie-revenue"]}>
-                <RiMoneyDollarBoxFill
-                  className={IndMovieStyle["movie-info-logo"]}
-                  size={50}
-                />
-                <div className={IndMovieStyle["movie-info-text"]}>
-                  {revenue ? `$${revenue}` : "N/A"}
-                </div>
-              </div>
-              <br />
-              <div className={IndMovieStyle["ind-movie-budget"]}>
-                <BsWallet2
-                  className={IndMovieStyle["movie-info-logo"]}
-                  size={50}
-                />
-                <div className={IndMovieStyle["movie-info-text"]}>
-                  {budget ? `$${budget}` : "N/A"}
-                </div>
-              </div>
-              <br />
-              <div className={IndMovieStyle["ind-movie-language"]}>
-                <FaLanguage
-                  className={IndMovieStyle["movie-info-logo"]}
-                  size={50}
-                />
-                <div className={IndMovieStyle["movie-info-text"]}>
-                  {language ? language : "N/A"}
-                </div>
-              </div>
-            </ul>
-            <ul className={IndMovieStyle["movie-column"]}>
-              <div className={IndMovieStyle["ind-movie-production-company"]}>
-                <MdOutlineMovie
-                  className={IndMovieStyle["movie-info-logo"]}
-                  size={50}
-                />
-                <div className={IndMovieStyle["movie-info-text"]}>
-                  {productionCompanies ? productionCompanies[0] : "N/A"}
-                </div>
-              </div>
-              <br />
-              <div className={IndMovieStyle["ind-movie-status"]}>
-                <RiMovie2Line
-                  size={50}
-                  className={IndMovieStyle["movie-info-logo"]}
-                />
-                <div className={IndMovieStyle["movie-info-text"]}>
-                  {movieStatus ? movieStatus : "N/A"}
-                </div>
-              </div>
-              <br />
-              <div className={IndMovieStyle["ind-movie-date"]}>
-                <MdDateRange
-                  size={50}
-                  className={IndMovieStyle["movie-info-logo"]}
-                />
-                <div className={IndMovieStyle["movie-info-text"]}>
-                  {releaseDate ? releaseDate : "N/A"}
-                </div>
-              </div>
-            </ul>
-          </div>
-        </div>
+    <div>
+      <div className="info-container-1">
+        <GlassCard
+          name={"RUNTIME"}
+          value={runtime}
+          icon="&#xe8b5;"
+          iconString={"&#xe8b5;"}
+        />
+        <GlassCard
+          name={"BUDGET"}
+          value={budget}
+          iconString={"&#xef63;"}
+          icon="&#xef63;"
+        />
+        <GlassCard
+          name={"REVENUE"}
+          value={revenue}
+          iconString={"&#xf041;"}
+          icon="&#xf041;"
+        />
+        <GlassCard
+          name={"VOTE COUNT"}
+          value={voteCount}
+          iconString={"&#xe175;"}
+          icon="&#xe175;"
+        />
       </div>
-    </section>
+      <div className="info-container-2">
+        <GlassCard
+          name={"LANGUAGE"}
+          value={language}
+          iconString={"&#xe8e2;"}
+          icon="&#xe8e2;"
+        />
+        <GlassCard
+          name={"PRODUCTION"}
+          value={productionCompanies}
+          iconString={"&#xe04b;"}
+          icon="&#xe04b;"
+        />
+        <GlassCard
+          name={"MOVIE STATUS"}
+          value={movieStatus}
+          iconString={"&#xf7f3;"}
+          icon="&#xf7f3;"
+        />
+        <GlassCard
+          name={"Release Date"}
+          value={releaseDate}
+          iconString={"&#xebcc;"}
+          icon="&#xebcc;"
+        />
+      </div>
+    </div>
   );
 }
 MovieDetails.propTypes = {
   runtime: PropTypes.number,
   revenue: PropTypes.number,
   budget: PropTypes.number,
+  voteCount: PropTypes.number,
+
   language: PropTypes.string,
   productionCompanies: PropTypes.arrayOf(PropTypes.string),
   movieStatus: PropTypes.string,
@@ -246,6 +217,7 @@ export {
   TruncateDescription,
   GetYearFromDate,
   MovieRuntime,
+  ParseNumber,
   MovieTrailer,
   MovieAverage,
   EmbeddedMovieTrailer,

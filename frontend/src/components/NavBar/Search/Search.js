@@ -1,68 +1,50 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useCallback } from "react";
 import "./Search.css";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { GetYearFromDate } from "../../IndMovie/MovieComponents";
-// import { debounce } from "lodash";
-
+import { debounce } from "lodash";
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+const language = "en-US";
+const page = 1;
 const Search = (props) => {
   const [query, setQuery] = useState("");
   const [detailedMovies, setDetailedMovies] = useState([]);
 
-  const api_key = "d84f9365179dc98dc69ab22833381835";
-  const language = "en-US";
-  const page = 1;
-
-  // Debounce function to delay API calls
-  const debounce = (func, delay) => {
-    let timer;
-    return function(...args) {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        func.apply(this, args);
-      }, delay);
-    };
-  };
-
-  const handleChange = async (event) => {
-    const value = event.target.value;
-    setQuery(value);
-  };
-
-  useEffect(() => {
-    // Create a debounced version of the handleChange function
-    const debouncedSearch = debounce(async () => {
+  const searchMovies = useCallback(
+    debounce(async (searchQuery) => {
       const response = await axios.get(
-        `https://api.themoviedb.org/3/search/movie?api_key=${api_key}&query=${query}&language=${language}&page=${page}&include_adult=${false}`
+        `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${searchQuery}&language=${language}&page=${page}&include_adult=${false}`
       );
-
       const detailedMoviesArray = await Promise.all(
         response.data.results.slice(0, 5).map(async (movie) => {
           const detailedResponse = await axios.get(
-            ` https://api.themoviedb.org/3/movie/${movie.id}?api_key=${api_key}&language=en-US`
+            `https://api.themoviedb.org/3/movie/${movie.id}?api_key=${API_KEY}&language=en-US`
           );
           const getTopActors = await axios.get(
-            `https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${api_key}`
+            `https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${API_KEY}`
           );
           const actors = getTopActors.data.cast
             .slice(0, 5)
             .map((actor) => actor.name);
-
           return {
             ...detailedResponse.data,
             actors: actors,
           };
         })
       );
-
       setDetailedMovies(detailedMoviesArray);
-    }, 500);
-
-    // Call the debouncedSearch function on every change to the query
-    if (query) {
-      debouncedSearch();
-    } else {
+    }, 500),
+    []
+  );
+  const handleChange = async (event) => {
+    const value = event.target.value;
+    setQuery(value);
+    searchMovies(value);
+  };
+  useEffect(() => {
+    if (!query) {
       setDetailedMovies([]);
     }
   }, [query]);

@@ -1,0 +1,20 @@
+.container {
+  margin: 7% auto;
+  transform: translateY(-2%);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.title-container {
+  transform: translateY(10vh);
+}
+.title-caption {
+  transform: translateY(-2vh);
+  font-family: "CoreCircus", sans-serif;
+  font-size: 1vw;
+  line-height: 2;
+  margin-left: 3.1%;
+}
+.pagination-container {
+  transform: translateY(3vh); 
+}

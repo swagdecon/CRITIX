@@ -24,7 +24,7 @@ export default async function isExpired() {
         );
         const data = await refreshResponse.json();
         CookieManager.encryptCookie("accessToken", data.access_token, {
-          expires: 7,
+          expires: 1,
         });
         CookieManager.encryptCookie("refreshToken", data.refresh_token, {
           expires: 7,

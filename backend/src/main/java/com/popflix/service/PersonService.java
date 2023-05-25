@@ -24,6 +24,9 @@ public class PersonService {
     public List<String> getAllImdbPersonJobs(String imdbId) throws java.io.IOException, InterruptedException {
         AllImdbPersonJobs allPersonJobs = new AllImdbPersonJobs();
         List<String> jobs = allPersonJobs.imdbPersonJobs(imdbId);
+        jobs.remove("miscellaneous");
+        jobs.remove("soundtrack");
+
         return jobs;
     }
 
@@ -33,10 +36,17 @@ public class PersonService {
         return numOfFilmsStarredIn;
     }
 
-    public Integer getAllpersonMoviesProduced(String imdbId) throws java.io.IOException, InterruptedException {
+    public Integer getAllPersonMoviesProduced(String imdbId) throws java.io.IOException, InterruptedException {
         PersonImdbJobInfo allPersonMoviesProduced = new PersonImdbJobInfo();
         Integer numOfFilmsProduced = allPersonMoviesProduced.personMoviesProduced(imdbId);
         return numOfFilmsProduced;
+    }
+
+    public Integer getAllPersoAwardNominations(String imdbId) throws java.io.IOException, InterruptedException {
+        PersonImdbJobInfo allPersonAwardNominations = new PersonImdbJobInfo();
+        Integer numOfNominatedAwards = allPersonAwardNominations.personAwardNominations(imdbId);
+        return numOfNominatedAwards;
+
     }
 
     public Optional<Person> singlePerson(Integer id) throws java.io.IOException, InterruptedException {
@@ -62,11 +72,14 @@ public class PersonService {
         List<String> images = getAllImdbPersonImages(imdbId);
         List<String> personJobs = getAllImdbPersonJobs(imdbId);
         Integer personFilmAppearances = getAllPersonFilmAppearances(imdbId);
-        Integer personFilmsProduced = getAllpersonMoviesProduced(imdbId);
+        Integer personFilmsProduced = getAllPersonMoviesProduced(imdbId);
+        Integer personNominatedAwards = getAllPersoAwardNominations(imdbId);
+
         person.setImdbPersonImages(images);
         person.setImdbPersonJobs(personJobs);
         person.setImdbPersonFilmAppearances(personFilmAppearances);
         person.setImdbFilmsProduced(personFilmsProduced);
+        person.setImdbAwardNominations(personNominatedAwards);
 
         updateTmdbPersonDetails(person);
         return Optional.of(person);

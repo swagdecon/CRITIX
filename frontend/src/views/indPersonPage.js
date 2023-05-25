@@ -9,7 +9,7 @@ import {
   PersonTitle,
   PersonJobs,
   PersonRoles,
-} from "../components/Person/PersonComponents";
+} from "../components/IndPerson/PersonComponents";
 import LoadingPage from "./LoadingPage";
 export default function IndPerson() {
   const { id } = useParams();
@@ -19,7 +19,7 @@ export default function IndPerson() {
   if (!dataLoaded) {
     return <LoadingPage />;
   }
-  console.log(person);
+  console.log(person)
   let personBackdrop =
     `url(${person.imdbPersonImages[1]}) ` || `url(${person.backdrop_path})`;
 
@@ -42,7 +42,7 @@ export default function IndPerson() {
           backgroundImage: personBackdrop,
         }}
       ></div>
-      <ind-person-body>
+      <section>
         <div className={IndPersonStyle["ind-person-wrapper"]}>
           <div className={IndPersonStyle["hero-poster"]}>
             <img src={personPosterPath} />
@@ -60,7 +60,9 @@ export default function IndPerson() {
 
                 <div className={IndPersonStyle.person__year}></div>
                 <PersonRoles
-                  actorFilmAppearances={person.imdbPersonFilmAppearances}
+                  personFilmAppearances={person.imdbPersonFilmAppearances}
+                  personFilmsProduced={person.imdbFilmsProduced}
+                  personAwardNominations={person.imdbAwardNominations}
                 />
               </div>
             </div>
@@ -78,7 +80,7 @@ export default function IndPerson() {
             </div>
           </section>
         </div>
-      </ind-person-body>
+      </section>
     </html>
   );
 }

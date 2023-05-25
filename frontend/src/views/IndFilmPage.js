@@ -1,9 +1,8 @@
-import React from "react";
+import { React, useState } from "react";
 import { useParams } from "react-router-dom";
 import IndMovieStyle from "../components/IndMovie/ind_movie.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import NavBar from "../components/NavBar/NavBar.js";
-
 import {
   MovieGenres,
   MovieTrailer,
@@ -21,14 +20,19 @@ import fetchData from "../security/FetchApiData";
 export default function IndMovie() {
   const { id } = useParams();
   const { data: movie, dataLoaded: dataLoaded } = fetchData(id);
+  const [recommendedMoviesLoaded, setRecommendedMoviesLoaded] = useState(false);
 
-  if (!dataLoaded) {
+  const handleRecommendedMoviesLoaded = () => {
+    setRecommendedMoviesLoaded(true);
+  };
+  if (!dataLoaded && !recommendedMoviesLoaded) {
     return <LoadingPage />;
   }
   let movieBackdrop =
     `url(https://image.tmdb.org/t/p/original${movie.backdropPath}) ` ||
     `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`;
   let moviePosterPath = `https://image.tmdb.org/t/p/original${movie.posterPath}`;
+
   return (
     <div className={IndMovieStyle["ind-movie-page-wrapper"]}>
       <NavBar />
@@ -86,9 +90,10 @@ export default function IndMovie() {
                       runtime={movie.runtime}
                       revenue={movie.revenue}
                       budget={movie.budget}
-                      language={movie.original_language}
+                      voteCount={movie.voteCount}
+                      language={movie.originalLanguage}
                       productionCompanies={movie.productionCompanies}
-                      movieStatus={movie.status}
+                      movieStatus={movie.movieStatus}
                       releaseDate={movie.releaseDate}
                     />
                   </div>
@@ -102,7 +107,8 @@ export default function IndMovie() {
               </div>
             </section>
             <section className={IndMovieStyle.recommended_movies}>
-              <RecommendedCarousel movieId={movie.id} />
+              <RecommendedCarousel movieId={movie.id} onRecommendedMoviesLoad={handleRecommendedMoviesLoaded}
+              />
             </section>
           </div>
         </ind-movie-body>
