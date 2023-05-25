@@ -25,6 +25,7 @@ export default function IndMovie() {
   const handleRecommendedMoviesLoaded = () => {
     setRecommendedMoviesLoaded(true);
   };
+  console.log(recommendedMoviesLoaded);
   if (!dataLoaded && !recommendedMoviesLoaded) {
     return <LoadingPage />;
   }
@@ -106,10 +107,12 @@ export default function IndMovie() {
                 </div>
               </div>
             </section>
-            <section className={IndMovieStyle.recommended_movies}>
-              <RecommendedCarousel movieId={movie.id} onRecommendedMoviesLoad={handleRecommendedMoviesLoaded}
-              />
-            </section>
+            {recommendedMoviesLoaded ?
+              <section className={IndMovieStyle.recommended_movies}>
+                <RecommendedCarousel movieId={movie.id} onRecommendedMoviesLoad={handleRecommendedMoviesLoaded}
+                />
+              </section>
+              : null}
           </div>
         </ind-movie-body>
       </div>
