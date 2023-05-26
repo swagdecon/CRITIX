@@ -9,13 +9,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.popflix.repository.UserRepository;
-import com.popflix.repository.WatchlistRepository;
 
 @Controller
 public class AboutController {
 
-    @Autowired
-    WatchlistRepository watchlistRepository;
     @Autowired
     UserRepository userRepository;
 

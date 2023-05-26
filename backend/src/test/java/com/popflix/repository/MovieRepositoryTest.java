@@ -1,41 +1,40 @@
-// package com.popflix.repository;
+package com.popflix.repository;
 
-// import com.popflix.model.Movie;
-// import com.popflix.service.MovieService;
+import com.popflix.model.Movie;
+import com.popflix.service.MovieService;
 
-// import org.bson.types.ObjectId;
-// import org.junit.jupiter.api.Test;
-// import org.junit.jupiter.api.extension.ExtendWith;
-// import org.mockito.InjectMocks;
-// import org.mockito.Mock;
-// import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-// import java.util.Optional;
+import java.util.Optional;
 
-// import static org.junit.jupiter.api.Assertions.assertEquals;
-// import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
-// @ExtendWith(MockitoExtension.class)
-// public class MovieRepositoryTest {
+@ExtendWith(MockitoExtension.class)
+public class MovieRepositoryTest {
 
-// @Mock
-// private MovieRepository movieRepository;
+    @Mock
+    private MovieRepository movieRepository;
 
-// @InjectMocks
-// private MovieService movieService;
+    @InjectMocks
+    private MovieService movieService;
 
-// @Test
-// void testFindMovieById() {
-// Integer movieId = 1;
-// Movie movie = new Movie();
-// movie.setId(1);
-// movie.setTitle("Movie Title");
+    @Test
+    void testFindMovieById() {
+        Integer movieId = 1;
+        Movie movie = new Movie();
+        movie.setId(1);
+        movie.setTitle("Movie Title");
 
-// when(movieRepository.findMovieById(movieId)).thenReturn(Optional.ofNullable(movie));
+        when(movieRepository.findMovieById(movieId)).thenReturn(Optional.ofNullable(movie));
 
-// Optional<Movie> result = movieService.findMovieById(movieId);
+        Optional<Movie> result = movieService.findMovieById(movieId);
 
-// assertEquals(Optional.ofNullable(movie), result);
-// verify(movieRepository, times(1)).findMovieById(movieId);
-// }
-// }
+        assertEquals(movie, result.orElse(null)); // Extract movie object from Optional and perform the comparison
+        verify(movieRepository, times(1)).findMovieById(movieId);
+    }
+}

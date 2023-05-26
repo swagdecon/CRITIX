@@ -13,6 +13,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import com.popflix.model.Movie;
 import com.popflix.model.Person;
+import com.popflix.repository.MovieRepository;
+
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.model.Credits;
 import info.movito.themoviedbapi.model.Genre;
@@ -21,14 +23,27 @@ import info.movito.themoviedbapi.model.ProductionCompany;
 import info.movito.themoviedbapi.model.Reviews;
 import info.movito.themoviedbapi.model.Video;
 import info.movito.themoviedbapi.model.people.PersonCast;
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.annotation.PostConstruct;
 
 @Service
 
 public class MovieService {
+  Dotenv dotenv = Dotenv.load();
+  private String TMDB_API_KEY = dotenv.get("TMDB_API_KEY");
+  private final MovieRepository movieRepository;
+
+  public Optional<Movie> findMovieById(Integer id) {
+    return movieRepository.findMovieById(id);
+  }
+
+  public MovieService(MovieRepository movieRepository) {
+    this.movieRepository = movieRepository;
+  }
+
   @Autowired
   private MongoTemplate mongoTemplate;
-  private final TmdbApi tmdbApi = new TmdbApi("d84f9365179dc98dc69ab22833381835");
+  private final TmdbApi tmdbApi = new TmdbApi(TMDB_API_KEY);
 
   public List<Movie> allMovies(String collectionName) {
     Query query = new Query();
@@ -364,9 +379,5 @@ public class MovieService {
       mongoTemplate.save(movie, collectionName);
 
     }
-  }
-
-  public Optional<Movie> findMovieById(Integer movieId) {
-    return null;
   }
 }
