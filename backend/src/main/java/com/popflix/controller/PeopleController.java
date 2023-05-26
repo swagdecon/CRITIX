@@ -17,7 +17,7 @@ import com.popflix.service.PersonService;
 @RequestMapping("/person")
 public class PeopleController {
     @Autowired
-    private PersonService PersonService;
+    PersonService PersonService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Person>> singlePerson(@PathVariable Integer id)

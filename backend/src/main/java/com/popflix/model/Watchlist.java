@@ -2,7 +2,13 @@ package com.popflix.model;
 
 import org.springframework.data.annotation.Id;
 import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class Watchlist {
     @Id
@@ -13,13 +19,6 @@ public class Watchlist {
     public Watchlist(Long userid, Integer movieid) {
         this.userid = userid;
         this.movieid = movieid;
-    }
-
-    public Watchlist(Long id, Long userid, Integer movieid) {
-        this.movieid = movieid;
-    }
-
-    public Watchlist() {
     }
 
     public Long getId() {

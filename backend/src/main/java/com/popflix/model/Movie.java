@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Movie {
     @Id
-    private ObjectId mongo_id;
+    private ObjectId mongoId;
     private Boolean adult;
     private String backdropPath;
     private List<Integer> genreIds;

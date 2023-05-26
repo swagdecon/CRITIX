@@ -365,4 +365,8 @@ public class MovieService {
 
     }
   }
+
+  public Optional<Movie> findMovieById(Integer movieId) {
+    return null;
+  }
 }
