@@ -226,18 +226,14 @@ public class MovieService {
   public void updateTmdbMovieDetails(Movie movie) {
     MovieDb movieDb = tmdbApi.getMovies().getMovie(movie.getId(), "en-US");
 
-    if (movie.getBudget() == null) {
-      movie.setBudget(movieDb.getBudget());
-    }
-    if (movie.getTagline() == null) {
-      movie.setTagline(movieDb.getTagline());
-    }
-    if (movie.getRevenue() == null) {
-      movie.setRevenue(movieDb.getRevenue());
-    }
-    if (movie.getRuntime() == null) {
-      movie.setRuntime(movieDb.getRuntime());
-    }
+    movie.setBudget(movie.getBudget() != null ? movie.getBudget() : movieDb.getBudget());
+    movie.setTagline(movie.getTagline() != null ? movie.getTagline() : movieDb.getTagline());
+    movie.setRevenue(movie.getRevenue() != null ? movie.getRevenue() : movieDb.getRevenue());
+    movie.setRuntime(movie.getRuntime() != null ? movie.getRuntime() : movieDb.getRuntime());
+    movie.setVoteAverage(movie.getVoteAverage() != null ? movie.getVoteAverage() : movieDb.getVoteAverage());
+    movie.setVoteCount(movie.getVoteCount() != null ? movie.getVoteCount() : movieDb.getVoteCount());
+    movie.setImdbId(movie.getImdbId() != null ? movie.getImdbId() : movieDb.getImdbID());
+
     if (movie.getGenres() == null || movie.getGenres().isEmpty()) {
       // Get the movie genres
       List<Genre> genres = movieDb.getGenres();
@@ -281,21 +277,6 @@ public class MovieService {
       }
 
       movie.setReviews(reviewTexts);
-    }
-
-    if (movie.getVoteAverage() == null) {
-      float voteAverage = movieDb.getVoteAverage();
-
-      movie.setVoteAverage(voteAverage);
-    }
-    if (movie.getVoteCount() == null) {
-      Integer voteCount = movieDb.getVoteCount();
-      movie.setVoteCount(voteCount);
-    }
-    if (movie.getImdbId() == null) {
-      String imdbId = movieDb.getImdbID();
-
-      movie.setImdbId(imdbId);
     }
 
     if (movie.getProductionCompanies() == null ||
@@ -343,7 +324,6 @@ public class MovieService {
     List<Movie> movies = new ArrayList<>();
     List<MovieDb> collection = null;
     mongoTemplate.dropCollection(collectionName);
-
     switch (collectionName) {
       case "now_playing":
         collection = tmdbApi.getMovies().getNowPlayingMovies("en-US", 1, "").getResults();
@@ -360,7 +340,6 @@ public class MovieService {
       default:
         throw new IllegalArgumentException("Invalid method name: " + collectionName);
     }
-
     for (MovieDb movieDb : collection) {
       Movie movie = new Movie();
       movie.setId(movieDb.getId());
@@ -376,8 +355,9 @@ public class MovieService {
       movie.setVoteAverage(movie.getVoteAverage());
       movie.setVoteCount(movie.getVoteCount());
       movies.add(movie);
-      mongoTemplate.save(movie, collectionName);
-
+    }
+    if (!movies.isEmpty()) {
+      mongoTemplate.insert(movies, collectionName);
     }
   }
 }
