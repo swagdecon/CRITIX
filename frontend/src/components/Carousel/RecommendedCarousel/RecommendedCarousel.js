@@ -20,9 +20,11 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
   useEffect(() => {
     const fetchRecommendations = async () => {
       const data = await getDetailedMovie("recommendations", { page: 1 }, movieId);
-      setRecommendations(data.detailedMovies);
-    };
-    onRecommendedMoviesLoad()
+      data ?
+        setRecommendations(data.detailedMovies) &&
+        onRecommendedMoviesLoad()
+        : null
+    }
     fetchRecommendations();
   }, [movieId]);
   if (!recommendations) {

@@ -35,17 +35,16 @@ public class LogoutService implements LogoutHandler {
         var storedToken = tokenRepository.findByToken(jwt)
                 .orElse(null);
 
-        var user = storedToken.getUser();
-        if (user != null) {
-            user.setLoggedIn(false);
-            userRepository.save(user);
-        }
         if (storedToken != null) {
+            var user = storedToken.getUser();
+            if (user != null) {
+                user.setLoggedIn(false);
+                userRepository.save(user);
+            }
             storedToken.setExpired(true);
             storedToken.setRevoked(true);
             tokenRepository.save(storedToken);
             SecurityContextHolder.clearContext();
         }
-
     }
 }

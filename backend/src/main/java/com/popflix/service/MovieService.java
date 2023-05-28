@@ -13,6 +13,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import com.popflix.model.Movie;
 import com.popflix.model.Person;
+import com.popflix.repository.MovieRepository;
+
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.model.Credits;
 import info.movito.themoviedbapi.model.Genre;
@@ -21,14 +23,29 @@ import info.movito.themoviedbapi.model.ProductionCompany;
 import info.movito.themoviedbapi.model.Reviews;
 import info.movito.themoviedbapi.model.Video;
 import info.movito.themoviedbapi.model.people.PersonCast;
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.annotation.PostConstruct;
 
 @Service
 
 public class MovieService {
+  Dotenv dotenv = Dotenv.load();
+  private String TMDB_API_KEY = dotenv.get("TMDB_API_KEY");
+  private final MovieRepository movieRepository;
+
+  public Optional<Movie> findMovieById(Integer id) {
+    return movieRepository.findMovieById(id);
+  }
+
+  public MovieService(MovieRepository movieRepository, MongoTemplate mongoTemplate) {
+    this.movieRepository = movieRepository;
+    this.mongoTemplate = mongoTemplate;
+
+  }
+
   @Autowired
   private MongoTemplate mongoTemplate;
-  private final TmdbApi tmdbApi = new TmdbApi("d84f9365179dc98dc69ab22833381835");
+  private final TmdbApi tmdbApi = new TmdbApi(TMDB_API_KEY);
 
   public List<Movie> allMovies(String collectionName) {
     Query query = new Query();
@@ -211,18 +228,14 @@ public class MovieService {
   public void updateTmdbMovieDetails(Movie movie) {
     MovieDb movieDb = tmdbApi.getMovies().getMovie(movie.getId(), "en-US");
 
-    if (movie.getBudget() == null) {
-      movie.setBudget(movieDb.getBudget());
-    }
-    if (movie.getTagline() == null) {
-      movie.setTagline(movieDb.getTagline());
-    }
-    if (movie.getRevenue() == null) {
-      movie.setRevenue(movieDb.getRevenue());
-    }
-    if (movie.getRuntime() == null) {
-      movie.setRuntime(movieDb.getRuntime());
-    }
+    movie.setBudget(movie.getBudget() != null ? movie.getBudget() : movieDb.getBudget());
+    movie.setTagline(movie.getTagline() != null ? movie.getTagline() : movieDb.getTagline());
+    movie.setRevenue(movie.getRevenue() != null ? movie.getRevenue() : movieDb.getRevenue());
+    movie.setRuntime(movie.getRuntime() != null ? movie.getRuntime() : movieDb.getRuntime());
+    movie.setVoteAverage(movie.getVoteAverage() != null ? movie.getVoteAverage() : movieDb.getVoteAverage());
+    movie.setVoteCount(movie.getVoteCount() != null ? movie.getVoteCount() : movieDb.getVoteCount());
+    movie.setImdbId(movie.getImdbId() != null ? movie.getImdbId() : movieDb.getImdbID());
+
     if (movie.getGenres() == null || movie.getGenres().isEmpty()) {
       // Get the movie genres
       List<Genre> genres = movieDb.getGenres();
@@ -266,21 +279,6 @@ public class MovieService {
       }
 
       movie.setReviews(reviewTexts);
-    }
-
-    if (movie.getVoteAverage() == null) {
-      float voteAverage = movieDb.getVoteAverage();
-
-      movie.setVoteAverage(voteAverage);
-    }
-    if (movie.getVoteCount() == null) {
-      Integer voteCount = movieDb.getVoteCount();
-      movie.setVoteCount(voteCount);
-    }
-    if (movie.getImdbId() == null) {
-      String imdbId = movieDb.getImdbID();
-
-      movie.setImdbId(imdbId);
     }
 
     if (movie.getProductionCompanies() == null ||
@@ -328,7 +326,6 @@ public class MovieService {
     List<Movie> movies = new ArrayList<>();
     List<MovieDb> collection = null;
     mongoTemplate.dropCollection(collectionName);
-
     switch (collectionName) {
       case "now_playing":
         collection = tmdbApi.getMovies().getNowPlayingMovies("en-US", 1, "").getResults();
@@ -345,7 +342,6 @@ public class MovieService {
       default:
         throw new IllegalArgumentException("Invalid method name: " + collectionName);
     }
-
     for (MovieDb movieDb : collection) {
       Movie movie = new Movie();
       movie.setId(movieDb.getId());
@@ -361,8 +357,9 @@ public class MovieService {
       movie.setVoteAverage(movie.getVoteAverage());
       movie.setVoteCount(movie.getVoteCount());
       movies.add(movie);
-      mongoTemplate.save(movie, collectionName);
-
+    }
+    if (!movies.isEmpty()) {
+      mongoTemplate.insert(movies, collectionName);
     }
   }
 }

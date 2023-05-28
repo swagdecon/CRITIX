@@ -23,8 +23,16 @@ export default function MovieCard({
     rating: PropTypes.number,
     runtime: PropTypes.number,
     overview: PropTypes.string,
-    video: PropTypes.arrayOf(PropTypes.string),
-    genres: PropTypes.arrayOf(PropTypes.string),
+    video: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.array,
+      PropTypes.bool,
+    ]),
+    genres: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.array,
+    ]),
+
     actors: PropTypes.arrayOf(
       PropTypes.shape({
         name: PropTypes.string,
@@ -105,7 +113,7 @@ export default function MovieCard({
                   onClick={() =>
                     video[0]
                       ? // video is saved in the db as an array, (for recommended carouseL) but for ind_movie it is just ${video}
-                        MovieTrailer(video[0])
+                      MovieTrailer(video[0])
                       : MovieTrailer(video)
                   }
                 >
