@@ -2,11 +2,9 @@ package com.popflix.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -143,59 +141,5 @@ class MovieServiceTest {
         // Assert
         assertFalse(actualMovie.isPresent());
     }
-
-    // @Test
-    // void singleTmdbMovieWithValidIdShouldReturnOptionalMovie() {
-    // // Arrange
-    // Integer movieId = 603692;
-    // Movie expectedMovie = new Movie();
-    // expectedMovie.setId(movieId);
-    // when(tmdbApi.getMovies().getMovie(eq(movieId),
-    // anyString())).thenReturn(Mockito.mock(MovieDb.class));
-
-    // // Act
-    // Optional<Movie> actualMovie = movieService.singleTmdbMovie(movieId);
-
-    // // Assert
-    // assertTrue(actualMovie.isPresent());
-    // assertEquals(expectedMovie, actualMovie.get());
-    // }
-
-    // @Test
-    // void updateMoviesShouldSaveMovieDetailsForAllCollections() {
-    // // Arrange
-    // List<Movie> movies = new ArrayList<>();
-    // movies.add(new Movie());
-    // movies.add(new Movie());
-    // movies.add(new Movie());
-    // movies.add(new Movie());
-    // when(movieService.allMovies("exampleCollection")).thenReturn(movies); // Act
-    // movieService.updateMovies();
-
-    // // Assert
-    // verify(mongoTemplate, times(1)).save(any(Movie.class), anyString());
-    // }
-
-    // @Test
-    // void updateMovieDetailsShouldUpdateMovieFields() {
-    // // Arrange
-    // String collectionName = "collection_name";
-    // Movie movie = new Movie();
-    // movie.setId(1);
-    // MovieDb movieDb = new MovieDb();
-    // movieDb.setBudget(1000000L);
-    // movieDb.setTagline("Awesome movie");
-    // when(tmdbApi.getMovies().getMovie(anyInt(),
-    // anyString())).thenReturn(movieDb);
-    // when(mongoTemplate.save(any(Movie.class), anyString())).thenReturn(movie);
-
-    // // Act
-    // movieService.updateMovieDetails(collectionName);
-
-    // // Assert
-    // verify(mongoTemplate).save(movie, collectionName);
-    // assertEquals(movie.getBudget(), movieDb.getBudget());
-    // assertEquals(movie.getTagline(), movieDb.getTagline());
-    // }
 
 }

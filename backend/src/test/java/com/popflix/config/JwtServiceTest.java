@@ -8,10 +8,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import io.github.cdimascio.dotenv.Dotenv;
-
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,33 +84,4 @@ public class JwtServiceTest {
         boolean isExpired = jwtService.isTokenExpired(expiredToken);
         Assertions.assertFalse(isExpired);
     }
-
-    // @Test
-    // public void testTokenExpiration() {
-    // String validToken = generateTokenWithExpiration(3600L);
-    // boolean isExpired = jwtService.isTokenExpired(validToken);
-    // Assertions.assertFalse(isExpired);
-
-    // String expiredToken = generateTokenWithExpiration(-3599L);
-    // isExpired = jwtService.isTokenExpired(expiredToken);
-    // Assertions.assertTrue(isExpired);
-    // }
-
-    // @Test
-    // public void testIsTokenValidWithExpiredToken() {
-    // String expiredToken = generateTokenWithExpiration(-3600L);
-    // boolean isValid = jwtService.isTokenValid(expiredToken, userDetails);
-    // Assertions.assertFalse(isValid);
-    // }
-
-    // private String generateTokenWithExpiration(long expirationSeconds) {
-    // Map<String, Object> extraClaims = new HashMap<>();
-    // extraClaims.put("extraClaim", "value");
-
-    // Date expirationDate = new Date(System.currentTimeMillis() +
-    // (expirationSeconds * 1000));
-
-    // return jwtService.buildToken(extraClaims, userDetails, expirationSeconds *
-    // 1000);
-    // }
 }
