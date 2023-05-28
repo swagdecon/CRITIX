@@ -9,15 +9,11 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
-
 import com.popflix.model.Movie;
 import com.popflix.repository.MovieRepository;
-
 import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.model.MovieDb;
 import io.github.cdimascio.dotenv.Dotenv;
 
 class MovieServiceTest {
@@ -30,9 +26,7 @@ class MovieServiceTest {
     void setUp() {
         movieRepository = mock(MovieRepository.class);
         mongoTemplate = mock(MongoTemplate.class);
-        movieService = new MovieService();
-        movieService.movieRepository = movieRepository;
-        movieService.mongoTemplate = mongoTemplate;
+        movieService = new MovieService(movieRepository, mongoTemplate);
     }
 
     Dotenv dotenv = Dotenv.load();

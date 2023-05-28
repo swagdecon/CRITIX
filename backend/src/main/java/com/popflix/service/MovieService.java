@@ -37,8 +37,10 @@ public class MovieService {
     return movieRepository.findMovieById(id);
   }
 
-  public MovieService(MovieRepository movieRepository) {
+  public MovieService(MovieRepository movieRepository, MongoTemplate mongoTemplate) {
     this.movieRepository = movieRepository;
+    this.mongoTemplate = mongoTemplate;
+
   }
 
   @Autowired

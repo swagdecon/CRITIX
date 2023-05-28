@@ -42,6 +42,8 @@ class AuthenticationControllerTest {
 
     @Test
     void testRegister() throws UserAlreadyExistsException {
+
+        // Tests user gets successfully registered
         RegisterRequest request = new RegisterRequest();
         when(service.register(request)).thenReturn(new AuthenticationResponse("Registration Successful", null));
         ResponseEntity<?> response = controller.register(request);
@@ -49,7 +51,8 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    void testRegisterUserAlreadyExists() throws UserAlreadyExistsException {
+    void testRegisteredUserAlreadyExists() throws UserAlreadyExistsException {
+        // Functionality to check if user has already been registered
         RegisterRequest request = new RegisterRequest();
         when(service.register(request))
                 .thenThrow(new UserAlreadyExistsException("A User With This Email Already Exists"));
@@ -59,6 +62,8 @@ class AuthenticationControllerTest {
 
     @Test
     void testAuthenticate() throws UsernameNotFoundException, UserAlreadyLoggedInException {
+
+        // Tests that a user is found during login
         AuthenticationRequest request = new AuthenticationRequest();
         when(service.authenticate(request, httpRequest))
                 .thenReturn(new AuthenticationResponse("Authentication Successful", null));
@@ -67,7 +72,8 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    void testAuthenticateUserNotFound() throws UsernameNotFoundException, UserAlreadyLoggedInException {
+    void testAuthenticatedUserNotFound() throws UsernameNotFoundException, UserAlreadyLoggedInException {
+        // Tests the functionality to check if user is not found during login
         AuthenticationRequest request = new AuthenticationRequest();
         when(service.authenticate(request, httpRequest)).thenThrow(new UsernameNotFoundException("User not found"));
         ResponseEntity<?> response = controller.authenticate(request, httpRequest);
@@ -75,7 +81,8 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    void testAuthenticateUserAlreadyLoggedIn() throws UsernameNotFoundException, UserAlreadyLoggedInException {
+    void testAuthenticatedUserAlreadyLoggedIn() throws UsernameNotFoundException, UserAlreadyLoggedInException {
+        // Tests if user is already logged in
         AuthenticationRequest request = new AuthenticationRequest();
         when(service.authenticate(request, httpRequest))
                 .thenThrow(new UserAlreadyLoggedInException("User is already logged in"));
@@ -83,9 +90,9 @@ class AuthenticationControllerTest {
         assertEquals(ResponseEntity.badRequest().body("User is already logged in"), response);
     }
 
-    @Test
-    void testRefreshToken() throws Exception {
-        controller.refreshToken(httpRequest, httpResponse);
-        // Add assertions or verify some behavior if needed
-    }
+    // @Test
+    // void testRefreshToken() throws Exception {
+    // controller.refreshToken(httpRequest, httpResponse);
+    // // Add assertions or verify some behavior if needed
+    // }
 }

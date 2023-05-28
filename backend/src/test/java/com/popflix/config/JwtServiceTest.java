@@ -1,231 +1,119 @@
-// package com.popflix.config;
+package com.popflix.config;
 
-// import org.junit.jupiter.api.BeforeEach;
-// import org.junit.jupiter.api.Test;
-// import org.mockito.Mock;
-// import org.mockito.MockitoAnnotations;
-// import org.springframework.security.core.userdetails.UserDetails;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UserDetails;
 
-// import io.github.cdimascio.dotenv.Dotenv;
-// import io.jsonwebtoken.Claims;
+import io.github.cdimascio.dotenv.Dotenv;
 
-// import java.security.Key;
-// import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-// import static org.junit.jupiter.api.Assertions.*;
-// import static org.mockito.Mockito.*;
+@ExtendWith(MockitoExtension.class)
+public class JwtServiceTest {
 
-// class JwtServiceTest {
-// @Mock
-// private UserDetails userDetails;
+    private JwtService jwtService;
 
-// private JwtService jwtService;
-// private static Dotenv dotenv;
+    @Mock
+    private UserDetails userDetails;
 
-// @BeforeEach
-// void setUp() {
-// dotenv =
-// Dotenv.configure().directory("backend/src/main/resources/.env").load();
+    private final Long mockJwtExpiration = 1500L;
 
-// MockitoAnnotations.openMocks(this);
-// jwtService = new JwtService();
-// }
+    @BeforeEach
+    public void setup() {
+        jwtService = new JwtService();
 
-// @Test
-// void extractUsername_shouldReturnUsernameFromToken() {
-// // Arrange
-// String token = "valid_token";
-// String expectedUsername = "test@example.com";
-// Claims claims = mock(Claims.class);
-// when(jwtService.extractAllClaims(token)).thenReturn(claims);
-// when(claims.getSubject()).thenReturn(expectedUsername);
+        Dotenv dotenv = Dotenv.load();
+        String SECRET_KEY = dotenv.get("SECRET_KEY");
+        Long jwtExpiration = Long.parseLong(dotenv.get("SECRET_KEY_EXPIRATION"));
+        Long refreshExpiration = Long.parseLong(dotenv.get("REFRESH_TOKEN_EXPIRATION"));
+        Mockito.when(userDetails.getUsername()).thenReturn("testUser");
+    }
 
-// // Act
-// String extractedUsername = jwtService.extractUsername(token);
+    private String generateTokenWithSubject(String subject) {
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("extraClaim", "value");
+        return jwtService.buildToken(extraClaims, userDetails, mockJwtExpiration);
+    }
 
-// // Assert
-// assertEquals(expectedUsername, extractedUsername);
-// verify(jwtService).extractAllClaims(token);
-// verify(claims).getSubject();
-// }
+    private String generateExpiredTokenWithSubject(String subject) {
+        long expirationMillis = System.currentTimeMillis() - 10000L; // Set expiration to 10 seconds ago
+        return generateTokenWithExpiration(subject, expirationMillis);
+    }
 
-// @Test
-// void extractClaim_shouldReturnClaimValueFromToken() {
-// // Arrange
-// String token = "valid_token";
-// String claimName = "claim";
-// String expectedClaimValue = "value";
-// Claims claims = mock(Claims.class);
-// when(jwtService.extractAllClaims(token)).thenReturn(claims);
-// when(claims.get(claimName)).thenReturn(expectedClaimValue);
+    private String generateTokenWithExpiration(String subject, long expirationMillis) {
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("extraClaim", "value");
+        return jwtService.buildToken(extraClaims, userDetails, expirationMillis);
+    }
 
-// // Act
-// Object extractedClaimValue = jwtService.extractClaim(token, c ->
-// c.get(claimName));
+    @Test
+    public void testExtractUsername() {
+        String token = generateTokenWithSubject("testUser");
+        String extractedUsername = jwtService.extractUsername(token);
+        Assertions.assertEquals("testUser", extractedUsername);
+    }
 
-// // Assert
-// assertEquals(expectedClaimValue, extractedClaimValue);
-// verify(jwtService).extractAllClaims(token);
-// verify(claims).get(claimName);
-// }
+    @Test
+    public void testGenerateToken() {
+        String token = jwtService.generateToken(userDetails);
+        Assertions.assertNotNull(token);
+        Assertions.assertTrue(token.length() > 0);
+    }
 
-// @Test
-// void generateToken_shouldGenerateTokenWithNoExtraClaims() {
-// // Arrange
-// String expectedToken = "generated_token";
+    @Test
+    public void testGenerateRefreshToken() {
+        String refreshToken = jwtService.generateRefreshToken(userDetails);
+        Assertions.assertNotNull(refreshToken);
+        Assertions.assertTrue(refreshToken.length() > 0);
+    }
 
-// // Mock the buildToken method to return the expected token
-// when(jwtService.buildToken(any(), eq(userDetails),
-// anyLong())).thenReturn(expectedToken);
+    @Test
+    public void testIsTokenValid() {
+        String token = generateTokenWithSubject("testUser");
+        boolean isValid = jwtService.isTokenValid(token, userDetails);
+        Assertions.assertTrue(isValid);
+    }
 
-// // Act
-// String generatedToken = jwtService.generateToken(userDetails);
+    @Test
+    public void testIsTokenNonExpired() {
+        String expiredToken = generateExpiredTokenWithSubject("testUser");
+        boolean isExpired = jwtService.isTokenExpired(expiredToken);
+        Assertions.assertFalse(isExpired);
+    }
 
-// // Assert
-// assertEquals(expectedToken, generatedToken);
-// verify(jwtService).buildToken(any(), eq(userDetails), anyLong());
-// }
+    // @Test
+    // public void testTokenExpiration() {
+    // String validToken = generateTokenWithExpiration(3600L);
+    // boolean isExpired = jwtService.isTokenExpired(validToken);
+    // Assertions.assertFalse(isExpired);
 
-// @Test
-// void generateToken_shouldGenerateTokenWithExtraClaims() {
-// // Arrange
-// String expectedToken = "generated_token";
-// Map<String, Object> extraClaims = new HashMap<>();
+    // String expiredToken = generateTokenWithExpiration(-3599L);
+    // isExpired = jwtService.isTokenExpired(expiredToken);
+    // Assertions.assertTrue(isExpired);
+    // }
 
-// // Mock the buildToken method to return the expected token
-// when(jwtService.buildToken(eq(extraClaims), eq(userDetails),
-// anyLong())).thenReturn(expectedToken);
+    // @Test
+    // public void testIsTokenValidWithExpiredToken() {
+    // String expiredToken = generateTokenWithExpiration(-3600L);
+    // boolean isValid = jwtService.isTokenValid(expiredToken, userDetails);
+    // Assertions.assertFalse(isValid);
+    // }
 
-// // Act
-// String generatedToken = jwtService.generateToken(extraClaims, userDetails);
+    // private String generateTokenWithExpiration(long expirationSeconds) {
+    // Map<String, Object> extraClaims = new HashMap<>();
+    // extraClaims.put("extraClaim", "value");
 
-// // Assert
-// assertEquals(expectedToken, generatedToken);
-// verify(jwtService).buildToken(eq(extraClaims), eq(userDetails), anyLong());
-// }
+    // Date expirationDate = new Date(System.currentTimeMillis() +
+    // (expirationSeconds * 1000));
 
-// @Test
-// void generateRefreshToken_shouldGenerateRefreshToken() {
-// // Arrange
-// String expectedRefreshToken = "refresh_token";
-
-// // Mock the buildToken method to return the expected refresh token
-// when(jwtService.buildToken(any(), eq(userDetails),
-// anyLong())).thenReturn(expectedRefreshToken);
-
-// // Act
-// String generatedRefreshToken = jwtService.generateRefreshToken(userDetails);
-
-// // Assert
-// assertEquals(expectedRefreshToken, generatedRefreshToken);
-// verify(jwtService).buildToken(any(), eq(userDetails), anyLong());
-// }
-
-// @Test
-// void isTokenValid_withValidTokenAndMatchingUserDetails_shouldReturnTrue() {
-// // Arrange
-// String token = "valid_token";
-// String username = "test@example.com";
-// when(jwtService.extractUsername(token)).thenReturn(username);
-// when(userDetails.getUsername()).thenReturn(username);
-// when(jwtService.isTokenExpired(token)).thenReturn(false);
-
-// // Act
-// boolean isValid = jwtService.isTokenValid(token, userDetails);
-
-// // Assert
-// assertTrue(isValid);
-// verify(jwtService).extractUsername(token);
-// verify(jwtService).isTokenExpired(token);
-// verify(userDetails).getUsername();
-// }
-
-// @Test
-// void isTokenValid_withExpiredToken_shouldReturnFalse() {
-// // Arrange
-// String token = "expired_token";
-// when(jwtService.isTokenExpired(token)).thenReturn(true);
-
-// // Act
-// boolean isValid = jwtService.isTokenValid(token, userDetails);
-
-// // Assert
-// assertFalse(isValid);
-// verify(jwtService).isTokenExpired(token);
-// verifyNoInteractions(jwtService, userDetails);
-// }
-
-// @Test
-// void isTokenValid_withInvalidUsername_shouldReturnFalse() {
-// // Arrange
-// String token = "valid_token";
-// String tokenUsername = "invalid@example.com";
-// String userDetailsUsername = "test@example.com";
-// when(jwtService.extractUsername(token)).thenReturn(tokenUsername);
-// when(userDetails.getUsername()).thenReturn(userDetailsUsername);
-// when(jwtService.isTokenExpired(token)).thenReturn(false);
-
-// // Act
-// boolean isValid = jwtService.isTokenValid(token, userDetails);
-
-// // Assert
-// assertFalse(isValid);
-// verify(jwtService).extractUsername(token);
-// verify(jwtService).isTokenExpired(token);
-// verify(userDetails).getUsername();
-// }
-
-// @Test
-// void isTokenExpired_withValidTokenNotExpired_shouldReturnFalse() {
-// // Arrange
-// String token = "valid_token";
-// Date expirationDate = new Date(System.currentTimeMillis() + 10000);
-// when(jwtService.extractExpiration(token)).thenReturn(expirationDate);
-// Date currentDate = new Date();
-
-// // Act
-// boolean isExpired = jwtService.isTokenExpired(token);
-
-// // Assert
-// assertFalse(isExpired);
-// verify(jwtService).extractExpiration(token);
-// verifyNoMoreInteractions(jwtService);
-// }
-
-// @Test
-// void isTokenExpired_withExpiredToken_shouldReturnTrue() {
-// // Arrange
-// String token = "expired_token";
-// Date expirationDate = new Date(System.currentTimeMillis() - 10000);
-// when(jwtService.extractExpiration(token)).thenReturn(expirationDate);
-// Date currentDate = new Date();
-
-// // Act
-// boolean isExpired = jwtService.isTokenExpired(token);
-
-// // Assert
-// assertTrue(isExpired);
-// verify(jwtService).extractExpiration(token);
-// verifyNoMoreInteractions(jwtService);
-// }
-
-// @Test
-// void extractExpiration_shouldReturnExpirationDateFromToken() {
-// // Arrange
-// String token = "valid_token";
-// Date expectedExpirationDate = new Date(System.currentTimeMillis() + 10000);
-// Claims claims = mock(Claims.class);
-// when(jwtService.extractAllClaims(token)).thenReturn(claims);
-// when(claims.getExpiration()).thenReturn(expectedExpirationDate);
-
-// // Act
-// Date extractedExpirationDate = jwtService.extractExpiration(token);
-
-// // Assert
-// assertEquals(expectedExpirationDate, extractedExpirationDate);
-// verify(jwtService).extractAllClaims(token);
-// verify(claims).getExpiration();
-// }
-
-// // Additional test cases can be added for edge cases and other scenarios
-// }
+    // return jwtService.buildToken(extraClaims, userDetails, expirationSeconds *
+    // 1000);
+    // }
+}

@@ -53,42 +53,40 @@ class JwtAuthenticationFilterTest {
         String token = "valid_token"; // Sample token
         String userEmail = "test@example.com"; // Sample user email
         UserDetails userDetails = mock(UserDetails.class); // Mock UserDetails
-        UsernamePasswordAuthenticationToken authToken = mock(UsernamePasswordAuthenticationToken.class); // Mock
-                                                                                                         // UsernamePasswordAuthenticationToken
-        WebAuthenticationDetails details = new WebAuthenticationDetails(request); // Create WebAuthenticationDetails
-                                                                                  // using the request
+        // Mock UsernamePasswordAuthenticationToken
+        UsernamePasswordAuthenticationToken authToken = mock(UsernamePasswordAuthenticationToken.class);
+        // Create WebAuthenticationDetails using the request
 
+        WebAuthenticationDetails details = new WebAuthenticationDetails(request);
         // Mocking the static method
         try (MockedStatic<SecurityContextHolder> mockedSecurityContextHolder = Mockito
                 .mockStatic(SecurityContextHolder.class)) {
             SecurityContext securityContext = mock(SecurityContext.class); // Mock SecurityContext
-            mockedSecurityContextHolder.when(SecurityContextHolder::getContext).thenReturn(securityContext); // Configure
-                                                                                                             // SecurityContextHolder.getContext()
-                                                                                                             // to
-                                                                                                             // return
-                                                                                                             // the mock
-                                                                                                             // securityContext
+            // Configure SecurityContextHolder.getContext() to return the mock
+            // securityContext
+
+            mockedSecurityContextHolder.when(SecurityContextHolder::getContext).thenReturn(securityContext);
 
             // Configure the behavior of mocked objects
-            when(request.getHeader("Authorization")).thenReturn("Bearer " + token); // Configure request.getHeader() to
-                                                                                    // return the token
-            when(jwtService.extractUsername(token)).thenReturn(userEmail); // Configure jwtService.extractUsername() to
-                                                                           // return the user email
-            when(userDetailsService.loadUserByUsername(userEmail)).thenReturn(userDetails); // Configure
-                                                                                            // userDetailsService.loadUserByUsername()
-                                                                                            // to return the mocked
-                                                                                            // UserDetails
-            when(tokenRepository.findByToken(token)).thenReturn(Optional.of(mock(Token.class))); // Configure
-                                                                                                 // tokenRepository.findByToken()
-                                                                                                 // to return an
-                                                                                                 // Optional containing
-                                                                                                 // a mocked Token
-            when(jwtService.isTokenValid(token, userDetails)).thenReturn(true); // Configure jwtService.isTokenValid()
-                                                                                // to return true
-            when(authToken.getDetails()).thenReturn(details); // Configure authToken.getDetails() to return the mocked
-                                                              // WebAuthenticationDetails
-            when(securityContext.getAuthentication()).thenReturn(null); // Configure securityContext.getAuthentication()
-                                                                        // to return null
+            // Configure request.getHeader() to return the token
+            when(request.getHeader("Authorization")).thenReturn("Bearer " + token);
+            // Configure jwtService.extractUsername() to return the user email
+            when(jwtService.extractUsername(token)).thenReturn(userEmail);
+            // Configure userDetailsService.loadUserByUsername() to return the mocked
+            // UserDetails
+            when(userDetailsService.loadUserByUsername(userEmail)).thenReturn(userDetails);
+            // Configure tokenRepository.findByToken() to return an Optional containing a
+            // mocked Token
+            when(tokenRepository.findByToken(token)).thenReturn(Optional.of(mock(Token.class)));
+            // Configure jwtService.isTokenValid() to return true
+            when(jwtService.isTokenValid(token, userDetails)).thenReturn(true);
+
+            // Configure authToken.getDetails() to return the mocked
+            // WebAuthenticationDetails
+            when(authToken.getDetails()).thenReturn(details);
+            // Configure securityContext.getAuthentication()
+            // to return null
+            when(securityContext.getAuthentication()).thenReturn(null);
 
             // Act
             // Invoke the method under test
@@ -96,15 +94,15 @@ class JwtAuthenticationFilterTest {
 
             // Assert
             // Verify the expected interactions
-            verify(securityContext).setAuthentication(any(UsernamePasswordAuthenticationToken.class)); // Verify that
-                                                                                                       // securityContext.setAuthentication()
-                                                                                                       // is called with
-                                                                                                       // any instance
-                                                                                                       // of
-                                                                                                       // UsernamePasswordAuthenticationToken
-            verify(filterChain).doFilter(request, response); // Verify that filterChain.doFilter() is called with the
-                                                             // request and response objects
-            verifyNoMoreInteractions(filterChain); // Verify that there are no more interactions with filterChain
+            // Verify that securityContext.setAuthentication() is called with any instance
+            // of UsernamePasswordAuthenticationToken
+            verify(securityContext).setAuthentication(any(UsernamePasswordAuthenticationToken.class));
+
+            // Verify that filterChain.doFilter() is called with the
+            // request and response objects
+            verify(filterChain).doFilter(request, response);
+            // Verify that there are no more interactions with filterChain
+            verifyNoMoreInteractions(filterChain);
         }
     }
 
