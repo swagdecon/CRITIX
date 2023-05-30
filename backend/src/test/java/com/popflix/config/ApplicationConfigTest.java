@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.Optional;
 
-public class ApplicationConfigTest {
+class ApplicationConfigTest {
     @Mock
     private UserRepository userRepository;
 
@@ -24,7 +24,7 @@ public class ApplicationConfigTest {
     }
 
     @Test
-    public void testUserDetailsService() {
+    void testUserDetailsService() {
         ApplicationConfig applicationConfig = new ApplicationConfig(userRepository);
 
         // Mock the behavior of UserRepository.findByEmail
@@ -37,7 +37,7 @@ public class ApplicationConfigTest {
     }
 
     @Test
-    public void testAuthenticationProvider() {
+    void testAuthenticationProvider() {
         ApplicationConfig applicationConfig = new ApplicationConfig(userRepository);
 
         // Test the AuthenticationProvider
@@ -45,7 +45,7 @@ public class ApplicationConfigTest {
     }
 
     @Test
-    public void testPasswordEncoder() {
+    void testPasswordEncoder() {
         ApplicationConfig applicationConfig = new ApplicationConfig(userRepository);
 
         // Test the PasswordEncoder
@@ -54,7 +54,7 @@ public class ApplicationConfigTest {
     }
 
     @Test
-    public void testAuthenticationManager() throws Exception {
+    void testAuthenticationManager() throws Exception {
         ApplicationConfig applicationConfig = new ApplicationConfig(userRepository);
 
         // Mock the behavior of AuthenticationConfiguration.getAuthenticationManager

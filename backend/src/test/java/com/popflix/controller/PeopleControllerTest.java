@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import com.popflix.model.Person;
 import com.popflix.service.PersonService;
 
-public class PeopleControllerTest {
+class PeopleControllerTest {
 
     @Test
     void testSinglePerson() throws IOException, InterruptedException {

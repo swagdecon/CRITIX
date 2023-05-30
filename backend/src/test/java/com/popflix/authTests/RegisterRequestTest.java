@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import com.popflix.auth.RegisterRequest;
 
-public class RegisterRequestTest {
+class RegisterRequestTest {
 
     @Test
-    public void testRegisterRequest() {
+    void testRegisterRequest() {
         // Create an instance of RegisterRequest
         RegisterRequest registerRequest = RegisterRequest.builder()
                 .firstName("John")

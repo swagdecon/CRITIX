@@ -13,7 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import com.popflix.model.Person;
 
-public class PeopleServiceTest {
+class PeopleServiceTest {
     private PersonService personService;
 
     @BeforeEach

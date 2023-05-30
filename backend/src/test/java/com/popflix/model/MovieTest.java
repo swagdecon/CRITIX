@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
-public class MovieTest {
+class MovieTest {
 
     @Test
     void testMovieConstructorAndGetters() {

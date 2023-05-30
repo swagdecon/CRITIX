@@ -19,7 +19,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class MovieControllerTest {
+class MovieControllerTest {
     @Mock
     private MovieService movieService;
 
@@ -32,7 +32,7 @@ public class MovieControllerTest {
     }
 
     @Test
-    public void testGetSingleMovie() {
+    void testGetSingleMovie() {
         int movieId = 1;
         Movie movie = new Movie();
         Optional<Movie> optionalMovie = Optional.of(movie);
@@ -49,7 +49,7 @@ public class MovieControllerTest {
     }
 
     @Test
-    public void testGetPopularMovies() throws Exception {
+    void testGetPopularMovies() throws Exception {
         // Create a mock MovieService
         MovieService movieService = mock(MovieService.class);
         List<Movie> movies = new ArrayList<>();
@@ -76,7 +76,7 @@ public class MovieControllerTest {
     }
 
     @Test
-    public void testGetUpcomingMovies() throws Exception {
+    void testGetUpcomingMovies() throws Exception {
         // Create a mock MovieService
         MovieService movieService = mock(MovieService.class);
         List<Movie> movies = new ArrayList<>();
@@ -103,7 +103,7 @@ public class MovieControllerTest {
     }
 
     @Test
-    public void testGetTopRatedMovies() throws Exception {
+    void testGetTopRatedMovies() throws Exception {
         // Create a mock MovieService
         MovieService movieService = mock(MovieService.class);
         List<Movie> movies = new ArrayList<>();
@@ -130,7 +130,7 @@ public class MovieControllerTest {
     }
 
     @Test
-    public void testGetNowPlayingMovies() throws Exception {
+    void testGetNowPlayingMovies() throws Exception {
         // Create a mock MovieService
         MovieService movieService = mock(MovieService.class);
         List<Movie> movies = new ArrayList<>();

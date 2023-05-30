@@ -18,7 +18,7 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
 
-public class LogoutServiceTest {
+class LogoutServiceTest {
     private LogoutService logoutService;
 
     @Mock
