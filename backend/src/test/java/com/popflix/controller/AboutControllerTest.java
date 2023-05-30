@@ -8,7 +8,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.ui.ModelMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AboutControllerTest {
+class AboutControllerTest {
 
     private AboutController aboutController;
 
@@ -23,14 +23,14 @@ public class AboutControllerTest {
     }
 
     @Test
-    public void testGetAboutPage() {
+    void testGetAboutPage() {
         ModelMap model = new ModelMap();
         String viewName = aboutController.getAboutPage(model);
         assertEquals("about", viewName);
     }
 
     @Test
-    public void testGetCreditPage() {
+    void testGetCreditPage() {
         ModelMap model = new ModelMap();
         String viewName = aboutController.getCreditPage(model);
         assertEquals("credits", viewName);

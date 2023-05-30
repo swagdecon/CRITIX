@@ -6,10 +6,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Collection;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserTest {
+class UserTest {
 
     @Test
-    public void testGetAuthorities() {
+    void testGetAuthorities() {
         User user = new User();
         user.setRole(Role.ADMIN);
 
@@ -19,25 +19,25 @@ public class UserTest {
     }
 
     @Test
-    public void testIsAccountNonExpired() {
+    void testIsAccountNonExpired() {
         User user = new User();
         assertTrue(user.isAccountNonExpired());
     }
 
     @Test
-    public void testIsAccountNonLocked() {
+    void testIsAccountNonLocked() {
         User user = new User();
         assertTrue(user.isAccountNonLocked());
     }
 
     @Test
-    public void testIsCredentialsNonExpired() {
+    void testIsCredentialsNonExpired() {
         User user = new User();
         assertTrue(user.isCredentialsNonExpired());
     }
 
     @Test
-    public void testIsEnabled() {
+    void testIsEnabled() {
         User user = new User();
         assertTrue(user.isEnabled());
     }

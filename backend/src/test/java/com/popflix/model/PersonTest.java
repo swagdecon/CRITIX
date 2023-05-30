@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Arrays;
 import java.util.List;
 
-public class PersonTest {
+class PersonTest {
 
     @Test
-    public void testPerson() {
+    void testPerson() {
         // Create a Person object
         Person person = new Person();
         person.setId(1);

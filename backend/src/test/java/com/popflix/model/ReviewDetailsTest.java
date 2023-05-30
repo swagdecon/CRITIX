@@ -3,10 +3,10 @@ package com.popflix.model;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ReviewDetailsTest {
+class ReviewDetailsTest {
 
     @Test
-    public void testReviewDetails() {
+    void testReviewDetails() {
         // Create a ReviewDetails object
         ReviewDetails reviewDetails = new ReviewDetails();
         reviewDetails.setContent("This movie is amazing!");

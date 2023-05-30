@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ExtendWith(MockitoExtension.class)
-public class JwtServiceTest {
+class JwtServiceTest {
 
     private JwtService jwtService;
 
@@ -51,35 +51,35 @@ public class JwtServiceTest {
     }
 
     @Test
-    public void testExtractUsername() {
+    void testExtractUsername() {
         String token = generateTokenWithSubject("testUser");
         String extractedUsername = jwtService.extractUsername(token);
         Assertions.assertEquals("testUser", extractedUsername);
     }
 
     @Test
-    public void testGenerateToken() {
+    void testGenerateToken() {
         String token = jwtService.generateToken(userDetails);
         Assertions.assertNotNull(token);
         Assertions.assertTrue(token.length() > 0);
     }
 
     @Test
-    public void testGenerateRefreshToken() {
+    void testGenerateRefreshToken() {
         String refreshToken = jwtService.generateRefreshToken(userDetails);
         Assertions.assertNotNull(refreshToken);
         Assertions.assertTrue(refreshToken.length() > 0);
     }
 
     @Test
-    public void testIsTokenValid() {
+    void testIsTokenValid() {
         String token = generateTokenWithSubject("testUser");
         boolean isValid = jwtService.isTokenValid(token, userDetails);
         Assertions.assertTrue(isValid);
     }
 
     @Test
-    public void testIsTokenNonExpired() {
+    void testIsTokenNonExpired() {
         String expiredToken = generateExpiredTokenWithSubject("testUser");
         boolean isExpired = jwtService.isTokenExpired(expiredToken);
         Assertions.assertFalse(isExpired);
