@@ -60,7 +60,7 @@ public class AuthenticationService {
 
                 User user = userRepository.findByEmail(request.getEmail())
                                 .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
-                if (user.getLoggedIn() == true) {
+                if (user.getLoggedIn()) {
                         throw new UserAlreadyLoggedInException("This User is already logged in");
                 }
                 user.setLoggedIn(true);
