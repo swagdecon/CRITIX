@@ -81,15 +81,15 @@ export default function MovieActors({ actors }) {
                           <i
                             className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-instagram"]}`}
                             aria-hidden="true"
-                          ></i>
+                           />
                           <i
                             className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-twitter"]}`}
                             aria-hidden="true"
-                          ></i>
+                           />
                           <i
                             className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-facebook"]}`}
                             aria-hidden="true"
-                          ></i>
+                           />
                         </div>
                       </div>
                     </Link>

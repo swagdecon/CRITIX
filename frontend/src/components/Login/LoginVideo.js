@@ -6,7 +6,7 @@ import "./login.module.css";
 export default function LoginPlayer() {
   return (
     <div>
-      <video autoPlay loop muted src={PopflixTrailer2} type="video/mp4"></video>
+      <video autoPlay loop muted src={PopflixTrailer2} type="video/mp4" />
     </div>
   );
 }

@@ -52,7 +52,7 @@ export default function MovieCard({
             style={{
               backgroundImage: `url(https://image.tmdb.org/t/p/w500/${poster})`,
             }}
-          ></div>
+           />
           <div className={MovieCardStyle["text-movie-cont"]}>
             <div className={MovieCardStyle["mr-grid"]}>
               <div className={MovieCardStyle.col1}>
