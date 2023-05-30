@@ -41,7 +41,7 @@ export default function IndMovie() {
         style={{
           backgroundImage: movieBackdrop,
         }}
-      ></div>
+       />
       <div>
         <ind-movie-body>
           <div className={IndMovieStyle["ind-movie-wrapper"]}>

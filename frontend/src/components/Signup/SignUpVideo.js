@@ -5,6 +5,6 @@ import "../Login/login.module.css";
 
 export default function SignUpPlayer() {
   return (
-    <video autoPlay loop muted src={PopflixTrailer1} type="video/mp4"></video>
+    <video autoPlay loop muted src={PopflixTrailer1} type="video/mp4" />
   );
 }

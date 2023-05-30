@@ -41,7 +41,7 @@ export default function IndPerson() {
         style={{
           backgroundImage: personBackdrop,
         }}
-      ></div>
+       />
       <section>
         <div className={IndPersonStyle["ind-person-wrapper"]}>
           <div className={IndPersonStyle["hero-poster"]}>
@@ -49,7 +49,7 @@ export default function IndPerson() {
           </div>
           <div id="fade" className={IndPersonStyle["container-margin"]}>
             <div className={IndPersonStyle["ind-person-header"]}>
-              <div className={IndPersonStyle.person__score}></div>
+              <div className={IndPersonStyle.person__score} />
               <div className={IndPersonStyle.person__title__container}>
                 <div className={IndPersonStyle.person_job_wrapper}>
                   <PersonJobs jobs={person.imdbPersonJobs} />
@@ -58,7 +58,7 @@ export default function IndPerson() {
                   <PersonTitle name={person.name} />
                 </h2>
 
-                <div className={IndPersonStyle.person__year}></div>
+                <div className={IndPersonStyle.person__year} />
                 <PersonRoles
                   personFilmAppearances={person.imdbPersonFilmAppearances}
                   personFilmsProduced={person.imdbFilmsProduced}
@@ -75,7 +75,7 @@ export default function IndPerson() {
                   data-center="opacity: 1"
                   data-top="opacity: 0"
                   data-anchor-target="#slide-1 h2"
-                ></div>
+                 />
               </div>
             </div>
           </section>
