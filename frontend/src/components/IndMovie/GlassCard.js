@@ -159,13 +159,13 @@ export default function GlassCard({ name, value, icon, iconString }) {
 
   if (iconString === "&#xef63;") {
     // Budget
-    data = `$ ` + ParseNumber(value);
+    data = "$ " + ParseNumber(value);
   } else if (iconString === "&#xe8b5;") {
     // Minutes
     data = ` ${value} minutes`;
   } else if (iconString === "&#xf041;") {
     // Revenue
-    data = `$ ` + ParseNumber(value);
+    data = "$ " + ParseNumber(value);
   } else if (iconString === "&#xe175;") {
     // Vote Count
     data = ParseNumber(value);
