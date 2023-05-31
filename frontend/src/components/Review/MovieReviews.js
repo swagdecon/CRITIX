@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from "prop-types";
-import { Embed, CommentCount } from 'hyvor-talk-react'
+import { Embed } from 'hyvor-talk-react'
 import IndReview from "./Review.module.css";
 export default class MovieComments extends Component {
 
@@ -13,19 +13,13 @@ export default class MovieComments extends Component {
         return (
             <div className={IndReview["ind-review-wrapper"]}>
                 <h1>Reviews</h1>
-
                 <div className="comment-count-view">
-
                     { /* Comment Counts */}
-                    <CommentCount
+                    {/* <CommentCount
                         websiteId={8952}
                         id={movieId}
-                    />
-
+                    /> */}
                 </div>
-
-                <content>Your Article Here</content>
-
                 { /* Load Comments now */}
                 <Embed
                     websiteId={8952}

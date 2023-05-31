@@ -3,11 +3,11 @@
 }
 
 .carousel-movie .carousel-control-prev {
-  left: -6%;
+  max-width: 3%;
   top: -10%;
 }
 
 .carousel-movie .carousel-control-next {
-  right: -6%;
+  max-width: 3%;
   top: -10%;
 }

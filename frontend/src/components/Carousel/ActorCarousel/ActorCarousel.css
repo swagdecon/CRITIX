@@ -1,6 +1,9 @@
 .carousel-actors .carousel-control-prev {
-  left: -9%;
+  max-width: 3%;
+  left:-3%;
 }
 .carousel-actors .carousel-control-next {
-  right: -9%;
+  max-width: 3%;
+  right:-3%;
+
 }
