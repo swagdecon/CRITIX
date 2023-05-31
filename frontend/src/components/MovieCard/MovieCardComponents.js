@@ -46,12 +46,11 @@ function MovieCardActors({ actors }) {
   if (actors === null) {
     return (<span>No Actors Available</span>)
   } else {
-
-    let topActors = actors.slice(0, 3);
+    const topActors = actors.slice(0, 3);
     return (
       <span>
         {topActors.map((actor, index) => (
-          <span key={index}>{index === 0 ? actor.name : `, ${actor.name}`}</span>
+          <span key={actor.name}>{index === 0 ? actor.name : `, ${actor.name}`}</span>
         ))}
       </span>
     );

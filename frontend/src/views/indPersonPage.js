@@ -25,16 +25,7 @@ export default function IndPerson() {
 
   let personPosterPath = `https://image.tmdb.org/t/p/original${person.profilePath}`;
   return (
-    <html lang="en">
-      <head>
-        <meta charSet="UTF-8" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link
-          href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          rel="stylesheet"
-        />
-      </head>
+    <div>
       <NavBar />
       <div
         className={IndPersonStyle.background}
@@ -81,6 +72,5 @@ export default function IndPerson() {
           </section>
         </div>
       </section>
-    </html>
-  );
+    </div>);
 }
