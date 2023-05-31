@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import IndMovieStyle from "../components/IndMovie/ind_movie.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import NavBar from "../components/NavBar/NavBar.js";
+import MovieComments from "../components/Review/MovieReviews";
 import {
   MovieGenres,
   MovieTrailer,
@@ -41,7 +42,7 @@ export default function IndMovie() {
         style={{
           backgroundImage: movieBackdrop,
         }}
-       />
+      />
       <div>
         <ind-movie-body>
           <div className={IndMovieStyle["ind-movie-wrapper"]}>
@@ -85,6 +86,7 @@ export default function IndMovie() {
                     data-top="opacity: 0"
                     data-anchor-target="#slide-1 h2"
                   >
+
                     <EmbeddedMovieTrailer video={movie.video} />
                     <MovieDetails
                       runtime={movie.runtime}
@@ -96,6 +98,7 @@ export default function IndMovie() {
                       movieStatus={movie.movieStatus}
                       releaseDate={movie.releaseDate}
                     />
+                    <MovieComments movieId={movie.id} />
                   </div>
                   <h1 className={IndMovieStyle["cast-title-1"]}>
                     Cast Members:

@@ -22,6 +22,7 @@
     "enzyme": "^3.11.0",
     "fingerprintjs2": "^2.1.4",
     "font-awesome": "^4.7.0",
+    "hyvor-talk-react": "^2.0.1",
     "install": "^0.13.0",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^3.1.2",
