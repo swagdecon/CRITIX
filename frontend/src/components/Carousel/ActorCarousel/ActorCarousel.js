@@ -18,7 +18,7 @@ export default function MovieActors({ actors }) {
     ),
     images: PropTypes.arrayOf(PropTypes.string),
   };
-  const defaultImage = `url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg) center center no-repeat`;
+  const defaultImage = "url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg) center center no-repeat";
   const actorChunks = chunk(actors, 5);
   return (
     <Carousel className="carousel-actors" interval={null} indicators={false}>
@@ -35,12 +35,12 @@ export default function MovieActors({ actors }) {
                 }
                 const style = image
                   ? {
-                      background: actorImage,
-                      backgroundSize: "300px",
-                    }
+                    background: actorImage,
+                    backgroundSize: "300px",
+                  }
                   : {
-                      background: defaultImage,
-                    };
+                    background: defaultImage,
+                  };
 
                 return (
                   <div
@@ -81,15 +81,15 @@ export default function MovieActors({ actors }) {
                           <i
                             className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-instagram"]}`}
                             aria-hidden="true"
-                           />
+                          />
                           <i
                             className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-twitter"]}`}
                             aria-hidden="true"
-                           />
+                          />
                           <i
                             className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-facebook"]}`}
                             aria-hidden="true"
-                           />
+                          />
                         </div>
                       </div>
                     </Link>
