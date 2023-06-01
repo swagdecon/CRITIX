@@ -43,15 +43,18 @@ function MovieCardActors({ actors }) {
     ).isRequired,
   };
 
-  const topActors = actors.slice(0, 3);
-
-  return (
-    <span>
-      {topActors.map((actor, index) => (
-        <span key={index}>{index === 0 ? actor.name : `, ${actor.name}`}</span>
-      ))}
-    </span>
-  );
+  if (actors === null) {
+    return (<span>No Actors Available</span>)
+  } else {
+    const topActors = actors.slice(0, 3);
+    return (
+      <span>
+        {topActors.map((actor, index) => (
+          <span key={actor.name}>{index === 0 ? actor.name : `, ${actor.name}`}</span>
+        ))}
+      </span>
+    );
+  }
 }
 
 export { MovieCardActors, MovieCardGenres };
