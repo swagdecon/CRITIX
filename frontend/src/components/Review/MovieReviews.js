@@ -1,31 +1,48 @@
-import React, { Component } from 'react'
-import PropTypes from "prop-types";
-import { Embed } from 'hyvor-talk-react'
+import { React, useState } from "react";
 import IndReview from "./Review.module.css";
-export default class MovieComments extends Component {
+import TextField from '@mui/material/TextField'
+import Filter from "bad-words";
 
-    render() {
-        MovieComments.propTypes = {
-            movieId: PropTypes.number.isRequired,
-        }
-        const { movieId } = this.props;
+export default function MovieComments() {
 
-        return (
-            <div className={IndReview["ind-review-wrapper"]}>
-                <h1>Reviews</h1>
-                <div className="comment-count-view">
-                    { /* Comment Counts */}
-                    {/* <CommentCount
-                        websiteId={8952}
-                        id={movieId}
-                    /> */}
-                </div>
-                { /* Load Comments now */}
-                <Embed
-                    websiteId={8952}
-                    id={movieId}
-                />
-            </div>
-        )
-    }
+    const [review, setReview] = useState("");
+    const filter = new Filter();
+
+    const hasReviewProfanity = filter.isProfane(review);
+
+    return (
+        <div className={IndReview["ind-review-wrapper"]}>
+            <h2 className={IndReview["ind-review-section-title"]}>Audience Reviews & Ratings</h2>
+            <TextField
+                id="outlined-multiline-flexible"
+                label={hasReviewProfanity && review.trim().length > 0 ? "Profanity is not allowed." : "Your Review"}
+                multiline
+                onChange={(e) => setReview(e.target.value)}
+                maxRows={4}
+                className={IndReview["mui-input-field"]}
+                InputLabelProps={{
+                    style: {
+                        color: 'white',
+                    },
+                }}
+                inputProps={{
+                    sx: {
+                        color: 'white',
+                    },
+                }}
+                error={hasReviewProfanity && review.trim().length > 0} // Keep error if profanity is present and there is non-empty text
+                sx={{
+                    borderRadius: " 30px",
+                    fieldSet: {
+                        borderRadius: " 30px",
+                    },
+                    input: {
+                        color: "white !important"
+                    },
+
+                    width: "80%",
+                }}
+            />
+        </div>
+    )
 }

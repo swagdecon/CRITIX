@@ -12,7 +12,6 @@ export default function PrivateRoute({ children }) {
   try {
     decodedToken = jwt_decode(accessToken);
   } catch (e) {
-    console.log(e);
     return <Navigate to="/403" />;
   }
 

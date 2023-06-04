@@ -29,10 +29,11 @@ export default function IndMovie() {
   if (!dataLoaded && !recommendedMoviesLoaded) {
     return <LoadingPage />;
   }
+  let movieUrl = "https://image.tmdb.org/t/p/original"
   let movieBackdrop =
-    `url(https://image.tmdb.org/t/p/original${movie.backdropPath}) ` ||
-    `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`;
-  let moviePosterPath = `https://image.tmdb.org/t/p/original${movie.posterPath}`;
+    `url(${movieUrl}${movie.backdropPath}) ` ||
+    `url(${movieUrl}${movie.backdrop_path})`;
+  let moviePosterPath = `${movieUrl}${movie.posterPath}`;
 
   return (
     <div className={IndMovieStyle["ind-movie-page-wrapper"]}>
@@ -86,8 +87,9 @@ export default function IndMovie() {
                     data-top="opacity: 0"
                     data-anchor-target="#slide-1 h2"
                   >
-
                     <EmbeddedMovieTrailer video={movie.video} />
+                    <MovieComments />
+
                     <MovieDetails
                       runtime={movie.runtime}
                       revenue={movie.revenue}
@@ -98,7 +100,6 @@ export default function IndMovie() {
                       movieStatus={movie.movieStatus}
                       releaseDate={movie.releaseDate}
                     />
-                    <MovieComments movieId={movie.id} />
                   </div>
                   <h1 className={IndMovieStyle["cast-title-1"]}>
                     Cast Members:
