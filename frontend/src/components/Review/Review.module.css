@@ -5,7 +5,8 @@
     backdrop-filter: blur(20px);
     border-radius: 0.7rem;
     padding: 20px;
-    transform: translateX(-20%);
+    transform: translateX(-20%) translateY(-15vh);
+    
 }
 .ind-review-section-title {
     color: #0096ff !important
@@ -14,4 +15,17 @@
 .MuiTextField-root  {
     width: 80%;
 
+}
+.post-review-btn {
+    display: inline-block;
+    transform: translateY(0.3vh) translateX(.5vw);
+}
+.rating-wrapper {
+    background-color: white;
+    border-radius: 30px;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    width: max-content;
 }
