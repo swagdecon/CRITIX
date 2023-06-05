@@ -31,6 +31,7 @@ export default function MovieComments() {
                     inputProps={{
                         sx: {
                             color: 'white',
+
                         },
                     }}
                     error={hasReviewProfanity && review.trim().length > 0}
@@ -41,6 +42,17 @@ export default function MovieComments() {
                         },
                         input: {
                             color: "white !important"
+                        },
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'white',
+                            },
+                            '&:hover fieldset': {
+                                borderColor: '#0096ff',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#0096ff',
+                            },
                         },
                         width: "80%",
                     }}
