@@ -48,10 +48,10 @@ export default function MovieComments() {
                                 borderColor: 'white',
                             },
                             '&:hover fieldset': {
-                                borderColor: '#0096ff',
+                                borderColor: hasReviewProfanity && review.trim().length > 0 ? '#ff0000' : '#0096ff',
                             },
                             '&.Mui-focused fieldset': {
-                                borderColor: '#0096ff',
+                                borderColor: hasReviewProfanity && review.trim().length > 0 ? '#ff0000' : '#0096ff',
                             },
                         },
                         width: "80%",
