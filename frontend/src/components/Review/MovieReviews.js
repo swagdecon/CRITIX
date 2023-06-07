@@ -15,7 +15,6 @@ export default function MovieComments({ voteAverage }) {
     const [review, setReview] = useState("");
     const filter = new Filter();
     const hasReviewProfanity = filter.isProfane(review);
-    console.log(voteAverage)
     return (
         <div className={IndReview["ind-review-wrapper"]}>
             <h2 className={IndReview["ind-review-section-title"]}>Reviews</h2>

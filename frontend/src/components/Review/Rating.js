@@ -19,10 +19,10 @@ export default function CustomizedRating() {
             <StyledRating
                 name="customized-color"
                 defaultValue={2}
-                getLabelText={(value) => `${value} Heart${value !== 1 ? 's' : ''}`}
+                // getLabelText={(value) => `${value} Clapperboards ${value !== 1 ? 's' : ''}`}
                 precision={0.5}
-                icon={<MovieCreationIcon fontSize="large" />}
-                emptyIcon={<MovieCreationOutlinedIcon fontSize="large" />}
+                icon={<MovieCreationIcon style={{ color: "#FFD700" }} fontSize="large" />}
+                emptyIcon={<MovieCreationOutlinedIcon style={{ color: '#fff' }} fontSize="large" />}
             />
         </div>
     );
