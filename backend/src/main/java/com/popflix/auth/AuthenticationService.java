@@ -83,6 +83,11 @@ public class AuthenticationService {
 
         }
 
+        public User getUserDetails(String accessToken) {
+                User user = tokenRepository.findUserByToken(accessToken);
+                return user;
+        }
+
         private void revokeAllUserTokens(User user) {
                 var validUserTokens = tokenRepository.findAllValidTokensByUser(user.getId());
                 if (validUserTokens.isEmpty())

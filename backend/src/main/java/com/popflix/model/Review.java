@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class Review {
     @Id
     private ObjectId mongoId;
-    private Integer id;
+    private Integer movieId;
     private String userName;
     private String reviewContent;
     private Float kernelRating;
