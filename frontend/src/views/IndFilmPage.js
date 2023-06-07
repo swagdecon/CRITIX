@@ -4,6 +4,7 @@ import IndMovieStyle from "../components/IndMovie/ind_movie.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import NavBar from "../components/NavBar/NavBar.js";
 import MovieComments from "../components/Review/MovieReviews";
+// import ReviewBox from "../components/Review/TestReview";
 import {
   MovieGenres,
   MovieTrailer,
@@ -88,8 +89,8 @@ export default function IndMovie() {
                     data-anchor-target="#slide-1 h2"
                   >
                     <EmbeddedMovieTrailer video={movie.video} />
-                    <MovieComments />
-
+                    <MovieComments voteAverage={movie.voteAverage} />
+                    {/* <ReviewBox /> */}
                     <MovieDetails
                       runtime={movie.runtime}
                       revenue={movie.revenue}

@@ -5,15 +5,24 @@
     backdrop-filter: blur(20px);
     border-radius: 0.7rem;
     padding: 20px;
-    transform: translateX(-20%) translateY(-15vh);
-    height: 16rem;
+    transform: translateX(-20%) ;
+    height: 30rem;
+    text-align: right;
+
     
 }
+.movie-vote-average {
+    font-size: 80px;
+    text-align: left;
+    color: white;
+}
 .input-wrapper {
+    flex-grow: 1;
     transform: translateY(2vh);
 }
 .ind-review-section-title {
-    color: #0096ff !important
+    color: #0096ff !important;
+
 }
 
 .MuiTextField-root  {
@@ -21,15 +30,17 @@
 
 }
 .post-review-btn {
-    display: inline-block;
-    transform: translateY(0.3vh) translateX(.5vw);
-}
-.rating-wrapper {
-    background-color: white;
-    border-radius: 30px;
-    padding: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
+padding-top: 1vh;
+padding-bottom: 1vh;
 
-    width: max-content;
+}
+.review-content-wrapper {
+    border: 1px solid #5900ff;
+    border-radius: 30px;
+    padding: 30px;
+}
+
+.rating-wrapper {
+    border-radius: 30px;
+    padding: 5px;
 }
