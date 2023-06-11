@@ -10,8 +10,8 @@ import PropTypes from "prop-types";
 // import CookieManager from "../../security/CookieManager";
 // import jwt_decode from "jwt-decode";
 import PercentageRatingCircle from "./Rating/PercentageCircle";
-export default function MovieComments({ voteAverage }) {
-    MovieComments.propTypes = {
+export default function UserMovieReviews({ voteAverage }) {
+    UserMovieReviews.propTypes = {
         voteAverage: PropTypes.number,
     }
     const percentageAverage = voteAverage * 10
@@ -29,16 +29,12 @@ export default function MovieComments({ voteAverage }) {
             < div className={IndReview["review-content-wrapper"]}>
                 <div className={IndReview["movie-vote-average"]}>
                     <PercentageRatingCircle percentageRating={percentageAverage} />
-                    {/* <MovieAverage voteAverage={voteAverage} /> */}
                 </div>
                 <div className={IndReview["input-wrapper"]}>
 
                     <div className={IndReview["rating-wrapper"]}>
                         <UserRating />
                     </div>
-                    {/* <div className={IndReview["name-wrapper"]}>
-                        {firstName}
-                    </div> */}
                     <div className={IndReview["user-review-wrapper"]}>
                         <TextField
                             id="outlined-multiline-flexible"

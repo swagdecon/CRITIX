@@ -341,6 +341,9 @@ ind-movie-nav {
   margin: 0 auto;
   color: #b2b2b2;
 }
+.hsContentLeft {
+  transform: translateY(-56vh);
+}
 .indMovieEmbeddedTrailer {
   position: flex;
   transform: translateX(28.5vw) translateY(2vh);

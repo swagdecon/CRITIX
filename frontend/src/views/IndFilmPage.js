@@ -3,8 +3,7 @@ import { useParams } from "react-router-dom";
 import IndMovieStyle from "../components/IndMovie/ind_movie.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import NavBar from "../components/NavBar/NavBar.js";
-import MovieComments from "../components/Review/MovieReviews";
-// import ReviewBox from "../components/Review/TestReview";
+import UserMovieReviews from "../components/Review/MovieReviews";
 import {
   MovieGenres,
   MovieTrailer,
@@ -89,18 +88,19 @@ export default function IndMovie() {
                     data-anchor-target="#slide-1 h2"
                   >
                     <EmbeddedMovieTrailer video={movie.video} />
-                    <MovieComments voteAverage={movie.voteAverage} />
-                    {/* <ReviewBox /> */}
-                    <MovieDetails
-                      runtime={movie.runtime}
-                      revenue={movie.revenue}
-                      budget={movie.budget}
-                      voteCount={movie.voteCount}
-                      language={movie.originalLanguage}
-                      productionCompanies={movie.productionCompanies}
-                      movieStatus={movie.movieStatus}
-                      releaseDate={movie.releaseDate}
-                    />
+                    <div className={IndMovieStyle.hsContentLeft}>
+                      <MovieDetails
+                        runtime={movie.runtime}
+                        revenue={movie.revenue}
+                        budget={movie.budget}
+                        voteCount={movie.voteCount}
+                        language={movie.originalLanguage}
+                        productionCompanies={movie.productionCompanies}
+                        movieStatus={movie.movieStatus}
+                        releaseDate={movie.releaseDate}
+                      />
+                      <UserMovieReviews voteAverage={movie.voteAverage} />
+                    </div>
                   </div>
                   <h1 className={IndMovieStyle["cast-title-1"]}>
                     Cast Members:

@@ -118,7 +118,10 @@ p.css-button-text-2 {
   -o-transform: skew(-42deg) translate(-20px, -0px);
   transform: skew(-42deg) translate(-20px, -0px);
 }
-
+.popcorn-wrapper {
+  position: absolute;
+  left:2.4vw
+}
 @keyframes buttonx-in {
   from {
     transform: skew(-42deg) translate(-300px, 0);
