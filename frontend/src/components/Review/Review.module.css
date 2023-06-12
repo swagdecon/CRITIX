@@ -10,6 +10,7 @@
     max-width: 97.5%;
     
 }
+
 .movie-vote-average {
     transform: translateX(22vw);
     color: white;
@@ -17,6 +18,7 @@
 
 .input-wrapper {
     transform: translateY(2vh);
+    
 }
 
 .ind-review-section-title {
@@ -25,22 +27,38 @@
 }
 
 .user-review-wrapper {
-    transform: translateY(-14vh);
+    transform: translateY(-20vh) ;
+    display: flex;
+    align-items: center;
+  
 }
 
 .post-review-btn {
-padding-top: 1vh;
-padding-bottom: 1vh;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
 }
 
-.rating-wrapper {
-    border-radius: 30px;
-    padding: 5px;
-    transform: translateY(-6.5vh);
+.textField-wrapper {
+    margin-left: 15px;
+    flex: 1;
+}
 
+.input-slider {
+    margin-left: 1%;
 }
-.name-wrapper {
-  text-align: left;
-  padding-left: 0.5vw;
-  padding-bottom:  1vh;
-}
+
+.user-info-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 10px;
+    margin-top: 3%
+  }
+  
+  .profile-img {
+    width: 60px;
+  }
+  
+  .name-wrapper {
+    text-align: center;
+  }

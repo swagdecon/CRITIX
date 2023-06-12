@@ -1,7 +1,7 @@
 import React from "react"
 import "./PercentageCircle.css"
 import PropTypes from "prop-types"
-import Popcorn from "../../Other/btn/MovieButton/popcornLogo"
+import Popcorn from "../../../Other/btn/MovieButton/popcornLogo"
 export default function PercentageRatingCircle({ percentageRating }) {
     PercentageRatingCircle.propTypes = {
         percentageRating: PropTypes.number
