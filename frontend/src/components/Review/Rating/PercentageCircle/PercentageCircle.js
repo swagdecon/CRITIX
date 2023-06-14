@@ -10,8 +10,6 @@ export default function PercentageRatingCircle({ percentageRating }) {
         return (
             <div className="flex-wrapper">
                 <div className="single-chart">
-
-
                     <svg viewBox="0 0 36 36" className="circular-chart red">
                         <path className="circle-bg"
                             d="M18 2.0845

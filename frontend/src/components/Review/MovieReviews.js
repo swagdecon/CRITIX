@@ -16,7 +16,6 @@ export default function UserMovieReviews({ voteAverage }) {
     const percentageAverage = voteAverage * 10
     const token = CookieManager.decryptCookie("accessToken");
     const firstName = jwt_decode(token).firstName;
-
     const [review, setReview] = useState("");
     const filter = new Filter();
     const hasReviewProfanity = filter.isProfane(review);
@@ -24,14 +23,12 @@ export default function UserMovieReviews({ voteAverage }) {
         <div className={IndReview["ind-review-wrapper"]}>
             <h2 className={IndReview["ind-review-section-title"]}>Reviews</h2>
 
-            < div className={IndReview["review-content-wrapper"]}>
+            <div className={IndReview["review-content-wrapper"]}>
                 <div className={IndReview["movie-vote-average"]}>
                     <PercentageRatingCircle percentageRating={percentageAverage} />
                 </div>
                 <div className={IndReview["input-wrapper"]}>
-
                     <div className={IndReview["user-review-wrapper"]}>
-
                         <div className={IndReview["user-info-wrapper"]}>
 
                             <img className={IndReview["profile-img"]} src="https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745" />
@@ -99,12 +96,10 @@ export default function UserMovieReviews({ voteAverage }) {
                                     POST REVIEW
                                 </Button>
                             </div>
-
                         </div>
                     </div>
-                    <div className={IndReview["section-line"]} />
-
                 </div>
+                <div className={IndReview["section-line"]} />
             </div>
         </div>
     );
