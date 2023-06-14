@@ -8,10 +8,12 @@ import com.popflix.model.Review;
 
 @Service
 public class ReviewService {
-    public Optional<Review> createNewMovieReview(Integer movieId, String reviewContent) {
+    public Optional<Review> createNewMovieReview(Integer movieId, Integer userId, Integer reviewRating,
+            String reviewContent) {
         Review review = new Review();
-
         review.setMovieId(movieId);
+        review.setUserId(userId);
+        review.setReviewRating(reviewRating);
         review.setReviewContent(reviewContent);
         return Optional.of(review);
     }

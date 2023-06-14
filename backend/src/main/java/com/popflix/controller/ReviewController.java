@@ -9,14 +9,17 @@ import com.popflix.model.Review;
 import com.popflix.service.ReviewService;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@RequestMapping("/reviews")
+@RequestMapping("/create/review")
 public class ReviewController {
     ReviewService reviewService = new ReviewService();
 
-    @PostMapping("/create/movie/{movieId}")
+    @PostMapping("/{movieId}/user/{userId}")
 
-    public ResponseEntity<Optional<Review>> createMovieReview(@PathVariable Integer movieId, String reviewContent) {
-        return new ResponseEntity<Optional<Review>>(reviewService.createNewMovieReview(movieId, reviewContent),
+    public ResponseEntity<Optional<Review>> createMovieReview(@PathVariable Integer movieId, Integer userId,
+            Integer reviewRating,
+            String reviewContent) {
+        return new ResponseEntity<Optional<Review>>(
+                reviewService.createNewMovieReview(movieId, userId, reviewRating, reviewContent),
                 HttpStatus.OK);
     }
 }

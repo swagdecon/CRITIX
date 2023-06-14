@@ -16,7 +16,8 @@ public class Review {
     @Id
     private ObjectId mongoId;
     private Integer movieId;
-    private String userName;
+    private Integer userId;
+    private Integer reviewRating;
     private String reviewContent;
     private Float kernelRating;
     private Boolean isAccepted;
