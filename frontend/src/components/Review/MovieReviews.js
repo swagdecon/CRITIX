@@ -44,6 +44,7 @@ export default function UserMovieReviews({ voteAverage }) {
                                 <InputSlider />
                             </div>
                             <TextField
+                                size="small"
                                 id="outlined-multiline-flexible"
                                 label={hasReviewProfanity && review.trim().length > 0 ? "Profanity is not allowed." : "Post A Review"}
                                 multiline
@@ -53,12 +54,12 @@ export default function UserMovieReviews({ voteAverage }) {
                                 InputLabelProps={{
                                     style: {
                                         color: 'white',
+
                                     },
                                 }}
                                 inputProps={{
                                     sx: {
                                         color: 'white',
-
                                     },
                                 }}
                                 error={hasReviewProfanity && review.trim().length > 0}
@@ -68,7 +69,8 @@ export default function UserMovieReviews({ voteAverage }) {
                                         borderRadius: "30px",
                                     },
                                     input: {
-                                        color: "white !important"
+                                        color: "white !important",
+
                                     },
                                     '& .MuiOutlinedInput-root': {
                                         '& fieldset': {
@@ -89,7 +91,7 @@ export default function UserMovieReviews({ voteAverage }) {
                                 <Button
                                     variant="contained"
                                     endIcon={<MovieCreationOutlinedIcon />}
-                                    size="large"
+                                    size="medium"
                                     sx={{
                                         borderRadius: "30px",
                                     }}
@@ -97,9 +99,11 @@ export default function UserMovieReviews({ voteAverage }) {
                                     POST REVIEW
                                 </Button>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
+                    <div className={IndReview["section-line"]} />
+
                 </div>
             </div>
         </div>

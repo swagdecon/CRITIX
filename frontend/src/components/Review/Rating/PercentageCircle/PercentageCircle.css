@@ -4,7 +4,7 @@
 }
 .popcorn-wrapper {
   overflow: visible;
- transform: translateX(3.1vw) translateY(-14vh);
+ transform: translateX(3.1vw) translateY(-12vh);
 
 }
 .single-chart {
@@ -15,7 +15,7 @@
 .circular-chart {
   display: block;
   margin: 10px auto;
-  max-width: 80%;
+  max-width: 60%;
   max-height: 250px;
 }
 
@@ -38,12 +38,12 @@
   }
 }
 
-.circular-chart.orange .circle {
-  stroke: #ff9f00;
+.circular-chart.red .circle {
+  stroke: #ff0000;
 }
 
-.circular-chart.green .circle {
-  stroke: #4CC790;
+.circular-chart.yellow .circle {
+  stroke: #ff9f00;
 }
 
 .circular-chart.blue .circle {
