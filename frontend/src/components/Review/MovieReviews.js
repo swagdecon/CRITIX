@@ -22,9 +22,6 @@ export default function UserMovieReviews({ voteAverage }) {
     const hasReviewProfanity = filter.isProfane(review);
     return (
         <div className={IndReview["ind-review-wrapper"]}>
-
-            <h2 className={IndReview["ind-review-section-title"]}>Reviews</h2>
-
             <div className={IndReview["input-wrapper"]}>
                 <div className={IndReview["test-wrapper"]}>
                     <PercentageRatingCircle percentageRating={percentageAverage} />

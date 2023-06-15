@@ -1,9 +1,9 @@
 .comment-section {
-    padding: 50px 0px;
+    padding: 10px 0px;
   }
   
   .comment-section .media-review {
-    padding: 20px 0px;
+    padding: 15px 0px;
     border-bottom: 1px solid #ccc;
   }
   
@@ -47,7 +47,7 @@
   }
   
   .comment-section .media .M-flex .title span {
-    font-size: 20px;
+    font-size: 16px;
     display: inline;
     align-items: flex-start;
     font-weight: 700;
