@@ -8,8 +8,8 @@ import PropTypes from "prop-types";
 import CookieManager from "../../security/CookieManager";
 import jwt_decode from "jwt-decode";
 import PercentageRatingCircle from "./Rating/PercentageCircle/PercentageCircle";
-import InputSlider from "./Rating/Slider";
-import OtherReviews from "./OtherReviews";
+import InputSlider from "./Rating/Slider/Slider.js";
+import OtherReviews from "./Rating/ReviewList/OtherReviews";
 export default function UserMovieReviews({ voteAverage }) {
     UserMovieReviews.propTypes = {
         voteAverage: PropTypes.number,

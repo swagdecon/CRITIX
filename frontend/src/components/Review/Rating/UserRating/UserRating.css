@@ -13,8 +13,8 @@
 }
 .user-rating-bad, .user-rating-mid, .user-rating-good, .user-rating-excellent {
     padding: 5px;
-    padding-left: 2vw;
-    padding-right: 2vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
     border-radius: 5px;
     border-width: 2px;
 }

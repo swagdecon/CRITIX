@@ -1,6 +1,6 @@
 import React from "react"
 import "./OtherReviews.css"
-import UserRating from "./Rating/UserRating/UserRating"
+import UserRating from "../UserRating/UserRating"
 export default function OtherReviews() {
     return (
         <div className="comment-section">

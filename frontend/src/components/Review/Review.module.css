@@ -16,7 +16,8 @@
 
 .total-rating-wrapper {
     position: absolute;
-   right: 2.5%;
+    right: 2.5%;
+    top:1%
 }
 
 .ind-review-section-title {

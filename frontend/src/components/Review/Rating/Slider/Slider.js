@@ -33,7 +33,7 @@ export default function InputSlider() {
     return (
         <Box sx={{ width: 250 }}>
             <Typography id="input-slider" gutterBottom>
-                Kernel Rating
+                {/* Kernel Rating */}
             </Typography>
             <Grid container spacing={1} alignItems="left">
                 {/* <Grid item>
