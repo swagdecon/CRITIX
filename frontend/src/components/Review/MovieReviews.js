@@ -23,7 +23,7 @@ export default function UserMovieReviews({ voteAverage }) {
     return (
         <div className={IndReview["ind-review-wrapper"]}>
             <div className={IndReview["input-wrapper"]}>
-                <div className={IndReview["test-wrapper"]}>
+                <div className={IndReview["total-rating-wrapper"]}>
                     <PercentageRatingCircle percentageRating={percentageAverage} />
                 </div>
                 <div className={IndReview["user-review-wrapper"]}>
@@ -60,9 +60,9 @@ export default function UserMovieReviews({ voteAverage }) {
                             }}
                             error={hasReviewProfanity && review.trim().length > 0}
                             sx={{
-                                borderRadius: "30px",
+                                borderRadius: "15px",
                                 fieldSet: {
-                                    borderRadius: "30px",
+                                    borderRadius: "15px",
                                 },
                                 input: {
                                     color: "white !important",
@@ -89,10 +89,10 @@ export default function UserMovieReviews({ voteAverage }) {
                                 endIcon={<MovieCreationOutlinedIcon />}
                                 size="medium"
                                 sx={{
-                                    borderRadius: "30px",
+                                    borderRadius: "15px",
                                 }}
                             >
-                                POST REVIEW
+                                SUBMIT
                             </Button>
                         </div>
                     </div>
