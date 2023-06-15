@@ -8,26 +8,24 @@ export default function PercentageRatingCircle({ percentageRating }) {
     }
     if (percentageRating > 0 && percentageRating <= 30) {
         return (
-            <div className="flex-wrapper">
-                <div className="single-chart">
-                    <svg viewBox="0 0 36 36" className="circular-chart red">
-                        <path className="circle-bg"
-                            d="M18 2.0845
+            <div className="single-chart">
+                <svg viewBox="0 0 36 36" className="circular-chart red">
+                    <path className="circle-bg"
+                        d="M18 2.0845
                         a 15.9155 15.9155 0 0 1 0 31.831
                         a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                        <path className="circle"
-                            strokeDasharray={`${percentageRating}, 100`}
-                            d="M18 2.0845
+                    />
+                    <path className="circle"
+                        strokeDasharray={`${percentageRating}, 100`}
+                        d="M18 2.0845
           a 15.9155 15.9155 0 0 1 0 31.831
           a 15.9155 15.9155 0 0 1 0 -31.831"
-                        />
-                        <text x="18" y="26.35" className="percentage">{percentageRating}%</text>
-                    </svg>
-                    <div className="popcorn-wrapper">
-                        <Popcorn propsCss="rating" />
-                    </div>
-                </div >
+                    />
+                    <text x="18" y="26.35" className="percentage">{percentageRating}%</text>
+                </svg>
+                <div className="popcorn-wrapper">
+                    <Popcorn propsCss="rating" />
+                </div>
             </div >
         )
     } else if (percentageRating > 30 && percentageRating < 60) {

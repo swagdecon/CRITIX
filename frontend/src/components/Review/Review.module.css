@@ -11,28 +11,22 @@
     
 }
 
-.movie-vote-average {
-    transform: translateX(22vw) translateY(-4vh);
-    color: white;
+
+
+
+.test-wrapper {
+    position: absolute;
+   right: 7%;
 }
 
-.input-wrapper {
-    transform: translateY(2vh);
-    
-}
-.review-content-wrapper {
-    transform: translateY(2vh);
-}
 .ind-review-section-title {
     color: #0096ff !important;
     text-align: center;
 }
 
 .user-review-wrapper {
-    transform: translateY(-17vh) ;
     display: flex;
     align-items: center;
-  
 }
 
 .post-review-btn {

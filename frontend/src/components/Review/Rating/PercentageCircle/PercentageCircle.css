@@ -1,11 +1,7 @@
-.flex-wrapper {
-  display: flex;
-  flex-flow: row nowrap;
-}
+
 .popcorn-wrapper {
   overflow: visible;
- transform: translateX(3.1vw) translateY(-12vh);
-
+ transform: translateX(0.7vw) translateY(-12vh);
 }
 .single-chart {
   width: 33%;
@@ -13,12 +9,13 @@
 }
 
 .circular-chart {
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px; /* Adjust the width as needed */
+  height: 150px; /* Adjust the height as needed */
   margin: 10px auto;
-  max-width: 60%;
-  max-height: 250px;
 }
-
 .circle-bg {
   fill: none;
   stroke: #eee;
@@ -26,7 +23,7 @@
 }
 
 .circle {
-  fill: none;
+ fill: none;
   stroke-width: 2.8;
   stroke-linecap: round;
   animation: progress 1s ease-out forwards;
@@ -55,4 +52,5 @@
   font-family: sans-serif;
   font-size: 0.3em;
   text-anchor: middle;
+  
 }
