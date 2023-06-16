@@ -7,17 +7,25 @@ import MovieCreationOutlinedIcon from '@mui/icons-material/MovieCreationOutlined
 import PropTypes from "prop-types";
 // import CookieManager from "../../security/CookieManager";
 // import jwt_decode from "jwt-decode";
+import fetchData from "../../security/FetchApiData"
 import PercentageRatingCircle from "./Rating/PercentageCircle/PercentageCircle";
 import InputSlider from "./Rating/Slider/Slider.js";
 import OtherReviews from "./Rating/ReviewList/OtherReviews";
-export default function UserMovieReviews({ voteAverage }) {
+export default function UserMovieReviews({ voteAverage, movieId }) {
     UserMovieReviews.propTypes = {
         voteAverage: PropTypes.number,
+        movieId: PropTypes.number,
+
     }
+
+    const { data: reviewTest, } = fetchData(`/review/get/movie/${movieId}`);
+
+    console.log(reviewTest);
     const percentageAverage = voteAverage * 10
+    const [review, setReview] = useState("");
+
     // const token = CookieManager.decryptCookie("accessToken");
     // const firstName = jwt_decode(token).firstName;
-    const [review, setReview] = useState("");
     const filter = new Filter();
     const hasReviewProfanity = filter.isProfane(review);
     return (

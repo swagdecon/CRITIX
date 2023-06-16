@@ -99,7 +99,7 @@ export default function IndMovie() {
                         movieStatus={movie.movieStatus}
                         releaseDate={movie.releaseDate}
                       />
-                      <UserMovieReviews voteAverage={movie.voteAverage} />
+                      <UserMovieReviews voteAverage={movie.voteAverage} movieId={movie.id} />
                     </div>
                   </div>
                   <h1 className={IndMovieStyle["cast-title-1"]}>
