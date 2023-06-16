@@ -5,8 +5,8 @@ import Filter from "bad-words";
 import Button from "@mui/material/Button"
 import MovieCreationOutlinedIcon from '@mui/icons-material/MovieCreationOutlined';
 import PropTypes from "prop-types";
-import CookieManager from "../../security/CookieManager";
-import jwt_decode from "jwt-decode";
+// import CookieManager from "../../security/CookieManager";
+// import jwt_decode from "jwt-decode";
 import PercentageRatingCircle from "./Rating/PercentageCircle/PercentageCircle";
 import InputSlider from "./Rating/Slider/Slider.js";
 import OtherReviews from "./Rating/ReviewList/OtherReviews";
@@ -15,8 +15,8 @@ export default function UserMovieReviews({ voteAverage }) {
         voteAverage: PropTypes.number,
     }
     const percentageAverage = voteAverage * 10
-    const token = CookieManager.decryptCookie("accessToken");
-    const firstName = jwt_decode(token).firstName;
+    // const token = CookieManager.decryptCookie("accessToken");
+    // const firstName = jwt_decode(token).firstName;
     const [review, setReview] = useState("");
     const filter = new Filter();
     const hasReviewProfanity = filter.isProfane(review);
@@ -30,10 +30,10 @@ export default function UserMovieReviews({ voteAverage }) {
 
                     <div className={IndReview["user-info-wrapper"]}>
 
-                        <img className={IndReview["profile-img"]} src="https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745" />
+                        {/* <img className={IndReview["profile-img"]} src="https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745" />
                         <div className={IndReview["name-wrapper"]}>
-                            {firstName}
-                        </div>
+                            {firstName} 
+                    </div>  */}
                     </div>
                     <div className={IndReview["textField-wrapper"]}>
                         <div className={IndReview["input-slider"]}>
@@ -100,7 +100,7 @@ export default function UserMovieReviews({ voteAverage }) {
             </div>
             {/* <div className={IndReview["section-line"]} /> */}
             <OtherReviews />
-        </div>
+        </div >
     );
 }
 
