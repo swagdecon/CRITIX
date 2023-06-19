@@ -1,5 +1,7 @@
 package com.popflix.model;
 
+import java.net.http.HttpResponse;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,7 +20,7 @@ public class Review {
     private Integer movieId;
     private Integer userId;
     private Integer reviewRating;
-    private String reviewContent;
+    private HttpResponse<String> reviewContent;
     private Float kernelRating;
     private Boolean isAccepted;
     private Boolean isRejected;
