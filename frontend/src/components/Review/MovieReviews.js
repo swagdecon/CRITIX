@@ -17,9 +17,10 @@ export default function UserMovieReviews({ voteAverage, movieId }) {
         movieId: PropTypes.number,
 
     }
+    console.log(voteAverage);
     const { data: reviewTest, } = useFetchData(`http://localhost:8080/review/${movieId}`);
     console.log(reviewTest)
-    const percentageAverage = voteAverage * 10
+    const percentageAverage = voteAverage.toFixed(2) * 10
     const [review, setReview] = useState("");
 
     // const token = CookieManager.decryptCookie("accessToken");
