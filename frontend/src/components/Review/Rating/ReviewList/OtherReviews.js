@@ -7,7 +7,6 @@ export default function OtherReviews({ reviews }) {
     OtherReviews.propTypes = {
         reviews: PropTypes.obj
     };
-    console.log(reviews)
     return (
         <div className="comment-section">
             <div className="container">
@@ -19,7 +18,7 @@ export default function OtherReviews({ reviews }) {
                             < div className="user-review" key={review.author} >
 
                                 <div className="media media-review">
-                                    <div className="media-user"><img src={review.avatar.slice(1)} alt="" /> </div>
+                                    <div className="media-user"><img src={review.avatar ? review.avatar.slice(1) : "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"} alt="" /> </div>
                                     <div className="media-body">
                                         <div className="M-flex">
                                             <h4 className="title"><span> {review.author} </span>{review.createdDate}</h4>

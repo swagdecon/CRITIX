@@ -88,9 +88,7 @@ function EmbeddedMovieTrailer({ video }) {
   // }
 }
 function MovieReviews({ reviews }) {
-  MovieReviews.propTypes = {
-    reviews: PropTypes.arrayOf(PropTypes.string),
-  };
+
   if (!reviews) {
     return (
       <div className={IndMovieStyle["no-reviews"]}>No Reviews Available</div>
@@ -125,7 +123,7 @@ function MovieReviews({ reviews }) {
           key={index}
           options={{ ...TEXT_COLLAPSE_OPTIONS, maxHeight }}
         >
-          {/* <div className="review__score">{review.rating}%</div> */}
+          <div className="review__score">{review.rating}%</div>
           <p className={IndMovieStyle.review__description}>{review}</p>
           <br />
         </ReactTextCollapse>
@@ -133,6 +131,9 @@ function MovieReviews({ reviews }) {
     </div>
   );
 }
+MovieReviews.propTypes = {
+  reviews: PropTypes.arrayOf(PropTypes.string),
+};
 
 function MovieDetails({
   runtime,

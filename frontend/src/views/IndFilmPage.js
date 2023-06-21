@@ -10,7 +10,6 @@ import {
   MovieAverage,
   GetYearFromDate,
   EmbeddedMovieTrailer,
-  MovieReviews,
   MovieDetails,
 } from "../components/IndMovie/MovieComponents";
 import RecommendedCarousel from "../components/Carousel/RecommendedCarousel/RecommendedCarousel";
@@ -22,7 +21,6 @@ export default function IndMovie() {
   const { id } = useParams();
   const { data: movie, dataLoaded: dataLoaded } = fetchData(id);
   const [recommendedMoviesLoaded, setRecommendedMoviesLoaded] = useState(false);
-
   const handleRecommendedMoviesLoaded = () => {
     setRecommendedMoviesLoaded(true);
   };
@@ -75,7 +73,7 @@ export default function IndMovie() {
               </div>
               <div className={IndMovieStyle.ind_movie_review}>
                 <h3 className={IndMovieStyle.ind_review__title}>Reviews</h3>
-                <MovieReviews reviews={movie.reviews} />
+                <UserMovieReviews movieId={movie.id} placement="header" />
               </div>
             </div>
             <section id="slide-1" className={IndMovieStyle.homeSlide}>
@@ -99,7 +97,7 @@ export default function IndMovie() {
                         movieStatus={movie.movieStatus}
                         releaseDate={movie.releaseDate}
                       />
-                      <UserMovieReviews voteAverage={movie.voteAverage} movieId={movie.id} />
+                      <UserMovieReviews voteAverage={movie.voteAverage} movieId={movie.id} placement="userRatingSection" />
                     </div>
                   </div>
                   <h1 className={IndMovieStyle["cast-title-1"]}>
