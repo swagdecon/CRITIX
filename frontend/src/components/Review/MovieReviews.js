@@ -17,11 +17,11 @@ export default function UserMovieReviews({ voteAverage, movieId }) {
         movieId: PropTypes.number,
 
     }
-    console.log(voteAverage);
-    const { data: reviewTest, } = useFetchData(`http://localhost:8080/review/${movieId}`);
-    console.log(reviewTest)
+    const { data: userReviews, dataLoaded } = useFetchData(`http://localhost:8080/review/${movieId}`);
     const percentageAverage = voteAverage.toFixed(2) * 10
+    console.log(percentageAverage);
     const [review, setReview] = useState("");
+
 
     // const token = CookieManager.decryptCookie("accessToken");
     // const firstName = jwt_decode(token).firstName;
@@ -106,7 +106,7 @@ export default function UserMovieReviews({ voteAverage, movieId }) {
                 </div>
             </div>
             {/* <div className={IndReview["section-line"]} /> */}
-            <OtherReviews />
+            {dataLoaded && <OtherReviews reviews={userReviews} />}
         </div >
     );
 }
