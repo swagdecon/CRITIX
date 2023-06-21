@@ -1,55 +1,14 @@
 import React from "react";
 import "./UserProfile.css";
-import Cookies from "js-cookie";
-import isExpired from "../../../security/IsTokenExpired";
+import Logout from "../../../security/Logout";
 import { useNavigate } from "react-router-dom";
-import CookieManager from "../../../security/CookieManager";
+
 const UserProfile = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    async function logout() {
-      try {
-        let token = CookieManager.decryptCookie("accessToken");
-
-        const response = await fetch("http://localhost:8080/v1/auth/logout", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.ok) {
-          Cookies.remove("accessToken");
-          Cookies.remove("refreshToken");
-
-          navigate("/login");
-        }
-      } catch (error) {
-        // Token expired, get a new token and retry the request
-        await isExpired();
-        try {
-          let token = CookieManager.decryptCookie("accessToken");
-          const response = await fetch("http://localhost:8080/v1/auth/logout", {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          if (response.ok) {
-            Cookies.remove("accessToken");
-            Cookies.remove("refreshToken");
-            navigate("/login");
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-
-    // Call the logout function when the user clicks the button
-    logout();
+    await Logout(navigate);
   };
 
   return (
