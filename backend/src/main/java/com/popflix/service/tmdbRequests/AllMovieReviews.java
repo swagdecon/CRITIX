@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.popflix.model.Review;
@@ -37,42 +38,35 @@ public class AllMovieReviews {
         List<Review> reviews = parseMovieReviews(response.body());
 
         reviewCache.put(movieId, reviews);
-
-        System.out.println(response.body());
-
         return reviews;
     }
 
     private List<Review> parseMovieReviews(String responseBody) throws IOException {
         List<Review> reviews = new ArrayList<>();
-
         JsonNode jsonNode = objectMapper.readTree(responseBody);
-        if (jsonNode.has("results") && jsonNode.get("results").isArray()) {
-            JsonNode resultsNode = jsonNode.get("results");
+        JsonNode resultsNode = jsonNode.path("results");
+        if (resultsNode.isArray()) {
             for (JsonNode resultNode : resultsNode) {
-                Review review = new Review();
-                if (resultNode.has("author")) {
-                    review.setAuthor(resultNode.get("author").asText());
+                String content = resultNode.path("content").asText();
+                if (!content.contains("http") && !content.contains("https")) {
+                    Review review = new Review();
+                    review.setAuthor(resultNode.path("author").asText());
+                    JsonNode authorDetailsNode = resultNode.path("author_details");
+                    if (authorDetailsNode.has("avatar_path")) {
+                        review.setAvatar(authorDetailsNode.path("avatar_path").asText());
+                    }
+                    review.setContent(content);
+                    if (authorDetailsNode.has("rating")) {
+                        review.setRating(authorDetailsNode.path("rating").asText());
+                    }
+                    String timestamp = resultNode.path("created_at").asText();
+                    LocalDateTime dateTime = LocalDateTime.parse(timestamp, DateTimeFormatter.ISO_DATE_TIME);
+                    review.setCreatedDate(dateTime.toLocalDate().toString());
+                    review.setUpdatedDate(resultNode.path("updated_at").asText());
+                    reviews.add(review);
                 }
-                if (resultNode.has("author_details") && resultNode.get("author_details").has("avatar_path")) {
-                    review.setAvatar(resultNode.get("author_details").get("avatar_path").asText());
-                }
-                if (resultNode.has("content")) {
-                    review.setContent(resultNode.get("content").asText());
-                }
-                if (resultNode.has("author_details") && resultNode.get("author_details").has("rating")) {
-                    review.setRating(resultNode.get("author_details").get("rating").asText());
-                }
-                if (resultNode.has("created_at")) {
-                    review.setCreatedDate(resultNode.get("created_at").asText());
-                }
-                if (resultNode.has("updated_at")) {
-                    review.setUpdatedDate(resultNode.get("updated_at").asText());
-                }
-                reviews.add(review);
             }
         }
-
         return reviews;
     }
 }
