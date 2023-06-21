@@ -7,20 +7,18 @@ import MovieCreationOutlinedIcon from '@mui/icons-material/MovieCreationOutlined
 import PropTypes from "prop-types";
 // import CookieManager from "../../security/CookieManager";
 // import jwt_decode from "jwt-decode";
-import fetchData from "../../security/FetchApiData"
 import PercentageRatingCircle from "./Rating/PercentageCircle/PercentageCircle";
 import InputSlider from "./Rating/Slider/Slider.js";
 import OtherReviews from "./Rating/ReviewList/OtherReviews";
+import useFetchData from "../../security/FetchApiData";
 export default function UserMovieReviews({ voteAverage, movieId }) {
     UserMovieReviews.propTypes = {
         voteAverage: PropTypes.number,
         movieId: PropTypes.number,
 
     }
-
-    const { data: reviewTest, } = fetchData(`/review/get/movie/${movieId}`);
-
-    console.log(reviewTest);
+    const { data: reviewTest, } = useFetchData(`http://localhost:8080/review/${movieId}`);
+    console.log(reviewTest)
     const percentageAverage = voteAverage * 10
     const [review, setReview] = useState("");
 

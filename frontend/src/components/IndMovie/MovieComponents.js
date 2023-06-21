@@ -91,7 +91,7 @@ function MovieReviews({ reviews }) {
   MovieReviews.propTypes = {
     reviews: PropTypes.arrayOf(PropTypes.string),
   };
-  if (!reviews.length) {
+  if (!reviews) {
     return (
       <div className={IndMovieStyle["no-reviews"]}>No Reviews Available</div>
     );
