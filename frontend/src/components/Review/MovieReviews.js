@@ -18,7 +18,7 @@ export default function UserMovieReviews({ voteAverage, movieId }) {
 
     }
     const { data: userReviews, dataLoaded } = useFetchData(`http://localhost:8080/review/${movieId}`);
-    const percentageAverage = voteAverage.toFixed(2) * 10
+    const percentageAverage = voteAverage.toFixed(1) * 10
     console.log(percentageAverage);
     const [review, setReview] = useState("");
 
