@@ -31,9 +31,8 @@ function MovieRuntime({ runtime }) {
 
 
 function GetYearFromDate(dateString) {
-  const year = dateString.split("-")[0];
-
-  dateString ? year : null
+  const year = dateString ? dateString.split("-")[0] : null;
+  return year;
 }
 
 

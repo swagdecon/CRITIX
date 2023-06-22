@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useCallback } from "react";
+import { React, useState, useCallback } from "react";
 import "./Search.css";
 import axios from "axios";
 import PropTypes from "prop-types";
@@ -14,6 +14,11 @@ const Search = (props) => {
 
   const searchMovies = useCallback(
     debounce(async (searchQuery) => {
+      if (!searchQuery) {
+        setDetailedMovies([]);
+        return;
+      }
+
       const response = await axios.get(
         `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${searchQuery}&language=${language}&page=${page}&include_adult=${false}`
       );
@@ -43,11 +48,6 @@ const Search = (props) => {
     setQuery(value);
     searchMovies(value);
   };
-  useEffect(() => {
-    if (!query) {
-      setDetailedMovies([]);
-    }
-  }, [query]);
 
   return (
     <form onSubmit={props.onSubmit} id="search" className="Search">
@@ -58,7 +58,7 @@ const Search = (props) => {
         placeholder="Search for a title..."
       />
       <ul className="search-results-list">
-        {detailedMovies.slice(0, 5).map((movie) => {
+        {detailedMovies.map((movie) => {
           if (movie.poster_path && movie.vote_average) {
             return (
               <Link to={`/movies/movie/${movie.id}`} key={movie.id}>
@@ -70,7 +70,6 @@ const Search = (props) => {
                     <div className="result-title">
                       {movie.title} ({GetYearFromDate(movie.release_date)})
                     </div>
-
                     <div className="result-actors">
                       {movie.actors.slice(0, 3).map((actor, index) => (
                         <span key={index}>
