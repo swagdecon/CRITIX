@@ -53,7 +53,13 @@ public class AllMovieReviews {
                     review.setAuthor(resultNode.path("author").asText());
                     JsonNode authorDetailsNode = resultNode.path("author_details");
                     if (authorDetailsNode.has("avatar_path")) {
-                        review.setAvatar(authorDetailsNode.path("avatar_path").asText());
+                        String avatarPath = authorDetailsNode.path("avatar_path").asText();
+                        if (avatarPath.contains("secure.gravatar.com")) {
+                            String avatarPathWithoutSlash = avatarPath.substring(1);
+                            review.setAvatar(avatarPathWithoutSlash);
+                        } else {
+                            review.setAvatar(avatarPath);
+                        }
                     }
                     review.setContent(content);
                     if (authorDetailsNode.has("rating")) {
