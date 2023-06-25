@@ -3,10 +3,23 @@ import "./OtherReviews.css"
 import UserRating from "../UserRating/UserRating"
 
 import PropTypes from "prop-types"
+
+function ImageLogic(avatar) {
+
+    if (avatar !== "null") {
+        console.log(avatar)
+        if (avatar.includes("secure.gravatar.com")) {
+            return avatar;
+        } else {
+            return `https://image.tmdb.org/t/p/w200/${avatar}`;
+        }
+    } else {
+        return "https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg";
+    }
+}
+
 export default function OtherReviews({ reviews }) {
-    OtherReviews.propTypes = {
-        reviews: PropTypes.obj
-    };
+
     return (
         <div className="comment-section">
             <div className="container">
@@ -18,9 +31,7 @@ export default function OtherReviews({ reviews }) {
                             < div className="user-review" key={review.author} >
 
                                 <div className="media media-review">
-                                    {console.log(review.avatar)}
-                                    <div className="media-user"><img src={review.avatar.includes("secure.gravatar.com") ? review.avatar : `https://image.tmdb.org/t/p/w200/${review.avatar} `} alt="" /> </div>
-                                    {console.log(`https://image.tmdb.org/t/p/w200/${review.avatar}`)}
+                                    <div className="media-user"><img src={ImageLogic(review.avatar)} className="profile-picture" alt="" /> </div>
                                     <div className="media-body">
                                         <div className="M-flex">
                                             <h4 className="title"><span> {review.author} </span>{review.createdDate}</h4>
@@ -43,3 +54,6 @@ export default function OtherReviews({ reviews }) {
         </div >
     )
 }
+OtherReviews.propTypes = {
+    reviews: PropTypes.obj
+};

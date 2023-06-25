@@ -27,10 +27,14 @@
     height: 77px;
     margin-top:2%
   }
+  .profile-picture {
+    height: 100%;
+ 
+  }
   
   .comment-section .media .media-user img {
     width: 100%;
-    object-fit: contain;
+    object-fit: cover;
   }
   
   .comment-section .media .M-flex {

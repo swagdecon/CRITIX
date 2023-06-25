@@ -8,16 +8,7 @@ import IndMovieStyle from "../../IndMovie/ind_movie.module.css";
 import { Link } from "react-router-dom";
 
 export default function MovieActors({ actors }) {
-  MovieActors.propTypes = {
-    actors: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        id: PropTypes.number.isRequired,
-        profilePath: PropTypes.string,
-      })
-    ),
-    images: PropTypes.arrayOf(PropTypes.string),
-  };
+
   const defaultImage = "url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg) center center no-repeat";
   const actorChunks = chunk(actors, 5);
   return (
@@ -103,3 +94,13 @@ export default function MovieActors({ actors }) {
     </Carousel>
   );
 }
+MovieActors.propTypes = {
+  actors: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
+      profilePath: PropTypes.string,
+    })
+  ),
+  images: PropTypes.arrayOf(PropTypes.string),
+};
