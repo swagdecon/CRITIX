@@ -18,12 +18,16 @@ export default function OtherReviews({ reviews }) {
                             < div className="user-review" key={review.author} >
 
                                 <div className="media media-review">
-                                    <div className="media-user"><img src={review.avatar.slice(1)} alt="" /> </div>
+                                    {console.log(review.avatar)}
+                                    <div className="media-user"><img src={review.avatar.includes("secure.gravatar.com") ? review.avatar : `https://image.tmdb.org/t/p/w200/${review.avatar} `} alt="" /> </div>
+                                    {console.log(`https://image.tmdb.org/t/p/w200/${review.avatar}`)}
                                     <div className="media-body">
                                         <div className="M-flex">
                                             <h4 className="title"><span> {review.author} </span>{review.createdDate}</h4>
                                             <div className="rating-row">
-                                                <UserRating percentage={review.rating * 10 || null} />
+                                                {review.rating ?
+                                                    <UserRating percentage={review.rating * 10} />
+                                                    : null}
                                             </div>
                                         </div>
                                         <div className="description">{review.content} </div>

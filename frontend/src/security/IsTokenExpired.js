@@ -6,9 +6,9 @@ let isRefreshingToken = false;
 
 export default async function isExpired() {
   const navigate = useNavigate();
-
   const token = CookieManager.decryptCookie("accessToken");
   const refreshToken = CookieManager.decryptCookie("refreshToken");
+
   if (token) {
     const decodedToken = jwt_decode(token);
     const currentTime = Date.now() / 1000;
