@@ -1,13 +1,12 @@
-import React from "react"
-import "./OtherReviews.css"
-import UserRating from "../UserRating/UserRating"
-
-import PropTypes from "prop-types"
+import React, { useState } from "react";
+import "./OtherReviews.css";
+import UserRating from "../UserRating/UserRating";
+import Pagination from "@mui/material/Pagination";
+import PropTypes from "prop-types";
 
 function ImageLogic(avatar) {
-
     if (avatar !== "null") {
-        console.log(avatar)
+        console.log(avatar);
         if (avatar.includes("secure.gravatar.com")) {
             return avatar;
         } else {
@@ -19,41 +18,91 @@ function ImageLogic(avatar) {
 }
 
 export default function OtherReviews({ reviews }) {
+    const [currentPage, setCurrentPage] = useState(1);
+    const commentsPerPage = 2;
+    const totalPages = Math.ceil((reviews.length - 3) / commentsPerPage); // Subtract 3 from the length to start from the 3rd index
+
+    let displayReviews = [];
+    if (currentPage === 1) {
+        // If it's the first page, apply the original logic for the first two comments
+        const totalWordCount = reviews
+            .slice(3, 5)
+            .reduce((count, review) => count + review.content.split(" ").length, 0);
+
+        if (totalWordCount > 300) {
+            displayReviews = reviews.slice(3, 4);
+        } else {
+            displayReviews = reviews.slice(3, 5);
+        }
+    } else {
+        // For other pages, check if the word count of the comments (excluding the first two comments) is greater than 300
+        const startIdx = (currentPage - 1) * commentsPerPage + 3;
+        const endIdx = startIdx + commentsPerPage;
+
+        const pageReviews = reviews.slice(startIdx, endIdx);
+        const pageWordCount = pageReviews.reduce(
+            (count, review) => count + review.content.split(" ").length,
+            0
+        );
+
+        if (pageWordCount > 300) {
+            displayReviews = pageReviews.slice(0, 1);
+        } else {
+            displayReviews = pageReviews;
+        }
+    }
 
     return (
         <div className="comment-section">
             <div className="container">
                 <div className="review">
-                    {/* <h2 className="R-title">Reviews</h2> */}
                     <div className="comment-section">
-                        {reviews.slice(3).map((review) => (
-
-                            < div className="user-review" key={review.author} >
-
+                        {displayReviews.map((review) => (
+                            <div className="user-review" key={review.author}>
                                 <div className="media media-review">
-                                    <div className="media-user"><img src={ImageLogic(review.avatar)} className="profile-picture" alt="" /> </div>
+                                    <div className="media-user">
+                                        <img
+                                            src={ImageLogic(review.avatar)}
+                                            className="profile-picture"
+                                            alt=""
+                                        />
+                                    </div>
                                     <div className="media-body">
                                         <div className="M-flex">
-                                            <h4 className="title"><span> {review.author} </span>{review.createdDate}</h4>
+                                            <h4 className="title">
+                                                <span> {review.author} </span>
+                                                {review.createdDate}
+                                            </h4>
                                             <div className="rating-row">
-                                                {review.rating ?
+                                                {review.rating ? (
                                                     <UserRating percentage={review.rating * 10} />
-                                                    : null}
+                                                ) : null}
                                             </div>
                                         </div>
-                                        <div className="description">{review.content} </div>
+                                        <div className="description">{review.content}</div>
                                     </div>
-
                                 </div>
-
                             </div>
                         ))}
                     </div>
+                    <Pagination
+                        size="large"
+                        color="primary"
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={(event, page) => setCurrentPage(page)}
+                        sx={{
+                            "& .MuiPaginationItem-root": {
+                                color: "#ffffff",
+                            },
+                        }}
+                    />
                 </div>
             </div>
-        </div >
-    )
+        </div>
+    );
 }
+
 OtherReviews.propTypes = {
-    reviews: PropTypes.obj
+    reviews: PropTypes.object,
 };

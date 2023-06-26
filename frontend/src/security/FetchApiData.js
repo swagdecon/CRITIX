@@ -4,6 +4,7 @@ import isExpired from "./IsTokenExpired";
 import { useNavigate } from "react-router-dom";
 import CookieManager from "./CookieManager";
 import jwt_decode from "jwt-decode";
+import Logout from "./Logout";
 export default function useFetchData(endpoint) {
   const [data, setData] = useState({});
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -48,6 +49,7 @@ export default function useFetchData(endpoint) {
           setRequestSent(true);
         } catch (error) {
           console.log(error);
+          await Logout(navigate);
         }
       }
     }

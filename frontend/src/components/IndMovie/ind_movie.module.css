@@ -308,11 +308,11 @@ ind-movie-nav {
 }
 /* Scrolling css */
 .homeSlide {
-  height: 100%;
+  height: 120%;
 }
 
 .bcg {
-  height: inherit;
+  height:100%;
   background-color: #000000;
 }
 
