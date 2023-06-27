@@ -32,6 +32,7 @@ export default function useFetchData(endpoint) {
           setRequestSent(true);
         } catch (error) {
           console.log(error);
+          await Logout(navigate);
         }
       } else {
         // If token is expired, refresh it and fetch data again

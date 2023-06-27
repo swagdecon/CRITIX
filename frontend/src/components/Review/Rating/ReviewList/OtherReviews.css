@@ -62,6 +62,8 @@
     font-size: 14px;
     color: #ffffff;
     margin-bottom: 20px;
+    max-height: 34.83vh;
+    overflow: auto;
   }
   
   .comment-section .media .rating-row {

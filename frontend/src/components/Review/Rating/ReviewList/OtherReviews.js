@@ -20,11 +20,11 @@ function ImageLogic(avatar) {
 export default function OtherReviews({ reviews }) {
     const [currentPage, setCurrentPage] = useState(1);
     const commentsPerPage = 2;
-    const totalPages = Math.ceil((reviews.length - 3) / commentsPerPage); // Subtract 3 from the length to start from the 3rd index
+    const totalPages = Math.ceil((reviews.length - 3) / commentsPerPage);
 
     let displayReviews = [];
+
     if (currentPage === 1) {
-        // If it's the first page, apply the original logic for the first two comments
         const totalWordCount = reviews
             .slice(3, 5)
             .reduce((count, review) => count + review.content.split(" ").length, 0);
@@ -35,7 +35,6 @@ export default function OtherReviews({ reviews }) {
             displayReviews = reviews.slice(3, 5);
         }
     } else {
-        // For other pages, check if the word count of the comments (excluding the first two comments) is greater than 300
         const startIdx = (currentPage - 1) * commentsPerPage + 3;
         const endIdx = startIdx + commentsPerPage;
 
@@ -79,7 +78,7 @@ export default function OtherReviews({ reviews }) {
                                                 ) : null}
                                             </div>
                                         </div>
-                                        <div className="description">{review.content}</div>
+                                        <div className="description" >{review.content}</div>
                                     </div>
                                 </div>
                             </div>
