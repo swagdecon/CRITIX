@@ -34,7 +34,7 @@ export default async function isExpired() {
         });
       } catch (error) {
         console.log(error);
-        Logout(navigate)
+        await Logout(navigate)
 
       } finally {
         isRefreshingToken = false;

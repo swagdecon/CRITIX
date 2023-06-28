@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import "./OtherReviews.css";
 import UserRating from "../UserRating/UserRating";
 import Pagination from "@mui/material/Pagination";
 import PropTypes from "prop-types";
-
+// Moved outside of the component
 function ImageLogic(avatar) {
     if (avatar !== "null") {
-        console.log(avatar);
         if (avatar.includes("secure.gravatar.com")) {
             return avatar;
         } else {
@@ -16,41 +15,38 @@ function ImageLogic(avatar) {
         return "https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg";
     }
 }
-
 export default function OtherReviews({ reviews }) {
     const [currentPage, setCurrentPage] = useState(1);
     const commentsPerPage = 2;
     const totalPages = Math.ceil((reviews.length - 3) / commentsPerPage);
-
-    let displayReviews = [];
-
-    if (currentPage === 1) {
-        const totalWordCount = reviews
-            .slice(3, 5)
-            .reduce((count, review) => count + review.content.split(" ").length, 0);
-
-        if (totalWordCount > 300) {
-            displayReviews = reviews.slice(3, 4);
+    // Use useMemo to avoid unnecessary computations on every render
+    const displayReviews = useMemo(() => {
+        let reviewsToDisplay = [];
+        if (currentPage === 1) {
+            const totalWordCount = reviews
+                .slice(3, 5)
+                .reduce((count, review) => count + review.content.split(" ").length, 0);
+            if (totalWordCount > 300) {
+                reviewsToDisplay = reviews.slice(3, 4);
+            } else {
+                reviewsToDisplay = reviews.slice(3, 5);
+            }
         } else {
-            displayReviews = reviews.slice(3, 5);
+            const startIdx = (currentPage - 1) * commentsPerPage + 3;
+            const endIdx = startIdx + commentsPerPage;
+            const pageReviews = reviews.slice(startIdx, endIdx);
+            const pageWordCount = pageReviews.reduce(
+                (count, review) => count + review.content.split(" ").length,
+                0
+            );
+            if (pageWordCount > 300) {
+                reviewsToDisplay = pageReviews.slice(0, 1);
+            } else {
+                reviewsToDisplay = pageReviews;
+            }
         }
-    } else {
-        const startIdx = (currentPage - 1) * commentsPerPage + 3;
-        const endIdx = startIdx + commentsPerPage;
-
-        const pageReviews = reviews.slice(startIdx, endIdx);
-        const pageWordCount = pageReviews.reduce(
-            (count, review) => count + review.content.split(" ").length,
-            0
-        );
-
-        if (pageWordCount > 300) {
-            displayReviews = pageReviews.slice(0, 1);
-        } else {
-            displayReviews = pageReviews;
-        }
-    }
-
+        return reviewsToDisplay;
+    }, [currentPage, reviews]);
     return (
         <div className="comment-section">
             <div className="container">
@@ -101,7 +97,6 @@ export default function OtherReviews({ reviews }) {
         </div>
     );
 }
-
 OtherReviews.propTypes = {
-    reviews: PropTypes.object,
+    reviews: PropTypes.array,
 };
