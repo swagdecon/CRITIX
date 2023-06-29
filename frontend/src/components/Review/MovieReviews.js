@@ -25,30 +25,35 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
     const { data: userReviews, dataLoaded } = useFetchData(
         `http://localhost:8080/review/${movieId}`
     );
-
     if (placement === "userRatingSection") {
         const token = CookieManager.decryptCookie("accessToken");
         const [reviewRating, setReviewRating] = useState(0);
+        const [reviewContent, setReviewContent] = useState("");
         const decodedToken = jwt_decode(token);
 
         const handleSubmit = () => {
             axios
                 .post(`http://localhost:8080/review/create/${movieId}`, {
+                    createdDate: Date.now(),
                     movieId: movieId,
-                    userName: decodedToken.firstName,
+                    username: decodedToken.firstName,
                     reviewRating: reviewRating,
-                    reviewContent: reviewContent
+                    reviewContent: reviewContent,
+                }, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
                 })
                 .then((response) => {
-                    console.log(response.json());
+                    console.log(response.data); // Use response.data instead of response.json()
                 })
                 .catch((error) => {
                     console.log(error);
                 });
-        };
+        }
 
-        const percentageAverage = voteAverage.toFixed(1) * 10;
-        const [reviewContent, setReviewContent] = useState("");
+        const percentageVoteAverage = voteAverage.toFixed(1) * 10;
         const filter = new Filter();
         const hasReviewProfanity = filter.isProfane(reviewContent);
 
@@ -58,7 +63,7 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
             <div className={IndReview["ind-review-wrapper"]}>
                 <div className={IndReview["input-wrapper"]}>
                     <div className={IndReview["total-rating-wrapper"]}>
-                        <PercentageRatingCircle percentageRating={percentageAverage} />
+                        <PercentageRatingCircle percentageRating={percentageVoteAverage} />
                     </div>
                     <div className={IndReview["user-review-wrapper"]}>
                         <div className={IndReview["user-info-wrapper"]}></div>
