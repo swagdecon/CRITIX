@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,17 +24,18 @@ public class ReviewController {
         @Autowired
         ReviewService reviewService;
 
-        // @PostMapping("/post/{movieId}/user/{userId}")
-
-        // public ResponseEntity<Optional<Review>> createMovieReview(@PathVariable
-        // Integer movieId, Integer userId,
-        // Integer reviewRating,
-        // String reviewContent) {
-        // return new ResponseEntity<Optional<Review>>(
-        // reviewService.createNewMovieReview(movieId, userId, reviewRating,
-        // reviewContent),
-        // HttpStatus.OK);
-        // }
+        // @PostMapping("/create/{movieId}")
+        public ResponseEntity<Optional<Review>> createMovieReview(@PathVariable Integer movieId,
+                        @RequestBody Review request) {
+                String username = request.getAuthor();
+                String reviewRating = request.getRating();
+                String reviewContent = request.getContent();
+                String createdAt = request.getCreatedDate();
+                Optional<Review> newReview = reviewService.createNewMovieReview(movieId,
+                                username, reviewRating,
+                                reviewContent, createdAt);
+                return new ResponseEntity<>(newReview, HttpStatus.OK);
+        }
 
         @GetMapping("/{movieId}")
         public ResponseEntity<List<Review>> movieReviews(@PathVariable Integer movieId)
