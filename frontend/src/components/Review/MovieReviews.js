@@ -32,13 +32,15 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
         const decodedToken = jwt_decode(token);
 
         const handleSubmit = () => {
+            const currentDate = new Date();
+
             axios
                 .post(`http://localhost:8080/review/create/${movieId}`, {
-                    createdDate: Date.now(),
+                    createdDate: currentDate,
                     movieId: movieId,
-                    username: decodedToken.firstName,
-                    reviewRating: reviewRating,
-                    reviewContent: reviewContent,
+                    author: decodedToken.firstName,
+                    rating: reviewRating,
+                    content: reviewContent,
                 }, {
                     headers: {
                         "Content-Type": "application/json",

@@ -24,16 +24,17 @@ public class ReviewController {
         @Autowired
         ReviewService reviewService;
 
-        // @PostMapping("/create/{movieId}")
+        @PostMapping("/create/{movieId}")
         public ResponseEntity<Optional<Review>> createMovieReview(@PathVariable Integer movieId,
                         @RequestBody Review request) {
                 String username = request.getAuthor();
                 String reviewRating = request.getRating();
                 String reviewContent = request.getContent();
                 String createdAt = request.getCreatedDate();
-                Optional<Review> newReview = reviewService.createNewMovieReview(movieId,
-                                username, reviewRating,
+
+                Optional<Review> newReview = reviewService.createNewMovieReview(movieId, username, reviewRating,
                                 reviewContent, createdAt);
+
                 return new ResponseEntity<>(newReview, HttpStatus.OK);
         }
 
