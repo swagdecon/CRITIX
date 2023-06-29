@@ -29,6 +29,10 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
         const token = CookieManager.decryptCookie("accessToken");
         const [reviewRating, setReviewRating] = useState(0);
         const [reviewContent, setReviewContent] = useState("");
+        const percentageVoteAverage = voteAverage.toFixed(1) * 10;
+        const filter = new Filter();
+        const hasReviewProfanity = filter.isProfane(reviewContent);
+        const isSubmitDisabled = reviewContent.trim().length === 0 || reviewRating === 0;
         const decodedToken = jwt_decode(token);
 
         const handleSubmit = () => {
@@ -48,18 +52,14 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                     },
                 })
                 .then((response) => {
-                    console.log(response.data); // Use response.data instead of response.json()
+                    console.log(response.data);
+                    setReviewRating(0);
+                    setReviewContent("");
                 })
                 .catch((error) => {
                     console.log(error);
                 });
         }
-
-        const percentageVoteAverage = voteAverage.toFixed(1) * 10;
-        const filter = new Filter();
-        const hasReviewProfanity = filter.isProfane(reviewContent);
-
-        const isSubmitDisabled = reviewContent.trim().length === 0 || reviewRating === 0;
 
         return (
             <div className={IndReview["ind-review-wrapper"]}>
