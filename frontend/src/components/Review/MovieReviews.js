@@ -25,10 +25,12 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
     const { data: userReviews, dataLoaded } = useFetchData(
         `http://localhost:8080/review/${movieId}`
     );
+
     if (placement === "userRatingSection") {
         const token = CookieManager.decryptCookie("accessToken");
         const [reviewRating, setReviewRating] = useState(0);
         const [reviewContent, setReviewContent] = useState("");
+        const [hasSubmittedReview, setHasSubmittedReview] = useState(false); // Track whether user has submitted a review
         const percentageVoteAverage = voteAverage.toFixed(1) * 10;
         const filter = new Filter();
         const hasReviewProfanity = filter.isProfane(reviewContent);
@@ -53,6 +55,7 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                 })
                 .then((response) => {
                     console.log(response.data);
+                    setHasSubmittedReview(true); // Set hasSubmittedReview to true after successful submission
                     setReviewRating(0);
                     setReviewContent("");
                 })
@@ -79,11 +82,14 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                                 label={
                                     hasReviewProfanity && reviewContent.trim().length > 0
                                         ? "Profanity is not allowed."
-                                        : "Post A Review"
+                                        : hasSubmittedReview // Display error message if user has already submitted a review
+                                            ? "You have already submitted a review for this movie."
+                                            : "Post A Review"
                                 }
                                 multiline
                                 onChange={(e) => setReviewContent(e.target.value)}
                                 maxRows={4}
+                                value={reviewContent}
                                 className={IndReview["mui-input-field"]}
                                 InputLabelProps={{
                                     style: {
@@ -124,20 +130,23 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                                     width: "60%"
                                 }}
                             />
-                            <div className={IndReview["post-review-btn"]}>
-                                <Button
-                                    variant="contained"
-                                    endIcon={<MovieCreationOutlinedIcon />}
-                                    size="medium"
-                                    onClick={handleSubmit}
-                                    disabled={isSubmitDisabled} // Disable the button if review content or rating is not entered
-                                    sx={{
-                                        borderRadius: "15px"
-                                    }}
-                                >
-                                    SUBMIT
-                                </Button>
-                            </div>
+                            {!hasSubmittedReview && (
+
+                                <div className={IndReview["post-review-btn"]}>
+                                    <Button
+                                        variant="contained"
+                                        endIcon={<MovieCreationOutlinedIcon />}
+                                        size="medium"
+                                        onClick={handleSubmit}
+                                        disabled={isSubmitDisabled} // Disable the button if review content or rating is not entered
+                                        sx={{
+                                            borderRadius: "15px"
+                                        }}
+                                    >
+                                        SUBMIT
+                                    </Button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
