@@ -12,9 +12,7 @@ import Pagination from '@mui/material/Pagination';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 export default function MovieList({ endpoint }) {
-  MovieList.propTypes = {
-    endpoint: PropTypes.object,
-  };
+
   let title;
   let caption;
   const [movies, setMovies] = useState([]);
@@ -161,3 +159,6 @@ export default function MovieList({ endpoint }) {
     </div>
   );
 }
+MovieList.propTypes = {
+  endpoint: PropTypes.object,
+};

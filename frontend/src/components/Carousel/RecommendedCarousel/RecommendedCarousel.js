@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Carousel } from "react-bootstrap";
 import { chunk } from "lodash";
 import MovieCardStyle from "../../MovieCard/moviecard.module.scss";
@@ -11,25 +11,26 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
   RecommendedCarousel.propTypes = {
     movieId: PropTypes.number,
     onRecommendedMoviesLoad: PropTypes.func,
-
   };
-  const [recommendations, setRecommendations] = useState([]);
 
-  const movieChunks = chunk(recommendations, 5);
+  const [recommendations, setRecommendations] = useState([]);
 
   useEffect(() => {
     const fetchRecommendations = async () => {
       const data = await getDetailedMovie("recommendations", { page: 1 }, movieId);
-      data ?
-        setRecommendations(data.detailedMovies) &&
-        onRecommendedMoviesLoad()
-        : null
-    }
+      if (data) {
+        setRecommendations(data.detailedMovies);
+        onRecommendedMoviesLoad();
+      }
+    };
     fetchRecommendations();
   }, [movieId]);
-  if (!recommendations) {
-    return;
+
+  if (recommendations.length === 0) {
+    return null;
   }
+
+  const movieChunks = chunk(recommendations, 5);
 
   return (
     <Carousel className="carousel-movie" indicators={false} interval={null}>
@@ -54,8 +55,7 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
             </div>
           ))}
         </Carousel.Item>
-      ))
-      }
-    </Carousel >
+      ))}
+    </Carousel>
   );
 }

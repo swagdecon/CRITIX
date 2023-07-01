@@ -17,7 +17,6 @@ function ImageLogic(avatar) {
 }
 
 export default function OtherReviews({ reviews }) {
-    console.log(reviews)
     const [currentPage, setCurrentPage] = useState(1);
     const commentsPerPage = 2;
     const totalPages = Math.ceil((reviews.length - 3) / commentsPerPage);

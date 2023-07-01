@@ -18,28 +18,6 @@ export default function MovieCard({
   overview,
   actors,
 }) {
-  MovieCard.propTypes = {
-    poster: PropTypes.string,
-    rating: PropTypes.number,
-    runtime: PropTypes.number,
-    overview: PropTypes.string,
-    video: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.array,
-      PropTypes.bool,
-    ]),
-    genres: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.array,
-    ]),
-
-    actors: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string,
-        character: PropTypes.string,
-      })
-    ),
-  };
   return (
     <div className="container">
       <div className={MovieCardStyle["cellphone-container"]}>
@@ -52,7 +30,7 @@ export default function MovieCard({
             style={{
               backgroundImage: `url(https://image.tmdb.org/t/p/w500/${poster})`,
             }}
-           />
+          />
           <div className={MovieCardStyle["text-movie-cont"]}>
             <div className={MovieCardStyle["mr-grid"]}>
               <div className={MovieCardStyle.col1}>
@@ -145,3 +123,25 @@ export default function MovieCard({
     </div>
   );
 }
+MovieCard.propTypes = {
+  poster: PropTypes.string,
+  rating: PropTypes.number,
+  runtime: PropTypes.number,
+  overview: PropTypes.string,
+  video: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+    PropTypes.bool,
+  ]),
+  genres: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
+
+  actors: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      character: PropTypes.string,
+    })
+  ),
+};

@@ -37,34 +37,35 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
         const hasReviewProfanity = useMemo(() => filter.isProfane(reviewContent), [filter, reviewContent]);
         const isSubmitDisabled = useMemo(() => reviewContent.trim().length === 0 || reviewRating === 0, [reviewContent, reviewRating]);
         const handleSubmit = useCallback(() => {
-            const currentDate = new Date();
-            const day = currentDate.getDate().toString().padStart(2, "0");
-            const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
-            const year = currentDate.getFullYear().toString();
 
-            const formattedDate = `${day}-${month}-${year}`;
-            axios
-                .post(`http://localhost:8080/review/create/${movieId}`, {
-                    createdDate: formattedDate,
-                    movieId: movieId,
-                    author: decodedToken.firstName,
-                    rating: reviewRating,
-                    content: reviewContent,
-                }, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                })
-                .then((response) => {
-                    console.log(response.data);
-                    setHasSubmittedReview(true);
-                    setReviewRating(0);
-                    setReviewContent("");
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            if (!hasReviewProfanity) {
+                const currentDate = new Date();
+                const day = currentDate.getDate().toString().padStart(2, "0");
+                const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+                const year = currentDate.getFullYear().toString();
+                const formattedDate = `${day}-${month}-${year}`;
+                axios
+                    .post(`http://localhost:8080/review/create/${movieId}`, {
+                        createdDate: formattedDate,
+                        movieId: movieId,
+                        author: decodedToken.firstName,
+                        rating: reviewRating,
+                        content: reviewContent,
+                    }, {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    })
+                    .then(
+                        setHasSubmittedReview(true),
+                        setReviewRating(0),
+                        setReviewContent("")
+                    )
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
         }, [movieId, decodedToken, reviewRating, reviewContent, token]);
 
         return (
@@ -133,7 +134,7 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                                     width: "60%"
                                 }}
                             />
-                            {!hasSubmittedReview && (
+                            {!hasSubmittedReview && !hasReviewProfanity && (
 
                                 <div className={IndReview["post-review-btn"]}>
                                     <Button
@@ -153,7 +154,6 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                         </div>
                     </div>
                 </div>
-                {console.log(userReviews)}
                 {dataLoaded && userReviews && userReviews.length >= 2 && (
                     <OtherReviews reviews={userReviews} />
                 )}            </div>
