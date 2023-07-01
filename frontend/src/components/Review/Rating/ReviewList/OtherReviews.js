@@ -3,9 +3,9 @@ import "./OtherReviews.css";
 import UserRating from "../UserRating/UserRating";
 import Pagination from "@mui/material/Pagination";
 import PropTypes from "prop-types";
-// Moved outside of the component
+
 function ImageLogic(avatar) {
-    if (avatar !== "null") {
+    if (avatar !== null && avatar !== "null") {
         if (avatar.includes("secure.gravatar.com")) {
             return avatar;
         } else {
@@ -15,11 +15,12 @@ function ImageLogic(avatar) {
         return "https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg";
     }
 }
+
 export default function OtherReviews({ reviews }) {
     const [currentPage, setCurrentPage] = useState(1);
     const commentsPerPage = 2;
     const totalPages = Math.ceil((reviews.length - 3) / commentsPerPage);
-    // Use useMemo to avoid unnecessary computations on every render
+
     const displayReviews = useMemo(() => {
         let reviewsToDisplay = [];
         if (currentPage === 1) {
@@ -29,7 +30,8 @@ export default function OtherReviews({ reviews }) {
             if (totalWordCount > 300) {
                 reviewsToDisplay = reviews.slice(3, 4);
             } else {
-                reviewsToDisplay = reviews.slice(3, 5);
+                reviewsToDisplay = reviews.slice(3
+                    , 5);
             }
         } else {
             const startIdx = (currentPage - 1) * commentsPerPage + 3;
@@ -47,6 +49,7 @@ export default function OtherReviews({ reviews }) {
         }
         return reviewsToDisplay;
     }, [currentPage, reviews]);
+
     return (
         <div className="comment-section">
             <div className="container">
@@ -74,29 +77,32 @@ export default function OtherReviews({ reviews }) {
                                                 ) : null}
                                             </div>
                                         </div>
-                                        <div className="description" >{review.content}</div>
+                                        <div className="description">{review.content}</div>
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
-                    <Pagination
-                        size="large"
-                        color="primary"
-                        count={totalPages}
-                        page={currentPage}
-                        onChange={(event, page) => setCurrentPage(page)}
-                        sx={{
-                            "& .MuiPaginationItem-root": {
-                                color: "#ffffff",
-                            },
-                        }}
-                    />
+                    {reviews && reviews.length > 0 && (
+                        <Pagination
+                            size="large"
+                            color="primary"
+                            count={totalPages}
+                            page={currentPage}
+                            onChange={(event, page) => setCurrentPage(page)}
+                            sx={{
+                                "& .MuiPaginationItem-root": {
+                                    color: "#ffffff",
+                                },
+                            }}
+                        />
+                    )}
                 </div>
             </div>
         </div>
     );
 }
+
 OtherReviews.propTypes = {
     reviews: PropTypes.array,
 };

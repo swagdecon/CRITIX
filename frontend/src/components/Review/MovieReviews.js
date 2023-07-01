@@ -1,4 +1,4 @@
-import { React, useState, useRef, useEffect } from "react";
+import { React, useState, useRef, useEffect, useMemo, useCallback } from "react";
 import IndReview from "./Review.module.css";
 import TextField from '@mui/material/TextField';
 import Filter from "bad-words";
@@ -23,26 +23,28 @@ UserMovieReviews.propTypes = {
 
 export default function UserMovieReviews({ voteAverage, movieId, placement }) {
     const { data: userReviews, dataLoaded } = useFetchData(
-        `http://localhost:8080/review/${movieId}`
+        useMemo(() => `http://localhost:8080/review/${movieId}`, [movieId])
     );
-
     if (placement === "userRatingSection") {
-        const token = CookieManager.decryptCookie("accessToken");
+
+        const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
+        const decodedToken = useMemo(() => jwt_decode(token), [token]);
+        const filter = useMemo(() => new Filter(), []);
         const [reviewRating, setReviewRating] = useState(0);
         const [reviewContent, setReviewContent] = useState("");
-        const [hasSubmittedReview, setHasSubmittedReview] = useState(false); // Track whether user has submitted a review
-        const percentageVoteAverage = voteAverage.toFixed(1) * 10;
-        const filter = new Filter();
-        const hasReviewProfanity = filter.isProfane(reviewContent);
-        const isSubmitDisabled = reviewContent.trim().length === 0 || reviewRating === 0;
-        const decodedToken = jwt_decode(token);
-
-        const handleSubmit = () => {
-            const currentDate = new Date();
-
+        const [hasSubmittedReview, setHasSubmittedReview] = useState(false);
+        const percentageVoteAverage = useMemo(() => voteAverage.toFixed(1) * 10, [voteAverage]);
+        const hasReviewProfanity = useMemo(() => filter.isProfane(reviewContent), [filter, reviewContent]);
+        const isSubmitDisabled = useMemo(() => reviewContent.trim().length === 0 || reviewRating === 0, [reviewContent, reviewRating]);
+        const handleSubmit = useCallback(() => {
+            const formattedDate = new Date().toLocaleDateString(undefined, {
+                day: 'numeric',
+                month: 'numeric',
+                year: 'numeric'
+            });
             axios
                 .post(`http://localhost:8080/review/create/${movieId}`, {
-                    createdDate: currentDate,
+                    createdDate: formattedDate,
                     movieId: movieId,
                     author: decodedToken.firstName,
                     rating: reviewRating,
@@ -55,14 +57,14 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                 })
                 .then((response) => {
                     console.log(response.data);
-                    setHasSubmittedReview(true); // Set hasSubmittedReview to true after successful submission
+                    setHasSubmittedReview(true);
                     setReviewRating(0);
                     setReviewContent("");
                 })
                 .catch((error) => {
                     console.log(error);
                 });
-        }
+        }, [movieId, decodedToken, reviewRating, reviewContent, token]);
 
         return (
             <div className={IndReview["ind-review-wrapper"]}>
@@ -82,7 +84,7 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                                 label={
                                     hasReviewProfanity && reviewContent.trim().length > 0
                                         ? "Profanity is not allowed."
-                                        : hasSubmittedReview // Display error message if user has already submitted a review
+                                        : hasSubmittedReview
                                             ? "You have already submitted a review for this movie."
                                             : "Post A Review"
                                 }
@@ -138,7 +140,7 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                                         endIcon={<MovieCreationOutlinedIcon />}
                                         size="medium"
                                         onClick={handleSubmit}
-                                        disabled={isSubmitDisabled} // Disable the button if review content or rating is not entered
+                                        disabled={isSubmitDisabled}
                                         sx={{
                                             borderRadius: "15px"
                                         }}
@@ -150,8 +152,9 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                         </div>
                     </div>
                 </div>
-                {dataLoaded && <OtherReviews reviews={userReviews} />}
-            </div>
+                {dataLoaded && userReviews && userReviews.length > 3 && (
+                    <OtherReviews reviews={userReviews} />
+                )}            </div>
         );
     } else if (placement === "header") {
         const [maxHeight, setMaxHeight] = useState(500);

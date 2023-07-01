@@ -1,5 +1,7 @@
 package com.popflix.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -10,7 +12,7 @@ import com.popflix.service.tmdbRequests.AllMovieReviews;
 @Service
 public class ReviewService {
 
-    private final AllMovieReviews reviews = new AllMovieReviews();
+    private final AllMovieReviews tmdbReviews = new AllMovieReviews();
     private final ReviewRepository reviewRepository;
 
     public ReviewService(ReviewRepository reviewRepository) {
@@ -29,9 +31,18 @@ public class ReviewService {
         return Optional.of(savedReview);
     }
 
-    public List<Review> getMovieUserReviews(Integer movieId) throws java.io.IOException, InterruptedException {
-        List<Review> response = reviews.getMovieReviews(movieId);
-        return response;
+    public List<Review> getAllMovieReviews(Integer movieId) {
+        return reviewRepository.findByMovieId(movieId);
+    }
 
+    public List<Review> getMovieUserReviews(Integer movieId) throws IOException, InterruptedException {
+        List<Review> externalReviews = tmdbReviews.getMovieReviews(movieId);
+        List<Review> databaseReviews = getAllMovieReviews(movieId);
+
+        List<Review> combinedReviews = new ArrayList<>();
+        combinedReviews.addAll(externalReviews);
+        combinedReviews.addAll(databaseReviews);
+
+        return combinedReviews;
     }
 }

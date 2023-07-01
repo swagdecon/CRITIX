@@ -15,6 +15,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.popflix.model.Review;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 public class AllMovieReviews {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final Map<Integer, List<Review>> reviewCache = new HashMap<>();
@@ -24,11 +26,13 @@ public class AllMovieReviews {
         if (reviewCache.containsKey(movieId)) {
             return reviewCache.get(movieId);
         }
+        Dotenv dotenv = Dotenv.load();
+        String TMDB_API_KEY = dotenv.get("TMDB_API_KEY");
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(
                         "https://api.themoviedb.org/3/movie/" + movieId
-                                + "/reviews?language=en-US&page=1&api_key=106a378e128c7b7d4af58c04580ca64e"))
+                                + "/reviews?language=en-US&page=1&api_key=" + TMDB_API_KEY))
                 .header("accept", "application/json")
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
