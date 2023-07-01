@@ -37,11 +37,12 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
         const hasReviewProfanity = useMemo(() => filter.isProfane(reviewContent), [filter, reviewContent]);
         const isSubmitDisabled = useMemo(() => reviewContent.trim().length === 0 || reviewRating === 0, [reviewContent, reviewRating]);
         const handleSubmit = useCallback(() => {
-            const formattedDate = new Date().toLocaleDateString(undefined, {
-                day: 'numeric',
-                month: 'numeric',
-                year: 'numeric'
-            });
+            const currentDate = new Date();
+            const day = currentDate.getDate().toString().padStart(2, "0");
+            const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+            const year = currentDate.getFullYear().toString();
+
+            const formattedDate = `${day}-${month}-${year}`;
             axios
                 .post(`http://localhost:8080/review/create/${movieId}`, {
                     createdDate: formattedDate,
@@ -152,7 +153,8 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                         </div>
                     </div>
                 </div>
-                {dataLoaded && userReviews && userReviews.length > 3 && (
+                {console.log(userReviews)}
+                {dataLoaded && userReviews && userReviews.length >= 2 && (
                     <OtherReviews reviews={userReviews} />
                 )}            </div>
         );

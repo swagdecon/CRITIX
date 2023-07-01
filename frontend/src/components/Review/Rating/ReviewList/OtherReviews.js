@@ -17,6 +17,7 @@ function ImageLogic(avatar) {
 }
 
 export default function OtherReviews({ reviews }) {
+    console.log(reviews)
     const [currentPage, setCurrentPage] = useState(1);
     const commentsPerPage = 2;
     const totalPages = Math.ceil((reviews.length - 3) / commentsPerPage);
@@ -30,7 +31,7 @@ export default function OtherReviews({ reviews }) {
             if (totalWordCount > 300) {
                 reviewsToDisplay = reviews.slice(3, 4);
             } else {
-                reviewsToDisplay = reviews.slice(3
+                reviewsToDisplay = reviews.slice(2
                     , 5);
             }
         } else {
