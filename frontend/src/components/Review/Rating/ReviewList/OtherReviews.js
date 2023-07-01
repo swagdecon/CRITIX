@@ -29,9 +29,9 @@ export default function OtherReviews({ reviews }) {
                 .slice(3, 5)
                 .reduce((count, review) => count + review.content.split(" ").length, 0);
             if (totalWordCount > 300) {
-                reviewsToDisplay = reviews.slice(3, 4);
+                reviewsToDisplay = reviews.slice(2, 4);
             } else {
-                reviewsToDisplay = reviews.slice(2
+                reviewsToDisplay = reviews.slice(3
                     , 5);
             }
         } else {
