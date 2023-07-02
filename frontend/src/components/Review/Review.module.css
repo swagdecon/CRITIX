@@ -38,6 +38,7 @@
 .textField-wrapper {
     margin-left: 15px;
     flex: 1;
+    height: 140px;
 }
 
 .input-slider {
