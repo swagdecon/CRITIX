@@ -3,7 +3,9 @@ package com.popflix.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.popflix.model.Review;
 import com.popflix.repository.ReviewRepository;
@@ -13,22 +15,20 @@ import com.popflix.service.tmdbRequests.AllMovieReviews;
 public class ReviewService {
 
     private final AllMovieReviews tmdbReviews = new AllMovieReviews();
-    private final ReviewRepository reviewRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
-    public ReviewService(ReviewRepository reviewRepository) {
-        this.reviewRepository = reviewRepository;
-    }
-
-    public Optional<Review> createNewMovieReview(Integer movieId, String username, String reviewRating,
+    public void createNewMovieReview(Integer movieId, String username, String reviewRating,
             String reviewContent, String createdAt) {
+        String reviewId = UUID.randomUUID().toString();
         Review review = new Review();
+        review.setReviewId(reviewId);
         review.setMovieId(movieId);
         review.setAuthor(username);
         review.setRating(reviewRating);
         review.setContent(reviewContent);
         review.setCreatedDate(createdAt);
-        Review savedReview = reviewRepository.save(review);
-        return Optional.of(savedReview);
+        reviewRepository.save(review);
     }
 
     public List<Review> getAllMovieReviews(Integer movieId) {

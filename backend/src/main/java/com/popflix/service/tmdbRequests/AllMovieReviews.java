@@ -67,8 +67,10 @@ public class AllMovieReviews {
                     }
                     review.setContent(content);
                     if (authorDetailsNode.has("rating")) {
-                        review.setRating(authorDetailsNode.path("rating").asText());
+                        String rating = authorDetailsNode.path("rating").asText();
+                        review.setRating(rating);
                     }
+
                     String timestamp = resultNode.path("created_at").asText();
                     LocalDateTime dateTime = LocalDateTime.parse(timestamp, DateTimeFormatter.ISO_DATE_TIME);
                     review.setCreatedDate(dateTime.toLocalDate().toString());

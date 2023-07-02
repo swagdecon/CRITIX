@@ -2,7 +2,6 @@ package com.popflix.controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,22 +19,18 @@ import com.popflix.service.ReviewService;
 @RestController
 @RequestMapping("/review")
 public class ReviewController {
-
         @Autowired
-        ReviewService reviewService;
+        private ReviewService reviewService;
 
         @PostMapping("/create/{movieId}")
-        public ResponseEntity<Optional<Review>> createMovieReview(@PathVariable Integer movieId,
-                        @RequestBody Review request) {
+        public void createMovieReview(@PathVariable Integer movieId, @RequestBody Review request) {
                 String username = request.getAuthor();
                 String reviewRating = request.getRating();
                 String reviewContent = request.getContent();
                 String createdAt = request.getCreatedDate();
 
-                Optional<Review> newReview = reviewService.createNewMovieReview(movieId, username, reviewRating,
+                reviewService.createNewMovieReview(movieId, username, reviewRating,
                                 reviewContent, createdAt);
-
-                return new ResponseEntity<>(newReview, HttpStatus.OK);
         }
 
         @GetMapping("/{movieId}")
@@ -44,5 +39,4 @@ public class ReviewController {
                 List<Review> reviews = reviewService.getMovieUserReviews(movieId);
                 return new ResponseEntity<>(reviews, HttpStatus.OK);
         }
-
 }
