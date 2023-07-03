@@ -37,7 +37,6 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
         const hasReviewProfanity = useMemo(() => filter.isProfane(reviewContent), [filter, reviewContent]);
         const isSubmitDisabled = useMemo(() => reviewContent.trim().length === 0 || reviewRating === 0, [reviewContent, reviewRating]);
         const handleSubmit = useCallback(() => {
-
             if (!hasReviewProfanity) {
                 const currentDate = new Date();
                 const day = currentDate.getDate().toString().padStart(2, "0");

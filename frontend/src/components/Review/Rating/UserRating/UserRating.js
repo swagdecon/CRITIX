@@ -5,6 +5,7 @@ export default function UserRating({ percentage }) {
     UserRating.propTypes = {
         percentage: PropTypes.number
     }
+    console.log(percentage)
     switch (true) {
         case (percentage >= 0 && percentage < 40):
             return <div className="user-rating-bad">{percentage} kernels</div>
