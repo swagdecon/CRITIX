@@ -6,6 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.popflix.model.Review;
 
-public interface ReviewRepository extends MongoRepository<Review, Integer> {
+public interface ReviewRepository extends MongoRepository<Review, String> {
     List<Review> findByMovieId(Integer movieId);
 }

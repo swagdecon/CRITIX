@@ -38,11 +38,9 @@ public class ReviewService {
     public List<Review> getMovieUserReviews(Integer movieId) throws IOException, InterruptedException {
         List<Review> externalReviews = tmdbReviews.getMovieReviews(movieId);
         List<Review> databaseReviews = getAllMovieReviews(movieId);
-
         List<Review> combinedReviews = new ArrayList<>();
         combinedReviews.addAll(externalReviews);
         combinedReviews.addAll(databaseReviews);
-
         return combinedReviews;
     }
 }
