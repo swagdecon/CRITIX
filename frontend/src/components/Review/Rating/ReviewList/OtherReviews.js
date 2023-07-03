@@ -75,7 +75,7 @@ export default function OtherReviews({ reviews }) {
                                             <div className="rating-row">
                                                 {review.rating ? (
 
-                                                    <UserRating percentage={(typeof review.rating === 'number' ? review.rating : parseInt(review.rating))} />
+                                                    <UserRating percentage={(review.reviewId == null ? review.rating * 10 : parseInt(review.rating))} />
                                                 ) : null}
                                             </div>
                                         </div>
