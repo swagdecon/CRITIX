@@ -74,7 +74,7 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                         <PercentageRatingCircle percentageRating={percentageVoteAverage} />
                     </div>
                     <div className={IndReview["user-review-wrapper"]}>
-                        <div className={IndReview["user-info-wrapper"]}></div>
+                        <div className={IndReview["user-info-wrapper"]} />
                         <div className={IndReview["textField-wrapper"]}>
                             <div className={IndReview["input-slider"]}>
                                 <InputSlider onSliderChange={setReviewRating} />
