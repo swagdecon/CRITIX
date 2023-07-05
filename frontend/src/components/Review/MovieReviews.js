@@ -36,6 +36,8 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
         const percentageVoteAverage = useMemo(() => voteAverage.toFixed(1) * 10, [voteAverage]);
         const hasReviewProfanity = useMemo(() => filter.isProfane(reviewContent), [filter, reviewContent]);
         const isSubmitDisabled = useMemo(() => reviewContent.trim().length === 0 || reviewRating === 0, [reviewContent, reviewRating]);
+
+
         const handleSubmit = useCallback(() => {
             if (!hasReviewProfanity) {
                 const currentDate = new Date();
@@ -43,10 +45,12 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                 const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
                 const year = currentDate.getFullYear().toString();
                 const formattedDate = `${day}-${month}-${year}`;
+                const userId = decodedToken.userId;
                 axios
                     .post(`http://localhost:8080/review/create/${movieId}`, {
                         createdDate: formattedDate,
                         movieId: movieId,
+                        userId: userId,
                         author: decodedToken.firstName,
                         rating: reviewRating,
                         content: reviewContent,
@@ -57,12 +61,14 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                         },
                     })
                     .then(
-                        setHasSubmittedReview(true),
                         setReviewRating(0),
-                        setReviewContent("")
+                        setReviewContent(""),
                     )
                     .catch((error) => {
-                        console.log(error);
+                        if (error.response.status === 400 && error.response.data === "User already submitted a review for this movie.") {
+                            setHasSubmittedReview(true);
+                        }
+                        // console.log(error)
                     });
             }
         }, [movieId, decodedToken, reviewRating, reviewContent, token]);
