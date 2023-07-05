@@ -179,12 +179,12 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
 
         const TEXT_COLLAPSE_OPTIONS = {
             collapse: false,
-            collapseText: "... show more",
+            collapseText: "...show more",
             expandText: "show less",
             minHeight: 210,
-            maxHeight: 500,
+            maxHeight: 300,
             textStyle: {
-                color: "white",
+                color: "grey",
                 fontSize: "20px"
             }
         };
