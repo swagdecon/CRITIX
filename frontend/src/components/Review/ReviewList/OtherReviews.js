@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import "./OtherReviews.css";
-import UserRating from "../UserRating/UserRating";
+import UserRating from "../Rating/UserRating/UserRating";
 import Pagination from "@mui/material/Pagination";
 import PropTypes from "prop-types";
 

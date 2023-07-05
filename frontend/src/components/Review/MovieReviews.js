@@ -7,7 +7,7 @@ import MovieCreationOutlinedIcon from '@mui/icons-material/MovieCreationOutlined
 import PropTypes from "prop-types";
 import PercentageRatingCircle from "./Rating/PercentageCircle/PercentageCircle";
 import InputSlider from "./Rating/Slider/Slider.js";
-import OtherReviews from "./Rating/ReviewList/OtherReviews";
+import OtherReviews from "./ReviewList/OtherReviews";
 import ReactTextCollapse from "react-text-collapse/dist/ReactTextCollapse";
 import useFetchData from "../../security/FetchApiData";
 import IndMovieStyle from "../IndMovie/ind_movie.module.css";
