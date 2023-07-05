@@ -36,7 +36,7 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
         const percentageVoteAverage = useMemo(() => voteAverage.toFixed(1) * 10, [voteAverage]);
         const hasReviewProfanity = useMemo(() => filter.isProfane(reviewContent), [filter, reviewContent]);
         const isSubmitDisabled = useMemo(() => reviewContent.trim().length === 0 || reviewRating === 0, [reviewContent, reviewRating]);
-
+        const [disabledInput, setDisabledInputLogic] = useState(false);
 
         const handleSubmit = useCallback(() => {
             if (!hasReviewProfanity) {
@@ -63,6 +63,8 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                     .then(
                         setReviewRating(0),
                         setReviewContent(""),
+                        setHasSubmittedReview(true),
+                        setDisabledInputLogic(true)
                     )
                     .catch((error) => {
                         if (error.response.status === 400 && error.response.data === "User already submitted a review for this movie.") {
@@ -106,6 +108,7 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                                     }
                                 }}
                                 inputProps={{
+                                    disabled: disabledInput,
                                     sx: {
                                         color: "white"
                                     }

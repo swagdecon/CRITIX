@@ -6,7 +6,7 @@ export default function PercentageRatingCircle({ percentageRating }) {
     PercentageRatingCircle.propTypes = {
         percentageRating: PropTypes.number
     }
-    if (percentageRating > 0 && percentageRating <= 30) {
+    if (percentageRating >= 0 && percentageRating < 30) {
         return (
             <div className="single-chart">
                 <svg viewBox="0 0 36 36" className="circular-chart red">
@@ -28,7 +28,7 @@ export default function PercentageRatingCircle({ percentageRating }) {
                 </div>
             </div >
         )
-    } else if (percentageRating > 30 && percentageRating < 60) {
+    } else if (percentageRating >= 30 && percentageRating < 60) {
 
         return (
             <div className="flex-wrapper">
