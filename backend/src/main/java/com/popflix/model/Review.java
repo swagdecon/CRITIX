@@ -1,6 +1,8 @@
 package com.popflix.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +16,10 @@ public class Review {
     @Id
     private String reviewId;
 
-    // private ObjectId mongoId;
+    @DBRef
+    private User user;
+
+    private String userId;
     private Integer movieId;
     private String author;
     private String avatar;

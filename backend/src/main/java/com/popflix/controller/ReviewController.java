@@ -3,6 +3,7 @@ package com.popflix.controller;
 import java.io.IOException;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +24,21 @@ public class ReviewController {
         private ReviewService reviewService;
 
         @PostMapping("/create/{movieId}")
-        public void createMovieReview(@PathVariable Integer movieId, @RequestBody Review request) {
+        public ResponseEntity<String> createMovieReview(@PathVariable Integer movieId, @RequestBody Review request) {
                 String username = request.getAuthor();
+                String userId = request.getUserId();
                 String reviewRating = request.getRating();
                 String reviewContent = request.getContent();
                 String createdAt = request.getCreatedDate();
 
-                reviewService.createNewMovieReview(movieId, username, reviewRating,
-                                reviewContent, createdAt);
+                if (reviewService.doesUserIdExistsForMovie(movieId, userId)) {
+                        String errorMessage = "User already submitted a review for this movie.";
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+                } else {
+                        reviewService.createNewMovieReview(movieId, username, userId, reviewRating, reviewContent,
+                                        createdAt);
+                }
+                return null;
         }
 
         @GetMapping("/{movieId}")

@@ -51,6 +51,7 @@ public class AuthenticationService {
                                 .build();
                 var extraClaims = new HashMap<String, Object>();
                 extraClaims.put("firstName", request.getFirstName());
+                extraClaims.put("userId", user.getId());
                 var savedUser = userRepository.save(user);
                 var jwtToken = jwtService.generateToken(extraClaims, user);
                 var refreshToken = jwtService.generateRefreshToken(user);
@@ -69,11 +70,13 @@ public class AuthenticationService {
                 if (user.getLoggedIn()) {
                         throw new UserAlreadyLoggedInException("This User is already logged in");
                 }
+
                 user.setLoggedIn(true);
                 userRepository.save(user);
                 String firstName = user.getFirstName();
                 var extraClaims = new HashMap<String, Object>();
                 extraClaims.put("firstName", firstName);
+                extraClaims.put("userId", user.getId());
 
                 authenticationManager.authenticate(
                                 new UsernamePasswordAuthenticationToken(
