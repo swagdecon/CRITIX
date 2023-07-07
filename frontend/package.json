@@ -26,7 +26,7 @@
     "js-cookie": "^3.0.5",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
-    "npm": "^9.5.1",
+    "npm": "^9.7.1",
     "profanity-cleaner": "^0.0.3",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
