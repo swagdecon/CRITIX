@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.module.css";
 import Filter from "bad-words";
@@ -12,7 +12,7 @@ export default function LoginLogic() {
   const [errorMessage, setErrorMessage] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const filter = new Filter();
+  const filter = useMemo(() => new Filter(), []);
 
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);

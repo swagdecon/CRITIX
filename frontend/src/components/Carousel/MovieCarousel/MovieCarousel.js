@@ -15,7 +15,7 @@ function MovieCarousel({ title, endpoint }) {
   return (
     <section>
       <h3-title>{title}</h3-title>
-      <div className={MovieCardStyle["wrapper"]}>
+      <div className={MovieCardStyle.wrapper}>
         <Carousel className="carousel-movie" indicators={false} interval={null}>
           {movieChunks.map((chunk, i) => (
             <Carousel.Item key={i}>

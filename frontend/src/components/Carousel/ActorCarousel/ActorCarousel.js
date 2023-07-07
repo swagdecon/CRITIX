@@ -1,65 +1,63 @@
 import React from "react";
 import { Carousel } from "react-bootstrap";
-import { chunk } from "lodash";
 import "./ActorCarousel.css";
 import PropTypes from "prop-types";
 import IndMovieStyle from "../../IndMovie/ind_movie.module.css";
 import { Link } from "react-router-dom";
-
 const defaultImage = "url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg) center center no-repeat";
 
-
 function onMouseEnter(e, image) {
+  const target = e.currentTarget;
   if (image) {
-    e.currentTarget.style.background = `url(https://image.tmdb.org/t/p/w500${image}) left center no-repeat `;
-    e.currentTarget.style.backgroundSize = "600px";
+    target.style.background = `url(https://image.tmdb.org/t/p/w500${image}) left center no-repeat `;
+    target.style.backgroundSize = "600px";
   }
-  e.currentTarget.querySelector("h3").style.opacity = 1;
-  Array.from(e.currentTarget.querySelectorAll(".fa")).forEach((icon) => {
+  target.querySelector("h3").style.opacity = 1;
+  const icons = target.querySelectorAll(".fa");
+  icons.forEach((icon) => {
     icon.style.opacity = 1;
   });
 }
 
 
 function onMouseLeave(e, image, actorImage) {
+  const target = e.currentTarget;
   if (image) {
-    e.currentTarget.style.background = actorImage;
-    e.currentTarget.style.backgroundSize = "300px";
+    target.style.background = actorImage;
+    target.style.backgroundSize = "300px";
   }
-  e.currentTarget.querySelector("h3").style.opacity = 0;
-  Array.from(e.currentTarget.querySelectorAll(".fa")).forEach((icon) => {
+  target.querySelector("h3").style.opacity = 0;
+  const icons = target.querySelectorAll(".fa");
+  icons.forEach((icon) => {
     icon.style.opacity = 0;
   });
 }
 
 
 export default function MovieActors({ actors }) {
-  const actorChunks = chunk(actors, 5);
+  const actorChunks = [];
+  const chunkSize = 5;
+  for (let i = 0; i < actors.length; i += chunkSize) {
+    actorChunks.push(actors.slice(i, i + chunkSize));
+  }
+  const defaultStyle = {
+    background: defaultImage,
+  };
   return (
     <Carousel className="carousel-actors" interval={null} indicators={false}>
       {actorChunks.map((chunk, chunkIndex) => (
         <Carousel.Item key={chunkIndex}>
           <div className={IndMovieStyle["profile-container"]}>
             {chunk.map((actor, index) => {
-              let image = actor.profilePath ? actor.profilePath : null;
-              let actorImage = `url(https://image.tmdb.org/t/p/w500${image}) center center no-repeat`;
-              if (image === null) {
-                actorImage = defaultImage;
-              }
-              const style = image
-                ? {
-                  background: actorImage,
-                  backgroundSize: "300px",
-                }
-                : {
-                  background: defaultImage,
-                };
+              const image = actor.profilePath ? actor.profilePath : null;
+              const actorImage = image ? `url(https://image.tmdb.org/t/p/w500${image}) center center no-repeat` : defaultImage;
+              const style = image ? { background: actorImage, backgroundSize: "300px" } : defaultStyle;
               return (
                 <div
                   key={index}
                   className={`${IndMovieStyle["card"]} ${IndMovieStyle["card1"]}`}
                   style={style}
-                  onMouseEnter={(e) => onMouseEnter(e, image, actorImage)}
+                  onMouseEnter={(e) => onMouseEnter(e, image)}
                   onMouseLeave={(e) => onMouseLeave(e, image, actorImage)}
                 >
                   <Link to={`/person/${actor.id}`}>

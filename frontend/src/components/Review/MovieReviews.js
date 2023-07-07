@@ -1,18 +1,18 @@
-import { React, useState, useRef, useEffect, useMemo, useCallback } from "react";
-import IndReview from "./Review.module.css";
+import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import PropTypes from "prop-types";
 import TextField from '@mui/material/TextField';
-import Filter from "bad-words";
 import Button from "@mui/material/Button";
 import MovieCreationOutlinedIcon from '@mui/icons-material/MovieCreationOutlined';
-import PropTypes from "prop-types";
-import PercentageRatingCircle from "./Rating/PercentageCircle/PercentageCircle";
-import InputSlider from "./Rating/Slider/Slider.js";
-import OtherReviews from "./ReviewList/OtherReviews";
 import ReactTextCollapse from "react-text-collapse/dist/ReactTextCollapse";
-import useFetchData from "../../security/FetchApiData";
-import IndMovieStyle from "../IndMovie/ind_movie.module.css";
+import Filter from "bad-words";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+import useFetchData from "../../security/FetchApiData";
+import IndReview from "./Review.module.css";
+import IndMovieStyle from "../IndMovie/ind_movie.module.css";
+import OtherReviews from "./ReviewList/OtherReviews";
+import PercentageRatingCircle from "./Rating/PercentageCircle/PercentageCircle";
+import InputSlider from "./Rating/Slider/Slider.js";
 import CookieManager from "../../security/CookieManager";
 
 UserMovieReviews.propTypes = {
@@ -32,11 +32,10 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
     const [reviewContent, setReviewContent] = useState("");
     const [disabledInput, setDisabledInputLogic] = useState(false);
     const [hasSubmittedReview, setHasSubmittedReview] = useState(false);
+    const [maxHeight, setMaxHeight] = useState(500);
     const hasReviewProfanity = useMemo(() => filter.isProfane(reviewContent), [filter, reviewContent]);
     const isSubmitDisabled = useMemo(() => reviewContent.trim().length === 0 || reviewRating === 0, [reviewContent, reviewRating]);
-    const [maxHeight, setMaxHeight] = useState(500);
-
-
+    const reviewRef = useRef(null);
 
     const handleSubmit = useCallback(() => {
         if (!hasReviewProfanity) {
@@ -74,8 +73,7 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                     // console.log(error)
                 });
         }
-    }, [movieId, decodedToken, reviewRating, reviewContent, token, refetchData]);
-    const reviewRef = useRef(null);
+    }, [movieId, decodedToken, reviewRating, reviewContent, token, refetchData, hasReviewProfanity]);
 
     useEffect(() => {
         if (reviewRef.current) {
@@ -86,6 +84,7 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
 
     if (placement === "userRatingSection") {
         const percentageVoteAverage = useMemo(() => voteAverage.toFixed(1) * 10, [voteAverage]);
+
         return (
             <div className={IndReview["ind-review-wrapper"]}>
                 <div className={IndReview["input-wrapper"]}>
@@ -171,19 +170,22 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                             )}
                         </div>
                     </div>
+                    {dataLoaded && userReviews && userReviews.length >= 2 && (
+                        <OtherReviews reviews={userReviews} />
+                    )}
                 </div>
-                {dataLoaded && userReviews && userReviews.length >= 2 && (
-                    <OtherReviews reviews={userReviews} />
-                )}
             </div>
         );
+
     } else if (placement === "header") {
-
-
         const TEXT_COLLAPSE_OPTIONS = {
             collapse: false,
-            collapseText: "...show more",
-            expandText: "show less",
+            collapseText: (
+                <span style={{ cursor: "pointer" }}>...show more</span>
+            ),
+            expandText: (
+                <span style={{ cursor: "pointer" }}>show less</span>
+            ),
             minHeight: 210,
             maxHeight: 300,
             textStyle: {
@@ -191,6 +193,7 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                 fontSize: "20px"
             }
         };
+
         return (
             <div className={IndMovieStyle.review__wrapper} ref={reviewRef}>
                 {dataLoaded &&

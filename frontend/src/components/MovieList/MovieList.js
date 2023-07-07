@@ -1,3 +1,4 @@
+
 import { React, useState, useEffect } from "react";
 import MovieListStyle from "./MovieList.module.css";
 import MovieCard from "../../components/MovieCard/MovieCard";
@@ -7,121 +8,94 @@ import PropTypes from "prop-types";
 import getDetailedMovie from "../../axios/GetDetailedMovie";
 import LoadingPage from "../../views/LoadingPage";
 import SortByButton from "../Other/Dropdown/SortByDropdown/SortByDropdown";
-// import FilterByButton from "../Other/Dropdown/FilterByDropdown/FilterByDropdown";
 import Pagination from '@mui/material/Pagination';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#0096ff",
+    },
+  },
+});
 export default function MovieList({ endpoint }) {
-
-  let title;
-  let caption;
   const [movies, setMovies] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
-
+  const [title, setTitle] = useState("");
+  const [caption, setCaption] = useState("");
   useEffect(() => {
-    async function getDetailedMovieData(endpoint) {
-      const data = await getDetailedMovie(endpoint);
+    async function getDetailedMovieData(endpointName) {
+      const data = await getDetailedMovie(endpointName);
       setMovies(data.detailedMovies);
       setTotalPages(data.totalPages);
       setDataLoaded(true);
       setCurrentPage(1);
+      switch (endpointName) {
+        case "now_playing":
+          setTitle("In Theatres:");
+          setCaption("The Latest Movies on the Big Screen");
+          break;
+        case "upcoming":
+          setTitle("Upcoming Movies:");
+          setCaption("Get a Sneak Peek of What's Coming Soon");
+          break;
+        case "popular":
+          setTitle("Discover What Everyone Is Watching Right Now");
+          setCaption("Popular Movies:");
+          break;
+        case "top_rated":
+          setTitle("Top Rated Movies:");
+          setCaption("Popular Movies:");
+          break;
+        case "now_playing_and_upcoming":
+          setTitle("In Theatres:");
+          setCaption("The Latest Movies on the Big Screen");
+          break;
+        case "now_playing_and_popular":
+          setTitle("In Theatres:");
+          break;
+      }
     }
-
     getDetailedMovieData(endpoint.endpointName);
   }, [endpoint.endpointName]);
-  if (!dataLoaded) {
-    return <LoadingPage />;
-  }
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: "#0096ff",
-      },
-
-    },
-  });
-
-  switch (endpoint.endpointName) {
-    case "now_playing":
-      title = "In Theatres:";
-      caption = "The Latest Movies on the Big Screen";
-      break;
-    case "upcoming":
-      title = "Upcoming Movies:";
-      caption = "Get a Sneak Peek of What's Coming Soon";
-      break;
-    case "popular":
-      title = "Discover What Everyone Is Watching Right Now";
-      caption = "Popular Movies:";
-      break;
-    case "top_rated":
-      title = "Top Rated Movies:";
-      caption = "Popular Movies:";
-      break;
-    case "now_playing_and_upcoming":
-      title = "In Theatres:";
-      caption = "The Latest Movies on the Big Screen";
-      break;
-    case "now_playing_and_popular":
-      title = "In Theatres:";
-  }
-
-  const handleSortByChange = async (selectedValue) => {
-    const data = await getDetailedMovie(endpoint.endpointName).then(data => data.detailedMovies);
-
-    if (selectedValue === "A-Z") {
-      const sortedMovieTitleAscending = data.sort((a, b) =>
-        a.title.localeCompare(b.title)
-      );
-      setMovies(sortedMovieTitleAscending);
-    } else if (selectedValue === "Z-A") {
-      const sortedMovieTitleDescending = data.sort((a, b) =>
-        b.title.localeCompare(a.title)
-      );
-      setMovies(sortedMovieTitleDescending);
-    } else if (selectedValue === "Popularity Asc.") {
-      const sortedMoviePopularityAscending = data.sort(
-        (a, b) => a.popularity - b.popularity
-      );
-      setMovies(sortedMoviePopularityAscending);
-    } else if (selectedValue === "Popularity Desc.") {
-      const sortedMoviePopularityDescending = data.sort(
-        (a, b) => b.popularity - a.popularity
-      );
-      setMovies(sortedMoviePopularityDescending);
-    } else if (selectedValue === "Vote Average Asc.") {
-      const sortedMovieVoteAverageAscending = data.sort(
-        (a, b) => a.vote_average - b.vote_average
-      );
-      setMovies(sortedMovieVoteAverageAscending);
-    } else if (selectedValue === "Vote Average Desc.") {
-      const sortedMovieVoteAverageDescending = data.sort(
-        (a, b) => b.vote_average - a.vote_average
-      );
-      setMovies(sortedMovieVoteAverageDescending);
-    } else {
-      return;
+  const handleSortByChange = (selectedValue) => {
+    let sortedMovies;
+    switch (selectedValue) {
+      case "A-Z":
+        sortedMovies = [...movies].sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case "Z-A":
+        sortedMovies = [...movies].sort((a, b) => b.title.localeCompare(a.title));
+        break;
+      case "Popularity Asc.":
+        sortedMovies = [...movies].sort((a, b) => a.popularity - b.popularity);
+        break;
+      case "Popularity Desc.":
+        sortedMovies = [...movies].sort((a, b) => b.popularity - a.popularity);
+        break;
+      case "Vote Average Asc.":
+        sortedMovies = [...movies].sort((a, b) => a.vote_average - b.vote_average);
+        break;
+      case "Vote Average Desc.":
+        sortedMovies = [...movies].sort((a, b) => b.vote_average - a.vote_average);
+        break;
+      default:
+        sortedMovies = [...movies];
     }
+    setMovies(sortedMovies);
   };
-
   async function handlePageChange(event) {
     setDataLoaded(false);
     const newPage = parseInt(event.target.textContent);
-
     setCurrentPage(newPage);
-
-    const data = await getDetailedMovie(endpoint.endpointName, { page: newPage }).then(
-      (data) => data.detailedMovies
-    );
-    setMovies(data);
+    const data = await getDetailedMovie(endpoint.endpointName, { page: newPage });
+    setMovies(data.detailedMovies);
     setDataLoaded(true);
   }
-
-
-
+  if (!dataLoaded) {
+    return <LoadingPage />;
+  }
   return (
     <div>
       <div className={MovieListStyle["title-container"]}>
@@ -129,10 +103,9 @@ export default function MovieList({ endpoint }) {
         <div className={MovieListStyle["title-caption"]}>{caption}</div>
       </div>
       <SortByButton onSelectSortBy={handleSortByChange} />
-      {/* <FilterByButton /> */}
       <div className={MovieListStyle["container"]}>
-        {movies.map((movie, i) => (
-          <div key={i}>
+        {movies.map((movie) => (
+          <div key={movie.id}>
             <Link to={`/movies/movie/${movie.id}`}>
               <MovieCard
                 poster={movie.poster_path}
@@ -150,7 +123,7 @@ export default function MovieList({ endpoint }) {
           <ThemeProvider theme={theme}>
             <Pagination onClick={handlePageChange} count={totalPages} siblingCount={4} boundaryCount={1} page={currentPage} size="large" color="primary" sx={{
               '& .MuiPaginationItem-root': {
-                color: '#ffffff', // Set the font color to white
+                color: '#ffffff',
               },
             }} />
           </ThemeProvider>

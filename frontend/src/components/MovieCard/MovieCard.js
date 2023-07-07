@@ -1,4 +1,4 @@
-import { React } from "react";
+import { React, useCallback } from "react";
 import {
   MovieRuntime,
   MovieAverage,
@@ -18,6 +18,13 @@ export default function MovieCard({
   overview,
   actors,
 }) {
+  const handleOnClick = useCallback(() => {
+    if (Array.isArray(video) && video.length > 0) {
+      MovieTrailer(video[0]);
+    } else {
+      MovieTrailer(video);
+    }
+  }, [video]);
   return (
     <div className="container">
       <div className={MovieCardStyle["cellphone-container"]}>
@@ -88,13 +95,9 @@ export default function MovieCard({
                 <button
                   className={MovieCardStyle["watch-btn"]}
                   type="button"
-                  onClick={() =>
-                    video[0]
-                      ? // video is saved in the db as an array, (for recommended carouseL) but for ind_movie it is just ${video}
-                      MovieTrailer(video[0])
-                      : MovieTrailer(video)
-                  }
+                  onClick={handleOnClick}
                 >
+
                   <h3>
                     <i className="material-icons">&#xE037;</i>
                     WATCH TRAILER

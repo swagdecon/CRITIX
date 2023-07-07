@@ -1,6 +1,5 @@
 package com.popflix.model;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -27,7 +26,4 @@ public class Review {
     private String createdDate;
     private String updatedDate;
     private String content;
-    // private Boolean isAccepted;
-    // private Boolean isRejected;
-    // private Boolean isInReview;
 }
