@@ -11,10 +11,6 @@ import PropTypes from "prop-types";
 const Input = styled(MuiInput)`
   width: 42px;
 `;
-
-InputSlider.propTypes = {
-    onSliderChange: PropTypes.func,
-};
 export default function InputSlider({ onSliderChange }) {
     const [value, setValue] = useState(30);
 
@@ -73,3 +69,6 @@ export default function InputSlider({ onSliderChange }) {
         </Box>
     );
 }
+InputSlider.propTypes = {
+    onSliderChange: PropTypes.func,
+};

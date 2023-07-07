@@ -4,11 +4,6 @@ import PropTypes from "prop-types";
 import BtnStyles from "./Button.module.css";
 import Popcorn from "./popcornLogo";
 export default function MovieButton(props) {
-  MovieButton.propTypes = {
-    innerIcon: PropTypes.string,
-    onClick: PropTypes.func,
-  };
-
   {
     if (props.innerIcon === "popcorn") {
       return (
@@ -55,3 +50,7 @@ export default function MovieButton(props) {
     }
   }
 }
+MovieButton.propTypes = {
+  innerIcon: PropTypes.string,
+  onClick: PropTypes.func,
+};

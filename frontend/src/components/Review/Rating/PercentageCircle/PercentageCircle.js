@@ -3,9 +3,7 @@ import "./PercentageCircle.css"
 import PropTypes from "prop-types"
 import Popcorn from "../../../Other/btn/MovieButton/popcornLogo"
 export default function PercentageRatingCircle({ percentageRating }) {
-    PercentageRatingCircle.propTypes = {
-        percentageRating: PropTypes.number
-    }
+
     if (percentageRating >= 0 && percentageRating < 30) {
         return (
             <div className="single-chart">
@@ -86,4 +84,7 @@ export default function PercentageRatingCircle({ percentageRating }) {
     else {
         return
     }
+}
+PercentageRatingCircle.propTypes = {
+    percentageRating: PropTypes.number
 }

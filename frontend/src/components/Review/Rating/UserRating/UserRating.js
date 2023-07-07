@@ -2,9 +2,7 @@ import React from "react"
 import "./UserRating.css"
 import PropTypes from "prop-types"
 export default function UserRating({ percentage }) {
-    UserRating.propTypes = {
-        percentage: PropTypes.number
-    }
+
     switch (true) {
         case (percentage >= 0 && percentage < 40):
             return <div className="user-rating-bad">{percentage} kernels</div>
@@ -15,4 +13,7 @@ export default function UserRating({ percentage }) {
         case (percentage >= 80 && percentage <= 100):
             return <div className="user-rating-excellent">{percentage}  kernels</div>
     }
+}
+UserRating.propTypes = {
+    percentage: PropTypes.number
 }
