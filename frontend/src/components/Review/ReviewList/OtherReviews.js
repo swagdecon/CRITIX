@@ -30,8 +30,8 @@ export default function OtherReviews({ reviews }) {
             if (totalWordCount > 300) {
                 reviewsToDisplay = reviews.slice(2, 4);
             } else {
-                reviewsToDisplay = reviews.slice(3
-                    , 5);
+                reviewsToDisplay = reviews.slice(2
+                    , 4);
             }
         } else {
             const startIdx = (currentPage - 1) * commentsPerPage + 3;
