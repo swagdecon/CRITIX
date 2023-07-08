@@ -19,7 +19,12 @@
     right:  2.5%;
     top:    0.1%
 }
-
+@media screen and (min-aspect-ratio: 21/9) {
+    .total-rating-wrapper {
+        position: absolute;
+        right:  7%;
+    }
+  }
 .ind-review-section-title {
     color: #0096ff !important;
     text-align: center;
