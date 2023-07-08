@@ -336,7 +336,6 @@ ind-movie-nav {
   line-height: 48px;
   margin-bottom: 12px;
 }
-
 .hsContent p {
   width: 400px;
   margin: 0 auto;
@@ -348,8 +347,15 @@ ind-movie-nav {
 .indMovieEmbeddedTrailer {
   position: flex;
   transform: translateX(28.5vw) translateY(2vh);
-}
 
+}
+@media screen and (min-aspect-ratio: 21/9) {
+  .indMovieEmbeddedTrailer {
+    position: flex;
+    transform: translateX(32.1vw) translateY(2vh);
+  
+  }
+}
 /* CAST MEMBERS */
 .CastMembers {
   position: flex;
@@ -401,7 +407,6 @@ ind-movie-nav {
 h1.cast-title-1 {
   position: relative;
   pointer-events: none;
-
   transform: translateX(-31vw) translateY(63vh);
   font-family: "CoreCircus", sans-serif;
   font-size: 1.75vw;
@@ -410,6 +415,14 @@ h1.cast-title-1 {
   color: #0096ff;
   letter-spacing: -0.5rem;
 }
+
+@media screen and (min-aspect-ratio: 21/9) {
+  h1.cast-title-1 {
+    transform: translateX(-27.5vw) translateY(63vh);
+  }
+}
+
+
 .border h3 {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #fff;

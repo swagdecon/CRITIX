@@ -99,7 +99,9 @@ export default function MovieList({ endpoint }) {
   return (
     <div>
       <div className={MovieListStyle["title-container"]}>
-        <div className={Title.carouselTitle}>{title}</div>
+        <div className={MovieListStyle.titleWrapper}>
+          <h3 className={Title.carouselTitle}>{title}</h3>
+        </div>
         <div className={MovieListStyle["title-caption"]}>{caption}</div>
       </div>
       <SortByButton onSelectSortBy={handleSortByChange} />

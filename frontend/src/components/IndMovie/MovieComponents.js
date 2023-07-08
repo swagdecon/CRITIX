@@ -70,22 +70,46 @@ function ParseNumber(num) {
 
 
 function EmbeddedMovieTrailer({ video }) {
+  const [playerWidth, setPlayerWidth] = useState("60vw");
+  const [playerHeight, setPlayerHeight] = useState("60vh");
 
-  // if (video !== null) {
+  useEffect(() => {
+    const handleResize = () => {
+      // Adjust the width and height based on media queries
+      if (window.innerWidth < 768) {
+        setPlayerWidth("100%");
+        setPlayerHeight("300px");
+      } else if (window.innerWidth > 1200) {
+        setPlayerWidth("58vw");
+        setPlayerHeight("60vh");
+      } else {
+        setPlayerWidth("60vw");
+        setPlayerHeight("60vh");
+      }
+    };
+
+    // Call the handleResize function initially and whenever the window is resized
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <ReactPlayer
       className={IndMovieStyle.indMovieEmbeddedTrailer}
       url={`https://www.youtube.com/watch?v=${video}`}
       controls={true}
       playing={false}
-      width={"60vw"}
-      height={"60vh"}
+      width={playerWidth}
+      height={playerHeight}
     />
   );
-  // } else {
-  //   // return <div>No Trailer Available</div>;
-  // }
 }
+
 EmbeddedMovieTrailer.propTypes = {
   video: PropTypes.arrayOf(PropTypes.string),
 };

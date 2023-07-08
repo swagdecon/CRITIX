@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Login/login.module.css";
 import Filter from "bad-words";
@@ -6,13 +6,13 @@ import SignUpStyles from "../Login/login.module.css";
 import MovieButton from "../Other/btn/MovieButton/Button.js";
 import CookieManager from "../../security/CookieManager";
 
+
 export default function SignUpFunctionality() {
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
   }
-
-  const filter = useMemo(() => new Filter(), []);
-  const navigate = useMemo(() => new useNavigate(), []);
+  const filter = new Filter()
+  const navigate = useNavigate()
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
