@@ -1,14 +1,12 @@
 $accent-color: #e7e7e7;
 $brand-color: #0096ff;
 $dark-color: #1e1b26;
+
 .wrapper {
   transform: translateY(-6%);
 }
 .container {
-  width: 100%;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
 }
 
 .main-card-container {
@@ -29,6 +27,18 @@ $dark-color: #1e1b26;
   margin: 60px auto 0 auto;
   border-radius: 4px;
 }
+.titleWrapper {
+  transform: translateY(4vh) translateX(3vw);
+  display: relative;
+}
+
+// Media Queries
+@media screen and (min-aspect-ratio: 21/9) {
+  .titleWrapper {
+    transform: translateY(6vh) translateX(15vw);
+  }
+}
+
 
 .menu {
   position: absolute;

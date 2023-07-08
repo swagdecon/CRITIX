@@ -3,7 +3,7 @@ import { React, useState, useEffect } from "react";
 import MovieListStyle from "./MovieList.module.css";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import { Link } from "react-router-dom";
-import "../Carousel/title.scss";
+import Title from "../Carousel/title.module.scss";
 import PropTypes from "prop-types";
 import getDetailedMovie from "../../axios/GetDetailedMovie";
 import LoadingPage from "../../views/LoadingPage";
@@ -99,7 +99,7 @@ export default function MovieList({ endpoint }) {
   return (
     <div>
       <div className={MovieListStyle["title-container"]}>
-        <h3-title>{title}</h3-title>
+        <div className={Title.carouselTitle}>{title}</div>
         <div className={MovieListStyle["title-caption"]}>{caption}</div>
       </div>
       <SortByButton onSelectSortBy={handleSortByChange} />

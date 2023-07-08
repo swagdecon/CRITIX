@@ -1,12 +1,11 @@
 $h3: #0096ff;
 $outline: rgba(#fff, 0.4);
 
-h3-title {
+.carouselTitle  {
   font-family: "CoreCircus", sans-serif;
   font-size: 2vw;
-  text-align: center;
+  text-align: start; 
   line-height: 2;
-  margin-left: 3%;
   position: relative;
   color: $h3;
   letter-spacing: -0.5rem;
