@@ -83,7 +83,11 @@ p.css-button-text-2 {
   -o-transform: skew(40deg);
   transform: skew(40deg);
 }
-
+.popcorn-wrapper {
+  display: flex;
+  justify-content: center;
+  max-width: 81%;
+}
 .css-button:hover > .css-button-inner-popcorn {
   -webkit-animation-name: buttonx-in;
   -webkit-animation-duration: 0.6s;
@@ -118,10 +122,7 @@ p.css-button-text-2 {
   -o-transform: skew(-42deg) translate(-20px, -0px);
   transform: skew(-42deg) translate(-20px, -0px);
 }
-.popcorn-wrapper {
-  position: absolute;
-  left:2.4vw
-}
+
 @keyframes buttonx-in {
   from {
     transform: skew(-42deg) translate(-300px, 0);

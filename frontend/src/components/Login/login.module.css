@@ -210,36 +210,6 @@ video {
   width: 60%;
   margin: auto;
 }
-/* Screens above 1200px */
-@media only screen and (min-width: 1200px) {
-  #left {
-    flex: 4;
-  }
-  #right {
-    flex: 6;
-  }
-}
-@media only screen and (max-width: 768px) {
-  body {
-    overflow: visible;
-  }
-  #right {
-    display: none;
-  }
-  #left {
-    justify-content: start;
-    margin-top: 4vh;
-  }
-  #signin .logo {
-    margin-bottom: 2vh;
-  }
-  #signin .text-input {
-    margin-bottom: 0.7rem;
-  }
-  #main-footer {
-    padding-top: 1rem;
-  }
-}
 
 .eye {
   position: absolute;

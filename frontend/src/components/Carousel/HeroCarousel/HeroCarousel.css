@@ -3,11 +3,10 @@
   text-align: left;
   font-family: "Poppins", sans-serif;
 }
+
 .hero_header {
   margin-bottom: -1%;
 }
-
-/* HERO_HEADER */
 
 .carousel-inner img {
   margin: auto;
@@ -22,7 +21,6 @@
 h1 {
   /* font-size: 60px; */
   pointer-events: none;
-
   top: 5%;
   font-weight: bold;
   padding: 0 0 40px 0;
@@ -59,4 +57,30 @@ h1 {
   display: inline;
   width: 60px;
   height: auto;
+}
+
+/* Media Queries for Ultrawide Screens */
+
+@media screen and (min-aspect-ratio: 21/9) {
+  .hero_header {
+    margin-bottom: -2%;
+  }
+
+  h1 {
+    /* Adjust font-size for ultrawide */
+    font-size: 80px;
+  }
+
+  .hero_genre {
+    /* Adjust margin-right for ultrawide */
+    margin-right: 30px;
+  }
+
+  .hero_rating_container {
+    padding: 20px 0 0 0;
+  }
+
+  .hero_rating {
+    padding: 0 0 0 20px;
+  }
 }
