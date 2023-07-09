@@ -84,7 +84,7 @@ export default function OtherReviews({ reviews }) {
                             </div>
                         ))}
                     </div>
-                    {reviews && reviews.length > 0 && (
+                    {reviews && reviews.length > 0 && totalPages > 0 && (
                         <Pagination
                             size="large"
                             color="primary"
