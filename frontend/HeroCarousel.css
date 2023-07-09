@@ -58,16 +58,47 @@ h1 {
   width: 60px;
   height: auto;
 }
-.carousel-hero .carousel-control-prev,
-  .carousel-hero .carousel-control-next {
+.carousel-item {
+  text-align: center;
+}
+
+.carousel-movie {
+  width: 100%; 
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+
+}
+
+.carousel-movie .carousel-inner {
+  width: 100%; 
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+
+  .carousel-movie .carousel-control-prev,
+  .carousel-movie .carousel-control-next {
     display: flex;
-   
   }
-  .carousel-hero .carousel-control-prev {
+  
+  .carousel-control-prev {
     justify-content: flex-start;
   }
-  .carousel-hero .carousel-control-next {
+  .carousel-control-next {
     justify-content: flex-end;
+  }
+  @media screen and (min-aspect-ratio: 21/9) {
+    .carousel-control-prev {
+      justify-content: flex-end;
+    }
+    
+    .carousel-control-next {
+      justify-content: flex-start;
+    }
   }
 /* Media Queries for Ultrawide Screens */
 

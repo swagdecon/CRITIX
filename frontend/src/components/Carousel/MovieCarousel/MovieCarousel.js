@@ -27,11 +27,9 @@ function MovieCarousel({ title, endpoint }) {
   const getChunkSize = () => {
     if (windowWidth <= 979) {
       return 1
-    }
-    else if (windowWidth <= 1471) {
+    } else if (windowWidth <= 1471) {
       return 2
-    }
-    else if (windowWidth <= 1971) {
+    } else if (windowWidth <= 1971) {
       return 3;
     } else if (windowWidth <= 2463) {
       return 4;

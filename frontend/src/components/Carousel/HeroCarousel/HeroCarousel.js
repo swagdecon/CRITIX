@@ -57,7 +57,7 @@ const heroMovies = [
 ];
 export default function HeroCarousel() {
   return (
-    <Carousel>
+    <Carousel className="carousel-hero">
       {heroMovies.map((movie) => (
         <Carousel.Item interval={5000} key={movie.id}>
           <Link to={`/movies/movie/${movie.id}`} className="hero-movie-page">
