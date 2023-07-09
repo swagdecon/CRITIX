@@ -50,30 +50,28 @@ function MovieCarousel({ title, endpoint }) {
         <div className={MovieCardStyle.titleWrapper}>
           <h3 className={Title.carouselTitle}>{title}</h3>
         </div>
-        {movies.length > 0 && (
-          <Carousel className="carousel-movie" indicators={false} interval={null}>
-            {movieChunks.map((chunk, i) => (
-              <Carousel.Item key={i}>
-                <div className={MovieCardStyle.carouselHeader} />
-                {chunk.map((movie) => (
-                  <div className={MovieCardStyle["main-card-container"]} key={movie.id}>
-                    <Link to={`${endpoint}/${movie.id}`}>
-                      <MovieCard
-                        poster={movie.posterPath}
-                        rating={movie.voteAverage}
-                        runtime={movie.runtime}
-                        genres={movie.genres}
-                        overview={movie.overview}
-                        actors={movie.actors}
-                        video={movie.video}
-                      />
-                    </Link>
-                  </div>
-                ))}
-              </Carousel.Item>
-            ))}
-          </Carousel>
-        )}
+        <Carousel className="carousel-movie" indicators={false} interval={null}>
+          {movieChunks.map((chunk, i) => (
+            <Carousel.Item key={i}>
+              <div className={MovieCardStyle.carouselHeader} />
+              {chunk.map((movie) => (
+                <div className={MovieCardStyle["main-card-container"]} key={movie.id}>
+                  <Link to={`${endpoint}/${movie.id}`}>
+                    <MovieCard
+                      poster={movie.posterPath}
+                      rating={movie.voteAverage}
+                      runtime={movie.runtime}
+                      genres={movie.genres}
+                      overview={movie.overview}
+                      actors={movie.actors}
+                      video={movie.video}
+                    />
+                  </Link>
+                </div>
+              ))}
+            </Carousel.Item>
+          ))}
+        </Carousel>
       </div>
     </section>
   );
