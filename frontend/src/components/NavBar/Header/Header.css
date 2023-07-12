@@ -4,10 +4,8 @@
   display: flex;
   padding: 40px;
   position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
   box-sizing: border-box;
-  z-index: 5;
+  z-index: 2;
 }
 

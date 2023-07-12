@@ -1,9 +1,8 @@
-/* Navigation */
 
 .Navigation ul {
   display: flex;
   align-items: center;
-  padding: 0 10px;
+  justify-content: center;  
 }
 .nav-link {
   display: flex;
@@ -16,12 +15,15 @@
   text-align: center;
   white-space: nowrap; /* Add this property */
 }
-
+.Navigation ul:after {
+  content: ""; /* Create an empty pseudo-element */
+  flex-grow: 1; 
+}
 .nav-link:hover {
   background: #0096FF;
   cursor: pointer;
 }
-@media screen and (max-width: 877px) {
+@media screen and (max-width: 100px) {
   .Navigation ul {
     display: none
   }

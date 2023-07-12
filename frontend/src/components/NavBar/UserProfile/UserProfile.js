@@ -24,23 +24,6 @@ const UserProfile = () => {
           </div>
         </button>
       </div>
-      {/* <div className="UserProfile-menu">
-        <div className="UserProfileSwitch">
-          <ul>
-            <li>
-              <div className="UserProfile-image" />
-              <div className="UserProfile-name">Alexander</div>
-            </li>
-          </ul>
-        </div>
-        <div className="UserNavigation">
-          <ul>
-            <li>Your Account</li>
-            <li>Help Center</li>
-            <li>Sign out of Popflix</li>
-          </ul>
-        </div>
-      </div> */}
     </div>
   );
 };
