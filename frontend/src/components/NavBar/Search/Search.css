@@ -4,8 +4,7 @@
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-  min-width: 20%;
-  transform: translateX(-3vw);
+  min-width: 25%;
 }
 
 .Search input {
@@ -30,7 +29,7 @@
 
 .Search input:focus {
   border: 2px solid #0096ff;
-  width: 100%;
+  width: 60%;
 }
 
 .search-results-list {
@@ -81,4 +80,34 @@ a {
 
 a:hover {
   color: inherit;
+}
+/* Media Queries */
+@media screen and (min-aspect-ratio: 21/9) {
+  /* Adjust the styles for narrower aspect ratios (e.g., mobile devices) */
+  .Search {
+   transform: translateX(0.1vw);
+  }
+
+  .Search input {
+    width: 60%;
+  }
+
+  .Search input:focus {
+    width: 100%;
+  }
+}
+
+@media screen and (min-aspect-ratio: 16/9) and (max-aspect-ratio: 21/9) {
+  /* Adjust the styles for wider aspect ratios (e.g., landscape-oriented devices) */
+  .Search {
+    transform: translateX(-4.4vw);
+  }
+
+  .Search input {
+    width: 60%;
+  }
+
+  .Search input:focus {
+    width: 100%;
+  }
 }
