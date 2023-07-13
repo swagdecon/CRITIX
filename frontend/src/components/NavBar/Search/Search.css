@@ -9,7 +9,6 @@
   align-items: center;
   width: 100%;
   max-width: 400px;
-  padding: 0 10px;
   box-sizing: border-box;
 }
 .Search input {
@@ -17,8 +16,7 @@
   font-weight: 300;
   font-size: 14px;
   height: 37px;
-  width: 100%;
-  max-width: 400px;
+  width: 70%; 
   background: transparent;
   color: #ffffff;
   appearance: none;
@@ -35,7 +33,7 @@
 
 .Search input:focus {
   border: 2px solid #0096ff;
-  width: 60%;
+  width: 100%;
 }
 
 .search-results-list {
