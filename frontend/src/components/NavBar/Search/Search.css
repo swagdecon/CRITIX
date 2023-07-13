@@ -85,3 +85,13 @@ a {
 a:hover {
   color: inherit;
 }
+@media screen and (max-width:  720px) {
+  .Search input { 
+    width: 40%;
+  }
+}
+@media screen and (max-width:  900px) {
+  .Search input:focus {
+    width: 70%;
+  }
+}
