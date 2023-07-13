@@ -19,7 +19,6 @@
 }
 
 h1 {
-  /* font-size: 60px; */
   pointer-events: none;
   top: 5%;
   font-weight: bold;
@@ -35,12 +34,13 @@ h1 {
   margin-right: 20px;
   font-family: "Poppins", sans-serif;
 }
-
+.carousel-caption {
+  bottom: 10%
+}
 .hero_trailer {
   display: flex;
   justify-content: left;
   text-decoration: none;
-  margin-bottom: 8%;
 }
 
 .hero_rating_container {
@@ -59,16 +59,16 @@ h1 {
   height: auto;
 }
 .carousel-hero .carousel-control-prev,
-  .carousel-hero .carousel-control-next {
-    display: flex;
-   
-  }
-  .carousel-hero .carousel-control-prev {
-    justify-content: flex-start;
-  }
-  .carousel-hero .carousel-control-next {
-    justify-content: flex-end;
-  }
+.carousel-hero .carousel-control-next {
+  display: flex;
+  
+}
+.carousel-hero .carousel-control-prev {
+  justify-content: flex-start;
+}
+.carousel-hero .carousel-control-next {
+  justify-content: flex-end;
+}
 /* Media Queries for Ultrawide Screens */
 
 @media screen and (min-aspect-ratio: 21/9) {
@@ -93,4 +93,30 @@ h1 {
   .hero_rating {
     padding: 0 0 0 20px;
   }
+}
+@media screen and (max-width:  900px) {
+
+  h1 {
+    padding: 0 0 20px 0;
+
+  }
+  .carousel-caption {
+    top: 60%
+  }
+  .hero_trailer {
+    display: none;
+  }
+ .carousel-indicators {
+  display: none;
+ }
+}
+@media screen and (max-width:  720px) {
+  h1 {
+    padding: 0 0 10px 0;
+    font-size:18px;
+  }
+  .hero_tagline  {
+    display: none;
+  }
+
 }

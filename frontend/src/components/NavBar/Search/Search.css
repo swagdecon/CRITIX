@@ -89,6 +89,9 @@ a:hover {
   .Search input { 
     width: 40%;
   }
+  .Search input:focus { 
+    width: 20%;
+  }
 }
 @media screen and (max-width:  900px) {
   .Search input:focus {
