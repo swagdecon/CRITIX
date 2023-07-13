@@ -1,4 +1,5 @@
 .movie_carousel_wrapper {
+  transform: translateY(4%);
   height: 100%;
   display: flex;
   flex-direction: column;

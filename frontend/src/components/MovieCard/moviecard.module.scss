@@ -3,7 +3,9 @@ $brand-color: #0096ff;
 $dark-color: #1e1b26;
 
 .wrapper {
-  transform: translateY(-6%);
+  transform: translateY(-6vh);
+  margin-bottom: 4%;
+ 
 }
 .container {
   display: flex;
@@ -27,25 +29,10 @@ $dark-color: #1e1b26;
   margin: 60px auto 0 auto;
   border-radius: 4px;
 }
-.titleWrapper {
+.titleWrapper {  
   display: flex;
-  @media screen and (min-aspect-ratio: 16/9) {
-    transform: translateY(4vh) translateX(3vw);
-  }
-
-  @media screen and (min-aspect-ratio: 21/9) {
-    transform: translateY(4vh) translateX(15.1vw);
-  }
-
-  // @media screen and (min-aspect-ratio: 4/3) and (max-aspect-ratio: 5/4) {
-  //   justify-content: center;
-    
-  // }
-  @media screen and (max-width: 1971px) {
-    justify-content: center;
+  justify-content: center;
 }
-}
-
 
 
 .menu {

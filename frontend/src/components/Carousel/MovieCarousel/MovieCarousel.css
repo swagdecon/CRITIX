@@ -18,25 +18,24 @@
   flex-wrap: wrap;
 }
 
+.carousel-movie .carousel-control-prev,
+.carousel-movie .carousel-control-next {
+  display: flex;
+}
 
+.carousel-control-prev {
+  justify-content: flex-start;
+}
+.carousel-control-next {
+  justify-content: flex-end;
+}
 
-  .carousel-movie .carousel-control-prev,
-  .carousel-movie .carousel-control-next {
-    display: flex;
-  }
-  
+@media screen and (min-aspect-ratio: 21/9) {
   .carousel-control-prev {
-    justify-content: flex-start;
-  }
-  .carousel-control-next {
     justify-content: flex-end;
   }
-  @media screen and (min-aspect-ratio: 21/9) {
-    .carousel-control-prev {
-      justify-content: flex-end;
-    }
-    
-    .carousel-control-next {
-      justify-content: flex-start;
-    }
+  
+  .carousel-control-next {
+    justify-content: flex-start;
   }
+}
