@@ -1,7 +1,7 @@
 $h3: #0096ff;
 $outline: rgba(#fff, 0.4);
 
-.carouselTitle {
+.homepage-carousel-title {
   display: flex;
   font-family: "CoreCircus", sans-serif;
   line-height: 2;
@@ -14,13 +14,22 @@ $outline: rgba(#fff, 0.4);
 }
 
 @media screen and (max-width: 1144px) {
-  .carouselTitle {
+  .homepage-carousel-title  {
     font-size: 33px;
     letter-spacing: -0.1rem;
     text-align: center;
     white-space: nowrap;
 
   }
+}
+.list-page-carousel-title {
+  display: flex;
+  justify-content: flex-start;
+  font-family: "CoreCircus", sans-serif;
+  line-height: 2;
+  font-size: 50px;
+  color: $h3;
+  letter-spacing: -0.5rem;
 }
 /*
  * Webfont: CoreCircus by S-Core

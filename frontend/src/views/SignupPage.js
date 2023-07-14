@@ -10,7 +10,7 @@ import SignUpStyles from "../components/Login/login.module.css";
 
 export default function SignUp() {
   return (
-    <div id={SignUpStyles.wrapper}>
+    <div>
       <div id={SignUpStyles.left}>
         <div id={SignUpStyles.signin}>
           <Logo />
@@ -32,7 +32,7 @@ export default function SignUp() {
           </Link>
         </div>
         <footer id={SignUpStyles["main-footer"]}>
-          <p>&copy; 2022 POPFLIX, All Rights Reserved</p>
+          <p>&copy; 2023 POPFLIX, All Rights Reserved</p>
           <div>
             <Link to="#">Terms of Use</Link> |{" "}
             <Link to="#">Privacy Policy</Link>

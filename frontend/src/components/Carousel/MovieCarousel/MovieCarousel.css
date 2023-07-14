@@ -7,7 +7,6 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  position: relative;
   overflow: hidden;
 
 }
@@ -30,7 +29,7 @@
   justify-content: flex-end;
 }
 
-@media screen and (min-aspect-ratio: 21/9) {
+@media screen and (min-width: 3340px) {
   .carousel-control-prev {
     justify-content: flex-end;
   }

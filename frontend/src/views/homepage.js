@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import "../components/MovieCard/moviecard.module.scss";
+import React, { useState, useCallback } from "react";
 import HeroCarousel from "../components/Carousel/HeroCarousel/HeroCarousel";
 import MovieCarousel from "../components/Carousel/MovieCarousel/MovieCarousel.js";
 import NavBar from "../components/NavBar/NavBar.js";
 import LoadingPage from "./LoadingPage";
 import HomePage from "../misc/HomePage.module.css";
 
-export default function Homepage() {
+function Homepage() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLoad = () => {
+  const handleLoad = useCallback(() => {
     setIsLoading(true);
-  };
+  }, []);
+
   return isLoading ? (
     <LoadingPage />
   ) : (
@@ -44,3 +44,5 @@ export default function Homepage() {
     </div>
   );
 }
+
+export default React.memo(Homepage);

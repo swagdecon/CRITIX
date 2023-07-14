@@ -25,7 +25,9 @@ export default function MovieButton(props) {
           <p className={BtnStyles["css-button-text"]}>LOG IN</p>
           <div className={BtnStyles["css-button-inner-clapperboard"]}>
             <div className={BtnStyles["reset-skew"]}>
-              <clapperboard-div />
+              <div className={BtnStyles["clapperboard-wrapper"]}>
+                <clapperboard-div />
+              </div>
             </div>
           </div>
         </button>

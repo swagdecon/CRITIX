@@ -1,5 +1,4 @@
-
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useCallback } from "react";
 import MovieListStyle from "./MovieList.module.css";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import { Link } from "react-router-dom";
@@ -10,6 +9,7 @@ import LoadingPage from "../../views/LoadingPage";
 import SortByButton from "../Other/Dropdown/SortByDropdown/SortByDropdown";
 import Pagination from '@mui/material/Pagination';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -17,6 +17,7 @@ const theme = createTheme({
     },
   },
 });
+
 export default function MovieList({ endpoint }) {
   const [movies, setMovies] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -24,6 +25,43 @@ export default function MovieList({ endpoint }) {
   const [totalPages, setTotalPages] = useState(1);
   const [title, setTitle] = useState("");
   const [caption, setCaption] = useState("");
+
+  const handleSortByChange = useCallback((selectedValue) => {
+    let sortedMovies;
+    switch (selectedValue) {
+      case "A-Z":
+        sortedMovies = [...movies].sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case "Z-A":
+        sortedMovies = [...movies].sort((a, b) => b.title.localeCompare(a.title));
+        break;
+      case "Popularity Asc.":
+        sortedMovies = [...movies].sort((a, b) => a.popularity - b.popularity);
+        break;
+      case "Popularity Desc.":
+        sortedMovies = [...movies].sort((a, b) => b.popularity - a.popularity);
+        break;
+      case "Vote Average Asc.":
+        sortedMovies = [...movies].sort((a, b) => a.vote_average - b.vote_average);
+        break;
+      case "Vote Average Desc.":
+        sortedMovies = [...movies].sort((a, b) => b.vote_average - a.vote_average);
+        break;
+      default:
+        sortedMovies = [...movies];
+    }
+    setMovies(sortedMovies);
+  }, [movies]);
+
+  const handlePageChange = useCallback(async (event) => {
+    setDataLoaded(false);
+    const newPage = parseInt(event.target.textContent);
+    setCurrentPage(newPage);
+    const data = await getDetailedMovie(endpoint.endpointName, { page: newPage });
+    setMovies(data.detailedMovies);
+    setDataLoaded(true);
+  }, [endpoint.endpointName]);
+
   useEffect(() => {
     async function getDetailedMovieData(endpointName) {
       const data = await getDetailedMovie(endpointName);
@@ -59,48 +97,16 @@ export default function MovieList({ endpoint }) {
     }
     getDetailedMovieData(endpoint.endpointName);
   }, [endpoint.endpointName]);
-  const handleSortByChange = (selectedValue) => {
-    let sortedMovies;
-    switch (selectedValue) {
-      case "A-Z":
-        sortedMovies = [...movies].sort((a, b) => a.title.localeCompare(b.title));
-        break;
-      case "Z-A":
-        sortedMovies = [...movies].sort((a, b) => b.title.localeCompare(a.title));
-        break;
-      case "Popularity Asc.":
-        sortedMovies = [...movies].sort((a, b) => a.popularity - b.popularity);
-        break;
-      case "Popularity Desc.":
-        sortedMovies = [...movies].sort((a, b) => b.popularity - a.popularity);
-        break;
-      case "Vote Average Asc.":
-        sortedMovies = [...movies].sort((a, b) => a.vote_average - b.vote_average);
-        break;
-      case "Vote Average Desc.":
-        sortedMovies = [...movies].sort((a, b) => b.vote_average - a.vote_average);
-        break;
-      default:
-        sortedMovies = [...movies];
-    }
-    setMovies(sortedMovies);
-  };
-  async function handlePageChange(event) {
-    setDataLoaded(false);
-    const newPage = parseInt(event.target.textContent);
-    setCurrentPage(newPage);
-    const data = await getDetailedMovie(endpoint.endpointName, { page: newPage });
-    setMovies(data.detailedMovies);
-    setDataLoaded(true);
-  }
+
   if (!dataLoaded) {
     return <LoadingPage />;
   }
+
   return (
     <div>
       <div className={MovieListStyle["title-container"]}>
         <div className={MovieListStyle.titleWrapper}>
-          <h3 className={Title.carouselTitle}>{title}</h3>
+          <h3 className={Title["list-page-carousel-title"]}>{title}</h3>
         </div>
         <div className={MovieListStyle["title-caption"]}>{caption}</div>
       </div>
@@ -134,6 +140,7 @@ export default function MovieList({ endpoint }) {
     </div>
   );
 }
+
 MovieList.propTypes = {
   endpoint: PropTypes.object,
 };

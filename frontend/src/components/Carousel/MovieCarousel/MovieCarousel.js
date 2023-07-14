@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Title from "../title.module.scss";
@@ -10,43 +10,29 @@ import useFetchData from "../../../security/FetchApiData.js";
 
 function MovieCarousel({ title, endpoint }) {
   const { data: movies } = useFetchData(endpoint);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const getChunkSize = () => {
+  const getChunkSize = useCallback(() => {
+    const windowWidth = window.innerWidth;
     if (windowWidth <= 979) {
-      return 1
+      return 1;
     } else if (windowWidth <= 1471) {
-      return 2
+      return 2;
     } else if (windowWidth <= 1971) {
       return 3;
     } else if (windowWidth <= 2463) {
       return 4;
     } else {
       return 5;
-
     }
+  }, []);
 
-  };
-
-  const movieChunks = chunk(movies, getChunkSize());
+  const movieChunks = useMemo(() => chunk(movies, getChunkSize()), [movies, getChunkSize]);
 
   return (
     <section>
       <div className={MovieCardStyle.wrapper}>
         <div className={MovieCardStyle.titleWrapper}>
-          <h3 className={Title.carouselTitle}>{title}</h3>
+          <h3 className={Title["homepage-carousel-title"]}>{title}</h3>
         </div>
         <Carousel className="carousel-movie" indicators={false} interval={null}>
           {movieChunks.map((chunk, i) => (
