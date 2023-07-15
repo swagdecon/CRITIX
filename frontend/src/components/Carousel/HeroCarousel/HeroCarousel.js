@@ -11,29 +11,29 @@ const heroMovies = [
   {
     id: 335984,
     image:
-      "https://www.themoviedb.org/t/p/original/sAtoMqDVhNDQBc3QJL3RF6hlhGq.jpg",
-    title: "BLADE RUNNER 2049",
-    tagline: "THE KEY TO THE FUTURE IS FINALLY UNEARTHED.",
+      "https://www.themoviedb.org/t/p/original/xcXALwBjdHIjrESpGVhghqj8fGT.jpg",
+    title: "OPPENHEIMER",
+    tagline: "THE WORLD FOREVER CHANGES",
     genres: ["SCI-FI", "THRILLER", "DRAMA"],
-    trailerUrl: "https://www.youtube.com/watch?v=gCcx85zbxz4",
+    trailerUrl: "https://www.youtube.com/watch?v=uYPbbksJxIg",
   },
   {
     id: 330459,
     image:
-      "https://www.themoviedb.org/t/p/original/6t8ES1d12OzWyCGxBeDYLHoaDrT.jpg",
-    title: "ROGUE ONE: A STAR WARS STORY",
-    tagline: "A REBELLION BUILT ON HOPE.",
-    genres: ["SCI-FI", "ACTION", "ADVENTURE"],
-    trailerUrl: "https://www.youtube.com/watch?v=frdj1zb9sMY",
+      "https://www.themoviedb.org/t/p/original/628Dep6AxEtDxjZoGP78TsOxYbK.jpg",
+    title: "MISSION: IMPOSSIBLE - DEAD RECKONING",
+    tagline: "WE ALL SHARE THE SAME FATE",
+    genres: ["ACTION", "ADVENTURE"],
+    trailerUrl: "https://www.youtube.com/watch?v=HurjfO_TDlQ",
   },
   {
     id: 157336,
     image:
-      "https://www.themoviedb.org/t/p/original/xJHokMbljvjADYdit5fK5VQsXEG.jpg",
-    title: "INTERSTELLAR",
-    tagline: "MANKIND WAS BORN ON EARTH. IT WAS NEVER MEANT TO DIE HERE.",
-    genres: ["SCI-FI", "DRAMA", "ADVENTURE"],
-    trailerUrl: "https://www.youtube.com/watch?v=zSWdZVtXT7E",
+      "https://www.themoviedb.org/t/p/original/b0PlSFdDwbyK0cf5RxwDpaOJQvQ.jpg",
+    title: "THE BATMAN",
+    tagline: "UNMASK THE TRUTH",
+    genres: ["SCI-FI", "ACTION"],
+    trailerUrl: "https://www.youtube.com/watch?v=mqqft2x_Aa4",
   },
   {
     id: 27205,

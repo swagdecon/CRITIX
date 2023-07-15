@@ -19,27 +19,22 @@ function Homepage() {
       <NavBar />
       <HeroCarousel onLoad={handleLoad} />
       <div className={HomePage.movie_carousel_wrapper}>
-        <div className={HomePage.movie_carousel_container}>
-          <MovieCarousel
-            title="Popular right now"
-            endpoint="/movies/popular"
-            onLoad={handleLoad}
-          />
-        </div>
-        <div className={HomePage.movie_carousel_container}>
-          <MovieCarousel
-            title="Top Rated"
-            endpoint="/movies/top_rated"
-            onLoad={handleLoad}
-          />
-        </div>
-        <div className={HomePage.movie_carousel_container}>
-          <MovieCarousel
-            title="Releasing Soon"
-            endpoint="/movies/upcoming"
-            onLoad={handleLoad}
-          />
-        </div>
+        <MovieCarousel
+          title="Trending movies"
+          endpoint="/movies/popular"
+          onLoad={handleLoad}
+        />
+        <MovieCarousel
+          title="Top Rated"
+          endpoint="/movies/top_rated"
+          onLoad={handleLoad}
+        />
+
+        <MovieCarousel
+          title="Releasing Soon"
+          endpoint="/movies/upcoming"
+          onLoad={handleLoad}
+        />
       </div>
     </div>
   );

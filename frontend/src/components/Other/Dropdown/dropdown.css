@@ -1,7 +1,8 @@
 .button-container {
   transform: translateX(3.4vw) translateY(8vh);
-  display: inline-block;
+  display: flex;
   margin-right: 10px;
-  position: relative;
-  z-index: 1;
+  position: absolute;
+  display: flex;
+  z-index: 4;
 }

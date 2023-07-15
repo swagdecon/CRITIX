@@ -83,7 +83,14 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
     }, [userReviews]);
 
     if (placement === "userRatingSection") {
-        const percentageVoteAverage = useMemo(() => voteAverage.toFixed(1) * 10, [voteAverage]);
+        const percentageVoteAverage = useMemo(() => {
+            if (voteAverage) {
+                return voteAverage.toFixed(1) * 10;
+            } else {
+                return null;
+            }
+        }, [voteAverage, voteAverage]);
+
 
         return (
             <div className={IndReview["ind-review-wrapper"]}>

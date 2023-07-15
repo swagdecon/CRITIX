@@ -1,9 +1,16 @@
 .container {
-  margin: 7% auto;
-  transform: translateY(-2%);
+  margin-top: 5%;
+  margin-bottom: 1%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: flex-end; /* Change align-items property to flex-start */
+}
+
+@media screen and (max-width: 1500px) {
+  .title-caption {
+   display: none !important;
+  }
 }
 .title-container {
   transform: translate(3vw,10vh);
@@ -20,7 +27,7 @@
 .pagination-container {
   display: flex;
   justify-content: center;
-  transform: translateY(3vh); 
+  padding-bottom: 5%;
 }
 .titleWrapper {
   display: flex;
@@ -44,7 +51,3 @@
   flex-wrap: wrap;
 }
 
-.carousel-movie .carousel-control-prev,
-.carousel-movie .carousel-control-next {
-  display: flex;
-}

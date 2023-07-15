@@ -1,35 +1,34 @@
 $h3: #0096ff;
 $outline: rgba(#fff, 0.4);
 
-.homepage-carousel-title {
-  display: flex;
-  font-family: "CoreCircus", sans-serif;
-  line-height: 2;
-  font-size: 50px;
+.homepage-carousel {
   position: absolute;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: $h3;
-  letter-spacing: -0.5rem;
 }
 
 @media screen and (max-width: 1144px) {
-  .homepage-carousel-title  {
-    font-size: 33px;
-    letter-spacing: -0.1rem;
-    text-align: center;
+  .homepage-carousel  {
     white-space: nowrap;
-
   }
+  .movie-title {
+    font-size: 45px !important; /* Update the font size within the media query */
+  }
+
 }
-.list-page-carousel-title {
+
+.movie-title {
   display: flex;
-  justify-content: flex-start;
   font-family: "CoreCircus", sans-serif;
   line-height: 2;
   font-size: 50px;
   color: $h3;
   letter-spacing: -0.5rem;
+
+}
+.list-page-carousel {
+  justify-content: flex-start;
+
 }
 /*
  * Webfont: CoreCircus by S-Core

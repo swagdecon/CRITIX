@@ -79,12 +79,12 @@ export default function MovieList({ endpoint }) {
           setCaption("Get a Sneak Peek of What's Coming Soon");
           break;
         case "popular":
-          setTitle("Discover What Everyone Is Watching Right Now");
-          setCaption("Popular Movies:");
+          setTitle("Popular Movies");
+          setCaption("Discover What Everyone Is Watching Right Now");
           break;
         case "top_rated":
           setTitle("Top Rated Movies:");
-          setCaption("Popular Movies:");
+          setCaption("Cinematic Masterpieces");
           break;
         case "now_playing_and_upcoming":
           setTitle("In Theatres:");
@@ -106,7 +106,7 @@ export default function MovieList({ endpoint }) {
     <div>
       <div className={MovieListStyle["title-container"]}>
         <div className={MovieListStyle.titleWrapper}>
-          <h3 className={Title["list-page-carousel-title"]}>{title}</h3>
+          <h3 className={`${Title["list-page-carousel"]} ${Title["movie-title"]}`}>{title}</h3>
         </div>
         <div className={MovieListStyle["title-caption"]}>{caption}</div>
       </div>
@@ -127,15 +127,15 @@ export default function MovieList({ endpoint }) {
             </Link>
           </div>
         ))}
-        <div className={MovieListStyle["pagination-container"]}>
-          <ThemeProvider theme={theme}>
-            <Pagination onClick={handlePageChange} count={totalPages} siblingCount={4} boundaryCount={1} page={currentPage} size="large" color="primary" sx={{
-              '& .MuiPaginationItem-root': {
-                color: '#ffffff',
-              },
-            }} />
-          </ThemeProvider>
-        </div>
+      </div>
+      <div className={MovieListStyle["pagination-container"]}>
+        <ThemeProvider theme={theme}>
+          <Pagination onClick={handlePageChange} count={totalPages} siblingCount={4} boundaryCount={1} page={currentPage} size="large" color="primary" sx={{
+            '& .MuiPaginationItem-root': {
+              color: '#ffffff',
+            },
+          }} />
+        </ThemeProvider>
       </div>
     </div>
   );

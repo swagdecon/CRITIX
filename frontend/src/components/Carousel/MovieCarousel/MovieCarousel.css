@@ -1,14 +1,16 @@
 .carousel-item {
   text-align: center;
 }
-
+.carousel-wrapper {
+  transform: translateY(5%);
+}
 .carousel-movie {
   width: 100%; 
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   overflow: hidden;
-
+  margin-bottom: 70px;
 }
 
 .carousel-movie .carousel-inner {

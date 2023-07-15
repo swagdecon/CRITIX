@@ -362,7 +362,7 @@ ind-movie-nav {
   align-items: center;
   justify-content: center;
   width: 95rem;
-  transform: translateY(215%) translateX(-22%);
+  transform: translateY(170%) translateX(-22%);
 }
 .profile-container {
   display: flex;

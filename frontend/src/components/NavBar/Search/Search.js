@@ -3,54 +3,77 @@ import "./Search.css";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { GetYearFromDate } from "../../IndMovie/MovieComponents";
+
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+
 export default function Search(props) {
   const [query, setQuery] = useState("");
   const [detailedMovies, setDetailedMovies] = useState([]);
   const searchRef = useRef();
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         setDetailedMovies([]);
       }
     };
+
     document.addEventListener("click", handleClickOutside);
+
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      searchMovies(query);
+    },);
+
+    return () => {
+      clearTimeout(debounceTimer);
+    };
+  }, [query]);
+
   const searchMovies = async (searchQuery) => {
     if (!searchQuery) {
       setDetailedMovies([]);
       return;
     }
+
     const response = await axios.get(
       `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${searchQuery}&language=en-US&page=1&include_adult=false`
     );
+
     const detailedMoviesArray = await Promise.all(
       response.data.results.slice(0, 5).map(async (movie) => {
         const detailedResponse = await axios.get(
           `https://api.themoviedb.org/3/movie/${movie.id}?api_key=${API_KEY}&language=en-US`
         );
+
         const getTopActors = await axios.get(
           `https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${API_KEY}`
         );
+
         const actors = getTopActors.data.cast
           .slice(0, 5)
           .map((actor) => actor.name);
+
         return {
           ...detailedResponse.data,
           actors: actors,
         };
       })
     );
+
     setDetailedMovies(detailedMoviesArray);
   };
-  const handleChange = async (event) => {
+
+  const handleChange = (event) => {
     const value = event.target.value;
     setQuery(value);
-    searchMovies(value);
   };
+
   return (
     <form onSubmit={props.onSubmit} id="search" className="Search" ref={searchRef}>
       <input
@@ -99,6 +122,7 @@ export default function Search(props) {
     </form>
   );
 }
+
 Search.propTypes = {
   onSubmit: PropTypes.func,
 };

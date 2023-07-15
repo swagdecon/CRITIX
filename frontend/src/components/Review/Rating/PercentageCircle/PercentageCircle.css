@@ -52,5 +52,10 @@
   font-family: sans-serif;
   font-size: 0.3em;
   text-anchor: middle;
-  
+}
+.error-percentage {
+  fill: #ffffff;
+  font-family: sans-serif;
+  font-size: 0.25em;
+  text-anchor: middle;
 }

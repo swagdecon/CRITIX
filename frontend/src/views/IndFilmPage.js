@@ -100,9 +100,6 @@ export default function IndMovie() {
                       <UserMovieReviews voteAverage={movie.voteAverage} movieId={movie.id} placement="userRatingSection" />
                     </div>
                   </div>
-                  <h1 className={IndMovieStyle["cast-title-1"]}>
-                    Cast Members:
-                  </h1>
                   <section className={IndMovieStyle.CastMembers}>
                     <MovieActors actors={movie.actors} />
                   </section>
