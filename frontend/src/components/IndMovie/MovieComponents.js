@@ -5,7 +5,7 @@ import ReactTextCollapse from "react-text-collapse/dist/ReactTextCollapse";
 import ReactPlayer from "react-player";
 import "../Carousel/MovieCarousel/MovieCarousel.css";
 import GlassCard from "./GlassCard";
-
+import NoTrailer from "./NoTrailerAvailable.png"
 
 function TruncateDescription({ description }) {
   const words = description.split(" ");
@@ -70,6 +70,7 @@ function ParseNumber(num) {
 
 
 function EmbeddedMovieTrailer({ video }) {
+
   const [playerWidth, setPlayerWidth] = useState("60vw");
   const [playerHeight, setPlayerHeight] = useState("60vh");
 
@@ -99,15 +100,28 @@ function EmbeddedMovieTrailer({ video }) {
   }, []);
 
   return (
-    <ReactPlayer
-      className={IndMovieStyle.indMovieEmbeddedTrailer}
-      url={`https://www.youtube.com/watch?v=${video}`}
-      controls={true}
-      playing={false}
-      width={playerWidth}
-      height={playerHeight}
-    />
+    <div>
+      {video ? (
+
+        <ReactPlayer
+          className={IndMovieStyle.indMovieEmbeddedTrailer}
+          url={`https://www.youtube.com/watch?v=${video}`}
+          controls={true}
+          playing={false}
+          width={playerWidth}
+          height={playerHeight}
+        />
+      ) : <img
+        className={IndMovieStyle.indMovieEmbeddedTrailer}
+        src={NoTrailer}
+        alt="Movie Trailer Unavailable"
+        width={1520}
+        height={825}
+      />
+      }
+    </div>
   );
+
 }
 
 EmbeddedMovieTrailer.propTypes = {
