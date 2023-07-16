@@ -50,11 +50,13 @@ export default function IndMovie() {
         }}
       />
       <div className={IndMovieStyle["content-wrapper"]}>
-        <img
-          className={IndMovieStyle["hero-poster"]}
-          src={moviePosterPath}
-          alt="Movie Poster"
-        />
+        <div className={IndMovieStyle["flex-1"]}>
+          <img
+            className={IndMovieStyle["hero-poster"]}
+            src={moviePosterPath}
+            alt="Movie Poster"
+          />
+        </div>
         <section className={IndMovieStyle["hero-content"]}>
           <div className={IndMovieStyle.movie__score}>
             <MovieAverage voteAverage={movie.voteAverage} />
@@ -119,6 +121,6 @@ export default function IndMovie() {
           onRecommendedMoviesLoad={handleRecommendedMoviesLoaded}
         />
       </div>
-    </div>
+    </div >
   );
 }

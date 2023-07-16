@@ -22,12 +22,19 @@
   filter: blur(10px) brightness(0.35);
 }
 
+.flex-1 {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-start; /* Move the image down vertically */
+  width: 85%;
+}
+
 
 .hero-poster {
   display: flex;
   position: absolute;
   top: 9vh;
-  right: 10vw;
   height: 90%;
 }
 
