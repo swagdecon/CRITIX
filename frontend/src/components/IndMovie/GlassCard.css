@@ -1,8 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
 
 .info-container-1,.info-container-2 {
+  flex-grow: 1;
   display:inline-flex;
-  padding: 15px;
+  padding-bottom: 5px;
+  padding-top: 10px;
+  width: 100%;
+  /* padding: 15px; */
   pointer-events: visibleStroke;
 }
 

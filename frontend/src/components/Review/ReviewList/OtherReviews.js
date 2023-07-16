@@ -61,7 +61,6 @@ export default function OtherReviews({ reviews }) {
                                         <img
                                             src={ImageLogic(review.avatar)}
                                             className="profile-picture"
-                                            alt=""
                                         />
                                     </div>
                                     <div className="media-body">

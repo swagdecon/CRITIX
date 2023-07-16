@@ -5,26 +5,15 @@
     backdrop-filter: blur(20px);
     border-radius: 0.7rem;
     padding: 20px;
-    transform: translateX(-20%) translateY(2vh) ;
     text-align: left;
-    max-width: 97.5%;
-    
+    width: 95%;   
 }
-
-
-
-
 .total-rating-wrapper {
     position: absolute;
     right:  2.5%;
     top:    0.1%
 }
-@media screen and (min-aspect-ratio: 21/9) {
-    .total-rating-wrapper {
-        position: absolute;
-        right:  7%;
-    }
-  }
+
 .ind-review-section-title {
     color: #0096ff !important;
     text-align: center;
@@ -41,9 +30,7 @@
 }
 
 .textField-wrapper {
-    margin-left: 15px;
     flex: 1;
-    height: 140px;
 }
 
 .input-slider {
@@ -68,5 +55,4 @@
 
   .section-line {
     border-bottom: thin solid #8f8f8f;
-    transform: translateY(-14vh);
   }
