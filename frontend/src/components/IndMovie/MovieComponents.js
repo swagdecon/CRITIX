@@ -79,12 +79,12 @@ function EmbeddedMovieTrailer({ video }) {
       // Adjust the width and height based on media queries
       if (window.innerWidth < 768) {
         setPlayerWidth("100%");
-        setPlayerHeight("300px");
-      } else if (window.innerWidth > 1200) {
-        setPlayerWidth("58vw");
+        setPlayerHeight("100%");
+      } else if (window.innerWidth < 3000) {
+        setPlayerWidth("100%");
         setPlayerHeight("60vh");
       } else {
-        setPlayerWidth("60vw");
+        setPlayerWidth("100%");
         setPlayerHeight("60vh");
       }
     };
@@ -121,7 +121,6 @@ function EmbeddedMovieTrailer({ video }) {
       }
     </div>
   );
-
 }
 
 EmbeddedMovieTrailer.propTypes = {

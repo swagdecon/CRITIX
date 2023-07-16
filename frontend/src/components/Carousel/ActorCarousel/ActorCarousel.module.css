@@ -49,6 +49,39 @@
   font-size: 1vw;
 }
 
+.carousel-actors {
+  width: 100%; 
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  overflow: hidden;
+  margin-bottom: 70px;
+}
+.carousel-actors .carousel-inner {
+  width: 100%; 
+  display: flex;
+  flex-wrap: wrap;
+}
+.carousel-actors .carousel-control-prev,
+.carousel-actors .carousel-control-next {
+  display: flex;
+}
+
+.carousel-control-prev {
+  justify-content: flex-start;
+}
+.carousel-control-next {
+  justify-content: flex-end;
+}
+@media screen and (min-width: 3340px) {
+  .carousel-control-prev {
+    justify-content: flex-end;
+  }
+  
+  .carousel-control-next {
+    justify-content: flex-start;
+  }
+}
 /* .fa {
   opacity: 0;
   transition: opacity 1s;

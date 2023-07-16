@@ -36,19 +36,32 @@
 }
 
 .btn-wrapper {
-  margin-top: 1%;
+  margin-top:3%;
   display: flex;
-  float: left;
+  align-self: start;
 }
 
+
 .hero-content {
+  display: flex;
+  flex-wrap: wrap;
   max-width: 45.9vw;
   margin: 0 auto;
   padding-top: 30vh;
-
-
 }
 
+.movie_hero_info_container {
+  flex: 1; /* Allow the title container to grow and fill the available space */
+  max-width: 55%; /* Set a specific width for the title container */
+  display: flex;
+  flex-direction: column; /* Change to column to stack title and year vertically */
+}
+
+.movie__title {
+  font-size: 4.5rem;
+  display: flex;
+  margin: 0
+}
 .movie__score {
   /* max-width: 100%; */
   color: #0096ff;
@@ -63,7 +76,6 @@
 
 
 .movie__description {
-  max-width: 55%;
   display: flex;
   color: #ffffff;
   font-size: 1.1rem;
@@ -78,7 +90,7 @@
   color: #ffffff;
   font-size: 1.1rem;
   padding-top: 3rem;
-  line-height: 2rem;
+  line-height: rem;
   text-align: start;
 }
 
@@ -93,7 +105,7 @@
   max-width: 46vw;
   width: 100%;
   margin: 0 auto;
-  padding-top: 5rem;
+  padding-top: 3rem;
   padding-bottom: 5rem;
 }
 

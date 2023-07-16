@@ -59,31 +59,32 @@ export default function IndMovie() {
           <div className={IndMovieStyle.movie__score}>
             <MovieAverage voteAverage={movie.voteAverage} />
           </div>
-          <div className={IndMovieStyle.movie__title__container}>
+          <div className={IndMovieStyle.movie_hero_info_container}>
             <h2 className={IndMovieStyle.movie__title}>{movie.title}</h2>
             <div className={IndMovieStyle.movie__year}>
               <ParseDate date={movie.releaseDate} />
             </div>
-          </div>
-          <MovieGenres genres={movie.genres} />
-          <p className={IndMovieStyle.movie__description}>
-            {movie.overview}
-          </p>
+            <MovieGenres genres={movie.genres} />
+            <div className={IndMovieStyle.movie__description}>
+              {movie.overview}
+            </div>
 
-          <div className={IndMovieStyle["btn-wrapper"]}>
-            <MovieButton
-              innerIcon="trailer"
-              onClick={() => MovieTrailer(movie.video[0])}
+            <div className={IndMovieStyle["btn-wrapper"]}>
+              <MovieButton
+                innerIcon="trailer"
+                onClick={() => MovieTrailer(movie.video[0])}
+              />
+            </div>
+          </div>
+
+          <div className={IndMovieStyle.ind_movie_review}>
+            <h3 className={IndMovieStyle.ind_review_title}>Reviews</h3>
+            <UserMovieReviews
+              movieId={movie.id}
+              placement="header"
             />
           </div>
         </section>
-        <div className={IndMovieStyle.ind_movie_review}>
-          <h3 className={IndMovieStyle.ind_review_title}>Reviews</h3>
-          <UserMovieReviews
-            movieId={movie.id}
-            placement="header"
-          />
-        </div>
         <section className={IndMovieStyle.mainContainer}>
           <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-1"]}`}>
             <MovieDetails
