@@ -1,6 +1,7 @@
 import { React, useState } from "react";
 import { useParams } from "react-router-dom";
 import IndMovieStyle from "../components/IndMovie/ind_movie.module.css";
+import ActorCarouselStyle from "../components/Carousel/ActorCarousel/ActorCarousel.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import NavBar from "../components/NavBar/NavBar.js";
 import UserMovieReviews from "../components/Review/MovieReviews";
@@ -72,7 +73,7 @@ export default function IndMovie() {
                 </div>
               </div>
               <div className={IndMovieStyle.ind_movie_review}>
-                <h3 className={IndMovieStyle.ind_review__title}>Reviews</h3>
+                <h3 className={IndMovieStyle.ind_review_title}>Reviews</h3>
                 <UserMovieReviews movieId={movie.id} placement="header" />
               </div>
             </div>
@@ -100,8 +101,10 @@ export default function IndMovie() {
                       <UserMovieReviews voteAverage={movie.voteAverage} movieId={movie.id} placement="userRatingSection" />
                     </div>
                   </div>
-                  <section className={IndMovieStyle.CastMembers}>
-                    <MovieActors actors={movie.actors} />
+                  <section className={IndMovieStyle.CastWrapper}>
+                    <div className={ActorCarouselStyle.CastMembers}>
+                      <MovieActors actors={movie.actors} />
+                    </div>
                   </section>
                 </div>
               </div>

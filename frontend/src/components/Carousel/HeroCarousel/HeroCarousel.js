@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 
 const heroMovies = [
   {
-    id: 335984,
+    id: 872585,
     image:
       "https://www.themoviedb.org/t/p/original/xcXALwBjdHIjrESpGVhghqj8fGT.jpg",
     title: "OPPENHEIMER",
@@ -18,7 +18,7 @@ const heroMovies = [
     trailerUrl: "https://www.youtube.com/watch?v=uYPbbksJxIg",
   },
   {
-    id: 330459,
+    id: 575264,
     image:
       "https://www.themoviedb.org/t/p/original/628Dep6AxEtDxjZoGP78TsOxYbK.jpg",
     title: "MISSION: IMPOSSIBLE - DEAD RECKONING",
@@ -27,7 +27,7 @@ const heroMovies = [
     trailerUrl: "https://www.youtube.com/watch?v=HurjfO_TDlQ",
   },
   {
-    id: 157336,
+    id: 414906,
     image:
       "https://www.themoviedb.org/t/p/original/b0PlSFdDwbyK0cf5RxwDpaOJQvQ.jpg",
     title: "THE BATMAN",

@@ -1,8 +1,7 @@
 import React from "react";
 import { Carousel } from "react-bootstrap";
-import "./ActorCarousel.css";
 import PropTypes from "prop-types";
-import IndMovieStyle from "../../IndMovie/ind_movie.module.css";
+import ActorCarouselStyle from "./ActorCarousel.module.css";
 import Title from "../title.module.scss";
 import { Link } from "react-router-dom";
 const defaultImage = "url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg) center center no-repeat";
@@ -51,7 +50,7 @@ export default function MovieActors({ actors }) {
         <Carousel className="carousel-actors" interval={null} indicators={false}>
           {actorChunks.map((chunk, chunkIndex) => (
             <Carousel.Item key={chunkIndex}>
-              <div className={IndMovieStyle["profile-container"]}>
+              <div className={ActorCarouselStyle["profile-container"]}>
                 {chunk.map((actor, index) => {
                   const image = actor.profilePath ? actor.profilePath : null;
                   const actorImage = image ? `url(https://image.tmdb.org/t/p/w500${image}) center center no-repeat` : defaultImage;
@@ -59,27 +58,27 @@ export default function MovieActors({ actors }) {
                   return (
                     <div
                       key={index}
-                      className={`${IndMovieStyle["card"]} ${IndMovieStyle["card1"]}`}
+                      className={`${ActorCarouselStyle["card"]} ${ActorCarouselStyle["card1"]}`}
                       style={style}
                       onMouseEnter={(e) => onMouseEnter(e, image)}
                       onMouseLeave={(e) => onMouseLeave(e, image, actorImage)}
                     >
                       <Link to={`/person/${actor.id}`}>
-                        <div className={IndMovieStyle.border}>
-                          <h3 className={IndMovieStyle["profile-person"]}>
+                        <div className={ActorCarouselStyle.border}>
+                          <h3 className={ActorCarouselStyle["profile-person"]}>
                             {actor.name}
                           </h3>
-                          <div className={IndMovieStyle["ind-movie-cast-icons"]}>
+                          <div className={ActorCarouselStyle["ind-movie-cast-icons"]}>
                             <i
-                              className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-instagram"]}`}
+                              className={`${ActorCarouselStyle["fa"]} ${ActorCarouselStyle["fa-instagram"]}`}
                               aria-hidden="true"
                             />
                             <i
-                              className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-twitter"]}`}
+                              className={`${ActorCarouselStyle["fa"]} ${ActorCarouselStyle["fa-twitter"]}`}
                               aria-hidden="true"
                             />
                             <i
-                              className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-facebook"]}`}
+                              className={`${ActorCarouselStyle["fa"]} ${ActorCarouselStyle["fa-facebook"]}`}
                               aria-hidden="true"
                             />
                           </div>
