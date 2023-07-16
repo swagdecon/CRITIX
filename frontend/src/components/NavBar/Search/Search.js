@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./Search.css";
 import axios from "axios";
 import PropTypes from "prop-types";
-import { GetYearFromDate } from "../../IndMovie/MovieComponents";
+import { ParseDate } from "../../IndMovie/MovieComponents";
 
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
@@ -98,7 +98,7 @@ export default function Search(props) {
                   />
                   <div className="result-title-data">
                     <div className="result-title">
-                      {movie.title} ({GetYearFromDate(movie.release_date)})
+                      {movie.title} <ParseDate date={movie.release_date} />
                     </div>
                     <div className="result-actors">
                       {movie.actors.slice(0, 3).map((actor, index) => (

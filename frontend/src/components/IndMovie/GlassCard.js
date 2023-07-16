@@ -3,16 +3,6 @@ import PropTypes from "prop-types";
 import "./GlassCard.css";
 import { ParseNumber } from "./MovieComponents";
 export default function GlassCard({ name, value, icon, iconString }) {
-  GlassCard.propTypes = {
-    name: PropTypes.string,
-    icon: PropTypes.string,
-    value: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.string,
-      PropTypes.array
-    ]),
-    iconString: PropTypes.string,
-  };
 
   let data;
   // Helper function to get the full language name from the ISO code
@@ -210,3 +200,13 @@ export default function GlassCard({ name, value, icon, iconString }) {
     </div>
   );
 }
+GlassCard.propTypes = {
+  name: PropTypes.string,
+  icon: PropTypes.string,
+  value: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+    PropTypes.array
+  ]),
+  iconString: PropTypes.string,
+};

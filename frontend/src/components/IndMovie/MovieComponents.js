@@ -30,8 +30,8 @@ function MovieRuntime({ runtime }) {
 }
 
 
-function GetYearFromDate(dateString) {
-  const year = dateString ? dateString.split("-")[0] : null;
+function ParseDate({ date }) {
+  const year = date ? date.split("-")[0] : null;
   return year;
 }
 
@@ -214,6 +214,7 @@ function MovieDetails({
           icon="&#xe175;"
         />
       </div>
+      <br />
       <div className="info-container-2">
         <GlassCard
           name={"LANGUAGE"}
@@ -257,7 +258,7 @@ MovieDetails.propTypes = {
 
 export {
   TruncateDescription,
-  GetYearFromDate,
+  ParseDate,
   MovieRuntime,
   ParseNumber,
   MovieTrailer,
