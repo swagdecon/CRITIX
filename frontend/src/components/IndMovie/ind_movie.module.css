@@ -56,7 +56,9 @@
   flex-wrap: wrap;
   max-width: 45.9vw;
   margin: 0 auto;
+  padding-right: 2vw;
   padding-top: 30vh;
+  min-height: 100vh;
 }
 
 .movie_hero_info_container {
