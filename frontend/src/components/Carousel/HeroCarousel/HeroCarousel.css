@@ -66,8 +66,9 @@ h1 {
 .carousel-hero .carousel-control-prev,
 .carousel-hero .carousel-control-next {
   display: flex;
-  
+  width: 5vw;
 }
+
 .carousel-hero .carousel-control-prev {
   justify-content: flex-start;
 }

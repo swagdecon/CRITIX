@@ -62,11 +62,12 @@
   display: flex;
   flex-wrap: wrap;
 }
-.carousel-hero .carousel-control-prev,
-.carousel-hero .carousel-control-next {
+.carousel-actors .carousel-control-prev,
+.carousel-actors .carousel-control-next {
   display: flex;
-  
+  width: 5px  !important;
 }
+
 .carousel-hero .carousel-control-prev {
   justify-content: flex-start;
 }
