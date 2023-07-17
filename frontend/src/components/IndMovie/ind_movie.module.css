@@ -5,7 +5,9 @@
 .ind-movie-page-wrapper::-webkit-scrollbar {
   display: none;
 }
-
+.carousel-wrapper {
+  transform: translateY(5%);
+}
 .content-wrapper {
   position: relative;
   z-index: 1;
@@ -58,12 +60,11 @@
 }
 
 .movie_hero_info_container {
-  flex: 1; /* Allow the title container to grow and fill the available space */
-  max-width: 55%; /* Set a specific width for the title container */
+  flex: 1; 
+  max-width: 55%; 
   display: flex;
-  flex-direction: column; /* Change to column to stack title and year vertically */
+  flex-direction: column; 
 }
-
 .movie__title {
   font-size: 4.5rem;
   display: flex;
@@ -131,7 +132,9 @@
 /* Scrolling css */
 .mainContainer {
   display: grid;
-  grid-template-columns: 1fr 1fr ;
+  position: relative;
+  z-index: 1;
+    grid-template-columns: 1fr 1fr ;
   height: 100%;
   background-color: #000000;
 }
@@ -142,4 +145,7 @@
 .grid-item-3 {
   grid-row: span 2;
   padding-left:15px
+}
+.recommended-carousel-wrapper {
+  overflow: hidden; /* Hide any content that exceeds the fixed height */
 }

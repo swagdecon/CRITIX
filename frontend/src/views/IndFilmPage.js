@@ -116,10 +116,12 @@ export default function IndMovie() {
             </div>
           </div>
         </section>
-        <RecommendedCarousel
-          movieId={movie.id}
-          onRecommendedMoviesLoad={handleRecommendedMoviesLoaded}
-        />
+        <div className={`${IndMovieStyle["recommended-carousel-wrapper"]}`}>
+          <RecommendedCarousel
+            movieId={movie.id}
+            onRecommendedMoviesLoad={handleRecommendedMoviesLoaded}
+          />
+        </div>
       </div>
     </div >
   );
