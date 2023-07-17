@@ -185,40 +185,45 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
         );
 
     } else if (placement === "header") {
-        const TEXT_COLLAPSE_OPTIONS = {
-            collapse: false,
-            collapseText: (
-                <span style={{ cursor: "pointer" }}>...show more</span>
-            ),
-            expandText: (
-                <span style={{ cursor: "pointer" }}>show less</span>
-            ),
-            minHeight: 210,
-            maxHeight: 300,
-            textStyle: {
-                color: "grey",
-                fontSize: "20px"
-            }
-        };
+        if (userReviews.length > 0) {
+            const TEXT_COLLAPSE_OPTIONS = {
+                collapse: false,
+                collapseText: (
+                    <span style={{ cursor: "pointer" }}>...show more</span>
+                ),
+                expandText: (
+                    <span style={{ cursor: "pointer" }}>show less</span>
+                ),
+                minHeight: 210,
+                maxHeight: 300,
+                textStyle: {
+                    color: "grey",
+                    fontSize: "20px"
+                }
+            };
 
-        return (
-            <div className={IndMovieStyle.review__wrapper} ref={reviewRef}>
-                {dataLoaded &&
-                    userReviews &&
-                    Object.keys(userReviews)
-                        .slice(0, 2)
-                        .map((key, index) => (
-                            <ReactTextCollapse
-                                key={index}
-                                options={{ ...TEXT_COLLAPSE_OPTIONS, maxHeight }}
-                            >
-                                <p className={IndMovieStyle.review__description}>
-                                    {userReviews[key].content}
-                                </p>
-                                <br />
-                            </ReactTextCollapse>
-                        ))}
-            </div>
-        );
+            return (
+                <div className={IndMovieStyle.review__wrapper} ref={reviewRef}>
+                    <h3 className={IndMovieStyle.ind_review_title}>Reviews</h3>
+                    {console.log(userReviews)}
+                    {dataLoaded &&
+                        Object.keys(userReviews)
+                            .slice(0, 2)
+                            .map((key, index) => (
+                                <ReactTextCollapse
+                                    key={index}
+                                    options={{ ...TEXT_COLLAPSE_OPTIONS, maxHeight }}
+                                >
+                                    <p className={IndMovieStyle.review__description}>
+                                        {userReviews[key].content}
+                                    </p>
+                                    <br />
+                                </ReactTextCollapse>
+                            ))}
+                </div>
+            );
+        } else {
+            return null
+        }
     }
 }

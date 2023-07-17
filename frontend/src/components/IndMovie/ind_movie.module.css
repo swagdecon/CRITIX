@@ -66,6 +66,7 @@
   max-width: 55%; 
   display: flex;
   flex-direction: column; 
+  
 }
 .movie__title {
   font-size: 4.5rem;
@@ -112,9 +113,9 @@
 }
 
 .ind_movie_review {
+  display: flex;
   max-width: 46vw;
   width: 100%;
-  margin: 0 auto;
   padding-top: 3rem;
   padding-bottom: 5rem;
 }

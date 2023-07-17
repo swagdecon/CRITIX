@@ -80,7 +80,6 @@ export default function IndMovie() {
           </div>
 
           <div className={IndMovieStyle.ind_movie_review}>
-            <h3 className={IndMovieStyle.ind_review_title}>Reviews</h3>
             <UserMovieReviews
               movieId={movie.id}
               placement="header"
