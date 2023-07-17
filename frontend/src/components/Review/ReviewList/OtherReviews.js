@@ -15,11 +15,10 @@ function ImageLogic(avatar) {
         return "https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg";
     }
 }
-
 export default function OtherReviews({ reviews }) {
     const [currentPage, setCurrentPage] = useState(1);
     const commentsPerPage = 2;
-    const totalPages = Math.ceil(reviews.length / commentsPerPage) - 2;
+    const totalPages = Math.ceil(reviews.length / commentsPerPage) - 1;
     const displayReviews = useMemo(() => {
         let reviewsToDisplay = [];
         if (currentPage === 1) {

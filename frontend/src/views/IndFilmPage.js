@@ -70,14 +70,16 @@ export default function IndMovie() {
             <div className={IndMovieStyle.movie__description}>
               {movie.overview}
             </div>
-
-            <div className={IndMovieStyle["btn-wrapper"]}>
-              <MovieButton
-                innerIcon="trailer"
-                onClick={() => MovieTrailer(movie.video[0])}
-              />
-            </div>
+            {movie.video ?
+              <div className={IndMovieStyle["btn-wrapper"]}>
+                <MovieButton
+                  innerIcon="trailer"
+                  onClick={() => MovieTrailer(movie.video[0])}
+                />
+              </div>
+              : null}
           </div>
+
 
           <div className={IndMovieStyle.ind_movie_review}>
             <UserMovieReviews
@@ -115,6 +117,7 @@ export default function IndMovie() {
             </div>
           </div>
         </section>
+
         <div className={`${IndMovieStyle["recommended-carousel-wrapper"]}`}>
           <RecommendedCarousel
             movieId={movie.id}
