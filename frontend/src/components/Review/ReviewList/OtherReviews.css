@@ -23,22 +23,24 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  width: 100%; /* Ensure the media body occupies the available width */
+  width: 100%; 
 }
 
 .comment-section .media .media-user {
   margin-right: 15px;
+  position: flex;
+  align-items: center;
   border-radius: 50%;
   overflow: hidden;
   background: rgb(236, 236, 236);
   width: 77px;
   height: 77px;
-  margin-top: 2%;
 }
 
 .profile-picture {
   height: 100%;
   width: 100%;
+  
 }
 
 .comment-section .media .media-user img {
@@ -48,9 +50,8 @@
 
 .comment-section .media .M-flex {
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
-  flex-wrap: wrap; 
+  align-items: center;
 }
 
 .comment-section .media .M-flex .title {
@@ -58,14 +59,11 @@
   color: #ffffff;
   margin-bottom: 10px;
   font-weight: 400;
-  align-items: flex-start;
-  flex-basis: 100%; 
 }
 
-.comment-section .media .M-flex .title span {
+.comment-section .media .title span {
   font-size: 16px;
-  display: inline;
-  align-items: flex-start;
+  color: #ffffff;
   font-weight: 700;
   margin-bottom: 5px;
 }
@@ -73,13 +71,6 @@
 .comment-section .media .description {
   font-size: 14px;
   color: #ffffff;
-  margin-bottom: 20px;
   max-height: 10.6vh;
   overflow: auto;
-}
-
-.comment-section .media .rating-row {
-  display: flex;
-  align-items: center;
-  margin-left: auto;
 }

@@ -62,8 +62,17 @@
   display: flex;
   flex-wrap: wrap;
 }
-
-
+.carousel-hero .carousel-control-prev,
+.carousel-hero .carousel-control-next {
+  display: flex;
+  
+}
+.carousel-hero .carousel-control-prev {
+  justify-content: flex-start;
+}
+.carousel-hero .carousel-control-next {
+  justify-content: flex-end;
+}
 
 /* .fa {
   opacity: 0;
