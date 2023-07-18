@@ -211,3 +211,18 @@ video {
   width: 20px;
   height: 20px;
 }
+@media screen and (max-width: 900px) {
+  #left {
+    min-width: 100%;
+    overflow: hidden;
+    display: flex;
+  }
+  #signin form {
+    width: 250px;
+    padding-bottom: 3rem;
+    justify-content: center;
+  }
+  .secondary-btn {
+    width: 250px !important;
+  }
+}

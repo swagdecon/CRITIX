@@ -83,7 +83,7 @@ p.css-button-text-2 {
 .clapperboard-wrapper {
   display: flex;
   justify-content: center;
-  align-items: right;
+ 
 }
 .reset-skew {
   -moz-transform: skew(40deg);
@@ -154,4 +154,50 @@ p.css-button-text-2 {
   to {
     transform: skew(-42deg) translate(300px, -0px);
   }
+}
+
+
+
+
+@media screen and (max-width: 900px) {
+  .css-button {
+    min-width: 245px
+  }
+  /* Clapperboard button */
+  @keyframes buttonx-in-clapperboard {
+    from {
+      transform: skew(-42deg) translate(-200px, 0);
+    }
+    to {
+      transform: skew(-42deg) translate(-5px, -0px);
+    }
+  }
+  .css-button:hover > .css-button-inner-clapperboard {
+    -moz-transform: skew(-42deg) translate(-5px, -0px);
+    -o-transform: skew(-42deg) translate(-5px, -0px);
+    transform: skew(-42deg) translate(-5px, -0px);
+  }
+  .css-button-inner-clapperboard {
+    width: 260px;
+  }
+
+/* Popcorn button */
+@keyframes buttonx-in {
+  from {
+    transform: skew(-42deg) translate(-200px, 0);
+  }
+  to {
+    transform: skew(-42deg) translate(-5px, -0px);
+  }
+}  .css-button:hover > .css-button-inner-popcorn {
+  -moz-transform: skew(-42deg) translate(-5px, -0px);
+  -o-transform: skew(-42deg) translate(-5px, -0px);
+  transform: skew(-42deg) translate(-5px, -0px);
+}
+
+.css-button-inner-popcorn {
+  width: 260px;
+  padding-right: 8px !important;
+}
+
 }

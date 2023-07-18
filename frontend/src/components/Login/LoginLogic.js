@@ -89,7 +89,6 @@ export default function LoginLogic() {
           placeholder="Email"
         />
       </div>
-
       <div>
         <input
           type={passwordVisible ? "text" : "password"}
@@ -103,7 +102,6 @@ export default function LoginLogic() {
           placeholder="Password"
           required
         />
-
         <span className={LoginStyles.eye} onClick={togglePasswordVisibility}>
           <i
             id="hide"

@@ -4,15 +4,26 @@ $outline: rgba(#fff, 0.4);
 .homepage-carousel {
   position: absolute;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%) translateY(-50%);
+  text-align: center;
+  white-space: nowrap;
+
 }
 
 @media screen and (max-width: 1144px) {
   .homepage-carousel  {
-    white-space: nowrap;
+    justify-content: center;
+    align-items: center;
+    display: flex;
   }
   .movie-title {
-    font-size: 45px !important; /* Update the font size within the media query */
+    font-size: 45px !important; 
+  }
+
+}
+@media screen and (max-width: 600px) {
+  .movie-title {
+    font-size: 35px !important; 
   }
 
 }
@@ -23,7 +34,9 @@ $outline: rgba(#fff, 0.4);
   line-height: 2;
   font-size: 50px;
   color: $h3;
-  letter-spacing: -0.5rem;
+  letter-spacing: 1px;
+  text-align: center;
+
 
 }
 .list-page-carousel {
