@@ -10,24 +10,27 @@ $outline: rgba(#fff, 0.4);
 
 }
 
-@media screen and (max-width: 1144px) {
+@media screen and (max-width: 980px) {
   .homepage-carousel  {
     justify-content: center;
     align-items: center;
     display: flex;
   }
   .movie-title {
-    font-size: 45px !important; 
+    zoom: 0.75
   }
 
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 500px) {
   .movie-title {
-    font-size: 35px !important; 
+    zoom: 0.59
   }
-
 }
-
+@media screen and (max-width: 400px) {
+  .movie-title {
+    zoom: 0.5
+  }
+}
 .movie-title {
   display: flex;
   font-family: "CoreCircus", sans-serif;

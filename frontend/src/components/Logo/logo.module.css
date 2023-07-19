@@ -5,7 +5,7 @@
   transition: margin 0.125s ease;
   display: flex;
   justify-content: flex-start;
-
+  z-index: 999;
 }
 
 .Logo:hover {
@@ -17,5 +17,11 @@
   .Logo {
     width: 120px;
     height: 31px;
+  }
+}
+@media screen and (max-width: 450px) {
+  .Logo {
+    width: 90px;
+    height: 21px;
   }
 }

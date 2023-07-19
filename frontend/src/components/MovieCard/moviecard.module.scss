@@ -23,7 +23,15 @@ $dark-color: #1e1b26;
   background-color: #1e1b26;
   margin: 60px auto 0 auto;
   border-radius: 4px;
+  @media (max-width: 500px) {
+    zoom: 0.8; 
+  }
+  @media (max-width: 400px) {
+    zoom: 0.7; 
+  }
 }
+
+
 .titleWrapper {  
   display: flex;
   justify-content: center;

@@ -12,10 +12,14 @@
 .carousel-inner img {
   margin: auto;
 }
-
+.hero_trailer {
+  display: flex;
+  justify-content: left;
+  text-decoration: none;
+}
 .hero_caption {
   font-family: "Open Sans", sans-serif;
-  display: flex; 
+  display: flex;
   text-align: left;
   justify-content: flex-start;
 }
@@ -25,103 +29,105 @@ h1 {
   justify-content: flex-start;
   pointer-events: none;
   top: 5%;
-
   font-weight: bold;
   padding: 0 0 60px 0;
+
+  @media screen and (min-aspect-ratio: 21/9) {
+    font-size: 60px;
+    font-weight: 500;
+  }
+
+  @media screen and (max-width: 1470px) {
+    padding: 0 0 10px 0;
+  }
+
+  @media screen and (max-width: 900px) {
+    padding: 0 0 20px 0;
+    font-size: 18px;
+  }
+
+  @media screen and (max-width: 380px) {
+    justify-content: center;
+    zoom: 0.75;  
+  }
 }
 
 .hero_genre-container {
   text-align: left;
-}
 
-.hero_genre {
-  display: inline-block;
-  margin-right: 20px;
-  font-family: "Poppins", sans-serif;
-}
-.carousel-caption {
-  bottom: 10%
-}
-.hero_trailer {
-  display: flex;
-  justify-content: left;
-  text-decoration: none;
+  .hero_genre {
+    display: inline-block;
+    margin-right: 20px;
+    font-family: "Poppins", sans-serif;
+
+    @media screen and (min-aspect-ratio: 21/9) {
+      margin-right: 30px;
+    }
+
+    @media screen and (max-width: 405px) {
+      display: none;
+    }
+  }
 }
 
 .hero_rating_container {
   padding: 10px 0 0 0;
-}
-
-.hero_rating {
-  padding: 0 0 0 10px;
-  vertical-align: bottom;
-  display: inline;
-}
-
-.hero_rating_img {
-  display: inline;
-  width: 60px;
-  height: auto;
-}
-.carousel-hero .carousel-control-prev,
-.carousel-hero .carousel-control-next {
-  display: flex;
-  width: 5vw;
-}
-
-.carousel-hero .carousel-control-prev {
-  justify-content: flex-start;
-}
-.carousel-hero .carousel-control-next {
-  justify-content: flex-end;
-}
-
-@media screen and (min-aspect-ratio: 21/9) {
-  .hero_header {
-    margin-bottom: -2%;
-  }
-
-  h1 {
-    font-size: 60px;    
-    font-weight: 500;
-
-  }
-
-  .hero_genre {
-    margin-right: 30px;
-  }
-
-  .hero_rating_container {
-    padding: 20px 0 0 0;
-  }
 
   .hero_rating {
-    padding: 0 0 0 20px;
+    padding: 0 0 0 10px;
+    vertical-align: bottom;
+    display: inline;
+
+    .hero_rating_img {
+      display: inline;
+      width: 60px;
+      height: auto;
+    }
+  }
+
+  @media screen and (min-aspect-ratio: 21/9) {
+    padding: 20px 0 0 0;
+
+    .hero_rating {
+      padding: 0 0 0 20px;
+    }
   }
 }
 
-@media screen and (max-width:  900px) {
+.carousel-hero {
+  & .carousel-control-prev,
+  & .carousel-control-next {
+    display: flex;
+    width: 5vw;
+  }
 
-  h1 {
-    padding: 0 0 20px 0;
+  & .carousel-control-prev {
+    justify-content: flex-start;
   }
-  .carousel-caption {
-    top: 60%
+
+  & .carousel-control-next {
+    justify-content: flex-end;
   }
-  .hero_trailer {
-    display: none;
+
+  @media screen and (max-width: 900px) {
+    .carousel-caption {
+      top: 60%;
+    }
+    .hero_trailer {
+      display: none;
+    }
+    .carousel-indicators {
+      display: none;
+    }
   }
- .carousel-indicators {
-  display: none;
- }
 }
-@media screen and (max-width:  720px) {
+
+@media screen and (max-width: 720px) {
   h1 {
     padding: 0 0 10px 0;
-    font-size:18px;
+    font-size: 18px;
   }
-  .hero_tagline  {
+  .hero_tagline {
     display: none;
   }
-
 }

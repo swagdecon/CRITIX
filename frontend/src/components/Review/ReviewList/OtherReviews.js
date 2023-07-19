@@ -18,7 +18,7 @@ function ImageLogic(avatar) {
 export default function OtherReviews({ reviews }) {
     const [currentPage, setCurrentPage] = useState(1);
     const commentsPerPage = 2;
-    const totalPages = Math.ceil(reviews.length / commentsPerPage) - 1;
+    const totalPages = Math.ceil(reviews.length / commentsPerPage) - 2;
     const displayReviews = useMemo(() => {
         let reviewsToDisplay = [];
         if (currentPage === 1) {

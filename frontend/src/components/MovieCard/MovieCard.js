@@ -1,4 +1,5 @@
-import { React, useCallback } from "react";
+import React, { useCallback } from "react";
+import PropTypes from "prop-types";
 import {
   MovieRuntime,
   MovieAverage,
@@ -7,7 +8,6 @@ import {
 } from "../IndMovie/MovieComponents.js";
 import { MovieCardActors, MovieCardGenres } from "./MovieCardComponents.js";
 import MovieCardStyle from "./moviecard.module.scss";
-import PropTypes from "prop-types";
 
 export default function MovieCard({
   poster,
@@ -19,12 +19,10 @@ export default function MovieCard({
   actors,
 }) {
   const handleOnClick = useCallback(() => {
-    if (Array.isArray(video) && video.length > 0) {
-      MovieTrailer(video[0]);
-    } else {
-      MovieTrailer(video);
-    }
+    const firstVideo = Array.isArray(video) ? video[0] : video;
+    MovieTrailer(firstVideo);
   }, [video]);
+
   return (
     <div className="container">
       <div className={MovieCardStyle["cellphone-container"]}>
@@ -97,7 +95,6 @@ export default function MovieCard({
                   type="button"
                   onClick={handleOnClick}
                 >
-
                   <h3>
                     <i className="material-icons">&#xE037;</i>
                     WATCH TRAILER
@@ -126,6 +123,7 @@ export default function MovieCard({
     </div>
   );
 }
+
 MovieCard.propTypes = {
   poster: PropTypes.string,
   rating: PropTypes.number,
@@ -140,7 +138,6 @@ MovieCard.propTypes = {
     PropTypes.string,
     PropTypes.array,
   ]),
-
   actors: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,

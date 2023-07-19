@@ -109,7 +109,7 @@ export default function Search(props) {
                     </div>
                   </div>
                   <div className="result-rating">
-                    {movie.vote_average.toFixed(1)}
+                    {movie.vote_average.toFixed(1) * 10}
                   </div>
                 </li>
               </a>

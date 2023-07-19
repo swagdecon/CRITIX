@@ -15,6 +15,44 @@ import PercentageRatingCircle from "./Rating/PercentageCircle/PercentageCircle";
 import InputSlider from "./Rating/Slider/Slider.js";
 import CookieManager from "../../security/CookieManager";
 
+const TEXT_COLLAPSE_OPTIONS = {
+    collapse: false,
+    collapseText: <span style={{ cursor: "pointer" }}>...show more</span>,
+    expandText: <span style={{ cursor: "pointer" }}>show less</span>,
+    minHeight: 210,
+    maxHeight: 300,
+    textStyle: {
+        color: "grey",
+        fontSize: "20px"
+    }
+};
+
+const reviewInputStyles = {
+    borderRadius: "15px",
+    fieldSet: {
+        borderRadius: "15px"
+    },
+    input: {
+        color: "white !important"
+    },
+    "& .MuiOutlinedInput-root": {
+        "& fieldset": {
+            borderColor: "white"
+        },
+        "&:hover fieldset": {
+            borderColor: "#0096ff"
+        },
+        "&.Mui-focused fieldset": {
+            borderColor: "#0096ff"
+        }
+    },
+    width: "60%"
+};
+
+const submitButtonStyles = {
+    borderRadius: "15px"
+};
+
 UserMovieReviews.propTypes = {
     voteAverage: PropTypes.number,
     movieId: PropTypes.number,
@@ -70,7 +108,6 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                     if (error.response.status === 400 && error.response.data === "User already submitted a review for this movie.") {
                         setHasSubmittedReview(true);
                     }
-                    // console.log(error)
                 });
         }
     }, [movieId, decodedToken, reviewRating, reviewContent, token, refetchData, hasReviewProfanity]);
@@ -90,7 +127,6 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                 return null;
             }
         }, [voteAverage, voteAverage]);
-
 
         return (
             <div className={IndReview["ind-review-wrapper"]}>
@@ -131,33 +167,7 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                                     }
                                 }}
                                 error={hasReviewProfanity && reviewContent.trim().length > 0}
-                                sx={{
-                                    borderRadius: "15px",
-                                    fieldSet: {
-                                        borderRadius: "15px"
-                                    },
-                                    input: {
-                                        color: "white !important"
-                                    },
-                                    "& .MuiOutlinedInput-root": {
-                                        "& fieldset": {
-                                            borderColor: "white"
-                                        },
-                                        "&:hover fieldset": {
-                                            borderColor:
-                                                hasReviewProfanity && reviewContent.trim().length > 0
-                                                    ? "#ff0000"
-                                                    : "#0096ff"
-                                        },
-                                        "&.Mui-focused fieldset": {
-                                            borderColor:
-                                                hasReviewProfanity && reviewContent.trim().length > 0
-                                                    ? "#ff0000"
-                                                    : "#0096ff"
-                                        }
-                                    },
-                                    width: "60%"
-                                }}
+                                sx={reviewInputStyles}
                             />
                             {!hasSubmittedReview && !hasReviewProfanity && (
                                 <div className={IndReview["post-review-btn"]}>
@@ -167,9 +177,7 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                                         size="medium"
                                         onClick={handleSubmit}
                                         disabled={isSubmitDisabled}
-                                        sx={{
-                                            borderRadius: "15px"
-                                        }}
+                                        sx={submitButtonStyles}
                                     >
                                         SUBMIT
                                     </Button>
@@ -183,29 +191,11 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                 </div>
             </div>
         );
-
     } else if (placement === "header") {
         if (userReviews.length > 0) {
-            const TEXT_COLLAPSE_OPTIONS = {
-                collapse: false,
-                collapseText: (
-                    <span style={{ cursor: "pointer" }}>...show more</span>
-                ),
-                expandText: (
-                    <span style={{ cursor: "pointer" }}>show less</span>
-                ),
-                minHeight: 210,
-                maxHeight: 300,
-                textStyle: {
-                    color: "grey",
-                    fontSize: "20px"
-                }
-            };
-
             return (
                 <div className={IndMovieStyle.review__wrapper} ref={reviewRef}>
                     <h3 className={IndMovieStyle.ind_review_title}>Reviews</h3>
-                    {console.log(userReviews)}
                     {dataLoaded &&
                         Object.keys(userReviews)
                             .slice(0, 2)

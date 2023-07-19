@@ -27,7 +27,7 @@ function MovieCardActors({ actors }) {
           role: PropTypes.string,
         }),
       ])
-    ).isRequired,
+    ),
   };
   if (!actors || actors.length === 0) {
     return <span>No Actors Available</span>;
