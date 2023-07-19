@@ -122,82 +122,117 @@ public class MovieService {
       List<Movie> movies = allMovies(collectionName);
       for (Movie movie : movies) {
         MovieDb movieDb = tmdbApi.getMovies().getMovie(movie.getId(), "en-US");
-        movie.setBudget(movie.getBudget() != null ? movie.getBudget() : movieDb.getBudget());
-        movie.setTagline(movie.getTagline() != null ? movie.getTagline() : movieDb.getTagline());
-        movie.setRevenue(movie.getRevenue() != null ? movie.getRevenue() : movieDb.getRevenue());
-        movie.setRuntime(movie.getRuntime() != null ? movie.getRuntime() : movieDb.getRuntime());
-        movie.setVoteAverage(movie.getVoteAverage() != null ? movie.getVoteAverage() : movieDb.getVoteAverage());
-        movie.setVoteCount(movie.getVoteCount() != null ? movie.getVoteCount() : movieDb.getVoteCount());
-        movie.setImdbId(movie.getImdbId() != null ? movie.getImdbId() : movieDb.getImdbID());
 
-        // Get the movie genres
+        // Initialize fields if they don't exist
+        if (movie.getBudget() == null) {
+          movie.setBudget(movieDb.getBudget());
+        }
+        if (movie.getTagline() == null) {
+          movie.setTagline(movieDb.getTagline());
+        }
+        if (movie.getRevenue() == null) {
+          movie.setRevenue(movieDb.getRevenue());
+        }
+        if (movie.getRuntime() == null) {
+          movie.setRuntime(movieDb.getRuntime());
+        }
         if (movie.getGenres() == null || movie.getGenres().isEmpty()) {
+          // Get the movie genres
           List<Genre> genres = movieDb.getGenres();
-          List<String> genreNames = genres.stream().map(Genre::getName).collect(Collectors.toList());
+
+          // Extract the movie genre names
+          List<String> genreNames = new ArrayList<>();
+          for (Genre genre : genres) {
+            genreNames.add(genre.getName());
+          }
           movie.setGenres(genreNames);
         }
 
-        // Get the movie actors
         if (movie.getActors() == null || movie.getActors().isEmpty() ||
             movie.getActorImagePaths() == null || movie.getActorImagePaths().isEmpty()) {
           Credits movieCredits = tmdbApi.getMovies().getCredits(movie.getId());
           List<PersonCast> castList = movieCredits.getCast();
-          List<Person> actors = castList.stream()
-              .map(cast -> {
-                Person person = new Person();
-                person.setId(cast.getId());
-                person.setName(cast.getName());
-                person.setProfilePath(cast.getProfilePath());
-                return person;
-              })
-              .collect(Collectors.toList());
+          List<Person> actors = new ArrayList<>();
+          for (PersonCast cast : castList) {
+            Person person = new Person();
+            // This sets the Id of the person to the PersonId, not the CastId
+            person.setId(cast.getId());
+            person.setName(cast.getName());
+            person.setProfilePath(cast.getProfilePath());
+            actors.add(person);
+          }
           movie.setActors(actors);
         }
 
-        // Get the movie reviews
         if (movie.getReviews() == null || movie.getReviews().isEmpty()) {
           List<Reviews> reviews = tmdbApi.getReviews().getReviews(movie.getId(), "en-US", 1).getResults();
-          List<String> reviewTexts = reviews.stream()
-              .filter(review -> review.getContent().split("\\s+").length < 300
-                  && !review.getContent().contains("SPOILER-FREE")
-                  && review.getContent().split("\\s+").length > 20)
-              .map(Reviews::getContent)
-              .collect(Collectors.toList());
+
+          // Extract the review text for each review
+          List<String> reviewTexts = new ArrayList<>();
+          for (Reviews review : reviews) {
+            String content = review.getContent();
+            if (content.split("\\s+").length < 300 && !content.contains("SPOILER-FREE")
+                && content.split("\\s+").length > 20) {
+              reviewTexts.add(content);
+            }
+          }
+
           movie.setReviews(reviewTexts);
         }
+        if (movie.getVoteAverage() == null) {
+          float voteAverage = movieDb.getVoteAverage();
+          movie.setVoteAverage(voteAverage);
+        }
+        if (movie.getVoteCount() == null) {
+          Integer voteCount = movieDb.getVoteCount();
+          movie.setVoteCount(voteCount);
+        }
 
-        // Get the movie production companies
+        if (movie.getImdbId() == null) {
+          String imdbId = movieDb.getImdbID();
+
+          movie.setImdbId(imdbId);
+        }
+
         if (movie.getProductionCompanies() == null || movie.getProductionCompanies().isEmpty()) {
+          // Get the movie production companies
           List<ProductionCompany> productionCompaniesList = movieDb.getProductionCompanies();
-          List<String> productionCompanies = productionCompaniesList.stream()
-              .map(ProductionCompany::getName)
-              .collect(Collectors.toList());
+
+          // Extract the movie production company names
+          List<String> productionCompanies = new ArrayList<>();
+          for (ProductionCompany productionCompany : productionCompaniesList) {
+            productionCompanies.add(productionCompany.getName());
+          }
           movie.setProductionCompanies(productionCompanies);
         }
 
-        // Get the movie status
         if (movie.getMovieStatus() == null || movie.getMovieStatus().isEmpty()) {
           String movieStatus = tmdbApi.getMovies().getMovie(movie.getId(), "en-US").getStatus();
           movie.setMovieStatus(movieStatus);
         }
 
-        // Get the movie videos
         if (movie.getVideo() == null || movie.getVideo().isEmpty()) {
           List<Video> movieVideos = tmdbApi.getMovies().getVideos(movie.getId(), "en-US");
-          String mainTrailerKey = movieVideos.stream()
-              .filter(video -> video.getType().equals("Trailer") && video.getSite().equals("YouTube"))
-              .map(Video::getKey)
-              .findFirst()
-              .orElse(null);
+
+          // Extract the video key for the main trailer
+          String mainTrailerKey = null;
+          for (Video video : movieVideos) {
+            if (video.getType().equals("Trailer") && video.getSite().equals("YouTube")) {
+              mainTrailerKey = video.getKey();
+              break;
+            }
+          }
+
+          // Set the main trailer video key for the movie
           if (mainTrailerKey != null) {
             List<String> videoKeys = new ArrayList<>();
             videoKeys.add(mainTrailerKey);
             movie.setVideo(videoKeys);
           }
         }
-      }
 
-      mongoTemplate.save(movies, collectionName);
+        mongoTemplate.save(movie, collectionName);
+      }
     });
   }
 
