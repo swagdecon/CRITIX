@@ -3,7 +3,7 @@ import { Carousel } from "react-bootstrap";
 import PropTypes from "prop-types";
 "./ActorCarousel.css";
 import Title from "../title.module.scss";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 const defaultImage = "url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg) center center no-repeat";
 
 function onMouseEnter(e, image) {
@@ -63,12 +63,12 @@ export default function MovieActors({ actors }) {
                       onMouseEnter={(e) => onMouseEnter(e, image)}
                       onMouseLeave={(e) => onMouseLeave(e, image, actorImage)}
                     >
-                      <Link to={`/person/${actor.id}`}>
-                        <div className="border">
-                          <h3 className="profile-person">
-                            {actor.name}
-                          </h3>
-                          <div className="ind-movie-cast-icons">
+                      {/* <Link to={`/person/${actor.id}`}> */}
+                      <div className="border">
+                        <h3 className="profile-person">
+                          {actor.name}
+                        </h3>
+                        {/* <div className="ind-movie-cast-icons">
                             <i
                               className={"fa fa-instagram"}
                               aria-hidden="true"
@@ -81,9 +81,9 @@ export default function MovieActors({ actors }) {
                               className={"fa fa-facebook"}
                               aria-hidden="true"
                             />
-                          </div>
-                        </div>
-                      </Link>
+                          </div> */}
+                      </div>
+                      {/* </Link> */}
                     </div>
                   );
                 })}
@@ -91,7 +91,7 @@ export default function MovieActors({ actors }) {
             </Carousel.Item>
           ))}
         </Carousel>
-      </div>
+      </div >
     );
   } else {
     return null
