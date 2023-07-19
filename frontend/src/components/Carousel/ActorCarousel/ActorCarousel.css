@@ -65,7 +65,7 @@
 .carousel-actors .carousel-control-prev,
 .carousel-actors .carousel-control-next {
   display: flex;
-  width: 5px  !important;
+  width: 1vw;
 }
 
 .carousel-hero .carousel-control-prev {

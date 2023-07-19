@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import IndMovieStyle from "../components/IndMovie/ind_movie.module.css";
-import ActorCarouselStyle from "../components/Carousel/ActorCarousel/ActorCarousel.module.css";
+import "../components/Carousel/ActorCarousel/ActorCarousel.css";
 import "font-awesome/css/font-awesome.min.css";
 import NavBar from "../components/NavBar/NavBar.js";
 import UserMovieReviews from "../components/Review/MovieReviews";
@@ -112,7 +112,7 @@ export default function IndMovie() {
             />
           </div>
           <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-4"]}`}>
-            <div className={ActorCarouselStyle.CastMembers}>
+            <div className="CastMembers">
               <MovieActors actors={movie.actors} />
             </div>
           </div>
