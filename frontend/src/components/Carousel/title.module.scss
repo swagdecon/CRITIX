@@ -21,31 +21,24 @@ $outline: rgba(#fff, 0.4);
   }
 
 }
-@media screen and (max-width: 500px) {
-  .movie-title {
-    zoom: 0.59
-  }
-}
-@media screen and (max-width: 400px) {
-  .movie-title {
-    zoom: 0.5
-  }
-}
+
 .movie-title {
   display: flex;
   font-family: "CoreCircus", sans-serif;
   line-height: 2;
   font-size: 50px;
   color: $h3;
-  letter-spacing: 1px;
   text-align: center;
-
-
+  @media screen and (max-width: 400px) {
+      zoom: 0.5
+  }
+  @media screen and (max-width: 500px) {
+      zoom: 0.59
+    
+  }
+  
 }
-.list-page-carousel {
-  justify-content: flex-start;
 
-}
 /*
  * Webfont: CoreCircus by S-Core
  * URL: http://www.myfonts.com/fonts/s-core/core-circus/regular/

@@ -71,11 +71,11 @@ export default function MovieList({ endpoint }) {
       setCurrentPage(1);
       switch (endpointName) {
         case "now_playing":
-          setTitle("In Theatres:");
+          setTitle("In Theatres");
           setCaption("The Latest Movies on the Big Screen");
           break;
         case "upcoming":
-          setTitle("Upcoming Movies:");
+          setTitle("Upcoming Movies");
           setCaption("Get a Sneak Peek of What's Coming Soon");
           break;
         case "popular":
@@ -83,15 +83,15 @@ export default function MovieList({ endpoint }) {
           setCaption("Discover What Everyone Is Watching Right Now");
           break;
         case "top_rated":
-          setTitle("Top Rated Movies:");
+          setTitle("Top Rated Movies");
           setCaption("Cinematic Masterpieces");
           break;
         case "now_playing_and_upcoming":
-          setTitle("In Theatres:");
+          setTitle("In Theatres");
           setCaption("The Latest Movies on the Big Screen");
           break;
         case "now_playing_and_popular":
-          setTitle("In Theatres:");
+          setTitle("In Theatres");
           break;
       }
     }
@@ -101,16 +101,18 @@ export default function MovieList({ endpoint }) {
   if (!dataLoaded) {
     return <LoadingPage />;
   }
-
   return (
-    <div>
-      <div className={MovieListStyle["title-container"]}>
-        <div className={MovieListStyle.titleWrapper}>
-          <h3 className={`${Title["list-page-carousel"]} ${Title["movie-title"]}`}>{title}</h3>
+    <div className={MovieListStyle["page-wrapper"]}>
+      <div className={MovieListStyle.titleWrapper}>
+        <div className={MovieListStyle["title-container"]}>
+          <h3 className={Title["movie-title"]}>{title}</h3>
+          <div className={MovieListStyle["title-caption"]}>{caption}</div>
+          <div className={MovieListStyle["sort-by-btn"]}>
+            <SortByButton onSelectSortBy={handleSortByChange} />
+          </div>
         </div>
-        <div className={MovieListStyle["title-caption"]}>{caption}</div>
       </div>
-      <SortByButton onSelectSortBy={handleSortByChange} />
+
       <div className={MovieListStyle["container"]}>
         {movies.map((movie) => (
           <div key={movie.id}>
@@ -130,15 +132,25 @@ export default function MovieList({ endpoint }) {
       </div>
       <div className={MovieListStyle["pagination-container"]}>
         <ThemeProvider theme={theme}>
-          <Pagination onClick={handlePageChange} count={totalPages} siblingCount={4} boundaryCount={1} page={currentPage} size="large" color="primary" sx={{
-            '& .MuiPaginationItem-root': {
-              color: '#ffffff',
-            },
-          }} />
+          <Pagination
+            onClick={handlePageChange}
+            count={totalPages}
+            siblingCount={4}
+            boundaryCount={1}
+            page={currentPage}
+            size="large"
+            color="primary"
+            sx={{
+              '& .MuiPaginationItem-root': {
+                color: '#ffffff',
+              },
+            }}
+          />
         </ThemeProvider>
       </div>
     </div>
   );
+
 }
 
 MovieList.propTypes = {

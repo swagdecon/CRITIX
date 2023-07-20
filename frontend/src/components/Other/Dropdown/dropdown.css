@@ -1,8 +1,10 @@
-.button-container {
-  transform: translateX(3.4vw) translateY(8vh);
-  display: flex;
-  margin-right: 10px;
-  position: absolute;
-  display: flex;
-  z-index: 4;
+.dropdown-menu {
+  background-color: #212529;  
+}
+.dropdown-menu a:hover{
+  background-color:#0096ff;
+}
+
+.dropdown-item, .dropdown-item:hover {
+  color: white; 
 }
