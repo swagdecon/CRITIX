@@ -1,20 +1,23 @@
-
 .ind-movie-page-wrapper {
   overflow-y: auto;
+  height: 100vh;
 }
+
 .ind-movie-page-wrapper::-webkit-scrollbar {
   display: none;
 }
+
 .carousel-wrapper {
   transform: translateY(5%);
 }
+
 .content-wrapper {
   position: relative;
-  z-index: 1;
-  height: 100vh;
   font-family: "Open Sans", sans-serif;
+  padding-top: 30vh;
 
 }
+
 .background {
   display: flex;
   position: absolute;
@@ -25,66 +28,54 @@
 }
 
 .flex-1 {
-  display: inline-flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: flex-start; /* Move the image down vertically */
-  width: 85%;
+  max-width: 35%;
+  margin-left: 5%;
 }
-
 
 .hero-poster {
   display: flex;
-  position: absolute;
-  top: 9vh;
-  height: 90%;
-}
-
-.hero-poster img {
-  height: 100%;
+  max-width: 85ch;
+  margin-top: -22vh;
 }
 
 .btn-wrapper {
-  margin-top:3%;
+  padding-top: 3%;
   display: flex;
   align-self: start;
 }
 
-
 .hero-content {
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start; 
   max-width: 45.9vw;
   margin: 0 auto;
-  padding-right: 2vw;
-  padding-top: 30vh;
-  min-height: 100vh;
-}
+  margin-bottom: 2vh;
 
+}
 .movie_hero_info_container {
-  flex: 1; 
-  max-width: 55%; 
+  flex: 1;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   
 }
+
 .movie__title {
   font-size: 4.5rem;
   display: flex;
-  margin: 0
+  margin: 0;
 }
-.movie__score {
-  /* max-width: 100%; */
+
+/* .movie__score {
   color: #0096ff;
   font-size: 1.3rem;
-}
+} */
 
 .movie__year {
   font-size: 4.5rem;
   display: flex;
   color: #979596;
 }
-
 
 .movie__description {
   display: flex;
@@ -95,35 +86,28 @@
 }
 
 .review__description {
-  width: 100%;
   margin: 0 0;
   display: flex;
   color: #ffffff;
   font-size: 1.1rem;
-  padding-top: 3rem;
-  line-height: rem;
+  line-height: 2.1rem;
   text-align: start;
 }
-
 
 .review__wrapper {
   display: flex;
   flex-direction: column;
-  max-width: 55%;
 }
 
 .ind_movie_review {
   display: flex;
-  max-width: 46vw;
-  width: 100%;
   padding-top: 3rem;
-  padding-bottom: 5rem;
+
 }
 
-
 .ind_review_title {
+  padding-bottom: 3vh;
   font-size: 1rem;
-  display: flex;
   color: #979596;
   text-transform: uppercase;
   letter-spacing: 0.1rem;
@@ -132,25 +116,58 @@
 .no-reviews {
   padding-top: 1vh;
 }
+
 /* Scrolling css */
 .mainContainer {
   display: grid;
   position: relative;
   z-index: 1;
-    grid-template-columns: 1fr 1fr ;
+  grid-template-columns: 1fr 1fr;
   height: 100%;
   background-color: #000000;
 }
+
 .grid-item-1 {
   max-width: 96%;
 }
+
 .grid-item-2 {
   grid-row: span 2;
 }
+
 .grid-item-3 {
   grid-row: span 2;
-  padding-left:15px
+  padding-left: 15px;
 }
+
 .recommended-carousel-wrapper {
-  overflow: hidden; /* Hide any content that exceeds the fixed height */
+  overflow: hidden;
+}
+
+@media (max-width: 1600px) {
+  .hero-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-poster {
+    width: 100%;
+    order: -1;
+    margin-bottom: 2rem; 
+    display: flex;
+    justify-content: center;
+    
+  }
+  .btn-wrapper, .review__description, .movie__description, .ind_review_title, .movie__title, .movie__year  {
+    align-self: center;
+    text-align: center;
+  }
+  .flex-1 {
+    max-width: 100%;
+    margin: 0;
+  }
+  .movie_hero_info_container {
+    order: 1; 
+  }
+  
 }

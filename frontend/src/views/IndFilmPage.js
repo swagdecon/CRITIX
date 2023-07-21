@@ -22,9 +22,7 @@ import fetchData from "../security/FetchApiData";
 export default function IndMovie() {
   const { id } = useParams();
   const { data: movie, dataLoaded: dataLoaded } = fetchData(id);
-  const [recommendedMoviesLoaded, setRecommendedMoviesLoaded] = useState(
-    false
-  );
+  const [recommendedMoviesLoaded, setRecommendedMoviesLoaded] = useState(false);
 
   const handleRecommendedMoviesLoaded = () => {
     setRecommendedMoviesLoaded(true);
@@ -50,18 +48,11 @@ export default function IndMovie() {
         }}
       />
       <div className={IndMovieStyle["content-wrapper"]}>
-        <div className={IndMovieStyle["flex-1"]}>
-          <img
-            className={IndMovieStyle["hero-poster"]}
-            src={moviePosterPath}
-            alt="Movie Poster"
-          />
-        </div>
         <section className={IndMovieStyle["hero-content"]}>
-          <div className={IndMovieStyle.movie__score}>
-            <MovieAverage voteAverage={movie.voteAverage} />
-          </div>
           <div className={IndMovieStyle.movie_hero_info_container}>
+            <div className={IndMovieStyle.movie__score}>
+              <MovieAverage voteAverage={movie.voteAverage} />
+            </div>
             <h2 className={IndMovieStyle.movie__title}>{movie.title}</h2>
             <div className={IndMovieStyle.movie__year}>
               <ParseDate date={movie.releaseDate} />
@@ -70,21 +61,24 @@ export default function IndMovie() {
             <div className={IndMovieStyle.movie__description}>
               {movie.overview}
             </div>
-            {movie.video ?
+            {movie.video ? (
               <div className={IndMovieStyle["btn-wrapper"]}>
                 <MovieButton
                   innerIcon="trailer"
                   onClick={() => MovieTrailer(movie.video[0])}
                 />
               </div>
-              : null}
+            ) : null}
+            <div className={IndMovieStyle.ind_movie_review}>
+              <UserMovieReviews movieId={movie.id} placement="header" />
+            </div>
           </div>
 
-
-          <div className={IndMovieStyle.ind_movie_review}>
-            <UserMovieReviews
-              movieId={movie.id}
-              placement="header"
+          <div className={IndMovieStyle["flex-1"]}>
+            <img
+              className={IndMovieStyle["hero-poster"]}
+              src={moviePosterPath}
+              alt="Movie Poster"
             />
           </div>
         </section>
@@ -125,6 +119,6 @@ export default function IndMovie() {
           />
         </div>
       </div>
-    </div >
+    </div>
   );
 }
