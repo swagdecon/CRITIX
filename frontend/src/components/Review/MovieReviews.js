@@ -32,6 +32,7 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
         useMemo(() => `http://localhost:8080/review/${movieId}`, [movieId])
     );
 
+    console.log(userReviews)
     const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
     const decodedToken = useMemo(() => jwt_decode(token), [token]);
     const filter = useMemo(() => new Filter(), []);

@@ -16,7 +16,7 @@ export default function ReviewSection({ reviews }) {
         reviewsToDisplay = reviews.slice(startIdx, endIdx);
         return reviewsToDisplay;
     }, [currentPage, reviews]);
-    console.log(reviews.avatar)
+
     return (
         <div className="comment-section">
             <div className="container">
@@ -34,7 +34,7 @@ export default function ReviewSection({ reviews }) {
                                     <div className="media-body">
                                         <div className="M-flex">
                                             <h4 className="title">
-                                                <span> {review.author} </span>
+                                                <span> {review.author}{" "}</span>
                                                 {review.createdDate}
                                             </h4>
 
@@ -57,7 +57,7 @@ export default function ReviewSection({ reviews }) {
                             color="primary"
                             count={totalPages}
                             page={currentPage}
-                            onChange={(event, page) => setCurrentPage(page)}
+                            onChange={(e, page) => setCurrentPage(page)}
                             sx={{
                                 "& .MuiPaginationItem-root": {
                                     color: "#ffffff",

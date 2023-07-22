@@ -29,8 +29,9 @@ import jakarta.annotation.PostConstruct;
 @Service
 
 public class MovieService {
-  Dotenv dotenv = Dotenv.load();
+  static Dotenv dotenv = Dotenv.load();
   private String TMDB_API_KEY = dotenv.get("TMDB_API_KEY");
+  private static String DEFAULT_AVATAR_URL = dotenv.get("DEFAULT_AVATAR_URL");
   private final MovieRepository movieRepository;
   private final MongoTemplate mongoTemplate;
   private final TmdbApi tmdbApi;
@@ -383,7 +384,7 @@ public class MovieService {
           return "https://image.tmdb.org/t/p/w200" + avatar;
         }
       } else {
-        return "https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg";
+        return DEFAULT_AVATAR_URL;
       }
     }
   }

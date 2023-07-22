@@ -7,7 +7,9 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.popflix.model.Review;
+import com.popflix.model.User;
 import com.popflix.repository.ReviewRepository;
+import com.popflix.repository.UserRepository;
 import com.popflix.service.tmdbRequests.AllMovieReviews;
 
 @Service
@@ -16,6 +18,8 @@ public class ReviewService {
     private final AllMovieReviews tmdbReviews = new AllMovieReviews();
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public void createNewMovieReview(Integer movieId, String username, String userId, String reviewRating,
             String reviewContent, String createdAt) {
@@ -42,7 +46,14 @@ public class ReviewService {
     }
 
     public List<Review> getAllMovieReviews(Integer movieId) {
-        return reviewRepository.findByMovieId(movieId);
+        List<Review> reviews = reviewRepository.findByMovieId(movieId);
+        for (Review review : reviews) {
+            User user = userRepository.findById(review.getUserId()).orElse(null);
+            if (user != null) {
+                review.setAvatar(user.getAvatar());
+            }
+        }
+        return reviews;
     }
 
     public List<Review> getMovieUserReviews(Integer movieId) throws IOException, InterruptedException {

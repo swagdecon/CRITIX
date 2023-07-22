@@ -22,6 +22,7 @@ import com.popflix.model.User;
 import com.popflix.repository.TokenRepository;
 import com.popflix.repository.UserRepository;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,6 +36,8 @@ public class AuthenticationService {
         private final PasswordEncoder passwordEncoder;
         private final JwtService jwtService;
         private final AuthenticationManager authenticationManager;
+        Dotenv dotenv = Dotenv.load();
+        private String DEFAULT_AVATAR_URL = dotenv.get("DEFAULT_AVATAR_URL");
 
         public AuthenticationResponse register(RegisterRequest request) {
 
@@ -47,6 +50,7 @@ public class AuthenticationService {
                                 .lastName(request.getLastName())
                                 .email(request.getEmail())
                                 .password(passwordEncoder.encode(request.getPassword()))
+                                .avatar(DEFAULT_AVATAR_URL)
                                 .role(Role.USER)
                                 .build();
                 var extraClaims = new HashMap<String, Object>();
@@ -133,7 +137,6 @@ public class AuthenticationService {
                                 .revoked(false)
                                 .build();
                 tokenRepository.save(token);
-
         }
 
         public void refreshToken(
