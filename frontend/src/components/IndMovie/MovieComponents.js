@@ -1,7 +1,7 @@
-import { React, useRef, useEffect, useState } from "react";
+import { React, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import IndMovieStyle from "../IndMovie/ind_movie.module.css";
-import ReactTextCollapse from "react-text-collapse/dist/ReactTextCollapse";
+// import ReactTextCollapse from "react-text-collapse/dist/ReactTextCollapse";
 import ReactPlayer from "react-player";
 import "../Carousel/MovieCarousel/MovieCarousel.css";
 import GlassCard from "./GlassCard";
@@ -89,11 +89,9 @@ function EmbeddedMovieTrailer({ video }) {
       }
     };
 
-    // Call the handleResize function initially and whenever the window is resized
     handleResize();
     window.addEventListener("resize", handleResize);
 
-    // Clean up the event listener on component unmount
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -126,54 +124,6 @@ function EmbeddedMovieTrailer({ video }) {
 EmbeddedMovieTrailer.propTypes = {
   video: PropTypes.arrayOf(PropTypes.string),
 };
-function MovieReviews({ reviews }) {
-
-  if (!reviews) {
-    return (
-      <div className={IndMovieStyle["no-reviews"]}>No Reviews Available</div>
-    );
-  } else {
-    const [maxHeight, setMaxHeight] = useState(500);
-
-    const reviewRef = useRef(null);
-    useEffect(() => {
-      if (reviewRef.current) {
-        const reviewHeight = reviewRef.current.offsetHeight;
-        setMaxHeight(reviewHeight);
-      }
-    }, [reviews]);
-
-    const TEXT_COLLAPSE_OPTIONS = {
-      collapse: false,
-      collapseText: "... show more",
-      expandText: "show less",
-      minHeight: 210,
-      maxHeight: 500,
-      textStyle: {
-        color: "white",
-        fontSize: "20px",
-      },
-    };
-
-    return (
-      <div className={IndMovieStyle.review__wrapper}>
-        {reviews.slice(0, 3).map((review, index) => (
-          <ReactTextCollapse
-            key={index}
-            options={{ ...TEXT_COLLAPSE_OPTIONS, maxHeight }}
-          >
-            <div className="review__score">{review.rating}%</div>
-            <p className={IndMovieStyle.review__description}>{review}</p>
-            <br />
-          </ReactTextCollapse>
-        ))}
-      </div>
-    );
-  }
-}
-MovieReviews.propTypes = {
-  reviews: PropTypes.arrayOf(PropTypes.string),
-};
 
 function MovieDetails({
   runtime,
@@ -186,8 +136,8 @@ function MovieDetails({
   releaseDate,
 }) {
   return (
-    <div>
-      <div className="info-container-1">
+    <div className="info-container-wrapper">
+      <div className="info-container-row">
         <GlassCard
           name={"RUNTIME"}
           value={runtime}
@@ -213,8 +163,7 @@ function MovieDetails({
           icon="&#xe175;"
         />
       </div>
-      <br />
-      <div className="info-container-2">
+      <div className="info-container-row">
         <GlassCard
           name={"LANGUAGE"}
           value={language}
@@ -264,6 +213,6 @@ export {
   MovieAverage,
   EmbeddedMovieTrailer,
   MovieGenres,
-  MovieReviews,
+  // MovieReviews,
   MovieDetails,
 };

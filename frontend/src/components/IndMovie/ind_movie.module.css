@@ -15,7 +15,6 @@
   position: relative;
   font-family: "Open Sans", sans-serif;
   padding-top: 30vh;
-
 }
 
 .background {
@@ -28,14 +27,18 @@
 }
 
 .flex-1 {
-  max-width: 35%;
   margin-left: 5%;
-}
+  flex-grow: 1;
+  margin-top: -22%;
 
+}
+.indMovieEmbeddedTrailer {
+  display: flex
+}
 .hero-poster {
   display: flex;
-  max-width: 85ch;
-  margin-top: -22vh;
+  max-width: 32vw;
+  margin: 0 auto;
 }
 
 .btn-wrapper {
@@ -46,18 +49,18 @@
 
 .hero-content {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start; 
   max-width: 45.9vw;
   margin: 0 auto;
   margin-bottom: 2vh;
-
+  align-items: flex-start;
 }
+
 .movie_hero_info_container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  
+  min-width: 500px;
+
 }
 
 .movie__title {
@@ -122,9 +125,13 @@
   display: grid;
   position: relative;
   z-index: 1;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 38vw 62vw;
   height: 100%;
   background-color: #000000;
+}
+
+.grid-item {
+  flex-basis: 100%;
 }
 
 .grid-item-1 {
@@ -144,30 +151,37 @@
   overflow: hidden;
 }
 
-@media (max-width: 1600px) {
+@media (max-width: 1695px) {
   .hero-content {
     flex-direction: column;
+    max-width: 50%;
     align-items: center;
   }
-
+  .content-wrapper {
+    padding-top: 7vh;
+  }
   .hero-poster {
-    width: 100%;
-    order: -1;
+    max-width: 45vw ;
     margin-bottom: 2rem; 
     display: flex;
     justify-content: center;
-    
+  }
+
+  .flex-1 {
+    margin: 0;
+  
   }
   .btn-wrapper, .review__description, .movie__description, .ind_review_title, .movie__title, .movie__year  {
     align-self: center;
     text-align: center;
   }
-  .flex-1 {
-    max-width: 100%;
-    margin: 0;
-  }
+ 
   .movie_hero_info_container {
-    order: 1; 
+    order: 2; 
   }
-  
+}
+@media (max-width: 1000px) {
+ .hero-poster {
+    max-width: 70vw;
+  }
 }

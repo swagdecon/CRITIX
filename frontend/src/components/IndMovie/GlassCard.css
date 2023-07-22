@@ -1,14 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
 
-.info-container-1,.info-container-2 {
-  flex-grow: 1;
-  display:inline-flex;
-  padding-bottom: 5px;
-  padding-top: 10px;
-  width: 100%;
-  pointer-events: visibleStroke;
+.info-container-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
+.info-container-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
 .content {
   pointer-events: none;
   display: flex;
@@ -27,7 +29,6 @@
 }
 
 .container .box {
-  width: 100%;
   min-width: 11.875em;
   min-height: 12.875em;
   padding: 1rem;

@@ -73,7 +73,6 @@ export default function IndMovie() {
               <MovieReviews movieId={movie.id} placement="header" />
             </div>
           </div>
-
           <div className={IndMovieStyle["flex-1"]}>
             <img
               className={IndMovieStyle["hero-poster"]}
