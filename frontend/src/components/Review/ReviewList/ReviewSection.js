@@ -4,50 +4,19 @@ import UserRating from "../Rating/UserRating/UserRating";
 import Pagination from "@mui/material/Pagination";
 import PropTypes from "prop-types";
 
-function ImageLogic(avatar) {
-    if (avatar !== null && avatar !== "null") {
-        if (avatar.includes("secure.gravatar.com")) {
-            return avatar;
-        } else {
-            return `https://image.tmdb.org/t/p/w200/${avatar}`;
-        }
-    } else {
-        return "https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg";
-    }
-}
-export default function OtherReviews({ reviews }) {
+export default function ReviewSection({ reviews }) {
     const [currentPage, setCurrentPage] = useState(1);
     const commentsPerPage = 2;
-    const totalPages = Math.ceil(reviews.length / commentsPerPage) - 2;
+    const totalPages = Math.ceil(reviews.length / commentsPerPage);
+    console.log(reviews);
     const displayReviews = useMemo(() => {
         let reviewsToDisplay = [];
-        if (currentPage === 1) {
-            const totalWordCount = reviews
-                .slice(3, 5)
-                .reduce((count, review) => count + review.content.split(" ").length, 0);
-            if (totalWordCount > 300) {
-                reviewsToDisplay = reviews.slice(2, 4);
-            } else {
-                reviewsToDisplay = reviews.slice(2
-                    , 4);
-            }
-        } else {
-            const startIdx = (currentPage - 1) * commentsPerPage + 3;
-            const endIdx = startIdx + commentsPerPage;
-            const pageReviews = reviews.slice(startIdx, endIdx);
-            const pageWordCount = pageReviews.reduce(
-                (count, review) => count + review.content.split(" ").length,
-                0
-            );
-            if (pageWordCount > 300) {
-                reviewsToDisplay = pageReviews.slice(0, 1);
-            } else {
-                reviewsToDisplay = pageReviews;
-            }
-        }
+        const startIdx = (currentPage - 1) * commentsPerPage;
+        const endIdx = startIdx + commentsPerPage;
+        reviewsToDisplay = reviews.slice(startIdx, endIdx);
         return reviewsToDisplay;
     }, [currentPage, reviews]);
-
+    console.log(reviews.avatar)
     return (
         <div className="comment-section">
             <div className="container">
@@ -58,7 +27,7 @@ export default function OtherReviews({ reviews }) {
                                 <div className="media media-review">
                                     <div className="media-user">
                                         <img
-                                            src={ImageLogic(review.avatar)}
+                                            src={review.avatar}
                                             className="profile-picture"
                                         />
                                     </div>
@@ -102,6 +71,6 @@ export default function OtherReviews({ reviews }) {
     );
 }
 
-OtherReviews.propTypes = {
+ReviewSection.propTypes = {
     reviews: PropTypes.array,
 };

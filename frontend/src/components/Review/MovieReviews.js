@@ -10,7 +10,7 @@ import jwt_decode from "jwt-decode";
 import useFetchData from "../../security/FetchApiData";
 import IndReview from "./Review.module.css";
 import IndMovieStyle from "../IndMovie/ind_movie.module.css";
-import OtherReviews from "./ReviewList/OtherReviews";
+import ReviewSection from "./ReviewList/ReviewSection";
 import PercentageRatingCircle from "./Rating/PercentageCircle/PercentageCircle";
 import InputSlider from "./Rating/Slider/Slider.js";
 import CookieManager from "../../security/CookieManager";
@@ -27,42 +27,11 @@ const TEXT_COLLAPSE_OPTIONS = {
     }
 };
 
-const reviewInputStyles = {
-    borderRadius: "15px",
-    fieldSet: {
-        borderRadius: "15px"
-    },
-    input: {
-        color: "white !important"
-    },
-    "& .MuiOutlinedInput-root": {
-        "& fieldset": {
-            borderColor: "white"
-        },
-        "&:hover fieldset": {
-            borderColor: "#0096ff"
-        },
-        "&.Mui-focused fieldset": {
-            borderColor: "#0096ff"
-        }
-    },
-    width: "60%"
-};
-
-const submitButtonStyles = {
-    borderRadius: "15px"
-};
-
-UserMovieReviews.propTypes = {
-    voteAverage: PropTypes.number,
-    movieId: PropTypes.number,
-    placement: PropTypes.string
-};
-
-export default function UserMovieReviews({ voteAverage, movieId, placement }) {
+const MovieReviews = ({ voteAverage, movieId, placement }) => {
     const { data: userReviews, dataLoaded, refetchData } = useFetchData(
         useMemo(() => `http://localhost:8080/review/${movieId}`, [movieId])
     );
+
     const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
     const decodedToken = useMemo(() => jwt_decode(token), [token]);
     const filter = useMemo(() => new Filter(), []);
@@ -74,6 +43,31 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
     const hasReviewProfanity = useMemo(() => filter.isProfane(reviewContent), [filter, reviewContent]);
     const isSubmitDisabled = useMemo(() => reviewContent.trim().length === 0 || reviewRating === 0, [reviewContent, reviewRating]);
     const reviewRef = useRef(null);
+
+    const reviewInputStyles = {
+        borderRadius: "15px",
+        fieldSet: {
+            borderRadius: "15px"
+        },
+        input: {
+            color: "white !important"
+        },
+        "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+                borderColor: hasReviewProfanity ? "red" : "white",
+            },
+            "&:hover fieldset": {
+                borderColor: hasReviewProfanity ? "red" : "#0096ff",
+            },
+            "&.Mui-focused fieldset": {
+                borderColor: "#0096ff",
+            },
+            "&.Mui-error fieldset": {
+                borderColor: "red",
+            },
+        },
+        width: "60%"
+    };
 
     const handleSubmit = useCallback(() => {
         if (!hasReviewProfanity) {
@@ -119,14 +113,8 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
         }
     }, [userReviews]);
 
-    if (placement === "userRatingSection") {
-        const percentageVoteAverage = useMemo(() => {
-            if (voteAverage) {
-                return voteAverage.toFixed(1) * 10;
-            } else {
-                return null;
-            }
-        }, [voteAverage, voteAverage]);
+    const renderUserRatingSection = () => {
+        const percentageVoteAverage = useMemo(() => voteAverage || null, [voteAverage]);
 
         return (
             <div className={IndReview["ind-review-wrapper"]}>
@@ -177,7 +165,6 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                                         size="medium"
                                         onClick={handleSubmit}
                                         disabled={isSubmitDisabled}
-                                        sx={submitButtonStyles}
                                     >
                                         SUBMIT
                                     </Button>
@@ -186,12 +173,14 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
                         </div>
                     </div>
                     {dataLoaded && userReviews && userReviews.length >= 2 && (
-                        <OtherReviews reviews={userReviews} />
+                        <ReviewSection reviews={userReviews} />
                     )}
                 </div>
             </div>
         );
-    } else if (placement === "header") {
+    };
+
+    const renderHeaderSection = () => {
         if (userReviews.length > 0) {
             return (
                 <div className={IndMovieStyle.review__wrapper} ref={reviewRef}>
@@ -215,5 +204,20 @@ export default function UserMovieReviews({ voteAverage, movieId, placement }) {
         } else {
             return null
         }
-    }
-}
+    };
+
+    return (
+        <>
+            {placement === "userRatingSection" && renderUserRatingSection()}
+            {placement === "header" && renderHeaderSection()}
+        </>
+    );
+};
+
+MovieReviews.propTypes = {
+    voteAverage: PropTypes.number,
+    movieId: PropTypes.number,
+    placement: PropTypes.string
+};
+
+export default MovieReviews;

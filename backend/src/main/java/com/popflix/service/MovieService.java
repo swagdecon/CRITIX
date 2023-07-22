@@ -8,9 +8,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -18,7 +15,6 @@ import org.springframework.stereotype.Service;
 import com.popflix.model.Movie;
 import com.popflix.model.Person;
 import com.popflix.repository.MovieRepository;
-
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.model.Credits;
 import info.movito.themoviedbapi.model.Genre;
@@ -40,7 +36,6 @@ public class MovieService {
   private final TmdbApi tmdbApi;
   private ScheduledExecutorService executor;
 
-  @Autowired
   public MovieService(MovieRepository movieRepository, MongoTemplate mongoTemplate) {
     this.movieRepository = movieRepository;
     this.mongoTemplate = mongoTemplate;
@@ -180,8 +175,8 @@ public class MovieService {
           movie.setReviews(reviewTexts);
         }
         if (movie.getVoteAverage() == null) {
-          float voteAverage = movieDb.getVoteAverage();
-          movie.setVoteAverage(voteAverage);
+          float voteAverage = Math.round(movieDb.getVoteAverage() * 10);
+          movie.setVoteAverage(Math.round(voteAverage));
         }
         if (movie.getVoteCount() == null) {
           Integer voteCount = movieDb.getVoteCount();
@@ -190,7 +185,6 @@ public class MovieService {
 
         if (movie.getImdbId() == null) {
           String imdbId = movieDb.getImdbID();
-
           movie.setImdbId(imdbId);
         }
 
@@ -243,7 +237,8 @@ public class MovieService {
     movie.setTagline(movie.getTagline() != null ? movie.getTagline() : movieDb.getTagline());
     movie.setRevenue(movie.getRevenue() != null ? movie.getRevenue() : movieDb.getRevenue());
     movie.setRuntime(movie.getRuntime() != null ? movie.getRuntime() : movieDb.getRuntime());
-    movie.setVoteAverage(movie.getVoteAverage() != null ? movie.getVoteAverage() : movieDb.getVoteAverage());
+    movie.setVoteAverage(movie.getVoteAverage() != null ? Math.round(movie.getVoteAverage() * 10)
+        : Math.round(movieDb.getVoteAverage() * 10));
     movie.setVoteCount(movie.getVoteCount() != null ? movie.getVoteCount() : movieDb.getVoteCount());
     movie.setImdbId(movie.getImdbId() != null ? movie.getImdbId() : movieDb.getImdbID());
 
@@ -377,5 +372,19 @@ public class MovieService {
         mongoTemplate.insert(movies, collectionName);
       }
     });
+  }
+
+  public class ImageUtility {
+    public static String getImageUrl(String avatar) {
+      if (avatar != null && !avatar.equals("null")) {
+        if (avatar.contains("secure.gravatar.com")) {
+          return avatar.substring(1);
+        } else {
+          return "https://image.tmdb.org/t/p/w200" + avatar;
+        }
+      } else {
+        return "https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg";
+      }
+    }
   }
 }

@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.popflix.model.Review;
+import com.popflix.service.MovieService.ImageUtility;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -58,12 +59,8 @@ public class AllMovieReviews {
                     JsonNode authorDetailsNode = resultNode.path("author_details");
                     if (authorDetailsNode.has("avatar_path")) {
                         String avatarPath = authorDetailsNode.path("avatar_path").asText();
-                        if (avatarPath.contains("secure.gravatar.com")) {
-                            String avatarPathWithoutSlash = avatarPath.substring(1);
-                            review.setAvatar(avatarPathWithoutSlash);
-                        } else {
-                            review.setAvatar(avatarPath);
-                        }
+                        String avatarUrl = ImageUtility.getImageUrl(avatarPath);
+                        review.setAvatar(avatarUrl);
                     }
                     review.setContent(content);
                     if (authorDetailsNode.has("rating")) {

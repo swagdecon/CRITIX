@@ -4,7 +4,7 @@ import IndMovieStyle from "../components/IndMovie/ind_movie.module.css";
 import "../components/Carousel/ActorCarousel/ActorCarousel.css";
 import "font-awesome/css/font-awesome.min.css";
 import NavBar from "../components/NavBar/NavBar.js";
-import UserMovieReviews from "../components/Review/MovieReviews";
+import MovieReviews from "../components/Review/MovieReviews";
 import {
   MovieGenres,
   MovieTrailer,
@@ -70,7 +70,7 @@ export default function IndMovie() {
               </div>
             ) : null}
             <div className={IndMovieStyle.ind_movie_review}>
-              <UserMovieReviews movieId={movie.id} placement="header" />
+              <MovieReviews movieId={movie.id} placement="header" />
             </div>
           </div>
 
@@ -99,7 +99,7 @@ export default function IndMovie() {
             <EmbeddedMovieTrailer video={movie.video} />
           </div>
           <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-3"]}`}>
-            <UserMovieReviews
+            <MovieReviews
               voteAverage={movie.voteAverage}
               movieId={movie.id}
               placement="userRatingSection"
