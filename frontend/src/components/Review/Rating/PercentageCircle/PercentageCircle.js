@@ -57,7 +57,9 @@ export default function PercentageRatingCircle({ percentageRating }) {
             <div className="flex-wrapper">
 
                 <div className="single-chart" >
-
+                    <div className="popcorn-wrapper">
+                        <Popcorn propsCss="rating" />
+                    </div>
                     <svg viewBox="0 0 36 36" className="circular-chart blue">
                         <path className="circle-bg"
                             d="M18 2.0845
@@ -74,9 +76,6 @@ export default function PercentageRatingCircle({ percentageRating }) {
 
                         <text x="18" y="26.35" className="percentage">{percentageRating}%</text>
                     </svg >
-                    <div className="popcorn-wrapper">
-                        <Popcorn propsCss="rating" />
-                    </div>
                 </div >
             </div>
         )

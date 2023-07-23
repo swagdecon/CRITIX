@@ -1,7 +1,9 @@
 
 .popcorn-wrapper {
   overflow: visible;
- transform: translateX(0.7vw) translateY(-12vh);
+  justify-content: flex-start ;
+  transform: translate(17px,10px);
+  display: flex;
 }
 .single-chart {
   width: 33%;

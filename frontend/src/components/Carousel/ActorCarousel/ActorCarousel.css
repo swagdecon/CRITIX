@@ -3,7 +3,6 @@
   position: flex;
   align-items: center;
   justify-content: center;
-  width: 95rem;
   flex-wrap: wrap;
 }
 .profile-container {
@@ -16,7 +15,7 @@
 .card {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   background: grey;
   border-radius: 10px;
   transition: background 0.8s;
