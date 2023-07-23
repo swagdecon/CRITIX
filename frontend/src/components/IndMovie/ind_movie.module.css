@@ -32,9 +32,12 @@
   margin-top: -22%;
 
 }
-.indMovieEmbeddedTrailer {
-  display: flex
+.EmbeddedMovieTrailer {
+  display: flex;
+  height: 750px;
+  width: 61vw;
 }
+
 .hero-poster {
   display: flex;
   max-width: 32vw;
@@ -125,17 +128,18 @@
   display: grid;
   position: relative;
   z-index: 1;
-  grid-template-columns: 38vw 62vw;
+  grid-template-columns: repeat(2, 1fr);
   height: 100%;
   background-color: #000000;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
-
 .grid-item {
   flex-basis: 100%;
 }
 
 .grid-item-1 {
-  max-width: 96%;
+  max-width: 97%;
 }
 
 .grid-item-2 {
@@ -184,4 +188,14 @@
  .hero-poster {
     max-width: 70vw;
   }
+}
+@media (max-width: 1600px) {
+
+.EmbeddedMovieTrailer { 
+  display: none;
+}
+.mainContainer {
+  grid-template-columns: minmax(0, 1fr);
+    padding: 0 10px;
+}
 }

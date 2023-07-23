@@ -1,7 +1,6 @@
-import { React, useEffect, useState } from "react";
+import { React } from "react";
 import PropTypes from "prop-types";
 import IndMovieStyle from "../IndMovie/ind_movie.module.css";
-// import ReactTextCollapse from "react-text-collapse/dist/ReactTextCollapse";
 import ReactPlayer from "react-player";
 import "../Carousel/MovieCarousel/MovieCarousel.css";
 import GlassCard from "./GlassCard";
@@ -71,44 +70,18 @@ function ParseNumber(num) {
 
 function EmbeddedMovieTrailer({ video }) {
 
-  const [playerWidth, setPlayerWidth] = useState("60vw");
-  const [playerHeight, setPlayerHeight] = useState("60vh");
-
-  useEffect(() => {
-    const handleResize = () => {
-      // Adjust the width and height based on media queries
-      if (window.innerWidth < 768) {
-        setPlayerWidth("100%");
-        setPlayerHeight("100%");
-      } else if (window.innerWidth < 3000) {
-        setPlayerWidth("100%");
-        setPlayerHeight("60vh");
-      } else {
-        setPlayerWidth("100%");
-        setPlayerHeight("60vh");
-      }
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
   return (
     <div>
       {video ? (
-
-        <ReactPlayer
-          className={IndMovieStyle.indMovieEmbeddedTrailer}
-          url={`https://www.youtube.com/watch?v=${video}`}
-          controls={true}
-          playing={false}
-          width={playerWidth}
-          height={playerHeight}
-        />
+        <div className={IndMovieStyle.EmbeddedMovieTrailer}>
+          <ReactPlayer
+            url={`https://www.youtube.com/watch?v=${video}`}
+            controls={true}
+            playing={false}
+            width="100%"
+            height="100%"
+          />
+        </div>
       ) : <img
         className={IndMovieStyle.indMovieEmbeddedTrailer}
         src={NoTrailer}
@@ -137,58 +110,54 @@ function MovieDetails({
 }) {
   return (
     <div className="info-container-wrapper">
-      <div className="info-container-row">
-        <GlassCard
-          name={"RUNTIME"}
-          value={runtime}
-          icon="&#xe8b5;"
-          iconString={"&#xe8b5;"}
-        />
-        <GlassCard
-          name={"BUDGET"}
-          value={budget}
-          iconString={"&#xef63;"}
-          icon="&#xef63;"
-        />
-        <GlassCard
-          name={"REVENUE"}
-          value={revenue}
-          iconString={"&#xf041;"}
-          icon="&#xf041;"
-        />
-        <GlassCard
-          name={"VOTE COUNT"}
-          value={voteCount}
-          iconString={"&#xe175;"}
-          icon="&#xe175;"
-        />
-      </div>
-      <div className="info-container-row">
-        <GlassCard
-          name={"LANGUAGE"}
-          value={language}
-          iconString={"&#xe8e2;"}
-          icon="&#xe8e2;"
-        />
-        <GlassCard
-          name={"PRODUCTION"}
-          value={productionCompanies}
-          iconString={"&#xe04b;"}
-          icon="&#xe04b;"
-        />
-        <GlassCard
-          name={"MOVIE STATUS"}
-          value={movieStatus}
-          iconString={"&#xf7f3;"}
-          icon="&#xf7f3;"
-        />
-        <GlassCard
-          name={"Release Date"}
-          value={releaseDate}
-          iconString={"&#xebcc;"}
-          icon="&#xebcc;"
-        />
-      </div>
+      <GlassCard
+        name={"RUNTIME"}
+        value={runtime}
+        icon="&#xe8b5;"
+        iconString={"&#xe8b5;"}
+      />
+      <GlassCard
+        name={"BUDGET"}
+        value={budget}
+        iconString={"&#xef63;"}
+        icon="&#xef63;"
+      />
+      <GlassCard
+        name={"REVENUE"}
+        value={revenue}
+        iconString={"&#xf041;"}
+        icon="&#xf041;"
+      />
+      <GlassCard
+        name={"VOTE COUNT"}
+        value={voteCount}
+        iconString={"&#xe175;"}
+        icon="&#xe175;"
+      />
+      <GlassCard
+        name={"LANGUAGE"}
+        value={language}
+        iconString={"&#xe8e2;"}
+        icon="&#xe8e2;"
+      />
+      <GlassCard
+        name={"PRODUCTION"}
+        value={productionCompanies}
+        iconString={"&#xe04b;"}
+        icon="&#xe04b;"
+      />
+      <GlassCard
+        name={"MOVIE STATUS"}
+        value={movieStatus}
+        iconString={"&#xf7f3;"}
+        icon="&#xf7f3;"
+      />
+      <GlassCard
+        name={"Release Date"}
+        value={releaseDate}
+        iconString={"&#xebcc;"}
+        icon="&#xebcc;"
+      />
     </div>
   );
 }
