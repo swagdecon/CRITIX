@@ -1,9 +1,9 @@
-import { React, useState, useEffect } from "react";
+import React from "react";
 import { Carousel } from "react-bootstrap";
 import PropTypes from "prop-types";
 "./ActorCarousel.css";
 import Title from "../title.module.scss";
-import { chunk } from "lodash";
+// import { Link } from "react-router-dom";
 const defaultImage = "url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg) center center no-repeat";
 
 function onMouseEnter(e, image) {
@@ -35,35 +35,8 @@ function onMouseLeave(e, image, actorImage) {
 
 
 export default function MovieActors({ actors }) {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const actorChunks = [];
   const chunkSize = 5;
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const getChunkSize = () => {
-    if (windowWidth <= 979) {
-      return 1
-    } else if (windowWidth <= 1471) {
-      return 2
-    } else if (windowWidth <= 1971) {
-      return 3;
-    } else if (windowWidth <= 2397) {
-      return 4;
-    } else {
-      return 5;
-    }
-  };
-  const actorChunks = chunk(actors, getChunkSize());
-
   if (actors) {
     for (let i = 0; i < actors.length; i += chunkSize) {
       actorChunks.push(actors.slice(i, i + chunkSize));
@@ -71,8 +44,6 @@ export default function MovieActors({ actors }) {
     const defaultStyle = {
       background: defaultImage,
     };
-
-
     return (
       <div>
         <h3 className={`${Title["movie-title"]}`}>cast members:</h3>
