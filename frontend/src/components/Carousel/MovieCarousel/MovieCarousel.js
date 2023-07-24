@@ -35,9 +35,7 @@ function MovieCarousel({ title, endpoint }) {
       return 4;
     } else {
       return 5;
-
     }
-
   };
 
   const movieChunks = chunk(movies, getChunkSize());

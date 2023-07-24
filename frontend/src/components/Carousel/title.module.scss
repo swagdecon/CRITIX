@@ -34,9 +34,11 @@ $outline: rgba(#fff, 0.4);
   }
   @media screen and (max-width: 500px) {
       zoom: 0.59
-    
   }
-  
+  @media (max-width: 1695px) {
+    // For ind movie actor title
+      justify-content: center;
+  }
 }
 
 /*

@@ -13,6 +13,7 @@
 }
 
 .card {
+  margin: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -45,7 +46,7 @@
   opacity: 1;
   color: #0096ff;
   font-family: "CoreCircus", sans-serif;
-  font-size: 1vw;
+  font-size: 30px;
 }
 
 .carousel-actors {
@@ -64,7 +65,9 @@
 .carousel-actors .carousel-control-prev,
 .carousel-actors .carousel-control-next {
   display: flex;
-  width: 1vw;
+  width: 5vw;
+  flex-grow: 1;
+
 }
 
 .carousel-hero .carousel-control-prev {

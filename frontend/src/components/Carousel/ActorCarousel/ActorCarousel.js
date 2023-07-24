@@ -1,6 +1,8 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
 import PropTypes from "prop-types";
+import { chunk } from "lodash";
+
 "./ActorCarousel.css";
 import Title from "../title.module.scss";
 // import { Link } from "react-router-dom";
@@ -35,40 +37,71 @@ function onMouseLeave(e, image, actorImage) {
 
 
 export default function MovieActors({ actors }) {
-  const actorChunks = [];
-  const chunkSize = 5;
-  if (actors) {
-    for (let i = 0; i < actors.length; i += chunkSize) {
-      actorChunks.push(actors.slice(i, i + chunkSize));
-    }
-    const defaultStyle = {
-      background: defaultImage,
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
     };
-    return (
-      <div>
-        <h3 className={`${Title["movie-title"]}`}>cast members:</h3>
-        <Carousel className="carousel-actors" interval={null} indicators={false}>
-          {actorChunks.map((chunk, chunkIndex) => (
-            <Carousel.Item key={chunkIndex}>
-              <div className="profile-container">
-                {chunk.map((actor, index) => {
-                  const image = actor.profilePath ? actor.profilePath : null;
-                  const actorImage = image ? `url(https://image.tmdb.org/t/p/w500${image}) center center no-repeat` : defaultImage;
-                  const style = image ? { background: actorImage, backgroundSize: "300px" } : defaultStyle;
-                  return (
-                    <div
-                      key={index}
-                      className="card card1"
-                      style={style}
-                      onMouseEnter={(e) => onMouseEnter(e, image)}
-                      onMouseLeave={(e) => onMouseLeave(e, image, actorImage)}
-                    >
-                      {/* <Link to={`/person/${actor.id}`}> */}
-                      <div className="border">
-                        <h3 className="profile-person">
-                          {actor.name}
-                        </h3>
-                        {/* <div className="ind-movie-cast-icons">
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const getChunkSize = () => {
+    switch (true) {
+      case windowWidth < 645:
+        return 1;
+      case windowWidth <= 949:
+        return 2;
+      case windowWidth <= 1300:
+        return 3;
+      case windowWidth <= 1555:
+        return 4;
+      case windowWidth <= 1869:
+        return 5;
+      case windowWidth <= 2181:
+        return 6;
+      case windowWidth <= 2300:
+        return 7;
+      default:
+        return 5;
+    }
+  };
+
+
+  const actorChunks = chunk(actors, getChunkSize());
+
+  const defaultStyle = {
+    background: defaultImage,
+  };
+  return (
+    <div>
+      <h3 className={`${Title["movie-title"]}`}>cast members:</h3>
+      <Carousel className="carousel-actors" interval={null} indicators={false}>
+        {actorChunks.map((chunk, chunkIndex) => (
+          <Carousel.Item key={chunkIndex}>
+            <div className="profile-container">
+              {chunk.map((actor, index) => {
+                const image = actor.profilePath ? actor.profilePath : null;
+                const actorImage = image ? `url(https://image.tmdb.org/t/p/w500${image}) center center no-repeat` : defaultImage;
+                const style = image ? { background: actorImage, backgroundSize: "300px" } : defaultStyle;
+                return (
+                  <div
+                    key={index}
+                    className="card card1"
+                    style={style}
+                    onMouseEnter={(e) => onMouseEnter(e, image)}
+                    onMouseLeave={(e) => onMouseLeave(e, image, actorImage)}
+                  >
+                    {/* <Link to={`/person/${actor.id}`}> */}
+                    <div className="border">
+                      <h3 className="profile-person">
+                        {actor.name}
+                      </h3>
+                      {/* <div className="ind-movie-cast-icons">
                             <i
                               className={"fa fa-instagram"}
                               aria-hidden="true"
@@ -82,20 +115,17 @@ export default function MovieActors({ actors }) {
                               aria-hidden="true"
                             />
                           </div> */}
-                      </div>
-                      {/* </Link> */}
                     </div>
-                  );
-                })}
-              </div>
-            </Carousel.Item>
-          ))}
-        </Carousel>
-      </div >
-    );
-  } else {
-    return null
-  }
+                    {/* </Link> */}
+                  </div>
+                );
+              })}
+            </div>
+          </Carousel.Item>
+        ))}
+      </Carousel>
+    </div >
+  );
 }
 MovieActors.propTypes = {
   actors: PropTypes.arrayOf(
