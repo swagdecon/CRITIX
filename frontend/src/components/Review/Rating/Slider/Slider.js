@@ -1,73 +1,69 @@
 import { React, useState } from 'react';
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
-import MuiInput from '@mui/material/Input';
-// import popcornIcon from './popcornRatingIcon.png';
 import PropTypes from "prop-types";
+import { styled } from '@mui/material/styles';
 
-const Input = styled(MuiInput)`
-  width: 42px;
-`;
+const PopflixSlider = styled(Slider)({
+    color: '#0096ff',
+    height: 8,
+    width: "55%",
+    '& .MuiSlider-track': {
+        border: 'none',
+    },
+    '& .MuiSlider-thumb': {
+        height: 24,
+        width: 24,
+        backgroundColor: '#fff',
+        border: '2px solid currentColor',
+        '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
+            boxShadow: 'inherit',
+        },
+        '&:before': {
+            display: 'none',
+        },
+    },
+    '& .MuiSlider-valueLabel': {
+        lineHeight: 1.2,
+        fontSize: 12,
+        background: 'unset',
+        padding: 0,
+        width: 32,
+        height: 32,
+        borderRadius: '50% 50% 50% 0',
+        backgroundColor: '#0096ff',
+        transformOrigin: 'bottom left',
+        transform: 'translate(50%, -100%) rotate(-45deg) scale(0)',
+        '&:before': { display: 'none' },
+        '&.MuiSlider-valueLabelOpen': {
+            transform: 'translate(50%, -100%) rotate(-45deg) scale(1)',
+        },
+        '& > *': {
+            transform: 'rotate(45deg)',
+        },
+    },
+});
+
+
 export default function InputSlider({ onSliderChange }) {
-    const [value, setValue] = useState(30);
+    const [value, setValue] = useState(20);
 
     const handleSliderChange = (event, newValue) => {
         setValue(newValue);
-        onSliderChange(newValue); // Call the callback function
-    };
-
-    const handleInputChange = (event) => {
-        setValue(event.target.value === "" ? "" : Number(event.target.value));
-    };
-
-    const handleBlur = () => {
-        if (value < 0) {
-            setValue(0);
-        } else if (value > 100) {
-            setValue(100);
-        }
+        onSliderChange(newValue);
     };
 
     return (
-        <Box sx={{ width: 250 }}>
-            <Typography id="input-slider" gutterBottom>
-                {/* Kernel Rating */}
-            </Typography>
-            <Grid container spacing={1} alignItems="left">
-                {/* <Grid item>
-            <img style={{ width: "50%" }} src={popcornIcon} />
-          </Grid> */}
-                <Grid item xs>
-                    <Slider
-                        value={typeof value === "number" ? value : 0}
-                        onChange={handleSliderChange}
-                        aria-labelledby="input-slider"
-                    />
-                </Grid>
-                <Grid item>
-                    <Input
-                        value={value}
-                        size="small"
-                        onChange={handleInputChange}
-                        onBlur={handleBlur}
-                        inputProps={{
-                            step: 10,
-                            min: 0,
-                            max: 100,
-                            type: "number",
-                            "aria-labelledby": "input-slider"
-                        }}
-                        sx={{
-                            color: "white"
-                        }}
-                    />
-                </Grid>
-            </Grid>
+        <Box sx={{ m: 3 }}>
+            <PopflixSlider
+                value={value}
+                onChange={handleSliderChange}
+                valueLabelDisplay="auto"
+                aria-label="popflix slider"
+                defaultValue={20}
+            />
         </Box>
-    );
+    )
 }
 InputSlider.propTypes = {
     onSliderChange: PropTypes.func,

@@ -12,7 +12,7 @@
 .total-rating-wrapper {
   position: absolute;
   right:  2.5%;
-  top:    0.1%
+  top:    5%
 }
 
 .ind-review-section-title {
@@ -36,7 +36,8 @@
 }
 
 .input-slider {
-  margin-left: 1%;
+  justify-content: center;
+  align-self: start;
 }
 
 .user-info-wrapper {
@@ -57,4 +58,9 @@
 
 .section-line {
   border-bottom: thin solid #8f8f8f;
+}
+@media screen and (max-width: 500px) {
+  .MuiInputBase-input {
+    display: none;
+  }
 }
