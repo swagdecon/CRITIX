@@ -64,15 +64,13 @@
   max-width: 45.9vw;
   margin: 0 auto;
   margin-bottom: 2vh;
-  align-items: flex-start;
 }
 
 .movie_hero_info_container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 500px;
-
+  min-width: 22vw;
 }
 
 .movie__title {
@@ -94,10 +92,12 @@
 
 .movie__description {
   display: flex;
+  flex-wrap: wrap;
   color: #ffffff;
   font-size: 1.1rem;
   padding-top: 3rem;
   line-height: 2rem;
+  max-width: 100%;
 }
 
 .review__description {

@@ -83,7 +83,6 @@ export default function IndMovie() {
         </section>
         <section className={IndMovieStyle.mainContainer}>
           <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-1"]}`}>
-
             <MovieDetails
               runtime={movie.runtime}
               revenue={movie.revenue}
