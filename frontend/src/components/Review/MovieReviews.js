@@ -67,7 +67,10 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                 borderColor: "red",
             },
         },
-        width: "60%"
+        width: "60%",
+        '@media (max-width: 500px)': {
+            width: '100%',
+        }
     };
 
     const handleSubmit = useCallback(() => {

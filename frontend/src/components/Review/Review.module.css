@@ -27,11 +27,13 @@
 }
 
 .post-review-btn {
+  display: flex;
   padding-top: 1vh;
   padding-bottom: 1vh;
 }
 
 .textField-wrapper {
+  margin-top: 5%;
   flex: 1;
 }
 
@@ -62,5 +64,21 @@
 @media screen and (max-width: 500px) {
   .MuiInputBase-input {
     display: none;
+  }
+
+   .total-rating-wrapper {
+    position: relative;
+    display: flex;
+    right:  0;
+    justify-content: center;
+   }
+   .user-review-wrapper {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    min-height: 10vh;
+  }
+  .post-review-btn {
+    justify-content: center;
   }
 }

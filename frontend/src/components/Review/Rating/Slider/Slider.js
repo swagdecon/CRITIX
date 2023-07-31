@@ -42,6 +42,9 @@ const PopflixSlider = styled(Slider)({
             transform: 'rotate(45deg)',
         },
     },
+    '@media (max-width: 500px)': {
+        width: '100%',
+    }
 });
 
 
