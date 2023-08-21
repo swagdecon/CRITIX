@@ -62,19 +62,20 @@
   display: flex;
   flex-wrap: wrap;
 }
-.carousel-actors .carousel-control-prev,
-.carousel-actors .carousel-control-next {
-  display: flex;
-  width: 5vw;
-  flex-grow: 1;
+.carousel-control-prev,
+.carousel-control-next {
+  flex: 1;
+  width: 30px;
+  align-self: center;
+  margin: 0 5px;
 }
 
-.carousel-hero .carousel-control-prev {
+/* .carousel-hero .carousel-control-prev {
   justify-content: flex-start;
 }
 .carousel-hero .carousel-control-next {
   justify-content: flex-end;
-}
+} */
 
 /* .fa {
   opacity: 0;
