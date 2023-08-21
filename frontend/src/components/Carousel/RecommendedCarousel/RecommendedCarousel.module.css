@@ -1,0 +1,20 @@
+.recommended-card-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .carousel-recommended {
+    width: 100%; 
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow: hidden;
+    margin-bottom: 70px;
+  }
+.carousel-actors .carousel-control-prev,
+.carousel-actors .carousel-control-next {
+  display: flex;
+  width: 5vw;
+  flex-grow: 1;
+}
