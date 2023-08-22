@@ -32,7 +32,6 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
         useMemo(() => `http://localhost:8080/review/${movieId}`, [movieId])
     );
 
-    console.log(userReviews)
     const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
     const decodedToken = useMemo(() => jwt_decode(token), [token]);
     const filter = useMemo(() => new Filter(), []);
@@ -123,11 +122,10 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
         return (
             <div className={IndReview["ind-review-wrapper"]}>
                 <div className={IndReview["input-wrapper"]}>
-                    <div className={IndReview["total-rating-wrapper"]}>
-                        <PercentageRatingCircle percentageRating={percentageVoteAverage} />
-                    </div>
                     <div className={IndReview["user-review-wrapper"]}>
+
                         <div className={IndReview["user-info-wrapper"]} />
+
                         <div className={IndReview["textField-wrapper"]}>
                             <div className={IndReview["input-slider"]}>
                                 <InputSlider onSliderChange={setReviewRating} />
@@ -161,6 +159,7 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                                 error={hasReviewProfanity && reviewContent.trim().length > 0}
                                 sx={reviewInputStyles}
                             />
+
                             {!hasSubmittedReview && !hasReviewProfanity && (
                                 <div className={IndReview["post-review-btn"]}>
                                     <Button
@@ -175,6 +174,9 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                                 </div>
                             )}
                         </div>
+                        <div className={IndReview["total-rating-wrapper"]}>
+                            <PercentageRatingCircle percentageRating={percentageVoteAverage} />
+                        </div>
                     </div>
                     {dataLoaded && userReviews && userReviews.length >= 2 && (
                         <ReviewSection reviews={userReviews} />
@@ -182,6 +184,7 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                 </div>
             </div>
         );
+
     };
 
     const renderHeaderSection = () => {

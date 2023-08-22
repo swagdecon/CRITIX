@@ -5,6 +5,7 @@ import "../components/Carousel/ActorCarousel/ActorCarousel.css";
 import "font-awesome/css/font-awesome.min.css";
 import NavBar from "../components/NavBar/NavBar.js";
 import MovieReviews from "../components/Review/MovieReviews";
+import backupPoster from "../misc/noPosterAvailable.png"
 import {
   MovieGenres,
   MovieTrailer,
@@ -73,13 +74,20 @@ export default function IndMovie() {
               <MovieReviews movieId={movie.id} placement="header" />
             </div>
           </div>
-          <div className={IndMovieStyle["flex-1"]}>
-            <img
+
+          {movie.posterPath ?
+            <div className={IndMovieStyle["flex-1"]}>
+              <img
+                className={IndMovieStyle["hero-poster"]}
+                src={moviePosterPath}
+                alt="Movie Poster"
+              />
+            </div>
+            : <img
               className={IndMovieStyle["hero-poster"]}
-              src={moviePosterPath}
-              alt="Movie Poster"
-            />
-          </div>
+              src={backupPoster}
+              alt="fallback poster"
+            />}
         </section>
         <section className={IndMovieStyle.mainContainer}>
           <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-1"]}`}>
@@ -104,11 +112,13 @@ export default function IndMovie() {
               placement="userRatingSection"
             />
           </div>
-          <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-4"]}`}>
-            <div className="CastMembers">
-              <MovieActors actors={movie.actors} />
+          {movie.actors.length > 0 ?
+            <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-4"]}`}>
+              <div className="CastMembers">
+                <MovieActors actors={movie.actors} />
+              </div>
             </div>
-          </div>
+            : null}
         </section>
 
         <div className={`${IndMovieStyle["recommended-carousel-wrapper"]}`}>

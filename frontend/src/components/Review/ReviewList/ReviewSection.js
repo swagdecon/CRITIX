@@ -8,7 +8,6 @@ export default function ReviewSection({ reviews }) {
     const [currentPage, setCurrentPage] = useState(1);
     const commentsPerPage = 2;
     const totalPages = Math.ceil(reviews.length / commentsPerPage);
-    console.log(reviews);
     const displayReviews = useMemo(() => {
         let reviewsToDisplay = [];
         const startIdx = (currentPage - 1) * commentsPerPage;

@@ -112,7 +112,6 @@
 .review__wrapper {
   display: flex;
   flex-direction: column;
-  max-width: 90%;
 }
 
 .ind_movie_review {
