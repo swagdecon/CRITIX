@@ -74,7 +74,7 @@ function MovieCarousel({ title, endpoint }) {
 MovieCarousel.propTypes = {
   title: PropTypes.string.isRequired,
   endpoint: PropTypes.string.isRequired,
-  movies: PropTypes.array.isRequired,
+  movies: PropTypes.array,
 };
 
 export default React.memo(MovieCarousel);

@@ -86,8 +86,8 @@ function EmbeddedMovieTrailer({ video }) {
         className={IndMovieStyle.indMovieEmbeddedTrailer}
         src={NoTrailer}
         alt="Movie Trailer Unavailable"
-        width={1520}
-        height={825}
+        width={"100%"}
+        height={"100%"}
       />
       }
     </div>

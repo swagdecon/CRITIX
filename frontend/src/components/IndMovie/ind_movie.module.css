@@ -34,7 +34,7 @@
 }
 .EmbeddedMovieTrailer {
   position: relative;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio (9 / 16 * 100) */
+  padding-bottom: 56.25%; 
   height: 0;
   overflow: hidden;
 }
@@ -50,7 +50,6 @@
 .hero-poster {
   display: flex;
   max-width: 32vw;
-  margin: 0 auto;
 }
 
 .btn-wrapper {
