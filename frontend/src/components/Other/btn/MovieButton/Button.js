@@ -2,13 +2,8 @@ import React from "react";
 import "./clapperboard.css";
 import PropTypes from "prop-types";
 import BtnStyles from "./Button.module.css";
-import Popcorn from "./popcorn_logo";
+import Popcorn from "./popcornLogo";
 export default function MovieButton(props) {
-  MovieButton.propTypes = {
-    innerIcon: PropTypes.string,
-    onClick: PropTypes.func,
-  };
-
   {
     if (props.innerIcon === "popcorn") {
       return (
@@ -16,7 +11,10 @@ export default function MovieButton(props) {
           <p className={BtnStyles["css-button-text"]}>SIGN UP</p>
           <div className={BtnStyles["css-button-inner-popcorn"]}>
             <div className={BtnStyles["reset-skew"]}>
-              <Popcorn />
+              <div className={BtnStyles["popcorn-wrapper"]} >
+                <Popcorn />
+              </div>
+
             </div>
           </div>
         </button>
@@ -27,7 +25,9 @@ export default function MovieButton(props) {
           <p className={BtnStyles["css-button-text"]}>LOG IN</p>
           <div className={BtnStyles["css-button-inner-clapperboard"]}>
             <div className={BtnStyles["reset-skew"]}>
-              <clapperboard-div />
+              <div className={BtnStyles["clapperboard-wrapper"]}>
+                <clapperboard-div />
+              </div>
             </div>
           </div>
         </button>
@@ -42,7 +42,9 @@ export default function MovieButton(props) {
           <p className={BtnStyles["css-button-text"]}>WATCH TRAILER</p>
           <div className={BtnStyles["css-button-inner-popcorn"]}>
             <div className={BtnStyles["reset-skew"]}>
-              <Popcorn />
+              <div className={BtnStyles["popcorn-wrapper"]} >
+                <Popcorn />
+              </div>
             </div>
           </div>
         </button>
@@ -50,3 +52,7 @@ export default function MovieButton(props) {
     }
   }
 }
+MovieButton.propTypes = {
+  innerIcon: PropTypes.string,
+  onClick: PropTypes.func,
+};

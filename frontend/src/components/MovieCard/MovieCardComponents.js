@@ -1,35 +1,22 @@
 import PropTypes from "prop-types";
 import React from "react";
 function MovieCardGenres({ genres }) {
-  if (!genres) {
-    // If genres is falsy, return "No genres available"
+  if (!genres || genres.length === 0) {
     return "No genres available";
   }
   if (Array.isArray(genres)) {
-    // If genres is an array, proceed with checking if it's nested or not
-    const nestedGenres = genres.filter((genre) => typeof genre === "object"); // Filter the nested genres by checking if their type is an object
-    if (nestedGenres.length > 0) {
-      // If there are nested genres, flatten the array and join them using " | "
-      const flattenedGenres = genres.flatMap((genre) => {
-        if (typeof genre === "object") {
-          // If genre is an object, return the name property
-          return genre.name;
-        } else {
-          // Otherwise, return the genre
-          return genre;
-        }
-      });
-      return flattenedGenres.join(" | ");
-    } else {
-      // If there are no nested genres, join the genres array using " | "
-      return genres.join(" | ");
-    }
+    const flattenedGenres = genres.map((genre) => {
+      if (typeof genre === "object") {
+        return genre.name;
+      } else {
+        return genre;
+      }
+    });
+    return flattenedGenres.join(" | ");
   } else {
-    // If genres is not an array, return "No genres available"
     return "No genres available";
   }
 }
-
 function MovieCardActors({ actors }) {
   MovieCardActors.propTypes = {
     actors: PropTypes.arrayOf(
@@ -40,11 +27,10 @@ function MovieCardActors({ actors }) {
           role: PropTypes.string,
         }),
       ])
-    ).isRequired,
+    ),
   };
-
-  if (actors === null) {
-    return (<span>No Actors Available</span>)
+  if (!actors || actors.length === 0) {
+    return <span>No Actors Available</span>;
   } else {
     const topActors = actors.slice(0, 3);
     return (
@@ -56,5 +42,4 @@ function MovieCardActors({ actors }) {
     );
   }
 }
-
 export { MovieCardActors, MovieCardGenres };

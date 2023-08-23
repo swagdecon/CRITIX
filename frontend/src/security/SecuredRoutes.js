@@ -8,15 +8,14 @@ export default function PrivateRoute({ children }) {
   let accessToken = CookieManager.decryptCookie("accessToken");
   let refreshToken = CookieManager.decryptCookie("refreshToken");
   let decodedToken;
+  const currentTime = Date.now() / 1000;
 
   try {
     decodedToken = jwt_decode(accessToken);
   } catch (e) {
-    console.log(e);
     return <Navigate to="/403" />;
   }
 
-  const currentTime = Date.now() / 1000;
 
   if (decodedToken.exp < currentTime || accessToken || refreshToken) {
     return children;

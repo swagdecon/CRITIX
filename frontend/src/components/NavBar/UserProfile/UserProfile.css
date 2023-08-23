@@ -47,3 +47,8 @@
   margin: 0;
   cursor: pointer;
 }
+@media screen and (max-width: 764px) {
+  .User .name {
+    display: none;
+  }
+}

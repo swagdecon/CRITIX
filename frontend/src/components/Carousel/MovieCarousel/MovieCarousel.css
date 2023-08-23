@@ -1,13 +1,43 @@
 .carousel-item {
   text-align: center;
 }
-
-.carousel-movie .carousel-control-prev {
-  left: -6%;
-  top: -10%;
+.carousel-wrapper {
+  transform: translateY(5%);
+}
+.carousel-movie {
+  width: 100%; 
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  overflow: hidden;
+  margin-bottom: 70px;
 }
 
+.carousel-movie .carousel-inner {
+  width: 100%; 
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.carousel-movie .carousel-control-prev,
 .carousel-movie .carousel-control-next {
-  right: -6%;
-  top: -10%;
+  display: flex;
+  width: 3vw;
+}
+
+.carousel-control-prev {
+  justify-content: flex-start;
+}
+.carousel-control-next {
+  justify-content: flex-end;
+}
+
+@media screen and (min-width: 3340px) {
+  .carousel-control-prev {
+    justify-content: flex-end;
+  }
+  
+  .carousel-control-next {
+    justify-content: flex-start;
+  }
 }

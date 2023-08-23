@@ -6,8 +6,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.popflix.model.User;
 
-public interface UserRepository extends MongoRepository<User, Integer> {
+public interface UserRepository extends MongoRepository<User, String> {
 
     Optional<User> findByEmail(String email);
 
+    // Optional<User> findById(String id);
 }

@@ -15,14 +15,15 @@ export default function SortByButton({ onSelectSortBy }) {
     onSelectSortBy(eventKey);
   };
   return (
-    <div className="button-container">
+    <div className="mb-2">
       <DropdownButton
-        id="dropdown-button-dark"
-        variant="secondary"
-        menuVariant="dark"
+        key="down-centered"
+        id={"dropdown-button-drop-down-centered"}
+        drop="down-centered"
         title={`SORT BY: ${selectedValue}`}
-        className="mt-2"
         onSelect={handleSelect}
+        variant="dark"
+        data-bs-theme="dark"
       >
         <Dropdown.Item eventKey="Popularity Desc.">
           Popularity Descending

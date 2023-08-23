@@ -1,0 +1,22 @@
+.user-rating-bad {
+    background-color: #ff0000 ;
+  
+}
+.user-rating-mid {
+    background-color: #ff9f00 ;
+}
+.user-rating-good {
+    background-color: #00a71c ;
+}
+.user-rating-excellent {
+    background-color: #0096ff;
+}
+.user-rating-bad, .user-rating-mid, .user-rating-good, .user-rating-excellent {
+    padding: 5px;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    border-radius: 5px;
+    border-width: 2px;
+    margin-bottom: 1.5vh;
+    text-align: center;
+}

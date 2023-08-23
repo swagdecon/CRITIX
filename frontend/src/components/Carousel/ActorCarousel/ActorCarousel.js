@@ -1,105 +1,139 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
+import PropTypes from "prop-types";
 import { chunk } from "lodash";
 
-import "./ActorCarousel.css";
-import PropTypes from "prop-types";
-import IndMovieStyle from "../../IndMovie/ind_movie.module.css";
-import { Link } from "react-router-dom";
+"./ActorCarousel.css";
+import Title from "../title.module.scss";
+// import { Link } from "react-router-dom";
+const defaultImage = "url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg) center center no-repeat";
+
+function onMouseEnter(e, image) {
+  const target = e.currentTarget;
+  if (image) {
+    target.style.background = `url(https://image.tmdb.org/t/p/w500${image}) left center no-repeat `;
+    target.style.backgroundSize = "600px";
+  }
+  target.querySelector("h3").style.opacity = 1;
+  const icons = target.querySelectorAll(".fa");
+  icons.forEach((icon) => {
+    icon.style.opacity = 1;
+  });
+}
+
+
+function onMouseLeave(e, image, actorImage) {
+  const target = e.currentTarget;
+  if (image) {
+    target.style.background = actorImage;
+    target.style.backgroundSize = "300px";
+  }
+  target.querySelector("h3").style.opacity = 0;
+  const icons = target.querySelectorAll(".fa");
+  icons.forEach((icon) => {
+    icon.style.opacity = 0;
+  });
+}
+
 
 export default function MovieActors({ actors }) {
-  MovieActors.propTypes = {
-    actors: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        id: PropTypes.number.isRequired,
-        profilePath: PropTypes.string,
-      })
-    ),
-    images: PropTypes.arrayOf(PropTypes.string),
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const getChunkSize = () => {
+    switch (true) {
+      case windowWidth < 645:
+        return 1;
+      case windowWidth <= 949:
+        return 2;
+      case windowWidth <= 1300:
+        return 3;
+      case windowWidth <= 1555:
+        return 4;
+      case windowWidth <= 1869:
+        return 5;
+      case windowWidth <= 2181:
+        return 6;
+      case windowWidth <= 2300:
+        return 7;
+      default:
+        return 5;
+    }
   };
-  const defaultImage = "url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg) center center no-repeat";
-  const actorChunks = chunk(actors, 5);
+
+
+  const actorChunks = chunk(actors, getChunkSize());
+
+  const defaultStyle = {
+    background: defaultImage,
+  };
   return (
-    <Carousel className="carousel-actors" interval={null} indicators={false}>
-      {actorChunks.map((chunk, chunkIndex) => {
-        return (
+    <div>
+      <h3 className={`${Title["movie-title"]}`}>cast members:</h3>
+      <Carousel className="carousel-actors" interval={null} indicators={false}>
+        {actorChunks.map((chunk, chunkIndex) => (
           <Carousel.Item key={chunkIndex}>
-            <div className={IndMovieStyle["profile-container"]}>
+            <div className="profile-container">
               {chunk.map((actor, index) => {
-                let image = actor.profilePath ? actor.profilePath : null;
-                let actorImage = `url(https://image.tmdb.org/t/p/w500${image}) center center no-repeat`;
-
-                if (image === null) {
-                  actorImage = defaultImage;
-                }
-                const style = image
-                  ? {
-                    background: actorImage,
-                    backgroundSize: "300px",
-                  }
-                  : {
-                    background: defaultImage,
-                  };
-
+                const image = actor.profilePath ? actor.profilePath : null;
+                const actorImage = image ? `url(https://image.tmdb.org/t/p/w500${image}) center center no-repeat` : defaultImage;
+                const style = image ? { background: actorImage, backgroundSize: "300px" } : defaultStyle;
                 return (
                   <div
                     key={index}
-                    className={`${IndMovieStyle["card"]} ${IndMovieStyle["card1"]}`}
+                    className="card card1"
                     style={style}
-                    onMouseEnter={(e) => {
-                      if (image) {
-                        e.currentTarget.style.background = `url(https://image.tmdb.org/t/p/w500${image}) left center no-repeat `;
-                        e.currentTarget.style.backgroundSize = "600px";
-                      }
-                      e.currentTarget.querySelector("h3").style.opacity = 1;
-                      Array.from(
-                        e.currentTarget.querySelectorAll(".fa")
-                      ).forEach((icon) => {
-                        icon.style.opacity = 1;
-                      });
-                    }}
-                    onMouseLeave={(e) => {
-                      if (image) {
-                        e.currentTarget.style.background = actorImage;
-                        e.currentTarget.style.backgroundSize = "300px";
-                      }
-                      e.currentTarget.querySelector("h3").style.opacity = 0;
-                      Array.from(
-                        e.currentTarget.querySelectorAll(".fa")
-                      ).forEach((icon) => {
-                        icon.style.opacity = 0;
-                      });
-                    }}
+                    onMouseEnter={(e) => onMouseEnter(e, image)}
+                    onMouseLeave={(e) => onMouseLeave(e, image, actorImage)}
                   >
-                    <Link to={`/person/${actor.id}`}>
-                      <div className={IndMovieStyle.border}>
-                        <h3 className={IndMovieStyle["profile-person"]}>
-                          {actor.name}
-                        </h3>
-                        <div className={IndMovieStyle["ind-movie-cast-icons"]}>
-                          <i
-                            className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-instagram"]}`}
-                            aria-hidden="true"
-                          />
-                          <i
-                            className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-twitter"]}`}
-                            aria-hidden="true"
-                          />
-                          <i
-                            className={`${IndMovieStyle["fa"]} ${IndMovieStyle["fa-facebook"]}`}
-                            aria-hidden="true"
-                          />
-                        </div>
-                      </div>
-                    </Link>
+                    {/* <Link to={`/person/${actor.id}`}> */}
+                    <div className="border">
+                      <h3 className="profile-person">
+                        {actor.name}
+                      </h3>
+                      {/* <div className="ind-movie-cast-icons">
+                            <i
+                              className={"fa fa-instagram"}
+                              aria-hidden="true"
+                            />
+                            <i
+                              className={"fa fa-twitter"}
+                              aria-hidden="true"
+                            />
+                            <i
+                              className={"fa fa-facebook"}
+                              aria-hidden="true"
+                            />
+                          </div> */}
+                    </div>
+                    {/* </Link> */}
                   </div>
                 );
               })}
             </div>
           </Carousel.Item>
-        );
-      })}
-    </Carousel>
+        ))}
+      </Carousel>
+    </div >
   );
 }
+MovieActors.propTypes = {
+  actors: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
+      profilePath: PropTypes.string,
+    })
+  ),
+  images: PropTypes.arrayOf(PropTypes.string),
+};

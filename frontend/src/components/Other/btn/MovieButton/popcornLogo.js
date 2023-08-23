@@ -1,45 +1,51 @@
 import React from "react";
-import "./popcorn_logo.css";
-const Popcorn = () => (
-  <div className="popcorn">
-    <svg
-      className="mypopcorn animated fadeIn"
-      version="1.1"
-      id="Capa_1"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlnsXlink="http://www.w3.org/1999/xlink"
-      x="0px"
-      y="0px"
-      viewBox="0 0 354.461 354.461"
-      style={{ enableBackground: "new 0 0 354.461 354.461" }}
-      xmlSpace="preserve"
-    >
-      <g id="XMLID_484_">
-        <circle
-          id="popcrncirlce"
-          className="firstcirle"
-          cx="260.426"
-          cy="22.695"
-          r="22.695"
-        />
-        <circle
-          id="popcrncirlce"
-          className="firstcirle"
-          cx="163.426"
-          cy="-16.695"
-          r="22.695"
-        />
-        <circle
-          id="popcrncirlce"
-          className="firstcirle"
-          cx="65.426"
-          cy="22.695"
-          r="22.695"
-        />
-        <path
-          id="XMLID_488_"
-          style={{ fill: "#FFEB99" }}
-          d="M278.375,128.664c-0.05,0-0.099,0.007-0.149,0.008
+import "./popcornLogo.css";
+import PropTypes from "prop-types"
+
+export default function Popcorn({ propsCss }) {
+  Popcorn.propTypes = {
+    propsCss: PropTypes.string
+  }
+  return (
+    <div className={`popcorn ${propsCss}`}>
+      <svg
+        className="mypopcorn animated fadeIn"
+        version="1.1"
+        id="Capa_1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+        x="0px"
+        y="0px"
+        viewBox="0 0 354.461 354.461"
+        style={{ enableBackground: "new 0 0 354.461 354.461" }}
+        xmlSpace="preserve"
+      >
+        <g id="XMLID_484_">
+          <circle
+            id="popcrncirlce"
+            className="firstcirle"
+            cx="260.426"
+            cy="22.695"
+            r="22.695"
+          />
+          <circle
+            id="popcrncirlce"
+            className="firstcirle"
+            cx="163.426"
+            cy="-16.695"
+            r="22.695"
+          />
+          <circle
+            id="popcrncirlce"
+            className="firstcirle"
+            cx="65.426"
+            cy="22.695"
+            r="22.695"
+          />
+          <path
+            id="XMLID_488_"
+            style={{ fill: "#FFEB99" }}
+            d="M278.375,128.664c-0.05,0-0.099,0.007-0.149,0.008
 		c0.092-0.831,0.149-1.673,0.149-2.529c0-12.534-10.161-22.695-22.695-22.695c-0.05,0-0.099,0.007-0.149,0.008
 		c0.092-0.831,0.149-1.673,0.149-2.529c0-12.534-10.161-22.695-22.695-22.695c-0.752,0-1.495,0.041-2.228,0.112
 		c0.1-0.866,0.165-1.742,0.165-2.634c0-12.099-9.475-21.958-21.406-22.63C208.895,41.1,199.014,31.57,186.88,31.57
@@ -79,11 +85,11 @@ const Popcorn = () => (
 		c0.092-0.831,0.149-1.673,0.149-2.529c0-0.856-0.057-1.698-0.149-2.529c0.05,0,0.099,0.008,0.149,0.008s0.099-0.007,0.149-0.008
 		c-0.092,0.831-0.149,1.673-0.149,2.529c0,0.856,0.057,1.698,0.149,2.529c-0.05,0-0.099-0.008-0.149-0.008
 		S232.886,128.671,232.836,128.672z"
-        />
-        <path
-          id="XMLID_502_"
-          style={{ fill: "#FFE477" }}
-          d="M278.375,128.664c-0.05,0-0.099,0.007-0.149,0.008
+          />
+          <path
+            id="XMLID_502_"
+            style={{ fill: "#FFE477" }}
+            d="M278.375,128.664c-0.05,0-0.099,0.007-0.149,0.008
           c0.092-0.831,0.149-1.673,0.149-2.529c0-12.534-10.161-22.695-22.695-22.695c-0.05,0-0.099,0.007-0.149,0.008
           c0.092-0.831,0.149-1.673,0.149-2.529c0-12.534-10.161-22.695-22.695-22.695c-0.752,0-1.495,0.041-2.228,0.112
           c0.1-0.866,0.165-1.742,0.165-2.634c0-12.099-9.475-21.958-21.406-22.63C208.895,41.1,199.014,31.57,186.88,31.57
@@ -103,21 +109,21 @@ const Popcorn = () => (
            M233.134,128.672c-0.05,0-0.099-0.008-0.149-0.008s-0.099,0.007-0.149,0.008c0.092-0.831,0.149-1.673,0.149-2.529
           c0-0.856-0.057-1.698-0.149-2.529c0.05,0,0.099,0.008,0.149,0.008s0.099-0.007,0.149-0.008c-0.092,0.831-0.149,1.673-0.149,2.529
           C232.985,126.999,233.042,127.84,233.134,128.672z"
-        />
-        <path
-          id="XMLID_510_"
-          style={{ fill: "#C9C7D7" }}
-          d="M209.291,159.361c-2.49-22.257-21.497-39.711-44.39-39.711h0v234.811h44.675
+          />
+          <path
+            id="XMLID_510_"
+            style={{ fill: "#C9C7D7" }}
+            d="M209.291,159.361c-2.49-22.257-21.497-39.711-44.39-39.711h0v234.811h44.675
           V223.892v-59.567v-4.964H209.291z"
-        />
-        <path
-          id="XMLID_515_"
-          style={{ fill: "#D14F4E" }}
-          d="M295.424,159.361c-2.49-22.257-21.497-39.711-44.39-39.711h0
+          />
+          <path
+            id="XMLID_515_"
+            style={{ fill: "#D14F4E" }}
+            d="M295.424,159.361c-2.49-22.257-21.497-39.711-44.39-39.711h0
           c-22.893,0-41.9,17.454-44.39,39.711h-0.285v4.964v59.567v130.569h69.495l19.856-190.136v-4.964H295.424z"
-        />
-      </g>
-    </svg>
-  </div>
-);
-export default Popcorn;
+          />
+        </g>
+      </svg>
+    </div>
+  );
+}

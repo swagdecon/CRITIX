@@ -2,9 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./Navigation.css";
 
-const Navigation = () => {
+export default function Navigation() {
+
   return (
-    <div id="navigation" className="Navigation">
+    <div className="Navigation">
       <nav>
         <ul>
           <Link className="nav-link" to="/home">
@@ -26,6 +27,5 @@ const Navigation = () => {
       </nav>
     </div>
   );
-};
+}
 
-export default Navigation;

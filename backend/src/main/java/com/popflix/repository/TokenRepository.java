@@ -7,11 +7,15 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 import com.popflix.model.Token;
+import com.popflix.model.User;
 
 public interface TokenRepository extends MongoRepository<Token, String> {
 
     @Query("{'userId': ?0, expired: false, revoked: false}")
     List<Token> findAllValidTokensByUser(String userId);
+
+    @Query(value = "{'token': ?0, expired: false, revoked: false}", fields = "{'userId': 1}")
+    User findUserByToken(String token);
 
     Optional<Token> findByToken(String token);
 }
