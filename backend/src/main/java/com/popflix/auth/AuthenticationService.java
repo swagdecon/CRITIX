@@ -1,23 +1,28 @@
 package com.popflix.auth;
 
+import java.util.HashMap;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.exc.StreamWriteException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.popflix.config.JwtService;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
 import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
 import com.popflix.model.Role;
+import com.popflix.model.Token;
 import com.popflix.model.TokenType;
 import com.popflix.model.User;
-import com.popflix.model.Token;
 import com.popflix.repository.TokenRepository;
 import com.popflix.repository.UserRepository;
-import com.fasterxml.jackson.core.exc.StreamWriteException;
-import com.fasterxml.jackson.databind.DatabindException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,6 +36,8 @@ public class AuthenticationService {
         private final PasswordEncoder passwordEncoder;
         private final JwtService jwtService;
         private final AuthenticationManager authenticationManager;
+        Dotenv dotenv = Dotenv.load();
+        private String DEFAULT_AVATAR_URL = dotenv.get("DEFAULT_AVATAR_URL");
 
         public AuthenticationResponse register(RegisterRequest request) {
 
@@ -43,10 +50,14 @@ public class AuthenticationService {
                                 .lastName(request.getLastName())
                                 .email(request.getEmail())
                                 .password(passwordEncoder.encode(request.getPassword()))
+                                .avatar(DEFAULT_AVATAR_URL)
                                 .role(Role.USER)
                                 .build();
+                var extraClaims = new HashMap<String, Object>();
+                extraClaims.put("firstName", request.getFirstName());
+                extraClaims.put("userId", user.getId());
                 var savedUser = userRepository.save(user);
-                var jwtToken = jwtService.generateToken(user);
+                var jwtToken = jwtService.generateToken(extraClaims, user);
                 var refreshToken = jwtService.generateRefreshToken(user);
                 saveAccessToken(savedUser, jwtToken);
                 saveRefreshToken(user, refreshToken);
@@ -63,15 +74,20 @@ public class AuthenticationService {
                 if (user.getLoggedIn()) {
                         throw new UserAlreadyLoggedInException("This User is already logged in");
                 }
+
                 user.setLoggedIn(true);
                 userRepository.save(user);
+                String firstName = user.getFirstName();
+                var extraClaims = new HashMap<String, Object>();
+                extraClaims.put("firstName", firstName);
+                extraClaims.put("userId", user.getId());
 
                 authenticationManager.authenticate(
                                 new UsernamePasswordAuthenticationToken(
                                                 request.getEmail(),
                                                 request.getPassword()));
 
-                var accessToken = jwtService.generateToken(user);
+                var accessToken = jwtService.generateToken(extraClaims, user);
                 var refreshToken = jwtService.generateRefreshToken(user);
                 revokeAllUserTokens(user);
                 saveAccessToken(user, accessToken);
@@ -81,6 +97,11 @@ public class AuthenticationService {
                                 .refreshToken(refreshToken)
                                 .build();
 
+        }
+
+        public User getUserDetails(String accessToken) {
+                User user = tokenRepository.findUserByToken(accessToken);
+                return user;
         }
 
         private void revokeAllUserTokens(User user) {
@@ -116,7 +137,6 @@ public class AuthenticationService {
                                 .revoked(false)
                                 .build();
                 tokenRepository.save(token);
-
         }
 
         public void refreshToken(

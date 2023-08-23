@@ -1,11 +1,15 @@
+/* Search */
 .Search {
-  align-items: center;
-  justify-content: center;
-  width: 100%;
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   justify-content: center;
-  pointer-events: none;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
 }
 
 .Search input {
@@ -13,37 +17,32 @@
   font-weight: 300;
   font-size: 14px;
   height: 37px;
-  width: 20%;
+  width: 70%; 
   background: transparent;
   color: #ffffff;
   appearance: none;
-  border: 0;
   border: 2px solid rgb(162, 162, 162);
   outline: none;
   border-radius: 37px;
   padding: 0 10px;
-  pointer-events: all;
   transition: border 0.25s ease, width 0.125s ease 0.125s;
 }
+
 .Search ::placeholder {
   color: #ffffff;
 }
 
 .Search input:focus {
   border: 2px solid #0096ff;
-  width: 30%;
+  width: 100%;
 }
 
 .search-results-list {
   list-style-type: none;
   position: absolute;
   top: 100%;
-  width: fit-content;
   display: flex;
   flex-direction: column;
-  pointer-events: auto;
-  padding: 0;
-  margin: 0;
 }
 
 .ind-search-result {
@@ -51,25 +50,26 @@
   backdrop-filter: blur(10px);
   display: flex;
   align-items: flex-start;
-  width: 30vw;
+  justify-content: flex-start;
+  min-width: 30vw;
   padding: 5px;
   margin: 5px;
   border: 3px solid #ccc;
-  border-radius: 5px;
+  border-radius: 8px;
   font-family: "Open Sans", sans-serif;
 }
+
 .ind-search-result:hover {
   border: 3px solid #0096ff;
 }
+
 .result-title-data {
   transform: translateY(4vh);
   padding-left: 3%;
 }
+
 .result-title {
   padding-bottom: 1vh;
-}
-.result-title-year {
-  color: grey;
 }
 
 .result-rating {
@@ -78,6 +78,7 @@
   color: #0096ff;
   font-weight: bold;
 }
+
 a {
   text-decoration: none;
   color: inherit;
@@ -86,3 +87,23 @@ a {
 a:hover {
   color: inherit;
 }
+
+@media screen and (max-width:  720px) {
+  .Search input { 
+    width: 40%;
+  }
+  .Search input:focus { 
+    width: 20%;
+  }
+}
+@media screen and (max-width:  900px) {
+  .Search input:focus {
+    width: 40%;
+  }
+}
+@media screen and (max-width:  1300px) {
+  .result-actors {
+    display: none;
+  }
+}
+

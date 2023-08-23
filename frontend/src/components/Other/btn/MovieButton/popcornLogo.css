@@ -2,12 +2,11 @@
   padding: 25px;
 }
 .popcorn {
-  margin: auto;
   position: absolute;
   width: 85px;
-  overflow: hidden;
-  top: 60%;
-  right: 42%;
+}
+.rating {
+  width: 110px
 }
 
 circle#popcrncirlce {

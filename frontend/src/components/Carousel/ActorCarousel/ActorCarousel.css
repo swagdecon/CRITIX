@@ -1,6 +1,96 @@
-.carousel-actors .carousel-control-prev {
-  left: -9%;
+/* CAST MEMBERS */
+.CastMembers {
+  position: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 }
-.carousel-actors .carousel-control-next {
-  right: -9%;
+.profile-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex: 1;
 }
+
+.card {
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: grey;
+  border-radius: 10px;
+  transition: background 0.8s;
+  overflow: hidden;
+  background: black;
+  box-shadow: 0 70px 63px -60px #000000;
+}
+
+.border {
+  height: 400px;
+  width: 295px;
+  opacity: 0;
+  background: transparent;
+  border-radius: 10px;
+  transition: border 1s;
+  position: relative;
+}
+.border:hover {
+  border: 1px solid #fff;
+  opacity: 1;
+}
+.border h3 {
+  transition: opacity 1s;
+}
+.card1:hover .profile-person,
+.fa {
+  opacity: 1;
+  color: #0096ff;
+  font-family: "CoreCircus", sans-serif;
+  font-size: 30px;
+}
+
+.carousel-actors {
+  width: 100%; 
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  overflow: hidden;
+  margin-bottom: 70px;
+}
+.carousel-actors .carousel-inner {
+  width: 100%; 
+  display: flex;
+  flex-wrap: wrap;
+}
+.carousel-control-prev,
+.carousel-control-next {
+  flex: 1;
+  width: 30px;
+  align-self: center;
+  margin: 0 5px;
+}
+
+/* .carousel-hero .carousel-control-prev {
+  justify-content: flex-start;
+}
+.carousel-hero .carousel-control-next {
+  justify-content: flex-end;
+} */
+
+/* .fa {
+  opacity: 0;
+  transition: opacity 1s;
+}
+.ind-movie-cast-icons {
+  position: absolute;
+  fill: #0096ff;
+  color: #0096ff;
+  height: 130px;
+  top: 226px;
+  width: 50px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+} */

@@ -1,22 +1,12 @@
 $accent-color: #e7e7e7;
 $brand-color: #0096ff;
 $dark-color: #1e1b26;
-.wrapper {
-  transform: translateY(-6%);
-}
+
 .container {
-  width: 100%;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
 }
 
 .main-card-container {
-  display: inline-block;
-  align-items: center;
-  justify-content: center;
-}
-.recommended-card-container {
   display: inline-block;
   align-items: center;
   justify-content: center;
@@ -28,6 +18,18 @@ $dark-color: #1e1b26;
   background-color: #1e1b26;
   margin: 60px auto 0 auto;
   border-radius: 4px;
+  @media (max-width: 500px) {
+    zoom: 0.8; 
+  }
+  @media (max-width: 400px) {
+    zoom: 0.7; 
+  }
+}
+
+
+.titleWrapper {  
+  display: flex;
+  justify-content: center;
 }
 
 .menu {
@@ -49,7 +51,7 @@ $dark-color: #1e1b26;
   background-position: top;
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  z-index: 111 !important;
+  z-index: 111;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   -webkit-mask-image: -webkit-gradient(
@@ -94,7 +96,7 @@ $dark-color: #1e1b26;
   position: absolute;
   background-size: contain;
   background-size: cover;
-  z-index: 1 !important;
+  z-index: 1;
   width: 450px;
   height: 900px;
   display: flex;
@@ -335,3 +337,4 @@ h5 {
 .col6rest {
   width: 80.3333333333%;
 }
+

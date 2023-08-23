@@ -1,15 +1,45 @@
 $h3: #0096ff;
 $outline: rgba(#fff, 0.4);
 
-h3-title {
-  font-family: "CoreCircus", sans-serif;
-  font-size: 2vw;
+.homepage-carousel {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
   text-align: center;
+  white-space: nowrap;
+
+}
+
+@media screen and (max-width: 980px) {
+  .homepage-carousel  {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+  }
+  .movie-title {
+    zoom: 0.75
+  }
+
+}
+
+.movie-title {
+  
+  display: flex;
+  font-family: "CoreCircus", sans-serif;
   line-height: 2;
-  margin-left: 3%;
-  position: relative;
+  font-size: 50px;
   color: $h3;
-  letter-spacing: -0.5rem;
+  text-align: center;
+  @media screen and (max-width: 400px) {
+      zoom: 0.5
+  }
+  @media screen and (max-width: 500px) {
+      zoom: 0.59
+  }
+  @media (max-width: 1695px) {
+    // For ind movie actor title
+      justify-content: center;
+  }
 }
 
 /*

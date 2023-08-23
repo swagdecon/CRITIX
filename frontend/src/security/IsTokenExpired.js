@@ -1,11 +1,14 @@
 import jwt_decode from "jwt-decode";
 import CookieManager from "./CookieManager";
 import { useNavigate } from "react-router-dom";
+import Logout from "./Logout";
 let isRefreshingToken = false;
 
 export default async function isExpired() {
+  const navigate = useNavigate();
   const token = CookieManager.decryptCookie("accessToken");
   const refreshToken = CookieManager.decryptCookie("refreshToken");
+
   if (token) {
     const decodedToken = jwt_decode(token);
     const currentTime = Date.now() / 1000;
@@ -31,7 +34,8 @@ export default async function isExpired() {
         });
       } catch (error) {
         console.log(error);
-        useNavigate("/403");
+        await Logout(navigate)
+
       } finally {
         isRefreshingToken = false;
       }

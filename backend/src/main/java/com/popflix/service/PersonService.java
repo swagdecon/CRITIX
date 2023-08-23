@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.popflix.model.Person;
+import com.popflix.service.imdbRequests.AllImdbPersonImages;
+import com.popflix.service.imdbRequests.AllImdbPersonJobs;
+import com.popflix.service.imdbRequests.PersonImdbJobInfo;
+
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.model.people.PersonPeople;
-
-import com.popflix.service.imdbRequests.*;
 
 @Service
 public class PersonService {

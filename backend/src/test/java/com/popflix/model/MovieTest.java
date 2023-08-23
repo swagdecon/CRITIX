@@ -26,7 +26,7 @@ class MovieTest {
         String releaseDate = "2023-05-30";
         String title = "Movie Title";
         List<String> video = Arrays.asList("video1", "video2");
-        Float voteAverage = 8.2f;
+        Integer voteAverage = 82;
         Integer voteCount = 1000;
         String imdbId = "tt1234567";
         Long budget = 100000000L;

@@ -6,13 +6,14 @@ import SignUpStyles from "../Login/login.module.css";
 import MovieButton from "../Other/btn/MovieButton/Button.js";
 import CookieManager from "../../security/CookieManager";
 
+
 export default function SignUpFunctionality() {
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
   }
+  const filter = new Filter()
+  const navigate = useNavigate()
 
-  const filter = new Filter();
-  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -20,7 +21,6 @@ export default function SignUpFunctionality() {
   const [error, setError] = useState(false);
   const [profanityErrorMessage, setProfanityErrorMessage] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -86,7 +86,6 @@ export default function SignUpFunctionality() {
         </div>
       ) : null}
       <div>
-        {/* <label htmlFor="email">Email Address</label> */}
         <input
           type="email"
           id="email"
@@ -101,7 +100,6 @@ export default function SignUpFunctionality() {
         />
       </div>
       <div>
-        {/* <label htmlFor="firstName">First Name</label> */}
         <input
           type="text"
           id="firstName"
@@ -115,7 +113,6 @@ export default function SignUpFunctionality() {
         />
       </div>
       <div>
-        {/* <label htmlFor="lastName">Last Name</label> */}
         <input
           type="text"
           id="lastName"
@@ -129,7 +126,6 @@ export default function SignUpFunctionality() {
         />
       </div>
       <div>
-        {/* <label htmlFor="password">Password</label> */}
         <input
           type={passwordVisible ? "text" : "password"}
           id="password"

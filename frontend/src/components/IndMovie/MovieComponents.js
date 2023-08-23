@@ -1,19 +1,21 @@
-import { React, useRef, useEffect, useState } from "react";
+import { React } from "react";
 import PropTypes from "prop-types";
 import IndMovieStyle from "../IndMovie/ind_movie.module.css";
-import ReactTextCollapse from "react-text-collapse/dist/ReactTextCollapse";
-
 import ReactPlayer from "react-player";
-
 import "../Carousel/MovieCarousel/MovieCarousel.css";
 import GlassCard from "./GlassCard";
+import NoTrailer from "./NoTrailerAvailable.png"
+
 function TruncateDescription({ description }) {
   const words = description.split(" ");
 
-  if (words.length > 30) {
-    if (!words || words === null || words.length === 0) {
-      return "No Description Available";
-    }
+  if (!words || words === null || words.length === 0) {
+    return "No Description Available";
+  }
+  const numWords = words.length;
+
+  if (numWords > 30) {
+
     const truncated = words.slice(0, 30).join(" ");
     return truncated + "...";
   }
@@ -21,118 +23,80 @@ function TruncateDescription({ description }) {
   return description;
 }
 
+
 function MovieRuntime({ runtime }) {
-  if (!runtime) {
-    return "No Runtime Available";
-  }
-  return `${runtime} mins |`;
+  runtime ? `${runtime} mins |` : "No Runtime Available";
 }
 
-function GetYearFromDate(dateString) {
-  if (!dateString) {
-    return null;
-  }
-  const year = dateString.split("-")[0];
+
+function ParseDate({ date }) {
+  const year = date ? date.split("-")[0] : null;
   return year;
 }
+
+
 function MovieTrailer(url) {
-  if (!url) {
-    return;
-  }
-  return window.open(`https://www.youtube.com/watch?v=${url}`);
+  url ? window.open(`https://www.youtube.com/watch?v=${url}`) : null
 }
+
 
 function MovieAverage({ voteAverage }) {
-  if (!voteAverage) {
-    return "No Rating";
-  }
-  let rating = parseFloat(voteAverage).toFixed(1);
-  return rating;
+  const rating = parseFloat(voteAverage).toFixed(1);
+
+  voteAverage ? rating : "No Rating";
 }
 
+
 function MovieGenres({ genres }) {
-  if (!genres) {
-    return "";
-  }
-  MovieGenres.propTypes = {
-    genres: PropTypes.arrayOf(PropTypes.string),
-  };
-  return (
-    <ul className={IndMovieStyle.movie__type}>
-      {genres.map((genre) => (
-        <li key={genre}>{genre}</li>
-      ))}
-    </ul>
-  );
+  genres ?
+    (
+      <ul className={IndMovieStyle.movie__type}>
+        {genres.map((genre) => (
+          <li key={genre}>{genre}</li>
+        ))}
+      </ul>
+    ) : ""
 }
+
+MovieGenres.propTypes = {
+  genres: PropTypes.arrayOf(PropTypes.string),
+};
+
+
 function ParseNumber(num) {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+
 function EmbeddedMovieTrailer({ video }) {
-  EmbeddedMovieTrailer.propTypes = {
-    video: PropTypes.arrayOf(PropTypes.string),
-  };
-  // if (video !== null) {
-  return (
-    <ReactPlayer
-      className={IndMovieStyle.indMovieEmbeddedTrailer}
-      url={`https://www.youtube.com/watch?v=${video}`}
-      controls={true}
-      playing={false}
-      width={"60vw"}
-      height={"60vh"}
-    />
-  );
-  // } else {
-  //   // return <div>No Trailer Available</div>;
-  // }
-}
-function MovieReviews({ reviews }) {
-  MovieReviews.propTypes = {
-    reviews: PropTypes.arrayOf(PropTypes.string),
-  };
-  if (!reviews.length) {
-    return (
-      <div className={IndMovieStyle["no-reviews"]}>No Reviews Available</div>
-    );
-  }
-  const [maxHeight, setMaxHeight] = useState(500);
-
-  const reviewRef = useRef(null);
-  useEffect(() => {
-    if (reviewRef.current) {
-      const reviewHeight = reviewRef.current.offsetHeight;
-      setMaxHeight(reviewHeight);
-    }
-  }, [reviews]);
-
-  const TEXT_COLLAPSE_OPTIONS = {
-    collapse: false,
-    collapseText: "... show more",
-    expandText: "show less",
-    minHeight: 210,
-    maxHeight: 500,
-    textStyle: {
-      color: "white",
-      fontSize: "20px",
-    },
-  };
 
   return (
-    <div className={IndMovieStyle.review__wrapper}>
-      {reviews.slice(0, 3).map((review, index) => (
-        <ReactTextCollapse
-          key={index}
-          options={{ ...TEXT_COLLAPSE_OPTIONS, maxHeight }}
-        >
-          {/* <div className="review__score">{review.rating}%</div> */}
-          <p className={IndMovieStyle.review__description}>{review}</p>
-          <br />
-        </ReactTextCollapse>
-      ))}
+    <div>
+      {video ? (
+        <div className={IndMovieStyle.EmbeddedMovieTrailer}>
+          <ReactPlayer
+            url={`https://www.youtube.com/watch?v=${video}`}
+            controls={true}
+            playing={false}
+            width="60vw"
+            height="70vh"
+          />
+        </div>
+      ) : <img
+        className={IndMovieStyle.indMovieEmbeddedTrailer}
+        src={NoTrailer}
+        alt="Movie Trailer Unavailable"
+        width={"100%"}
+        height={"100%"}
+      />
+      }
     </div>
   );
 }
+
+EmbeddedMovieTrailer.propTypes = {
+  video: PropTypes.arrayOf(PropTypes.string),
+};
 
 function MovieDetails({
   runtime,
@@ -145,8 +109,8 @@ function MovieDetails({
   releaseDate,
 }) {
   return (
-    <div>
-      <div className="info-container-1">
+    <div className="info-wrapper">
+      <div className="info-container-wrapper">
         <GlassCard
           name={"RUNTIME"}
           value={runtime}
@@ -171,8 +135,6 @@ function MovieDetails({
           iconString={"&#xe175;"}
           icon="&#xe175;"
         />
-      </div>
-      <div className="info-container-2">
         <GlassCard
           name={"LANGUAGE"}
           value={language}
@@ -215,13 +177,13 @@ MovieDetails.propTypes = {
 
 export {
   TruncateDescription,
-  GetYearFromDate,
+  ParseDate,
   MovieRuntime,
   ParseNumber,
   MovieTrailer,
   MovieAverage,
   EmbeddedMovieTrailer,
   MovieGenres,
-  MovieReviews,
+  // MovieReviews,
   MovieDetails,
 };

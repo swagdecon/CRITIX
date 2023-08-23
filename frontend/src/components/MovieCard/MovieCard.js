@@ -1,4 +1,5 @@
-import { React } from "react";
+import React, { useCallback } from "react";
+import PropTypes from "prop-types";
 import {
   MovieRuntime,
   MovieAverage,
@@ -7,7 +8,6 @@ import {
 } from "../IndMovie/MovieComponents.js";
 import { MovieCardActors, MovieCardGenres } from "./MovieCardComponents.js";
 import MovieCardStyle from "./moviecard.module.scss";
-import PropTypes from "prop-types";
 
 export default function MovieCard({
   poster,
@@ -18,28 +18,11 @@ export default function MovieCard({
   overview,
   actors,
 }) {
-  MovieCard.propTypes = {
-    poster: PropTypes.string,
-    rating: PropTypes.number,
-    runtime: PropTypes.number,
-    overview: PropTypes.string,
-    video: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.array,
-      PropTypes.bool,
-    ]),
-    genres: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.array,
-    ]),
+  const handleOnClick = useCallback(() => {
+    const firstVideo = Array.isArray(video) ? video[0] : video;
+    MovieTrailer(firstVideo);
+  }, [video]);
 
-    actors: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string,
-        character: PropTypes.string,
-      })
-    ),
-  };
   return (
     <div className="container">
       <div className={MovieCardStyle["cellphone-container"]}>
@@ -52,7 +35,7 @@ export default function MovieCard({
             style={{
               backgroundImage: `url(https://image.tmdb.org/t/p/w500/${poster})`,
             }}
-           />
+          />
           <div className={MovieCardStyle["text-movie-cont"]}>
             <div className={MovieCardStyle["mr-grid"]}>
               <div className={MovieCardStyle.col1}>
@@ -110,12 +93,7 @@ export default function MovieCard({
                 <button
                   className={MovieCardStyle["watch-btn"]}
                   type="button"
-                  onClick={() =>
-                    video[0]
-                      ? // video is saved in the db as an array, (for recommended carouseL) but for ind_movie it is just ${video}
-                      MovieTrailer(video[0])
-                      : MovieTrailer(video)
-                  }
+                  onClick={handleOnClick}
                 >
                   <h3>
                     <i className="material-icons">&#xE037;</i>
@@ -145,3 +123,25 @@ export default function MovieCard({
     </div>
   );
 }
+
+MovieCard.propTypes = {
+  poster: PropTypes.string,
+  rating: PropTypes.number,
+  runtime: PropTypes.number,
+  overview: PropTypes.string,
+  video: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+    PropTypes.bool,
+  ]),
+  genres: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
+  actors: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      character: PropTypes.string,
+    })
+  ),
+};
