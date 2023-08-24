@@ -45,7 +45,7 @@
     "react-text-collapse": "^0.6.1",
     "react-video": "^1.5.3",
     "redux": "^4.2.1",
-    "sass": "^1.63.4",
+    "sass": "^1.64.2",
     "sha256": "^0.2.0",
     "typeface-ibm-plex-sans": "^1.1.13",
     "uuid": "^9.0.0",
