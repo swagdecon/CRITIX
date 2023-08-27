@@ -5,10 +5,11 @@ import Filter from "bad-words";
 import LoginStyles from "../Login/login.module.css";
 import MovieButton from "../Other/btn//MovieButton/Button.js";
 import CookieManager from "../../security/CookieManager";
-const navigate = useNavigate();
 
 
 export async function checkExistingJwt() {
+  const navigate = useNavigate();
+
   // Check for valid tokens
   const accessToken = CookieManager.decryptCookie("accessToken");
   const refreshToken = CookieManager.decryptCookie("refreshToken");
@@ -40,6 +41,7 @@ export default function LoginLogic() {
   const [errorMessage, setErrorMessage] = useState("");
   const [error, setError] = useState("");
   const filter = useMemo(() => new Filter(), []);
+  const navigate = useNavigate();
 
 
   checkExistingJwt();
