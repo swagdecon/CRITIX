@@ -2,6 +2,11 @@ package com.popflix.auth;
 
 import lombok.RequiredArgsConstructor;
 
+import java.time.Instant;
+import java.util.Map;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,4 +59,16 @@ public class AuthenticationController {
                 service.refreshToken(request, response);
 
         }
+
+        @PostMapping("/authenticate-existing-token")
+        public ResponseEntity<?> authenticateExistingToken(HttpServletRequest request) {
+                String authHeader = request.getHeader("Authorization");
+
+                if (service.authenticateExistingToken(authHeader)) {
+                        return ResponseEntity.ok("Token is valid");
+                } else {
+                        return ResponseEntity.badRequest().body("Invalid token");
+                }
+        }
+
 }

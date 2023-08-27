@@ -6,8 +6,8 @@ import SignUpStyles from "../Login/login.module.css";
 import MovieButton from "../Other/btn/MovieButton/Button.js";
 import CookieManager from "../../security/CookieManager";
 
-
 export default function SignUpFunctionality() {
+
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
   }

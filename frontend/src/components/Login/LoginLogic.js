@@ -5,14 +5,44 @@ import Filter from "bad-words";
 import LoginStyles from "../Login/login.module.css";
 import MovieButton from "../Other/btn//MovieButton/Button.js";
 import CookieManager from "../../security/CookieManager";
+const navigate = useNavigate();
+
+
+export async function checkExistingJwt() {
+  // Check for valid tokens
+  const accessToken = CookieManager.decryptCookie("accessToken");
+  const refreshToken = CookieManager.decryptCookie("refreshToken");
+
+  if (accessToken && refreshToken) {
+    const response = await fetch(
+      "http://localhost:8080/v1/auth/authenticate-existing-token",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    if (response.ok) {
+      navigate("/home");
+    } else {
+      console.log({ response })
+    }
+  }
+}
+
+
 export default function LoginLogic() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();
   const filter = useMemo(() => new Filter(), []);
+
+
+  checkExistingJwt();
 
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);

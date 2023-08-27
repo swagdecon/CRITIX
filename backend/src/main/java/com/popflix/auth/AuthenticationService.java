@@ -1,8 +1,13 @@
 package com.popflix.auth;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -97,6 +102,19 @@ public class AuthenticationService {
                                 .refreshToken(refreshToken)
                                 .build();
 
+        }
+
+        public boolean authenticateExistingToken(String authHeader) {
+
+                String accessToken = authHeader.substring(7);
+                String userEmail = jwtService.extractUsername(accessToken);
+                var user = this.userRepository.findByEmail(userEmail).orElse(null);
+
+                if (user != null && jwtService.isTokenValid(accessToken, user)) {
+                        return true;
+                } else {
+                        return false;
+                }
         }
 
         public User getUserDetails(String accessToken) {

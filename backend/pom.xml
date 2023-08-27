@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.1</version>
+		<version>3.1.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.popflix</groupId>
 	<artifactId>popflix</artifactId>
 	<version>0.0.1</version>
 	<name>popflix</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Application where users can find, rate and review their favourite movies</description>
 	<properties>
 		<java.version>19</java.version>
 	</properties>
@@ -96,7 +96,7 @@
    <dependency>
      <groupId>com.squareup.okhttp3</groupId>
      <artifactId>okhttp</artifactId>
-     <version>4.1.0</version>
+     <version>4.11.0</version>
    </dependency>
  </dependencies>
 	<build>
