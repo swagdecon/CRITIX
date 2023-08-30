@@ -1,12 +1,6 @@
 package com.popflix.auth;
 
 import lombok.RequiredArgsConstructor;
-
-import java.time.Instant;
-import java.util.Map;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;

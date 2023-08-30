@@ -73,14 +73,14 @@ public class AuthenticationService {
         }
 
         public AuthenticationResponse authenticate(AuthenticationRequest request, HttpServletRequest httpRequest) {
-
                 User user = userRepository.findByEmail(request.getEmail())
                                 .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
-                if (user.getLoggedIn()) {
-                        throw new UserAlreadyLoggedInException("This User is already logged in");
-                }
-
+                // if (user.getLoggedIn()) {
+                // throw new UserAlreadyLoggedInException("This User is already logged in");
+                // }
+                Date lastLoginTime = new Date();
                 user.setLoggedIn(true);
+                user.setLastLoginTime(lastLoginTime);
                 userRepository.save(user);
                 String firstName = user.getFirstName();
                 var extraClaims = new HashMap<String, Object>();
@@ -93,7 +93,7 @@ public class AuthenticationService {
                                                 request.getPassword()));
 
                 var accessToken = jwtService.generateToken(extraClaims, user);
-                var refreshToken = jwtService.generateRefreshToken(user);
+                var refreshToken = jwtService.generateRefreshToken(user, user.getLastLoginTime());
                 revokeAllUserTokens(user);
                 saveAccessToken(user, accessToken);
                 saveRefreshToken(user, refreshToken);
@@ -101,7 +101,6 @@ public class AuthenticationService {
                                 .accessToken(accessToken)
                                 .refreshToken(refreshToken)
                                 .build();
-
         }
 
         public boolean authenticateExistingToken(String authHeader) {
@@ -174,9 +173,8 @@ public class AuthenticationService {
                                         .orElseThrow();
                         if (jwtService.isTokenValid(refreshToken, user)) {
                                 revokeAllUserTokens(user);
-
                                 var accessToken = jwtService.generateToken(user);
-                                var newRefreshToken = jwtService.generateRefreshToken(user);
+                                var newRefreshToken = jwtService.generateRefreshToken(user, user.getLastLoginTime());
 
                                 saveAccessToken(user, accessToken);
                                 saveRefreshToken(user, newRefreshToken);
@@ -188,4 +186,5 @@ public class AuthenticationService {
                         }
                 }
         }
+
 }

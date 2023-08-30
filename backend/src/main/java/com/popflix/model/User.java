@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +30,7 @@ public class User implements UserDetails {
     private String password;
     private Boolean loggedIn = false;
     private String avatar;
+    private Date lastLoginTime;
     @Enumerated(EnumType.STRING)
     private Role role;
 
