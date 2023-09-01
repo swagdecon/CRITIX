@@ -1,11 +1,9 @@
 import jwt_decode from "jwt-decode";
 import CookieManager from "./CookieManager";
-import { useNavigate } from "react-router-dom";
-import Logout from "./Logout";
+// import Logout from "./Logout";
 let isRefreshingToken = false;
 
 export default async function isExpired() {
-  const navigate = useNavigate();
   const token = CookieManager.decryptCookie("accessToken");
   const refreshToken = CookieManager.decryptCookie("refreshToken");
 
@@ -14,6 +12,7 @@ export default async function isExpired() {
     const currentTime = Date.now() / 1000;
 
     if (decodedToken.exp < currentTime && !isRefreshingToken) {
+      console.log("HELLO WORLD")
       isRefreshingToken = true;
       try {
         const refreshResponse = await fetch(
@@ -26,6 +25,7 @@ export default async function isExpired() {
           }
         );
         const data = await refreshResponse.json();
+        console.log(data)
         CookieManager.encryptCookie("accessToken", data.access_token, {
           expires: 1,
         });
@@ -34,7 +34,7 @@ export default async function isExpired() {
         });
       } catch (error) {
         console.log(error);
-        await Logout(navigate)
+        // await Logout(navigate)
 
       } finally {
         isRefreshingToken = false;
