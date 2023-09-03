@@ -11,11 +11,10 @@ export default function useFetchData(endpoint) {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
   const [prevEndpoint, setPrevEndpoint] = useState(null);
-  const [retryCount, setRetryCount] = useState(0); // New state for retry count
   const navigate = useNavigate();
 
   const fetchData = async () => {
-    await isExpired();
+    await isExpired(navigate);
     let token = CookieManager.decryptCookie("accessToken");
 
     try {
@@ -30,19 +29,12 @@ export default function useFetchData(endpoint) {
       setRequestSent(true);
     } catch (error) {
       console.log(error);
-      if (retryCount < 3) { // Retry only if retry count is less than 3
-        setRetryCount(retryCount + 1); // Increment retry count
-        fetchData(); // Retry the request
-      } else {
-        // Maximum retries reached, handle the error or call logout here
-        // Example: await Logout(navigate);
-      }
+      return
     }
   };
 
   const refetchData = () => {
     setRequestSent(false);
-    setRetryCount(0); // Reset retry count when manually refetching
   };
 
   useEffect(() => {
@@ -50,7 +42,6 @@ export default function useFetchData(endpoint) {
       setRequestSent(false);
       setDataLoaded(false);
       setPrevEndpoint(endpoint);
-      setRetryCount(0); // Reset retry count when endpoint changes
     }
     if (!requestSent) {
       fetchData();
