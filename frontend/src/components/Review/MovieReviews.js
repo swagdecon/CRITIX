@@ -14,6 +14,7 @@ import ReviewSection from "./ReviewList/ReviewSection";
 import PercentageRatingCircle from "./Rating/PercentageCircle/PercentageCircle";
 import InputSlider from "./Rating/Slider/Slider.js";
 import CookieManager from "../../security/CookieManager";
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const TEXT_COLLAPSE_OPTIONS = {
     collapse: false,
@@ -177,6 +178,10 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                         <div className={IndReview["total-rating-wrapper"]}>
                             <PercentageRatingCircle percentageRating={percentageVoteAverage} />
                         </div>
+                        <ReCAPTCHA
+                            sitekey="6LebYvgnAAAAAPJ7vk9dbjUiR4lVIMXiE58okc1L"
+                        // onChange={onChange}
+                        />
                     </div>
                     {dataLoaded && userReviews && userReviews.length >= 2 && (
                         <ReviewSection reviews={userReviews} />

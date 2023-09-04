@@ -13,7 +13,7 @@ export default function SignUpFunctionality() {
   }
   const filter = new Filter()
   const navigate = useNavigate()
-  const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+  const API_KEY = process.env.REACT_APP_ABSTRACT_API_KEY;
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -45,44 +45,39 @@ export default function SignUpFunctionality() {
       setProfanityErrorMessage("");
     }
 
-
-
     try {
-      fetch(`https://emailvalidation.abstractapi.com/v1?api_key=${API_KEY}&email=${email}`)
-        .then(response => response.json())
-        .then(response => {
-          if (response.quality_score >= 0.7) {
-            const response = fetch("http://localhost:8080/v1/auth/register", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(userData),
-            });
-            if (response.ok) {
-              const data = response.json();
-              CookieManager.encryptCookie("accessToken", data.access_token, {
-                expires: 0.5,
-              });
-              CookieManager.encryptCookie("refreshToken", data.refresh_token, {
-                expires: 7,
-              });
+      const emailValidationResponse = await fetch(`https://emailvalidation.abstractapi.com/v1?api_key=${API_KEY}&email=${email}`);
+      const emailValidationData = await emailValidationResponse.json();
 
-              navigate("/login");
-            } else {
-              setError(response.text());
-            }
-            return;
-          } else {
-            setError(" Invalid email address")
-          }
-        })
+      if (emailValidationData.quality_score >= 0.85) {
+        const registerResponse = await fetch("http://localhost:8080/v1/auth/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        });
+
+        if (registerResponse.ok) {
+          const data = await registerResponse.json();
+          CookieManager.encryptCookie("accessToken", data.access_token, {
+            expires: 0.5,
+          });
+          CookieManager.encryptCookie("refreshToken", data.refresh_token, {
+            expires: 7,
+          });
+          navigate("/login");
+        } else {
+          const errorText = await registerResponse.text();
+          setError(errorText);
+        }
+      }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       navigate("/error");
     }
+  }
 
-  };
   return (
     <form onSubmit={handleSubmit}>
       {error ? (
