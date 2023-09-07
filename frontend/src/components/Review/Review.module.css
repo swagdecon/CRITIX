@@ -23,7 +23,10 @@
   align-items: flex-start;
   min-height: 10vh;
 }
-
+.recaptcha-btn {
+  display: flex;
+  padding-top: 1vh;
+}
 .post-review-btn {
   display: flex;
   padding-top: 1vh;
@@ -73,7 +76,7 @@
     margin: 0 auto;
     min-height: 10vh;
   }
-  .post-review-btn {
+  .post-review-btn, .recaptcha-btn {
     justify-content: center;
   }
 }

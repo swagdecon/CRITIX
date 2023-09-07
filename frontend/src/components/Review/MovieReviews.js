@@ -14,8 +14,7 @@ import ReviewSection from "./ReviewList/ReviewSection";
 import PercentageRatingCircle from "./Rating/PercentageCircle/PercentageCircle";
 import InputSlider from "./Rating/Slider/Slider.js";
 import CookieManager from "../../security/CookieManager";
-import ReCAPTCHA from 'react-google-recaptcha';
-
+import ReCAPTCHA from "react-google-recaptcha";
 const TEXT_COLLAPSE_OPTIONS = {
     collapse: false,
     collapseText: <span style={{ cursor: "pointer" }}>...show more</span>,
@@ -40,11 +39,20 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
     const [reviewContent, setReviewContent] = useState("");
     const [disabledInput, setDisabledInputLogic] = useState(false);
     const [hasSubmittedReview, setHasSubmittedReview] = useState(false);
+    const [recaptchaResult, setRecaptchaResult] = useState(false)
     const [maxHeight, setMaxHeight] = useState(500);
     const hasReviewProfanity = useMemo(() => filter.isProfane(reviewContent), [filter, reviewContent]);
-    const isSubmitDisabled = useMemo(() => reviewContent.trim().length === 0 || reviewRating === 0, [reviewContent, reviewRating]);
+    const isRecaptchaVisible = useMemo(() => reviewContent.trim().length != 0 && reviewRating != 0 && !hasReviewProfanity[reviewContent, reviewRating, hasReviewProfanity]);
+    const isSubmitDisabled = useMemo(
+        () =>
+            reviewContent.trim().length === 0 ||
+            reviewRating === 0 ||
+            !recaptchaResult,
+        [reviewContent, reviewRating, recaptchaResult]
+    );
     const reviewRef = useRef(null);
-
+    const CLIENT_API_KEY = process.env.REACT_APP_CLIENT_API_KEY;
+    console.log(isSubmitDisabled)
     const reviewInputStyles = {
         borderRadius: "15px",
         fieldSet: {
@@ -72,6 +80,18 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
             width: '100%',
         }
     };
+    async function onChange(token) {
+        console.log("Captcha token:", token);
+        try {
+            await axios.post(`http://localhost:8080/v1/auth/check-recaptcha-token`, {
+                recaptchaValue: token
+            }).then(res =>
+                setRecaptchaResult(res.data.success))
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
 
     const handleSubmit = useCallback(() => {
         if (!hasReviewProfanity) {
@@ -81,6 +101,7 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
             const year = currentDate.getFullYear().toString();
             const formattedDate = `${day}-${month}-${year}`;
             const userId = decodedToken.userId;
+
             axios
                 .post(`http://localhost:8080/review/create/${movieId}`, {
                     createdDate: formattedDate,
@@ -124,9 +145,7 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
             <div className={IndReview["ind-review-wrapper"]}>
                 <div className={IndReview["input-wrapper"]}>
                     <div className={IndReview["user-review-wrapper"]}>
-
                         <div className={IndReview["user-info-wrapper"]} />
-
                         <div className={IndReview["textField-wrapper"]}>
                             <div className={IndReview["input-slider"]}>
                                 <InputSlider onSliderChange={setReviewRating} />
@@ -162,26 +181,33 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                             />
 
                             {!hasSubmittedReview && !hasReviewProfanity && (
-                                <div className={IndReview["post-review-btn"]}>
-                                    <Button
-                                        variant="contained"
-                                        endIcon={<MovieCreationOutlinedIcon />}
-                                        size="medium"
-                                        onClick={handleSubmit}
-                                        disabled={isSubmitDisabled}
-                                    >
-                                        SUBMIT
-                                    </Button>
+                                <div>
+                                    {isRecaptchaVisible && (
+                                        <div className={IndReview["recaptcha-btn"]}>
+                                            <ReCAPTCHA
+                                                sitekey={CLIENT_API_KEY}
+                                                onChange={onChange}
+                                            />
+                                        </div>
+                                    )}
+                                    <div className={IndReview["post-review-btn"]}>
+
+                                        <Button
+                                            variant="contained"
+                                            endIcon={<MovieCreationOutlinedIcon />}
+                                            size="medium"
+                                            onClick={handleSubmit}
+                                            disabled={isSubmitDisabled}
+                                        >
+                                            SUBMIT
+                                        </Button>
+                                    </div>
                                 </div>
                             )}
                         </div>
                         <div className={IndReview["total-rating-wrapper"]}>
                             <PercentageRatingCircle percentageRating={percentageVoteAverage} />
                         </div>
-                        <ReCAPTCHA
-                            sitekey="6LebYvgnAAAAAPJ7vk9dbjUiR4lVIMXiE58okc1L"
-                        // onChange={onChange}
-                        />
                     </div>
                     {dataLoaded && userReviews && userReviews.length >= 2 && (
                         <ReviewSection reviews={userReviews} />
