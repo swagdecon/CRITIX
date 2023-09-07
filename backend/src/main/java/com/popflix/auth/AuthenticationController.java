@@ -1,18 +1,21 @@
 package com.popflix.auth;
 
 import lombok.RequiredArgsConstructor;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
 import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
-
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -63,6 +66,28 @@ public class AuthenticationController {
                 } else {
                         return ResponseEntity.badRequest().body("Invalid token");
                 }
+        }
+
+        @PostMapping("/check-recaptcha-token")
+
+        public String authenticateRecaptchaToken(@RequestBody RecaptchaRequest recaptchaRequest)
+                        throws java.io.IOException, InterruptedException {
+                Dotenv dotenv = Dotenv.load();
+                String recaptchaKey = dotenv.get("RECAPTCHA_SECRET_KEY");
+                String recaptchaValue = recaptchaRequest.getRecaptchaValue();
+                String recaptchaSecretKey = recaptchaKey;
+                HttpRequest request = HttpRequest.newBuilder()
+                                .uri(URI.create(
+                                                "https://www.google.com/recaptcha/api/siteverify"
+                                                                + "?secret=" + recaptchaSecretKey
+                                                                + "&response=" + recaptchaValue))
+                                .method("POST", HttpRequest.BodyPublishers.noBody())
+                                .build();
+
+                HttpResponse<String> response = HttpClient.newHttpClient().send(request,
+                                HttpResponse.BodyHandlers.ofString());
+
+                return response.body();
         }
 
 }
