@@ -8,6 +8,7 @@ import Logo_Text from "../components/Logo/POPFLIX_LOGO_OFFICIAL.png";
 import LoginPlayer from "../components/Login/LoginVideo";
 import LoginFunctionality from "../components/Login/LoginLogic.js";
 import LoginStyles from "../components/Login/login.module.css";
+
 export default function LogIn() {
   return (
     <div>
@@ -20,6 +21,9 @@ export default function LogIn() {
             alt="logo"
           />
           <LoginFunctionality />
+          <div className={LoginStyles["reset-pwd"]}>
+            <Link to="/forgot-password">Forgot Password</Link>
+          </div>
           <div className={LoginStyles.or}>
             <hr className={LoginStyles.bar} />
             <span>OR</span>
@@ -46,6 +50,6 @@ export default function LogIn() {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }

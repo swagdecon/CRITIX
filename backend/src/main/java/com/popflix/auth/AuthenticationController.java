@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -88,6 +89,42 @@ public class AuthenticationController {
                                 HttpResponse.BodyHandlers.ofString());
 
                 return response.body();
+        }
+
+        @PostMapping("/password-recovery-email")
+        public HttpResponse<String> sendPasswordRecoveryEmail(@RequestBody String username)
+                        throws java.io.IOException, InterruptedException {
+                HttpClient client = HttpClient.newHttpClient();
+
+                String requestBody = "{\"userName\": \"" + username + "\", " +
+                                "\"account\": \"Popflix\", " +
+                                "\"projectFullName\": \"POPFLIX\", " +
+                                "\"subject\": \"Please reset your POPFLIX password\", " +
+                                "\"redirectUrl\": \"https://forio.com/app/acme-simulations/supply-chain-game\"}";
+
+                HttpRequest request = HttpRequest.newBuilder()
+                                .uri(URI.create("https://api.forio.com/v2/password/recovery"))
+                                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                                .setHeader("Content-Type", "application/json")
+                                .build();
+
+                return client.send(request, HttpResponse.BodyHandlers.ofString());
+        }
+
+        @PostMapping("/password-reset")
+        public HttpResponse<String> resetUserPassword(@RequestBody String password, String recoveryToken)
+                        throws java.io.IOException, InterruptedException {
+                HttpClient client = HttpClient.newHttpClient();
+
+                String requestBody = "{\"password\": \"" + password + "\"}";
+
+                HttpRequest request = HttpRequest.newBuilder()
+                                .uri(URI.create("https://api.forio.com/v2/password/set/" + recoveryToken))
+                                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                                .setHeader("Content-Type", "application/json")
+                                .build();
+
+                return client.send(request, HttpResponse.BodyHandlers.ofString());
         }
 
 }

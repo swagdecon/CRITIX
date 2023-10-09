@@ -15,6 +15,7 @@ import Error404 from "./views/errorMessages/404/404error.js";
 import IndMovie from "./views/IndFilmPage.js";
 import IndPerson from "./views/IndPersonPage.js";
 import MovieListPage from "./views/MovieListPage.js";
+import ConfirmEmailForPwdReset from "./views/ResetPassword.js";
 export default function App() {
   return (
     <Router>
@@ -43,6 +44,8 @@ export default function App() {
         />
         <Route path="/movies/:endpoint/:id" element={<IndMovie />} />
         <Route path="/movies/movie/:id" element={<IndMovie />} />
+        <Route path="/forgot-password" element={<ConfirmEmailForPwdReset />} />
+
         <Route path="/person/:id" element={<IndPerson />} />
         <Route path="/403" element={<Error403 />} />
         <Route path="*" element={<Error404 />} />

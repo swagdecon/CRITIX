@@ -45,6 +45,7 @@
     "react-scripts": "^5.0.1",
     "react-text-collapse": "^0.6.1",
     "react-video": "^1.5.3",
+    "reactjs-popup": "^2.0.6",
     "redux": "^4.2.1",
     "sass": "^1.63.4",
     "sha256": "^0.2.0",

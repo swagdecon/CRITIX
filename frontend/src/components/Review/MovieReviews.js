@@ -15,6 +15,7 @@ import PercentageRatingCircle from "./Rating/PercentageCircle/PercentageCircle";
 import InputSlider from "./Rating/Slider/Slider.js";
 import CookieManager from "../../security/CookieManager";
 import ReCAPTCHA from "react-google-recaptcha";
+
 const TEXT_COLLAPSE_OPTIONS = {
     collapse: false,
     collapseText: <span style={{ cursor: "pointer" }}>...show more</span>,
