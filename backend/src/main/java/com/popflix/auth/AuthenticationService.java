@@ -8,6 +8,8 @@ import java.util.Map;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,14 +21,12 @@ import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.popflix.config.JwtService;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
-import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
 import com.popflix.model.Role;
 import com.popflix.model.Token;
 import com.popflix.model.TokenType;
 import com.popflix.model.User;
 import com.popflix.repository.TokenRepository;
 import com.popflix.repository.UserRepository;
-
 import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,6 +41,7 @@ public class AuthenticationService {
         private final PasswordEncoder passwordEncoder;
         private final JwtService jwtService;
         private final AuthenticationManager authenticationManager;
+
         Dotenv dotenv = Dotenv.load();
         private String DEFAULT_AVATAR_URL = dotenv.get("DEFAULT_AVATAR_URL");
 
@@ -116,6 +117,12 @@ public class AuthenticationService {
                 }
         }
 
+        public boolean authenticateExistingEmail(String email) {
+                String userEmail = email;
+                var user = this.userRepository.findByEmail(userEmail).orElse(null);
+                return user != null ? true : false;
+        }
+
         public User getUserDetails(String accessToken) {
                 User user = tokenRepository.findUserByToken(accessToken);
                 return user;
@@ -186,5 +193,4 @@ public class AuthenticationService {
                         }
                 }
         }
-
 }
