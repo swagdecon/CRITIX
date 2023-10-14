@@ -22,6 +22,7 @@ export default function SignUpFunctionality() {
   const [error, setError] = useState(false);
   const [profanityErrorMessage, setProfanityErrorMessage] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 

@@ -35,7 +35,7 @@ public class PasswordRecoveryService {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             String emailText = String.format(
-                    "Dear user, to reset your password, click the following link: http://popflix.com/v1/auth/password/reset-password?token=%s%n"
+                    "Dear user, to reset your password, click the following link: http:/localhost:3000/reset-password?token=%s%n"
                             + "If you didn't authorize this request, kindly ignore this email.%n"
                             + "Thanks for your support!%n"
                             + "The POPFLIX team",
