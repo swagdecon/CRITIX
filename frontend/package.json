@@ -19,7 +19,7 @@
     "browserify-fs": "^1.0.0",
     "compass": "^0.1.1",
     "cors": "^2.8.5",
-    "crypto-js": "^4.1.1",
+    "crypto-js": "^4.2.0",
     "enzyme": "^3.11.0",
     "fingerprintjs2": "^2.1.4",
     "font-awesome": "^4.7.0",
