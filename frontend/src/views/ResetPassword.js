@@ -5,29 +5,35 @@ export default function ResetPassword() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [message, setMessage] = useState("");
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (password !== confirmPassword) {
+            setMessage(`Error: Passwords don't match`);
+        } else if (password.length < 7 || confirmPassword.length < 7 || !/[a-zA-Z0-9]/.test(password) || !/[a-zA-Z0-9]/.test(confirmPassword)) {
+            setMessage(`Error: Your password must be a mix of letters and numbers, and at least 7 characters`)
+        } else {
+            try {
+                const response = await fetch("http://localhost:8080/v1/auth/password/reset-password", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: password,
+                });
 
-        try {
-            const response = await fetch("http://localhost:8080/v1/auth/password/reset-password", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ password, confirmPassword }),
-            });
-
-            if (response.ok) {
-                setMessage("Your Password has been reset");
-                setPassword("");
-                setConfirmPassword();
-            } else {
-                const errorMessage = await response.text();
-                setMessage(`Error: ${errorMessage}`);
+                if (response.ok) {
+                    setMessage("Your Password has been reset");
+                    setPassword("");
+                    setConfirmPassword();
+                } else {
+                    const errorMessage = await response.text();
+                    setMessage(`Error: ${errorMessage}`);
+                }
+            } catch (error) {
+                setMessage(`Error: ${error.message}`);
             }
-        } catch (error) {
-            setMessage(`Error: ${error.message}`);
         }
-    };
+    }
 
     return (
         <div className={resetPwdStyles["login-box"]}>
@@ -60,7 +66,7 @@ export default function ResetPassword() {
                         autoComplete="off"
                         placeholder=""
                         onChange={(e) => setConfirmPassword(e.target.value)} />
-                    <label>Confirm New Password</label>
+                    <label>Confirm Password</label>
                     <div />
                 </div>
                 <div className={resetPwdStyles["centered-button"]}>

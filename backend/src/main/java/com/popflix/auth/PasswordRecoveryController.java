@@ -18,6 +18,7 @@ public class PasswordRecoveryController {
 
     @PostMapping("/password-recovery-email")
     public void sendPasswordRecoveryEmail(@RequestBody String email) {
+        System.out.println(email);
         if (passwordRecoveryService.authenticateExistingEmail(email)) {
             System.out.println("Email exists, sending recovery email.");
             passwordRecoveryService.sendPasswordRecoveryEmail(email);
@@ -26,8 +27,12 @@ public class PasswordRecoveryController {
         }
     }
 
-    // @PostMapping("reset-password/{token}")
-    // public String resetPassword() {
-
-    // }
+    @PostMapping("reset-password/{token}")
+    public String resetPassword() {
+        // If more than 3rd time sending password reset request this hour, error with
+        // 'You have sent too many reset requests, please try again later'
+        // If link has expired since creation (>15 minutes), send "Link expired, please
+        // try again"
+        // If anything else, return error
+    }
 }
