@@ -8,6 +8,9 @@ export default function ResetPassword() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const currentURL = window.location.href;
+        const url = new URL(currentURL);
+        const token = url.pathname.split('/').pop();
 
         if (password !== confirmPassword) {
             setMessage(`Error: Passwords don't match`);
@@ -18,13 +21,17 @@ export default function ResetPassword() {
                 const response = await fetch("http://localhost:8080/v1/auth/password/reset-password", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: password,
+                    body: JSON.stringify({
+                        emaiL: token,
+                        password: password
+                    })
                 });
 
                 if (response.ok) {
+                    console.log(response)
                     setMessage("Your Password has been reset");
                     setPassword("");
-                    setConfirmPassword();
+                    setConfirmPassword("");
                 } else {
                     const errorMessage = await response.text();
                     setMessage(`Error: ${errorMessage}`);
@@ -36,6 +43,7 @@ export default function ResetPassword() {
     }
 
     return (
+
         <div className={resetPwdStyles["login-box"]}>
             <h2>Reset Password</h2>
             {message && (

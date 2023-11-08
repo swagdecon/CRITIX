@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.popflix.service.PasswordRecoveryService;
+
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -28,11 +30,7 @@ public class PasswordRecoveryController {
     }
 
     @PostMapping("reset-password/{token}")
-    public String resetPassword() {
-        // If more than 3rd time sending password reset request this hour, error with
-        // 'You have sent too many reset requests, please try again later'
-        // If link has expired since creation (>15 minutes), send "Link expired, please
-        // try again"
-        // If anything else, return error
+    public String resetPassword(@RequestBody String encrypedEmail, String newPassword) {
+        return passwordRecoveryService.resetUserPwd(encrypedEmail, newPassword);
     }
 }

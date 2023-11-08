@@ -1,21 +1,44 @@
 package com.popflix.service;
 
-import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import com.popflix.model.User;
 import com.popflix.repository.UserRepository;
+
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.mail.internet.MimeMessage;
-import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 public class PasswordRecoveryService {
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private JavaMailSender javaMailSender;
+    private String ALGORITHM = "AES";
+    private String CHARSET = "UTF-8";
+    Dotenv dotenv = Dotenv.load();
 
-    private final UserRepository userRepository;
-    private final JavaMailSender javaMailSender;
+    private String SECRET_KEY = dotenv.get("PWD_RESET_TOKEN");
+
+    public PasswordRecoveryService() {
+        // Schedule the resetPwdRetryCount method to run every hour
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        executor.scheduleAtFixedRate(this::resetPwdRetryCount, 0, 1, TimeUnit.HOURS);
+    }
 
     public boolean authenticateExistingEmail(String email) {
         String userEmail = email;
@@ -23,15 +46,27 @@ public class PasswordRecoveryService {
         return user != null;
     }
 
-    private String generateRandomToken() {
-        byte[] randomBytes = new byte[32]; // 32 bytes to generate a sufficiently long token
-        new SecureRandom().nextBytes(randomBytes);
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
+    public String generateEncryptedToken(String email) {
+        try {
+            SecretKey secretKey = new SecretKeySpec(SECRET_KEY.getBytes(CHARSET), ALGORITHM);
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            byte[] encryptedEmailBytes = cipher.doFinal(email.getBytes(CHARSET));
+            return Base64.getEncoder().encodeToString(encryptedEmailBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void sendPasswordRecoveryEmail(String email) {
+        var user = this.userRepository.findByEmail(email).orElse(null);
         try {
-            String token = generateRandomToken();
+            String encryptedEmailToken = generateEncryptedToken(email);
+            if (encryptedEmailToken == null) {
+                return;
+            }
+
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             String emailText = String.format(
@@ -39,7 +74,7 @@ public class PasswordRecoveryService {
                             + "If you didn't authorize this request, kindly ignore this email.%n"
                             + "Thanks for your support!%n"
                             + "The POPFLIX team",
-                    token);
+                    encryptedEmailToken);
 
             helper.setFrom("POPFLIX <popflix.help@gmail.com>");
             helper.setTo(email);
@@ -47,9 +82,49 @@ public class PasswordRecoveryService {
             helper.setText(emailText);
 
             javaMailSender.send(message);
-
+            user.setPasswordResetRequestDate(new Date());
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public boolean isPasswordResetLinkExpired(Date lastResetPwdTime) {
+        if (lastResetPwdTime == null) {
+            // If the last reset password time is not set, consider it as expired
+            return true;
+        }
+
+        long currentTimeMillis = System.currentTimeMillis();
+        long lastResetPwdTimeMillis = lastResetPwdTime.getTime();
+        long timeElapsedMinutes = (currentTimeMillis - lastResetPwdTimeMillis) / (1000 * 60);
+
+        return timeElapsedMinutes > 30;
+    }
+
+    public String resetUserPwd(String email, String newPassword) {
+        String userEmail = email;
+        var user = this.userRepository.findByEmail(userEmail).orElse(null);
+        Integer resetCount = user.getPasswordResetRequests();
+        Boolean isExpired = isPasswordResetLinkExpired(user.getPasswordResetRequestDate());
+
+        user.setPasswordResetRequests(resetCount += 1);
+        if (resetCount <= 3) {
+            if (!isExpired) {
+                user.setPassword(newPassword);
+                return "Password Successfully Updated";
+            } else {
+                return "This page has expired, please send another password reset request";
+            }
+        } else {
+            return "You have sent too many requests, please try again later";
+        }
+    }
+
+    public void resetPwdRetryCount() {
+        List<User> users = userRepository.findUsersWithResetRequestsInLastHour();
+        for (User user : users) {
+            user.setPasswordResetRequests(0);
+            userRepository.save(user);
         }
     }
 }

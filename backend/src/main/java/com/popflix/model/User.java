@@ -30,7 +30,8 @@ public class User implements UserDetails {
     private String password;
     private Boolean loggedIn = false;
     private String avatar;
-    private Integer passwordResetRequestsInLastHour;
+    private Integer passwordResetRequests;
+    private Date passwordResetRequestDate;
     private Date lastLoginTime;
     @Enumerated(EnumType.STRING)
     private Role role;
