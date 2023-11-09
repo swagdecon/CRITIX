@@ -7,6 +7,7 @@ import java.net.http.HttpResponse;
 import java.util.Map;
 
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -111,9 +112,18 @@ public class AuthenticationController {
         }
 
         @PostMapping("/reset-password")
-        public String resetPassword(@RequestBody Map<String, String> requestBody) {
+        public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> requestBody) {
                 String encrypedEmail = requestBody.get("emaiL");
                 String newPassword = requestBody.get("password");
-                return passwordRecoveryService.resetUserPwd(encrypedEmail, newPassword);
+                String passwordRecoveryMessage = passwordRecoveryService.resetUserPwd(encrypedEmail, newPassword);
+
+                if (passwordRecoveryMessage.equals("Password Successfully Updated")) {
+                        return ResponseEntity.ok(passwordRecoveryMessage);
+                } else if (passwordRecoveryMessage
+                                .equals("This page has expired, please send another password reset request")) {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(passwordRecoveryMessage);
+                } else {
+                        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(passwordRecoveryMessage);
+                }
         }
 }

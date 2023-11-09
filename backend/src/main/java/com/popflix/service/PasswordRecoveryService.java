@@ -137,10 +137,8 @@ public class PasswordRecoveryService {
         user.setPasswordResetRequests(resetCount += 1);
 
         if (resetCount <= 3) {
-            System.out.println("HERE I AM");
             if (!isExpired) {
                 var encodedPassword = passwordEncoder.encode(newPassword);
-                System.out.println("HERE IS ENCONDED PASSWORD" + encodedPassword);
                 user.setPassword(encodedPassword);
                 userRepository.save(user);
                 return "Password Successfully Updated";
