@@ -14,6 +14,8 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.popflix.model.User;
@@ -28,6 +30,9 @@ public class PasswordRecoveryService {
     private UserRepository userRepository;
     @Autowired
     private JavaMailSender javaMailSender;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private String ALGORITHM = "AES";
     private String CHARSET = "UTF-8";
     Dotenv dotenv = Dotenv.load();
@@ -40,8 +45,7 @@ public class PasswordRecoveryService {
         executor.scheduleAtFixedRate(this::resetPwdRetryCount, 0, 1, TimeUnit.HOURS);
     }
 
-    public boolean authenticateExistingEmail(String email) {
-        String userEmail = email;
+    public boolean authenticateExistingEmail(String userEmail) {
         var user = this.userRepository.findByEmail(userEmail).orElse(null);
         return user != null;
     }
@@ -59,8 +63,25 @@ public class PasswordRecoveryService {
         }
     }
 
+    public String decryptToken(String encryptedToken) {
+        try {
+            SecretKey secretKey = new SecretKeySpec(SECRET_KEY.getBytes(CHARSET), ALGORITHM);
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+
+            byte[] encryptedEmailBytes = Base64.getDecoder().decode(encryptedToken);
+            byte[] decryptedEmailBytes = cipher.doFinal(encryptedEmailBytes);
+
+            return new String(decryptedEmailBytes, CHARSET);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public void sendPasswordRecoveryEmail(String email) {
-        var user = this.userRepository.findByEmail(email).orElse(null);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
         try {
             String encryptedEmailToken = generateEncryptedToken(email);
             if (encryptedEmailToken == null) {
@@ -80,9 +101,9 @@ public class PasswordRecoveryService {
             helper.setTo(email);
             helper.setSubject("Password Reset Request");
             helper.setText(emailText);
-
-            javaMailSender.send(message);
             user.setPasswordResetRequestDate(new Date());
+            userRepository.save(user);
+            javaMailSender.send(message);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -101,16 +122,27 @@ public class PasswordRecoveryService {
         return timeElapsedMinutes > 30;
     }
 
-    public String resetUserPwd(String email, String newPassword) {
-        String userEmail = email;
-        var user = this.userRepository.findByEmail(userEmail).orElse(null);
+    public String resetUserPwd(String encrypedEmail, String newPassword) {
+        String userEmail = decryptToken(encrypedEmail);
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
         Integer resetCount = user.getPasswordResetRequests();
-        Boolean isExpired = isPasswordResetLinkExpired(user.getPasswordResetRequestDate());
+        if (resetCount != null) {
+            resetCount += 1;
+        } else {
+            resetCount = 1;
+        }
 
+        Boolean isExpired = isPasswordResetLinkExpired(user.getPasswordResetRequestDate());
         user.setPasswordResetRequests(resetCount += 1);
+
         if (resetCount <= 3) {
+            System.out.println("HERE I AM");
             if (!isExpired) {
-                user.setPassword(newPassword);
+                var encodedPassword = passwordEncoder.encode(newPassword);
+                System.out.println("HERE IS ENCONDED PASSWORD" + encodedPassword);
+                user.setPassword(encodedPassword);
+                userRepository.save(user);
                 return "Password Successfully Updated";
             } else {
                 return "This page has expired, please send another password reset request";

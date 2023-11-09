@@ -10,7 +10,7 @@ export default function ConfirmEmailForPwdReset() {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:8080/v1/auth/password/password-recovery-email", {
+            const response = await fetch("http://localhost:8080/v1/auth/send-password-recovery-email", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: email
