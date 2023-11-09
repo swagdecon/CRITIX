@@ -57,6 +57,7 @@
   border: 3px solid #ccc;
   border-radius: 8px;
   font-family: "Open Sans", sans-serif;
+  color: white;
 }
 
 .ind-search-result:hover {

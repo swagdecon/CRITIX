@@ -41,12 +41,15 @@
   transition: all ease 0.3s;
   display: flex;
   flex-direction: column;
+  color: white;
+
 }
 
 .container .box .title {
   font-size: 1.1rem;
   font-weight: 500;
   letter-spacing: 0.1em;
+  
 }
 
 .container .box div strong {

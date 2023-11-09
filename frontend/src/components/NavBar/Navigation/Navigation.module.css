@@ -16,6 +16,7 @@ nav {
   margin: 0;
   justify-content: center;
   flex-wrap: wrap;
+  color: white;
 }
 
 .nav-link {
@@ -37,13 +38,4 @@ nav {
   .Navigation {
   display: none;
   }
-  /* .Navigation ul {
-    flex-wrap: wrap;
-    overflow: hidden;
-  }
-  
-  .nav-link {
-    transition: all 0.3s ease-in-out;
-    flex-grow: 1;
-  } */
 }

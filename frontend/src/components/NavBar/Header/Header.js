@@ -3,11 +3,11 @@ import Logo from "../../Logo/Logo";
 import Navigation from "../Navigation/Navigation";
 import Search from "../Search/Search";
 import UserProfile from "../UserProfile/UserProfile";
-import "./Header.css";
+import HeaderStyle from "./Header.module.css";
 import PropTypes from "prop-types";
 export default function Header(props) {
   return (
-    <header className="Header">
+    <header className={HeaderStyle.Header}>
       <Logo />
       <Navigation />
       <Search onSubmit={props.onSubmit} />

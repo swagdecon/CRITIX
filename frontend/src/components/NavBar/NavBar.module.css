@@ -11,11 +11,11 @@
 }
 
 /* General */
-body {
+/* body {
   background: var(--black);
   color: var(--white);
   font-family: var(--font);
-}
+} */
 
 /* Typography */
 h2 {

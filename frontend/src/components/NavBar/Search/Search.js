@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./Search.css";
+import SearchStyle from "./Search.module.css";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { ParseDate } from "../../IndMovie/MovieComponents";
@@ -75,14 +75,14 @@ export default function Search(props) {
   };
 
   return (
-    <form onSubmit={props.onSubmit} id="search" className="Search" ref={searchRef}>
+    <form onSubmit={props.onSubmit} id="search" className={SearchStyle.Search} ref={searchRef}>
       <input
         type="search"
         onChange={handleChange}
         value={query}
         placeholder="Search for a title..."
       />
-      <ul className="search-results-list">
+      <ul className={SearchStyle["search-results-list"]}>
         {detailedMovies.map((movie) => {
           if (movie.poster_path && movie.vote_average) {
             return (
@@ -91,16 +91,16 @@ export default function Search(props) {
                 key={movie.id}
                 onClick={() => setDetailedMovies([])}
               >
-                <li className="ind-search-result">
+                <li className={SearchStyle["ind-search-result"]}>
                   <img
                     src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
                     alt={movie.title}
                   />
-                  <div className="result-title-data">
-                    <div className="result-title">
+                  <div className={SearchStyle["result-title-data"]}>
+                    <div className={SearchStyle["result-title"]}>
                       {movie.title} <ParseDate date={movie.release_date} />
                     </div>
-                    <div className="result-actors">
+                    <div className={SearchStyle["result-actors"]}>
                       {movie.actors.slice(0, 3).map((actor, index) => (
                         <span key={index}>
                           {index === 0 ? actor : ` | ${actor}`}
@@ -108,7 +108,7 @@ export default function Search(props) {
                       ))}
                     </div>
                   </div>
-                  <div className="result-rating">
+                  <div className={SearchStyle["result-rating"]}>
                     {movie.vote_average.toFixed(1) * 10}
                   </div>
                 </li>

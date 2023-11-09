@@ -1,26 +1,26 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./Navigation.css";
+import NavStyle from "./Navigation.module.css";
 
 export default function Navigation() {
 
   return (
-    <div className="Navigation">
+    <div className={NavStyle.Navigation}>
       <nav>
         <ul>
-          <Link className="nav-link" to="/home">
+          <Link className={NavStyle["nav_link"]} to="/home">
             HOME
           </Link>
-          <Link className="nav-link" to="/now_playing">
+          <Link className={NavStyle["nav-link"]} to="/now_playing">
             IN THEATRES
           </Link>
-          <Link className="nav-link" to="/upcoming">
+          <Link className={NavStyle["nav-link"]} to="/upcoming">
             UPCOMING
           </Link>
-          <Link className="nav-link" to="/popular">
+          <Link className={NavStyle["nav-link"]} to="/popular">
             MOST POPULAR
           </Link>
-          <Link className="nav-link" to="#">
+          <Link className={NavStyle["nav-link"]} to="#">
             WATCHLIST
           </Link>
         </ul>

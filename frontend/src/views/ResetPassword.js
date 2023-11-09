@@ -11,7 +11,6 @@ export default function ResetPassword() {
         const currentURL = window.location.href;
         const url = new URL(currentURL);
         const token = url.pathname.split('/').pop();
-        console.log(token)
         if (password !== confirmPassword) {
             setMessage(`Error: Passwords don't match`);
         } else if (password.length < 7 || confirmPassword.length < 7 || !/[a-zA-Z0-9]/.test(password) || !/[a-zA-Z0-9]/.test(confirmPassword)) {
@@ -45,50 +44,51 @@ export default function ResetPassword() {
     }
 
     return (
-
-        <div className={resetPwdStyles["login-box"]}>
-            <h2>Reset Password</h2>
-            {message && (
-                <div className={message.includes("Error") ? LoginStyles["error-msg"] : LoginStyles["success-msg"]}>
-                    {message}
-                </div>
-            )}
-            <form onSubmit={handleSubmit}>
-                <div className={resetPwdStyles["user-box"]}>
-                    <input
-                        type="password"
-                        name="password"
-                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}"
-                        required
-                        value={password}
-                        autoComplete="off"
-                        placeholder=""
-                        onChange={(e) => setPassword(e.target.value)} />
-                    <label>New Password</label>
-                </div>
-                <div className={resetPwdStyles["user-box"]}>
-                    <input
-                        type="password"
-                        name="confirmPassword"
-                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}"
-                        required
-                        value={confirmPassword}
-                        autoComplete="off"
-                        placeholder=""
-                        onChange={(e) => setConfirmPassword(e.target.value)} />
-                    <label>Confirm Password</label>
-                    <div />
-                </div>
-                <div className={resetPwdStyles["centered-button"]}>
-                    <button>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        Submit
-                    </button>
-                </div>
-            </form>
-        </div >
+        <div className={resetPwdStyles["reset-password-container"]}>
+            <div className={resetPwdStyles["login-box"]}>
+                <h2>Reset Password</h2>
+                {message && (
+                    <div className={message.includes("Error") ? LoginStyles["error-msg"] : LoginStyles["success-msg"]}>
+                        {message}
+                    </div>
+                )}
+                <form onSubmit={handleSubmit}>
+                    <div className={resetPwdStyles["user-box"]}>
+                        <input
+                            type="password"
+                            name="password"
+                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}"
+                            required
+                            value={password}
+                            autoComplete="off"
+                            placeholder=""
+                            onChange={(e) => setPassword(e.target.value)} />
+                        <label>New Password</label>
+                    </div>
+                    <div className={resetPwdStyles["user-box"]}>
+                        <input
+                            type="password"
+                            name="confirmPassword"
+                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}"
+                            required
+                            value={confirmPassword}
+                            autoComplete="off"
+                            placeholder=""
+                            onChange={(e) => setConfirmPassword(e.target.value)} />
+                        <label>Confirm Password</label>
+                        <div />
+                    </div>
+                    <div className={resetPwdStyles["centered-button"]}>
+                        <button>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div >
+        </div>
     );
 }
