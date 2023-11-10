@@ -7,42 +7,13 @@ import PropTypes from "prop-types";
 
 import MovieCard from "../../MovieCard/MovieCard.js";
 import getDetailedMovie from "../../../axios/GetDetailedMovie.js";
-
+import { getChunkSize, useWindowResizeEffect, CarouselArrowStyles } from "../CarouselHelpers.js";
 export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }) {
-  RecommendedCarousel.propTypes = {
-    movieId: PropTypes.number,
-    onRecommendedMoviesLoad: PropTypes.func,
-  };
-
   const [recommendations, setRecommendations] = useState([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const breakpoints = [979, 1471, 1971, 2463];
 
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const getChunkSize = () => {
-    if (windowWidth <= 979) {
-      return 1
-    } else if (windowWidth <= 1471) {
-      return 2
-    } else if (windowWidth <= 1971) {
-      return 3;
-    } else if (windowWidth <= 2463) {
-      return 4;
-    } else {
-      return 5;
-    }
-  };
-
+  useWindowResizeEffect(setWindowWidth);
 
   useEffect(() => {
     async function fetchRecommendations() {
@@ -59,7 +30,7 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
     return null;
   }
 
-  const movieChunks = chunk(recommendations, getChunkSize());
+  const movieChunks = chunk(recommendations, getChunkSize(windowWidth, breakpoints));
 
   return (
     <div className={MovieCardStyle["carousel-wrapper"]}>
@@ -87,6 +58,11 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
           </Carousel.Item>
         ))}
       </Carousel>
+      <style>{CarouselArrowStyles}</style>
     </div>
   );
 }
+RecommendedCarousel.propTypes = {
+  movieId: PropTypes.number,
+  onRecommendedMoviesLoad: PropTypes.func,
+};

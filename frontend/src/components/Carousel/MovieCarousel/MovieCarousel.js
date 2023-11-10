@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Title from "../title.module.scss";
@@ -8,37 +8,13 @@ import MovieCardStyle from "../../MovieCard/moviecard.module.scss";
 import MovieCard from "../../MovieCard/MovieCard.js";
 import useFetchData from "../../../security/FetchApiData.js";
 import MovieCarouselStyle from "./MovieCarousel.module.css"
+import { getChunkSize, useWindowResizeEffect, CarouselArrowStyles } from "../CarouselHelpers.js";
 function MovieCarousel({ title, endpoint }) {
   const { data: movies } = useFetchData(endpoint);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const getChunkSize = () => {
-    if (windowWidth <= 979) {
-      return 1
-    } else if (windowWidth <= 1471) {
-      return 2
-    } else if (windowWidth <= 1971) {
-      return 3;
-    } else if (windowWidth <= 2463) {
-      return 4;
-    } else {
-      return 5;
-    }
-  };
-
-  const movieChunks = chunk(movies, getChunkSize());
+  const breakpoints = [979, 1471, 1971, 2463];
+  useWindowResizeEffect(setWindowWidth);
+  const movieChunks = chunk(movies, getChunkSize(windowWidth, breakpoints));
 
   return (
     <div className={MovieCarouselStyle["carousel-wrapper"]}>
@@ -67,6 +43,7 @@ function MovieCarousel({ title, endpoint }) {
           </Carousel.Item>
         ))}
       </Carousel>
+      <style>{CarouselArrowStyles}</style>
     </div >
   );
 }

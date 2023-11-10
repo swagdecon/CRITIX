@@ -7,6 +7,8 @@
 .hero_header {
   margin-bottom: -1%;
   font-weight: 700;
+  font-size: 50px;
+  transform: translateY(-50px);
 }
 
 .carousel-inner img {
@@ -24,27 +26,9 @@
   justify-content: flex-start;
 }
 
-h1 {
-  display: flex;
-  justify-content: flex-start;
-  pointer-events: none;
-  top: 5%;
-  font-weight: bold;
-  padding: 0 0 60px 0;
-
-  @media screen and (min-aspect-ratio: 21/9) {
-    font-size: 60px;
-    font-weight: 500;
-  }
-
-  @media screen and (max-width: 1470px) {
-    padding: 0 0 10px 0;
-  }
-}
-
 .hero-genre-container {
   text-align: left;
-
+  
   .hero_genre {
     display: inline-block;
     margin-right: 20px;

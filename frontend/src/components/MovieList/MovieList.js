@@ -6,7 +6,7 @@ import Title from "../Carousel/title.module.scss";
 import PropTypes from "prop-types";
 import getDetailedMovie from "../../axios/GetDetailedMovie";
 import LoadingPage from "../../views/LoadingPage";
-import SortByButton from "../Other/Dropdown/SortByDropdown/SortByDropdown";
+import Dropdown from "../Other/Dropdown/SortByDropdown";
 import Pagination from '@mui/material/Pagination';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -108,7 +108,7 @@ export default function MovieList({ endpoint }) {
           <h3 className={Title["movie-title"]}>{title}</h3>
           <div className={MovieListStyle["title-caption"]}>{caption}</div>
           <div className={MovieListStyle["sort-by-btn"]}>
-            <SortByButton onSelectSortBy={handleSortByChange} />
+            <Dropdown onSelectSortBy={handleSortByChange} />
           </div>
         </div>
       </div>

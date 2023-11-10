@@ -1,21 +1,8 @@
 .recommended-card-container {
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
+}
 
 .carousel-recommended {
-  width: 100%; 
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  overflow: hidden;
   text-align: center;
-  margin-bottom: 70px;
-}
-.carousel-recommended .carousel-control-prev,
-.carousel-recommended .carousel-control-next {
-  display: flex;
-  width: 5vw;
-  flex-grow: 1;
+  margin-bottom: 30px;
 }

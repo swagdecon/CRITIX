@@ -8,9 +8,6 @@ export default function Navigation() {
     <div className={NavStyle.Navigation}>
       <nav>
         <ul>
-          <Link className={NavStyle["nav_link"]} to="/home">
-            HOME
-          </Link>
           <Link className={NavStyle["nav-link"]} to="/now_playing">
             IN THEATRES
           </Link>

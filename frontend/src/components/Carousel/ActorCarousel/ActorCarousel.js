@@ -1,8 +1,8 @@
-import { React, useState, useEffect } from "react";
+import { React, useState } from "react";
 import { Carousel } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { chunk } from "lodash";
-
+import { getChunkSize, useWindowResizeEffect } from "../CarouselHelpers"
 import ActorStyle from "./ActorCarousel.module.css";
 import Title from "../title.module.scss";
 // import { Link } from "react-router-dom";
@@ -33,49 +33,24 @@ function onMouseLeave(e, image, actorImage) {
     icon.style.opacity = 0;
   });
 }
-
+const CarouselArrowStyles = `
+.carousel-control-prev,
+.carousel-control-next {
+  flex: 1;
+  width: 30px;
+  align-self: center;
+  margin: 0 5px;
+}`
 
 export default function MovieActors({ actors }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const getChunkSize = () => {
-    switch (true) {
-      case windowWidth < 645:
-        return 1;
-      case windowWidth <= 949:
-        return 2;
-      case windowWidth <= 1300:
-        return 3;
-      case windowWidth <= 1555:
-        return 4;
-      case windowWidth <= 1869:
-        return 5;
-      case windowWidth <= 2181:
-        return 6;
-      case windowWidth <= 2300:
-        return 7;
-      default:
-        return 5;
-    }
-  };
-
-
-  const actorChunks = chunk(actors, getChunkSize());
-
+  const breakpoints = [645, 949, 1300, 1555, 1869, 2181, 2300];
+  useWindowResizeEffect(setWindowWidth);
+  const actorChunks = chunk(actors, getChunkSize(windowWidth, breakpoints));
   const defaultStyle = {
     background: defaultImage,
   };
+
   return (
     <div>
       <h3 className={`${Title["movie-title"]}`}>cast members:</h3>
@@ -123,15 +98,7 @@ export default function MovieActors({ actors }) {
           </Carousel.Item>
         ))}
       </Carousel>
-      <style >{`
-        .carousel-control-prev,
-        .carousel-control-next {
-          flex: 1;
-          width: 30px;
-          align-self: center;
-          margin: 0 5px;
-        }
-`} </style>
+      <style >{CarouselArrowStyles} </style>
     </div >
   );
 }
