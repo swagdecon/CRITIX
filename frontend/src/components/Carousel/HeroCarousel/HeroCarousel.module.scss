@@ -40,19 +40,9 @@ h1 {
   @media screen and (max-width: 1470px) {
     padding: 0 0 10px 0;
   }
-
-  @media screen and (max-width: 900px) {
-    padding: 0 0 20px 0;
-    font-size: 18px;
-  }
-
-  @media screen and (max-width: 380px) {
-    justify-content: center;
-    zoom: 0.75;  
-  }
 }
 
-.hero_genre-container {
+.hero-genre-container {
   text-align: left;
 
   .hero_genre {
@@ -62,10 +52,6 @@ h1 {
 
     @media screen and (min-aspect-ratio: 21/9) {
       margin-right: 30px;
-    }
-
-    @media screen and (max-width: 405px) {
-      display: none;
     }
   }
 }
@@ -107,27 +93,5 @@ h1 {
 
   & .carousel-control-next {
     justify-content: flex-end;
-  }
-
-  @media screen and (max-width: 900px) {
-    .carousel-caption {
-      top: 60%;
-    }
-    .hero_trailer {
-      display: none;
-    }
-    .carousel-indicators {
-      display: none;
-    }
-  }
-}
-
-@media screen and (max-width: 720px) {
-  h1 {
-    padding: 0 0 10px 0;
-    font-size: 18px;
-  }
-  .hero_tagline {
-    display: none;
   }
 }

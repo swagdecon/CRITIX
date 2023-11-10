@@ -3,7 +3,7 @@ import { Carousel } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { chunk } from "lodash";
 
-"./ActorCarousel.css";
+import ActorStyle from "./ActorCarousel.module.css";
 import Title from "../title.module.scss";
 // import { Link } from "react-router-dom";
 const defaultImage = "url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg) center center no-repeat";
@@ -20,7 +20,6 @@ function onMouseEnter(e, image) {
     icon.style.opacity = 1;
   });
 }
-
 
 function onMouseLeave(e, image, actorImage) {
   const target = e.currentTarget;
@@ -80,10 +79,10 @@ export default function MovieActors({ actors }) {
   return (
     <div>
       <h3 className={`${Title["movie-title"]}`}>cast members:</h3>
-      <Carousel className="carousel-actors" interval={null} indicators={false}>
+      <Carousel className={ActorStyle["carousel-actors"]} interval={null} indicators={false} >
         {actorChunks.map((chunk, chunkIndex) => (
           <Carousel.Item key={chunkIndex}>
-            <div className="profile-container">
+            <div className={ActorStyle["profile-container"]}>
               {chunk.map((actor, index) => {
                 const image = actor.profilePath ? actor.profilePath : null;
                 const actorImage = image ? `url(https://image.tmdb.org/t/p/w500${image}) center center no-repeat` : defaultImage;
@@ -91,14 +90,14 @@ export default function MovieActors({ actors }) {
                 return (
                   <div
                     key={index}
-                    className="card card1"
+                    className={`${ActorStyle.card} ${ActorStyle.card1}`}
                     style={style}
                     onMouseEnter={(e) => onMouseEnter(e, image)}
                     onMouseLeave={(e) => onMouseLeave(e, image, actorImage)}
                   >
                     {/* <Link to={`/person/${actor.id}`}> */}
-                    <div className="border">
-                      <h3 className="profile-person">
+                    <div className={ActorStyle.border}>
+                      <h3 className={ActorStyle["profile-person"]}>
                         {actor.name}
                       </h3>
                       {/* <div className="ind-movie-cast-icons">
@@ -124,6 +123,15 @@ export default function MovieActors({ actors }) {
           </Carousel.Item>
         ))}
       </Carousel>
+      <style >{`
+        .carousel-control-prev,
+        .carousel-control-next {
+          flex: 1;
+          width: 30px;
+          align-self: center;
+          margin: 0 5px;
+        }
+`} </style>
     </div >
   );
 }

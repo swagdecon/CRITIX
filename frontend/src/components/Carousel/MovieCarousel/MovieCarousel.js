@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import MovieCardStyle from "../../MovieCard/moviecard.module.scss";
 import MovieCard from "../../MovieCard/MovieCard.js";
 import useFetchData from "../../../security/FetchApiData.js";
-
+import MovieCarouselStyle from "./MovieCarousel.module.css"
 function MovieCarousel({ title, endpoint }) {
   const { data: movies } = useFetchData(endpoint);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -41,11 +41,11 @@ function MovieCarousel({ title, endpoint }) {
   const movieChunks = chunk(movies, getChunkSize());
 
   return (
-    <div className="carousel-wrapper">
+    <div className={MovieCarouselStyle["carousel-wrapper"]}>
       <div className={MovieCardStyle.titleWrapper}>
         <h3 className={`${Title["homepage-carousel"]} ${Title["movie-title"]}`}>{title}</h3>
       </div>
-      <Carousel className="carousel-movie" indicators={false} interval={null}>
+      <Carousel className={MovieCarouselStyle["carousel-movie"]} indicators={false} interval={null}>
         {movieChunks.map((chunk, i) => (
           <Carousel.Item key={i}>
             <div className={MovieCardStyle.carouselHeader} />

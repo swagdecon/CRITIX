@@ -24,10 +24,9 @@
 }
 
 
-.material-symbols-outlined {
+.icon-container {
   transform: translateY(2.5vh);
-  font-size: 4em; 
-  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 0;
+  font-variation-settings: "FILL" 1, "wght" 500, "GRAD" 0, "opsz" 0;
 }
 
 .container .box {

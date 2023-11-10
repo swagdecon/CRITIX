@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Carousel } from "react-bootstrap";
 import { chunk } from "lodash";
-import "./RecommendedCarousel.css";
+import RecommendedStyle from "./RecommendedCarousel.module.css";
 import MovieCardStyle from "../../MovieCard/moviecard.module.scss"
 import PropTypes from "prop-types";
 
@@ -63,12 +63,12 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
 
   return (
     <div className={MovieCardStyle["carousel-wrapper"]}>
-      <Carousel className="carousel-recommended" indicators={false} interval={null}>
+      <Carousel className={RecommendedStyle["carousel-recommended"]} indicators={false} interval={null}>
         {movieChunks.map((chunk, i) => (
           <Carousel.Item key={i}>
             {chunk.map((movie, j) => (
               <div
-                className="recommended-card-container"
+                className={RecommendedStyle["recommended-card-container"]}
                 key={`${i}-${j}`}
               >
                 <a href={`/movies/movie/${movie.id}`}>

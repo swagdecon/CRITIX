@@ -3,6 +3,7 @@
 }
 .carousel-wrapper {
   transform: translateY(5%);
+  text-align: center;
 }
 .carousel-movie {
   width: 100%; 

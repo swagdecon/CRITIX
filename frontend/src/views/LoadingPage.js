@@ -1,7 +1,7 @@
 import React from "react";
 import "../components/Logo/logo.module.scss";
 import Logo from "../components/Logo/Loader.js";
-import "../misc/loadingPage.css";
+import "../misc/loadingPage.module.css";
 
 export default function LoadingPage() {
   return (

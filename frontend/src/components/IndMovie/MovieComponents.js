@@ -2,10 +2,10 @@ import { React } from "react";
 import PropTypes from "prop-types";
 import IndMovieStyle from "../IndMovie/ind_movie.module.css";
 import ReactPlayer from "react-player";
-import "../Carousel/MovieCarousel/MovieCarousel.css";
+import "../Carousel/MovieCarousel/MovieCarousel.module.css";
 import GlassCard from "./GlassCard";
 import NoTrailer from "./NoTrailerAvailable.png"
-
+import GlassStyle from "./GlassCard.module.css"
 function TruncateDescription({ description }) {
   const words = description.split(" ");
 
@@ -109,8 +109,8 @@ function MovieDetails({
   releaseDate,
 }) {
   return (
-    <div className="info-wrapper">
-      <div className="info-container-wrapper">
+    <div className={GlassStyle["info-wrapper"]}>
+      <div className={GlassStyle["info-container-wrapper"]}>
         <GlassCard
           name={"RUNTIME"}
           value={runtime}
@@ -184,6 +184,5 @@ export {
   MovieAverage,
   EmbeddedMovieTrailer,
   MovieGenres,
-  // MovieReviews,
   MovieDetails,
 };
