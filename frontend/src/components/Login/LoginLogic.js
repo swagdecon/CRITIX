@@ -142,7 +142,6 @@ export default function LoginLogic() {
         </span>
       </div>
       <MovieButton innerIcon="clapperboard" />
-
     </form>
   );
 }

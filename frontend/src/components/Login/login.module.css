@@ -173,7 +173,8 @@ h6 {
 
 .reset-pwd {
    padding: 5%;
-
+   color: white;
+   border-radius: 50px;
 }
 
 .error-msg {

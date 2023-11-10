@@ -33,21 +33,21 @@ export default function App() {
         />
         <Route
           path="/popular"
-          element={<MovieListPage endpointName={"popular"} />}
+          element={<PrivateRoute><MovieListPage endpointName={"popular"} /></PrivateRoute>}
         />
         <Route
           path="/upcoming"
-          element={<MovieListPage endpointName={"upcoming"} />}
+          element={<PrivateRoute><MovieListPage endpointName={"upcoming"} /></PrivateRoute>}
         />
         <Route
           path="/now_playing"
-          element={<MovieListPage endpointName={"now_playing"} />}
+          element={<PrivateRoute><MovieListPage endpointName={"now_playing"} /></PrivateRoute>}
         />
-        <Route path="/movies/:endpoint/:id" element={<IndMovie />} />
-        <Route path="/movies/movie/:id" element={<IndMovie />} />
+        <Route path="/movies/:endpoint/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
+        <Route path="/movies/movie/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
         <Route path="/forgot-password" element={<ConfirmEmailForPwdReset />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/person/:id" element={<IndPerson />} />
+        <Route path="/person/:id" element={<PrivateRoute><IndPerson /></PrivateRoute>} />
         <Route path="/403" element={<Error403 />} />
         <Route path="*" element={<Error404 />} />
         <Route component={<Navigate replace to="/404" />} />
