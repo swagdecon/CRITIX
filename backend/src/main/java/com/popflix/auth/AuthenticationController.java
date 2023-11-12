@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
+import com.popflix.config.customExceptions.BadRequestException;
+import com.popflix.config.customExceptions.TooManyRequestsException;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
 import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
 import com.popflix.service.PasswordRecoveryService;
@@ -101,29 +103,29 @@ public class AuthenticationController {
         }
 
         @PostMapping("/send-password-recovery-email")
-        public void sendPasswordRecoveryEmail(@RequestBody String email) {
-                System.out.println(email);
-                if (passwordRecoveryService.authenticateExistingEmail(email)) {
-                        System.out.println("Email exists, sending recovery email.");
-                        passwordRecoveryService.sendPasswordRecoveryEmail(email);
-                } else {
-                        System.out.println("Email does not exist.");
+        public ResponseEntity<String> sendPasswordRecoveryEmail(@RequestBody String email) {
+                try {
+                        if (passwordRecoveryService.authenticateExistingEmail(email)) {
+                                passwordRecoveryService.sendPasswordRecoveryEmail(email);
+                                return ResponseEntity.ok("Password recovery email sent successfully");
+                        } else {
+                                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email not found");
+                        }
+                } catch (TooManyRequestsException e) {
+                        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(e.getMessage());
+                } catch (BadRequestException | UsernameNotFoundException e) {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+                } catch (Exception e) {
+                        e.printStackTrace();
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                        .body("Failed to send password recovery email");
                 }
         }
 
         @PostMapping("/reset-password")
-        public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> requestBody) {
+        public void resetPassword(@RequestBody Map<String, String> requestBody) {
                 String encrypedEmail = requestBody.get("emaiL");
                 String newPassword = requestBody.get("password");
-                String passwordRecoveryMessage = passwordRecoveryService.resetUserPwd(encrypedEmail, newPassword);
-
-                if (passwordRecoveryMessage.equals("Password Successfully Updated")) {
-                        return ResponseEntity.ok(passwordRecoveryMessage);
-                } else if (passwordRecoveryMessage
-                                .equals("This page has expired, please send another password reset request")) {
-                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(passwordRecoveryMessage);
-                } else {
-                        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(passwordRecoveryMessage);
-                }
+                passwordRecoveryService.resetUserPwd(encrypedEmail, newPassword);
         }
 }

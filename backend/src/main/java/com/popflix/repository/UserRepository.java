@@ -12,6 +12,6 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     Optional<User> findByEmail(String email);
 
-    @Query("{ 'PasswordResetRequestsInLastHour' : { $ne: null } }")
+    @Query("{ 'passwordResetRequests' : { $ne: null } }")
     List<User> findUsersWithResetRequestsInLastHour();
 }

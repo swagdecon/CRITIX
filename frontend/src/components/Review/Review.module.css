@@ -6,8 +6,9 @@
   border-radius: 0.7rem;
   padding: 20px;
   text-align: left;
-  width: 95%;
+  width: 50.5em;
   overflow: hidden; 
+  margin-right:15px
 }
 .total-rating-wrapper {
   display: inline-flex;
