@@ -41,6 +41,8 @@ public class PasswordRecoveryService {
     private String errorPasswordRequestExceeded;
 
     public PasswordRecoveryService() {
+        System.out.println("PasswordRecoveryService initialized");
+
         // Schedule the resetPwdRetryCount method to run every hour
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         executor.scheduleAtFixedRate(this::resetPwdRetryCount, 0, 1, TimeUnit.HOURS);
@@ -95,7 +97,6 @@ public class PasswordRecoveryService {
 
     public void sendPasswordRecoveryEmail(String email) throws Exception {
         try {
-
             User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
             Integer resetCount = user.getPasswordResetRequests();
@@ -126,11 +127,8 @@ public class PasswordRecoveryService {
 
                 userRepository.save(user);
                 javaMailSender.send(message);
-            } else {
-                throw new TooManyRequestsException("Too many password reset requests. Please try again later.");
             }
         } catch (Exception e) {
-            e.printStackTrace();
             throw new BadRequestException("Failed to send password recovery email. Please try again later.");
         }
     }
@@ -166,10 +164,16 @@ public class PasswordRecoveryService {
     }
 
     public void resetPwdRetryCount() {
-        List<User> users = userRepository.findUsersWithResetRequestsInLastHour();
-        for (User user : users) {
-            user.setPasswordResetRequests(0);
-            userRepository.save(user);
+        try {
+            // Find users with reset requests
+            List<User> users = this.userRepository.findUsersWithResetRequests();
+            // Reset password retry count for each user
+            for (User user : users) {
+                user.setPasswordResetRequests(0);
+                userRepository.save(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
