@@ -5,12 +5,14 @@ export default function ResetPassword() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [message, setMessage] = useState("");
+    const [response, setResponse] = useState(null)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const currentURL = window.location.href;
         const url = new URL(currentURL);
         const token = url.pathname.split('/').pop();
+
         if (password !== confirmPassword) {
             setMessage(`Error: Passwords don't match`);
         } else if (password.length < 7 || confirmPassword.length < 7 || !/[a-zA-Z0-9]/.test(password) || !/[a-zA-Z0-9]/.test(confirmPassword)) {
@@ -27,28 +29,29 @@ export default function ResetPassword() {
                         password: password
                     })
                 });
-
                 if (response.ok) {
-                    console.log(response)
-                    setMessage("Your Password has been reset");
+                    setMessage("Your password has been reset");
                     setPassword("");
                     setConfirmPassword("");
+                    setResponse(response);
                 } else {
+                    console.log(errorMessage)
                     const errorMessage = await response.text();
-                    setMessage(`Error: ${errorMessage}`);
+                    setResponse(response);
+                    setMessage(errorMessage);
                 }
             } catch (error) {
                 setMessage(`Error: ${error.message}`);
             }
         }
-    }
+    };
 
     return (
-        <div className={resetPwdStyles["reset-password-container"]}>
+        <div className={resetPwdStyles.wrapper}>
             <div className={resetPwdStyles["login-box"]}>
                 <h2>Reset Password</h2>
-                {message && (
-                    <div className={message.includes("Error") ? LoginStyles["error-msg"] : LoginStyles["success-msg"]}>
+                {response && (
+                    <div className={response.ok ? LoginStyles["success-msg"] : LoginStyles["error-msg"]}>
                         {message}
                     </div>
                 )}
@@ -78,6 +81,7 @@ export default function ResetPassword() {
                         <label>Confirm Password</label>
                         <div />
                     </div>
+                    {/* {!response.ok ? */}
                     <div className={resetPwdStyles["centered-button"]}>
                         <button>
                             <span></span>
@@ -87,6 +91,7 @@ export default function ResetPassword() {
                             Submit
                         </button>
                     </div>
+                    {/* : null} */}
                 </form>
             </div >
         </div>

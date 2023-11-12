@@ -15,14 +15,15 @@ export default function ConfirmEmailForPwdReset() {
                 headers: { "Content-Type": "application/json" },
                 body: email
             });
+            const responseText = await response.text()
             if (response.ok) {
-                setMessage("If there's an associated account, we've sent a password reset link.");
+                console.log(responseText);
+                setMessage(responseText);
                 setEmail("");
                 setResponse(response);
             } else {
-                const errorMessage = await response.text();
                 setResponse(response);
-                setMessage(`${errorMessage}`);
+                setMessage(responseText);
             }
         } catch (error) {
             setMessage(` ${error.message}`);
@@ -30,36 +31,40 @@ export default function ConfirmEmailForPwdReset() {
     };
 
     return (
-        <div className={resetPwdStyles["login-box"]}>
-            <h2>Reset Password</h2>
-            {response && (
-                <div className={response.ok ? LoginStyles["success-msg"] : LoginStyles["error-msg"]}>
-                    {message}
-                </div>
-            )}
-            <form onSubmit={handleSubmit}>
-                <div className={resetPwdStyles["user-box"]}>
-                    <input
-                        type="email"
-                        name="email"
-                        required
-                        autoComplete="off"
-                        onChange={(e) => setEmail(e.target.value)}
-                        value={email}
-                        placeholder=""
-                    />
-                    <label>Email Address</label>
-                </div>
-                <div className={resetPwdStyles["centered-button"]}>
-                    <button>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        Submit
-                    </button>
-                </div>
-            </form>
+        <div className={resetPwdStyles.wrapper}>
+            <div className={resetPwdStyles["login-box"]}>
+                <h2>Reset Password</h2>
+                {response && (
+                    <div className={response.ok ? LoginStyles["success-msg"] : LoginStyles["error-msg"]}>
+                        {message}
+                    </div>
+                )}
+                <form onSubmit={handleSubmit}>
+                    <div className={resetPwdStyles["user-box"]}>
+                        <input
+                            type="email"
+                            name="email"
+                            required
+                            autoComplete="off"
+                            onChange={(e) => setEmail(e.target.value)}
+                            value={email}
+                            placeholder=""
+                        />
+                        <label>Email Address</label>
+                    </div>
+                    {!response.ok ?
+                        <div className={resetPwdStyles["centered-button"]}>
+                            <button>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                Submit
+                            </button>
+                        </div>
+                        : null}
+                </form>
+            </div>
         </div>
     );
 }

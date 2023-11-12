@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.popflix.config.customExceptions.BadRequestException;
+import com.popflix.config.customExceptions.TokenExpiredException;
 import com.popflix.config.customExceptions.TooManyRequestsException;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
 import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
@@ -123,9 +124,18 @@ public class AuthenticationController {
         }
 
         @PostMapping("/reset-password")
-        public void resetPassword(@RequestBody Map<String, String> requestBody) {
-                String encrypedEmail = requestBody.get("emaiL");
-                String newPassword = requestBody.get("password");
-                passwordRecoveryService.resetUserPwd(encrypedEmail, newPassword);
+        public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> requestBody) {
+                try {
+                        String encrypedEmail = requestBody.get("emaiL");
+                        String newPassword = requestBody.get("password");
+                        passwordRecoveryService.resetUserPwd(encrypedEmail, newPassword);
+                        return ResponseEntity.ok("Password successfully updated.");
+                } catch (TokenExpiredException e) {
+                        return ResponseEntity.status(HttpStatus.GONE)
+                                        .body("This link is no longer valid, please try again.");
+                } catch (Exception e) {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                        .body("Something went wrong, please try again later.");
+                }
         }
 }

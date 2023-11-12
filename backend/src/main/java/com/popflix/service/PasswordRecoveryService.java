@@ -17,11 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.access.method.P;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.popflix.config.customExceptions.BadRequestException;
+import com.popflix.config.customExceptions.TokenExpiredException;
 import com.popflix.config.customExceptions.TooManyRequestsException;
 import com.popflix.model.User;
 import com.popflix.repository.UserRepository;
@@ -127,6 +129,8 @@ public class PasswordRecoveryService {
 
                 userRepository.save(user);
                 javaMailSender.send(message);
+            } else {
+                throw new TooManyRequestsException("Too many requests, please try again later");
             }
         } catch (Exception e) {
             throw new BadRequestException("Failed to send password recovery email. Please try again later.");
@@ -157,9 +161,12 @@ public class PasswordRecoveryService {
                 var encodedPassword = passwordEncoder.encode(newPassword);
                 user.setPassword(encodedPassword);
                 userRepository.save(user);
+            } else {
+                throw new TokenExpiredException("This link is no longer valid, please try again.");
             }
         } catch (Exception e) {
             e.printStackTrace();
+            throw new BadRequestException("Something went wrong. Please try again later.");
         }
     }
 
