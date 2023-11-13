@@ -1,12 +1,38 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import resetPwdStyles from "../misc/ResetPassword.module.css"
 import LoginStyles from "../components/Login/login.module.css"
+
+
+
 export default function ResetPassword() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [message, setMessage] = useState("");
     const [response, setResponse] = useState(null)
     const [showButton, setShowButton] = useState(true);
+    const [countDown, setCountDown] = useState(5);
+    const [countdownInterval, setCountdownInterval] = useState(null);
+
+
+    const startCountdown = () => {
+        const interval = setInterval(() => {
+            setCountDown(prevCountDown => prevCountDown - 1);
+        }, 1000);
+
+        setCountdownInterval(interval);
+
+        setTimeout(() => {
+            clearInterval(interval);
+            window.location.href = "/login";
+        }, countDown * 1000);
+    };
+
+    useEffect(() => {
+        return () => {
+            // Clear the countdown interval when the component unmounts
+            clearInterval(countdownInterval);
+        };
+    }, [countdownInterval]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -37,6 +63,7 @@ export default function ResetPassword() {
                     setConfirmPassword("");
                     setResponse(response);
                     setShowButton(false)
+                    startCountdown();
                 } else {
                     setResponse(response);
                     setMessage(responseText);
@@ -94,7 +121,7 @@ export default function ResetPassword() {
                                 Submit
                             </button>
                         </div>
-                        : null}
+                        : <span className={resetPwdStyles["redirect-txt"]}>{`You will be redirected to login in ${countDown} seconds`}</span>}
                 </form>
             </div >
         </div>
