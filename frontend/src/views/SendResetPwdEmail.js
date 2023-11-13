@@ -6,6 +6,7 @@ export default function ConfirmEmailForPwdReset() {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState(null);
     const [response, setResponse] = useState(null)
+    const [showButton, setShowButton] = useState(true);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -17,13 +18,14 @@ export default function ConfirmEmailForPwdReset() {
             });
             const responseText = await response.text()
             if (response.ok) {
-                console.log(responseText);
                 setMessage(responseText);
                 setEmail("");
                 setResponse(response);
+                setShowButton(false)
             } else {
                 setResponse(response);
                 setMessage(responseText);
+                setShowButton(false)
             }
         } catch (error) {
             setMessage(` ${error.message}`);
@@ -52,7 +54,7 @@ export default function ConfirmEmailForPwdReset() {
                         />
                         <label>Email Address</label>
                     </div>
-                    {!response.ok ?
+                    {showButton ?
                         <div className={resetPwdStyles["centered-button"]}>
                             <button>
                                 <span></span>

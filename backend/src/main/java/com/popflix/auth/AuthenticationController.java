@@ -108,7 +108,7 @@ public class AuthenticationController {
                 try {
                         if (passwordRecoveryService.authenticateExistingEmail(email)) {
                                 passwordRecoveryService.sendPasswordRecoveryEmail(email);
-                                return ResponseEntity.ok("Password recovery email sent successfully");
+                                return ResponseEntity.ok("Password recovery email sent successfully.");
                         } else {
                                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email not found");
                         }
@@ -119,7 +119,7 @@ public class AuthenticationController {
                 } catch (Exception e) {
                         e.printStackTrace();
                         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                        .body("Failed to send password recovery email");
+                                        .body(e.getMessage());
                 }
         }
 
@@ -132,10 +132,10 @@ public class AuthenticationController {
                         return ResponseEntity.ok("Password successfully updated.");
                 } catch (TokenExpiredException e) {
                         return ResponseEntity.status(HttpStatus.GONE)
-                                        .body("This link is no longer valid, please try again.");
+                                        .body(e.getMessage());
                 } catch (Exception e) {
                         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                        .body("Something went wrong, please try again later.");
+                                        .body(e.getMessage());
                 }
         }
 }

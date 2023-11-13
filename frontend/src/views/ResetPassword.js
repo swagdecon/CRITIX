@@ -6,6 +6,7 @@ export default function ResetPassword() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [message, setMessage] = useState("");
     const [response, setResponse] = useState(null)
+    const [showButton, setShowButton] = useState(true);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -29,16 +30,18 @@ export default function ResetPassword() {
                         password: password
                     })
                 });
+                const responseText = await response.text()
                 if (response.ok) {
-                    setMessage("Your password has been reset");
+                    setMessage(responseText);
                     setPassword("");
                     setConfirmPassword("");
                     setResponse(response);
+                    setShowButton(false)
                 } else {
-                    console.log(errorMessage)
-                    const errorMessage = await response.text();
                     setResponse(response);
-                    setMessage(errorMessage);
+                    setMessage(responseText);
+                    setShowButton(false)
+
                 }
             } catch (error) {
                 setMessage(`Error: ${error.message}`);
@@ -81,17 +84,17 @@ export default function ResetPassword() {
                         <label>Confirm Password</label>
                         <div />
                     </div>
-                    {/* {!response.ok ? */}
-                    <div className={resetPwdStyles["centered-button"]}>
-                        <button>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            Submit
-                        </button>
-                    </div>
-                    {/* : null} */}
+                    {showButton ?
+                        <div className={resetPwdStyles["centered-button"]}>
+                            <button>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                Submit
+                            </button>
+                        </div>
+                        : null}
                 </form>
             </div >
         </div>

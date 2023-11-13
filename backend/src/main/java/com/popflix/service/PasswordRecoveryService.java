@@ -98,42 +98,38 @@ public class PasswordRecoveryService {
     }
 
     public void sendPasswordRecoveryEmail(String email) throws Exception {
-        try {
-            User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
-            Integer resetCount = user.getPasswordResetRequests();
-            if (resetCount != null) {
-                resetCount += 1;
-            } else {
-                resetCount = 1;
-            }
-            user.setPasswordResetRequests(resetCount);
-            resetCount = user.getPasswordResetRequests();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
+        Integer resetCount = user.getPasswordResetRequests();
+        if (resetCount != null) {
+            resetCount += 1;
+        } else {
+            resetCount = 1;
+        }
+        user.setPasswordResetRequests(resetCount);
+        resetCount = user.getPasswordResetRequests();
 
-            if (resetCount <= 3) {
-                String encryptedEmailToken = encryptEmail(email);
-                MimeMessage message = javaMailSender.createMimeMessage();
-                MimeMessageHelper helper = new MimeMessageHelper(message, true);
-                String emailText = String.format(
-                        "Dear user, to reset your password, click the following link: http:/localhost:3000/reset-password/%s%n"
-                                + "If you didn't authorize this request, kindly ignore this email.%n"
-                                + "Thanks for your support!%n"
-                                + "The POPFLIX team",
-                        encryptedEmailToken);
+        if (resetCount <= 3) {
+            String encryptedEmailToken = encryptEmail(email);
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            String emailText = String.format(
+                    "Dear user, to reset your password, click the following link: http:/localhost:3000/reset-password/%s%n"
+                            + "If you didn't authorize this request, kindly ignore this email.%n"
+                            + "Thanks for your support!%n"
+                            + "The POPFLIX team",
+                    encryptedEmailToken);
 
-                helper.setFrom("POPFLIX <popflix.help@gmail.com>");
-                helper.setTo(email);
-                helper.setSubject("Password Reset Request");
-                helper.setText(emailText);
-                user.setPasswordResetRequestDate(new Date());
+            helper.setFrom("POPFLIX <popflix.help@gmail.com>");
+            helper.setTo(email);
+            helper.setSubject("Password Reset Request");
+            helper.setText(emailText);
+            user.setPasswordResetRequestDate(new Date());
 
-                userRepository.save(user);
-                javaMailSender.send(message);
-            } else {
-                throw new TooManyRequestsException("Too many requests, please try again later");
-            }
-        } catch (Exception e) {
-            throw new BadRequestException("Failed to send password recovery email. Please try again later.");
+            userRepository.save(user);
+            javaMailSender.send(message);
+        } else {
+            throw new TooManyRequestsException("Too many requests, please try again later.");
         }
     }
 
@@ -149,24 +145,19 @@ public class PasswordRecoveryService {
         return timeElapsedMinutes > 1;
     }
 
-    public void resetUserPwd(String encryptedEmail, String newPassword) {
-        try {
-            String userEmail = decryptToken(encryptedEmail);
-            User user = userRepository.findByEmail(userEmail)
-                    .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
+    public void resetUserPwd(String encryptedEmail, String newPassword) throws Exception {
+        String userEmail = decryptToken(encryptedEmail);
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
 
-            Boolean isExpired = isPasswordResetLinkExpired(user.getPasswordResetRequestDate());
+        Boolean isExpired = isPasswordResetLinkExpired(user.getPasswordResetRequestDate());
 
-            if (!isExpired) {
-                var encodedPassword = passwordEncoder.encode(newPassword);
-                user.setPassword(encodedPassword);
-                userRepository.save(user);
-            } else {
-                throw new TokenExpiredException("This link is no longer valid, please try again.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new BadRequestException("Something went wrong. Please try again later.");
+        if (!isExpired) {
+            var encodedPassword = passwordEncoder.encode(newPassword);
+            user.setPassword(encodedPassword);
+            userRepository.save(user);
+        } else {
+            throw new TokenExpiredException("This link is no longer valid, please try again.");
         }
     }
 
