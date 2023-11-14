@@ -44,7 +44,7 @@ export default function LoginLogic() {
   const navigate = useNavigate();
 
 
-  checkExistingJwt();
+
 
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
@@ -52,7 +52,7 @@ export default function LoginLogic() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    checkExistingJwt();
     const userData = { email, password };
     const hasEmailProfanity = filter.isProfane(userData["email"]);
     const hasPasswordProfanity = filter.isProfane(userData["password"]);

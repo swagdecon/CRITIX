@@ -57,13 +57,13 @@ export default function ResetPassword() {
                     })
                 });
                 const responseText = await response.text()
+                startCountdown();
                 if (response.ok) {
                     setMessage(responseText);
                     setPassword("");
                     setConfirmPassword("");
                     setResponse(response);
                     setShowButton(false)
-                    startCountdown();
                 } else {
                     setResponse(response);
                     setMessage(responseText);

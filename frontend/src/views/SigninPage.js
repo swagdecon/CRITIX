@@ -47,6 +47,7 @@ export default function LogIn() {
             <div className={LoginStyles.overlay}>
               <LoginPlayer />
             </div>
+            <div className={LoginStyles["responsive-background"]} />
           </div>
         </div>
       </div>

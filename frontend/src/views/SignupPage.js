@@ -45,9 +45,10 @@ export default function SignUp() {
             <div className={SignUpStyles.overlay}>
               <SignUpPlayer />
             </div>
+            <div className={SignUpStyles["responsive-background"]} />
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
