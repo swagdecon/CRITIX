@@ -62,20 +62,18 @@
   flex-wrap: wrap;
 }
 
-
+@media screen and (max-width: 2400px) {
+  .sort-by-btn {
+    display: none
+  }
+}
 @media screen and (max-width: 1100px) {
   .container {
     padding-top: 15%;
   }
 }
 
-
-@media screen and (max-width: 900px) {
-  .sort-by-btn {
-    display: none
-  }
-}
-@media screen and (max-width: 555px) {
+@media screen and (max-width: 700px) {
   .container {
     margin-top: 5%;
   }
