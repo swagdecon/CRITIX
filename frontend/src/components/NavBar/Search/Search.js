@@ -3,13 +3,14 @@ import SearchStyle from "./Search.module.css";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { ParseDate } from "../../IndMovie/MovieComponents";
-
+import ReactPlaceholderTyping from 'react-placeholder-typing'
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 export default function Search(props) {
   const [query, setQuery] = useState("");
   const [detailedMovies, setDetailedMovies] = useState([]);
   const searchRef = useRef();
+  const placeholders = ['Uncover and critique cinematic brilliance', 'Unravel hidden gems, share your filmic insights', '"Find your new favorite movie'];
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -69,18 +70,26 @@ export default function Search(props) {
     setDetailedMovies(detailedMoviesArray);
   };
 
-  const handleChange = (event) => {
-    const value = event.target.value;
-    setQuery(value);
-  };
+  // const handleChange = (event) => {
+  //   const { value } = event.target;
+  //   setQuery(value);
+  // };
 
   return (
     <form onSubmit={props.onSubmit} id="search" className={SearchStyle.Search} ref={searchRef}>
-      <input
+      {/* <input
         type="search"
         onChange={handleChange}
         value={query}
         placeholder="Search for a title..."
+      /> */}
+      <ReactPlaceholderTyping
+        placeholders={placeholders}
+        value={query}
+        onChange={(value) => {
+          setQuery(value)
+        }}
+        containerStyle={{ borderWidth: "0px" }}
       />
       <ul className={SearchStyle["search-results-list"]}>
         {detailedMovies.map((movie) => {

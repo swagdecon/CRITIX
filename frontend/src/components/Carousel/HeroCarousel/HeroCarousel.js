@@ -65,7 +65,7 @@ export default function HeroCarousel() {
               alt={movie.title}
             />
           </Link>
-          <Carousel.Caption>
+          <Carousel.Caption className={HeroStyle["carousel-caption"]}>
             <h1 className={HeroStyle["hero_header"]}>{movie.title}</h1>
             <p className={HeroStyle["hero_tagline"]}>{movie.tagline}</p>
             <div className={HeroStyle["hero-genre-container"]}>
