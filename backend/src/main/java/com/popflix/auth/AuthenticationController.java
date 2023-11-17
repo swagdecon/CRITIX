@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +23,7 @@ import com.popflix.config.customExceptions.TokenExpiredException;
 import com.popflix.config.customExceptions.TooManyRequestsException;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
 import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
-import com.popflix.service.PasswordRecoveryService;
+import com.popflix.service.PasswordService;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.io.IOException;
@@ -35,8 +36,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-        private final AuthenticationService service;
-        private final PasswordRecoveryService passwordRecoveryService;
+        private final AuthenticationService authService;
+        private final PasswordService passwordService;
 
         Dotenv dotenv = Dotenv.load();
         String recaptchaSecretKey = dotenv.get("RECAPTCHA_SECRET_KEY");
@@ -47,7 +48,7 @@ public class AuthenticationController {
         public ResponseEntity<?> register(
                         @RequestBody RegisterRequest request) {
                 try {
-                        return ResponseEntity.ok(service.register(request));
+                        return ResponseEntity.ok(authService.register(request));
                 } catch (UserAlreadyExistsException ex) {
                         return ResponseEntity.badRequest().body("A User With This Email Already Exists");
                 }
@@ -57,7 +58,7 @@ public class AuthenticationController {
         public ResponseEntity<?> authenticate(
                         @RequestBody AuthenticationRequest request, HttpServletRequest httpRequest) {
                 try {
-                        return ResponseEntity.ok(service.authenticate(request, httpRequest));
+                        return ResponseEntity.ok(authService.authenticate(request, httpRequest));
                 } catch (UsernameNotFoundException ex) {
                         return ResponseEntity.badRequest().body("Email or Password Not Found");
                 } catch (UserAlreadyLoggedInException ex) {
@@ -69,7 +70,7 @@ public class AuthenticationController {
         public void refreshToken(
                         HttpServletRequest request, HttpServletResponse response)
                         throws StreamWriteException, DatabindException, IOException, java.io.IOException {
-                service.refreshToken(request, response);
+                authService.refreshToken(request, response);
 
         }
 
@@ -77,7 +78,7 @@ public class AuthenticationController {
         public ResponseEntity<?> authenticateExistingToken(HttpServletRequest request) {
                 String authHeader = request.getHeader("Authorization");
 
-                if (service.authenticateExistingToken(authHeader)) {
+                if (authService.authenticateExistingToken(authHeader)) {
                         return ResponseEntity.ok("Token is valid");
                 } else {
                         return ResponseEntity.badRequest().body("Invalid token");
@@ -103,11 +104,38 @@ public class AuthenticationController {
                 return response.body();
         }
 
+        @PostMapping("/send-password-authentication-email")
+        public ResponseEntity<String> sendPasswordAuthenticationEmail(@RequestBody String email) {
+                try {
+                        authService.sendPasswordAuthenticationEmail(email);
+                        return ResponseEntity.ok("Please check your email to confirm your account");
+                } catch (Exception e) {
+                        e.printStackTrace();
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                        .body(e.getMessage());
+                }
+        }
+
+        @PostMapping("/activate-account/{token}")
+        public ResponseEntity<String> activateAccount(@PathVariable String token) {
+                try {
+                        String encrypedEmail = token;
+                        authService.activateAccount(encrypedEmail);
+                        return ResponseEntity.ok("Account Activated.");
+                } catch (TokenExpiredException e) {
+                        return ResponseEntity.status(HttpStatus.GONE)
+                                        .body(e.getMessage());
+                } catch (Exception e) {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                        .body(e.getMessage());
+                }
+        }
+
         @PostMapping("/send-password-recovery-email")
         public ResponseEntity<String> sendPasswordRecoveryEmail(@RequestBody String email) {
                 try {
-                        if (passwordRecoveryService.authenticateExistingEmail(email)) {
-                                passwordRecoveryService.sendPasswordRecoveryEmail(email);
+                        if (passwordService.authenticateExistingEmail(email)) {
+                                passwordService.sendPasswordRecoveryEmail(email);
                                 return ResponseEntity.ok("Password recovery email sent successfully.");
                         } else {
                                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email not found");
@@ -128,7 +156,7 @@ public class AuthenticationController {
                 try {
                         String encrypedEmail = requestBody.get("emaiL");
                         String newPassword = requestBody.get("password");
-                        passwordRecoveryService.resetUserPwd(encrypedEmail, newPassword);
+                        passwordService.resetUserPwd(encrypedEmail, newPassword);
                         return ResponseEntity.ok("Password successfully updated.");
                 } catch (TokenExpiredException e) {
                         return ResponseEntity.status(HttpStatus.GONE)

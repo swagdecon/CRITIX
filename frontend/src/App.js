@@ -17,6 +17,7 @@ import IndPerson from "./views/IndPersonPage.js";
 import MovieListPage from "./views/MovieListPage.js";
 import ConfirmEmailForPwdReset from "./views/SendResetPwdEmail.js";
 import ResetPassword from "./views/ResetPassword.js";
+import AccountVerification from "./views/AccountVerification.js"
 export default function App() {
   return (
     <Router>
@@ -48,6 +49,7 @@ export default function App() {
         <Route path="/person/:id" element={<PrivateRoute><IndPerson /></PrivateRoute>} />
         <Route path="/forgot-password" element={<ConfirmEmailForPwdReset />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/activate-account/:token" element={<AccountVerification />} />
         <Route path="/403" element={<Error403 />} />
         <Route path="*" element={<Error404 />} />
         <Route component={<Navigate replace to="/404" />} />

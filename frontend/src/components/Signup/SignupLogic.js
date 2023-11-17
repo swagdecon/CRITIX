@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "../Login/login.module.css";
 import Filter from "bad-words";
 import SignUpStyles from "../Login/login.module.css";
@@ -12,7 +11,6 @@ export default function SignUpFunctionality() {
     setPasswordVisible(!passwordVisible);
   }
   const filter = new Filter()
-  const navigate = useNavigate()
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -61,7 +59,7 @@ export default function SignUpFunctionality() {
       CookieManager.encryptCookie("refreshToken", data.refresh_token, {
         expires: 7,
       });
-      navigate("/login");
+
     } else {
       const errorText = await registerResponse.text();
       setError(errorText);

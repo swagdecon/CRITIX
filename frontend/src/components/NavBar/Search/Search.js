@@ -77,12 +77,6 @@ export default function Search(props) {
 
   return (
     <form onSubmit={props.onSubmit} id="search" className={SearchStyle.Search} ref={searchRef}>
-      {/* <input
-        type="search"
-        onChange={handleChange}
-        value={query}
-        placeholder="Search for a title..."
-      /> */}
       <ReactPlaceholderTyping
         placeholders={placeholders}
         value={query}

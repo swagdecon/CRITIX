@@ -1,15 +1,17 @@
 package com.popflix.model;
 
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +32,9 @@ public class User implements UserDetails {
     private String password;
     private Boolean loggedIn = false;
     private String avatar;
+    private Boolean accountActive;
+    private Integer emailAuthRequests;
+    private Date accountAuthRequestDate;
     private Integer passwordResetRequests;
     private Date passwordResetRequestDate;
     private Date lastLoginTime;

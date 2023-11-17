@@ -1,25 +1,29 @@
 
 package com.popflix.authTests;
 
-import com.popflix.auth.AuthenticationController;
-import com.popflix.auth.AuthenticationRequest;
-import com.popflix.auth.AuthenticationResponse;
-import com.popflix.auth.AuthenticationService;
-import com.popflix.auth.RegisterRequest;
-import com.popflix.config.customExceptions.UserAlreadyExistsException;
-import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import com.popflix.auth.AuthenticationController;
+import com.popflix.auth.AuthenticationRequest;
+import com.popflix.auth.AuthenticationResponse;
+import com.popflix.auth.AuthenticationService;
+import com.popflix.auth.RegisterRequest;
+import com.popflix.auth.RegistrationResponse;
+import com.popflix.config.customExceptions.UserAlreadyExistsException;
+import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 class AuthenticationControllerTest {
 
@@ -43,11 +47,19 @@ class AuthenticationControllerTest {
     @Test
     void testRegister() throws UserAlreadyExistsException {
 
-        // Tests user gets successfully registered
+        // Mock the behavior of the service's register method
         RegisterRequest request = new RegisterRequest();
-        when(service.register(request)).thenReturn(new AuthenticationResponse("Registration Successful", null));
+        RegistrationResponse registrationResponse = new RegistrationResponse(
+                new AuthenticationResponse("AccessToken", "RefreshToken"),
+                "User registered successfully");
+        when(service.register(request)).thenReturn(registrationResponse);
+
+        // Call the controller method under test
         ResponseEntity<?> response = controller.register(request);
-        assertEquals(ResponseEntity.ok(new AuthenticationResponse("Registration Successful", null)), response);
+
+        // Assert the response
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(registrationResponse, response.getBody());
     }
 
     @Test
