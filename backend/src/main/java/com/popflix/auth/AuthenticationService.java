@@ -11,7 +11,6 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -52,18 +51,16 @@ public class AuthenticationService {
         private final PasswordEncoder passwordEncoder;
         private final JwtService jwtService;
         private final AuthenticationManager authenticationManager;
-        private JavaMailSender javaMailSender;
+        private final JavaMailSender javaMailSender;
 
-        @Value("${AES_ALGORITHM}")
-        private static String AES_ALGORITHM;
+        static Dotenv dotenv = Dotenv.load();
 
-        @Value("${KEY_SIZE}")
-        private static int KEY_SIZE;
+        private static String AES_ALGORITHM = "AES";
+        private static int KEY_SIZE = 256;
 
-        Dotenv dotenv = Dotenv.load();
         private String DEFAULT_AVATAR_URL = dotenv.get("DEFAULT_AVATAR_URL");
 
-        public RegistrationResponse register(RegisterRequest request) {
+        public RegistrationResponse register(RegisterRequest request) throws Exception {
 
                 if (userRepository.findByEmail(request.getEmail()).isPresent()) {
                         throw new UserAlreadyExistsException("A User With This Email Already Exists");
@@ -87,9 +84,9 @@ public class AuthenticationService {
 
                 try {
                         sendPasswordAuthenticationEmail(request.getEmail());
-                } catch (Exception e) {
+                } catch (UserEmailNotAuthenticated e) {
                         e.printStackTrace();
-                        return new RegistrationResponse(null, "Failed to send authentication email");
+                        throw new UserEmailNotAuthenticated("Failed to send authentication email.");
 
                 }
                 saveAccessToken(savedUser, jwtToken);
@@ -99,7 +96,8 @@ public class AuthenticationService {
                                 .refreshToken(refreshToken)
                                 .build();
 
-                return new RegistrationResponse(authenticationResponse, "User registered successfully");
+                return new RegistrationResponse(authenticationResponse,
+                                "Please check your email to verify your account.");
         }
 
         public AuthenticationResponse authenticate(AuthenticationRequest request, HttpServletRequest httpRequest) {

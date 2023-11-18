@@ -10,7 +10,6 @@ import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +22,7 @@ import com.popflix.config.customExceptions.TokenExpiredException;
 import com.popflix.config.customExceptions.TooManyRequestsException;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
 import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
+import com.popflix.config.customExceptions.UserEmailNotAuthenticated;
 import com.popflix.service.PasswordService;
 
 import io.github.cdimascio.dotenv.Dotenv;
@@ -45,12 +45,17 @@ public class AuthenticationController {
         HttpClient client = HttpClient.newHttpClient();
 
         @PostMapping("/register")
-        public ResponseEntity<?> register(
-                        @RequestBody RegisterRequest request) {
+        public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
                 try {
-                        return ResponseEntity.ok(authService.register(request));
-                } catch (UserAlreadyExistsException ex) {
-                        return ResponseEntity.badRequest().body("A User With This Email Already Exists");
+                        RegistrationResponse registrationResponse = authService.register(request);
+                        return ResponseEntity.ok(registrationResponse);
+                } catch (UserEmailNotAuthenticated e) {
+                        return ResponseEntity.badRequest().body(e.getMessage());
+                } catch (UserAlreadyExistsException e) {
+                        return ResponseEntity.badRequest().body(e.getMessage());
+                } catch (Exception e) {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                        .body("An error occurred during registration");
                 }
         }
 
@@ -59,10 +64,10 @@ public class AuthenticationController {
                         @RequestBody AuthenticationRequest request, HttpServletRequest httpRequest) {
                 try {
                         return ResponseEntity.ok(authService.authenticate(request, httpRequest));
-                } catch (UsernameNotFoundException ex) {
-                        return ResponseEntity.badRequest().body("Email or Password Not Found");
-                } catch (UserAlreadyLoggedInException ex) {
-                        return ResponseEntity.badRequest().body("User is already logged in");
+                } catch (UsernameNotFoundException e) {
+                        return ResponseEntity.badRequest().body(e.getMessage());
+                } catch (UserAlreadyLoggedInException e) {
+                        return ResponseEntity.badRequest().body(e.getMessage());
                 }
         }
 
@@ -116,10 +121,9 @@ public class AuthenticationController {
                 }
         }
 
-        @PostMapping("/activate-account/{token}")
-        public ResponseEntity<String> activateAccount(@PathVariable String token) {
+        @PostMapping("/activate-account")
+        public ResponseEntity<String> activateAccount(@RequestBody String encrypedEmail) {
                 try {
-                        String encrypedEmail = token;
                         authService.activateAccount(encrypedEmail);
                         return ResponseEntity.ok("Account Activated.");
                 } catch (TokenExpiredException e) {

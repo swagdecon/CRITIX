@@ -2,8 +2,8 @@
 package com.popflix.authTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,7 +12,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
 import com.popflix.auth.AuthenticationController;
 import com.popflix.auth.AuthenticationRequest;
 import com.popflix.auth.AuthenticationResponse;
@@ -21,7 +20,6 @@ import com.popflix.auth.RegisterRequest;
 import com.popflix.auth.RegistrationResponse;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
 import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -45,14 +43,14 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    void testRegister() throws UserAlreadyExistsException {
-
+    void testRegister() throws Exception {
         // Mock the behavior of the service's register method
         RegisterRequest request = new RegisterRequest();
         RegistrationResponse registrationResponse = new RegistrationResponse(
                 new AuthenticationResponse("AccessToken", "RefreshToken"),
                 "User registered successfully");
-        when(service.register(request)).thenReturn(registrationResponse);
+
+        when(service.register(any(RegisterRequest.class))).thenReturn(registrationResponse);
 
         // Call the controller method under test
         ResponseEntity<?> response = controller.register(request);
@@ -63,7 +61,7 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    void testRegisteredUserAlreadyExists() throws UserAlreadyExistsException {
+    void testRegisteredUserAlreadyExists() throws Exception {
         // Functionality to check if user has already been registered
         RegisterRequest request = new RegisterRequest();
         when(service.register(request))

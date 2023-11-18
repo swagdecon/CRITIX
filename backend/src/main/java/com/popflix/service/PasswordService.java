@@ -1,17 +1,20 @@
 package com.popflix.service;
 
 import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import com.popflix.auth.AuthenticationService;
 import com.popflix.config.customExceptions.TokenExpiredException;
 import com.popflix.config.customExceptions.TooManyRequestsException;
 import com.popflix.model.User;
 import com.popflix.repository.UserRepository;
+
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 
@@ -25,12 +28,6 @@ public class PasswordService {
 
     @Value("${ERR_PWD_REQUEST_EXCEEDED}")
     private String errorPasswordRequestExceeded;
-
-    @Value("${AES_ALGORITHM}")
-    private static String AES_ALGORITHM;
-
-    @Value("${KEY_SIZE}")
-    private static int KEY_SIZE;
 
     public boolean authenticateExistingEmail(String userEmail) {
         var user = this.userRepository.findByEmail(userEmail).orElse(null);

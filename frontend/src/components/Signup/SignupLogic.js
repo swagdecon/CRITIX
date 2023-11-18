@@ -11,15 +11,31 @@ export default function SignUpFunctionality() {
     setPasswordVisible(!passwordVisible);
   }
   const filter = new Filter()
-
+  let content;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
+  const [message, setMessage] = useState(false);
   const [profanityErrorMessage, setProfanityErrorMessage] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [response, setResponse] = useState(null)
 
+
+  if (response && response.status === 200) {
+    content = (
+      <div className={SignUpStyles["success-msg"]}>
+        {message}
+      </div>
+    );
+  } else if (response && !response.status === 200) {
+    content = (
+      <div className={SignUpStyles["error-msg"]}>
+        <i className="fa fa-times-circle" />
+        {message}
+      </div>
+    );
+  }
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -37,44 +53,48 @@ export default function SignUpFunctionality() {
       hasPasswordProfanity
     ) {
       setProfanityErrorMessage("*Input(s) cannot contain profanity*");
-      setError("");
+      setMessage("");
       return;
     } else {
       setProfanityErrorMessage("");
     }
 
-    const registerResponse = await fetch("http://localhost:8080/v1/auth/register", {
+    const response = await fetch("http://localhost:8080/v1/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(userData),
     });
-
-    if (registerResponse.ok) {
-      const data = await registerResponse.json();
+    setResponse(response);
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data)
       CookieManager.encryptCookie("accessToken", data.access_token, {
         expires: 0.5,
       });
       CookieManager.encryptCookie("refreshToken", data.refresh_token, {
         expires: 7,
       });
-
+      setFirstName("")
+      setLastName("")
+      setEmail("")
+      setPassword("")
+      setMessage(data.message)
     } else {
-      const errorText = await registerResponse.text();
-      setError(errorText);
+      const messageText = await response.text();
+      setMessage(messageText);
+      setFirstName("")
+      setLastName("")
+      setEmail("")
+      setPassword("")
     }
   }
 
 
   return (
     <form onSubmit={handleSubmit}>
-      {error ? (
-        <div className={SignUpStyles["error-msg"]}>
-          <i className="fa fa-times-circle" />
-          {error}
-        </div>
-      ) : null}
+      {content}
       <br />
       {profanityErrorMessage ? (
         <div className={SignUpStyles["error-msg"]}>
