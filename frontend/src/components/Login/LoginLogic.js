@@ -6,106 +6,80 @@ import LoginStyles from "../Login/login.module.css";
 import MovieButton from "../Other/btn//MovieButton/Button.js";
 import CookieManager from "../../security/CookieManager";
 
-
-export async function checkExistingJwt() {
-  const navigate = useNavigate();
-
-  // Check for valid tokens
-  const accessToken = CookieManager.decryptCookie("accessToken");
-  const refreshToken = CookieManager.decryptCookie("refreshToken");
-
-  if (accessToken && refreshToken) {
-    const response = await fetch(
-      "http://localhost:8080/v1/auth/authenticate-existing-token",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    if (response.ok) {
-      navigate("/home");
-    } else {
-      console.log({ response })
-    }
-  }
-}
-
-
 export default function LoginLogic() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [error, setError] = useState("");
+  const [profanityError, setProfanityError] = useState("");
+  const [message, setMessage] = useState("");
   const filter = useMemo(() => new Filter(), []);
-  const navigate = useNavigate();
-
-
-
+  const [response, setResponse] = useState(null)
+  const navigate = useNavigate()
 
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
   }
-
+  function resetInputFields() {
+    setEmail("")
+    setPassword("")
+  }
   const handleSubmit = async (event) => {
     event.preventDefault();
-    checkExistingJwt();
     const userData = { email, password };
     const hasEmailProfanity = filter.isProfane(userData["email"]);
     const hasPasswordProfanity = filter.isProfane(userData["password"]);
 
     if (hasEmailProfanity || hasPasswordProfanity) {
-      setErrorMessage("*Input(s) cannot contain profanity*");
+      setProfanityError("*Input(s) cannot contain profanity*");
       return;
     } else {
-      setErrorMessage("");
+      setProfanityError("");
     }
-    try {
-      const response = await fetch(
-        "http://localhost:8080/v1/auth/authenticate",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userData),
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        CookieManager.encryptCookie("accessToken", data.access_token, {
-          expires: 1,
-        });
-        CookieManager.encryptCookie("refreshToken", data.refresh_token, {
-          expires: 7,
-        });
-        navigate("/home");
-      } else {
-        setError(await response.text());
+
+    const response = await fetch(
+      "http://localhost:8080/v1/auth/authenticate",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
       }
-      return;
-    } catch (error) {
-      setError(error);
-      navigate("/");
+    );
+
+    setResponse(response);
+
+    if (response.ok) {
+      const data = await response.json();
+      CookieManager.encryptCookie("accessToken", data.access_token, {
+        expires: 1,
+      });
+      CookieManager.encryptCookie("refreshToken", data.refresh_token, {
+        expires: 7,
+      });
+      setMessage(data.message);
+      resetInputFields()
+      navigate("/home")
+    } else {
+      const messageText = await response.text();
+      setMessage(messageText);
+      resetInputFields()
     }
+    return;
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      {error ? (
+      {response && response.status !== 200 ? (
         <div className={LoginStyles["error-msg"]}>
           <i className="fa fa-times-circle" />
-          {error}
+          {message}
         </div>
       ) : null}
-
       <br />
-      {errorMessage ? (
+      {profanityError ? (
         <div className={LoginStyles["error-msg"]}>
-          <i className="fa fa-times-circle" /> {errorMessage}
+          <i className="fa fa-times-circle" /> {profanityError}
         </div>
       ) : null}
       <div>

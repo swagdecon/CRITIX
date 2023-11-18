@@ -10,7 +10,7 @@ export default function Search(props) {
   const [query, setQuery] = useState("");
   const [detailedMovies, setDetailedMovies] = useState([]);
   const searchRef = useRef();
-  const placeholders = ['Uncover and critique cinematic brilliance', 'Unravel hidden gems, share your filmic insights', '"Find your new favorite movie'];
+  const placeholders = ['Uncover and critique cinematic brilliance', 'Unravel hidden gems, share your filmic insights', 'Find your new favorite movie'];
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -70,10 +70,7 @@ export default function Search(props) {
     setDetailedMovies(detailedMoviesArray);
   };
 
-  // const handleChange = (event) => {
-  //   const { value } = event.target;
-  //   setQuery(value);
-  // };
+
 
   return (
     <form onSubmit={props.onSubmit} id="search" className={SearchStyle.Search} ref={searchRef}>

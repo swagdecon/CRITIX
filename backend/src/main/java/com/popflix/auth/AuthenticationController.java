@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.security.GeneralSecurityException;
 import java.util.Map;
 
 import org.json.JSONObject;
@@ -54,6 +55,7 @@ public class AuthenticationController {
                 } catch (UserAlreadyExistsException e) {
                         return ResponseEntity.badRequest().body(e.getMessage());
                 } catch (Exception e) {
+                        System.out.println(e);
                         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                                         .body("An error occurred during registration");
                 }
@@ -67,6 +69,8 @@ public class AuthenticationController {
                 } catch (UsernameNotFoundException e) {
                         return ResponseEntity.badRequest().body(e.getMessage());
                 } catch (UserAlreadyLoggedInException e) {
+                        return ResponseEntity.badRequest().body(e.getMessage());
+                } catch (Exception e) {
                         return ResponseEntity.badRequest().body(e.getMessage());
                 }
         }
@@ -138,7 +142,7 @@ public class AuthenticationController {
         @PostMapping("/send-password-recovery-email")
         public ResponseEntity<String> sendPasswordRecoveryEmail(@RequestBody String email) {
                 try {
-                        if (passwordService.authenticateExistingEmail(email)) {
+                        if (authService.authenticateExistingEmail(email)) {
                                 passwordService.sendPasswordRecoveryEmail(email);
                                 return ResponseEntity.ok("Password recovery email sent successfully.");
                         } else {

@@ -4,12 +4,11 @@ import Filter from "bad-words";
 import SignUpStyles from "../Login/login.module.css";
 import MovieButton from "../Other/btn/MovieButton/Button.js";
 import CookieManager from "../../security/CookieManager";
+import { Link } from "react-router-dom";
 
 export default function SignUpFunctionality() {
 
-  function togglePasswordVisibility() {
-    setPasswordVisible(!passwordVisible);
-  }
+  const [emailErr, setEmailErr] = useState(false)
   const filter = new Filter()
   let content;
   const [firstName, setFirstName] = useState("");
@@ -22,13 +21,43 @@ export default function SignUpFunctionality() {
   const [response, setResponse] = useState(null)
 
 
+  function togglePasswordVisibility() {
+    setPasswordVisible(!passwordVisible);
+  }
+
+
+  async function resendAuthEmail(email) {
+    const response = await fetch(
+      "http://localhost:8080/v1/auth/send-password-authentication-email",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: email
+      }
+    );
+    if (response.ok) {
+      setMessage("")
+    }
+  }
+
+
+  function resetInputFields() {
+    setFirstName("")
+    setLastName("")
+    setEmail("")
+    setPassword("")
+  }
+
+
   if (response && response.status === 200) {
     content = (
       <div className={SignUpStyles["success-msg"]}>
         {message}
       </div>
     );
-  } else if (response && !response.status === 200) {
+  } else if (response && response.status !== 200) {
     content = (
       <div className={SignUpStyles["error-msg"]}>
         <i className="fa fa-times-circle" />
@@ -36,6 +65,8 @@ export default function SignUpFunctionality() {
       </div>
     );
   }
+
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -66,35 +97,37 @@ export default function SignUpFunctionality() {
       },
       body: JSON.stringify(userData),
     });
+
     setResponse(response);
+    const data = await response.json();
+    console.log(data)
     if (response.ok) {
-      const data = await response.json();
-      console.log(data)
       CookieManager.encryptCookie("accessToken", data.access_token, {
         expires: 0.5,
       });
       CookieManager.encryptCookie("refreshToken", data.refresh_token, {
         expires: 7,
       });
-      setFirstName("")
-      setLastName("")
-      setEmail("")
-      setPassword("")
+      resetInputFields()
       setMessage(data.message)
+    } else if (response.text() === "ERR_SEND_EMAIL") {
+      setEmailErr(true)
     } else {
       const messageText = await response.text();
+      resetInputFields()
       setMessage(messageText);
-      setFirstName("")
-      setLastName("")
-      setEmail("")
-      setPassword("")
     }
   }
-
 
   return (
     <form onSubmit={handleSubmit}>
       {content}
+      <br />
+      {emailErr ?
+        <div className={SignUpStyles["reset-pwd"]}>
+          <Link onClick={resendAuthEmail}>Resend authentication email</Link>
+        </div>
+        : null}
       <br />
       {profanityErrorMessage ? (
         <div className={SignUpStyles["error-msg"]}>
@@ -134,7 +167,7 @@ export default function SignUpFunctionality() {
           id="lastName"
           name="lastName"
           className={SignUpStyles["text-input"]}
-          autoComplete="off"
+          autoComplete="on"
           value={lastName}
           onChange={(event) => setLastName(event.target.value)}
           placeholder="Last Name"
@@ -161,7 +194,6 @@ export default function SignUpFunctionality() {
           />
         </span>
       </div>
-
       <MovieButton innerIcon="popcorn" onSubmit={handleSubmit} />
     </form>
   );

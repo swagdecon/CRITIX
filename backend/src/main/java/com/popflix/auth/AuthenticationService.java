@@ -5,12 +5,10 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -20,11 +18,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.popflix.config.JwtService;
+import com.popflix.config.customExceptions.BadRequestException;
 import com.popflix.config.customExceptions.TokenExpiredException;
 import com.popflix.config.customExceptions.TooManyRequestsException;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
@@ -35,7 +33,6 @@ import com.popflix.model.TokenType;
 import com.popflix.model.User;
 import com.popflix.repository.TokenRepository;
 import com.popflix.repository.UserRepository;
-
 import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.io.IOException;
 import jakarta.mail.internet.MimeMessage;
@@ -78,9 +75,17 @@ public class AuthenticationService {
                 var extraClaims = new HashMap<String, Object>();
                 extraClaims.put("firstName", request.getFirstName());
                 extraClaims.put("userId", user.getId());
+
                 var savedUser = userRepository.save(user);
                 var jwtToken = jwtService.generateToken(extraClaims, user);
                 var refreshToken = jwtService.generateRefreshToken(user);
+
+                saveAccessToken(savedUser, jwtToken);
+                saveRefreshToken(user, refreshToken);
+                AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
+                                .accessToken(jwtToken)
+                                .refreshToken(refreshToken)
+                                .build();
 
                 try {
                         sendPasswordAuthenticationEmail(request.getEmail());
@@ -89,12 +94,6 @@ public class AuthenticationService {
                         throw new UserEmailNotAuthenticated("Failed to send authentication email.");
 
                 }
-                saveAccessToken(savedUser, jwtToken);
-                saveRefreshToken(user, refreshToken);
-                AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
-                                .accessToken(jwtToken)
-                                .refreshToken(refreshToken)
-                                .build();
 
                 return new RegistrationResponse(authenticationResponse,
                                 "Please check your email to verify your account.");
@@ -129,7 +128,7 @@ public class AuthenticationService {
                                         .refreshToken(refreshToken)
                                         .build();
                 } else {
-                        throw new UserEmailNotAuthenticated("Please check your emails to verify your account");
+                        throw new UserEmailNotAuthenticated("Please check your email to verify your account");
                 }
         }
 
@@ -145,7 +144,7 @@ public class AuthenticationService {
         public boolean authenticateExistingEmail(String email) {
                 String userEmail = email;
                 var user = this.userRepository.findByEmail(userEmail).orElse(null);
-                return user != null ? true : false;
+                return user != null;
         }
 
         public boolean isAuthLinkExpired(Date lastResetPwdTime) {
@@ -208,38 +207,47 @@ public class AuthenticationService {
         }
 
         public void sendPasswordAuthenticationEmail(String email) throws Exception {
-                User user = userRepository.findByEmail(email)
-                                .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
-                Integer emailCount = user.getEmailAuthRequests();
-                if (emailCount != null) {
-                        emailCount += 1;
-                } else {
-                        emailCount = 1;
-                }
-                user.setEmailAuthRequests(emailCount);
-                emailCount = user.getEmailAuthRequests();
+                try {
+                        User user = userRepository.findByEmail(email)
+                                        .orElseThrow(() -> new UsernameNotFoundException(
+                                                        "Email or Password Not Found"));
+                        Integer emailCount = user.getEmailAuthRequests();
+                        if (user != null) {
 
-                if (emailCount <= 3) {
-                        String encryptedEmailToken = encryptEmail(email);
-                        MimeMessage message = javaMailSender.createMimeMessage();
-                        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-                        String emailText = String.format(
-                                        "Dear user, to authenticate your account, click the following link: http:/localhost:3000/activate-account/%s%n"
-                                                        + "If you didn't authorize this request, kindly ignore this email.%n"
-                                                        + "Thanks for your support!%n"
-                                                        + "The POPFLIX team",
-                                        encryptedEmailToken);
+                                throw new Exception("TESTING");
+                        }
+                        if (emailCount != null) {
+                                emailCount += 1;
+                        } else {
+                                emailCount = 1;
+                        }
+                        user.setEmailAuthRequests(emailCount);
+                        emailCount = user.getEmailAuthRequests();
 
-                        helper.setFrom("POPFLIX <popflix.help@gmail.com>");
-                        helper.setTo(email);
-                        helper.setSubject("Activate your account");
-                        helper.setText(emailText);
-                        user.setAccountAuthRequestDate(new Date());
+                        if (emailCount <= 3) {
+                                String encryptedEmailToken = encryptEmail(email);
+                                MimeMessage message = javaMailSender.createMimeMessage();
+                                MimeMessageHelper helper = new MimeMessageHelper(message, true);
+                                String emailText = String.format(
+                                                "Dear user, to authenticate your account, click the following link: http:/localhost:3000/activate-account/%s%n"
+                                                                + "If you didn't authorize this request, kindly ignore this email.%n"
+                                                                + "Thanks for your support!%n"
+                                                                + "The POPFLIX team",
+                                                encryptedEmailToken);
 
-                        userRepository.save(user);
-                        javaMailSender.send(message);
-                } else {
-                        throw new TooManyRequestsException("Too many requests, please try again later.");
+                                helper.setFrom("POPFLIX <popflix.help@gmail.com>");
+                                helper.setTo(email);
+                                helper.setSubject("Activate your account");
+                                helper.setText(emailText);
+                                user.setAccountAuthRequestDate(new Date());
+
+                                userRepository.save(user);
+                                javaMailSender.send(message);
+                        } else {
+                                throw new TooManyRequestsException("Too many requests, please try again later.");
+                        }
+                } catch (Exception e) {
+                        throw new BadRequestException("ERR_SEND_EMAIL");
                 }
         }
 

@@ -1,38 +1,30 @@
 package com.popflix.service;
 
 import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.popflix.auth.AuthenticationService;
 import com.popflix.config.customExceptions.TokenExpiredException;
 import com.popflix.config.customExceptions.TooManyRequestsException;
 import com.popflix.model.User;
 import com.popflix.repository.UserRepository;
-
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class PasswordService {
-    private UserRepository userRepository;
-    private JavaMailSender javaMailSender;
-    private PasswordEncoder passwordEncoder;
-    private AuthenticationService authService;
+    private final UserRepository userRepository;
+    private final JavaMailSender javaMailSender;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationService authService;
 
     @Value("${ERR_PWD_REQUEST_EXCEEDED}")
     private String errorPasswordRequestExceeded;
-
-    public boolean authenticateExistingEmail(String userEmail) {
-        var user = this.userRepository.findByEmail(userEmail).orElse(null);
-        return user != null;
-    }
 
     public void sendPasswordRecoveryEmail(String email) throws Exception {
         User user = userRepository.findByEmail(email)
