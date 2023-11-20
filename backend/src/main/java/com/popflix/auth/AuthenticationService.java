@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.popflix.config.JwtService;
 import com.popflix.config.customExceptions.BadRequestException;
+import com.popflix.config.customExceptions.ErrSendEmail;
 import com.popflix.config.customExceptions.TokenExpiredException;
 import com.popflix.config.customExceptions.TooManyRequestsException;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
@@ -212,9 +213,9 @@ public class AuthenticationService {
                                         .orElseThrow(() -> new UsernameNotFoundException(
                                                         "Email or Password Not Found"));
                         Integer emailCount = user.getEmailAuthRequests();
-                        if (user != null) {
 
-                                throw new Exception("TESTING");
+                        if (user != null) {
+                                throw new ErrSendEmail("TEST");
                         }
                         if (emailCount != null) {
                                 emailCount += 1;
@@ -246,8 +247,8 @@ public class AuthenticationService {
                         } else {
                                 throw new TooManyRequestsException("Too many requests, please try again later.");
                         }
-                } catch (Exception e) {
-                        throw new BadRequestException("ERR_SEND_EMAIL");
+                } catch (ErrSendEmail e) {
+                        throw new ErrSendEmail("ERR_SEND_EMAIL");
                 }
         }
 

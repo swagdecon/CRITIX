@@ -76,18 +76,12 @@ export default function SignUpFunctionality() {
 
     const userData = { firstName, lastName, email, password };
 
-    const hasFirstNameProfanity = filter.isProfane(userData["firstName"]);
-    const hasLastNameProfanity = filter.isProfane(userData["lastName"]);
-    const hasEmailProfanity = filter.isProfane(userData["email"]);
-    const hasPasswordProfanity = filter.isProfane(userData["password"]);
+    const hasProfanity = filter.isProfane(userData["firstName"]) || filter.isProfane(userData["lastName"]) || filter.isProfane(userData["email"]) || filter.isProfane(userData["password"]);
 
     if (
-      hasEmailProfanity ||
-      hasFirstNameProfanity ||
-      hasLastNameProfanity ||
-      hasPasswordProfanity
+      hasProfanity
     ) {
-      setProfanityErrorMessage("*Input(s) cannot contain profanity*");
+      setProfanityErrorMessage("Input(s) cannot contain profanity");
       setMessage("");
       return;
     } else {
@@ -103,23 +97,30 @@ export default function SignUpFunctionality() {
     });
 
     setResponse(response);
-    const data = await response.json();
-    console.log(data)
+
     if (response.ok) {
+      const data = await response.json();
       CookieManager.encryptCookie("accessToken", data.access_token, {
         expires: 0.5,
       });
       CookieManager.encryptCookie("refreshToken", data.refresh_token, {
         expires: 7,
       });
+      setMessage(data.message);
       resetInputFields()
-      setMessage(data.message)
-    } else if (response.text() === "ERR_SEND_EMAIL") {
-      setEmailErr(true)
     } else {
       const messageText = await response.text();
-      resetInputFields()
-      setMessage(messageText);
+
+      if (messageText === "ERR_SEND_EMAIL") {
+        console.log(messageText)
+        setEmailErr(true);
+        setMessage(" " + "There was an error sending your account activation email.");
+
+      } else {
+        setEmailErr(true);
+        resetInputFields();
+        setMessage(messageText);
+      }
     }
   }
 

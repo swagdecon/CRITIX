@@ -5,6 +5,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
+
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,15 +14,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.popflix.config.customExceptions.BadRequestException;
+import com.popflix.config.customExceptions.ErrSendEmail;
 import com.popflix.config.customExceptions.TokenExpiredException;
 import com.popflix.config.customExceptions.TooManyRequestsException;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
 import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
 import com.popflix.config.customExceptions.UserEmailNotAuthenticated;
 import com.popflix.service.PasswordService;
+
 import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,6 +53,8 @@ public class AuthenticationController {
                 } catch (UserEmailNotAuthenticated e) {
                         return ResponseEntity.badRequest().body(e.getMessage());
                 } catch (UserAlreadyExistsException e) {
+                        return ResponseEntity.badRequest().body(e.getMessage());
+                } catch (ErrSendEmail e) {
                         return ResponseEntity.badRequest().body(e.getMessage());
                 } catch (Exception e) {
                         System.out.println(e);
