@@ -8,9 +8,9 @@ import { Link } from "react-router-dom";
 
 export default function SignUpFunctionality() {
 
+  let displayErrMsgLogic;
   const [emailErr, setEmailErr] = useState(false)
   const filter = new Filter()
-  let content;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -52,16 +52,20 @@ export default function SignUpFunctionality() {
 
 
   if (response && response.status === 200) {
-    content = (
-      <div className={SignUpStyles["success-msg"]}>
-        {message}
+    displayErrMsgLogic = (
+      <div className={SignUpStyles["success-msg-wrapper"]}>
+        <div className={SignUpStyles["success-msg"]}>
+          {message}
+        </div>
       </div>
     );
   } else if (response && response.status !== 200) {
-    content = (
-      <div className={SignUpStyles["error-msg"]}>
-        <i className="fa fa-times-circle" />
-        {message}
+    displayErrMsgLogic = (
+      <div className={SignUpStyles["error-msg-wrapper"]}>
+        <div className={SignUpStyles["error-msg"]}>
+          <i className="fa fa-times-circle" />
+          {message}
+        </div>
       </div>
     );
   }
@@ -121,7 +125,7 @@ export default function SignUpFunctionality() {
 
   return (
     <form onSubmit={handleSubmit}>
-      {content}
+      {displayErrMsgLogic}
       <br />
       {emailErr ?
         <div className={SignUpStyles["reset-pwd"]}>

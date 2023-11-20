@@ -7,6 +7,8 @@ import MovieButton from "../Other/btn//MovieButton/Button.js";
 import CookieManager from "../../security/CookieManager";
 
 export default function LoginLogic() {
+
+  let displayErrMsgLogic;
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +25,27 @@ export default function LoginLogic() {
     setEmail("")
     setPassword("")
   }
+
+
+  if (response && response.status !== 200) {
+    displayErrMsgLogic = (
+      <div className={LoginStyles["error-msg-wrapper"]}>
+        <div className={LoginStyles["error-msg"]}>
+          <i className="fa fa-times-circle" />
+          {" "}{message}
+        </div>
+      </div>
+    )
+  } else if (profanityError) {
+    displayErrMsgLogic = (
+      <div className={LoginStyles["error-msg-wrapper"]}>
+        <div className={LoginStyles["error-msg"]}>
+          <i className="fa fa-times-circle" /> {profanityError}
+        </div>
+      </div>
+    )
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const userData = { email, password };
@@ -70,18 +93,7 @@ export default function LoginLogic() {
 
   return (
     <form onSubmit={handleSubmit}>
-      {response && response.status !== 200 ? (
-        <div className={LoginStyles["error-msg"]}>
-          <i className="fa fa-times-circle" />
-          {message}
-        </div>
-      ) : null}
-      <br />
-      {profanityError ? (
-        <div className={LoginStyles["error-msg"]}>
-          <i className="fa fa-times-circle" /> {profanityError}
-        </div>
-      ) : null}
+      {displayErrMsgLogic}
       <div>
         <input
           type="text"

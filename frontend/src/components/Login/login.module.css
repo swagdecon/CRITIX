@@ -177,14 +177,14 @@ h6 {
    color: white;
    border-radius: 50px;
 }
-
+.error-msg-wrapper, .success-msg-wrapper {
+  max-width: 200px;
+}
 .error-msg {
   margin: 10px 0;
   padding: 5px;
   padding-left: 5%;
   border-radius: 20px;
-  transform: translateY(-25%);
-  max-width: 100%;
   font-size: 13px;
   color: #d8000c;
   background-color: #ffbaba;
@@ -194,7 +194,6 @@ h6 {
   padding: 5px;
   padding-left: 5%;
   border-radius: 20px;
-  max-width: 200px;
   font-size: 13px;
   color: #ffffff;
   background-color: #0095ff6b;
