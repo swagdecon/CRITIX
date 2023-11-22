@@ -172,11 +172,15 @@ h6 {
   height: 100%;
 }
 
-.reset-pwd {
+.resend-pwd-auth {
    padding: 5%;
-   color: white;
+   color: white;  
    border-radius: 50px;
+   font-size: 14.2px;
+   background-color: #cecece48;
 }
+
+
 .error-msg-wrapper, .success-msg-wrapper {
   max-width: 200px;
 }

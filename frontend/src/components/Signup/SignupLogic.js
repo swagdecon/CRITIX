@@ -4,8 +4,6 @@ import Filter from "bad-words";
 import SignUpStyles from "../Login/login.module.css";
 import MovieButton from "../Other/btn/MovieButton/Button.js";
 import CookieManager from "../../security/CookieManager";
-import { Link } from "react-router-dom";
-
 export default function SignUpFunctionality() {
 
   let displayErrMsgLogic;
@@ -25,20 +23,24 @@ export default function SignUpFunctionality() {
     setPasswordVisible(!passwordVisible);
   }
 
-
-  async function resendAuthEmail(email) {
-    const response = await fetch(
-      "http://localhost:8080/v1/auth/send-password-authentication-email",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: email
-      }
-    );
-    if (response.ok) {
-      setMessage("")
+  const resendAuthEmail = async (userEmail) => {
+    try {
+      const response = await fetch(
+        "http://localhost:8080/v1/auth/send-password-authentication-email",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: userEmail }),
+        }
+      );
+      const text = await response.text();
+      setMessage(text);
+      resetInputFields()
+      setEmailErr(false)
+    } catch (error) {
+      setMessage("Error occurred: " + error);
     }
   }
 
@@ -110,35 +112,30 @@ export default function SignUpFunctionality() {
       resetInputFields()
     } else {
       const messageText = await response.text();
-
-      if (messageText === "ERR_SEND_EMAIL") {
-        console.log(messageText)
+      if (messageText === "There was an error sending your account activation email.") {
         setEmailErr(true);
-        setMessage(" " + "There was an error sending your account activation email.");
-
-      } else {
-        setEmailErr(true);
-        resetInputFields();
-        setMessage(messageText);
       }
+      setMessage(messageText);
     }
   }
 
   return (
     <form onSubmit={handleSubmit}>
       {displayErrMsgLogic}
-      <br />
       {emailErr ?
-        <div className={SignUpStyles["reset-pwd"]}>
-          <Link onClick={resendAuthEmail}>Resend authentication email</Link>
+        <div >
+          <button type="button" className={SignUpStyles["resend-pwd-auth"]} onClick={() => resendAuthEmail(email)}>Resend authentication email</button>
         </div>
-        : null}
+        : null
+      }
       <br />
-      {profanityErrorMessage ? (
-        <div className={SignUpStyles["error-msg"]}>
-          <i className="fa fa-times-circle" /> {profanityErrorMessage}
-        </div>
-      ) : null}
+      {
+        profanityErrorMessage ? (
+          <div className={SignUpStyles["error-msg"]}>
+            <i className="fa fa-times-circle" /> {profanityErrorMessage}
+          </div>
+        ) : null
+      }
       <div>
         <input
           type="email"
@@ -200,6 +197,6 @@ export default function SignUpFunctionality() {
         </span>
       </div>
       <MovieButton innerIcon="popcorn" onSubmit={handleSubmit} />
-    </form>
+    </form >
   );
 }

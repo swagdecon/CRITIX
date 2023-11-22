@@ -248,7 +248,7 @@ public class AuthenticationService {
                                 throw new TooManyRequestsException("Too many requests, please try again later.");
                         }
                 } catch (ErrSendEmail e) {
-                        throw new ErrSendEmail("ERR_SEND_EMAIL");
+                        throw new ErrSendEmail("There was an error sending your account activation email.");
                 }
         }
 
