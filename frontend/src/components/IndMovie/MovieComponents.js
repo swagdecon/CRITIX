@@ -41,11 +41,15 @@ function MovieTrailer(url) {
 
 
 function MovieAverage({ voteAverage }) {
-  const rating = parseFloat(voteAverage).toFixed(1);
-
-  voteAverage ? rating : "No Rating";
+  return (
+    <div className={IndMovieStyle.rating}>
+      {voteAverage ? `${voteAverage} kernels` : "No Rating"}
+    </div>
+  )
 }
-
+MovieAverage.propTypes = {
+  voteAverage: PropTypes.obj,
+};
 
 function MovieGenres({ genres }) {
   genres ?

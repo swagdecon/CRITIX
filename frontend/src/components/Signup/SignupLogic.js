@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import "../Login/login.module.css";
 import Filter from "bad-words";
 import SignUpStyles from "../Login/login.module.css";
@@ -23,12 +23,10 @@ export default function SignUpFunctionality() {
   };
 
   function resetInputFields() {
-    useEffect(() => {
-      setFirstName("")
-      setLastName("")
-      setEmail("")
-      setPassword("")
-    }, []);
+    setFirstName("")
+    setLastName("")
+    setEmail("")
+    setPassword("")
   }
 
   const resendEmail = () => {

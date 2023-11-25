@@ -53,7 +53,6 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
     );
     const reviewRef = useRef(null);
     const CLIENT_API_KEY = process.env.REACT_APP_CLIENT_API_KEY;
-    console.log(isSubmitDisabled)
     const reviewInputStyles = {
         borderRadius: "15px",
         fieldSet: {
@@ -82,7 +81,6 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
         }
     };
     async function onChange(token) {
-        console.log("Captcha token:", token);
         try {
             await axios.post(`http://localhost:8080/v1/auth/check-recaptcha-token`, {
                 recaptchaValue: token
@@ -192,7 +190,6 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                                         </div>
                                     )}
                                     <div className={IndReview["post-review-btn"]}>
-
                                         <Button
                                             variant="contained"
                                             endIcon={<MovieCreationOutlinedIcon />}

@@ -6,7 +6,11 @@
 .ind-movie-page-wrapper::-webkit-scrollbar {
   display: none;
 }
-
+.rating {
+  color: #0096ff;
+  text-transform: uppercase;
+  font-weight: 500;
+}
 .carousel-wrapper {
   transform: translateY(5%);
 }
@@ -73,10 +77,10 @@
   margin: 0;
 }
 
-/* .movie__score {
+.movie__score {
   color: #0096ff;
   font-size: 1.3rem;
-} */
+}
 
 .movie__year {
   font-size: 4.5rem;
@@ -213,6 +217,10 @@
  
   .movie_hero_info_container {
     order: 2; 
+  }
+  .movie__score {
+    display: flex;
+    justify-content: center;
   }
 }
 @media (max-width: 1000px) {
