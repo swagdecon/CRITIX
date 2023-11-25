@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import "../Login/login.module.css";
 import Filter from "bad-words";
 import SignUpStyles from "../Login/login.module.css";
 import MovieButton from "../Other/btn/MovieButton/Button.js";
 import CookieManager from "../../security/CookieManager";
-import { togglePasswordVisibility, resendAuthEmail, ErrorMessage } from "../../security/Shared";
+import { togglePasswordVisibility, resendAuthEmail, Message, ProfanityLogic } from "../../security/Shared";
 export default function SignUpFunctionality() {
 
   const [emailErr, setEmailErr] = useState(false)
-  const filter = new Filter()
+  const filter = useMemo(() => new Filter(), []);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState(false);
-  const [profanityErrorMessage, setProfanityErrorMessage] = useState("");
+  const [profanityError, setProfanityError] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [response, setResponse] = useState(null)
 
@@ -41,15 +41,11 @@ export default function SignUpFunctionality() {
     const userData = { firstName, lastName, email, password };
     const hasProfanity = filter.isProfane(userData["firstName"]) || filter.isProfane(userData["lastName"]) || filter.isProfane(userData["email"]) || filter.isProfane(userData["password"]);
 
-    if (
-      hasProfanity
-    ) {
-      setProfanityErrorMessage("Input(s) cannot contain profanity");
-      resetInputFields()
-      return;
-    } else {
-      setProfanityErrorMessage("");
+    if (ProfanityLogic(hasProfanity, setProfanityError)) {
+      // Stops creation of user
+      return
     }
+
 
     const response = await fetch("http://localhost:8080/v1/auth/register", {
       method: "POST",
@@ -82,7 +78,7 @@ export default function SignUpFunctionality() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <ErrorMessage response={response} message={message} style={SignUpStyles} />
+      <Message response={response} message={message} style={SignUpStyles} profanityError={profanityError} />
       {emailErr ?
         <div >
           <button type="button" className={SignUpStyles["resend-pwd-auth"]} onClick={resendEmail}>Resend authentication email</button>
@@ -90,13 +86,6 @@ export default function SignUpFunctionality() {
         : null
       }
       <br />
-      {
-        profanityErrorMessage ? (
-          <div className={SignUpStyles["error-msg"]}>
-            <i className="fa fa-times-circle" /> {profanityErrorMessage}
-          </div>
-        ) : null
-      }
       <div>
         <input
           type="email"

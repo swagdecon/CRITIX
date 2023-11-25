@@ -22,7 +22,6 @@ import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.popflix.config.JwtService;
-import com.popflix.config.customExceptions.BadRequestException;
 import com.popflix.config.customExceptions.ErrSendEmail;
 import com.popflix.config.customExceptions.TokenExpiredException;
 import com.popflix.config.customExceptions.TooManyRequestsException;
@@ -213,10 +212,6 @@ public class AuthenticationService {
                                         .orElseThrow(() -> new UsernameNotFoundException(
                                                         "Email or Password Not Found"));
                         Integer emailCount = user.getEmailAuthRequests();
-
-                        // if (user != null) {
-                        // throw new ErrSendEmail("TEST");
-                        // }
 
                         if (emailCount != null) {
                                 emailCount += 1;

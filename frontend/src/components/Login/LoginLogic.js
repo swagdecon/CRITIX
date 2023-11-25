@@ -5,10 +5,9 @@ import Filter from "bad-words";
 import LoginStyles from "../Login/login.module.css";
 import MovieButton from "../Other/btn//MovieButton/Button.js";
 import CookieManager from "../../security/CookieManager";
-
+import { resendAuthEmail, Message, togglePasswordVisibility, ProfanityLogic } from "../../security/Shared.js";
 export default function LoginLogic() {
 
-  let displayErrMsgLogic;
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,68 +18,22 @@ export default function LoginLogic() {
   const [emailErr, setEmailErr] = useState(false)
   const navigate = useNavigate()
 
+  const resendEmail = () => {
+    resendAuthEmail(email, setMessage, setEmailErr);
+  };
 
-  const resendAuthEmail = async (userEmail) => {
-    try {
-      const response = await fetch(
-        "http://localhost:8080/v1/auth/send-password-authentication-email",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email: userEmail }),
-        }
-      );
-      const text = await response.text();
-      setMessage(text);
-      resetInputFields()
-      setEmailErr(false)
-    } catch (error) {
-      setMessage("Error occurred: " + error);
-    }
-  }
-
-
-  function togglePasswordVisibility() {
-    setPasswordVisible(!passwordVisible);
-  }
-  function resetInputFields() {
-    setEmail("")
-    setPassword("")
-  }
-
-
-  if (response && response.status !== 200) {
-    displayErrMsgLogic = (
-      <div className={LoginStyles["error-msg-wrapper"]}>
-        <div className={LoginStyles["error-msg"]}>
-          <i className="fa fa-times-circle" />
-          {" "}{message}
-        </div>
-      </div>
-    )
-  } else if (profanityError) {
-    displayErrMsgLogic = (
-      <div className={LoginStyles["error-msg-wrapper"]}>
-        <div className={LoginStyles["error-msg"]}>
-          <i className="fa fa-times-circle" /> {profanityError}
-        </div>
-      </div>
-    )
-  }
+  const handleTogglePasswordVisibility = () => {
+    togglePasswordVisibility(passwordVisible, setPasswordVisible);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const userData = { email, password };
-    const hasEmailProfanity = filter.isProfane(userData["email"]);
-    const hasPasswordProfanity = filter.isProfane(userData["password"]);
+    const hasProfanity = filter.isProfane(userData["email"]) || filter.isProfane(userData["password"]);
 
-    if (hasEmailProfanity || hasPasswordProfanity) {
-      setProfanityError("*Input(s) cannot contain profanity*");
-      return;
-    } else {
-      setProfanityError("");
+    if (ProfanityLogic(hasProfanity, setProfanityError)) {
+      // Stops creation of user
+      return
     }
 
     const response = await fetch(
@@ -105,28 +58,27 @@ export default function LoginLogic() {
         expires: 7,
       });
       setMessage(data.message);
-      resetInputFields()
       navigate("/home")
     } else {
       const messageText = await response.text();
-      if (messageText === "There was an error sending your account activation email.") {
+
+      if (messageText === "Please check your email to verify your account") {
         setEmailErr(true);
       }
       setMessage(messageText);
-      resetInputFields()
     }
-    return;
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      {displayErrMsgLogic}
+      <Message response={response} message={message} style={LoginStyles} profanityError={profanityError} />
       {emailErr ?
         <div >
-          <button type="button" className={LoginStyles["resend-pwd-auth"]} onClick={() => resendAuthEmail(email)}>Resend authentication email</button>
+          <button type="button" className={LoginStyles["resend-pwd-auth"]} onClick={resendEmail}>Resend authentication email</button>
         </div>
         : null
       }
+      <br />
       <div>
         <input
           type="text"
@@ -153,7 +105,7 @@ export default function LoginLogic() {
           placeholder="Password"
           required
         />
-        <span className={LoginStyles.eye} onClick={togglePasswordVisibility}>
+        <span className={LoginStyles.eye} onClick={handleTogglePasswordVisibility}>
           <i
             id="hide"
             className={`bi bi-eye${passwordVisible ? "-slash" : ""}`}
@@ -161,6 +113,7 @@ export default function LoginLogic() {
         </span>
       </div>
       <MovieButton innerIcon="clapperboard" />
+      <br />
     </form>
   );
 }
