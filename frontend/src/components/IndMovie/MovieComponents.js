@@ -47,6 +47,7 @@ function MovieAverage({ voteAverage }) {
     </div>
   )
 }
+
 MovieAverage.propTypes = {
   voteAverage: PropTypes.obj,
 };

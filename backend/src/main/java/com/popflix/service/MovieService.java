@@ -27,7 +27,6 @@ import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.annotation.PostConstruct;
 
 @Service
-
 public class MovieService {
   static Dotenv dotenv = Dotenv.load();
   private String TMDB_API_KEY = dotenv.get("TMDB_API_KEY");
@@ -176,7 +175,7 @@ public class MovieService {
           movie.setReviews(reviewTexts);
         }
         if (movie.getVoteAverage() == null) {
-          float voteAverage = Math.round(movieDb.getVoteAverage() * 10);
+          Integer voteAverage = Math.round(movieDb.getVoteAverage() * 10);
           movie.setVoteAverage(Math.round(voteAverage));
         }
         if (movie.getVoteCount() == null) {
@@ -238,10 +237,10 @@ public class MovieService {
     movie.setTagline(movie.getTagline() != null ? movie.getTagline() : movieDb.getTagline());
     movie.setRevenue(movie.getRevenue() != null ? movie.getRevenue() : movieDb.getRevenue());
     movie.setRuntime(movie.getRuntime() != null ? movie.getRuntime() : movieDb.getRuntime());
-    movie.setVoteAverage(movie.getVoteAverage() != null ? Math.round(movie.getVoteAverage() * 10)
-        : Math.round(movieDb.getVoteAverage() * 10));
     movie.setVoteCount(movie.getVoteCount() != null ? movie.getVoteCount() : movieDb.getVoteCount());
     movie.setImdbId(movie.getImdbId() != null ? movie.getImdbId() : movieDb.getImdbID());
+    movie.setVoteAverage(movie.getVoteAverage() != null ? Math.round(movie.getVoteAverage() * 10)
+        : Math.round(movieDb.getVoteAverage() * 10));
 
     if (movie.getGenres() == null || movie.getGenres().isEmpty()) {
       // Get the movie genres

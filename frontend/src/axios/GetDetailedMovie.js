@@ -30,9 +30,11 @@ export default async function getDetailedMovie(endpoint, options, movieId) {
     }
     // Gets the top 5 actor names and ids from the API
     const actors = castResponse.value.data.cast.slice(0, 5).map((actor) => ({ id: actor.id, name: actor.name }));
+    const KernelRating = Math.round(detailsResponse.value.data.vote_average * 10);
+
     // gets the trailer url from the API
     const trailer = videoResponse.value.data.results.map((movie) => movie.key);
-    return { ...movie, ...detailsResponse.value.data, actors, trailer };
+    return { ...movie, ...detailsResponse.value.data, actors, trailer, vote_average: KernelRating };
   });
 
   // This code uses a Promise to retrieve detailed information about movies asynchronously and then filters out any rejected Promises. Finally, it maps over the fulfilled Promises to return an array of details for all the movies specified in the  details  array.
