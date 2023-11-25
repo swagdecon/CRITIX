@@ -214,9 +214,10 @@ public class AuthenticationService {
                                                         "Email or Password Not Found"));
                         Integer emailCount = user.getEmailAuthRequests();
 
-                        if (user != null) {
-                                throw new ErrSendEmail("TEST");
-                        }
+                        // if (user != null) {
+                        // throw new ErrSendEmail("TEST");
+                        // }
+
                         if (emailCount != null) {
                                 emailCount += 1;
                         } else {
@@ -225,7 +226,7 @@ public class AuthenticationService {
                         user.setEmailAuthRequests(emailCount);
                         emailCount = user.getEmailAuthRequests();
 
-                        if (emailCount <= 3) {
+                        if (emailCount <= 5) {
                                 String encryptedEmailToken = encryptEmail(email);
                                 MimeMessage message = javaMailSender.createMimeMessage();
                                 MimeMessageHelper helper = new MimeMessageHelper(message, true);

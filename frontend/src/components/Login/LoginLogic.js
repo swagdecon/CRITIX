@@ -16,7 +16,31 @@ export default function LoginLogic() {
   const [message, setMessage] = useState("");
   const filter = useMemo(() => new Filter(), []);
   const [response, setResponse] = useState(null)
+  const [emailErr, setEmailErr] = useState(false)
   const navigate = useNavigate()
+
+
+  const resendAuthEmail = async (userEmail) => {
+    try {
+      const response = await fetch(
+        "http://localhost:8080/v1/auth/send-password-authentication-email",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: userEmail }),
+        }
+      );
+      const text = await response.text();
+      setMessage(text);
+      resetInputFields()
+      setEmailErr(false)
+    } catch (error) {
+      setMessage("Error occurred: " + error);
+    }
+  }
+
 
   function togglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
@@ -85,6 +109,9 @@ export default function LoginLogic() {
       navigate("/home")
     } else {
       const messageText = await response.text();
+      if (messageText === "There was an error sending your account activation email.") {
+        setEmailErr(true);
+      }
       setMessage(messageText);
       resetInputFields()
     }
@@ -94,6 +121,12 @@ export default function LoginLogic() {
   return (
     <form onSubmit={handleSubmit}>
       {displayErrMsgLogic}
+      {emailErr ?
+        <div >
+          <button type="button" className={LoginStyles["resend-pwd-auth"]} onClick={() => resendAuthEmail(email)}>Resend authentication email</button>
+        </div>
+        : null
+      }
       <div>
         <input
           type="text"

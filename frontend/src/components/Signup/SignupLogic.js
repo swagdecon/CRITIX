@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../Login/login.module.css";
 import Filter from "bad-words";
 import SignUpStyles from "../Login/login.module.css";
 import MovieButton from "../Other/btn/MovieButton/Button.js";
 import CookieManager from "../../security/CookieManager";
+import { togglePasswordVisibility, resendAuthEmail, ErrorMessage } from "../../security/Shared";
 export default function SignUpFunctionality() {
 
-  let displayErrMsgLogic;
   const [emailErr, setEmailErr] = useState(false)
   const filter = new Filter()
   const [firstName, setFirstName] = useState("");
@@ -18,73 +18,34 @@ export default function SignUpFunctionality() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [response, setResponse] = useState(null)
 
-
-  function togglePasswordVisibility() {
-    setPasswordVisible(!passwordVisible);
-  }
-
-  const resendAuthEmail = async (userEmail) => {
-    try {
-      const response = await fetch(
-        "http://localhost:8080/v1/auth/send-password-authentication-email",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email: userEmail }),
-        }
-      );
-      const text = await response.text();
-      setMessage(text);
-      resetInputFields()
-      setEmailErr(false)
-    } catch (error) {
-      setMessage("Error occurred: " + error);
-    }
-  }
-
+  const handleTogglePasswordVisibility = () => {
+    togglePasswordVisibility(passwordVisible, setPasswordVisible);
+  };
 
   function resetInputFields() {
-    setFirstName("")
-    setLastName("")
-    setEmail("")
-    setPassword("")
+    useEffect(() => {
+      setFirstName("")
+      setLastName("")
+      setEmail("")
+      setPassword("")
+    }, []);
   }
 
-
-  if (response && response.status === 200) {
-    displayErrMsgLogic = (
-      <div className={SignUpStyles["success-msg-wrapper"]}>
-        <div className={SignUpStyles["success-msg"]}>
-          {message}
-        </div>
-      </div>
-    );
-  } else if (response && response.status !== 200) {
-    displayErrMsgLogic = (
-      <div className={SignUpStyles["error-msg-wrapper"]}>
-        <div className={SignUpStyles["error-msg"]}>
-          <i className="fa fa-times-circle" />
-          {message}
-        </div>
-      </div>
-    );
-  }
-
+  const resendEmail = () => {
+    resendAuthEmail(email, setMessage, setEmailErr);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const userData = { firstName, lastName, email, password };
-
     const hasProfanity = filter.isProfane(userData["firstName"]) || filter.isProfane(userData["lastName"]) || filter.isProfane(userData["email"]) || filter.isProfane(userData["password"]);
 
     if (
       hasProfanity
     ) {
       setProfanityErrorMessage("Input(s) cannot contain profanity");
-      setMessage("");
+      resetInputFields()
       return;
     } else {
       setProfanityErrorMessage("");
@@ -121,10 +82,10 @@ export default function SignUpFunctionality() {
 
   return (
     <form onSubmit={handleSubmit}>
-      {displayErrMsgLogic}
+      <ErrorMessage response={response} message={message} style={SignUpStyles} />
       {emailErr ?
         <div >
-          <button type="button" className={SignUpStyles["resend-pwd-auth"]} onClick={() => resendAuthEmail(email)}>Resend authentication email</button>
+          <button type="button" className={SignUpStyles["resend-pwd-auth"]} onClick={resendEmail}>Resend authentication email</button>
         </div>
         : null
       }
@@ -189,7 +150,7 @@ export default function SignUpFunctionality() {
           placeholder="Password"
           required
         />
-        <span className={SignUpStyles.eye} onClick={togglePasswordVisibility}>
+        <span className={SignUpStyles.eye} onClick={handleTogglePasswordVisibility}>
           <i
             id="hide"
             className={`bi bi-eye${passwordVisible ? "-slash" : ""}`}
