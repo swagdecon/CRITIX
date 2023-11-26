@@ -23,18 +23,15 @@ function TruncateDescription({ description }) {
   return description;
 }
 
-function MovieRuntime({ runtime }) {
-  runtime ? `${runtime} mins |` : "No Runtime Available";
-}
-
-
-function ParseDate({ date }) {
+function ParseYear({ date }) {
   const year = date ? date.split("-")[0] : null;
   return year;
 }
+
 function MovieTrailer(trailer) {
   trailer ? window.open(trailer) : null
 }
+
 function MovieAverage({ voteAverage }) {
   return (
     <div className={IndMovieStyle.rating}>
@@ -68,14 +65,14 @@ function ParseNumber(num) {
 }
 
 
-function EmbeddedMovieTrailer({ video }) {
+function EmbeddedMovieTrailer({ trailer }) {
 
   return (
     <div>
-      {video ? (
+      {trailer ? (
         <div className={IndMovieStyle.EmbeddedMovieTrailer}>
           <ReactPlayer
-            url={`https://www.youtube.com/watch?v=${video}`}
+            url={trailer}
             controls={true}
             playing={false}
             width="60vw"
@@ -95,7 +92,7 @@ function EmbeddedMovieTrailer({ video }) {
 }
 
 EmbeddedMovieTrailer.propTypes = {
-  video: PropTypes.arrayOf(PropTypes.string),
+  trailer: PropTypes.string,
 };
 
 function MovieDetails({
@@ -177,8 +174,7 @@ MovieDetails.propTypes = {
 
 export {
   TruncateDescription,
-  ParseDate,
-  MovieRuntime,
+  ParseYear,
   ParseNumber,
   MovieTrailer,
   MovieAverage,

@@ -1,7 +1,6 @@
 import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import {
-  MovieRuntime,
   MovieAverage,
   TruncateDescription,
   MovieTrailer,
@@ -12,7 +11,6 @@ import MovieCardStyle from "./moviecard.module.scss";
 export default function MovieCard({
   poster,
   rating,
-  runtime,
   genres,
   trailer,
   overview,
@@ -41,9 +39,6 @@ export default function MovieCard({
                 <ul className={MovieCardStyle["movie-gen"]}>
                   <li>
                     <MovieAverage voteAverage={rating} />
-                  </li>
-                  <li>
-                    <MovieRuntime runtime={runtime} />
                   </li>
                   <li>
                     <MovieCardGenres genres={genres} />

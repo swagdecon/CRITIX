@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import SearchStyle from "./Search.module.css";
 import axios from "axios";
 import PropTypes from "prop-types";
-import { ParseDate } from "../../IndMovie/MovieComponents";
+import { ParseYear } from "../../IndMovie/MovieComponents";
 import ReactPlaceholderTyping from 'react-placeholder-typing'
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
@@ -104,7 +104,7 @@ export default function Search(props) {
                   />
                   <div className={SearchStyle["result-title-data"]}>
                     <div className={SearchStyle["result-title"]}>
-                      {movie.title} <ParseDate date={movie.release_date} />
+                      {movie.title} <ParseYear date={movie.release_date} />
                     </div>
                     <div className={SearchStyle["result-actors"]}>
                       {movie.actors.slice(0, 3).map((actor, index) => (

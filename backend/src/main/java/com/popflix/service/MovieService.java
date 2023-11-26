@@ -64,7 +64,6 @@ public class MovieService {
     MovieDb movieDb = tmdbApi.getMovies().getMovie(movie.getId(), "en-US");
     String posterUrl = movieUrl + movieDb.getPosterPath();
     String backdropUrl = movieUrl + movieDb.getBackdropPath();
-
     movie.setAdult(movieDb.isAdult());
     movie.setTitle(movieDb.getOriginalTitle());
     movie.setOriginalLanguage(movieDb.getOriginalLanguage());

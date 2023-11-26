@@ -23,7 +23,7 @@ class MovieTest {
         String overview = "Movie overview";
         Float popularity = 7.8f;
         String posterUrl = "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg";
-        String releaseDate = "2023-05-30";
+        String releaseDate = "2023-11-12";
         String title = "Movie Title";
         String trailer = "https://www.youtube.com/watch?v=fui1f23";
         Integer voteAverage = 82;

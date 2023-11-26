@@ -10,7 +10,7 @@ import {
   MovieGenres,
   MovieTrailer,
   MovieAverage,
-  ParseDate,
+  ParseYear,
   EmbeddedMovieTrailer,
   MovieDetails,
 } from "../components/IndMovie/MovieComponents";
@@ -31,7 +31,6 @@ export default function IndMovie() {
   if (!dataLoaded && !recommendedMoviesLoaded) {
     return <LoadingPage />;
   }
-  console.log(movie.posterUrl)
   return (
     <div className={IndMovieStyle["ind-movie-page-wrapper"]}>
       <NavBar />
@@ -49,7 +48,7 @@ export default function IndMovie() {
             </div>
             <h2 className={IndMovieStyle.movie__title}>{movie.title}</h2>
             <div className={IndMovieStyle.movie__year}>
-              <ParseDate date={movie.releaseDate} />
+              <ParseYear date={movie.releaseDate} />
             </div>
             <MovieGenres genres={movie.genres} />
             <div className={IndMovieStyle.movie__description}>
@@ -96,7 +95,7 @@ export default function IndMovie() {
             />
           </div>
           <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-2"]}`}>
-            <EmbeddedMovieTrailer video={movie.trailer} />
+            <EmbeddedMovieTrailer trailer={movie.trailer} />
           </div>
           <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-3"]}`}>
             <MovieReviews

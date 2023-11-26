@@ -27,13 +27,10 @@ function MovieCarousel({ title, endpoint }) {
             <div className={MovieCardStyle.carouselHeader} />
             {chunk.map((movie) => (
               <div className={MovieCardStyle["main-card-container"]} key={movie.id}>
-                {console.log(movie)}
-
                 <Link to={`${endpoint}/${movie.id}`}>
                   <MovieCard
                     poster={movie.posterUrl}
                     rating={movie.voteAverage}
-                    runtime={movie.runtime}
                     genres={movie.genres}
                     overview={movie.overview}
                     actors={movie.actors}
