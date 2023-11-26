@@ -14,7 +14,7 @@ class MovieTest {
     void testMovieConstructorAndGetters() {
         ObjectId id = new ObjectId();
         Boolean adult = false;
-        String backdropPath = "/backdrop.jpg";
+        String backdropUrl = "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg";
         List<Integer> genreIds = Arrays.asList(1, 2, 3);
         List<String> genres = Arrays.asList("Action", "Adventure", "Sci-Fi");
         Integer movieId = 12345;
@@ -22,10 +22,10 @@ class MovieTest {
         String originalTitle = "Original Title";
         String overview = "Movie overview";
         Float popularity = 7.8f;
-        String posterPath = "/poster.jpg";
+        String posterUrl = "https://image.tmdb.org/t/p/original/aQPeznSu7XDTrrdCtT5eLiu52Yu.jpg";
         String releaseDate = "2023-05-30";
         String title = "Movie Title";
-        List<String> video = Arrays.asList("video1", "video2");
+        String trailer = "https://www.youtube.com/watch?v=fui1f23";
         Integer voteAverage = 82;
         Integer voteCount = 1000;
         String imdbId = "tt1234567";
@@ -39,15 +39,15 @@ class MovieTest {
         List<String> productionCompanies = Arrays.asList("Company 1", "Company 2");
         String movieStatus = "Released";
 
-        Movie movie = new Movie(id, adult, backdropPath, genreIds, genres, movieId, originalLanguage,
-                originalTitle, overview, popularity, posterPath, releaseDate, title, video, voteAverage, voteCount,
+        Movie movie = new Movie(id, adult, backdropUrl, genreIds, genres, movieId, originalLanguage,
+                originalTitle, overview, popularity, posterUrl, releaseDate, title, trailer, voteAverage, voteCount,
                 imdbId, budget, tagline, revenue, runtime, actors, actorImagePaths, reviews, productionCompanies,
                 movieStatus);
 
         // Assert individual properties
         assertEquals(id, movie.getMongoId());
         assertEquals(adult, movie.getAdult());
-        assertEquals(backdropPath, movie.getBackdropPath());
+        assertEquals(backdropUrl, movie.getBackdropUrl());
         assertEquals(genreIds, movie.getGenreIds());
         assertEquals(genres, movie.getGenres());
         assertEquals(movieId, movie.getId());
@@ -55,10 +55,10 @@ class MovieTest {
         assertEquals(originalTitle, movie.getOriginalTitle());
         assertEquals(overview, movie.getOverview());
         assertEquals(popularity, movie.getPopularity());
-        assertEquals(posterPath, movie.getPosterPath());
+        assertEquals(posterUrl, movie.getPosterUrl());
         assertEquals(releaseDate, movie.getReleaseDate());
         assertEquals(title, movie.getTitle());
-        assertEquals(video, movie.getVideo());
+        assertEquals(trailer, movie.getTrailer());
         assertEquals(voteAverage, movie.getVoteAverage());
         assertEquals(voteCount, movie.getVoteCount());
         assertEquals(imdbId, movie.getImdbId());

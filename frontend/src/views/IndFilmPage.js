@@ -28,107 +28,98 @@ export default function IndMovie() {
   const handleRecommendedMoviesLoaded = () => {
     setRecommendedMoviesLoaded(true);
   };
-
   if (!dataLoaded && !recommendedMoviesLoaded) {
     return <LoadingPage />;
   }
-
-  const movieUrl = "https://image.tmdb.org/t/p/original";
-  const movieBackdrop =
-    `url(${movieUrl}${movie.backdropPath})` ||
-    `url(${movieUrl}${movie.backdrop_path})`;
-  const moviePosterPath = `${movieUrl}${movie.posterPath}`;
-
+  console.log(movie.posterUrl)
   return (
     <div className={IndMovieStyle["ind-movie-page-wrapper"]}>
-      <body>
-        <NavBar />
-        <div
-          className={IndMovieStyle.background}
-          style={{
-            backgroundImage: movieBackdrop,
-          }}
-        />
-        <div className={IndMovieStyle["content-wrapper"]}>
-          <section className={IndMovieStyle["hero-content"]}>
-            <div className={IndMovieStyle.movie_hero_info_container}>
-              <div className={IndMovieStyle.movie__score}>
-                <MovieAverage voteAverage={movie.voteAverage} />
-              </div>
-              <h2 className={IndMovieStyle.movie__title}>{movie.title}</h2>
-              <div className={IndMovieStyle.movie__year}>
-                <ParseDate date={movie.releaseDate} />
-              </div>
-              <MovieGenres genres={movie.genres} />
-              <div className={IndMovieStyle.movie__description}>
-                {movie.overview}
-              </div>
-              {movie.video ? (
-                <div className={IndMovieStyle["btn-wrapper"]}>
-                  <MovieButton
-                    innerIcon="trailer"
-                    onClick={() => MovieTrailer(movie.video[0])}
-                  />
-                </div>
-              ) : null}
-              <div className={IndMovieStyle.ind_movie_review}>
-                <MovieReviews movieId={movie.id} placement="header" />
-              </div>
+      <NavBar />
+      <div
+        className={IndMovieStyle.background}
+        style={{
+          backgroundImage: `url(${movie.backdropUrl})`,
+        }}
+      />
+      <div className={IndMovieStyle["content-wrapper"]}>
+        <section className={IndMovieStyle["hero-content"]}>
+          <div className={IndMovieStyle.movie_hero_info_container}>
+            <div className={IndMovieStyle.movie__score}>
+              <MovieAverage voteAverage={movie.voteAverage} />
             </div>
-
-            {movie.posterPath ?
-              <div className={IndMovieStyle["flex-1"]}>
-                <img
-                  className={IndMovieStyle["hero-poster"]}
-                  src={moviePosterPath}
-                  alt="Movie Poster"
+            <h2 className={IndMovieStyle.movie__title}>{movie.title}</h2>
+            <div className={IndMovieStyle.movie__year}>
+              <ParseDate date={movie.releaseDate} />
+            </div>
+            <MovieGenres genres={movie.genres} />
+            <div className={IndMovieStyle.movie__description}>
+              {movie.overview}
+            </div>
+            {movie.trailer ? (
+              <div className={IndMovieStyle["btn-wrapper"]}>
+                <MovieButton
+                  innerIcon="trailer"
+                  onClick={() => MovieTrailer(movie.trailer)}
                 />
               </div>
-              : <img
+            ) : null}
+            <div className={IndMovieStyle.ind_movie_review}>
+              <MovieReviews movieId={movie.id} placement="header" />
+            </div>
+          </div>
+
+          {movie.posterUrl ?
+            <div className={IndMovieStyle["flex-1"]}>
+              <img
                 className={IndMovieStyle["hero-poster"]}
-                src={backupPoster}
-                alt="fallback poster"
-              />}
-          </section>
-          <section className={IndMovieStyle.mainContainer}>
-            <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-1"]}`}>
-              <MovieDetails
-                runtime={movie.runtime}
-                revenue={movie.revenue}
-                budget={movie.budget}
-                voteCount={movie.voteCount}
-                language={movie.originalLanguage}
-                productionCompanies={movie.productionCompanies}
-                movieStatus={movie.movieStatus}
-                releaseDate={movie.releaseDate}
+                src={movie.posterUrl}
+                alt="Movie Poster"
               />
             </div>
-            <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-2"]}`}>
-              <EmbeddedMovieTrailer video={movie.video} />
-            </div>
-            <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-3"]}`}>
-              <MovieReviews
-                voteAverage={movie.voteAverage}
-                movieId={movie.id}
-                placement="userRatingSection"
-              />
-            </div>
-            {movie.actors.length > 0 ?
-              <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-4"]}`}>
-                <div className={ActorStyle.CastMembers}>
-                  <MovieActors actors={movie.actors} />
-                </div>
-              </div>
-              : null}
-          </section>
-          <div className={`${IndMovieStyle["recommended-carousel-wrapper"]}`}>
-            <RecommendedCarousel
-              movieId={movie.id}
-              onRecommendedMoviesLoad={handleRecommendedMoviesLoaded}
+            : <img
+              className={IndMovieStyle["hero-poster"]}
+              src={backupPoster}
+              alt="fallback poster"
+            />}
+        </section>
+        <section className={IndMovieStyle.mainContainer}>
+          <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-1"]}`}>
+            <MovieDetails
+              runtime={movie.runtime}
+              revenue={movie.revenue}
+              budget={movie.budget}
+              voteCount={movie.voteCount}
+              language={movie.originalLanguage}
+              productionCompanies={movie.productionCompanies}
+              movieStatus={movie.movieStatus}
+              releaseDate={movie.releaseDate}
             />
           </div>
+          <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-2"]}`}>
+            <EmbeddedMovieTrailer video={movie.trailer} />
+          </div>
+          <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-3"]}`}>
+            <MovieReviews
+              voteAverage={movie.voteAverage}
+              movieId={movie.id}
+              placement="userRatingSection"
+            />
+          </div>
+          {movie.actors.length > 0 ?
+            <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-4"]}`}>
+              <div className={ActorStyle.CastMembers}>
+                <MovieActors actors={movie.actors} />
+              </div>
+            </div>
+            : null}
+        </section>
+        <div className={`${IndMovieStyle["recommended-carousel-wrapper"]}`}>
+          <RecommendedCarousel
+            movieId={movie.id}
+            onRecommendedMoviesLoad={handleRecommendedMoviesLoaded}
+          />
         </div>
-      </body>
+      </div>
     </div>
   );
 }

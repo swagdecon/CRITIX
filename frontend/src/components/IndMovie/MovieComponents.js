@@ -23,7 +23,6 @@ function TruncateDescription({ description }) {
   return description;
 }
 
-
 function MovieRuntime({ runtime }) {
   runtime ? `${runtime} mins |` : "No Runtime Available";
 }
@@ -33,13 +32,9 @@ function ParseDate({ date }) {
   const year = date ? date.split("-")[0] : null;
   return year;
 }
-
-
-function MovieTrailer(url) {
-  url ? window.open(`https://www.youtube.com/watch?v=${url}`) : null
+function MovieTrailer(trailer) {
+  trailer ? window.open(trailer) : null
 }
-
-
 function MovieAverage({ voteAverage }) {
   return (
     <div className={IndMovieStyle.rating}>
@@ -49,7 +44,7 @@ function MovieAverage({ voteAverage }) {
 }
 
 MovieAverage.propTypes = {
-  voteAverage: PropTypes.obj,
+  voteAverage: PropTypes.number,
 };
 
 function MovieGenres({ genres }) {

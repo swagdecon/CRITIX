@@ -14,14 +14,13 @@ export default function MovieCard({
   rating,
   runtime,
   genres,
-  video,
+  trailer,
   overview,
   actors,
 }) {
   const handleOnClick = useCallback(() => {
-    const firstVideo = Array.isArray(video) ? video[0] : video;
-    MovieTrailer(firstVideo);
-  }, [video]);
+    MovieTrailer(trailer);
+  }, [trailer]);
 
   return (
     <div className="container">
@@ -129,11 +128,7 @@ MovieCard.propTypes = {
   rating: PropTypes.number,
   runtime: PropTypes.number,
   overview: PropTypes.string,
-  video: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.array,
-    PropTypes.bool,
-  ]),
+  trailer: PropTypes.string,
   genres: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.array,

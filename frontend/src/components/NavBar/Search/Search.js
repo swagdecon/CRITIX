@@ -10,8 +10,14 @@ export default function Search(props) {
   const [query, setQuery] = useState("");
   const [detailedMovies, setDetailedMovies] = useState([]);
   const searchRef = useRef();
-  const placeholders = ['Uncover and critique cinematic brilliance', 'Unravel hidden gems, share your filmic insights', 'Find your new favorite movie'];
-
+  const placeholders = [
+    'Discover cinematic brilliance',
+    'Unearth hidden gems',
+    'Share your filmic insights',
+    'Find your next favorite movie',
+    'Explore cinematic wonders',
+    'Express your movie passion',
+  ];
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {

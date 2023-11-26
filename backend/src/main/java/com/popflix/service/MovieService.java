@@ -34,6 +34,7 @@ public class MovieService {
   private final MovieRepository movieRepository;
   private final MongoTemplate mongoTemplate;
   private final TmdbApi tmdbApi;
+  String movieUrl = "https://image.tmdb.org/t/p/original";
   private ScheduledExecutorService executor;
 
   public MovieService(MovieRepository movieRepository, MongoTemplate mongoTemplate) {
@@ -61,16 +62,19 @@ public class MovieService {
     Movie movie = new Movie();
     movie.setId(id);
     MovieDb movieDb = tmdbApi.getMovies().getMovie(movie.getId(), "en-US");
+    String posterUrl = movieUrl + movieDb.getPosterPath();
+    String backdropUrl = movieUrl + movieDb.getBackdropPath();
+
     movie.setAdult(movieDb.isAdult());
     movie.setTitle(movieDb.getOriginalTitle());
     movie.setOriginalLanguage(movieDb.getOriginalLanguage());
     movie.setOverview(movieDb.getOverview());
     movie.setPopularity(movieDb.getPopularity());
-    movie.setPosterPath(movieDb.getPosterPath());
-    movie.setBackdropPath(movieDb.getBackdropPath());
+    movie.setPosterUrl(posterUrl);
+    movie.setBackdropUrl(backdropUrl);
     movie.setImdbId(movieDb.getImdbID());
     movie.setReleaseDate(movieDb.getReleaseDate());
-    movie.setVideo(movie.getVideo());
+    movie.setTrailer(movie.getTrailer());
     movie.setVoteAverage(movie.getVoteAverage());
     movie.setVoteCount(movie.getVoteCount());
     updateTmdbMovieDetails(movie);
@@ -205,7 +209,7 @@ public class MovieService {
           movie.setMovieStatus(movieStatus);
         }
 
-        if (movie.getVideo() == null || movie.getVideo().isEmpty()) {
+        if (movie.getTrailer() == null || movie.getTrailer().isEmpty()) {
           List<Video> movieVideos = tmdbApi.getMovies().getVideos(movie.getId(), "en-US");
 
           // Extract the video key for the main trailer
@@ -217,11 +221,8 @@ public class MovieService {
             }
           }
 
-          // Set the main trailer video key for the movie
           if (mainTrailerKey != null) {
-            List<String> videoKeys = new ArrayList<>();
-            videoKeys.add(mainTrailerKey);
-            movie.setVideo(videoKeys);
+            movie.setTrailer("https://www.youtube.com/watch?v=" + mainTrailerKey);
           }
         }
 
@@ -306,7 +307,7 @@ public class MovieService {
       movie.setMovieStatus(movieStatus);
     }
 
-    if (movie.getVideo() == null || movie.getVideo().isEmpty()) {
+    if (movie.getTrailer() == null || movie.getTrailer().isEmpty()) {
       List<Video> movieVideos = tmdbApi.getMovies().getVideos(movie.getId(),
           "en-US");
 
@@ -321,9 +322,7 @@ public class MovieService {
 
       // Set the main trailer video key for the movie
       if (mainTrailerKey != null) {
-        List<String> videoKeys = new ArrayList<>();
-        videoKeys.add(mainTrailerKey);
-        movie.setVideo(videoKeys);
+        movie.setTrailer("https://www.youtube.com/watch?v=" + mainTrailerKey);
       }
     }
   }
@@ -353,16 +352,18 @@ public class MovieService {
 
       for (MovieDb movieDb : collection) {
         Movie movie = new Movie();
+        String posterUrl = movieUrl + movieDb.getPosterPath();
+        String backdropUrl = movieUrl + movieDb.getBackdropPath();
         movie.setId(movieDb.getId());
         movie.setAdult(movieDb.isAdult());
         movie.setTitle(movieDb.getOriginalTitle());
         movie.setOriginalLanguage(movieDb.getOriginalLanguage());
         movie.setOverview(movieDb.getOverview());
         movie.setPopularity(movieDb.getPopularity());
-        movie.setPosterPath(movieDb.getPosterPath());
-        movie.setBackdropPath(movieDb.getBackdropPath());
+        movie.setPosterUrl(posterUrl);
+        movie.setBackdropUrl(backdropUrl);
         movie.setReleaseDate(movieDb.getReleaseDate());
-        movie.setVideo(movie.getVideo());
+        movie.setTrailer(movie.getTrailer());
         movie.setVoteAverage(movie.getVoteAverage());
         movie.setVoteCount(movie.getVoteCount());
         movies.add(movie);

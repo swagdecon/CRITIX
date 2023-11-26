@@ -17,7 +17,7 @@ public class Movie {
     @Id
     private ObjectId mongoId;
     private Boolean adult;
-    private String backdropPath;
+    private String backdropUrl;
     private List<Integer> genreIds;
     private List<String> genres;
     private Integer id;
@@ -25,10 +25,10 @@ public class Movie {
     private String originalTitle;
     private String overview;
     private Float popularity;
-    private String posterPath;
+    private String posterUrl;
     private String releaseDate;
     private String title;
-    private List<String> video;
+    private String trailer;
     private Integer voteAverage;
     private Integer voteCount;
     private String imdbId;
