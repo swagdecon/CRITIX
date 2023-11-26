@@ -88,23 +88,18 @@ a {
 a:hover {
   color: inherit;
 }
-
-@media screen and (max-width:  720px) {
-  .Search input { 
-    width: 40%;
-  }
-  .Search input:focus { 
-    width: 20%;
+@media screen and (max-width: 720px) {
+  .Search {
+    max-width: 200px; /* Adjust max-width for smaller screens */
   }
 }
-@media screen and (max-width:  900px) {
-  .Search input:focus {
-    width: 40%;
+ @media screen and (max-width:  380px) {
+  .Search {
+    display: none;
   }
-}
+} 
 @media screen and (max-width:  1300px) {
   .result-actors {
     display: none;
   }
 }
-

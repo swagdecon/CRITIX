@@ -71,3 +71,8 @@
 .value-container {
   margin-top: 35%;
 }
+@media (max-width: 830px) {
+  .info-container-wrapper {
+    grid-template-columns: repeat(2, minmax(12.875em, 1fr));
+  }
+}

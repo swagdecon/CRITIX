@@ -230,6 +230,9 @@
   .ind_movie_review_title {
     justify-content: center;
    }
+   .movie__year {
+    font-size: 3rem;
+   }
 }
 @media (max-width: 500px) {
   .movie__title {

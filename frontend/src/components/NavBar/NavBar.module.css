@@ -4,7 +4,6 @@
     padding: 20px;
     position: fixed;
     width: 100%;
-    box-sizing: border-box;
     align-items: center;
     z-index: 2;
   }

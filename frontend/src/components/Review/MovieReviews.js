@@ -146,9 +146,7 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                     <div className={IndReview["user-review-wrapper"]}>
                         <div className={IndReview["user-info-wrapper"]} />
                         <div className={IndReview["textField-wrapper"]}>
-                            <div className={IndReview["input-slider"]}>
-                                <InputSlider onSliderChange={setReviewRating} />
-                            </div>
+                            <InputSlider onSliderChange={setReviewRating} />
                             <TextField
                                 size="small"
                                 id="outlined-multiline-flexible"

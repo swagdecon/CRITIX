@@ -37,12 +37,6 @@
 .textField-wrapper {
   flex: 1;
 }
-
-.input-slider {
-  justify-content: center;
-  align-self: start;
-}
-
 .user-info-wrapper {
   display: flex;
   flex-direction: column;
@@ -62,20 +56,19 @@
 .section-line {
   border-bottom: thin solid #8f8f8f;
 }
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 650px) {
   .MuiInputBase-input {
     display: none;
   }
   .textField-wrapper {
     order: 2;
-    min-width: 100%
+    min-width: 100%;
+    text-align: center;
   }
    .user-review-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0 auto;
-    min-height: 10vh;
   }
   .post-review-btn, .recaptcha-btn {
     justify-content: center;

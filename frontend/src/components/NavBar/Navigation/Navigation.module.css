@@ -1,21 +1,6 @@
-nav {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.Navigation {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .Navigation ul {
   display: flex;
-  align-items: center;
   margin: 0;
-  justify-content: center;
-  flex-wrap: wrap;
   color: white;
 }
 
