@@ -3,8 +3,10 @@ import SearchStyle from "./Search.module.css";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { ParseYear } from "../../IndMovie/MovieComponents";
+import useFetchData from "../../../security/FetchApiData";
 import ReactPlaceholderTyping from 'react-placeholder-typing'
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+
 
 export default function Search(props) {
   const [query, setQuery] = useState("");
@@ -18,6 +20,8 @@ export default function Search(props) {
     'Explore cinematic wonders',
     'Express your movie passion',
   ];
+
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -42,11 +46,15 @@ export default function Search(props) {
     };
   }, [query]);
 
+
   const searchMovies = async (searchQuery) => {
     if (!searchQuery) {
       setDetailedMovies([]);
       return;
     }
+    const queryAndOptions = `&query=${query}&language=en-US&page=1&include_adult=false`
+    const { data: movies } = useFetchData("/movies/search", queryAndOptions);
+    console.log(movies)
 
     const response = await axios.get(
       `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${searchQuery}&language=en-US&page=1&include_adult=false`

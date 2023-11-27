@@ -9,6 +9,7 @@ import MovieCard from "../../MovieCard/MovieCard.js";
 import useFetchData from "../../../security/FetchApiData.js";
 import MovieCarouselStyle from "./MovieCarousel.module.css"
 import { getChunkSize, useWindowResizeEffect, CarouselArrowStyles } from "../CarouselHelpers.js";
+
 function MovieCarousel({ title, endpoint }) {
   const { data: movies } = useFetchData(endpoint);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);

@@ -1,6 +1,9 @@
 package com.popflix.controller;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -62,5 +65,11 @@ public class MovieController {
     @GetMapping("/now_playing/{id}")
     public ResponseEntity<Optional<Movie>> getSingleNowPlayingMovie(@PathVariable Integer id) {
         return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(id, "now_playing"), HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Movie>> getSearchResults(@PathVariable String queryWithoptions)
+            throws IOException, InterruptedException, URISyntaxException {
+        return new ResponseEntity<List<Movie>>(movieService.searchResults(queryWithoptions), HttpStatus.OK);
     }
 }

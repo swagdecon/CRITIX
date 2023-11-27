@@ -1,20 +1,32 @@
 package com.popflix.service;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+
 import com.popflix.model.Movie;
 import com.popflix.model.Person;
 import com.popflix.repository.MovieRepository;
+
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.model.Credits;
 import info.movito.themoviedbapi.model.Genre;
@@ -372,6 +384,31 @@ public class MovieService {
         mongoTemplate.insert(movies, collectionName);
       }
     });
+  }
+
+  public List<Movie> searchResults(String queryWithoptions)
+      throws IOException, InterruptedException, URISyntaxException {
+
+    String url = "https://api.themoviedb.org/3/search/movie?api_key=" + TMDB_API_KEY + queryWithoptions;
+
+    HttpClient httpClient = HttpClient.newHttpClient();
+    HttpRequest request = HttpRequest.newBuilder()
+        .uri(new URI(url))
+        .GET()
+        .build();
+
+    HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+    if (response.statusCode() != 200) {
+      return null;
+    }
+
+    String responseBody = response.body();
+    System.out.println(responseBody);
+    // Process response as needed
+    // ...
+
+    return null; // Replace this with the processed data as needed
   }
 
   public class ImageUtility {
