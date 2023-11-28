@@ -2,16 +2,20 @@ import React, { useState, useEffect, useRef } from "react";
 import SearchStyle from "./Search.module.css";
 import axios from "axios";
 import PropTypes from "prop-types";
+import isExpired from "../../../security/IsTokenExpired";
+import { useNavigate } from "react-router-dom";
+import CookieManager from "../../../security/CookieManager";
 import { ParseYear } from "../../IndMovie/MovieComponents";
-import useFetchData from "../../../security/FetchApiData";
 import ReactPlaceholderTyping from 'react-placeholder-typing'
-const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
+const searchEndpoint = process.env.REACT_APP_SEARCH_ENDPOINT;
+const searchEndpointOptions = process.env.REACT_APP_SEARCH_ENDPOINT_OPTIONS;
 
 export default function Search(props) {
   const [query, setQuery] = useState("");
-  const [detailedMovies, setDetailedMovies] = useState([]);
+  const [movieResults, setMovieResults] = useState([]);
   const searchRef = useRef();
+  const navigate = useNavigate();
   const placeholders = [
     'Discover cinematic brilliance',
     'Unearth hidden gems',
@@ -25,12 +29,10 @@ export default function Search(props) {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
-        setDetailedMovies([]);
+        setMovieResults([]);
       }
     };
-
     document.addEventListener("click", handleClickOutside);
-
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
@@ -39,7 +41,7 @@ export default function Search(props) {
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
       searchMovies(query);
-    },);
+    }, 1000);
 
     return () => {
       clearTimeout(debounceTimer);
@@ -49,39 +51,29 @@ export default function Search(props) {
 
   const searchMovies = async (searchQuery) => {
     if (!searchQuery) {
-      setDetailedMovies([]);
+      setMovieResults([]);
       return;
     }
-    const queryAndOptions = `&query=${query}&language=en-US&page=1&include_adult=false`
-    const { data: movies } = useFetchData("/movies/search", queryAndOptions);
-    console.log(movies)
+    const formattedQuery = searchQuery.includes(' ') ? searchQuery.trim().split(' ').join('+') : searchQuery.trim();
+    const endpoint = `${searchEndpoint}=${formattedQuery}${searchEndpointOptions}`
 
-    const response = await axios.get(
-      `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${searchQuery}&language=en-US&page=1&include_adult=false`
-    );
-
-    const detailedMoviesArray = await Promise.all(
-      response.data.results.slice(0, 5).map(async (movie) => {
-        const detailedResponse = await axios.get(
-          `https://api.themoviedb.org/3/movie/${movie.id}?api_key=${API_KEY}&language=en-US`
-        );
-
-        const getTopActors = await axios.get(
-          `https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${API_KEY}`
-        );
-
-        const actors = getTopActors.data.cast
-          .slice(0, 5)
-          .map((actor) => actor.name);
-
-        return {
-          ...detailedResponse.data,
-          actors: actors,
-        };
-      })
-    );
-
-    setDetailedMovies(detailedMoviesArray);
+    const fetchData = async () => {
+      await isExpired(navigate);
+      let token = CookieManager.decryptCookie("accessToken");
+      try {
+        const response = await axios.get(endpoint, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setMovieResults(response.data);
+      } catch (error) {
+        console.log(error);
+        return
+      }
+    };
+    fetchData()
   };
 
 
@@ -97,33 +89,36 @@ export default function Search(props) {
         containerStyle={{ borderWidth: "0px" }}
       />
       <ul className={SearchStyle["search-results-list"]}>
-        {detailedMovies.map((movie) => {
-          if (movie.poster_path && movie.vote_average) {
+        {movieResults.map((movie) => {
+          if (movie.posterUrl && movie.voteAverage) {
             return (
               <a
                 href={`/movies/movie/${movie.id}`}
                 key={movie.id}
-                onClick={() => setDetailedMovies([])}
+                onClick={() => setMovieResults([])}
               >
                 <li className={SearchStyle["ind-search-result"]}>
                   <img
-                    src={`https://image.tmdb.org/t/p/w92${movie.poster_path}`}
+                    src={movie.posterUrl}
                     alt={movie.title}
                   />
                   <div className={SearchStyle["result-title-data"]}>
                     <div className={SearchStyle["result-title"]}>
-                      {movie.title} <ParseYear date={movie.release_date} />
+                      {movie.title}
+                      <div className={SearchStyle["result-release-date"]}>
+                        <span>({<ParseYear date={movie.releaseDate} />})</span>
+                      </div>
                     </div>
-                    <div className={SearchStyle["result-actors"]}>
+                    {/* <div className={SearchStyle["result-actors"]}>
                       {movie.actors.slice(0, 3).map((actor, index) => (
                         <span key={index}>
                           {index === 0 ? actor : ` | ${actor}`}
                         </span>
                       ))}
-                    </div>
+                    </div> */}
                   </div>
                   <div className={SearchStyle["result-rating"]}>
-                    {movie.vote_average.toFixed(1) * 10}
+                    {movie.voteAverage}
                   </div>
                 </li>
               </a>

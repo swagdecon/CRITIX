@@ -7,22 +7,23 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.popflix.model.Movie;
 import com.popflix.model.Person;
 import com.popflix.repository.MovieRepository;
@@ -42,11 +43,11 @@ import jakarta.annotation.PostConstruct;
 public class MovieService {
   static Dotenv dotenv = Dotenv.load();
   private String TMDB_API_KEY = dotenv.get("TMDB_API_KEY");
-  private static String DEFAULT_AVATAR_URL = dotenv.get("DEFAULT_AVATAR_URL");
   private final MovieRepository movieRepository;
   private final MongoTemplate mongoTemplate;
   private final TmdbApi tmdbApi;
   String movieUrl = "https://image.tmdb.org/t/p/original";
+  String miniPosterUrl = "https://image.tmdb.org/t/p/w92";
   private ScheduledExecutorService executor;
 
   public MovieService(MovieRepository movieRepository, MongoTemplate mongoTemplate) {
@@ -386,10 +387,8 @@ public class MovieService {
     });
   }
 
-  public List<Movie> searchResults(String queryWithoptions)
-      throws IOException, InterruptedException, URISyntaxException {
-
-    String url = "https://api.themoviedb.org/3/search/movie?api_key=" + TMDB_API_KEY + queryWithoptions;
+  public List<Movie> searchResults(String query) throws IOException, InterruptedException, URISyntaxException {
+    String url = "https://api.themoviedb.org/3/search/movie?api_key=" + TMDB_API_KEY + "&" + query;
 
     HttpClient httpClient = HttpClient.newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
@@ -400,28 +399,36 @@ public class MovieService {
     HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
     if (response.statusCode() != 200) {
-      return null;
+      return Collections.emptyList();
     }
 
     String responseBody = response.body();
-    System.out.println(responseBody);
-    // Process response as needed
-    // ...
 
-    return null; // Replace this with the processed data as needed
+    // Process the JSON response
+    ObjectMapper objectMapper = new ObjectMapper();
+    JsonNode rootNode = objectMapper.readTree(responseBody);
+    ArrayNode resultsNode = (ArrayNode) rootNode.get("results");
+
+    List<Movie> movies = new ArrayList<>();
+    int count = Math.min(resultsNode.size(), 5);
+
+    for (int i = 0; i < count; i++) {
+      JsonNode movieNode = resultsNode.get(i);
+      // Helper method to extract relevant movie details
+      Movie movie = extractMovieInfoFromApi(movieNode);
+      movies.add(movie);
+    }
+
+    return movies;
   }
 
-  public class ImageUtility {
-    public static String getImageUrl(String avatar) {
-      if (avatar != null && !avatar.equals("null")) {
-        if (avatar.contains("secure.gravatar.com")) {
-          return avatar.substring(1);
-        } else {
-          return "https://image.tmdb.org/t/p/w200" + avatar;
-        }
-      } else {
-        return DEFAULT_AVATAR_URL;
-      }
-    }
+  private Movie extractMovieInfoFromApi(JsonNode movieNode) {
+    Movie movie = new Movie();
+    movie.setId(movieNode.get("id").asInt());
+    movie.setTitle(movieNode.get("title").asText());
+    movie.setVoteAverage(movieNode.get("vote_average").asInt() * 10);
+    movie.setPosterUrl(miniPosterUrl + movieNode.get("poster_path").asText());
+    movie.setReleaseDate(movieNode.get("release_date").asText());
+    return movie;
   }
 }

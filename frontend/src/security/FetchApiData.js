@@ -3,10 +3,8 @@ import axios from "axios";
 import isExpired from "./IsTokenExpired";
 import { useNavigate } from "react-router-dom";
 import CookieManager from "./CookieManager";
-// import Logout from "./Logout";
 
-
-export default function useFetchData(endpoint, bodyParams) {
+export default function useFetchData(endpoint) {
   const [data, setData] = useState({});
   const [dataLoaded, setDataLoaded] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
@@ -16,14 +14,11 @@ export default function useFetchData(endpoint, bodyParams) {
   const fetchData = async () => {
     await isExpired(navigate);
     let token = CookieManager.decryptCookie("accessToken");
-    console.log("HERE ARE BODY PARAMS" + JSON.stringify({ bodyParams }))
     try {
       const response = await axios.get(endpoint, {
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(bodyParams),
       });
       setData(response.data);
       setDataLoaded(true);

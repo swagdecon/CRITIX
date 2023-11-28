@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.popflix.model.Movie;
@@ -67,9 +68,9 @@ public class MovieController {
         return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(id, "now_playing"), HttpStatus.OK);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<Movie>> getSearchResults(@PathVariable String queryWithoptions)
+    @GetMapping("/search/{params}")
+    public ResponseEntity<Object> getSearchResults(@PathVariable String params)
             throws IOException, InterruptedException, URISyntaxException {
-        return new ResponseEntity<List<Movie>>(movieService.searchResults(queryWithoptions), HttpStatus.OK);
+        return new ResponseEntity<Object>(movieService.searchResults(params), HttpStatus.OK);
     }
 }

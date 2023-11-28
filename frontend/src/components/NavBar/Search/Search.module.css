@@ -72,6 +72,12 @@
 .result-title {
   padding-bottom: 1vh;
 }
+.result-release-date {
+  color: #0096ff;
+  display: inline;
+  margin-left: 10px;
+  font-weight: bolder;
+}
 
 .result-rating {
   margin-left: auto;
