@@ -11,11 +11,14 @@ import ReactPlaceholderTyping from 'react-placeholder-typing'
 const searchEndpoint = process.env.REACT_APP_SEARCH_ENDPOINT;
 const searchEndpointOptions = process.env.REACT_APP_SEARCH_ENDPOINT_OPTIONS;
 
+
 export default function Search(props) {
   const [query, setQuery] = useState("");
   const [movieResults, setMovieResults] = useState([]);
   const searchRef = useRef();
   const navigate = useNavigate();
+  const miniPosterUrl = "https://image.tmdb.org/t/p/w92";
+
   const placeholders = [
     'Discover cinematic brilliance',
     'Unearth hidden gems',
@@ -24,6 +27,21 @@ export default function Search(props) {
     'Explore cinematic wonders',
     'Express your movie passion',
   ];
+  const fetchData = async (endpoint) => {
+    await isExpired(navigate);
+    let token = CookieManager.decryptCookie("accessToken");
+    try {
+      const response = await axios.get(endpoint, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setMovieResults(response.data);
+    } catch (error) {
+      console.log(error);
+      return
+    }
+  };
 
 
   useEffect(() => {
@@ -41,7 +59,7 @@ export default function Search(props) {
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
       searchMovies(query);
-    }, 1000);
+    }, 500);
 
     return () => {
       clearTimeout(debounceTimer);
@@ -57,23 +75,7 @@ export default function Search(props) {
     const formattedQuery = searchQuery.includes(' ') ? searchQuery.trim().split(' ').join('+') : searchQuery.trim();
     const endpoint = `${searchEndpoint}=${formattedQuery}${searchEndpointOptions}`
 
-    const fetchData = async () => {
-      await isExpired(navigate);
-      let token = CookieManager.decryptCookie("accessToken");
-      try {
-        const response = await axios.get(endpoint, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setMovieResults(response.data);
-      } catch (error) {
-        console.log(error);
-        return
-      }
-    };
-    fetchData()
+    fetchData(endpoint)
   };
 
 
@@ -99,7 +101,7 @@ export default function Search(props) {
               >
                 <li className={SearchStyle["ind-search-result"]}>
                   <img
-                    src={movie.posterUrl}
+                    src={`${miniPosterUrl}${movie.posterUrl}`}
                     alt={movie.title}
                   />
                   <div className={SearchStyle["result-title-data"]}>
@@ -123,8 +125,6 @@ export default function Search(props) {
                 </li>
               </a>
             );
-          } else {
-            return null;
           }
         })}
       </ul>

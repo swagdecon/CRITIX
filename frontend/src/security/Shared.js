@@ -10,9 +10,6 @@ export async function resendAuthEmail(
             "http://localhost:8080/v1/auth/send-password-authentication-email",
             {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
                 body: JSON.stringify({ email: userEmail }),
             }
         )
@@ -37,8 +34,6 @@ export function Message({ response, message, style, profanityError }) {
             </div>
         )
     } else if (response && !response.ok) {
-        console.log(response)
-        console.log("111")
         displayErrMsgLogic = (
             <div className={style["error-msg-wrapper"]}>
                 <div className={style["error-msg"]}>

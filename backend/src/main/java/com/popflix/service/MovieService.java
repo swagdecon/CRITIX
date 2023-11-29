@@ -8,6 +8,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -15,19 +16,17 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
+import java.util.function.BiConsumer;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.popflix.model.Movie;
 import com.popflix.model.Person;
 import com.popflix.repository.MovieRepository;
-
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.model.Credits;
 import info.movito.themoviedbapi.model.Genre;
@@ -47,13 +46,17 @@ public class MovieService {
   private final MongoTemplate mongoTemplate;
   private final TmdbApi tmdbApi;
   String movieUrl = "https://image.tmdb.org/t/p/original";
-  String miniPosterUrl = "https://image.tmdb.org/t/p/w92";
+
+  private HashMap<Integer, String> movieGenres;
+
   private ScheduledExecutorService executor;
 
   public MovieService(MovieRepository movieRepository, MongoTemplate mongoTemplate) {
     this.movieRepository = movieRepository;
     this.mongoTemplate = mongoTemplate;
     this.tmdbApi = new TmdbApi(TMDB_API_KEY);
+    this.movieGenres = createMovieGenresMap();
+
   }
 
   public Optional<Movie> findMovieById(Integer id) {
@@ -422,13 +425,121 @@ public class MovieService {
     return movies;
   }
 
+  public HashMap<Integer, String> createMovieGenresMap() {
+    HashMap<Integer, String> movieGenres = new HashMap<>();
+
+    movieGenres.put(28, "Action");
+    movieGenres.put(12, "Adventure");
+    movieGenres.put(16, "Animation");
+    movieGenres.put(35, "Comedy");
+    movieGenres.put(80, "Crime");
+    movieGenres.put(99, "Documentary");
+    movieGenres.put(18, "Drama");
+    movieGenres.put(10751, "Family");
+    movieGenres.put(14, "Fantasy");
+    movieGenres.put(36, "History");
+    movieGenres.put(27, "Horror");
+    movieGenres.put(10402, "Music");
+    movieGenres.put(9648, "Mystery");
+    movieGenres.put(10749, "Romance");
+    movieGenres.put(878, "Science Fiction");
+    movieGenres.put(10770, "TV Movie");
+    movieGenres.put(53, "Thriller");
+    movieGenres.put(10752, "War");
+    movieGenres.put(37, "Western");
+
+    return movieGenres;
+  }
+
   private Movie extractMovieInfoFromApi(JsonNode movieNode) {
     Movie movie = new Movie();
-    movie.setId(movieNode.get("id").asInt());
-    movie.setTitle(movieNode.get("title").asText());
-    movie.setVoteAverage(movieNode.get("vote_average").asInt() * 10);
-    movie.setPosterUrl(miniPosterUrl + movieNode.get("poster_path").asText());
-    movie.setReleaseDate(movieNode.get("release_date").asText());
+
+    setIntPropertyIfExists(movie, movieNode, "id", Movie::setId);
+    setStringPropertyIfExists(movie, movieNode, "title", Movie::setTitle);
+    setIntPropertyIfExistsAndMultiply(movie, movieNode, "vote_average", 10, Movie::setVoteAverage);
+    setStringPropertyIfExists(movie, movieNode, "poster_path", Movie::setPosterUrl);
+    setStringPropertyIfExists(movie, movieNode, "release_date", Movie::setReleaseDate);
+    setIntPropertyIfExists(movie, movieNode, "runtime", Movie::setRuntime);
+    setGenresPropertyIfExists(movie, movieNode, "genre_ids");
+    setStringPropertyIfExists(movie, movieNode, "overview", Movie::setOverview);
+    setStringPropertyIfExists(movie, movieNode, "video", Movie::setTrailer);
+
     return movie;
+  }
+
+  private void setIntPropertyIfExistsAndMultiply(Movie movie, JsonNode node, String propertyName, int multiplier,
+      BiConsumer<Movie, Integer> setter) {
+    JsonNode propertyNode = node.get(propertyName);
+    if (propertyNode != null && !propertyNode.isNull()) {
+      setter.accept(movie, propertyNode.asInt() * multiplier);
+    }
+  }
+
+  private void setIntPropertyIfExists(Movie movie, JsonNode node, String propertyName,
+      BiConsumer<Movie, Integer> setter) {
+    JsonNode propertyNode = node.get(propertyName);
+    if (propertyNode != null && !propertyNode.isNull()) {
+      setter.accept(movie, propertyNode.asInt());
+    }
+  }
+
+  private void setStringPropertyIfExists(Movie movie, JsonNode node, String propertyName,
+      BiConsumer<Movie, String> setter) {
+    JsonNode propertyNode = node.get(propertyName);
+    if (propertyNode != null && !propertyNode.isNull()) {
+      setter.accept(movie, propertyNode.asText());
+    }
+  }
+
+  private void setGenresPropertyIfExists(Movie movie, JsonNode node, String propertyName) {
+    JsonNode genresNode = node.get(propertyName);
+    if (genresNode != null && genresNode.isArray()) {
+      HashMap<Integer, String> movieGenres = createMovieGenresMap();
+      List<String> genresList = new ArrayList<>();
+      for (JsonNode genre : genresNode) {
+        if (genre.isInt()) {
+          int genreId = genre.asInt();
+          if (movieGenres.containsKey(genreId)) {
+            genresList.add(movieGenres.get(genreId));
+          }
+        }
+      }
+      movie.setGenres(genresList);
+    }
+  }
+
+  public List<Movie> recommendedMovies(Integer id, String options)
+      throws IOException, InterruptedException, URISyntaxException {
+    String url = "https://api.themoviedb.org/3/movie/" + id + "/recommendations?"
+        + options + "&api_key=" + TMDB_API_KEY;
+    HttpClient httpClient = HttpClient.newHttpClient();
+    HttpRequest request = HttpRequest.newBuilder()
+        .uri(new URI(url))
+        .GET()
+        .build();
+
+    HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    if (response.statusCode() != 200) {
+
+      return Collections.emptyList();
+    }
+
+    String responseBody = response.body();
+
+    // Process the JSON response
+    ObjectMapper objectMapper = new ObjectMapper();
+    JsonNode rootNode = objectMapper.readTree(responseBody);
+    ArrayNode resultsNode = (ArrayNode) rootNode.get("results");
+
+    List<Movie> movies = new ArrayList<>();
+    int count = Math.min(resultsNode.size(), 20);
+
+    for (int i = 0; i < count; i++) {
+      JsonNode movieNode = resultsNode.get(i);
+      // Helper method to extract relevant movie details
+      Movie movie = extractMovieInfoFromApi(movieNode);
+      movies.add(movie);
+    }
+    return movies;
   }
 }

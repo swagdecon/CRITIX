@@ -28,6 +28,7 @@ export default function IndMovie() {
   const handleRecommendedMoviesLoaded = () => {
     setRecommendedMoviesLoaded(true);
   };
+
   if (!dataLoaded && !recommendedMoviesLoaded) {
     return <LoadingPage />;
   }

@@ -73,4 +73,10 @@ public class MovieController {
             throws IOException, InterruptedException, URISyntaxException {
         return new ResponseEntity<Object>(movieService.searchResults(params), HttpStatus.OK);
     }
+
+    @GetMapping("/recommended/{id}/{options}")
+    public ResponseEntity<Object> getRecommendedMovies(@PathVariable Integer id, @PathVariable String options)
+            throws IOException, InterruptedException, URISyntaxException {
+        return new ResponseEntity<Object>(movieService.recommendedMovies(id, options), HttpStatus.OK);
+    }
 }

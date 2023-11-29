@@ -9,7 +9,6 @@ export default async function Logout(navigate) {
 
         const response = await fetch("http://localhost:8080/v1/auth/logout", {
             headers: {
-                "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
             },
         });
@@ -26,7 +25,6 @@ export default async function Logout(navigate) {
             let token = CookieManager.decryptCookie("accessToken");
             const response = await fetch("http://localhost:8080/v1/auth/logout", {
                 headers: {
-                    "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
             });

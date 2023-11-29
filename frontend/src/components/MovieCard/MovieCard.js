@@ -75,25 +75,28 @@ export default function MovieCard({
               className={`${MovieCardStyle["mr-grid"]} ${MovieCardStyle["actors-row"]}`}
             >
               <div className={MovieCardStyle.col1}>
-                <p className={MovieCardStyle["movie-actors"]}>
-                  <MovieCardActors actors={actors} />
-                </p>
+                {actors ?
+                  <p className={MovieCardStyle["movie-actors"]}>
+                    <MovieCardActors actors={actors} />
+                  </p> : null}
               </div>
             </div>
             <div
               className={`${MovieCardStyle["mr-grid"]} ${MovieCardStyle["action-row"]}`}
             >
               <div className={MovieCardStyle.col2}>
-                <button
-                  className={MovieCardStyle["watch-btn"]}
-                  type="button"
-                  onClick={handleOnClick}
-                >
-                  <h3>
-                    <i className="material-icons">&#xE037;</i>
-                    WATCH TRAILER
-                  </h3>
-                </button>
+                {trailer ?
+                  <button
+                    className={MovieCardStyle["watch-btn"]}
+                    type="button"
+                    onClick={handleOnClick}
+                  >
+                    <h3>
+                      <i className="material-icons">&#xE037;</i>
+                      WATCH TRAILER
+                    </h3>
+                  </button>
+                  : null}
               </div>
               <div
                 className={`${MovieCardStyle["col6"]} ${MovieCardStyle["action-btn"]}`}
