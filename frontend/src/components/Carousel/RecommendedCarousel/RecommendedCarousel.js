@@ -10,6 +10,9 @@ import PropTypes from "prop-types";
 import CookieManager from "../../../security/CookieManager";
 import MovieCard from "../../MovieCard/MovieCard.js";
 import { getChunkSize, useWindowResizeEffect, CarouselArrowStyles } from "../CarouselHelpers.js";
+const recommendedEndpoint = process.env.REACT_APP_RECOMMENDED_ENDPOINT;
+const recommendedEndpointOptions = process.env.REACT_APP_RECOMMENDED_ENDPOINT_OPTIONS;
+
 export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }) {
   const [recommendations, setRecommendations] = useState([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -17,7 +20,6 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
   const navigate = useNavigate();
 
   useWindowResizeEffect(setWindowWidth);
-
   useEffect(() => {
     const fetchData = async (endpoint) => {
       await isExpired(navigate);
@@ -34,9 +36,8 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
         console.log(error);
       }
     };
-    const url = "/movies/recommended/"
-    const options = "language=en-US&page=1"
-    const endpoint = `${url}${movieId}/${options}`
+    const endpoint = `${recommendedEndpoint}${movieId}/${recommendedEndpointOptions}`
+
     fetchData(endpoint)
   }, []);
   const movieChunks = chunk(recommendations, getChunkSize(windowWidth, breakpoints));

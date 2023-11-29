@@ -10,14 +10,13 @@ import ReactPlaceholderTyping from 'react-placeholder-typing'
 
 const searchEndpoint = process.env.REACT_APP_SEARCH_ENDPOINT;
 const searchEndpointOptions = process.env.REACT_APP_SEARCH_ENDPOINT_OPTIONS;
-
+const miniPosterUrl = process.env.REACT_APP_MINI_POSTER_URL;
 
 export default function Search(props) {
   const [query, setQuery] = useState("");
   const [movieResults, setMovieResults] = useState([]);
   const searchRef = useRef();
   const navigate = useNavigate();
-  const miniPosterUrl = "https://image.tmdb.org/t/p/w92";
 
   const placeholders = [
     'Discover cinematic brilliance',
