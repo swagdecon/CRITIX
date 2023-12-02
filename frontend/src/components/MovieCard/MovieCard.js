@@ -102,13 +102,15 @@ export default function MovieCard({
             <div
               className={`${MovieCardStyle["mr-grid"]} ${MovieCardStyle["action-row"]}`}
             >
-              <div
-                className={`${MovieCardStyle["col2"]} ${MovieCardStyle["action-row"]}`}
-                onClick={handleWatchTrailer} // This line allows clicking anywhere in the div to trigger the function
-              >
-                <button className={MovieCardStyle["watch-btn"]} type="button">
-                  <i className="material-icons">&#xE037;</i>
-                  <h3>WATCH TRAILER</h3>
+              <div className={MovieCardStyle.col2}>
+                <button
+                  className={MovieCardStyle["watch-btn"]}
+                  type="button"
+                  onClick={handleWatchTrailer}
+                >
+                  {/* <i className="material-icons">&#xE037;</i> */}
+
+                  WATCH TRAILER
                 </button>
               </div>
               <div
