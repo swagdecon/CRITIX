@@ -1,19 +1,16 @@
-import React, { useCallback } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import {
   MovieAverage,
   TruncateDescription,
   MovieTrailer
 } from "../IndMovie/MovieComponents.js";
-import CookieManager from "../../security/CookieManager.js";
-import isExpired from "../../security/IsTokenExpired.js";
+
 import { MovieCardActors, MovieCardGenres } from "./MovieCardComponents.js";
 import MovieCardStyle from "./moviecard.module.scss"
-import axios from "axios";
-// import { fetchTrailer } from "./MovieCardComponents.js";
-const trailerEndpoint = process.env.REACT_APP_TRAILER_ENDPOINT;
-import { useNavigate } from "react-router-dom";
 
+const trailerEndpoint = process.env.REACT_APP_TRAILER_ENDPOINT;
+import useFetchData from "../../security/FetchApiData.js";
 export default function MovieCard({
   movieId,
   poster,
@@ -22,22 +19,13 @@ export default function MovieCard({
   overview,
   actors,
 }) {
-  const navigate = useNavigate();
+  const { data: trailer, refetchData } = useFetchData(`${trailerEndpoint}${movieId}`);
 
-  const handleWatchTrailer = useCallback(async () => {
-    try {
-      await isExpired(navigate);
-      const token = CookieManager.decryptCookie("accessToken");
-      const response = await axios.get(`${trailerEndpoint}${movieId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      MovieTrailer(response.data)
-    } catch (error) {
-      console.error("Error fetching trailer:", error);
-    }
-  }, [movieId, navigate]);
+  function handleWatchTrailer() {
+    refetchData();
+    MovieTrailer(trailer)
+  }
+
   return (
     <div className="container">
       <div className={MovieCardStyle["cellphone-container"]}>
@@ -108,9 +96,10 @@ export default function MovieCard({
                   type="button"
                   onClick={handleWatchTrailer}
                 >
-                  {/* <i className="material-icons">&#xE037;</i> */}
-
-                  WATCH TRAILER
+                  <h3>
+                    <i className="material-icons">&#xE037;</i>
+                    WATCH TRAILER
+                  </h3>
                 </button>
               </div>
               <div

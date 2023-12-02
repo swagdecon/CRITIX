@@ -11,8 +11,10 @@ const defaultImage = "url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04
 function onMouseEnter(e, image) {
   const target = e.currentTarget;
   if (image) {
-    target.style.background = `url(https://image.tmdb.org/t/p/w500${image}) left center no-repeat `;
-    target.style.backgroundSize = "600px";
+    target.style.backgroundImage = `url(https://image.tmdb.org/t/p/w500${image})`;
+    target.style.backgroundPosition = 'left center';
+    target.style.backgroundRepeat = 'no-repeat';
+    target.style.backgroundSize = '600px';
   }
   target.querySelector("h3").style.opacity = 1;
   const icons = target.querySelectorAll(".fa");
@@ -24,8 +26,8 @@ function onMouseEnter(e, image) {
 function onMouseLeave(e, image, actorImage) {
   const target = e.currentTarget;
   if (image) {
-    target.style.background = actorImage;
-    target.style.backgroundSize = "300px";
+    target.style.backgroundImage = `url(https://image.tmdb.org/t/p/w500${actorImage})`;
+    target.style.backgroundSize = '300px';
   }
   target.querySelector("h3").style.opacity = 0;
   const icons = target.querySelectorAll(".fa");
@@ -33,6 +35,7 @@ function onMouseLeave(e, image, actorImage) {
     icon.style.opacity = 0;
   });
 }
+
 const CarouselArrowStyles = `
 .carousel-control-prev,
 .carousel-control-next {

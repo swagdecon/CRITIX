@@ -29,10 +29,24 @@ function ParseYear({ date }) {
   return year;
 }
 
-function MovieTrailer(trailer) {
-  console.log(trailer)
-  trailer ? window.open(trailer) : null
+function MovieTrailer(trailerUrl) {
+  console.log(trailerUrl);
+  if (trailerUrl) {
+    const a = document.createElement('a');
+    a.href = trailerUrl;
+    a.target = '_blank'; // Opens the link in a new tab/window
+    a.rel = 'noopener noreferrer'; // Security best practice for target="_blank"
+
+    // Simulate a click on the anchor element
+    const clickEvent = new MouseEvent('click', {
+      view: window,
+      bubbles: true,
+      cancelable: true,
+    });
+    a.dispatchEvent(clickEvent);
+  }
 }
+
 
 function MovieAverage({ voteAverage }) {
   return (

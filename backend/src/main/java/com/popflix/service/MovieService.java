@@ -591,8 +591,7 @@ public class MovieService {
     return movies;
   }
 
-  public String getTrailer(Integer id)
-      throws URISyntaxException, IOException, InterruptedException {
+  public String getTrailer(Integer id) throws URISyntaxException, IOException, InterruptedException {
     try {
       String url = "https://api.themoviedb.org/3/movie/" + id +
           "/videos?language=en-US"
@@ -610,20 +609,19 @@ public class MovieService {
       JSONObject jsonResponse = new JSONObject(responseBody);
 
       JSONArray resultsArray = jsonResponse.getJSONArray("results");
-      if (resultsArray.length() > 0) {
-        System.out.println(1);
-        JSONObject firstResult = resultsArray.getJSONObject(0);
-        System.out.println(firstResult);
-        String trailerKey = firstResult.getString("key");
-        System.out.println("https://www.youtube.com/watch?v=" + trailerKey);
 
+      if (resultsArray.length() > 0) {
+        JSONObject firstResult = resultsArray.getJSONObject(0);
+        String trailerKey = firstResult.getString("key");
         String trailer = "https://www.youtube.com/watch?v=" + trailerKey;
         return trailer;
+      } else {
+        System.out.println("No trailer found for the movie");
+        return null; // Indicate that no trailer was found
       }
-      System.out.println(responseBody);
     } catch (Exception e) {
-      System.out.println(e);
+      System.out.println("Something went wrong: " + e.getMessage());
+      return null; // Indicate an error occurred
     }
-    return null;
   }
 }

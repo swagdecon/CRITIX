@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
 import { chunk } from "lodash";
+import { Link } from "react-router-dom";
 import isExpired from "../../../security/IsTokenExpired";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -53,7 +54,7 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
                 className={RecommendedStyle["recommended-card-container"]}
                 key={`${i}-${j}`}
               >
-                <a href={`/movies/movie/${movie.id}`}>
+                <Link to={`/movies/movie/${movie.id}`}>
                   <MovieCard
                     movieId={movie.id}
                     poster={`https://image.tmdb.org/t/p/original${movie.posterUrl}`}
@@ -62,7 +63,7 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
                     genres={movie.genres}
                     overview={movie.overview}
                   />
-                </a>
+                </Link>
               </div>
             ))}
           </Carousel.Item>

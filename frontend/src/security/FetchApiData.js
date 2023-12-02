@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import isExpired from "./IsTokenExpired";
-import { useNavigate } from "react-router-dom";
-import CookieManager from "./CookieManager";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import isExpired from './IsTokenExpired';
+import CookieManager from './CookieManager';
+import { useNavigate } from 'react-router-dom';
 
 export default function useFetchData(endpoint) {
   const [data, setData] = useState({});
@@ -13,7 +13,7 @@ export default function useFetchData(endpoint) {
 
   const fetchData = async () => {
     await isExpired(navigate);
-    let token = CookieManager.decryptCookie("accessToken");
+    let token = CookieManager.decryptCookie('accessToken');
     try {
       const response = await axios.get(endpoint, {
         headers: {
@@ -25,7 +25,7 @@ export default function useFetchData(endpoint) {
       setRequestSent(true);
     } catch (error) {
       console.log(error);
-      return
+      return;
     }
   };
 

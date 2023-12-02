@@ -1,24 +1,24 @@
 import { useEffect } from "react";
 function getChunkSize(width, breakpoints) {
-    for (let i = 0; i < breakpoints.length; i++) {
-        if (width <= breakpoints[i]) {
-            return i + 1;
-        }
+  for (let i = 0; i < breakpoints.length; i++) {
+    if (width <= breakpoints[i]) {
+      return i + 1;
     }
-    return 5; // Default value if no breakpoint matches
+  }
+  return 5; // Default value if no breakpoint matches
 }
 const useWindowResizeEffect = (setWindowWidth) => {
-    useEffect(() => {
-        const handleResize = () => {
-            setWindowWidth(window.innerWidth);
-        };
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
 
-        window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize);
 
-        return () => {
-            window.removeEventListener("resize", handleResize);
-        };
-    }, [setWindowWidth]);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [setWindowWidth]);
 };
 
 const CarouselArrowStyles = `
