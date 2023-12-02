@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
+
 function MovieCardGenres({ genres }) {
   if (!genres || genres.length === 0) {
     return "No genres available";
@@ -38,4 +39,5 @@ function MovieCardActors({ actors }) {
     );
   }
 }
+
 export { MovieCardActors, MovieCardGenres };

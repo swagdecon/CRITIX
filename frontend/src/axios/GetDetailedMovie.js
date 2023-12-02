@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default async function getDetailedMovie(endpoint, options, movieId) {
+export default async function getDetailedMovie(endpoint, options) {
   const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
   const language = options && options.language ? options.language : "en-US";
@@ -14,7 +14,7 @@ export default async function getDetailedMovie(endpoint, options, movieId) {
     ...options
   });
   // if the movie id is provided, we will use it to get the details, with an endpoint, as well as any optional parameters, otherwise we will just use the endpoint to get a list
-  const response = await axios.get(`https://api.themoviedb.org/3/movie/${movieId ? movieId + "/" : ""}${endpoint}?${params.toString()}`);
+  const response = await axios.get(`https://api.themoviedb.org/3/movie/${endpoint}?${params.toString()}`);
   if (response.data.results.length === 0) {
     return null;
   }

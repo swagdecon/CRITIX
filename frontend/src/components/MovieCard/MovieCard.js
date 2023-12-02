@@ -3,23 +3,41 @@ import PropTypes from "prop-types";
 import {
   MovieAverage,
   TruncateDescription,
-  MovieTrailer,
+  MovieTrailer
 } from "../IndMovie/MovieComponents.js";
+import CookieManager from "../../security/CookieManager.js";
+import isExpired from "../../security/IsTokenExpired.js";
 import { MovieCardActors, MovieCardGenres } from "./MovieCardComponents.js";
-import MovieCardStyle from "./moviecard.module.scss";
+import MovieCardStyle from "./moviecard.module.scss"
+import axios from "axios";
+// import { fetchTrailer } from "./MovieCardComponents.js";
+const trailerEndpoint = process.env.REACT_APP_TRAILER_ENDPOINT;
+import { useNavigate } from "react-router-dom";
 
 export default function MovieCard({
+  movieId,
   poster,
   rating,
   genres,
-  trailer,
   overview,
   actors,
 }) {
-  const handleOnClick = useCallback(() => {
-    MovieTrailer(trailer);
-  }, [trailer]);
+  const navigate = useNavigate();
 
+  const handleWatchTrailer = useCallback(async () => {
+    try {
+      await isExpired(navigate);
+      const token = CookieManager.decryptCookie("accessToken");
+      const response = await axios.get(`${trailerEndpoint}${movieId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      MovieTrailer(response.data)
+    } catch (error) {
+      console.error("Error fetching trailer:", error);
+    }
+  }, [movieId, navigate]);
   return (
     <div className="container">
       <div className={MovieCardStyle["cellphone-container"]}>
@@ -84,19 +102,14 @@ export default function MovieCard({
             <div
               className={`${MovieCardStyle["mr-grid"]} ${MovieCardStyle["action-row"]}`}
             >
-              <div className={MovieCardStyle.col2}>
-                {trailer ?
-                  <button
-                    className={MovieCardStyle["watch-btn"]}
-                    type="button"
-                    onClick={handleOnClick}
-                  >
-                    <h3>
-                      <i className="material-icons">&#xE037;</i>
-                      WATCH TRAILER
-                    </h3>
-                  </button>
-                  : null}
+              <div
+                className={`${MovieCardStyle["col2"]} ${MovieCardStyle["action-row"]}`}
+                onClick={handleWatchTrailer} // This line allows clicking anywhere in the div to trigger the function
+              >
+                <button className={MovieCardStyle["watch-btn"]} type="button">
+                  <i className="material-icons">&#xE037;</i>
+                  <h3>WATCH TRAILER</h3>
+                </button>
               </div>
               <div
                 className={`${MovieCardStyle["col6"]} ${MovieCardStyle["action-btn"]}`}
@@ -122,6 +135,7 @@ export default function MovieCard({
 }
 
 MovieCard.propTypes = {
+  movieId: PropTypes.number,
   poster: PropTypes.string,
   rating: PropTypes.number,
   runtime: PropTypes.number,
@@ -137,4 +151,4 @@ MovieCard.propTypes = {
       character: PropTypes.string,
     })
   ),
-};
+}

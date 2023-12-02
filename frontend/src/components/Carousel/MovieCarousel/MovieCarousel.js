@@ -16,7 +16,6 @@ function MovieCarousel({ title, endpoint }) {
   const breakpoints = [979, 1471, 1971, 2463];
   useWindowResizeEffect(setWindowWidth);
   const movieChunks = chunk(movies, getChunkSize(windowWidth, breakpoints));
-
   return (
     <div className={MovieCarouselStyle["carousel-wrapper"]}>
       <div className={MovieCardStyle.titleWrapper}>

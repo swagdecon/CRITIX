@@ -17,6 +17,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -451,23 +455,67 @@ public class MovieService {
     return movieGenres;
   }
 
-  private Movie extractMovieInfoFromApi(JsonNode movieNode) {
+  private Movie extractMovieInfoFromApi(JsonNode movieNode)
+      throws IOException, InterruptedException, URISyntaxException {
     Movie movie = new Movie();
 
-    setIntPropertyIfExists(movie, movieNode, "id", Movie::setId);
-    setStringPropertyIfExists(movie, movieNode, "title", Movie::setTitle);
-    setIntPropertyIfExistsAndMultiply(movie, movieNode, "vote_average", 10, Movie::setVoteAverage);
-    setStringPropertyIfExists(movie, movieNode, "poster_path", Movie::setPosterUrl);
-    setStringPropertyIfExists(movie, movieNode, "release_date", Movie::setReleaseDate);
-    setIntPropertyIfExists(movie, movieNode, "runtime", Movie::setRuntime);
-    setGenresPropertyIfExists(movie, movieNode, "genre_ids");
-    setStringPropertyIfExists(movie, movieNode, "overview", Movie::setOverview);
-    setStringPropertyIfExists(movie, movieNode, "video", Movie::setTrailer);
-
+    setIntProperty(movie, movieNode, "id", Movie::setId);
+    setStringProperty(movie, movieNode, "title", Movie::setTitle);
+    setIntPropertyAndMultiply(movie, movieNode, "vote_average", 10, Movie::setVoteAverage);
+    setStringProperty(movie, movieNode, "poster_path", Movie::setPosterUrl);
+    setStringProperty(movie, movieNode, "release_date", Movie::setReleaseDate);
+    setIntProperty(movie, movieNode, "runtime", Movie::setRuntime);
+    setGenresProperty(movie, movieNode, "genre_ids");
+    setStringProperty(movie, movieNode, "overview", Movie::setOverview);
+    setStringProperty(movie, movieNode, "video", Movie::setTrailer);
+    // fetchMovieCredits(movie);
     return movie;
   }
 
-  private void setIntPropertyIfExistsAndMultiply(Movie movie, JsonNode node, String propertyName, int multiplier,
+  // Method to parse actors from the response body
+  private List<Person> parseActorsFromResponse(String responseBody) {
+    List<Person> actors = new ArrayList<>();
+    ObjectMapper objectMapper = new ObjectMapper();
+    try {
+      JsonNode rootNode = objectMapper.readTree(responseBody);
+      JsonNode castNode = rootNode.get("cast");
+
+      if (castNode != null && castNode.isArray()) {
+        for (JsonNode actorNode : castNode) {
+          // Extract relevant actor details and create Person objects
+          Person actor = new Person();
+          actor.setId(actorNode.get("id").asInt());
+          actor.setName(actorNode.get("name").asText());
+          actors.add(actor);
+        }
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return actors;
+  }
+
+  // private void fetchMovieCredits(Movie movie) throws IOException,
+  // InterruptedException, URISyntaxException {
+  // String creditsUrl = "https://api.themoviedb.org/3/movie/" + movie.getId() +
+  // "/credits?api_key=" + TMDB_API_KEY;
+  // HttpClient httpClient = HttpClient.newHttpClient();
+  // HttpRequest request = HttpRequest.newBuilder()
+  // .uri(new URI(creditsUrl))
+  // .GET()
+  // .build();
+
+  // HttpResponse<String> response = httpClient.send(request,
+  // HttpResponse.BodyHandlers.ofString());
+
+  // if (response.statusCode() == 200) {
+  // String responseBody = response.body();
+  // List<Person> actors = parseActorsFromResponse(responseBody);
+  // movie.setActors(actors);
+  // }
+  // }
+
+  private void setIntPropertyAndMultiply(Movie movie, JsonNode node, String propertyName, int multiplier,
       BiConsumer<Movie, Integer> setter) {
     JsonNode propertyNode = node.get(propertyName);
     if (propertyNode != null && !propertyNode.isNull()) {
@@ -475,7 +523,7 @@ public class MovieService {
     }
   }
 
-  private void setIntPropertyIfExists(Movie movie, JsonNode node, String propertyName,
+  private void setIntProperty(Movie movie, JsonNode node, String propertyName,
       BiConsumer<Movie, Integer> setter) {
     JsonNode propertyNode = node.get(propertyName);
     if (propertyNode != null && !propertyNode.isNull()) {
@@ -483,7 +531,7 @@ public class MovieService {
     }
   }
 
-  private void setStringPropertyIfExists(Movie movie, JsonNode node, String propertyName,
+  private void setStringProperty(Movie movie, JsonNode node, String propertyName,
       BiConsumer<Movie, String> setter) {
     JsonNode propertyNode = node.get(propertyName);
     if (propertyNode != null && !propertyNode.isNull()) {
@@ -491,7 +539,7 @@ public class MovieService {
     }
   }
 
-  private void setGenresPropertyIfExists(Movie movie, JsonNode node, String propertyName) {
+  private void setGenresProperty(Movie movie, JsonNode node, String propertyName) {
     JsonNode genresNode = node.get(propertyName);
     if (genresNode != null && genresNode.isArray()) {
       HashMap<Integer, String> movieGenres = createMovieGenresMap();
@@ -541,5 +589,41 @@ public class MovieService {
       movies.add(movie);
     }
     return movies;
+  }
+
+  public String getTrailer(Integer id)
+      throws URISyntaxException, IOException, InterruptedException {
+    try {
+      String url = "https://api.themoviedb.org/3/movie/" + id +
+          "/videos?language=en-US"
+          + "&api_key=" + TMDB_API_KEY;
+      HttpClient httpClient = HttpClient.newHttpClient();
+      HttpRequest request = HttpRequest.newBuilder()
+          .uri(new URI(url))
+          .GET()
+          .build();
+
+      HttpResponse<String> response = httpClient.send(request,
+          HttpResponse.BodyHandlers.ofString());
+
+      String responseBody = response.body();
+      JSONObject jsonResponse = new JSONObject(responseBody);
+
+      JSONArray resultsArray = jsonResponse.getJSONArray("results");
+      if (resultsArray.length() > 0) {
+        System.out.println(1);
+        JSONObject firstResult = resultsArray.getJSONObject(0);
+        System.out.println(firstResult);
+        String trailerKey = firstResult.getString("key");
+        System.out.println("https://www.youtube.com/watch?v=" + trailerKey);
+
+        String trailer = "https://www.youtube.com/watch?v=" + trailerKey;
+        return trailer;
+      }
+      System.out.println(responseBody);
+    } catch (Exception e) {
+      System.out.println(e);
+    }
+    return null;
   }
 }

@@ -6,6 +6,7 @@ import "../Carousel/MovieCarousel/MovieCarousel.module.css";
 import GlassCard from "./GlassCard";
 import NoTrailer from "./NoTrailerAvailable.png"
 import GlassStyle from "./GlassCard.module.css"
+
 function TruncateDescription({ description }) {
   const words = description.split(" ");
 
@@ -29,6 +30,7 @@ function ParseYear({ date }) {
 }
 
 function MovieTrailer(trailer) {
+  console.log(trailer)
   trailer ? window.open(trailer) : null
 }
 

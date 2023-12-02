@@ -18,8 +18,8 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const breakpoints = [979, 1471, 1971, 2463];
   const navigate = useNavigate();
-
   useWindowResizeEffect(setWindowWidth);
+
   useEffect(() => {
     const fetchData = async (endpoint) => {
       await isExpired(navigate);
@@ -42,6 +42,7 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
   }, []);
   const movieChunks = chunk(recommendations, getChunkSize(windowWidth, breakpoints));
 
+
   return (
     <div className={MovieCardStyle["carousel-wrapper"]}>
       <Carousel className={RecommendedStyle["carousel-recommended"]} indicators={false} interval={null}>
@@ -54,14 +55,12 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
               >
                 <a href={`/movies/movie/${movie.id}`}>
                   <MovieCard
+                    movieId={movie.id}
                     poster={`https://image.tmdb.org/t/p/original${movie.posterUrl}`}
                     rating={movie.voteAverage}
                     runtime={movie.runtime}
                     genres={movie.genres}
                     overview={movie.overview}
-                  // Cannot get this information without a ridiculous number of extra api requests
-                  // actors={movie.actors}
-                  // video={movie.trailer}
                   />
                 </a>
               </div>
