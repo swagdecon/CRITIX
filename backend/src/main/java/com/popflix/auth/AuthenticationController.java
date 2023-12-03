@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.popflix.config.customExceptions.BadRequestException;
 import com.popflix.config.customExceptions.ErrSendEmail;
 import com.popflix.config.customExceptions.TokenExpiredException;
@@ -78,10 +79,10 @@ public class AuthenticationController {
         }
 
         @PostMapping("/refresh-token")
-        public void refreshToken(
+        public JsonNode refreshToken(
                         HttpServletRequest request, HttpServletResponse response)
                         throws StreamWriteException, DatabindException, IOException, java.io.IOException {
-                authService.refreshToken(request, response);
+                return authService.refreshToken(request, response);
 
         }
 

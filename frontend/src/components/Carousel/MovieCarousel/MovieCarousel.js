@@ -6,12 +6,11 @@ import { chunk } from "lodash";
 import PropTypes from "prop-types";
 import MovieCardStyle from "../../MovieCard/moviecard.module.scss";
 import MovieCard from "../../MovieCard/MovieCard.js";
-import useFetchData from "../../../security/FetchApiData.js";
 import MovieCarouselStyle from "./MovieCarousel.module.css"
 import { getChunkSize, useWindowResizeEffect, CarouselArrowStyles } from "../CarouselHelpers.js";
 
-function MovieCarousel({ title, endpoint }) {
-  const { data: movies } = useFetchData(endpoint);
+function MovieCarousel({ title, movies, endpoint }) {
+
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const breakpoints = [979, 1471, 1971, 2463];
   useWindowResizeEffect(setWindowWidth);
@@ -29,6 +28,7 @@ function MovieCarousel({ title, endpoint }) {
               <div className={MovieCardStyle["main-card-container"]} key={movie.id}>
                 <Link to={`${endpoint}/${movie.id}`}>
                   <MovieCard
+                    movieId={movie.id}
                     poster={movie.posterUrl}
                     rating={movie.voteAverage}
                     genres={movie.genres}
@@ -53,4 +53,4 @@ MovieCarousel.propTypes = {
   movies: PropTypes.array,
 };
 
-export default React.memo(MovieCarousel);
+export default MovieCarousel;

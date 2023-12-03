@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import IndMovieStyle from "../components/IndMovie/ind_movie.module.css";
 import ActorStyle from "../components/Carousel/ActorCarousel/ActorCarousel.module.css";
@@ -19,20 +19,36 @@ import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel";
 import LoadingPage from "./LoadingPage";
 import MovieButton from "../components/Other/btn/MovieButton/Button";
 import fetchData from "../security/FetchApiData";
-
+import isTokenExpired from "../security/IsTokenExpired.js";
 export default function IndMovie() {
   const { id } = useParams();
-  const { data: movie, dataLoaded: dataLoaded } = fetchData(id);
-  const [recommendedMoviesLoaded, setRecommendedMoviesLoaded] = useState(false);
+  const [movie, setMovie] = useState(null)
+  const [reviews, setReviews] = useState(null)
 
-  const handleRecommendedMoviesLoaded = () => {
-    setRecommendedMoviesLoaded(true);
-  };
+  const [isLoading, setIsLoading] = useState(true);
 
-  if (!dataLoaded && !recommendedMoviesLoaded) {
-    return <LoadingPage />;
-  }
-  return (
+  useEffect(() => {
+    async function fetchBackendData() {
+      setIsLoading(true);
+      try {
+        await isTokenExpired();
+        const movies = await fetchData(id);
+        const reviews = await fetchData(`http://localhost:8080/review/${id}`)
+        setMovie(movies);
+        setReviews(reviews)
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchBackendData();
+  }, []);
+
+  console.log(movie)
+  return isLoading || !movie ? (
+    <LoadingPage />
+  ) : (
     <div className={IndMovieStyle["ind-movie-page-wrapper"]}>
       <NavBar />
       <div
@@ -64,7 +80,7 @@ export default function IndMovie() {
               </div>
             ) : null}
             <div className={IndMovieStyle.ind_movie_review}>
-              <MovieReviews movieId={movie.id} placement="header" />
+              <MovieReviews movieId={movie.id} reviews={reviews} placement="header" />
             </div>
           </div>
 
@@ -102,6 +118,7 @@ export default function IndMovie() {
             <MovieReviews
               voteAverage={movie.voteAverage}
               movieId={movie.id}
+              reviews={reviews}
               placement="userRatingSection"
             />
           </div>
@@ -116,7 +133,6 @@ export default function IndMovie() {
         <div className={`${IndMovieStyle["recommended-carousel-wrapper"]}`}>
           <RecommendedCarousel
             movieId={movie.id}
-            onRecommendedMoviesLoad={handleRecommendedMoviesLoaded}
           />
         </div>
       </div>

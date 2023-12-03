@@ -7,7 +7,6 @@ import ReactTextCollapse from "react-text-collapse/dist/ReactTextCollapse";
 import Filter from "bad-words";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import useFetchData from "../../security/FetchApiData";
 import IndReview from "./Review.module.css";
 import IndMovieStyle from "../IndMovie/ind_movie.module.css";
 import ReviewSection from "./ReviewList/ReviewSection";
@@ -15,7 +14,6 @@ import PercentageRatingCircle from "./Rating/PercentageCircle/PercentageCircle";
 import InputSlider from "./Rating/Slider/Slider.js";
 import CookieManager from "../../security/CookieManager";
 import ReCAPTCHA from "react-google-recaptcha";
-
 const TEXT_COLLAPSE_OPTIONS = {
     collapse: false,
     collapseText: <span style={{ cursor: "pointer" }}>...show more</span>,
@@ -28,13 +26,11 @@ const TEXT_COLLAPSE_OPTIONS = {
     }
 };
 
-const MovieReviews = ({ voteAverage, movieId, placement }) => {
-    const { data: userReviews, dataLoaded, refetchData } = useFetchData(
-        useMemo(() => `http://localhost:8080/review/${movieId}`, [movieId])
-    );
+const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
 
-    const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
-    const decodedToken = useMemo(() => jwt_decode(token), [token]);
+    let token = CookieManager.decryptCookie('accessToken');
+    const decodedToken = jwt_decode(token);
+
     const filter = useMemo(() => new Filter(), []);
     const [reviewRating, setReviewRating] = useState(0);
     const [reviewContent, setReviewContent] = useState("");
@@ -83,6 +79,9 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
     async function onChange(token) {
         try {
             await axios.post(`http://localhost:8080/v1/auth/check-recaptcha-token`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
                 recaptchaValue: token
             }).then(res =>
                 setRecaptchaResult(res.data.success))
@@ -111,7 +110,6 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                     content: reviewContent,
                 }, {
                     headers: {
-                        "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
                     },
                 })
@@ -120,7 +118,6 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                     setReviewContent("");
                     setHasSubmittedReview(true);
                     setDisabledInputLogic(true);
-                    refetchData();
                 })
                 .catch((error) => {
                     if (error.response.status === 400 && error.response.data === "User already submitted a review for this movie.") {
@@ -128,14 +125,14 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                     }
                 });
         }
-    }, [movieId, decodedToken, reviewRating, reviewContent, token, refetchData, hasReviewProfanity]);
+    }, [movieId, decodedToken, reviewRating, reviewContent, token, hasReviewProfanity]);
 
     useEffect(() => {
         if (reviewRef.current) {
             const reviewHeight = reviewRef.current.offsetHeight;
             setMaxHeight(reviewHeight);
         }
-    }, [userReviews]);
+    }, []);
 
     const renderUserRatingSection = () => {
         const percentageVoteAverage = useMemo(() => voteAverage || null, [voteAverage]);
@@ -205,8 +202,8 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                             <PercentageRatingCircle percentageRating={percentageVoteAverage} />
                         </div>
                     </div>
-                    {dataLoaded && userReviews && userReviews.length >= 2 && (
-                        <ReviewSection reviews={userReviews} />
+                    {reviews && reviews.length >= 2 && (
+                        <ReviewSection reviews={reviews} />
                     )}
                 </div>
             </div>
@@ -215,12 +212,12 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
     };
 
     const renderHeaderSection = () => {
-        if (userReviews.length > 0) {
+        if (reviews.length > 0) {
             return (
                 <div className={IndMovieStyle.review__wrapper} ref={reviewRef}>
                     <h3 className={IndMovieStyle.ind_review_title}>Reviews</h3>
-                    {dataLoaded &&
-                        Object.keys(userReviews)
+                    {
+                        Object.keys(reviews)
                             .slice(0, 2)
                             .map((key, index) => (
                                 <ReactTextCollapse
@@ -228,7 +225,7 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                                     options={{ ...TEXT_COLLAPSE_OPTIONS, maxHeight }}
                                 >
                                     <p className={IndMovieStyle.review__description}>
-                                        {userReviews[key].content}
+                                        {reviews[key].content}
                                     </p>
                                     <br />
                                 </ReactTextCollapse>
@@ -250,6 +247,7 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
 
 MovieReviews.propTypes = {
     voteAverage: PropTypes.number,
+    reviews: PropTypes.object,
     movieId: PropTypes.number,
     placement: PropTypes.string
 };

@@ -21,6 +21,7 @@ import java.util.function.BiConsumer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -606,22 +607,37 @@ public class MovieService {
           HttpResponse.BodyHandlers.ofString());
 
       String responseBody = response.body();
+      System.out.println(responseBody);
       JSONObject jsonResponse = new JSONObject(responseBody);
 
-      JSONArray resultsArray = jsonResponse.getJSONArray("results");
-
-      if (resultsArray.length() > 0) {
-        JSONObject firstResult = resultsArray.getJSONObject(0);
-        String trailerKey = firstResult.getString("key");
-        String trailer = "https://www.youtube.com/watch?v=" + trailerKey;
-        return trailer;
+      if (jsonResponse.has("results")) {
+        JSONArray resultsArray = jsonResponse.getJSONArray("results");
+        return extractTrailerUrl(resultsArray);
       } else {
-        System.out.println("No trailer found for the movie");
-        return null; // Indicate that no trailer was found
+        System.out.println("No 'results' found in the response");
+        return null; // Indicate no results were found
       }
+    } catch (JSONException e) {
+      System.out.println("JSON Exception: " + e.getMessage());
+      return null; // Indicate an error occurred during JSON parsing
     } catch (Exception e) {
       System.out.println("Something went wrong: " + e.getMessage());
       return null; // Indicate an error occurred
     }
   }
+
+  private String extractTrailerUrl(JSONArray resultsArray) {
+    for (int i = 0; i < resultsArray.length(); i++) {
+      JSONObject item = resultsArray.getJSONObject(i);
+
+      // Check if the type is 'Trailer'
+      if (item.getString("type").equals("Trailer") && item.getString("site").equals("YouTube")) {
+        String trailerKey = item.getString("key");
+        return "https://www.youtube.com/watch?v=" + trailerKey;
+      }
+    }
+    System.out.println("No relevant trailer found for the movie");
+    return null; // Indicate that no trailer was found
+  }
+
 }

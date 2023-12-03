@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import SearchStyle from "./Search.module.css";
 import axios from "axios";
 import PropTypes from "prop-types";
-import isExpired from "../../../security/IsTokenExpired";
-import { useNavigate } from "react-router-dom";
 import CookieManager from "../../../security/CookieManager";
 import { ParseYear } from "../../IndMovie/MovieComponents";
 import ReactPlaceholderTyping from 'react-placeholder-typing'
@@ -16,7 +14,7 @@ export default function Search(props) {
   const [query, setQuery] = useState("");
   const [movieResults, setMovieResults] = useState([]);
   const searchRef = useRef();
-  const navigate = useNavigate();
+
 
   const placeholders = [
     'Discover cinematic brilliance',
@@ -27,7 +25,6 @@ export default function Search(props) {
     'Express your movie passion',
   ];
   const fetchData = async (endpoint) => {
-    await isExpired(navigate);
     let token = CookieManager.decryptCookie("accessToken");
     try {
       const response = await axios.get(endpoint, {

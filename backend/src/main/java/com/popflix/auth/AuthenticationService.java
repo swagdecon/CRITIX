@@ -9,6 +9,7 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import javax.json.Json;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -18,8 +19,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.popflix.config.JwtService;
 import com.popflix.config.customExceptions.ErrSendEmail;
@@ -309,34 +313,44 @@ public class AuthenticationService {
                 tokenRepository.save(token);
         }
 
-        public void refreshToken(
+        public JsonNode refreshToken(
                         HttpServletRequest request,
                         HttpServletResponse response)
-                        throws IOException, StreamWriteException, DatabindException, java.io.IOException {
+                        throws IOException, JsonProcessingException {
                 final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
                 final String refreshToken;
                 final String userEmail;
+
                 if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                        return;
+                        return null; // Returning null since JsonNode cannot be null
                 }
+
                 refreshToken = authHeader.substring(7);
                 userEmail = jwtService.extractUsername(refreshToken);
+
                 if (userEmail != null) {
                         var user = this.userRepository.findByEmail(userEmail)
                                         .orElseThrow();
+
                         if (jwtService.isTokenValid(refreshToken, user)) {
                                 revokeAllUserTokens(user);
                                 var accessToken = jwtService.generateToken(user);
                                 var newRefreshToken = jwtService.generateRefreshToken(user, user.getLastLoginTime());
-
                                 saveAccessToken(user, accessToken);
                                 saveRefreshToken(user, newRefreshToken);
+
                                 var authResponse = AuthenticationResponse.builder()
                                                 .accessToken(accessToken)
                                                 .refreshToken(newRefreshToken)
                                                 .build();
-                                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+
+                                // Convert AuthenticationResponse to JsonNode
+                                ObjectMapper mapper = new ObjectMapper();
+                                String authResponseJson = mapper.writeValueAsString(authResponse);
+
+                                return mapper.readTree(authResponseJson);
                         }
                 }
+                return null;
         }
 }

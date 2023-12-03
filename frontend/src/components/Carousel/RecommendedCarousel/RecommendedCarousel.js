@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
 import { chunk } from "lodash";
 import { Link } from "react-router-dom";
-import isExpired from "../../../security/IsTokenExpired";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import RecommendedStyle from "./RecommendedCarousel.module.css";
 import MovieCardStyle from "../../MovieCard/moviecard.module.scss"
 import PropTypes from "prop-types";
@@ -18,12 +16,10 @@ export default function RecommendedCarousel({ movieId, onRecommendedMoviesLoad }
   const [recommendations, setRecommendations] = useState([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const breakpoints = [979, 1471, 1971, 2463];
-  const navigate = useNavigate();
   useWindowResizeEffect(setWindowWidth);
 
   useEffect(() => {
     const fetchData = async (endpoint) => {
-      await isExpired(navigate);
       let token = CookieManager.decryptCookie("accessToken");
       try {
         const response = await axios.get(endpoint, {

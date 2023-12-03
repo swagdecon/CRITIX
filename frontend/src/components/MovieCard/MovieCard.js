@@ -3,28 +3,28 @@ import PropTypes from "prop-types";
 import {
   MovieAverage,
   TruncateDescription,
-  MovieTrailer
+  // MovieTrailer
 } from "../IndMovie/MovieComponents.js";
 
 import { MovieCardActors, MovieCardGenres } from "./MovieCardComponents.js";
 import MovieCardStyle from "./moviecard.module.scss"
 
-const trailerEndpoint = process.env.REACT_APP_TRAILER_ENDPOINT;
-import useFetchData from "../../security/FetchApiData.js";
+// const trailerEndpoint = process.env.REACT_APP_TRAILER_ENDPOINT;
+// import fetchData from "../../security/FetchApiData.js";
 export default function MovieCard({
-  movieId,
+  // movieId,
   poster,
   rating,
   genres,
   overview,
   actors,
 }) {
-  const { data: trailer, refetchData } = useFetchData(`${trailerEndpoint}${movieId}`);
+  // const { fetchDataInternal } = fetchData();
 
-  function handleWatchTrailer() {
-    refetchData();
-    MovieTrailer(trailer)
-  }
+  // function handleWatchTrailer() {
+  //   const { data: trailer } = fetchDataInternal(`${trailerEndpoint}${movieId}`);
+  //   MovieTrailer(trailer)
+  // }
 
   return (
     <div className="container">
@@ -90,7 +90,7 @@ export default function MovieCard({
             <div
               className={`${MovieCardStyle["mr-grid"]} ${MovieCardStyle["action-row"]}`}
             >
-              <div className={MovieCardStyle.col2}>
+              {/* <div className={MovieCardStyle.col2}>
                 <button
                   className={MovieCardStyle["watch-btn"]}
                   type="button"
@@ -101,7 +101,7 @@ export default function MovieCard({
                     WATCH TRAILER
                   </h3>
                 </button>
-              </div>
+              </div> */}
               <div
                 className={`${MovieCardStyle["col6"]} ${MovieCardStyle["action-btn"]}`}
               >
