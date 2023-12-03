@@ -1,20 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import SearchStyle from "./Search.module.css";
-import axios from "axios";
 import PropTypes from "prop-types";
-import CookieManager from "../../../security/CookieManager";
 import { ParseYear } from "../../IndMovie/MovieComponents";
 import ReactPlaceholderTyping from 'react-placeholder-typing'
-
+import isTokenExpired from "../../../security/IsTokenExpired";
+import fetchData from "../../../security/FetchApiData";
 const searchEndpoint = process.env.REACT_APP_SEARCH_ENDPOINT;
-const searchEndpointOptions = process.env.REACT_APP_SEARCH_ENDPOINT_OPTIONS;
 const miniPosterUrl = process.env.REACT_APP_MINI_POSTER_URL;
 
 export default function Search(props) {
   const [query, setQuery] = useState("");
   const [movieResults, setMovieResults] = useState([]);
   const searchRef = useRef();
-
 
   const placeholders = [
     'Discover cinematic brilliance',
@@ -24,21 +21,6 @@ export default function Search(props) {
     'Explore cinematic wonders',
     'Express your movie passion',
   ];
-  const fetchData = async (endpoint) => {
-    let token = CookieManager.decryptCookie("accessToken");
-    try {
-      const response = await axios.get(endpoint, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setMovieResults(response.data);
-    } catch (error) {
-      console.log(error);
-      return
-    }
-  };
-
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -62,19 +44,23 @@ export default function Search(props) {
     };
   }, [query]);
 
-
   const searchMovies = async (searchQuery) => {
     if (!searchQuery) {
       setMovieResults([]);
       return;
     }
-    const formattedQuery = searchQuery.includes(' ') ? searchQuery.trim().split(' ').join('+') : searchQuery.trim();
-    const endpoint = `${searchEndpoint}=${formattedQuery}${searchEndpointOptions}`
 
-    fetchData(endpoint)
-  };
+    try {
+      await isTokenExpired();
+      const formattedQuery = searchQuery.includes(' ') ? searchQuery.trim().split(' ').join('+') : searchQuery.trim();
+      const endpoint = `${searchEndpoint}=${formattedQuery}`;
 
-
+      const search = await fetchData(endpoint);
+      setMovieResults(search);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
 
   return (
     <form onSubmit={props.onSubmit} id="search" className={SearchStyle.Search} ref={searchRef}>

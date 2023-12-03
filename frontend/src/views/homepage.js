@@ -6,13 +6,15 @@ import LoadingPage from "./LoadingPage.js";
 import HomePage from "../misc/HomePage.module.css";
 import fetchData from "../security/FetchApiData.js";
 import isTokenExpired from "../security/IsTokenExpired.js";
+const popularMovieEndpoint = process.env.REACT_APP_POPULAR_MOVIES_ENDPOINT;
+const topRatedMovieEndpoint = process.env.REACT_APP_TOP_RATED_MOVIES_ENDPOINT;
+const upcomingMovieEndpoint = process.env.REACT_APP_UPCOMING_MOVIES_ENDPOINT;
+
 function Homepage() {
   const [isLoading, setIsLoading] = useState(true);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [moviesData, setMoviesData] = useState(null);
-  const popularMovieEndpoint = "/movies/popular"
-  const topRatedMovieEndpoint = "/movies/top_rated"
-  const upcomingMovieEndpoint = "/movies/upcoming"
+
   const handleLoad = useCallback(() => {
     setIsLoading(false);
   }, []);
@@ -34,10 +36,11 @@ function Homepage() {
       setIsLoading(true);
       try {
         await isTokenExpired();
-        const trendingMovies = await fetchData(popularMovieEndpoint);
-        const topRatedMovies = await fetchData(topRatedMovieEndpoint);
-        const upcomingMovies = await fetchData(upcomingMovieEndpoint);
-
+        const [trendingMovies, topRatedMovies, upcomingMovies] = await Promise.all([
+          fetchData(popularMovieEndpoint),
+          fetchData(topRatedMovieEndpoint),
+          fetchData(upcomingMovieEndpoint),
+        ]);
         setMoviesData({
           trendingMovies,
           topRatedMovies,

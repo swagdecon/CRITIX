@@ -2,6 +2,7 @@ import jwt_decode from "jwt-decode";
 import CookieManager from "./CookieManager";
 
 let refreshPromise = null;
+
 export default function isTokenExpired() {
   return new Promise((resolve, reject) => {
     const token = CookieManager.decryptCookie("accessToken");
@@ -29,26 +30,27 @@ export default function isTokenExpired() {
       } catch (error) {
         reject(error); // Reject if there's an error during token refresh
       } finally {
-        refreshPromise = null; // Reset the refreshPromise after completion
+        refreshPromise = null; // Reset the refreshPromise after completion or failure
       }
     };
 
-    if (token) {
-      const decodedToken = jwt_decode(token);
-      const currentTime = Date.now() / 1000;
-
-      if (decodedToken.exp < currentTime) {
-        if (!refreshPromise) {
-          // If there's no ongoing refresh, create a new refreshPromise
-          refreshPromise = refreshTokenLogic();
-        }
-        // Add resolve and reject to refreshPromise
-        refreshPromise.then(resolve).catch(reject);
-      } else {
-        resolve(); // Resolve immediately if token is not expired
-      }
-    } else {
-      reject("No token found"); // Reject if no token is found
+    if (!token) {
+      return reject("No token found"); // Reject immediately if no token is found
     }
+
+    const decodedToken = jwt_decode(token);
+    const currentTime = Date.now() / 1000;
+
+    if (decodedToken.exp >= currentTime) {
+      return resolve(); // Resolve immediately if token is not expired
+    }
+
+    if (!refreshPromise) {
+      // If there's no ongoing refresh, create a new refreshPromise
+      refreshPromise = refreshTokenLogic();
+    }
+
+    // Add resolve and reject to refreshPromise
+    refreshPromise.then(resolve).catch(reject);
   });
 }

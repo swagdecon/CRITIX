@@ -396,7 +396,8 @@ public class MovieService {
   }
 
   public List<Movie> searchResults(String query) throws IOException, InterruptedException, URISyntaxException {
-    String url = "https://api.themoviedb.org/3/search/movie?api_key=" + TMDB_API_KEY + "&" + query;
+    String url = "https://api.themoviedb.org/3/search/movie?api_key=" + TMDB_API_KEY + "&" + query
+        + "&language=en-US&page=1&include_adult=false";
 
     HttpClient httpClient = HttpClient.newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
@@ -559,8 +560,8 @@ public class MovieService {
 
   public List<Movie> recommendedMovies(Integer id, String options)
       throws IOException, InterruptedException, URISyntaxException {
-    String url = "https://api.themoviedb.org/3/movie/" + id + "/recommendations?"
-        + options + "&api_key=" + TMDB_API_KEY;
+    String url = "https://api.themoviedb.org/3/movie/" + id + "/recommendations?language=en-US&page=1" + "&api_key="
+        + TMDB_API_KEY;
     HttpClient httpClient = HttpClient.newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
         .uri(new URI(url))

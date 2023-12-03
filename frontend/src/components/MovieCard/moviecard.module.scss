@@ -67,7 +67,9 @@ $dark-color: #1e1b26;
   );
   flex: 1;
 }
-
+.cardWrapper {
+  cursor: pointer;
+}
 .movie {
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+39,1e1b26+53&0+38,1+55 */
   background: -moz-linear-gradient(

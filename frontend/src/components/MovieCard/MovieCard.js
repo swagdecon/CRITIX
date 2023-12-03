@@ -10,7 +10,6 @@ import { MovieCardActors, MovieCardGenres } from "./MovieCardComponents.js";
 import MovieCardStyle from "./moviecard.module.scss"
 
 // const trailerEndpoint = process.env.REACT_APP_TRAILER_ENDPOINT;
-// import fetchData from "../../security/FetchApiData.js";
 export default function MovieCard({
   // movieId,
   poster,

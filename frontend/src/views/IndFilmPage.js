@@ -20,22 +20,31 @@ import LoadingPage from "./LoadingPage";
 import MovieButton from "../components/Other/btn/MovieButton/Button";
 import fetchData from "../security/FetchApiData";
 import isTokenExpired from "../security/IsTokenExpired.js";
+const recommendedEndpoint = process.env.REACT_APP_RECOMMENDED_ENDPOINT;
+const recommendedEndpointOptions = process.env.REACT_APP_RECOMMENDED_ENDPOINT_OPTIONS;
+
 export default function IndMovie() {
   const { id } = useParams();
   const [movie, setMovie] = useState(null)
   const [reviews, setReviews] = useState(null)
-
+  const [recommendedMovies, setRecommendedMovies] = useState(null)
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+
     async function fetchBackendData() {
       setIsLoading(true);
       try {
         await isTokenExpired();
-        const movies = await fetchData(id);
-        const reviews = await fetchData(`http://localhost:8080/review/${id}`)
+        const [movies, reviews, recommendedMovies] = await Promise.all([
+          fetchData(id),
+          fetchData(`http://localhost:8080/review/${id}`),
+          fetchData(`${recommendedEndpoint}${id}/${recommendedEndpointOptions}`)
+        ]);
+
         setMovie(movies);
         setReviews(reviews)
+        setRecommendedMovies(recommendedMovies)
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -45,7 +54,6 @@ export default function IndMovie() {
     fetchBackendData();
   }, []);
 
-  console.log(movie)
   return isLoading || !movie ? (
     <LoadingPage />
   ) : (
@@ -132,7 +140,7 @@ export default function IndMovie() {
         </section>
         <div className={`${IndMovieStyle["recommended-carousel-wrapper"]}`}>
           <RecommendedCarousel
-            movieId={movie.id}
+            recommendedMovies={recommendedMovies}
           />
         </div>
       </div>
