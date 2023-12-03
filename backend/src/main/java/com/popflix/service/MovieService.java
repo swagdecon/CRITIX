@@ -474,49 +474,6 @@ public class MovieService {
     return movie;
   }
 
-  // Method to parse actors from the response body
-  private List<Person> parseActorsFromResponse(String responseBody) {
-    List<Person> actors = new ArrayList<>();
-    ObjectMapper objectMapper = new ObjectMapper();
-    try {
-      JsonNode rootNode = objectMapper.readTree(responseBody);
-      JsonNode castNode = rootNode.get("cast");
-
-      if (castNode != null && castNode.isArray()) {
-        for (JsonNode actorNode : castNode) {
-          // Extract relevant actor details and create Person objects
-          Person actor = new Person();
-          actor.setId(actorNode.get("id").asInt());
-          actor.setName(actorNode.get("name").asText());
-          actors.add(actor);
-        }
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return actors;
-  }
-
-  // private void fetchMovieCredits(Movie movie) throws IOException,
-  // InterruptedException, URISyntaxException {
-  // String creditsUrl = "https://api.themoviedb.org/3/movie/" + movie.getId() +
-  // "/credits?api_key=" + TMDB_API_KEY;
-  // HttpClient httpClient = HttpClient.newHttpClient();
-  // HttpRequest request = HttpRequest.newBuilder()
-  // .uri(new URI(creditsUrl))
-  // .GET()
-  // .build();
-
-  // HttpResponse<String> response = httpClient.send(request,
-  // HttpResponse.BodyHandlers.ofString());
-
-  // if (response.statusCode() == 200) {
-  // String responseBody = response.body();
-  // List<Person> actors = parseActorsFromResponse(responseBody);
-  // movie.setActors(actors);
-  // }
-  // }
-
   private void setIntPropertyAndMultiply(Movie movie, JsonNode node, String propertyName, int multiplier,
       BiConsumer<Movie, Integer> setter) {
     JsonNode propertyNode = node.get(propertyName);
@@ -608,7 +565,6 @@ public class MovieService {
           HttpResponse.BodyHandlers.ofString());
 
       String responseBody = response.body();
-      System.out.println(responseBody);
       JSONObject jsonResponse = new JSONObject(responseBody);
 
       if (jsonResponse.has("results")) {

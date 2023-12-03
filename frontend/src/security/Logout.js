@@ -2,10 +2,8 @@
 import CookieManager from "./CookieManager";
 import Cookies from "js-cookie";
 import refreshJwtTokens from "./IsTokenExpired";
-import { Navigate } from "react-router-dom";
 export default async function Logout() {
     await refreshJwtTokens();
-
     try {
         let token = CookieManager.decryptCookie("accessToken");
 
@@ -17,7 +15,7 @@ export default async function Logout() {
         if (response.ok) {
             Cookies.remove("accessToken");
             Cookies.remove("refreshToken");
-            Navigate("/login")
+            window.location.href = "/login"
         }
     } catch (error) {
         console.error(error)

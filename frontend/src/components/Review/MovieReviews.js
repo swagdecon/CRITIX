@@ -14,6 +14,8 @@ import PercentageRatingCircle from "./Rating/PercentageCircle/PercentageCircle";
 import InputSlider from "./Rating/Slider/Slider.js";
 import CookieManager from "../../security/CookieManager";
 import ReCAPTCHA from "react-google-recaptcha";
+import { format } from 'date-fns';
+
 const TEXT_COLLAPSE_OPTIONS = {
     collapse: false,
     collapseText: <span style={{ cursor: "pointer" }}>...show more</span>,
@@ -94,10 +96,7 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
     const handleSubmit = useCallback(() => {
         if (!hasReviewProfanity) {
             const currentDate = new Date();
-            const day = currentDate.getDate().toString().padStart(2, "0");
-            const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
-            const year = currentDate.getFullYear().toString();
-            const formattedDate = `${day}-${month}-${year}`;
+            const formattedDate = format(currentDate, 'dd-MM-yyyy');
             const userId = decodedToken.userId;
 
             axios

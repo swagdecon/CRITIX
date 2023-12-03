@@ -118,6 +118,7 @@ export default function MovieList({ endpoint }) {
           <div key={movie.id}>
             <Link to={`/movies/movie/${movie.id}`}>
               <MovieCard
+                movieId={movie.id}
                 poster={movie.poster_path}
                 rating={movie.vote_average}
                 runtime={movie.runtime}

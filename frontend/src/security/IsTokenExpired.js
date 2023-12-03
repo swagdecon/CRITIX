@@ -1,6 +1,6 @@
 import jwt_decode from "jwt-decode";
 import CookieManager from "./CookieManager";
-
+import Logout from "./Logout";
 let refreshPromise = null;
 
 export default function isTokenExpired() {
@@ -29,6 +29,7 @@ export default function isTokenExpired() {
         resolve(); // Resolve the promise when token is refreshed
       } catch (error) {
         reject(error); // Reject if there's an error during token refresh
+        Logout()
       } finally {
         refreshPromise = null; // Reset the refreshPromise after completion or failure
       }
