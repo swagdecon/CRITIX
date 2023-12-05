@@ -53,7 +53,7 @@ class MovieControllerTest {
         // Create a mock MovieService
         MovieService movieService = mock(MovieService.class);
         List<Movie> movies = new ArrayList<>();
-        when(movieService.allMovies("popular")).thenReturn(movies);
+        when(movieService.getTop20Movies("popular")).thenReturn(movies);
 
         // Create a MovieController instance
         MovieController movieController = new MovieController();
@@ -72,7 +72,7 @@ class MovieControllerTest {
 
         // Verify that the movieService.allMovies method was called with the correct
         // parameter
-        verify(movieService, times(1)).allMovies("popular");
+        verify(movieService, times(1)).getTop20Movies("popular");
     }
 
     @Test
@@ -80,7 +80,7 @@ class MovieControllerTest {
         // Create a mock MovieService
         MovieService movieService = mock(MovieService.class);
         List<Movie> movies = new ArrayList<>();
-        when(movieService.allMovies("upcoming")).thenReturn(movies);
+        when(movieService.getTop20Movies("upcoming")).thenReturn(movies);
 
         // Create a MovieController instance
         MovieController movieController = new MovieController();
@@ -99,7 +99,7 @@ class MovieControllerTest {
 
         // Verify that the movieService.allMovies method was called with the correct
         // parameter
-        verify(movieService, times(1)).allMovies("upcoming_movies");
+        verify(movieService, times(1)).getTop20Movies("upcoming_movies");
     }
 
     @Test
@@ -107,7 +107,7 @@ class MovieControllerTest {
         // Create a mock MovieService
         MovieService movieService = mock(MovieService.class);
         List<Movie> movies = new ArrayList<>();
-        when(movieService.allMovies("top_rated")).thenReturn(movies);
+        when(movieService.getTop20Movies("top_rated")).thenReturn(movies);
 
         // Create a MovieController instance
         MovieController movieController = new MovieController();
@@ -126,7 +126,7 @@ class MovieControllerTest {
 
         // Verify that the movieService.allMovies method was called with the correct
         // parameter
-        verify(movieService, times(1)).allMovies("top_rated");
+        verify(movieService, times(1)).getTop20Movies("top_rated");
     }
 
     @Test
@@ -134,7 +134,7 @@ class MovieControllerTest {
         // Create a mock MovieService
         MovieService movieService = mock(MovieService.class);
         List<Movie> movies = new ArrayList<>();
-        when(movieService.allMovies("now_playing")).thenReturn(movies);
+        when(movieService.getTop20Movies("now_playing")).thenReturn(movies);
 
         // Create a MovieController instance
         MovieController movieController = new MovieController();
@@ -151,8 +151,9 @@ class MovieControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(movies, response.getBody());
 
-        // Verify that the movieService.allMovies method was called with the correct
+        // Verify that the movieService.getTop20Movies method was called with the
+        // correct
         // parameter
-        verify(movieService, times(1)).allMovies("now_playing");
+        verify(movieService, times(1)).getTop20Movies("now_playing");
     }
 }

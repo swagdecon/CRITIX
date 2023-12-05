@@ -138,7 +138,6 @@ export default function IndMovie() {
             </div>
             : null}
         </section>
-        {console.log(recommendedMovies)}
         {recommendedMovies.length > 0 ?
           <div className={`${IndMovieStyle["recommended-carousel-wrapper"]}`}>
             <RecommendedCarousel

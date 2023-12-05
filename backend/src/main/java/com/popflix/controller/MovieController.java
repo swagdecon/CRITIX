@@ -26,29 +26,29 @@ public class MovieController {
         return new ResponseEntity<Optional<Movie>>(movieService.singleTmdbMovie(id), HttpStatus.OK);
     }
 
-    @GetMapping("/popular")
+    @GetMapping("/top_popular")
     public ResponseEntity<List<Movie>> getPopularMovies() {
-        return new ResponseEntity<List<Movie>>(movieService.allMovies("popular"), HttpStatus.OK);
+        return new ResponseEntity<List<Movie>>(movieService.getTop20Movies("popular"), HttpStatus.OK);
     }
 
-    @GetMapping("/popular/{id}")
+    @GetMapping("/top_popular/{id}")
     public ResponseEntity<Optional<Movie>> getSinglePopularMovie(@PathVariable Integer id) {
         return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(id, "popular"), HttpStatus.OK);
     }
 
-    @GetMapping("/upcoming")
+    @GetMapping("/top_upcoming")
     public ResponseEntity<List<Movie>> getUpcomingMovies() {
-        return new ResponseEntity<List<Movie>>(movieService.allMovies("upcoming_movies"), HttpStatus.OK);
+        return new ResponseEntity<List<Movie>>(movieService.getTop20Movies("upcoming_movies"), HttpStatus.OK);
     }
 
-    @GetMapping("/upcoming/{id}")
+    @GetMapping("/top_upcoming/{id}")
     public ResponseEntity<Optional<Movie>> getUpcomingMovie(@PathVariable Integer id) {
         return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(id, "upcoming_movies"), HttpStatus.OK);
     }
 
     @GetMapping("/top_rated")
     public ResponseEntity<List<Movie>> getTopRatedMovies() {
-        return new ResponseEntity<List<Movie>>(movieService.allMovies("top_rated"), HttpStatus.OK);
+        return new ResponseEntity<List<Movie>>(movieService.getTop20Movies("top_rated"), HttpStatus.OK);
     }
 
     @GetMapping("/top_rated/{id}")
@@ -58,7 +58,7 @@ public class MovieController {
 
     @GetMapping("/now_playing")
     public ResponseEntity<List<Movie>> getNowPlayingMovies() {
-        return new ResponseEntity<List<Movie>>(movieService.allMovies("now_playing"), HttpStatus.OK);
+        return new ResponseEntity<List<Movie>>(movieService.getTop20Movies("now_playing"), HttpStatus.OK);
     }
 
     @GetMapping("/now_playing/{id}")

@@ -32,7 +32,7 @@ class MovieRepositoryTest {
 
         when(movieRepository.findMovieById(movieId)).thenReturn(Optional.ofNullable(movie));
 
-        Optional<Movie> result = movieService.findMovieById(movieId);
+        Optional<Movie> result = movieService.allMovies(movieId);
 
         assertEquals(movie, result.orElse(null)); // Extract movie object from Optional and perform the comparison
         verify(movieRepository, times(1)).findMovieById(movieId);

@@ -1,6 +1,8 @@
 package com.popflix.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,7 @@ class MovieServiceTest {
         when(movieRepository.findMovieById(movieId)).thenReturn(Optional.of(expectedMovie));
 
         // Act
-        Optional<Movie> actualMovie = movieService.findMovieById(movieId);
+        Optional<Movie> actualMovie = movieService.allMovies(movieId);
 
         // Assert
         assertTrue(actualMovie.isPresent());
@@ -47,13 +49,13 @@ class MovieServiceTest {
     }
 
     @Test
-    void findMovieByIdWithInvalidIdShouldReturnEmptyOptional() {
+    void allMoviesWithInvalidIdShouldReturnEmptyOptional() {
         // Arrange
         int movieId = 1;
         when(movieRepository.findMovieById(movieId)).thenReturn(Optional.empty());
 
         // Act
-        Optional<Movie> actualMovie = movieService.findMovieById(movieId);
+        Optional<Movie> actualMovie = movieService.allMovies(movieId);
 
         // Assert
         assertFalse(actualMovie.isPresent());
@@ -67,7 +69,7 @@ class MovieServiceTest {
         when(mongoTemplate.find(any(Query.class), eq(Movie.class), eq(collectionName))).thenReturn(expectedMovies);
 
         // Act
-        List<Movie> actualMovies = movieService.allMovies(collectionName);
+        List<Movie> actualMovies = movieService.getTop20Movies(collectionName);
 
         // Assert
         assertEquals(expectedMovies, actualMovies);
@@ -110,7 +112,7 @@ class MovieServiceTest {
         Integer movieId = null;
 
         // Act
-        Optional<Movie> actualMovie = movieService.findMovieById(movieId);
+        Optional<Movie> actualMovie = movieService.allMovies(movieId);
 
         // Assert
         assertFalse(actualMovie.isPresent());
@@ -123,7 +125,7 @@ class MovieServiceTest {
         when(mongoTemplate.find(any(Query.class), eq(Movie.class), eq(collectionName))).thenReturn(null);
 
         // Act
-        List<Movie> actualMovies = movieService.allMovies(collectionName);
+        List<Movie> actualMovies = movieService.getTop20Movies(collectionName);
 
         // Assert
         assertNull(actualMovies);
