@@ -24,6 +24,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -37,7 +38,6 @@ import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.ProductionCompany;
 import info.movito.themoviedbapi.model.Reviews;
 import info.movito.themoviedbapi.model.Video;
-import info.movito.themoviedbapi.model.core.MovieResultsPage;
 import info.movito.themoviedbapi.model.people.PersonCast;
 import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.annotation.PostConstruct;
@@ -317,12 +317,12 @@ public class MovieService {
     });
   }
 
-  public MovieResultsPage getMovieResultsPage(String endpoint, Integer page)
+  public List<Movie> getMovieResults(String endpoint, Integer page)
       throws IOException, InterruptedException, URISyntaxException {
     String url = "https://api.themoviedb.org/3/movie/" + endpoint + "?" + "api_key=" + TMDB_API_KEY
         + "&language=en-US&page=" + page
         + "&include_adult=false";
-    System.out.println("Here is url" + url);
+
     HttpClient httpClient = HttpClient.newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
         .uri(new URI(url))
@@ -331,11 +331,34 @@ public class MovieService {
 
     HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
     String responseBody = response.body();
-
     ObjectMapper objectMapper = new ObjectMapper();
-    MovieResultsPage movieList = objectMapper.readValue(responseBody, MovieResultsPage.class);
 
-    return movieList;
+    List<Movie> movies = new ArrayList<>();
+
+    try {
+      JsonNode resultsNode = objectMapper.readTree(responseBody).get("results");
+      if (resultsNode != null && resultsNode.isArray()) {
+        for (JsonNode movieNode : resultsNode) {
+          Movie movie = objectMapper.readValue(movieNode.toString(), Movie.class);
+
+          // Fields needed for Movie card
+          movie.setTitle(movie.getOriginalTitle());
+          movie.setOverview(movie.getOverview());
+          movie.setReleaseDate(movie.getReleaseDate());
+          movie.setTagline(movie.getTagline());
+          movie.setRuntime(movie.getRuntime());
+          // Fields requiring further complex operations
+          movie.setVoteAverage(movie.getVoteAverage());
+          setGenresProperty(movie, movieNode, "genre_ids");
+          movies.add(movie);
+        }
+      }
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+      // Handle JSON processing exception as needed
+    }
+
+    return movies;
   }
 
   public List<Movie> searchResults(String query) throws IOException, InterruptedException, URISyntaxException {

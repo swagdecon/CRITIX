@@ -88,7 +88,6 @@ public class MovieController {
     @GetMapping("/movie-list/{endpoint}")
     public ResponseEntity<Object> getMovieReultsPage(@PathVariable String endpoint, @RequestParam Integer page)
             throws IOException, InterruptedException, URISyntaxException {
-        System.out.println("HERE IS PAGE" + page);
-        return new ResponseEntity<Object>(movieService.getMovieResultsPage(endpoint, page), HttpStatus.OK);
+        return new ResponseEntity<Object>(movieService.getMovieResults(endpoint, page), HttpStatus.OK);
     }
 }

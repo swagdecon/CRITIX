@@ -24,7 +24,8 @@ async function fetchBackendData(endpointName, page) {
     const response = await Promise.all([
       fetchData(`http://localhost:8080/movies/movie-list/${endpointName}?page=${page}`),
     ]);
-    return response
+    console.log(response[0])
+    return response[0]
   } catch (error) {
     console.error("Error fetching data:", error);
   }
@@ -69,8 +70,8 @@ export default function MovieList({ endpoint }) {
     setCurrentPage(newPage);
     fetchBackendData(endpoint.endpointName, newPage)
       .then(data => {
-        setMovies(data[0].results);
-        setTotalPages(data[0].total_pages);
+        setMovies(data.results);
+        setTotalPages(data.total_pages);
         setDataLoaded(true);
       })
       .catch(error => {
@@ -84,8 +85,8 @@ export default function MovieList({ endpoint }) {
       setCurrentPage(1);
       fetchBackendData(endpointName, 1)
         .then(data => {
-          setMovies(data[0].results);
-          setTotalPages(data[0].total_pages);
+          setMovies(data.results);
+          setTotalPages(data.total_pages);
           setDataLoaded(true);
           switch (endpointName) {
             case "now_playing":
