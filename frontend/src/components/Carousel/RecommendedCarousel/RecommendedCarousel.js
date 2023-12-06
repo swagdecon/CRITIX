@@ -6,7 +6,7 @@ import MovieCardStyle from "../../MovieCard/moviecard.module.scss"
 import PropTypes from "prop-types";
 import MovieCard from "../../MovieCard/MovieCard.js";
 import { getChunkSize, useWindowResizeEffect, CarouselArrowStyles } from "../CarouselHelpers.js";
-
+const TMDB_IMAGE_PREFIX = process.env.REACT_APP_DEFAULT_TMDB_IMAGE_PREFIX;
 export default function RecommendedCarousel({ recommendedMovies }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const breakpoints = [979, 1471, 1971, 2463];
@@ -28,7 +28,7 @@ export default function RecommendedCarousel({ recommendedMovies }) {
                 <div onClick={() => handleRedirect(movie.id)} className={MovieCardStyle.cardWrapper}>
                   <MovieCard
                     movieId={movie.id}
-                    poster={`https://image.tmdb.org/t/p/original${movie.posterUrl}`}
+                    poster={`${TMDB_IMAGE_PREFIX}${movie.posterUrl}`}
                     rating={movie.voteAverage}
                     runtime={movie.runtime}
                     genres={movie.genres}

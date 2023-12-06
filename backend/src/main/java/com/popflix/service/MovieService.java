@@ -37,6 +37,7 @@ import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.ProductionCompany;
 import info.movito.themoviedbapi.model.Reviews;
 import info.movito.themoviedbapi.model.Video;
+import info.movito.themoviedbapi.model.core.MovieResultsPage;
 import info.movito.themoviedbapi.model.people.PersonCast;
 import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.annotation.PostConstruct;
@@ -314,6 +315,27 @@ public class MovieService {
         mongoTemplate.save(movie, collectionName);
       }
     });
+  }
+
+  public MovieResultsPage getMovieResultsPage(String endpoint, Integer page)
+      throws IOException, InterruptedException, URISyntaxException {
+    String url = "https://api.themoviedb.org/3/movie/" + endpoint + "?" + "api_key=" + TMDB_API_KEY
+        + "&language=en-US&page=" + page
+        + "&include_adult=false";
+    System.out.println("Here is url" + url);
+    HttpClient httpClient = HttpClient.newHttpClient();
+    HttpRequest request = HttpRequest.newBuilder()
+        .uri(new URI(url))
+        .GET()
+        .build();
+
+    HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    String responseBody = response.body();
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    MovieResultsPage movieList = objectMapper.readValue(responseBody, MovieResultsPage.class);
+
+    return movieList;
   }
 
   public List<Movie> searchResults(String query) throws IOException, InterruptedException, URISyntaxException {

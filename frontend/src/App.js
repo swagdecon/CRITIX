@@ -34,15 +34,15 @@ export default function App() {
         />
         <Route
           path="/popular"
-          element={<PrivateRoute><MovieListPage endpointName={"popular"} /></PrivateRoute>}
+          element={<PrivateRoute><MovieListPage endpointName="popular" /></PrivateRoute>}
         />
         <Route
           path="/upcoming"
-          element={<PrivateRoute><MovieListPage endpointName={"upcoming"} /></PrivateRoute>}
+          element={<PrivateRoute><MovieListPage endpointName="upcoming" /></PrivateRoute>}
         />
         <Route
           path="/now_playing"
-          element={<PrivateRoute><MovieListPage endpointName={"now_playing"} /></PrivateRoute>}
+          element={<PrivateRoute><MovieListPage endpointName="now_playing" /></PrivateRoute>}
         />
         <Route path="/movies/:endpoint/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
         <Route path="/movies/movie/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />

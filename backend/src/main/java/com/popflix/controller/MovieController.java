@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.popflix.model.Movie;
 import com.popflix.service.MovieService;
@@ -82,5 +83,12 @@ public class MovieController {
     public ResponseEntity<Object> getTrailer(@PathVariable Integer id)
             throws IOException, InterruptedException, URISyntaxException {
         return new ResponseEntity<Object>(movieService.getTrailer(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/movie-list/{endpoint}")
+    public ResponseEntity<Object> getMovieReultsPage(@PathVariable String endpoint, @RequestParam Integer page)
+            throws IOException, InterruptedException, URISyntaxException {
+        System.out.println("HERE IS PAGE" + page);
+        return new ResponseEntity<Object>(movieService.getMovieResultsPage(endpoint, page), HttpStatus.OK);
     }
 }

@@ -5,6 +5,8 @@ import SignUpStyles from "../Login/login.module.css";
 import MovieButton from "../Other/btn/MovieButton/Button.js";
 import CookieManager from "../../security/CookieManager";
 import { togglePasswordVisibility, resendAuthEmail, Message, ProfanityLogic } from "../../security/Shared";
+const SIGNUP_URL = process.env.REACT_APP_SIGNUP_ENDPOINT;
+
 export default function SignUpFunctionality() {
 
   const [emailErr, setEmailErr] = useState(false)
@@ -45,7 +47,7 @@ export default function SignUpFunctionality() {
     }
 
 
-    const response = await fetch("http://localhost:8080/v1/auth/register", {
+    const response = await fetch(SIGNUP_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

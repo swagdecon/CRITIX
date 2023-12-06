@@ -6,6 +6,7 @@ import LoginStyles from "../Login/login.module.css";
 import MovieButton from "../Other/btn//MovieButton/Button.js";
 import CookieManager from "../../security/CookieManager";
 import { resendAuthEmail, Message, togglePasswordVisibility, ProfanityLogic } from "../../security/Shared.js";
+const LOGIN_ENDPOINT = process.env.REACT_APP_LOGIN_ENDPOINT;
 export default function LoginLogic() {
 
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -37,7 +38,7 @@ export default function LoginLogic() {
     }
 
     const response = await fetch(
-      "http://localhost:8080/v1/auth/authenticate",
+      LOGIN_ENDPOINT,
       {
         method: "POST",
         headers: {

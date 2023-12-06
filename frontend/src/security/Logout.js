@@ -2,12 +2,14 @@
 import CookieManager from "./CookieManager";
 import Cookies from "js-cookie";
 import refreshJwtTokens from "./IsTokenExpired";
+const LOGOUT_ENDPOINT = process.env.REACT_APP_LOGOUT_ENDPOINT;
+
 export default async function Logout() {
     await refreshJwtTokens();
     try {
         let token = CookieManager.decryptCookie("accessToken");
 
-        const response = await fetch("http://localhost:8080/v1/auth/logout", {
+        const response = await fetch(LOGOUT_ENDPOINT, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

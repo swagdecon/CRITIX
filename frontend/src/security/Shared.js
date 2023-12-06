@@ -1,4 +1,6 @@
 import React from "react";
+const SEND_AUTH_EMAIL = process.env.REACT_APP_SEND_AUTH_EMAIL_ENDPOINT;
+
 // Functions Shared Between Signup and Login
 export async function resendAuthEmail(
     userEmail,
@@ -7,7 +9,7 @@ export async function resendAuthEmail(
 ) {
     try {
         const response = await fetch(
-            "http://localhost:8080/v1/auth/send-password-authentication-email",
+            SEND_AUTH_EMAIL,
             {
                 method: "POST",
                 body: JSON.stringify({ email: userEmail }),

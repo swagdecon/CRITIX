@@ -15,6 +15,9 @@ import InputSlider from "./Rating/Slider/Slider.js";
 import CookieManager from "../../security/CookieManager";
 import ReCAPTCHA from "react-google-recaptcha";
 import { format } from 'date-fns';
+const CLIENT_API_KEY = process.env.REACT_APP_CLIENT_API_KEY;
+const RECAPTCHA_ENDPOINT = process.env.REACT_APP_RECAPTCHA_ENDPOINT;
+const CREATE_MOVIE_ENDPOINT = process.env.REACT_APP_CREATE_MOVIE_ENDPOINT;
 
 const TEXT_COLLAPSE_OPTIONS = {
     collapse: false,
@@ -50,7 +53,6 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
         [reviewContent, reviewRating, recaptchaResult]
     );
     const reviewRef = useRef(null);
-    const CLIENT_API_KEY = process.env.REACT_APP_CLIENT_API_KEY;
     const reviewInputStyles = {
         borderRadius: "15px",
         fieldSet: {
@@ -80,7 +82,7 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
     };
     async function onChange(token) {
         try {
-            await axios.post(`http://localhost:8080/v1/auth/check-recaptcha-token`, {
+            await axios.post(RECAPTCHA_ENDPOINT, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -100,7 +102,7 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
             const userId = decodedToken.userId;
 
             axios
-                .post(`http://localhost:8080/review/create/${movieId}`, {
+                .post(`${CREATE_MOVIE_ENDPOINT}${movieId}`, {
                     createdDate: formattedDate,
                     movieId: movieId,
                     userId: userId,
