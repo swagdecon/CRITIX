@@ -24,11 +24,12 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.popflix.model.Movie;
+import com.popflix.model.MovieCard;
+import com.popflix.model.MovieResults;
 import com.popflix.model.Person;
 import com.popflix.repository.MovieRepository;
 import info.movito.themoviedbapi.TmdbApi;
@@ -264,7 +265,6 @@ public class MovieService {
         movie.setBackdropUrl(backdropUrl);
         movie.setReleaseDate(movieDb.getReleaseDate());
         movie.setVoteAverage(movie.getVoteAverage());
-        movie.setVoteCount(movie.getVoteCount());
         updateMovieDbDetails(collectionName);
         movies.add(movie);
       }
@@ -317,7 +317,7 @@ public class MovieService {
     });
   }
 
-  public List<Movie> getMovieResults(String endpoint, Integer page)
+  public MovieResults getMovieResults(String endpoint, Integer page)
       throws IOException, InterruptedException, URISyntaxException {
     String url = "https://api.themoviedb.org/3/movie/" + endpoint + "?" + "api_key=" + TMDB_API_KEY
         + "&language=en-US&page=" + page
@@ -333,32 +333,30 @@ public class MovieService {
     String responseBody = response.body();
     ObjectMapper objectMapper = new ObjectMapper();
 
-    List<Movie> movies = new ArrayList<>();
+    JsonNode resultsNode = objectMapper.readTree(responseBody).get("results");
+    List<MovieCard> movieCardList = new ArrayList<>();
+    Integer totalPages = objectMapper.readTree(responseBody).get("total_pages").asInt();
 
-    try {
-      JsonNode resultsNode = objectMapper.readTree(responseBody).get("results");
-      if (resultsNode != null && resultsNode.isArray()) {
-        for (JsonNode movieNode : resultsNode) {
-          Movie movie = objectMapper.readValue(movieNode.toString(), Movie.class);
+    resultsNode.forEach(movieNode -> {
+      MovieCard movie = objectMapper.convertValue(movieNode, MovieCard.class);
+      String posterUrl = movieUrl + movieNode.get("poster_path").asText();
+      long voteAverage = movieNode.get("vote_average").asLong();
 
-          // Fields needed for Movie card
-          movie.setTitle(movie.getOriginalTitle());
-          movie.setOverview(movie.getOverview());
-          movie.setReleaseDate(movie.getReleaseDate());
-          movie.setTagline(movie.getTagline());
-          movie.setRuntime(movie.getRuntime());
-          // Fields requiring further complex operations
-          movie.setVoteAverage(movie.getVoteAverage());
-          setGenresProperty(movie, movieNode, "genre_ids");
-          movies.add(movie);
-        }
-      }
-    } catch (JsonProcessingException e) {
-      e.printStackTrace();
-      // Handle JSON processing exception as needed
-    }
+      movie.setPosterUrl(posterUrl);
+      movie.setVoteAverage(Math.round(voteAverage) * 10);
 
-    return movies;
+      // Set other fields needed for Movie card
+      movie.setTitle(movie.getTitle());
+      movie.setOverview(movie.getOverview());
+      movie.setReleaseDate(movie.getReleaseDate());
+      movie.setTagline(movie.getTagline());
+      movie.setRuntime(movie.getRuntime());
+
+      setGenresProperty(movie, movieNode, "genre_ids");
+      movieCardList.add(movie);
+    });
+
+    return new MovieResults(movieCardList, totalPages);
   }
 
   public List<Movie> searchResults(String query) throws IOException, InterruptedException, URISyntaxException {
@@ -477,6 +475,23 @@ public class MovieService {
         }
       }
       movie.setGenres(genresList);
+    }
+  }
+
+  private void setGenresProperty(MovieCard movieCard, JsonNode node, String propertyName) {
+    JsonNode genresNode = node.get(propertyName);
+    if (genresNode != null && genresNode.isArray()) {
+      HashMap<Integer, String> movieGenres = createMovieGenresMap();
+      List<String> genresList = new ArrayList<>();
+      for (JsonNode genre : genresNode) {
+        if (genre.isInt()) {
+          int genreId = genre.asInt();
+          if (movieGenres.containsKey(genreId)) {
+            genresList.add(movieGenres.get(genreId));
+          }
+        }
+      }
+      movieCard.setGenres(genresList);
     }
   }
 

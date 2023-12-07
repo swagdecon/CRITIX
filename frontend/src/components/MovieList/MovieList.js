@@ -24,7 +24,6 @@ async function fetchBackendData(endpointName, page) {
     const response = await Promise.all([
       fetchData(`http://localhost:8080/movies/movie-list/${endpointName}?page=${page}`),
     ]);
-    console.log(response[0])
     return response[0]
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -70,13 +69,13 @@ export default function MovieList({ endpoint }) {
     setCurrentPage(newPage);
     fetchBackendData(endpoint.endpointName, newPage)
       .then(data => {
-        setMovies(data.results);
-        setTotalPages(data.total_pages);
+        setMovies(data.movieCardList);
+        setTotalPages(data.totalPages);
         setDataLoaded(true);
       })
       .catch(error => {
         console.error("Error handling page change:", error);
-        setDataLoaded(true); // Set dataLoaded to true even in case of error
+        setDataLoaded(true);
       });
   }
 
@@ -85,8 +84,9 @@ export default function MovieList({ endpoint }) {
       setCurrentPage(1);
       fetchBackendData(endpointName, 1)
         .then(data => {
-          setMovies(data.results);
-          setTotalPages(data.total_pages);
+          console.log(data)
+          setMovies(data.movieCardList);
+          setTotalPages(data.totalPages);
           setDataLoaded(true);
           switch (endpointName) {
             case "now_playing":
@@ -123,7 +123,7 @@ export default function MovieList({ endpoint }) {
   }, [endpoint.endpointName]);
 
 
-  if (!dataLoaded) {
+  if (!dataLoaded || movies === null) {
     return <LoadingPage />;
   }
   return (
@@ -144,8 +144,8 @@ export default function MovieList({ endpoint }) {
             <Link to={`/movies/movie/${movie.id}`}>
               <MovieCard
                 movieId={movie.id}
-                poster={movie.poster_path}
-                rating={movie.vote_average}
+                poster={movie.posterUrl}
+                rating={movie.voteAverage}
                 runtime={movie.runtime}
                 genres={movie.genres}
                 overview={movie.overview}
@@ -176,7 +176,6 @@ export default function MovieList({ endpoint }) {
       </div>
     </div>
   );
-
 }
 
 MovieList.propTypes = {
