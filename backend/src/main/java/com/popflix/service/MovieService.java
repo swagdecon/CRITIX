@@ -7,7 +7,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +15,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,13 +27,14 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.popflix.model.Movie;
 import com.popflix.model.MovieCard;
 import com.popflix.model.MovieResults;
 import com.popflix.model.Person;
 import com.popflix.repository.MovieRepository;
 import info.movito.themoviedbapi.TmdbApi;
+import info.movito.themoviedbapi.TmdbMovies;
+import info.movito.themoviedbapi.TmdbMovies.MovieMethod;
 import info.movito.themoviedbapi.model.Credits;
 import info.movito.themoviedbapi.model.Genre;
 import info.movito.themoviedbapi.model.MovieDb;
@@ -153,13 +155,14 @@ public class MovieService {
     if (movie.getGenres() == null || movie.getGenres().isEmpty()) {
       // Get the movie genres
       List<Genre> genres = movieApi.getGenres();
-
-      // Extract the movie genre names
-      List<String> genreNames = new ArrayList<>();
-      for (Genre genre : genres) {
-        genreNames.add(genre.getName());
+      if (genres != null) {
+        // Extract the movie genre names
+        List<String> genreNames = new ArrayList<>();
+        for (Genre genre : genres) {
+          genreNames.add(genre.getName());
+        }
+        movie.setGenres(genreNames);
       }
-      movie.setGenres(genreNames);
     }
   }
 
@@ -359,39 +362,19 @@ public class MovieService {
     return new MovieResults(movieCardList, totalPages);
   }
 
-  public List<Movie> searchResults(String query) throws IOException, InterruptedException, URISyntaxException {
-    String url = "https://api.themoviedb.org/3/search/movie?api_key=" + TMDB_API_KEY + "&" + query
-        + "&language=en-US&page=1&include_adult=false";
+  public List<MovieDb> searchResults(String query) throws IOException, InterruptedException, URISyntaxException {
 
-    HttpClient httpClient = HttpClient.newHttpClient();
-    HttpRequest request = HttpRequest.newBuilder()
-        .uri(new URI(url))
-        .GET()
-        .build();
+    List<MovieDb> searchResults = tmdbApi.getSearch().searchMovie(query, 0, "", false, 1).getResults();
 
-    HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    List<MovieDb> updatedSearchResults = searchResults.stream()
+        .limit(5)
+        .peek(movie -> {
+          Integer voteAverage = Math.round(movie.getVoteAverage() * 10);
+          movie.setVoteAverage(voteAverage);
+        })
+        .collect(Collectors.toList());
 
-    if (response.statusCode() != 200) {
-      return Collections.emptyList();
-    }
-
-    String responseBody = response.body();
-
-    // Process the JSON response
-    ObjectMapper objectMapper = new ObjectMapper();
-    JsonNode rootNode = objectMapper.readTree(responseBody);
-    ArrayNode resultsNode = (ArrayNode) rootNode.get("results");
-
-    List<Movie> movies = new ArrayList<>();
-    int count = Math.min(resultsNode.size(), 5);
-
-    for (int i = 0; i < count; i++) {
-      JsonNode movieNode = resultsNode.get(i);
-      // Helper method to extract relevant movie details
-      Movie movie = extractMovieInfoFromApi(movieNode);
-      movies.add(movie);
-    }
-    return movies;
+    return updatedSearchResults;
   }
 
   public HashMap<Integer, String> createMovieGenresMap() {
@@ -420,64 +403,6 @@ public class MovieService {
     return movieGenres;
   }
 
-  private Movie extractMovieInfoFromApi(JsonNode movieNode)
-      throws IOException, InterruptedException, URISyntaxException {
-    Movie movie = new Movie();
-
-    setIntProperty(movie, movieNode, "id", Movie::setId);
-    setStringProperty(movie, movieNode, "title", Movie::setTitle);
-    setIntPropertyAndMultiply(movie, movieNode, "vote_average", 10, Movie::setVoteAverage);
-    setStringProperty(movie, movieNode, "poster_path", Movie::setPosterUrl);
-    setStringProperty(movie, movieNode, "release_date", Movie::setReleaseDate);
-    setIntProperty(movie, movieNode, "runtime", Movie::setRuntime);
-    setGenresProperty(movie, movieNode, "genre_ids");
-    setStringProperty(movie, movieNode, "overview", Movie::setOverview);
-    setStringProperty(movie, movieNode, "video", Movie::setTrailer);
-    // fetchMovieCredits(movie);
-    return movie;
-  }
-
-  private void setIntPropertyAndMultiply(Movie movie, JsonNode node, String propertyName, int multiplier,
-      BiConsumer<Movie, Integer> setter) {
-    JsonNode propertyNode = node.get(propertyName);
-    if (propertyNode != null && !propertyNode.isNull()) {
-      setter.accept(movie, propertyNode.asInt() * multiplier);
-    }
-  }
-
-  private void setIntProperty(Movie movie, JsonNode node, String propertyName,
-      BiConsumer<Movie, Integer> setter) {
-    JsonNode propertyNode = node.get(propertyName);
-    if (propertyNode != null && !propertyNode.isNull()) {
-      setter.accept(movie, propertyNode.asInt());
-    }
-  }
-
-  private void setStringProperty(Movie movie, JsonNode node, String propertyName,
-      BiConsumer<Movie, String> setter) {
-    JsonNode propertyNode = node.get(propertyName);
-    if (propertyNode != null && !propertyNode.isNull()) {
-      setter.accept(movie, propertyNode.asText());
-    }
-  }
-
-  private void setGenresProperty(Movie movie, JsonNode node, String propertyName) {
-    JsonNode genresNode = node.get(propertyName);
-    if (genresNode != null && genresNode.isArray()) {
-      HashMap<Integer, String> movieGenres = createMovieGenresMap();
-      List<String> genresList = new ArrayList<>();
-      for (JsonNode genre : genresNode) {
-        if (genre.isInt()) {
-          int genreId = genre.asInt();
-          if (movieGenres.containsKey(genreId)) {
-            genresList.add(movieGenres.get(genreId));
-          }
-        }
-      }
-      movie.setGenres(genresList);
-    }
-  }
-
   private void setGenresProperty(MovieCard movieCard, JsonNode node, String propertyName) {
     JsonNode genresNode = node.get(propertyName);
     if (genresNode != null && genresNode.isArray()) {
@@ -495,86 +420,46 @@ public class MovieService {
     }
   }
 
-  public List<Movie> recommendedMovies(Integer id, String options)
+  public List<Movie> recommendedMovies(Integer movieId)
       throws IOException, InterruptedException, URISyntaxException {
-    String url = "https://api.themoviedb.org/3/movie/" + id + "/recommendations?language=en-US&page=1" + "&api_key="
-        + TMDB_API_KEY;
-    HttpClient httpClient = HttpClient.newHttpClient();
-    HttpRequest request = HttpRequest.newBuilder()
-        .uri(new URI(url))
-        .GET()
-        .build();
+    List<MovieDb> recommendedMovies = tmdbApi.getMovies().getRecommendedMovies(movieId, "", 1).getResults();
+    List<Movie> movieList = new ArrayList<>();
+    recommendedMovies.stream()
+        .peek(movieDb -> {
+          Movie movie = new Movie();
+          String posterUrl = movieUrl + movieDb.getPosterPath();
 
-    HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-    if (response.statusCode() != 200) {
+          movie.setId(movieDb.getId());
+          movie.setPosterUrl(posterUrl);
+          movie.setTitle(movieDb.getTitle());
+          movie.setOverview(movieDb.getOverview());
+          movie.setReleaseDate(movieDb.getReleaseDate());
+          movie.setTagline(movieDb.getTagline());
+          movie.setRuntime(movieDb.getRuntime());
+          movie.setVoteAverage(Math.round(movieDb.getVoteAverage() * 10));
+          movieList.add(movie);
+        })
+        .collect(Collectors.toList());
 
-      return Collections.emptyList();
-    }
-
-    String responseBody = response.body();
-
-    // Process the JSON response
-    ObjectMapper objectMapper = new ObjectMapper();
-    JsonNode rootNode = objectMapper.readTree(responseBody);
-    ArrayNode resultsNode = (ArrayNode) rootNode.get("results");
-
-    List<Movie> movies = new ArrayList<>();
-    int count = Math.min(resultsNode.size(), 20);
-
-    for (int i = 0; i < count; i++) {
-      JsonNode movieNode = resultsNode.get(i);
-      // Helper method to extract relevant movie details
-      Movie movie = extractMovieInfoFromApi(movieNode);
-      movies.add(movie);
-    }
-    return movies;
+    return movieList;
   }
 
-  public String getTrailer(Integer id) throws URISyntaxException, IOException, InterruptedException {
-    try {
-      String url = "https://api.themoviedb.org/3/movie/" + id +
-          "/videos?language=en-US"
-          + "&api_key=" + TMDB_API_KEY;
-      HttpClient httpClient = HttpClient.newHttpClient();
-      HttpRequest request = HttpRequest.newBuilder()
-          .uri(new URI(url))
-          .GET()
-          .build();
+  public String getTrailer(Integer movieId) {
+    TmdbMovies.MovieMethod appendVideos = TmdbMovies.MovieMethod.videos;
+    List<String> youtubeKeys = new ArrayList<>();
 
-      HttpResponse<String> response = httpClient.send(request,
-          HttpResponse.BodyHandlers.ofString());
+    List<Video> trailer = tmdbApi.getMovies().getMovie(movieId, "en-US", appendVideos).getVideos();
 
-      String responseBody = response.body();
-      JSONObject jsonResponse = new JSONObject(responseBody);
+    youtubeKeys = trailer.stream()
+        .filter(video -> "Trailer".equals(video.getType()) && "YouTube".equals(video.getSite()))
+        .map(Video::getKey)
+        .collect(Collectors.toList());
 
-      if (jsonResponse.has("results")) {
-        JSONArray resultsArray = jsonResponse.getJSONArray("results");
-        return extractTrailerUrl(resultsArray);
-      } else {
-        System.out.println("No 'results' found in the response");
-        return null; // Indicate no results were found
-      }
-    } catch (JSONException e) {
-      System.out.println("JSON Exception: " + e.getMessage());
-      return null; // Indicate an error occurred during JSON parsing
-    } catch (Exception e) {
-      System.out.println("Something went wrong: " + e.getMessage());
-      return null; // Indicate an error occurred
+    if (!youtubeKeys.isEmpty()) {
+      String firstTrailerKey = youtubeKeys.get(0);
+      return "https://www.youtube.com/watch?v=" + firstTrailerKey;
+    } else {
+      return "No Trailers Available";
     }
   }
-
-  private String extractTrailerUrl(JSONArray resultsArray) {
-    for (int i = 0; i < resultsArray.length(); i++) {
-      JSONObject item = resultsArray.getJSONObject(i);
-
-      // Check if the type is 'Trailer'
-      if (item.getString("type").equals("Trailer") && item.getString("site").equals("YouTube")) {
-        String trailerKey = item.getString("key");
-        return "https://www.youtube.com/watch?v=" + trailerKey;
-      }
-    }
-    System.out.println("No relevant trailer found for the movie");
-    return null; // Indicate that no trailer was found
-  }
-
 }

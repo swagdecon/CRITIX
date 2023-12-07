@@ -67,16 +67,16 @@ public class MovieController {
         return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(id, "now_playing"), HttpStatus.OK);
     }
 
-    @GetMapping("/search/{params}")
-    public ResponseEntity<Object> getSearchResults(@PathVariable String params)
+    @GetMapping("/search/{query}")
+    public ResponseEntity<Object> getSearchResults(@PathVariable String query)
             throws IOException, InterruptedException, URISyntaxException {
-        return new ResponseEntity<Object>(movieService.searchResults(params), HttpStatus.OK);
+        return new ResponseEntity<Object>(movieService.searchResults(query), HttpStatus.OK);
     }
 
-    @GetMapping("/recommended/{id}/{options}")
-    public ResponseEntity<Object> getRecommendedMovies(@PathVariable Integer id, @PathVariable String options)
+    @GetMapping("/recommended/{id}")
+    public ResponseEntity<Object> getRecommendedMovies(@PathVariable Integer id)
             throws IOException, InterruptedException, URISyntaxException {
-        return new ResponseEntity<Object>(movieService.recommendedMovies(id, options), HttpStatus.OK);
+        return new ResponseEntity<Object>(movieService.recommendedMovies(id), HttpStatus.OK);
     }
 
     @GetMapping("/get-trailer/{id}")

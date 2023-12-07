@@ -53,10 +53,11 @@ export default function Search(props) {
     try {
       await isTokenExpired();
       const formattedQuery = searchQuery.includes(' ') ? searchQuery.trim().split(' ').join('+') : searchQuery.trim();
-      const endpoint = `${searchEndpoint}=${formattedQuery}`;
+      const endpoint = `${searchEndpoint}/${formattedQuery}`;
 
       const search = await fetchData(endpoint);
       setMovieResults(search);
+      console.log(movieResults)
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -74,7 +75,7 @@ export default function Search(props) {
       />
       <ul className={SearchStyle["search-results-list"]}>
         {movieResults.map((movie) => {
-          if (movie.posterUrl && movie.voteAverage) {
+          if (movie.poster_path && movie.vote_average) {
             return (
               <a
                 href={`/movies/movie/${movie.id}`}
@@ -83,14 +84,14 @@ export default function Search(props) {
               >
                 <li className={SearchStyle["ind-search-result"]}>
                   <img
-                    src={`${miniPosterUrl}${movie.posterUrl}`}
+                    src={`${miniPosterUrl}${movie.poster_path}`}
                     alt={movie.title}
                   />
                   <div className={SearchStyle["result-title-data"]}>
                     <div className={SearchStyle["result-title"]}>
                       {movie.title}
                       <div className={SearchStyle["result-release-date"]}>
-                        <span>({<ParseYear date={movie.releaseDate} />})</span>
+                        <span>({<ParseYear date={movie.release_date} />})</span>
                       </div>
                     </div>
                     {/* <div className={SearchStyle["result-actors"]}>
@@ -102,7 +103,7 @@ export default function Search(props) {
                     </div> */}
                   </div>
                   <div className={SearchStyle["result-rating"]}>
-                    {movie.voteAverage}
+                    {movie.vote_average}
                   </div>
                 </li>
               </a>

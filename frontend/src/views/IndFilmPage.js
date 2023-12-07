@@ -21,7 +21,6 @@ import MovieButton from "../components/Other/btn/MovieButton/Button";
 import fetchData from "../security/FetchApiData";
 import isTokenExpired from "../security/IsTokenExpired.js";
 const recommendedEndpoint = process.env.REACT_APP_RECOMMENDED_ENDPOINT;
-const recommendedEndpointOptions = process.env.REACT_APP_RECOMMENDED_ENDPOINT_OPTIONS;
 
 export default function IndMovie() {
   const { id } = useParams();
@@ -31,7 +30,6 @@ export default function IndMovie() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-
     async function fetchBackendData() {
       setIsLoading(true);
       try {
@@ -39,7 +37,7 @@ export default function IndMovie() {
         const [movies, reviews, recommendedMovies] = await Promise.all([
           fetchData(id),
           fetchData(`http://localhost:8080/review/${id}`),
-          fetchData(`${recommendedEndpoint}${id}/${recommendedEndpointOptions}`)
+          fetchData(`${recommendedEndpoint}${id}`)
         ]);
 
         setMovie(movies);

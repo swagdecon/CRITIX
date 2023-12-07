@@ -10,7 +10,6 @@ import { MovieCardActors, MovieCardGenres } from "./MovieCardComponents.js";
 import MovieCardStyle from "./moviecard.module.scss"
 import fetchData from "../../security/FetchApiData.js"
 const trailerEndpoint = process.env.REACT_APP_TRAILER_ENDPOINT;
-// const TMDB_IMAGE_PREFIX = process.env.REACT_APP_DEFAULT_TMDB_IMAGE_PREFIX;
 
 export default function MovieCard({
   movieId,
