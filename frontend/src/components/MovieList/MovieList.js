@@ -116,7 +116,7 @@ export default function MovieList({ endpoint }) {
         })
         .catch(error => {
           console.error("Error fetching detailed movie data:", error);
-          setDataLoaded(true); // Set dataLoaded to true even in case of error
+          setDataLoaded(true);
         });
     }
     getDetailedMovieData(endpoint.endpointName, currentPage);

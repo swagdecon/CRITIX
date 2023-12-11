@@ -23,7 +23,6 @@
 		<jjwt.version>0.11.5</jjwt.version>
 		<okhttp.version>4.11.0</okhttp.version>
 	</properties>
-	
 		<dependencies>
 			<dependency>
 				<groupId>jakarta.persistence</groupId>
@@ -61,10 +60,10 @@
 				<version>${moviedbapi.version}</version>
 			</dependency>
 			<dependency>
-			<groupId>com.fasterxml.jackson.datatype</groupId>
-			<artifactId>jackson-datatype-json-org</artifactId>
-			<version>${jackson-datatype.version}</version>
-		</dependency>
+				<groupId>com.fasterxml.jackson.datatype</groupId>
+				<artifactId>jackson-datatype-json-org</artifactId>
+				<version>${jackson-datatype.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.projectlombok</groupId>
 				<artifactId>lombok</artifactId>
@@ -95,16 +94,7 @@
 				<artifactId>spring-security-test</artifactId>
 				<scope>test</scope>
 			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.datatype</groupId>
-				<artifactId>jackson-datatype-jsr310</artifactId>
-			</dependency>
-			<dependency>
-				<groupId>com.squareup.okhttp3</groupId>
-				<artifactId>okhttp</artifactId>
-				<version>${okhttp.version}</version>
-			</dependency>
- </dependencies>
+ 	</dependencies>
 	<build>
 		<plugins>
 			<plugin>

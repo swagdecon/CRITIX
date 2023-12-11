@@ -1,6 +1,7 @@
 package com.popflix.service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -10,17 +11,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -34,13 +31,13 @@ import com.popflix.model.Person;
 import com.popflix.repository.MovieRepository;
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbMovies;
-import info.movito.themoviedbapi.TmdbMovies.MovieMethod;
 import info.movito.themoviedbapi.model.Credits;
 import info.movito.themoviedbapi.model.Genre;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.ProductionCompany;
 import info.movito.themoviedbapi.model.Reviews;
 import info.movito.themoviedbapi.model.Video;
+import info.movito.themoviedbapi.model.core.MovieResultsPage;
 import info.movito.themoviedbapi.model.people.PersonCast;
 import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.annotation.PostConstruct;
@@ -49,21 +46,18 @@ import jakarta.annotation.PostConstruct;
 public class MovieService {
   static Dotenv dotenv = Dotenv.load();
   private String TMDB_API_KEY = dotenv.get("TMDB_API_KEY");
+  private String YT_URL_PREFIX = dotenv.get("YT_URL_PREFIX");
+  private String TMDB_IMAGE_PREFIX = dotenv.get("TMDB_IMAGE_PREFIX");
+
   private final MovieRepository movieRepository;
   private final MongoTemplate mongoTemplate;
   private final TmdbApi tmdbApi;
-  String movieUrl = "https://image.tmdb.org/t/p/original";
-
-  private HashMap<Integer, String> movieGenres;
-
   private ScheduledExecutorService executor;
 
   public MovieService(MovieRepository movieRepository, MongoTemplate mongoTemplate) {
     this.movieRepository = movieRepository;
     this.mongoTemplate = mongoTemplate;
     this.tmdbApi = new TmdbApi(TMDB_API_KEY);
-    this.movieGenres = createMovieGenresMap();
-
   }
 
   @PostConstruct
@@ -107,10 +101,9 @@ public class MovieService {
 
   private void setMovieDetails(Movie movie, MovieDb movieApi) {
 
-    String posterUrl = movieUrl + movieApi.getPosterPath();
-    String backdropUrl = movieUrl + movieApi.getBackdropPath();
-    movie.setAdult(movieApi.isAdult());
-    movie.setTitle(movieApi.getOriginalTitle());
+    String posterUrl = TMDB_IMAGE_PREFIX + movieApi.getPosterPath();
+    String backdropUrl = TMDB_IMAGE_PREFIX + movieApi.getBackdropPath();
+    movie.setTitle(movieApi.getTitle());
     movie.setOriginalLanguage(movieApi.getOriginalLanguage());
     movie.setOverview(movieApi.getOverview());
     movie.setPopularity(movieApi.getPopularity());
@@ -226,7 +219,7 @@ public class MovieService {
         }
       }
       if (mainTrailerKey != null) {
-        movie.setTrailer("https://www.youtube.com/watch?v=" + mainTrailerKey);
+        movie.setTrailer(YT_URL_PREFIX + mainTrailerKey);
       }
     }
   }
@@ -256,11 +249,10 @@ public class MovieService {
 
       for (MovieDb movieDb : collection) {
         Movie movie = new Movie();
-        String posterUrl = movieUrl + movieDb.getPosterPath();
-        String backdropUrl = movieUrl + movieDb.getBackdropPath();
+        String posterUrl = TMDB_IMAGE_PREFIX + movieDb.getPosterPath();
+        String backdropUrl = TMDB_IMAGE_PREFIX + movieDb.getBackdropPath();
         movie.setId(movieDb.getId());
-        movie.setAdult(movieDb.isAdult());
-        movie.setTitle(movieDb.getOriginalTitle());
+        movie.setTitle(movieDb.getTitle());
         movie.setOriginalLanguage(movieDb.getOriginalLanguage());
         movie.setOverview(movieDb.getOverview());
         movie.setPopularity(movieDb.getPopularity());
@@ -322,7 +314,8 @@ public class MovieService {
 
   public MovieResults getMovieResults(String endpoint, Integer page)
       throws IOException, InterruptedException, URISyntaxException {
-    String url = "https://api.themoviedb.org/3/movie/" + endpoint + "?" + "api_key=" + TMDB_API_KEY
+    String url = "https://api.themoviedb.org/3/movie/" + endpoint + "?" +
+        "api_key=" + TMDB_API_KEY
         + "&language=en-US&page=" + page
         + "&include_adult=false";
 
@@ -332,7 +325,8 @@ public class MovieService {
         .GET()
         .build();
 
-    HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    HttpResponse<String> response = httpClient.send(request,
+        HttpResponse.BodyHandlers.ofString());
     String responseBody = response.body();
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -342,11 +336,12 @@ public class MovieService {
 
     resultsNode.forEach(movieNode -> {
       MovieCard movie = objectMapper.convertValue(movieNode, MovieCard.class);
-      String posterUrl = movieUrl + movieNode.get("poster_path").asText();
-      long voteAverage = movieNode.get("vote_average").asLong();
-
+      String posterUrl = TMDB_IMAGE_PREFIX + movieNode.get("poster_path").asText();
+      JsonNode JsonNodeVoteAverage = movieNode.get("vote_average");
+      double voteAverageValue = JsonNodeVoteAverage.asDouble();
+      Integer voteAverage = (int) Math.round(voteAverageValue) * 10;
       movie.setPosterUrl(posterUrl);
-      movie.setVoteAverage(Math.round(voteAverage) * 10);
+      movie.setVoteAverage(voteAverage);
 
       // Set other fields needed for Movie card
       movie.setTitle(movie.getTitle());
@@ -361,6 +356,51 @@ public class MovieService {
 
     return new MovieResults(movieCardList, totalPages);
   }
+
+  // public MovieResults getMovieResults(String endpoint, Integer page) {
+
+  // MovieResultsPage results;
+  // Integer totalPages;
+  // List<MovieDb> movieResults;
+  // switch (endpoint) {
+  // case "now_playing":
+  // results = tmdbApi.getMovies().getNowPlayingMovies("en-US", page, "");
+  // movieResults = results.getResults();
+  // totalPages = results.getTotalPages();
+  // break;
+  // case "popular":
+  // results = tmdbApi.getMovies().getPopularMovies("en-US", page);
+  // movieResults = results.getResults();
+  // totalPages = results.getTotalPages();
+  // break;
+  // case "top_rated":
+  // results = tmdbApi.getMovies().getTopRatedMovies("en-US", page);
+  // movieResults = results.getResults();
+  // totalPages = results.getTotalPages();
+  // break;
+  // case "upcoming":
+  // results = tmdbApi.getMovies().getUpcoming("en-US", page, "");
+  // movieResults = results.getResults();
+  // totalPages = results.getTotalPages();
+  // break;
+  // default:
+  // throw new IllegalArgumentException("Invalid method name: " + endpoint);
+  // }
+  // List<MovieDb> updatedMoviesResults = movieResults.stream().peek(movie -> {
+  // movie.setTitle(movie.getTitle());
+  // movie.setOverview(movie.getOverview());
+  // movie.setReleaseDate(movie.getReleaseDate());
+  // movie.setVoteAverage(Math.round(movie.getVoteAverage()) * 10);
+  // movie.setPosterPath(TMDB_IMAGE_PREFIX + movie.getPosterPath());
+  // movie.setTagline(movie.getTagline());
+  // movie.setRuntime(movie.getRuntime());
+  // movie.setGenres(movie.getGenres());
+  // })
+  // .collect(Collectors.toList());
+
+  // return new MovieResults(updatedMoviesResults, totalPages);
+
+  // }
 
   public List<MovieDb> searchResults(String query) throws IOException, InterruptedException, URISyntaxException {
 
@@ -377,28 +417,21 @@ public class MovieService {
     return updatedSearchResults;
   }
 
-  public HashMap<Integer, String> createMovieGenresMap() {
+  public HashMap<Integer, String> parseGenreIds() {
+    Properties properties = new Properties();
     HashMap<Integer, String> movieGenres = new HashMap<>();
 
-    movieGenres.put(28, "Action");
-    movieGenres.put(12, "Adventure");
-    movieGenres.put(16, "Animation");
-    movieGenres.put(35, "Comedy");
-    movieGenres.put(80, "Crime");
-    movieGenres.put(99, "Documentary");
-    movieGenres.put(18, "Drama");
-    movieGenres.put(10751, "Family");
-    movieGenres.put(14, "Fantasy");
-    movieGenres.put(36, "History");
-    movieGenres.put(27, "Horror");
-    movieGenres.put(10402, "Music");
-    movieGenres.put(9648, "Mystery");
-    movieGenres.put(10749, "Romance");
-    movieGenres.put(878, "Science Fiction");
-    movieGenres.put(10770, "TV Movie");
-    movieGenres.put(53, "Thriller");
-    movieGenres.put(10752, "War");
-    movieGenres.put(37, "Western");
+    try (InputStream input = getClass().getClassLoader().getResourceAsStream("movieGenres.properties")) {
+      if (input != null) {
+        properties.load(input);
+
+        for (String key : properties.stringPropertyNames()) {
+          movieGenres.put(Integer.parseInt(key), properties.getProperty(key));
+        }
+      }
+    } catch (IOException | NumberFormatException e) {
+      e.printStackTrace();
+    }
 
     return movieGenres;
   }
@@ -406,7 +439,7 @@ public class MovieService {
   private void setGenresProperty(MovieCard movieCard, JsonNode node, String propertyName) {
     JsonNode genresNode = node.get(propertyName);
     if (genresNode != null && genresNode.isArray()) {
-      HashMap<Integer, String> movieGenres = createMovieGenresMap();
+      HashMap<Integer, String> movieGenres = parseGenreIds();
       List<String> genresList = new ArrayList<>();
       for (JsonNode genre : genresNode) {
         if (genre.isInt()) {
@@ -422,21 +455,20 @@ public class MovieService {
 
   public List<Movie> recommendedMovies(Integer movieId)
       throws IOException, InterruptedException, URISyntaxException {
-    List<MovieDb> recommendedMovies = tmdbApi.getMovies().getRecommendedMovies(movieId, "", 1).getResults();
+    List<MovieDb> recommendedMovies = tmdbApi.getMovies().getSimilarMovies(movieId, "", 1).getResults();
     List<Movie> movieList = new ArrayList<>();
     recommendedMovies.stream()
-        .peek(movieDb -> {
+        .peek(movieApi -> {
           Movie movie = new Movie();
-          String posterUrl = movieUrl + movieDb.getPosterPath();
-
-          movie.setId(movieDb.getId());
+          String posterUrl = TMDB_IMAGE_PREFIX + movieApi.getPosterPath();
+          movie.setId(movieApi.getId());
           movie.setPosterUrl(posterUrl);
-          movie.setTitle(movieDb.getTitle());
-          movie.setOverview(movieDb.getOverview());
-          movie.setReleaseDate(movieDb.getReleaseDate());
-          movie.setTagline(movieDb.getTagline());
-          movie.setRuntime(movieDb.getRuntime());
-          movie.setVoteAverage(Math.round(movieDb.getVoteAverage() * 10));
+          movie.setTitle(movieApi.getTitle());
+          movie.setOverview(movieApi.getOverview());
+          movie.setReleaseDate(movieApi.getReleaseDate());
+          movie.setTagline(movieApi.getTagline());
+          movie.setRuntime(movieApi.getRuntime());
+          movie.setVoteAverage(Math.round(movieApi.getVoteAverage() * 10));
           movieList.add(movie);
         })
         .collect(Collectors.toList());
@@ -457,7 +489,7 @@ public class MovieService {
 
     if (!youtubeKeys.isEmpty()) {
       String firstTrailerKey = youtubeKeys.get(0);
-      return "https://www.youtube.com/watch?v=" + firstTrailerKey;
+      return YT_URL_PREFIX + firstTrailerKey;
     } else {
       return "No Trailers Available";
     }
