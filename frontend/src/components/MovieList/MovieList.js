@@ -144,8 +144,8 @@ export default function MovieList({ endpoint }) {
             <Link to={`/movies/movie/${movie.id}`}>
               <MovieCard
                 movieId={movie.id}
-                poster={movie.poster_path}
-                rating={movie.vote_average}
+                poster={movie.posterUrl}
+                rating={movie.voteAverage}
                 runtime={movie.runtime}
                 genres={movie.genres}
                 overview={movie.overview}

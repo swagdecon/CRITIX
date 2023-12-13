@@ -46,7 +46,6 @@ function Homepage() {
 
     fetchBackendData();
   }, []);
-
   return isLoading || !moviesData ? (
     <LoadingPage />
   ) : (

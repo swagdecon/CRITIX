@@ -20,6 +20,7 @@ public class MovieCard {
     private String posterUrl;
     private String releaseDate;
     private String title;
+    private String trailer;
     private Integer voteAverage;
     private String tagline;
     private Integer runtime;

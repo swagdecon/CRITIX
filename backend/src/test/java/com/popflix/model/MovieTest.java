@@ -2,6 +2,9 @@ package com.popflix.model;
 
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
+
+import info.movito.themoviedbapi.model.providers.ProviderResults;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -28,6 +31,7 @@ class MovieTest {
         String trailer = "https://www.youtube.com/watch?v=fui1f23";
         Integer voteAverage = 82;
         Integer voteCount = 1000;
+        ProviderResults providers = new ProviderResults();
         String imdbId = "tt1234567";
         Long budget = 100000000L;
         String tagline = "Movie tagline";
@@ -40,8 +44,9 @@ class MovieTest {
         String movieStatus = "Released";
 
         Movie movie = new Movie(id, adult, backdropUrl, genreIds, genres, movieId, originalLanguage,
-                originalTitle, overview, popularity, posterUrl, releaseDate, title, trailer, voteAverage, voteCount,
-                imdbId, budget, tagline, revenue, runtime, actors, actorImagePaths, reviews, productionCompanies,
+                originalTitle, overview, popularity, posterUrl, releaseDate, title, trailer, voteAverage, providers,
+                voteCount, imdbId, budget, tagline, revenue, runtime, actors, actorImagePaths, reviews,
+                productionCompanies,
                 movieStatus);
 
         // Assert individual properties
@@ -59,6 +64,7 @@ class MovieTest {
         assertEquals(releaseDate, movie.getReleaseDate());
         assertEquals(title, movie.getTitle());
         assertEquals(trailer, movie.getTrailer());
+        assertEquals(providers, movie.getProviderResults());
         assertEquals(voteAverage, movie.getVoteAverage());
         assertEquals(voteCount, movie.getVoteCount());
         assertEquals(imdbId, movie.getImdbId());
