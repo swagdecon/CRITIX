@@ -38,7 +38,6 @@ h6 {
 }
 #signin form {
   width: 80%;
-  padding-bottom: 3rem;
   justify-content: center;
 }
 #signin .logo {
@@ -96,6 +95,7 @@ h6 {
   text-decoration: none;
   cursor: pointer;
   text-align: center;
+  font-weight: bold;
   transition: all 0.5s;
 }
 
@@ -120,7 +120,7 @@ h6 {
 }
 #signin .or {
   display: flex;
-  margin-bottom: 1.2rem;
+  margin-bottom: .2rem;
   align-items: center;
 }
 #signin .or .bar {
@@ -172,17 +172,36 @@ h6 {
   height: 100%;
 }
 
+.resend-pwd-auth {
+   padding: 5%;
+   color: white;  
+   border-radius: 50px;
+   font-size: 14.2px;
+   background-color: #cecece48;
+}
+
+
+.error-msg-wrapper, .success-msg-wrapper {
+  max-width: 200px;
+}
 .error-msg {
   margin: 10px 0;
   padding: 5px;
   padding-left: 5%;
   border-radius: 20px;
-  max-width: 100%;
   font-size: 13px;
   color: #d8000c;
   background-color: #ffbaba;
 }
-
+.success-msg {
+  margin: 10px 0;
+  padding: 5px;
+  padding-left: 5%;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #ffffff;
+  background-color: #0095ff6b;
+}
 video {
   object-fit: cover;
   width: 100%;
@@ -212,6 +231,21 @@ video {
   height: 20px;
 }
 @media screen and (max-width: 900px) {
+  .overlay {
+    display: none;
+  }
+  .or {
+    width: 26%;
+  }
+  .responsive-background {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background: linear-gradient(#141e30, #0096ff);
+    width: 100%;
+    height: 100%;
+  }
   #left {
     min-width: 100%;
     overflow: hidden;
@@ -219,7 +253,7 @@ video {
   }
   #signin form {
     width: 250px;
-    padding-bottom: 3rem;
+    /* padding-bottom: 3rem; */
     justify-content: center;
   }
   .secondary-btn {

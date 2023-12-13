@@ -6,8 +6,9 @@
   border-radius: 0.7rem;
   padding: 20px;
   text-align: left;
-  width: 95%;
+  width: 50.5em;
   overflow: hidden; 
+  margin-right:15px
 }
 .total-rating-wrapper {
   display: inline-flex;
@@ -23,7 +24,10 @@
   align-items: flex-start;
   min-height: 10vh;
 }
-
+.recaptcha-btn {
+  display: flex;
+  padding-top: 1vh;
+}
 .post-review-btn {
   display: flex;
   padding-top: 1vh;
@@ -33,12 +37,6 @@
 .textField-wrapper {
   flex: 1;
 }
-
-.input-slider {
-  justify-content: center;
-  align-self: start;
-}
-
 .user-info-wrapper {
   display: flex;
   flex-direction: column;
@@ -58,22 +56,21 @@
 .section-line {
   border-bottom: thin solid #8f8f8f;
 }
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 650px) {
   .MuiInputBase-input {
     display: none;
   }
   .textField-wrapper {
     order: 2;
-    min-width: 100%
+    min-width: 100%;
+    text-align: center;
   }
    .user-review-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0 auto;
-    min-height: 10vh;
   }
-  .post-review-btn {
+  .post-review-btn, .recaptcha-btn {
     justify-content: center;
   }
 }

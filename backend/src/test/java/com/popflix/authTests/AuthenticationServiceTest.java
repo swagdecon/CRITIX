@@ -54,7 +54,7 @@ class AuthenticationServiceTest {
     private AuthenticationService authenticationService;
 
     @Test
-    void testRegister() {
+    void testRegister() throws Exception {
         // Test data
         RegisterRequest request = new RegisterRequest();
         request.setEmail("test@example.com");

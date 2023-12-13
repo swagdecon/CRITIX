@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import "./OtherReviews.css";
+import ReviewStyle from "./OtherReviews.module.css";
 import UserRating from "../Rating/UserRating/UserRating";
 import Pagination from "@mui/material/Pagination";
 import PropTypes from "prop-types";
@@ -17,34 +17,34 @@ export default function ReviewSection({ reviews }) {
     }, [currentPage, reviews]);
 
     return (
-        <div className="comment-section">
-            <div className="container">
-                <div className="review">
-                    <div className="comment-section">
+        <div className={ReviewStyle["comment-section"]}>
+            <div className={ReviewStyle.container}>
+                <div className={ReviewStyle.review}>
+                    <div className={ReviewStyle["comment-section"]}>
                         {displayReviews.map((review) => (
-                            <div className="user-review" key={review.author}>
-                                <div className="media media-review">
-                                    <div className="media-user">
+                            <div className={ReviewStyle["user-review"]} key={review.author}>
+                                <div className={`${ReviewStyle["media"]} ${ReviewStyle["media-review"]}`} >
+                                    <div className={ReviewStyle["media-user"]}>
                                         <img
                                             src={review.avatar}
-                                            className="profile-picture"
+                                            className={ReviewStyle["profile-picture"]}
                                         />
                                     </div>
-                                    <div className="media-body">
-                                        <div className="M-flex">
-                                            <h4 className="title">
+                                    <div className={ReviewStyle["media-body"]}>
+                                        <div className={ReviewStyle["M-flex"]}>
+                                            <h4 className={ReviewStyle.title}>
                                                 <span> {review.author}{" "}</span>
                                                 {review.createdDate}
                                             </h4>
 
-                                            <div className="rating-row">
+                                            <div className={ReviewStyle["rating-row"]}>
                                                 {review.rating ? (
 
                                                     <UserRating percentage={(review.reviewId == null ? review.rating * 10 : parseInt(review.rating))} />
                                                 ) : null}
                                             </div>
                                         </div>
-                                        <div className="description">{review.content}</div>
+                                        <div className={ReviewStyle["description"]}>{review.content}</div>
                                     </div>
                                 </div>
                             </div>
@@ -66,7 +66,7 @@ export default function ReviewSection({ reviews }) {
                     )}
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 

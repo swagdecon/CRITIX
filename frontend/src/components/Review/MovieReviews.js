@@ -7,13 +7,17 @@ import ReactTextCollapse from "react-text-collapse/dist/ReactTextCollapse";
 import Filter from "bad-words";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import useFetchData from "../../security/FetchApiData";
 import IndReview from "./Review.module.css";
 import IndMovieStyle from "../IndMovie/ind_movie.module.css";
 import ReviewSection from "./ReviewList/ReviewSection";
 import PercentageRatingCircle from "./Rating/PercentageCircle/PercentageCircle";
 import InputSlider from "./Rating/Slider/Slider.js";
 import CookieManager from "../../security/CookieManager";
+import ReCAPTCHA from "react-google-recaptcha";
+import { format } from 'date-fns';
+const CLIENT_API_KEY = process.env.REACT_APP_CLIENT_API_KEY;
+const RECAPTCHA_ENDPOINT = process.env.REACT_APP_RECAPTCHA_ENDPOINT;
+const CREATE_MOVIE_ENDPOINT = process.env.REACT_APP_CREATE_MOVIE_ENDPOINT;
 
 const TEXT_COLLAPSE_OPTIONS = {
     collapse: false,
@@ -27,23 +31,28 @@ const TEXT_COLLAPSE_OPTIONS = {
     }
 };
 
-const MovieReviews = ({ voteAverage, movieId, placement }) => {
-    const { data: userReviews, dataLoaded, refetchData } = useFetchData(
-        useMemo(() => `http://localhost:8080/review/${movieId}`, [movieId])
-    );
+const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
 
-    const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
-    const decodedToken = useMemo(() => jwt_decode(token), [token]);
+    let token = CookieManager.decryptCookie('accessToken');
+    const decodedToken = jwt_decode(token);
+
     const filter = useMemo(() => new Filter(), []);
     const [reviewRating, setReviewRating] = useState(0);
     const [reviewContent, setReviewContent] = useState("");
     const [disabledInput, setDisabledInputLogic] = useState(false);
     const [hasSubmittedReview, setHasSubmittedReview] = useState(false);
+    const [recaptchaResult, setRecaptchaResult] = useState(false)
     const [maxHeight, setMaxHeight] = useState(500);
     const hasReviewProfanity = useMemo(() => filter.isProfane(reviewContent), [filter, reviewContent]);
-    const isSubmitDisabled = useMemo(() => reviewContent.trim().length === 0 || reviewRating === 0, [reviewContent, reviewRating]);
+    const isRecaptchaVisible = useMemo(() => reviewContent.trim().length != 0 && reviewRating != 0 && !hasReviewProfanity[reviewContent, reviewRating, hasReviewProfanity]);
+    const isSubmitDisabled = useMemo(
+        () =>
+            reviewContent.trim().length === 0 ||
+            reviewRating === 0 ||
+            !recaptchaResult,
+        [reviewContent, reviewRating, recaptchaResult]
+    );
     const reviewRef = useRef(null);
-
     const reviewInputStyles = {
         borderRadius: "15px",
         fieldSet: {
@@ -71,17 +80,29 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
             width: '100%',
         }
     };
+    async function onChange(token) {
+        try {
+            await axios.post(RECAPTCHA_ENDPOINT, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                recaptchaValue: token
+            }).then(res =>
+                setRecaptchaResult(res.data.success))
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
 
     const handleSubmit = useCallback(() => {
         if (!hasReviewProfanity) {
             const currentDate = new Date();
-            const day = currentDate.getDate().toString().padStart(2, "0");
-            const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
-            const year = currentDate.getFullYear().toString();
-            const formattedDate = `${day}-${month}-${year}`;
+            const formattedDate = format(currentDate, 'dd-MM-yyyy');
             const userId = decodedToken.userId;
+
             axios
-                .post(`http://localhost:8080/review/create/${movieId}`, {
+                .post(`${CREATE_MOVIE_ENDPOINT}${movieId}`, {
                     createdDate: formattedDate,
                     movieId: movieId,
                     userId: userId,
@@ -90,7 +111,6 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                     content: reviewContent,
                 }, {
                     headers: {
-                        "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
                     },
                 })
@@ -99,7 +119,6 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                     setReviewContent("");
                     setHasSubmittedReview(true);
                     setDisabledInputLogic(true);
-                    refetchData();
                 })
                 .catch((error) => {
                     if (error.response.status === 400 && error.response.data === "User already submitted a review for this movie.") {
@@ -107,14 +126,14 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                     }
                 });
         }
-    }, [movieId, decodedToken, reviewRating, reviewContent, token, refetchData, hasReviewProfanity]);
+    }, [movieId, decodedToken, reviewRating, reviewContent, token, hasReviewProfanity]);
 
     useEffect(() => {
         if (reviewRef.current) {
             const reviewHeight = reviewRef.current.offsetHeight;
             setMaxHeight(reviewHeight);
         }
-    }, [userReviews]);
+    }, []);
 
     const renderUserRatingSection = () => {
         const percentageVoteAverage = useMemo(() => voteAverage || null, [voteAverage]);
@@ -123,13 +142,9 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
             <div className={IndReview["ind-review-wrapper"]}>
                 <div className={IndReview["input-wrapper"]}>
                     <div className={IndReview["user-review-wrapper"]}>
-
                         <div className={IndReview["user-info-wrapper"]} />
-
                         <div className={IndReview["textField-wrapper"]}>
-                            <div className={IndReview["input-slider"]}>
-                                <InputSlider onSliderChange={setReviewRating} />
-                            </div>
+                            <InputSlider onSliderChange={setReviewRating} />
                             <TextField
                                 size="small"
                                 id="outlined-multiline-flexible"
@@ -161,16 +176,26 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                             />
 
                             {!hasSubmittedReview && !hasReviewProfanity && (
-                                <div className={IndReview["post-review-btn"]}>
-                                    <Button
-                                        variant="contained"
-                                        endIcon={<MovieCreationOutlinedIcon />}
-                                        size="medium"
-                                        onClick={handleSubmit}
-                                        disabled={isSubmitDisabled}
-                                    >
-                                        SUBMIT
-                                    </Button>
+                                <div>
+                                    {isRecaptchaVisible && (
+                                        <div className={IndReview["recaptcha-btn"]}>
+                                            <ReCAPTCHA
+                                                sitekey={CLIENT_API_KEY}
+                                                onChange={onChange}
+                                            />
+                                        </div>
+                                    )}
+                                    <div className={IndReview["post-review-btn"]}>
+                                        <Button
+                                            variant="contained"
+                                            endIcon={<MovieCreationOutlinedIcon />}
+                                            size="medium"
+                                            onClick={handleSubmit}
+                                            disabled={isSubmitDisabled}
+                                        >
+                                            SUBMIT
+                                        </Button>
+                                    </div>
                                 </div>
                             )}
                         </div>
@@ -178,8 +203,8 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                             <PercentageRatingCircle percentageRating={percentageVoteAverage} />
                         </div>
                     </div>
-                    {dataLoaded && userReviews && userReviews.length >= 2 && (
-                        <ReviewSection reviews={userReviews} />
+                    {reviews && reviews.length >= 2 && (
+                        <ReviewSection reviews={reviews} />
                     )}
                 </div>
             </div>
@@ -188,12 +213,12 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
     };
 
     const renderHeaderSection = () => {
-        if (userReviews.length > 0) {
+        if (reviews.length > 0) {
             return (
                 <div className={IndMovieStyle.review__wrapper} ref={reviewRef}>
                     <h3 className={IndMovieStyle.ind_review_title}>Reviews</h3>
-                    {dataLoaded &&
-                        Object.keys(userReviews)
+                    {
+                        Object.keys(reviews)
                             .slice(0, 2)
                             .map((key, index) => (
                                 <ReactTextCollapse
@@ -201,7 +226,7 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
                                     options={{ ...TEXT_COLLAPSE_OPTIONS, maxHeight }}
                                 >
                                     <p className={IndMovieStyle.review__description}>
-                                        {userReviews[key].content}
+                                        {reviews[key].content}
                                     </p>
                                     <br />
                                 </ReactTextCollapse>
@@ -223,6 +248,7 @@ const MovieReviews = ({ voteAverage, movieId, placement }) => {
 
 MovieReviews.propTypes = {
     voteAverage: PropTypes.number,
+    reviews: PropTypes.array,
     movieId: PropTypes.number,
     placement: PropTypes.string
 };

@@ -1,5 +1,4 @@
 import React from "react";
-import "./WatchTrailerBtn.css";
 export default function WatchTrailerBtn() {
   return (
     <svg

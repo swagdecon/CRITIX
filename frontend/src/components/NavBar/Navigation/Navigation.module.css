@@ -1,0 +1,26 @@
+.Navigation ul {
+  display: flex;
+  margin: 0;
+  color: white;
+}
+
+.nav-link {
+  display: flex;
+  font-weight: 400;
+  padding:  10px;
+  transition: background 0.125s ease;
+  border-radius: 3px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  background: #0096FF;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 1850px) {
+  .Navigation {
+  display: none;
+  }
+}

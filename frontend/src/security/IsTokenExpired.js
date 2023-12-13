@@ -1,20 +1,14 @@
 import jwt_decode from "jwt-decode";
 import CookieManager from "./CookieManager";
-import { useNavigate } from "react-router-dom";
 import Logout from "./Logout";
-let isRefreshingToken = false;
+let refreshPromise = null;
 
-export default async function isExpired() {
-  const navigate = useNavigate();
-  const token = CookieManager.decryptCookie("accessToken");
-  const refreshToken = CookieManager.decryptCookie("refreshToken");
+export default function isTokenExpired() {
+  return new Promise((resolve, reject) => {
+    const token = CookieManager.decryptCookie("accessToken");
+    const refreshToken = CookieManager.decryptCookie("refreshToken");
 
-  if (token) {
-    const decodedToken = jwt_decode(token);
-    const currentTime = Date.now() / 1000;
-
-    if (decodedToken.exp < currentTime && !isRefreshingToken) {
-      isRefreshingToken = true;
+    const refreshTokenLogic = async () => {
       try {
         const refreshResponse = await fetch(
           "http://localhost:8080/v1/auth/refresh-token",
@@ -32,15 +26,32 @@ export default async function isExpired() {
         CookieManager.encryptCookie("refreshToken", data.refresh_token, {
           expires: 7,
         });
+        resolve(); // Resolve the promise when token is refreshed
       } catch (error) {
-        console.log(error);
-        await Logout(navigate)
-
+        reject(error); // Reject if there's an error during token refresh
+        Logout()
       } finally {
-        isRefreshingToken = false;
+        refreshPromise = null; // Reset the refreshPromise after completion or failure
       }
+    };
+
+    if (!token) {
+      return reject("No token found"); // Reject immediately if no token is found
     }
-  } else {
-    return;
-  }
+
+    const decodedToken = jwt_decode(token);
+    const currentTime = Date.now() / 1000;
+
+    if (decodedToken.exp >= currentTime) {
+      return resolve(); // Resolve immediately if token is not expired
+    }
+
+    if (!refreshPromise) {
+      // If there's no ongoing refresh, create a new refreshPromise
+      refreshPromise = refreshTokenLogic();
+    }
+
+    // Add resolve and reject to refreshPromise
+    refreshPromise.then(resolve).catch(reject);
+  });
 }

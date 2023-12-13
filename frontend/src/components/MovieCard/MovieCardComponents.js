@@ -1,21 +1,18 @@
 import PropTypes from "prop-types";
 import React from "react";
+
 function MovieCardGenres({ genres }) {
   if (!genres || genres.length === 0) {
     return "No genres available";
   }
-  if (Array.isArray(genres)) {
-    const flattenedGenres = genres.map((genre) => {
-      if (typeof genre === "object") {
-        return genre.name;
-      } else {
-        return genre;
-      }
-    });
-    return flattenedGenres.join(" | ");
-  } else {
-    return "No genres available";
-  }
+  const flattenedGenres = genres.map((genre) => {
+    if (typeof genre === "object") {
+      return genre.name;
+    } else {
+      return genre;
+    }
+  });
+  return flattenedGenres.join(" | ");
 }
 function MovieCardActors({ actors }) {
   MovieCardActors.propTypes = {
@@ -42,4 +39,5 @@ function MovieCardActors({ actors }) {
     );
   }
 }
+
 export { MovieCardActors, MovieCardGenres };

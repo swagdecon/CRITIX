@@ -5,16 +5,23 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.1</version>
+		<version>3.2.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.popflix</groupId>
 	<artifactId>popflix</artifactId>
 	<version>0.0.1</version>
 	<name>popflix</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Application where users can find, rate and review their favourite movies</description>
+
 	<properties>
 		<java.version>19</java.version>
+		<javax.version>1.1.4</javax.version>
+		<dotenv.version>5.2.2</dotenv.version>
+		<moviedbapi.version>1.15.1</moviedbapi.version>
+		<jackson-datatype.version>2.15.2</jackson-datatype.version>
+		<jjwt.version>0.11.5</jjwt.version>
+		<okhttp.version>4.11.0</okhttp.version>
 	</properties>
 		<dependencies>
 			<dependency>
@@ -24,11 +31,15 @@
 			<dependency>
 				<groupId>javax.json</groupId>
 				<artifactId>javax.json-api</artifactId>
-				<version>1.1.4</version>
+				<version>${javax.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-security</artifactId>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-mail</artifactId>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
@@ -37,27 +48,22 @@
 			<dependency>
 				<groupId>io.github.cdimascio</groupId>
 				<artifactId>java-dotenv</artifactId>
-				<version>5.2.2</version>
+				<version>${dotenv.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-data-mongodb</artifactId>
 			</dependency>
 			<dependency>
-				<groupId>com.github.holgerbrandl</groupId>
+				<groupId>uk.co.conoregan</groupId>
 				<artifactId>themoviedbapi</artifactId>
-				<version>1.15</version>
+				<version>${moviedbapi.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>io.github.imdb8wrapper</groupId>
-				<artifactId>imdb8wrapper</artifactId>
-				<version>1.0.1</version>
+				<groupId>com.fasterxml.jackson.datatype</groupId>
+				<artifactId>jackson-datatype-json-org</artifactId>
+				<version>${jackson-datatype.version}</version>
 			</dependency>
-			<dependency>
-			<groupId>com.fasterxml.jackson.datatype</groupId>
-			<artifactId>jackson-datatype-json-org</artifactId>
-			<version>2.16.0</version>
-		</dependency>
 			<dependency>
 				<groupId>org.projectlombok</groupId>
 				<artifactId>lombok</artifactId>
@@ -66,17 +72,17 @@
 			<dependency>
 				<groupId>io.jsonwebtoken</groupId>
 				<artifactId>jjwt-api</artifactId>
-				<version>0.11.5</version>
+				<version>${jjwt.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.jsonwebtoken</groupId>
 				<artifactId>jjwt-impl</artifactId>
-				<version>0.11.5</version>
+				<version>${jjwt.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.jsonwebtoken</groupId>
 				<artifactId>jjwt-jackson</artifactId>
-				<version>0.11.5</version>
+				<version>${jjwt.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
@@ -88,17 +94,7 @@
 				<artifactId>spring-security-test</artifactId>
 				<scope>test</scope>
 			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson.datatype</groupId>
-				<artifactId>jackson-datatype-jsr310</artifactId>
-			</dependency>
-	
-   <dependency>
-     <groupId>com.squareup.okhttp3</groupId>
-     <artifactId>okhttp</artifactId>
-     <version>4.1.0</version>
-   </dependency>
- </dependencies>
+ 	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
@@ -115,5 +111,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

@@ -14,13 +14,25 @@ import java.time.format.DateTimeFormatter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.popflix.model.Review;
-import com.popflix.service.MovieService.ImageUtility;
-
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class AllMovieReviews {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final Map<Integer, List<Review>> reviewCache = new HashMap<>();
+    static Dotenv dotenv = Dotenv.load();
+    private static String DEFAULT_AVATAR_URL = dotenv.get("DEFAULT_AVATAR_URL");
+
+    public static String getImageUrl(String avatar) {
+        if (avatar != null && !avatar.equals("null")) {
+            if (avatar.contains("secure.gravatar.com")) {
+                return avatar.substring(1);
+            } else {
+                return "https://image.tmdb.org/t/p/w200" + avatar;
+            }
+        } else {
+            return DEFAULT_AVATAR_URL;
+        }
+    }
 
     public List<Review> getMovieReviews(Integer movieId)
             throws IOException, InterruptedException {
@@ -59,7 +71,7 @@ public class AllMovieReviews {
                     JsonNode authorDetailsNode = resultNode.path("author_details");
                     if (authorDetailsNode.has("avatar_path")) {
                         String avatarPath = authorDetailsNode.path("avatar_path").asText();
-                        String avatarUrl = ImageUtility.getImageUrl(avatarPath);
+                        String avatarUrl = getImageUrl(avatarPath);
                         review.setAvatar(avatarUrl);
                     }
                     review.setContent(content);

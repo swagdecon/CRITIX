@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Title from "../title.module.scss";
@@ -6,46 +6,23 @@ import { chunk } from "lodash";
 import PropTypes from "prop-types";
 import MovieCardStyle from "../../MovieCard/moviecard.module.scss";
 import MovieCard from "../../MovieCard/MovieCard.js";
-import useFetchData from "../../../security/FetchApiData.js";
+import MovieCarouselStyle from "./MovieCarousel.module.css"
+import { getChunkSize, useWindowResizeEffect, CarouselArrowStyles } from "../CarouselHelpers.js";
 
-function MovieCarousel({ title, endpoint }) {
-  const { data: movies } = useFetchData(endpoint);
+const carouselBreakpoints = process.env.REACT_APP_CAROUSEL_BREAKPOINTS;
+const movieCarouselBreakpoints = JSON.parse(carouselBreakpoints);
+
+function MovieCarousel({ title, movies, endpoint }) {
+
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const getChunkSize = () => {
-    if (windowWidth <= 979) {
-      return 1
-    } else if (windowWidth <= 1471) {
-      return 2
-    } else if (windowWidth <= 1971) {
-      return 3;
-    } else if (windowWidth <= 2463) {
-      return 4;
-    } else {
-      return 5;
-    }
-  };
-
-  const movieChunks = chunk(movies, getChunkSize());
-
+  useWindowResizeEffect(setWindowWidth);
+  const movieChunks = chunk(movies, getChunkSize(windowWidth, movieCarouselBreakpoints));
   return (
-    <div className="carousel-wrapper">
+    <div className={MovieCarouselStyle["carousel-wrapper"]}>
       <div className={MovieCardStyle.titleWrapper}>
         <h3 className={`${Title["homepage-carousel"]} ${Title["movie-title"]}`}>{title}</h3>
       </div>
-      <Carousel className="carousel-movie" indicators={false} interval={null}>
+      <Carousel className={MovieCarouselStyle["carousel-movie"]} indicators={false} interval={null}>
         {movieChunks.map((chunk, i) => (
           <Carousel.Item key={i}>
             <div className={MovieCardStyle.carouselHeader} />
@@ -53,13 +30,12 @@ function MovieCarousel({ title, endpoint }) {
               <div className={MovieCardStyle["main-card-container"]} key={movie.id}>
                 <Link to={`${endpoint}/${movie.id}`}>
                   <MovieCard
-                    poster={movie.posterPath}
+                    movieId={movie.id}
+                    poster={movie.posterUrl}
                     rating={movie.voteAverage}
-                    runtime={movie.runtime}
                     genres={movie.genres}
                     overview={movie.overview}
                     actors={movie.actors}
-                    video={movie.video}
                   />
                 </Link>
               </div>
@@ -67,6 +43,7 @@ function MovieCarousel({ title, endpoint }) {
           </Carousel.Item>
         ))}
       </Carousel>
+      <style>{CarouselArrowStyles}</style>
     </div >
   );
 }
@@ -77,4 +54,4 @@ MovieCarousel.propTypes = {
   movies: PropTypes.array,
 };
 
-export default React.memo(MovieCarousel);
+export default MovieCarousel;

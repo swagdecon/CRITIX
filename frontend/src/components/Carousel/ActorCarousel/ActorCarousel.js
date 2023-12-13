@@ -1,18 +1,23 @@
-import { React, useState, useEffect } from "react";
+import { React, useState } from "react";
 import { Carousel } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { chunk } from "lodash";
-
-"./ActorCarousel.css";
+import { getChunkSize, useWindowResizeEffect } from "../CarouselHelpers"
+import ActorStyle from "./ActorCarousel.module.css";
 import Title from "../title.module.scss";
 // import { Link } from "react-router-dom";
-const defaultImage = "url(https://i.pinimg.com/736x/83/bc/8b/83bc8b88cf6bc4b4e04d153a418cde62.jpg) center center no-repeat";
+const DEFAULT_ACTOR_IMAGE = process.env.REACT_APP_DEFAULT_ACTOR_IMAGE;
+const DEFAULT_TMDB_IMAGE = process.env.REACT_APP_DEFAULT_TMDB_IMAGE_PREFIX;
+const ACTOR_CAROUSEL_BREAKPOINT = process.env.REACT_APP_ACTOR_CAROUSEL_BREAKPOINTS
+const defaultImage = `url(${DEFAULT_ACTOR_IMAGE}) center center no-repeat`;
 
 function onMouseEnter(e, image) {
   const target = e.currentTarget;
   if (image) {
-    target.style.background = `url(https://image.tmdb.org/t/p/w500${image}) left center no-repeat `;
-    target.style.backgroundSize = "600px";
+    target.style.backgroundImage = `url(${DEFAULT_TMDB_IMAGE}${image})`;
+    target.style.backgroundPosition = 'left center';
+    target.style.backgroundRepeat = 'no-repeat';
+    target.style.backgroundSize = '600px';
   }
   target.querySelector("h3").style.opacity = 1;
   const icons = target.querySelectorAll(".fa");
@@ -21,12 +26,11 @@ function onMouseEnter(e, image) {
   });
 }
 
-
 function onMouseLeave(e, image, actorImage) {
   const target = e.currentTarget;
   if (image) {
-    target.style.background = actorImage;
-    target.style.backgroundSize = "300px";
+    target.style.backgroundImage = `url(${DEFAULT_TMDB_IMAGE}${actorImage})`;
+    target.style.backgroundSize = '300px';
   }
   target.querySelector("h3").style.opacity = 0;
   const icons = target.querySelectorAll(".fa");
@@ -35,98 +39,59 @@ function onMouseLeave(e, image, actorImage) {
   });
 }
 
+const CarouselArrowStyles = `
+.carousel-control-prev,
+.carousel-control-next {
+  flex: 1;
+  width: 30px;
+  margin: 0 5px;
+}`
+
 
 export default function MovieActors({ actors }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const getChunkSize = () => {
-    switch (true) {
-      case windowWidth < 645:
-        return 1;
-      case windowWidth <= 949:
-        return 2;
-      case windowWidth <= 1300:
-        return 3;
-      case windowWidth <= 1555:
-        return 4;
-      case windowWidth <= 1869:
-        return 5;
-      case windowWidth <= 2181:
-        return 6;
-      case windowWidth <= 2300:
-        return 7;
-      default:
-        return 5;
-    }
-  };
-
-
-  const actorChunks = chunk(actors, getChunkSize());
-
+  useWindowResizeEffect(setWindowWidth);
+  const actorChunks = chunk(actors, getChunkSize(windowWidth, ACTOR_CAROUSEL_BREAKPOINT));
   const defaultStyle = {
     background: defaultImage,
   };
+
   return (
     <div>
-      <h3 className={`${Title["movie-title"]}`}>cast members:</h3>
-      <Carousel className="carousel-actors" interval={null} indicators={false}>
+      <h3 className={`${Title["movie-title"]} ${Title["ind-movie-actors"]}`}>cast members:</h3>
+      <Carousel className={ActorStyle["carousel-actors"]} interval={null} indicators={false} >
         {actorChunks.map((chunk, chunkIndex) => (
           <Carousel.Item key={chunkIndex}>
-            <div className="profile-container">
+            <div className={ActorStyle["profile-container"]}>
               {chunk.map((actor, index) => {
-                const image = actor.profilePath ? actor.profilePath : null;
-                const actorImage = image ? `url(https://image.tmdb.org/t/p/w500${image}) center center no-repeat` : defaultImage;
+                const image = actor.profilePath || null;
+                const actorImage = image ? `url(${DEFAULT_TMDB_IMAGE}${image}) center center no-repeat` : defaultImage;
                 const style = image ? { background: actorImage, backgroundSize: "300px" } : defaultStyle;
                 return (
                   <div
                     key={index}
-                    className="card card1"
+                    className={`${ActorStyle.card} ${ActorStyle.card1}`}
                     style={style}
                     onMouseEnter={(e) => onMouseEnter(e, image)}
                     onMouseLeave={(e) => onMouseLeave(e, image, actorImage)}
                   >
-                    {/* <Link to={`/person/${actor.id}`}> */}
-                    <div className="border">
-                      <h3 className="profile-person">
+                    <div className={ActorStyle.border}>
+                      <h3 className={ActorStyle["profile-person"]}>
                         {actor.name}
                       </h3>
-                      {/* <div className="ind-movie-cast-icons">
-                            <i
-                              className={"fa fa-instagram"}
-                              aria-hidden="true"
-                            />
-                            <i
-                              className={"fa fa-twitter"}
-                              aria-hidden="true"
-                            />
-                            <i
-                              className={"fa fa-facebook"}
-                              aria-hidden="true"
-                            />
-                          </div> */}
                     </div>
-                    {/* </Link> */}
                   </div>
                 );
               })}
             </div>
           </Carousel.Item>
         ))}
+        <style>{CarouselArrowStyles}</style>
       </Carousel>
-    </div >
-  );
+    </div>
+  )
 }
+
 MovieActors.propTypes = {
   actors: PropTypes.arrayOf(
     PropTypes.shape({

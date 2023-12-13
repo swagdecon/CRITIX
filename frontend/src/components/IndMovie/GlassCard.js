@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./GlassCard.css";
+import GlassStyle from "./GlassCard.module.css";
 import { ParseNumber } from "./MovieComponents";
 const languageMap = {
   "af": "Afrikaans",
@@ -131,16 +131,14 @@ const languageMap = {
 export default function GlassCard({ name, value, icon, iconString }) {
 
   let data;
-  // Helper function to get the full language name from the ISO code
   function getLanguageName(isoCode) {
-    // Define an object mapping ISO codes to full language names
 
-    const hasKey = isoCode in languageMap; // Check if the ISO code exists in the languageMap
+    const hasKey = isoCode in languageMap;
 
     if (hasKey) {
-      return languageMap[isoCode]; // Return the corresponding language name
+      return languageMap[isoCode];
     } else {
-      return "Unknown"; // Return "Unknown" if the ISO code is not found
+      return "Unknown";
     }
   }
 
@@ -160,7 +158,7 @@ export default function GlassCard({ name, value, icon, iconString }) {
     data = ParseNumber(value);
   } else if (iconString === "&#xe8e2;") {
     // Language
-    // Check if the value is an ISO code and convert it to the full language name
+
     let language = getLanguageName(value);
     data = ` ${language} `;
   } else if (iconString === "&#xe04b;") {
@@ -184,14 +182,14 @@ export default function GlassCard({ name, value, icon, iconString }) {
 
 
   return (
-    <div className="container">
-      <div className="box">
-        <div className="content">
-          <span className="title">{name}</span>
-          <div className="icon-container">
-            <span className="material-symbols-outlined">{icon}</span>
+    <div className={GlassStyle.container}>
+      <div className={GlassStyle.box}>
+        <div className={GlassStyle.content}>
+          <span className={GlassStyle.title}>{name}</span>
+          <div className={GlassStyle["icon-container"]}>
+            <span className="material-symbols-outlined" style={{ fontSize: '45px' }}>{icon}</span>
           </div>
-          <div className="value-container">
+          <div className={GlassStyle["value-container"]}>
             <p>{data}</p>
           </div>
         </div>

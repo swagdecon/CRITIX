@@ -15,6 +15,9 @@ import Error404 from "./views/errorMessages/404/404error.js";
 import IndMovie from "./views/IndFilmPage.js";
 import IndPerson from "./views/IndPersonPage.js";
 import MovieListPage from "./views/MovieListPage.js";
+import ConfirmEmailForPwdReset from "./views/SendResetPwdEmail.js";
+import ResetPassword from "./views/ResetPassword.js";
+import AccountVerification from "./views/AccountVerification.js"
 export default function App() {
   return (
     <Router>
@@ -31,19 +34,22 @@ export default function App() {
         />
         <Route
           path="/popular"
-          element={<MovieListPage endpointName={"popular"} />}
+          element={<PrivateRoute><MovieListPage endpointName="popular" /></PrivateRoute>}
         />
         <Route
           path="/upcoming"
-          element={<MovieListPage endpointName={"upcoming"} />}
+          element={<PrivateRoute><MovieListPage endpointName="upcoming" /></PrivateRoute>}
         />
         <Route
           path="/now_playing"
-          element={<MovieListPage endpointName={"now_playing"} />}
+          element={<PrivateRoute><MovieListPage endpointName="now_playing" /></PrivateRoute>}
         />
-        <Route path="/movies/:endpoint/:id" element={<IndMovie />} />
-        <Route path="/movies/movie/:id" element={<IndMovie />} />
-        <Route path="/person/:id" element={<IndPerson />} />
+        <Route path="/movies/:endpoint/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
+        <Route path="/movies/movie/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
+        <Route path="/person/:id" element={<PrivateRoute><IndPerson /></PrivateRoute>} />
+        <Route path="/forgot-password" element={<ConfirmEmailForPwdReset />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/activate-account/:token" element={<AccountVerification />} />
         <Route path="/403" element={<Error403 />} />
         <Route path="*" element={<Error404 />} />
         <Route component={<Navigate replace to="/404" />} />

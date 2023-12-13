@@ -1,0 +1,18 @@
+.carousel-wrapper {
+  transform: translateY(5%);
+  text-align: center;
+}
+.carousel-movie {
+  margin-bottom: 70px;
+}
+
+
+@media screen and (min-width: 3340px) {
+  .carousel-control-prev {
+    justify-content: flex-end;
+  }
+  
+  .carousel-control-next {
+    justify-content: flex-start;
+  }
+}

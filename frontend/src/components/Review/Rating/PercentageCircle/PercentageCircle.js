@@ -11,7 +11,7 @@ const getColorClassName = (percentageRating) => {
 
 export default function PercentageRatingCircle({ percentageRating }) {
     const colorClassName = getColorClassName(percentageRating);
-    const showNoRating = percentageRating < 0;
+    const showNoRating = percentageRating <= 0;
 
     return (
         <div className="flex-wrapper">

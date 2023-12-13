@@ -1,27 +1,29 @@
-import React, { useCallback } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import {
-  MovieRuntime,
   MovieAverage,
   TruncateDescription,
-  MovieTrailer,
+  MovieTrailer
 } from "../IndMovie/MovieComponents.js";
+
 import { MovieCardActors, MovieCardGenres } from "./MovieCardComponents.js";
-import MovieCardStyle from "./moviecard.module.scss";
+import MovieCardStyle from "./moviecard.module.scss"
+import fetchData from "../../security/FetchApiData.js"
+const trailerEndpoint = process.env.REACT_APP_TRAILER_ENDPOINT;
 
 export default function MovieCard({
+  movieId,
   poster,
   rating,
-  runtime,
   genres,
-  video,
   overview,
   actors,
 }) {
-  const handleOnClick = useCallback(() => {
-    const firstVideo = Array.isArray(video) ? video[0] : video;
-    MovieTrailer(firstVideo);
-  }, [video]);
+
+  async function handleWatchTrailer() {
+    const trailer = await fetchData(`${trailerEndpoint}${movieId}`);
+    MovieTrailer(trailer)
+  }
 
   return (
     <div className="container">
@@ -33,7 +35,7 @@ export default function MovieCard({
           <div
             className={MovieCardStyle["movie-img"]}
             style={{
-              backgroundImage: `url(https://image.tmdb.org/t/p/w500/${poster})`,
+              backgroundImage: `url(${poster})`,
             }}
           />
           <div className={MovieCardStyle["text-movie-cont"]}>
@@ -42,9 +44,6 @@ export default function MovieCard({
                 <ul className={MovieCardStyle["movie-gen"]}>
                   <li>
                     <MovieAverage voteAverage={rating} />
-                  </li>
-                  <li>
-                    <MovieRuntime runtime={runtime} />
                   </li>
                   <li>
                     <MovieCardGenres genres={genres} />
@@ -81,9 +80,10 @@ export default function MovieCard({
               className={`${MovieCardStyle["mr-grid"]} ${MovieCardStyle["actors-row"]}`}
             >
               <div className={MovieCardStyle.col1}>
-                <p className={MovieCardStyle["movie-actors"]}>
-                  <MovieCardActors actors={actors} />
-                </p>
+                {actors ?
+                  <p className={MovieCardStyle["movie-actors"]}>
+                    <MovieCardActors actors={actors} />
+                  </p> : null}
               </div>
             </div>
             <div
@@ -93,7 +93,7 @@ export default function MovieCard({
                 <button
                   className={MovieCardStyle["watch-btn"]}
                   type="button"
-                  onClick={handleOnClick}
+                  onClick={handleWatchTrailer}
                 >
                   <h3>
                     <i className="material-icons">&#xE037;</i>
@@ -125,15 +125,12 @@ export default function MovieCard({
 }
 
 MovieCard.propTypes = {
+  movieId: PropTypes.number,
   poster: PropTypes.string,
   rating: PropTypes.number,
   runtime: PropTypes.number,
   overview: PropTypes.string,
-  video: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.array,
-    PropTypes.bool,
-  ]),
+  trailer: PropTypes.string,
   genres: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.array,
@@ -144,4 +141,4 @@ MovieCard.propTypes = {
       character: PropTypes.string,
     })
   ),
-};
+}

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import IndMovieStyle from "../components/IndMovie/ind_movie.module.css";
-import "../components/Carousel/ActorCarousel/ActorCarousel.css";
+import ActorStyle from "../components/Carousel/ActorCarousel/ActorCarousel.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import NavBar from "../components/NavBar/NavBar.js";
 import MovieReviews from "../components/Review/MovieReviews";
@@ -10,7 +10,7 @@ import {
   MovieGenres,
   MovieTrailer,
   MovieAverage,
-  ParseDate,
+  ParseYear,
   EmbeddedMovieTrailer,
   MovieDetails,
 } from "../components/IndMovie/MovieComponents";
@@ -19,33 +19,48 @@ import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel";
 import LoadingPage from "./LoadingPage";
 import MovieButton from "../components/Other/btn/MovieButton/Button";
 import fetchData from "../security/FetchApiData";
+import isTokenExpired from "../security/IsTokenExpired.js";
+const recommendedEndpoint = process.env.REACT_APP_RECOMMENDED_ENDPOINT;
 
 export default function IndMovie() {
   const { id } = useParams();
-  const { data: movie, dataLoaded: dataLoaded } = fetchData(id);
-  const [recommendedMoviesLoaded, setRecommendedMoviesLoaded] = useState(false);
+  const [movie, setMovie] = useState(null)
+  const [reviews, setReviews] = useState(null)
+  const [recommendedMovies, setRecommendedMovies] = useState(null)
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleRecommendedMoviesLoaded = () => {
-    setRecommendedMoviesLoaded(true);
-  };
+  useEffect(() => {
+    async function fetchBackendData() {
+      setIsLoading(true);
+      try {
+        await isTokenExpired();
+        const [movies, reviews, recommendedMovies] = await Promise.all([
+          fetchData(id),
+          fetchData(`http://localhost:8080/review/${id}`),
+          fetchData(`${recommendedEndpoint}${id}`)
+        ]);
 
-  if (!dataLoaded && !recommendedMoviesLoaded) {
-    return <LoadingPage />;
-  }
-
-  const movieUrl = "https://image.tmdb.org/t/p/original";
-  const movieBackdrop =
-    `url(${movieUrl}${movie.backdropPath})` ||
-    `url(${movieUrl}${movie.backdrop_path})`;
-  const moviePosterPath = `${movieUrl}${movie.posterPath}`;
-
-  return (
+        setMovie(movies);
+        setReviews(reviews)
+        setRecommendedMovies(recommendedMovies)
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchBackendData();
+  }, [id]);
+  console.log(recommendedMovies)
+  return isLoading || !movie ? (
+    <LoadingPage />
+  ) : (
     <div className={IndMovieStyle["ind-movie-page-wrapper"]}>
       <NavBar />
       <div
         className={IndMovieStyle.background}
         style={{
-          backgroundImage: movieBackdrop,
+          backgroundImage: `url(${movie.backdropUrl})`,
         }}
       />
       <div className={IndMovieStyle["content-wrapper"]}>
@@ -56,30 +71,30 @@ export default function IndMovie() {
             </div>
             <h2 className={IndMovieStyle.movie__title}>{movie.title}</h2>
             <div className={IndMovieStyle.movie__year}>
-              <ParseDate date={movie.releaseDate} />
+              <ParseYear date={movie.releaseDate} />
             </div>
             <MovieGenres genres={movie.genres} />
             <div className={IndMovieStyle.movie__description}>
               {movie.overview}
             </div>
-            {movie.video ? (
+            {movie.trailer ? (
               <div className={IndMovieStyle["btn-wrapper"]}>
                 <MovieButton
                   innerIcon="trailer"
-                  onClick={() => MovieTrailer(movie.video[0])}
+                  onClick={() => MovieTrailer(movie.trailer)}
                 />
               </div>
             ) : null}
             <div className={IndMovieStyle.ind_movie_review}>
-              <MovieReviews movieId={movie.id} placement="header" />
+              <MovieReviews movieId={movie.id} reviews={reviews} placement="header" />
             </div>
           </div>
 
-          {movie.posterPath ?
+          {movie.posterUrl ?
             <div className={IndMovieStyle["flex-1"]}>
               <img
                 className={IndMovieStyle["hero-poster"]}
-                src={moviePosterPath}
+                src={movie.posterUrl}
                 alt="Movie Poster"
               />
             </div>
@@ -103,30 +118,31 @@ export default function IndMovie() {
             />
           </div>
           <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-2"]}`}>
-            <EmbeddedMovieTrailer video={movie.video} />
+            <EmbeddedMovieTrailer trailer={movie.trailer} />
           </div>
           <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-3"]}`}>
             <MovieReviews
               voteAverage={movie.voteAverage}
               movieId={movie.id}
+              reviews={reviews}
               placement="userRatingSection"
             />
           </div>
           {movie.actors.length > 0 ?
             <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-4"]}`}>
-              <div className="CastMembers">
+              <div className={ActorStyle.CastMembers}>
                 <MovieActors actors={movie.actors} />
               </div>
             </div>
             : null}
         </section>
-
-        <div className={`${IndMovieStyle["recommended-carousel-wrapper"]}`}>
-          <RecommendedCarousel
-            movieId={movie.id}
-            onRecommendedMoviesLoad={handleRecommendedMoviesLoaded}
-          />
-        </div>
+        {recommendedMovies.length >= 4 ?
+          <div className={`${IndMovieStyle["recommended-carousel-wrapper"]}`}>
+            <RecommendedCarousel
+              recommendedMovies={recommendedMovies}
+            />
+          </div>
+          : null}
       </div>
     </div>
   );

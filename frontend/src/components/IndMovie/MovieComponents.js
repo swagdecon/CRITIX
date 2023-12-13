@@ -2,9 +2,10 @@ import { React } from "react";
 import PropTypes from "prop-types";
 import IndMovieStyle from "../IndMovie/ind_movie.module.css";
 import ReactPlayer from "react-player";
-import "../Carousel/MovieCarousel/MovieCarousel.css";
+import "../Carousel/MovieCarousel/MovieCarousel.module.css";
 import GlassCard from "./GlassCard";
 import NoTrailer from "./NoTrailerAvailable.png"
+import GlassStyle from "./GlassCard.module.css"
 
 function TruncateDescription({ description }) {
   const words = description.split(" ");
@@ -23,29 +24,41 @@ function TruncateDescription({ description }) {
   return description;
 }
 
-
-function MovieRuntime({ runtime }) {
-  runtime ? `${runtime} mins |` : "No Runtime Available";
-}
-
-
-function ParseDate({ date }) {
+function ParseYear({ date }) {
   const year = date ? date.split("-")[0] : null;
   return year;
 }
 
+function MovieTrailer(trailerUrl) {
+  console.log(trailerUrl);
+  if (trailerUrl) {
+    const a = document.createElement('a');
+    a.href = trailerUrl;
+    a.target = '_blank'; // Opens the link in a new tab/window
+    a.rel = 'noopener noreferrer'; // Security best practice for target="_blank"
 
-function MovieTrailer(url) {
-  url ? window.open(`https://www.youtube.com/watch?v=${url}`) : null
+    // Simulate a click on the anchor element
+    const clickEvent = new MouseEvent('click', {
+      view: window,
+      bubbles: true,
+      cancelable: true,
+    });
+    a.dispatchEvent(clickEvent);
+  }
 }
 
 
 function MovieAverage({ voteAverage }) {
-  const rating = parseFloat(voteAverage).toFixed(1);
-
-  voteAverage ? rating : "No Rating";
+  return (
+    <div className={IndMovieStyle.rating}>
+      {voteAverage ? `${voteAverage} kernels` : "No Rating"}
+    </div>
+  )
 }
 
+MovieAverage.propTypes = {
+  voteAverage: PropTypes.number,
+};
 
 function MovieGenres({ genres }) {
   genres ?
@@ -68,14 +81,14 @@ function ParseNumber(num) {
 }
 
 
-function EmbeddedMovieTrailer({ video }) {
+function EmbeddedMovieTrailer({ trailer }) {
 
   return (
     <div>
-      {video ? (
+      {trailer ? (
         <div className={IndMovieStyle.EmbeddedMovieTrailer}>
           <ReactPlayer
-            url={`https://www.youtube.com/watch?v=${video}`}
+            url={trailer}
             controls={true}
             playing={false}
             width="60vw"
@@ -95,7 +108,7 @@ function EmbeddedMovieTrailer({ video }) {
 }
 
 EmbeddedMovieTrailer.propTypes = {
-  video: PropTypes.arrayOf(PropTypes.string),
+  trailer: PropTypes.string,
 };
 
 function MovieDetails({
@@ -109,8 +122,8 @@ function MovieDetails({
   releaseDate,
 }) {
   return (
-    <div className="info-wrapper">
-      <div className="info-container-wrapper">
+    <div className={GlassStyle["info-wrapper"]}>
+      <div className={GlassStyle["info-container-wrapper"]}>
         <GlassCard
           name={"RUNTIME"}
           value={runtime}
@@ -177,13 +190,11 @@ MovieDetails.propTypes = {
 
 export {
   TruncateDescription,
-  ParseDate,
-  MovieRuntime,
+  ParseYear,
   ParseNumber,
   MovieTrailer,
   MovieAverage,
   EmbeddedMovieTrailer,
   MovieGenres,
-  // MovieReviews,
   MovieDetails,
 };

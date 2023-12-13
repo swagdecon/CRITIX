@@ -1,10 +1,8 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.css";
 import Carousel from "react-bootstrap/Carousel";
-import "./HeroCarousel.css";
+import HeroStyle from "./HeroCarousel.module.scss";
 import WatchTrailerBtn from "./WatchTrailerbtn";
 import "../../Logo/Loader.js";
-import "./WatchTrailerBtn.css";
 import { Link } from "react-router-dom";
 
 const heroMovies = [
@@ -57,34 +55,34 @@ const heroMovies = [
 ];
 export default function HeroCarousel() {
   return (
-    <Carousel className="carousel-hero">
+    <Carousel className={HeroStyle["carousel-hero"]}>
       {heroMovies.map((movie) => (
         <Carousel.Item interval={5000} key={movie.id}>
-          <Link to={`/movies/movie/${movie.id}`} className="hero-movie-page">
+          <Link to={`/movies/movie/${movie.id}`} className={HeroStyle["hero-movie-page"]}>
             <img
               className="d-block w-100"
               src={movie.image}
               alt={movie.title}
             />
           </Link>
-          <Carousel.Caption>
-            <h1 className="hero_header">{movie.title}</h1>
-            <p className="hero_tagline">{movie.tagline}</p>
-            <div className="hero_genre-container">
+          <Carousel.Caption className={HeroStyle["carousel-caption"]}>
+            <h1 className={HeroStyle["hero_header"]}>{movie.title}</h1>
+            <p className={HeroStyle["hero_tagline"]}>{movie.tagline}</p>
+            <div className={HeroStyle["hero-genre-container"]}>
               {movie.genres.map((genre) => (
-                <p className="hero_genre" key={genre}>
+                <p className={HeroStyle["hero_genre"]} key={genre}>
                   {genre}
                 </p>
               ))}
             </div>
             <Link
-              className="hero_trailer"
+              className={HeroStyle["hero_trailer"]}
               to={movie.trailerUrl}
               target="_blank"
               rel="noopener noreferrer"
             >
-              <button type="button" className="btn btn-warning ">
-                <WatchTrailerBtn />
+              <button type="button" className="btn btn-warning">
+                <WatchTrailerBtn />{" "}
                 WATCH TRAILER
               </button>
             </Link>

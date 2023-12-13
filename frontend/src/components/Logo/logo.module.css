@@ -1,7 +1,7 @@
 /* Logo */
 .Logo {
-  width: 151px;
-  height: 41px;
+  width: 15ch;
+  height: 4ch;
   transition: margin 0.125s ease;
   display: flex;
   justify-content: flex-start;

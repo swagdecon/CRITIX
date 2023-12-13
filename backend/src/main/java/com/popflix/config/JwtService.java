@@ -48,6 +48,15 @@ public class JwtService {
         return buildToken(new HashMap<>(), userDetails, refreshExpiration);
     }
 
+    public String generateRefreshToken(UserDetails userDetails, Date lastLoginTime) {
+        return Jwts.builder()
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(lastLoginTime.getTime() + refreshExpiration))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS512)
+                .compact();
+    }
+
     public String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, Long expiration) {
         return Jwts.builder()
                 .setClaims(extraClaims)

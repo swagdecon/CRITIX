@@ -1,6 +1,21 @@
 import React from "react";
-import Header from "./Header/Header";
-import "./NavBar.css";
-export default function NavBar() {
-  return <Header />;
+import Logo from "../Logo/Logo";
+import Navigation from "./Navigation/Navigation";
+import NavBarStyle from "./NavBar.module.css"
+import Search from "./Search/Search";
+import UserProfile from "./UserProfile/UserProfile";
+import PropTypes from "prop-types";
+export default function NavBar(props) {
+  return (
+    <div className={NavBarStyle.NavBar}>
+      <Logo />
+      <Navigation />
+      <Search onSubmit={props.onSubmit} />
+      <UserProfile />
+    </div>
+  )
 }
+NavBar.propTypes = {
+  onSubmit: PropTypes.func,
+};
+

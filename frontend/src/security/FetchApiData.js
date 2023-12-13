@@ -1,71 +1,21 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import isExpired from "./IsTokenExpired";
-import { useNavigate } from "react-router-dom";
-import CookieManager from "./CookieManager";
-import jwt_decode from "jwt-decode";
-import Logout from "./Logout";
+// FetchApiData.js
+import axios from 'axios';
+import CookieManager from './CookieManager';
 
-export default function useFetchData(endpoint) {
-  const [data, setData] = useState({});
-  const [dataLoaded, setDataLoaded] = useState(false);
-  const [requestSent, setRequestSent] = useState(false);
-  const [prevEndpoint, setPrevEndpoint] = useState(null);
-  const navigate = useNavigate();
-
-  const fetchData = async () => {
-    let token = CookieManager.decryptCookie("accessToken");
-    const decodedToken = jwt_decode(token);
-    const currentTime = Date.now() / 1000;
-    if (decodedToken.exp > currentTime) {
-      try {
-        const response = await axios.get(endpoint, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setData(response.data);
-        setDataLoaded(true);
-        setRequestSent(true);
-      } catch (error) {
-        console.log(error);
-        await Logout(navigate);
-      }
-    } else {
-      await isExpired();
-      try {
-        const response = await axios.get(endpoint, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setData(response.data);
-        setDataLoaded(true);
-        setRequestSent(true);
-      } catch (error) {
-        console.log(error);
-        await Logout(navigate);
-      }
-    }
-  };
-
-  const refetchData = () => {
-    setRequestSent(false);
-  };
-
-  useEffect(() => {
-    if (prevEndpoint !== endpoint) {
-      setRequestSent(false);
-      setDataLoaded(false);
-      setPrevEndpoint(endpoint);
-    }
-    if (!requestSent) {
-      fetchData();
-      setRequestSent(true);
-    }
-  }, [requestSent, endpoint, navigate, prevEndpoint]);
-
-  return { data, dataLoaded, requestSent, refetchData };
+export default async function fetchData(endpoint, options) {
+  let token = CookieManager.decryptCookie('accessToken');
+  try {
+    const response = await axios.get(endpoint, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        options: options
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 }

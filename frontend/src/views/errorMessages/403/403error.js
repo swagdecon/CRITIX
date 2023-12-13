@@ -1,11 +1,11 @@
 import React from "react";
-import "./403.css";
+import errorStyle from "./403.module.css";
 
 function Error403() {
   return (
     <div>
       <svg
-        className="text"
+        className={errorStyle.text}
         preserveAspectRatio="xMinYMin"
         viewBox="0 0 300 300"
       >
@@ -283,7 +283,7 @@ function Error403() {
         </g>
       </svg>
       <svg
-        className="staff"
+        className={errorStyle.staff}
         preserveAspectRatio="xMinYMin"
         viewBox="0 0 150 1000"
       >
@@ -322,7 +322,7 @@ function Error403() {
           </g>
         </g>
       </svg>
-      <div className="shine" />
+      <div className={errorStyle.shine} />
     </div>
   );
 }

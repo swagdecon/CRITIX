@@ -20,9 +20,7 @@ p.css-button-text {
   width: 100%;
   margin-top: 3.5%;
   position: absolute;
-}
-p.css-button-text-2 {
-  margin-top: -1%;
+  font-weight: bold;
 }
 
 .css-button-inner-popcorn {

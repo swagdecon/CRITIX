@@ -28,7 +28,7 @@ export default function SignUp() {
             <hr className={SignUpStyles.bar} />
           </div>
           <Link to="/login" className={SignUpStyles["secondary-btn"]}>
-            <p className={SignUpStyles["css-button-text-2"]}>LOG IN</p>
+            <p>LOG IN</p>
           </Link>
         </div>
         <footer id={SignUpStyles["main-footer"]}>
@@ -45,9 +45,10 @@ export default function SignUp() {
             <div className={SignUpStyles.overlay}>
               <SignUpPlayer />
             </div>
+            <div className={SignUpStyles["responsive-background"]} />
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }

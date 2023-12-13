@@ -1,0 +1,88 @@
+.hero_tagline {
+  pointer-events: none;
+  text-align: left;
+  font-family: "Poppins", sans-serif;
+}
+
+.hero_header {
+  margin-bottom: -1%;
+  font-weight: 700;
+  font-size: 50px;
+  transform: translateY(-50px);
+}
+.carousel-caption {
+  margin-bottom: 10vh;
+}
+.carousel-inner img {
+  margin: auto;
+}
+.hero_trailer {
+  display: flex;
+  justify-content: left;
+  text-decoration: none;
+}
+.hero_caption {
+  font-family: "Open Sans", sans-serif;
+  display: flex;
+  text-align: left;
+  justify-content: flex-start;
+}
+
+.hero-genre-container {
+  text-align: left;
+  
+  .hero_genre {
+    display: inline-block;
+    margin-right: 20px;
+    font-family: "Poppins", sans-serif;
+
+    @media screen and (min-aspect-ratio: 21/9) {
+      margin-right: 30px;
+    }
+  }
+}
+
+.hero_rating_container {
+  padding: 10px 0 0 0;
+
+  .hero_rating {
+    padding: 0 0 0 10px;
+    vertical-align: bottom;
+    display: inline;
+
+    .hero_rating_img {
+      display: inline;
+      width: 60px;
+      height: auto;
+    }
+  }
+
+  @media screen and (min-aspect-ratio: 21/9) {
+    padding: 20px 0 0 0;
+
+    .hero_rating {
+      padding: 0 0 0 20px;
+    }
+  }
+}
+
+.carousel-hero {
+  & .carousel-control-prev,
+  & .carousel-control-next {
+    display: flex;
+    width: 5vw;
+  }
+
+  & .carousel-control-prev {
+    justify-content: flex-start;
+  }
+
+  & .carousel-control-next {
+    justify-content: flex-end;
+  }
+}
+@media screen and (max-width: 1700px) {
+  .carousel-hero {
+    display: none;
+  }
+}

@@ -1,23 +1,26 @@
 package com.popflix.model;
 
 import java.util.List;
-
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import info.movito.themoviedbapi.model.providers.ProviderResults;
 
 @Document
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Movie {
     @Id
     private ObjectId mongoId;
     private Boolean adult;
-    private String backdropPath;
+    private String backdropUrl;
     private List<Integer> genreIds;
     private List<String> genres;
     private Integer id;
@@ -25,11 +28,12 @@ public class Movie {
     private String originalTitle;
     private String overview;
     private Float popularity;
-    private String posterPath;
+    private String posterUrl;
     private String releaseDate;
     private String title;
-    private List<String> video;
+    private String trailer;
     private Integer voteAverage;
+    private ProviderResults providerResults;
     private Integer voteCount;
     private String imdbId;
     private Long budget;

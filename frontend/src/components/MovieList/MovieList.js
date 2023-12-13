@@ -1,15 +1,15 @@
-import { React, useState, useEffect, useCallback } from "react";
+import { React, useState, useMemo, useCallback } from "react";
 import MovieListStyle from "./MovieList.module.css";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import { Link } from "react-router-dom";
 import Title from "../Carousel/title.module.scss";
 import PropTypes from "prop-types";
-import getDetailedMovie from "../../axios/GetDetailedMovie";
 import LoadingPage from "../../views/LoadingPage";
-import SortByButton from "../Other/Dropdown/SortByDropdown/SortByDropdown";
+import Dropdown from "../Other/Dropdown/SortByDropdown";
 import Pagination from '@mui/material/Pagination';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import isTokenExpired from "../../security/IsTokenExpired";
+import fetchData from "../../security/FetchApiData";
 const theme = createTheme({
   palette: {
     primary: {
@@ -17,7 +17,18 @@ const theme = createTheme({
     },
   },
 });
+async function fetchBackendData(endpointName, page) {
 
+  try {
+    await isTokenExpired();
+    const response = await Promise.all([
+      fetchData(`http://localhost:8080/movies/movie-list/${endpointName}?page=${page}`),
+    ]);
+    return response[0]
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
 export default function MovieList({ endpoint }) {
   const [movies, setMovies] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -25,7 +36,6 @@ export default function MovieList({ endpoint }) {
   const [totalPages, setTotalPages] = useState(1);
   const [title, setTitle] = useState("");
   const [caption, setCaption] = useState("");
-
   const handleSortByChange = useCallback((selectedValue) => {
     let sortedMovies;
     switch (selectedValue) {
@@ -53,52 +63,67 @@ export default function MovieList({ endpoint }) {
     setMovies(sortedMovies);
   }, [movies]);
 
-  const handlePageChange = useCallback(async (event) => {
+  const handlePageChange = (event) => {
     setDataLoaded(false);
     const newPage = parseInt(event.target.textContent);
     setCurrentPage(newPage);
-    const data = await getDetailedMovie(endpoint.endpointName, { page: newPage });
-    setMovies(data.detailedMovies);
-    setDataLoaded(true);
-  }, [endpoint.endpointName]);
+    fetchBackendData(endpoint.endpointName, newPage)
+      .then(data => {
+        setMovies(data.movieCardList);
+        setTotalPages(data.totalPages);
+        setDataLoaded(true);
+      })
+      .catch(error => {
+        console.error("Error handling page change:", error);
+        setDataLoaded(true);
+      });
+  }
 
-  useEffect(() => {
-    async function getDetailedMovieData(endpointName) {
-      const data = await getDetailedMovie(endpointName);
-      setMovies(data.detailedMovies);
-      setTotalPages(data.totalPages);
-      setDataLoaded(true);
+  useMemo(() => {
+    function getDetailedMovieData(endpointName) {
       setCurrentPage(1);
-      switch (endpointName) {
-        case "now_playing":
-          setTitle("In Theatres");
-          setCaption("The Latest Movies on the Big Screen");
-          break;
-        case "upcoming":
-          setTitle("Upcoming Movies");
-          setCaption("Get a Sneak Peek of What's Coming Soon");
-          break;
-        case "popular":
-          setTitle("Popular Movies");
-          setCaption("Discover What Everyone Is Watching Right Now");
-          break;
-        case "top_rated":
-          setTitle("Top Rated Movies");
-          setCaption("Cinematic Masterpieces");
-          break;
-        case "now_playing_and_upcoming":
-          setTitle("In Theatres");
-          setCaption("The Latest Movies on the Big Screen");
-          break;
-        case "now_playing_and_popular":
-          setTitle("In Theatres");
-          break;
-      }
+      fetchBackendData(endpointName, 1)
+        .then(data => {
+          console.log(data)
+          setMovies(data.movieCardList);
+          setTotalPages(data.totalPages);
+          setDataLoaded(true);
+          switch (endpointName) {
+            case "now_playing":
+              setTitle("In Theatres");
+              setCaption("The Latest Movies on the Big Screen");
+              break;
+            case "upcoming":
+              setTitle("Upcoming Movies");
+              setCaption("Get a Sneak Peek of What's Coming Soon");
+              break;
+            case "popular":
+              setTitle("Popular Movies");
+              setCaption("Discover What Everyone Is Watching Right Now");
+              break;
+            case "top_rated":
+              setTitle("Top Rated Movies");
+              setCaption("Cinematic Masterpieces");
+              break;
+            case "now_playing_and_upcoming":
+              setTitle("In Theatres");
+              setCaption("The Latest Movies on the Big Screen");
+              break;
+            case "now_playing_and_popular":
+              setTitle("In Theatres");
+              break;
+          }
+        })
+        .catch(error => {
+          console.error("Error fetching detailed movie data:", error);
+          setDataLoaded(true);
+        });
     }
-    getDetailedMovieData(endpoint.endpointName);
+    getDetailedMovieData(endpoint.endpointName, currentPage);
   }, [endpoint.endpointName]);
 
-  if (!dataLoaded) {
+
+  if (!dataLoaded || movies === null) {
     return <LoadingPage />;
   }
   return (
@@ -108,7 +133,7 @@ export default function MovieList({ endpoint }) {
           <h3 className={Title["movie-title"]}>{title}</h3>
           <div className={MovieListStyle["title-caption"]}>{caption}</div>
           <div className={MovieListStyle["sort-by-btn"]}>
-            <SortByButton onSelectSortBy={handleSortByChange} />
+            <Dropdown onSelectSortBy={handleSortByChange} />
           </div>
         </div>
       </div>
@@ -118,8 +143,9 @@ export default function MovieList({ endpoint }) {
           <div key={movie.id}>
             <Link to={`/movies/movie/${movie.id}`}>
               <MovieCard
-                poster={movie.poster_path}
-                rating={movie.vote_average}
+                movieId={movie.id}
+                poster={movie.posterUrl}
+                rating={movie.voteAverage}
                 runtime={movie.runtime}
                 genres={movie.genres}
                 overview={movie.overview}
@@ -150,7 +176,6 @@ export default function MovieList({ endpoint }) {
       </div>
     </div>
   );
-
 }
 
 MovieList.propTypes = {
