@@ -87,7 +87,7 @@ class AuthenticationControllerTest {
         AuthenticationRequest request = new AuthenticationRequest();
         when(service.authenticate(request, httpRequest)).thenThrow(new UsernameNotFoundException("User not found"));
         ResponseEntity<?> response = controller.authenticate(request, httpRequest);
-        assertEquals(ResponseEntity.badRequest().body("Email or Password Not Found"), response);
+        assertEquals(ResponseEntity.badRequest().body("User not found"), response);
     }
 
     @Test

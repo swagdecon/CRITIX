@@ -7,6 +7,8 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -22,6 +24,13 @@ class MovieServiceTest {
 
     Dotenv dotenv = Dotenv.load();
     final TmdbApi tmdbApi = new TmdbApi(dotenv.get("TMDB_API_KEY"));
+
+    @BeforeEach
+    void setUp() {
+        movieRepository = mock(MovieRepository.class);
+        mongoTemplate = mock(MongoTemplate.class);
+        movieService = new MovieService(movieRepository, mongoTemplate);
+    }
 
     @Test
     void findMovieByIdWithValidIdShouldReturnOptionalMovie() {
