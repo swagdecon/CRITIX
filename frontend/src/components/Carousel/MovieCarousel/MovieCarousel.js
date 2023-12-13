@@ -9,12 +9,14 @@ import MovieCard from "../../MovieCard/MovieCard.js";
 import MovieCarouselStyle from "./MovieCarousel.module.css"
 import { getChunkSize, useWindowResizeEffect, CarouselArrowStyles } from "../CarouselHelpers.js";
 
+const carouselBreakpoints = process.env.REACT_APP_CAROUSEL_BREAKPOINTS;
+const movieCarouselBreakpoints = JSON.parse(carouselBreakpoints);
+
 function MovieCarousel({ title, movies, endpoint }) {
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const breakpoints = [979, 1471, 1971, 2463];
   useWindowResizeEffect(setWindowWidth);
-  const movieChunks = chunk(movies, getChunkSize(windowWidth, breakpoints));
+  const movieChunks = chunk(movies, getChunkSize(windowWidth, movieCarouselBreakpoints));
   return (
     <div className={MovieCarouselStyle["carousel-wrapper"]}>
       <div className={MovieCardStyle.titleWrapper}>
@@ -34,7 +36,6 @@ function MovieCarousel({ title, movies, endpoint }) {
                     genres={movie.genres}
                     overview={movie.overview}
                     actors={movie.actors}
-                    trailer={movie.trailer}
                   />
                 </Link>
               </div>

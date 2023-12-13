@@ -10,3 +10,8 @@
       transform: translateY(2.5%);
       }
   }
+  @media screen and (max-width: 1700px) {
+    .movie_carousel_wrapper{
+      transform: translateY(2%);
+    }
+  }

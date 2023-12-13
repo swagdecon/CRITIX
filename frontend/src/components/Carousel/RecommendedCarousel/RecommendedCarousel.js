@@ -7,11 +7,14 @@ import MovieCardStyle from "../../MovieCard/moviecard.module.scss"
 import PropTypes from "prop-types";
 import MovieCard from "../../MovieCard/MovieCard.js";
 import { getChunkSize, useWindowResizeEffect, CarouselArrowStyles } from "../CarouselHelpers.js";
+
+const carouselBreakpoints = process.env.REACT_APP_CAROUSEL_BREAKPOINTS;
+const recommendedCarouselBreakpoints = JSON.parse(carouselBreakpoints);
+
 export default function RecommendedCarousel({ recommendedMovies }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const breakpoints = [979, 1471, 1971, 2463];
   useWindowResizeEffect(setWindowWidth);
-  const movieChunks = chunk(recommendedMovies, getChunkSize(windowWidth, breakpoints));
+  const movieChunks = chunk(recommendedMovies, getChunkSize(windowWidth, recommendedCarouselBreakpoints));
 
   return (
     <div className={MovieCardStyle["carousel-wrapper"]}>
@@ -43,6 +46,7 @@ export default function RecommendedCarousel({ recommendedMovies }) {
     </div >
   );
 }
+
 RecommendedCarousel.propTypes = {
   recommendedMovies: PropTypes.array.isRequired
 };

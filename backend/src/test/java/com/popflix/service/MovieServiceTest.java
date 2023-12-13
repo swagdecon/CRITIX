@@ -7,7 +7,6 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -17,17 +16,9 @@ import info.movito.themoviedbapi.TmdbApi;
 import io.github.cdimascio.dotenv.Dotenv;
 
 class MovieServiceTest {
-
     private MovieService movieService;
     private MovieRepository movieRepository;
     private MongoTemplate mongoTemplate;
-
-    @BeforeEach
-    void setUp() {
-        movieRepository = mock(MovieRepository.class);
-        mongoTemplate = mock(MongoTemplate.class);
-        movieService = new MovieService(movieRepository, mongoTemplate);
-    }
 
     Dotenv dotenv = Dotenv.load();
     final TmdbApi tmdbApi = new TmdbApi(dotenv.get("TMDB_API_KEY"));

@@ -248,7 +248,7 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
 
 MovieReviews.propTypes = {
     voteAverage: PropTypes.number,
-    reviews: PropTypes.object,
+    reviews: PropTypes.array,
     movieId: PropTypes.number,
     placement: PropTypes.string
 };

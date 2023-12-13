@@ -8,7 +8,7 @@ import Title from "../title.module.scss";
 // import { Link } from "react-router-dom";
 const DEFAULT_ACTOR_IMAGE = process.env.REACT_APP_DEFAULT_ACTOR_IMAGE;
 const DEFAULT_TMDB_IMAGE = process.env.REACT_APP_DEFAULT_TMDB_IMAGE_PREFIX;
-
+const ACTOR_CAROUSEL_BREAKPOINT = process.env.REACT_APP_ACTOR_CAROUSEL_BREAKPOINTS
 const defaultImage = `url(${DEFAULT_ACTOR_IMAGE}) center center no-repeat`;
 
 function onMouseEnter(e, image) {
@@ -47,11 +47,11 @@ const CarouselArrowStyles = `
   margin: 0 5px;
 }`
 
+
 export default function MovieActors({ actors }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const breakpoints = [645, 949, 1300, 1555, 1869, 2181, 2300];
   useWindowResizeEffect(setWindowWidth);
-  const actorChunks = chunk(actors, getChunkSize(windowWidth, breakpoints));
+  const actorChunks = chunk(actors, getChunkSize(windowWidth, ACTOR_CAROUSEL_BREAKPOINT));
   const defaultStyle = {
     background: defaultImage,
   };
@@ -64,7 +64,7 @@ export default function MovieActors({ actors }) {
           <Carousel.Item key={chunkIndex}>
             <div className={ActorStyle["profile-container"]}>
               {chunk.map((actor, index) => {
-                const image = actor.profilePath ? actor.profilePath : null;
+                const image = actor.profilePath || null;
                 const actorImage = image ? `url(${DEFAULT_TMDB_IMAGE}${image}) center center no-repeat` : defaultImage;
                 const style = image ? { background: actorImage, backgroundSize: "300px" } : defaultStyle;
                 return (
@@ -75,38 +75,23 @@ export default function MovieActors({ actors }) {
                     onMouseEnter={(e) => onMouseEnter(e, image)}
                     onMouseLeave={(e) => onMouseLeave(e, image, actorImage)}
                   >
-                    {/* <Link to={`/person/${actor.id}`}> */}
                     <div className={ActorStyle.border}>
                       <h3 className={ActorStyle["profile-person"]}>
                         {actor.name}
                       </h3>
-                      {/* <div className="ind-movie-cast-icons">
-                            <i
-                              className={"fa fa-instagram"}
-                              aria-hidden="true"
-                            />
-                            <i
-                              className={"fa fa-twitter"}
-                              aria-hidden="true"
-                            />
-                            <i
-                              className={"fa fa-facebook"}
-                              aria-hidden="true"
-                            />
-                          </div> */}
                     </div>
-                    {/* </Link> */}
                   </div>
                 );
               })}
             </div>
           </Carousel.Item>
         ))}
-        <style >{CarouselArrowStyles} </style>
+        <style>{CarouselArrowStyles}</style>
       </Carousel>
-    </div >
-  );
+    </div>
+  )
 }
+
 MovieActors.propTypes = {
   actors: PropTypes.arrayOf(
     PropTypes.shape({

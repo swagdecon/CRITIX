@@ -50,7 +50,7 @@ export default function IndMovie() {
       }
     }
     fetchBackendData();
-  }, []);
+  }, [id]);
 
   return isLoading || !movie ? (
     <LoadingPage />
@@ -136,7 +136,7 @@ export default function IndMovie() {
             </div>
             : null}
         </section>
-        {recommendedMovies.length > 0 ?
+        {recommendedMovies.length >= 4 ?
           <div className={`${IndMovieStyle["recommended-carousel-wrapper"]}`}>
             <RecommendedCarousel
               recommendedMovies={recommendedMovies}
