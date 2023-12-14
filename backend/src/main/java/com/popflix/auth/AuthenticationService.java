@@ -155,7 +155,7 @@ public class AuthenticationService {
                 long lastResetPwdTimeMillis = lastResetPwdTime.getTime();
                 long timeElapsedMinutes = (currentTimeMillis - lastResetPwdTimeMillis) / (1000 * 60);
 
-                return timeElapsedMinutes > 1;
+                return timeElapsedMinutes >= 1;
         }
 
         public String decryptToken(String encryptedToken) throws Exception {
