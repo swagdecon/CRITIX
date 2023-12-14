@@ -72,12 +72,11 @@ public class AuthenticationService {
                                         .role(Role.USER)
                                         .build();
 
-                        var savedUser = userRepository.save(user);
-
                         var extraClaims = new HashMap<String, Object>();
                         extraClaims.put("firstName", request.getFirstName());
                         extraClaims.put("userId", user.getId());
 
+                        var savedUser = userRepository.save(user);
                         var jwtToken = jwtService.generateToken(extraClaims, user);
                         var refreshToken = jwtService.generateRefreshToken(user);
 
@@ -274,7 +273,7 @@ public class AuthenticationService {
                 return keyGenerator.generateKey();
         }
 
-        private void revokeAllUserTokens(User user) {
+        public void revokeAllUserTokens(User user) {
                 var validUserTokens = tokenRepository.findAllValidTokensByUser(user.getId());
                 if (validUserTokens.isEmpty())
                         return;

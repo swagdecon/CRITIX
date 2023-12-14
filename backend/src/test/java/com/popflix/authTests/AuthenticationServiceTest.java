@@ -15,28 +15,25 @@ import com.popflix.auth.AuthenticationService;
 import com.popflix.auth.RegisterRequest;
 import com.popflix.auth.RegistrationResponse;
 import com.popflix.config.JwtService;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Date;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -222,5 +219,104 @@ public class AuthenticationServiceTest {
                 assertThrows(UserEmailNotAuthenticated.class, () -> {
                         spyAuthService.register(request);
                 });
+        }
+
+        // Authenticates user with valid email and password, generates access and
+        // refresh tokens, and saves them to the database
+        @Test
+        public void test_authenticate_valid_email_and_password() {
+                // Mock userRepository.findByEmail() to return a User object
+                User mockUser = new User();
+                mockUser.setAccountActive(true);
+                mockUser.setLoggedIn(false);
+                mockUser.setLastLoginTime(null);
+                when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(mockUser));
+
+                // Mock authenticationManager.authenticate() to return an Authentication object
+                when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+                                .thenReturn(null);
+
+                // Mock jwtService.generateToken() to return a valid access token
+                when(jwtService.generateToken(anyMap(), any(User.class))).thenReturn("access_token");
+
+                // Mock jwtService.generateRefreshToken() to return a valid refresh token
+                when(jwtService.generateRefreshToken(any(User.class), any(Date.class))).thenReturn("refresh_token");
+
+                // Invoke the authenticate() method
+                AuthenticationRequest request = new AuthenticationRequest("test@example.com", "password");
+                AuthenticationResponse response = authenticationService.authenticate(request, null);
+
+                // Verify that the access and refresh tokens are generated and saved
+                assertEquals("access_token", response.getAccessToken());
+                assertEquals("refresh_token", response.getRefreshToken());
+
+                // Verify that the user's last login time and loggedIn flag are set
+                assertNotNull(mockUser.getLastLoginTime());
+                assertTrue(mockUser.getLoggedIn());
+
+                // Verify that userRepository.save() is called to save the user object
+                verify(userRepository, times(1)).save(mockUser);
+        }
+
+        // Sets last login time and loggedIn flag for authenticated user
+        @Test
+        public void test_set_last_login_time_and_logged_in_flag() {
+                // Mock userRepository.findByEmail() to return a User object
+                User mockUser = new User();
+                mockUser.setAccountActive(true);
+                mockUser.setLoggedIn(false);
+                mockUser.setLastLoginTime(null);
+                when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(mockUser));
+
+                // Mock authenticationManager.authenticate() to return an Authentication object
+                when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+                                .thenReturn(null);
+
+                // Mock jwtService.generateToken() to return a valid access token
+                when(jwtService.generateToken(anyMap(), any(User.class))).thenReturn("access_token");
+
+                // Mock jwtService.generateRefreshToken() to return a valid refresh token
+                when(jwtService.generateRefreshToken(any(User.class), any(Date.class))).thenReturn("refresh_token");
+
+                // Invoke the authenticate() method
+                AuthenticationRequest request = new AuthenticationRequest("test@example.com", "password");
+                authenticationService.authenticate(request, null);
+
+                // Verify that the user's last login time and loggedIn flag are set
+                assertNotNull(mockUser.getLastLoginTime());
+                assertTrue(mockUser.getLoggedIn());
+
+                // Verify that userRepository.save() is called to save the user object
+                verify(userRepository, times(1)).save(mockUser);
+        }
+
+        // Revokes all user's previous tokens before generating new ones
+        @Test
+        public void testRevokePreviousTokens() {
+                // Mock userRepository.findByEmail() to return a User object
+                User mockUser = new User();
+                mockUser.setAccountActive(true);
+                mockUser.setLoggedIn(false);
+                mockUser.setLastLoginTime(null);
+                AuthenticationService spyAuthService = spy(authenticationService);
+
+                when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(mockUser));
+
+                // Mock authenticationManager.authenticate() to return an Authentication object
+                when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+                                .thenReturn(null);
+
+                // Mock jwtService.generateToken() to return a valid access token
+                when(jwtService.generateToken(anyMap(), any(User.class))).thenReturn("access_token");
+
+                // Mock jwtService.generateRefreshToken() to return a valid refresh token
+                when(jwtService.generateRefreshToken(any(User.class), any(Date.class))).thenReturn("refresh_token");
+
+                // Invoke the authenticate() method
+                AuthenticationRequest request = new AuthenticationRequest("test@example.com", "password");
+                authenticationService.authenticate(request, null);
+
+                // Verify that revokeAllUserTokens() is called to revoke previous tokens
+                verify(spyAuthService, times(1)).revokeAllUserTokens(any(User.class));
         }
 }
