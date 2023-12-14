@@ -58,45 +58,45 @@ public class AuthenticationService {
         private String DEFAULT_AVATAR_URL = dotenv.get("DEFAULT_AVATAR_URL");
 
         public RegistrationResponse register(RegisterRequest request) throws Exception {
-
                 if (userRepository.findByEmail(request.getEmail()).isPresent()) {
                         throw new UserAlreadyExistsException("A User With This Email Already Exists");
+                } else {
+
+                        var user = User.builder()
+                                        .firstName(request.getFirstName())
+                                        .lastName(request.getLastName())
+                                        .email(request.getEmail())
+                                        .password(passwordEncoder.encode(request.getPassword()))
+                                        .accountActive(false)
+                                        .avatar(DEFAULT_AVATAR_URL)
+                                        .role(Role.USER)
+                                        .build();
+
+                        var savedUser = userRepository.save(user);
+
+                        var extraClaims = new HashMap<String, Object>();
+                        extraClaims.put("firstName", request.getFirstName());
+                        extraClaims.put("userId", user.getId());
+
+                        var jwtToken = jwtService.generateToken(extraClaims, user);
+                        var refreshToken = jwtService.generateRefreshToken(user);
+
+                        saveAccessToken(savedUser, jwtToken);
+                        saveRefreshToken(user, refreshToken);
+                        AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
+                                        .accessToken(jwtToken)
+                                        .refreshToken(refreshToken)
+                                        .build();
+                        try {
+                                sendPasswordAuthenticationEmail(request.getEmail());
+                                return new RegistrationResponse(authenticationResponse,
+                                                "Please check your email to verify your account.");
+                        } catch (UserEmailNotAuthenticated e) {
+                                e.printStackTrace();
+                                throw new UserEmailNotAuthenticated("Failed to send authentication email.");
+                        }
+
                 }
-
-                var user = User.builder()
-                                .firstName(request.getFirstName())
-                                .lastName(request.getLastName())
-                                .email(request.getEmail())
-                                .password(passwordEncoder.encode(request.getPassword()))
-                                .accountActive(false)
-                                .avatar(DEFAULT_AVATAR_URL)
-                                .role(Role.USER)
-                                .build();
-                var extraClaims = new HashMap<String, Object>();
-                extraClaims.put("firstName", request.getFirstName());
-                extraClaims.put("userId", user.getId());
-
-                var savedUser = userRepository.save(user);
-                var jwtToken = jwtService.generateToken(extraClaims, user);
-                var refreshToken = jwtService.generateRefreshToken(user);
-
-                saveAccessToken(savedUser, jwtToken);
-                saveRefreshToken(user, refreshToken);
-                AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
-                                .accessToken(jwtToken)
-                                .refreshToken(refreshToken)
-                                .build();
-
-                try {
-                        sendPasswordAuthenticationEmail(request.getEmail());
-                } catch (UserEmailNotAuthenticated e) {
-                        e.printStackTrace();
-                        throw new UserEmailNotAuthenticated("Failed to send authentication email.");
-
-                }
-
-                return new RegistrationResponse(authenticationResponse,
-                                "Please check your email to verify your account.");
         }
 
         public AuthenticationResponse authenticate(AuthenticationRequest request, HttpServletRequest httpRequest) {

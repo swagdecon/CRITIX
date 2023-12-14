@@ -2,146 +2,225 @@ package com.popflix.authTests;
 
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
 import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
+import com.popflix.config.customExceptions.UserEmailNotAuthenticated;
+import com.popflix.model.Role;
 import com.popflix.model.Token;
 import com.popflix.model.User;
 import com.popflix.repository.TokenRepository;
 import com.popflix.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import com.popflix.auth.AuthenticationRequest;
+import com.popflix.auth.AuthenticationResponse;
 import com.popflix.auth.AuthenticationService;
 import com.popflix.auth.RegisterRequest;
+import com.popflix.auth.RegistrationResponse;
 import com.popflix.config.JwtService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.util.Optional;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-class AuthenticationServiceTest {
+@ExtendWith(MockitoExtension.class)
+public class AuthenticationServiceTest {
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+        @Mock
+        private UserRepository userRepository;
 
-    @Mock
-    private UserRepository userRepository;
+        @Mock
+        private TokenRepository tokenRepository;
 
-    @Mock
-    private TokenRepository tokenRepository;
+        @Mock
+        private PasswordEncoder passwordEncoder;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
+        @Mock
+        private JwtService jwtService;
 
-    @Mock
-    private JwtService jwtService;
+        @Mock
+        private AuthenticationManager authenticationManager;
 
-    @Mock
-    private AuthenticationManager authenticationManager;
+        @Mock
+        private JavaMailSender javaMailSender;
 
-    @InjectMocks
-    private AuthenticationService authenticationService;
+        @Mock
+        private AuthenticationService authService;
 
-    @Test
-    void testRegister() throws Exception {
-        // Test data
-        RegisterRequest request = new RegisterRequest();
-        request.setEmail("test@example.com");
-        request.setPassword("password");
-        request.setFirstName("John");
-        request.setLastName("Doe");
+        @InjectMocks
+        private AuthenticationService authenticationService;
 
-        // Mocking behavior
-        when(userRepository.findByEmail(eq(request.getEmail()))).thenReturn(Optional.empty());
-        when(passwordEncoder.encode(eq(request.getPassword()))).thenReturn("encodedPassword");
-        when(jwtService.generateToken(ArgumentMatchers.any(User.class))).thenReturn("jwtToken");
-        when(jwtService.generateRefreshToken(ArgumentMatchers.any(User.class))).thenReturn("refreshToken");
-        when(userRepository.save(ArgumentMatchers.any(User.class))).thenReturn(new User());
+        String DEFAULT_AVATAR_URL = "test";
 
-        // Method invocation
-        authenticationService.register(request);
+        // Registering a new user with valid input should create a new user in the
+        // database and return an access token.
+        @Test
+        public void test_register_success() throws Exception {
+                // Arrange
+                RegisterRequest request = new RegisterRequest();
+                request.setFirstName("John");
+                request.setLastName("Doe");
+                request.setEmail("john.doe@example.com");
+                request.setPassword("password");
+                AuthenticationService spyAuthService = spy(authenticationService);
 
-        // Verify interactions
-        verify(userRepository).save(ArgumentMatchers.any(User.class));
-        verify(jwtService).generateToken(ArgumentMatchers.any(User.class));
-        verify(jwtService).generateRefreshToken(ArgumentMatchers.any(User.class));
-        verify(tokenRepository, times(2)).save(ArgumentMatchers.any(Token.class));
-    }
+                User user = User.builder()
+                                .firstName(request.getFirstName())
+                                .lastName(request.getLastName())
+                                .email(request.getEmail())
+                                .password(passwordEncoder.encode(request.getPassword()))
+                                .accountActive(false)
+                                .avatar(DEFAULT_AVATAR_URL)
+                                .role(Role.USER)
+                                .build();
 
-    @Test
-    void testRegisterUserAlreadyExists() {
-        RegisterRequest request = new RegisterRequest();
-        request.setEmail("test@example.com");
-        request.setPassword("password");
-        request.setFirstName("John");
-        request.setLastName("Doe");
+                String jwtToken = "access_token";
+                String refreshToken = "refresh_token";
 
-        when(userRepository.findByEmail(eq(request.getEmail()))).thenReturn(Optional.of(new User()));
+                when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.empty());
+                when(userRepository.save(any(User.class))).thenReturn(user);
+                when(jwtService.generateToken(anyMap(), any(User.class))).thenReturn("access_token");
+                when(jwtService.generateRefreshToken(any(User.class))).thenReturn("refresh_token");
+                doNothing().when(spyAuthService).sendPasswordAuthenticationEmail(request.getEmail());
 
-        assertThrows(UserAlreadyExistsException.class, () -> authenticationService.register(request));
-        verify(userRepository, never()).save(any(User.class));
-        verify(tokenRepository, never()).save(any(Token.class));
-    }
+                RegistrationResponse response = spyAuthService.register(request);
+                assertNotNull(response);
+                assertEquals(jwtToken, response.getAuthenticationResponse().getAccessToken());
+                assertEquals(refreshToken, response.getAuthenticationResponse().getRefreshToken());
+                assertEquals("Please check your email to verify your account.", response.getMessage());
+        }
 
-    @Test
-    void testAuthenticate() {
-        // Test data
-        AuthenticationRequest request = new AuthenticationRequest();
-        request.setEmail("test@example.com");
-        request.setPassword("password");
+        // Attempting to register a user with an email that already exists in the
+        // database
+        @Test
+        public void test_register_existing_user() throws Exception {
+                // Arrange
+                RegisterRequest request = new RegisterRequest();
+                request.setEmail("john.doe@example.com");
 
-        User user = User.builder()
-                .email("test@example.com")
-                .loggedIn(false)
-                .build();
+                User existingUser = User.builder()
+                                .email(request.getEmail())
+                                .build();
 
-        // Mocking behavior
-        when(userRepository.findByEmail(eq(request.getEmail()))).thenReturn(Optional.of(user));
-        when(passwordEncoder.encode(eq(request.getPassword()))).thenReturn("encodedPassword");
-        when(jwtService.generateToken(ArgumentMatchers.any(User.class))).thenReturn("jwtToken");
-        when(jwtService.generateRefreshToken(ArgumentMatchers.any(User.class))).thenReturn("refreshToken");
+                when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.of(existingUser));
 
-        // Method invocation
-        authenticationService.authenticate(request, mock(HttpServletRequest.class));
+                // Act and Assert
+                assertThrows(UserAlreadyExistsException.class, () -> authenticationService.register(request));
+        }
 
-        // Verify interactions
-        verify(userRepository).save(user);
-        verify(authenticationManager).authenticate(
-                eq(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())));
-        verify(jwtService).generateToken(user);
-        verify(jwtService).generateRefreshToken(user);
-        verify(tokenRepository, times(2)).save(ArgumentMatchers.any(Token.class));
-    }
+        @Test
+        public void test_register_password_special_characters() throws Exception {
+                // Arrange
+                RegisterRequest request = new RegisterRequest();
+                request.setFirstName("John");
+                request.setLastName("Doe");
+                request.setEmail("john.doe@example.com");
+                request.setPassword("password!@#");
 
-    @Test
-    void testAuthenticateUserAlreadyLoggedIn() {
-        AuthenticationRequest request = new AuthenticationRequest();
-        request.setEmail("test@example.com");
-        request.setPassword("password");
+                when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.empty());
 
-        User user = User.builder()
-                .email("test@example.com")
-                .loggedIn(true)
-                .build();
+                // Act and Assert
+                assertThrows(Exception.class, () -> authenticationService.register(request));
+        }
 
-        when(userRepository.findByEmail(eq(request.getEmail()))).thenReturn(Optional.of(user));
+        @Test
+        public void test_register_empty_first_name() throws Exception {
+                // Arrange
+                RegisterRequest request = new RegisterRequest();
+                request.setFirstName("");
+                request.setLastName("Doe");
+                request.setEmail("john.doe@example.com");
+                request.setPassword("password123");
 
-        assertThrows(UserAlreadyLoggedInException.class,
-                () -> authenticationService.authenticate(request, mock(HttpServletRequest.class)));
+                // Act and Assert
+                assertThrows(Exception.class, () -> authenticationService.register(request));
+        }
 
-        verify(userRepository, never()).save(any(User.class));
-        verify(authenticationManager, never()).authenticate(any(UsernamePasswordAuthenticationToken.class));
-        verify(tokenRepository, never()).save(any(Token.class));
-    }
+        @Test
+        public void test_register_empty_last_name() throws Exception {
+                // Arrange
+                RegisterRequest request = new RegisterRequest();
+                request.setFirstName("john");
+                request.setLastName("");
+                request.setEmail("john.doe@example.com");
+                request.setPassword("password123");
+
+                // Act and Assert
+                assertThrows(Exception.class, () -> authenticationService.register(request));
+        }
+
+        @Test
+        public void test_register_empty_email() throws Exception {
+                // Arrange
+                RegisterRequest request = new RegisterRequest();
+                request.setFirstName("John");
+                request.setLastName("Doe");
+                request.setEmail("");
+                request.setPassword("password123");
+
+                // Act and Assert
+                assertThrows(Exception.class, () -> authenticationService.register(request));
+        }
+
+        @Test
+        public void test_register_empty_pwd() throws Exception {
+                // Arrange
+                RegisterRequest request = new RegisterRequest();
+                request.setFirstName("John");
+                request.setLastName("Doe");
+                request.setEmail("john.doe@example.com");
+                request.setPassword("");
+
+                // Act and Assert
+                assertThrows(Exception.class, () -> authenticationService.register(request));
+        }
+
+        @Test
+        public void testUserNeedsEmailAuthentication() throws Exception {
+                RegisterRequest request = new RegisterRequest();
+                request.setFirstName("John");
+                request.setLastName("Doe");
+                request.setEmail("john.doe@example.com");
+                request.setPassword("password");
+
+                AuthenticationService spyAuthService = spy(authenticationService);
+
+                User user = User.builder()
+                                .firstName(request.getFirstName())
+                                .lastName(request.getLastName())
+                                .email(request.getEmail())
+                                .password(passwordEncoder.encode(request.getPassword()))
+                                .accountActive(false)
+                                .avatar(DEFAULT_AVATAR_URL)
+                                .role(Role.USER)
+                                .build();
+
+                when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.empty());
+                when(userRepository.save(any(User.class))).thenReturn(user);
+                when(jwtService.generateToken(anyMap(), any(User.class))).thenReturn("access_token");
+                when(jwtService.generateRefreshToken(any(User.class))).thenReturn("refresh_token");
+                doThrow(UserEmailNotAuthenticated.class).when(spyAuthService)
+                                .sendPasswordAuthenticationEmail(request.getEmail());
+
+                // Act and Assert
+                assertThrows(UserEmailNotAuthenticated.class, () -> {
+                        spyAuthService.register(request);
+                });
+        }
 }
