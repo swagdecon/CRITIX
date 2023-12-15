@@ -118,14 +118,18 @@ public class AuthenticationController {
 
         @PostMapping("/send-password-authentication-email")
         public ResponseEntity<String> sendPasswordAuthenticationEmail(@RequestBody Map<String, String> requestBody) {
-                String email = requestBody.get("email");
-                try {
-                        authService.sendPasswordAuthenticationEmail(email);
-                        return ResponseEntity.ok("Please check your email to confirm your account");
-                } catch (Exception e) {
-                        e.printStackTrace();
-                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                        .body(e.getMessage());
+                if (requestBody == null || requestBody.get("email") == null || requestBody.get("email").isEmpty()) {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email cannot be empty or null");
+                } else {
+                        String email = requestBody.get("email");
+                        try {
+                                authService.sendPasswordAuthenticationEmail(email);
+                                return ResponseEntity.ok("Please check your email to confirm your account");
+                        } catch (Exception e) {
+                                e.printStackTrace();
+                                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                                .body(e.getMessage());
+                        }
                 }
         }
 
