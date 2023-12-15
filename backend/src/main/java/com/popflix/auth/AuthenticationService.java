@@ -155,7 +155,7 @@ public class AuthenticationService {
                 long lastResetPwdTimeMillis = lastResetPwdTime.getTime();
                 long timeElapsedMinutes = (currentTimeMillis - lastResetPwdTimeMillis) / (1000 * 60);
 
-                return timeElapsedMinutes >= 1;
+                return timeElapsedMinutes >= 30;
         }
 
         public String decryptToken(String encryptedToken) throws Exception {
@@ -178,6 +178,7 @@ public class AuthenticationService {
 
         public void activateAccount(String encryptedEmail) throws Exception {
                 String userEmail = decryptToken(encryptedEmail);
+                System.out.println(userEmail);
                 User user = userRepository.findByEmail(userEmail)
                                 .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
                 Boolean isExpired = isAuthLinkExpired(user.getAccountAuthRequestDate());
@@ -267,7 +268,7 @@ public class AuthenticationService {
                 return user;
         }
 
-        private static SecretKey generateSecretKey() throws Exception {
+        public static SecretKey generateSecretKey() throws Exception {
                 KeyGenerator keyGenerator = KeyGenerator.getInstance(AES_ALGORITHM);
                 keyGenerator.init(KEY_SIZE);
                 return keyGenerator.generateKey();
@@ -284,7 +285,7 @@ public class AuthenticationService {
                 tokenRepository.saveAll(validUserTokens);
         }
 
-        private void saveAccessToken(User user, String accessToken) {
+        public void saveAccessToken(User user, String accessToken) {
                 var token = Token.builder()
                                 .user(user)
                                 .userId(user.getId())
@@ -296,7 +297,7 @@ public class AuthenticationService {
                 tokenRepository.save(token);
         }
 
-        private void saveRefreshToken(User user, String refreshToken) {
+        public void saveRefreshToken(User user, String refreshToken) {
                 var token = Token.builder()
                                 .user(user)
                                 .userId(user.getId())
