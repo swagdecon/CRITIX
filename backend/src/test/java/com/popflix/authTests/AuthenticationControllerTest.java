@@ -9,6 +9,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.net.URI;
@@ -36,6 +38,8 @@ import com.popflix.auth.AuthenticationService;
 import com.popflix.auth.RecaptchaRequest;
 import com.popflix.auth.RegisterRequest;
 import com.popflix.auth.RegistrationResponse;
+import com.popflix.config.customExceptions.TokenExpiredException;
+import com.popflix.config.customExceptions.TooManyRequestsException;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
 import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
 import com.popflix.service.PasswordService;
@@ -263,16 +267,77 @@ class AuthenticationControllerTest {
         assertNotNull(response.getBody());
     }
 
-    // @Test
-    // public void test_sendPasswordAuthenticationEmail_invalidEmailFormat() {
-    // // Arrange
-    // Map<String, String> requestBody = new HashMap<>();
-    // requestBody.put("email", "test");
+    @Test
+    public void test_sendPasswordAuthenticationEmail_invalidEmailFormat() {
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("email", "test");
 
-    // ResponseEntity<String> response =
-    // controller.sendPasswordAuthenticationEmail(requestBody);
+        ResponseEntity<String> response = controller.sendPasswordAuthenticationEmail(requestBody);
 
-    // assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    // assertNotNull(response.getBody());
-    // }
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNotNull(response.getBody());
+    }
+
+    /// //////////////////////////////////////////////////////////////
+    // activateAccount tests ////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+    // Feel this is sufficiently covered in auth service tests
+
+    /// //////////////////////////////////////////////////////////////
+    // sendPasswordRecoveryEmail tests //////////////////////////////
+    ////////////////////////////////////////////////////////////////
+
+    // Testing error paths, success path covered in service tests
+    @Test
+    public void test_invalid_email_not_found() {
+        String email = "invalid_email";
+        AuthenticationService authService = mock(AuthenticationService.class);
+        PasswordService passwordService = mock(PasswordService.class);
+        AuthenticationController controller = new AuthenticationController(authService, passwordService);
+        when(authService.authenticateExistingEmail(email)).thenReturn(false);
+
+        ResponseEntity<String> response = controller.sendPasswordRecoveryEmail(email);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("Email not found", response.getBody());
+        verify(authService).authenticateExistingEmail(email);
+        verifyNoInteractions(passwordService);
+    }
+
+    @Test
+    public void test_too_many_requests() {
+        // Arrange
+        String email = "valid_email@example.com";
+        AuthenticationService authService = mock(AuthenticationService.class);
+        PasswordService passwordService = mock(PasswordService.class);
+        AuthenticationController controller = new AuthenticationController(authService, passwordService);
+        when(authService.authenticateExistingEmail(email)).thenThrow(new TooManyRequestsException("Too many requests"));
+
+        // Act
+        ResponseEntity<String> response = controller.sendPasswordRecoveryEmail(email);
+
+        // Assert
+        assertEquals(HttpStatus.TOO_MANY_REQUESTS, response.getStatusCode());
+        assertEquals("Too many requests", response.getBody());
+        verify(authService).authenticateExistingEmail(email);
+        verifyNoInteractions(passwordService);
+    }
+
+    /// //////////////////////////////////////////////////////////////
+    // resetUserPwd tests ///////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+
+    @Test
+    public void test_resetPassword_validEmailAndPassword() {
+        // Arrange
+
+        String encryptedPwd = "valid_encrypted_email";
+        String newPwd = "new_password";
+
+        try {
+            passwordService.resetUserPwd(encryptedPwd, newPwd);
+        } catch (Exception e) {
+            fail("An error occurred: " + e.getMessage());
+        }
+    }
 }

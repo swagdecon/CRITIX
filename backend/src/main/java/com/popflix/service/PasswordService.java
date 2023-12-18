@@ -1,18 +1,24 @@
 package com.popflix.service;
 
 import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import com.popflix.auth.AuthenticationService;
 import com.popflix.config.customExceptions.TokenExpiredException;
 import com.popflix.config.customExceptions.TooManyRequestsException;
 import com.popflix.model.User;
 import com.popflix.repository.UserRepository;
+
+import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeMultipart;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -30,33 +36,61 @@ public class PasswordService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
         Integer resetCount = user.getPasswordResetRequests();
-        if (resetCount != null) {
-            resetCount += 1;
-        } else {
+        if (resetCount == null) {
             resetCount = 1;
         }
         user.setPasswordResetRequests(resetCount);
         resetCount = user.getPasswordResetRequests();
 
         if (resetCount <= 3) {
-            String encryptedEmailToken = authService.encryptEmail(email);
-            MimeMessage message = javaMailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            String emailText = String.format(
-                    "Dear user, to reset your password, click the following link: http:/localhost:3000/reset-password/%s%n"
-                            + "If you didn't authorize this request, kindly ignore this email.%n"
-                            + "Thanks for your support!%n"
-                            + "The POPFLIX team",
-                    encryptedEmailToken);
+            try {
+                String encryptedEmailToken = authService.encryptEmail(email);
+                MimeMessage message = javaMailSender.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+                // HTML content for the email
+                String emailContent = "<html>"
+                        + "<body style='background-color: black; color: white; font-family: Arial, sans-serif;'>"
+                        + "<div style='text-align: center; padding: 20px;'>"
+                        + "<img src='cid:logoIcon' alt='Popflix Logo' style='max-width: 200px;' />"
+                        + "<h1>Password Reset Request</h1>"
+                        + "<p>Dear user,</p>"
+                        + "<p>To reset your password, click <a href='http:/localhost:3000/reset-password/"
+                        + encryptedEmailToken + "' style='color: white;'>here</a>.</p>"
+                        + "<p>If you didn't authorize this request, kindly ignore this email.</p>"
+                        + "<p>Thanks for your support!<br/>The POPFLIX team</p>"
+                        + "</div>"
+                        + "</body>"
+                        + "</html>";
 
-            helper.setFrom("POPFLIX <popflix.help@gmail.com>");
-            helper.setTo(email);
-            helper.setSubject("Password Reset Request");
-            helper.setText(emailText);
-            user.setPasswordResetRequestDate(new Date());
+                // Set email properties
+                helper.setFrom("POPFLIX <popflix.help@gmail.com>");
+                helper.setTo(email);
+                helper.setSubject("Password Reset Request");
+                MimeMultipart multipart = new MimeMultipart("related");
 
-            userRepository.save(user);
-            javaMailSender.send(message);
+                MimeBodyPart messageBodyPart = new MimeBodyPart();
+                messageBodyPart.setContent(emailContent, "text/html; charset=utf-8");
+                multipart.addBodyPart(messageBodyPart);
+
+                FileSystemResource logo = new FileSystemResource("src/main/resources/POPFLIX_LOGO_OFFICIAL.png");
+                if (logo.exists()) {
+                    MimeBodyPart imagePart = new MimeBodyPart();
+                    imagePart.attachFile(logo.getFile());
+                    imagePart.setContentID("<logoIcon>");
+                    imagePart.setDisposition(MimeBodyPart.ATTACHMENT);
+                    multipart.addBodyPart(imagePart);
+                }
+
+                message.setContent(multipart);
+
+                javaMailSender.send(message);
+                user.setPasswordResetRequestDate(new Date());
+                resetCount += 1;
+                user.setPasswordResetRequests(resetCount);
+                userRepository.save(user);
+            } catch (Exception e) {
+                throw new Exception("Something went wrong while sending email.");
+            }
         } else {
             throw new TooManyRequestsException("Too many requests, please try again later.");
         }

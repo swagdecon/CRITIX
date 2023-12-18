@@ -6,7 +6,7 @@ export default function ConfirmEmailForPwdReset() {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState(null);
     const [response, setResponse] = useState(null)
-    const [showButton, setShowButton] = useState(true);
+    const [showInputFields, setShowInputFields] = useState(true);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -21,11 +21,11 @@ export default function ConfirmEmailForPwdReset() {
                 setMessage(responseText);
                 setEmail("");
                 setResponse(response);
-                setShowButton(false)
+                setShowInputFields(false)
             } else {
                 setResponse(response);
                 setMessage(responseText);
-                setShowButton(false)
+                setShowInputFields(false)
             }
         } catch (error) {
             setMessage(` ${error.message}`);
@@ -41,20 +41,20 @@ export default function ConfirmEmailForPwdReset() {
                         {message}
                     </div>
                 )}
-                <form onSubmit={handleSubmit}>
-                    <div className={resetPwdStyles["user-box"]}>
-                        <input
-                            type="email"
-                            name="email"
-                            required
-                            autoComplete="off"
-                            onChange={(e) => setEmail(e.target.value)}
-                            value={email}
-                            placeholder=""
-                        />
-                        <label>Email Address</label>
-                    </div>
-                    {showButton ?
+                {showInputFields ?
+                    <form onSubmit={handleSubmit}>
+                        <div className={resetPwdStyles["user-box"]}>
+                            <input
+                                type="email"
+                                name="email"
+                                required
+                                autoComplete="off"
+                                onChange={(e) => setEmail(e.target.value)}
+                                value={email}
+                                placeholder=""
+                            />
+                            <label>Email Address</label>
+                        </div>
                         <div className={resetPwdStyles["centered-button"]}>
                             <button>
                                 <span></span>
@@ -64,8 +64,8 @@ export default function ConfirmEmailForPwdReset() {
                                 Submit
                             </button>
                         </div>
-                        : null}
-                </form>
+                    </form>
+                    : null}
             </div>
         </div>
     );
