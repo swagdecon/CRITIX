@@ -115,7 +115,6 @@ public class AuthenticationController {
 
                 return response.body();
         }
-        // Assuming authService is an instance of your authentication service
 
         @PostMapping("/send-password-authentication-email")
         public ResponseEntity<String> sendPasswordAuthenticationEmail(@RequestBody Map<String, String> requestBody) {

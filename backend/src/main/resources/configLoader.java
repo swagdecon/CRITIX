@@ -13,7 +13,6 @@ public class ConfigLoader {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return propertyValue;
     }
 }

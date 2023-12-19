@@ -1,7 +1,6 @@
 package com.popflix.service;
 
 import java.util.Date;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,8 +18,6 @@ public class PasswordService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationService authService;
     private final EmailService emailService;
-    @Value("${ERR_PWD_REQUEST_EXCEEDED}")
-    private String errorPasswordRequestExceeded;
 
     public void sendPasswordRecoveryEmail(String email) throws Exception {
         User user = userRepository.findByEmail(email)
