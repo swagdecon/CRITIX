@@ -13,7 +13,6 @@ export default function ResetPassword() {
     const [countDown, setCountDown] = useState(5);
     const [countdownInterval, setCountdownInterval] = useState(null);
 
-
     const startCountdown = () => {
         const interval = setInterval(() => {
             setCountDown(prevCountDown => prevCountDown - 1);
@@ -29,22 +28,21 @@ export default function ResetPassword() {
 
     useEffect(() => {
         return () => {
-            // Clear the countdown interval when the component unmounts
             clearInterval(countdownInterval);
         };
     }, [countdownInterval]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const currentURL = window.location.href;
-        const url = new URL(currentURL);
-        const token = url.pathname.split('/').pop();
 
         if (password !== confirmPassword) {
             setMessage(`Error: Passwords don't match`);
         } else if (password.length < 7 || confirmPassword.length < 7 || !/[a-zA-Z0-9]/.test(password) || !/[a-zA-Z0-9]/.test(confirmPassword)) {
             setMessage(`Error: Your password must be a mix of letters and numbers, and at least 7 characters`)
         } else {
+            const currentURL = window.location.href;
+            const tokenStartIndex = currentURL.indexOf("/reset-password/") + "/reset-password/".length;
+            const token = currentURL.substring(tokenStartIndex, tokenStartIndex + 87);
             try {
                 const response = await fetch("http://localhost:8080/v1/auth/reset-password", {
                     method: "POST",

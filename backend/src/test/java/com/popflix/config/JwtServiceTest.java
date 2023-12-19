@@ -8,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
-import io.github.cdimascio.dotenv.Dotenv;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,11 +24,6 @@ class JwtServiceTest {
     @BeforeEach
     public void setup() {
         jwtService = new JwtService();
-
-        Dotenv dotenv = Dotenv.load();
-        String SECRET_KEY = dotenv.get("SECRET_KEY");
-        Long jwtExpiration = Long.parseLong(dotenv.get("SECRET_KEY_EXPIRATION"));
-        Long refreshExpiration = Long.parseLong(dotenv.get("REFRESH_TOKEN_EXPIRATION"));
         Mockito.when(userDetails.getUsername()).thenReturn("testUser");
     }
 
