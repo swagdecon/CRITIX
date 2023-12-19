@@ -12,8 +12,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,7 +23,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.popflix.config.JwtService;
-import com.popflix.config.customExceptions.ErrSendEmail;
 import com.popflix.config.customExceptions.TokenExpiredException;
 import com.popflix.config.customExceptions.TooManyRequestsException;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
@@ -36,10 +33,10 @@ import com.popflix.model.TokenType;
 import com.popflix.model.User;
 import com.popflix.repository.TokenRepository;
 import com.popflix.repository.UserRepository;
+import com.popflix.service.EmailService;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.io.IOException;
-import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -52,8 +49,7 @@ public class AuthenticationService {
         private final PasswordEncoder passwordEncoder;
         private final JwtService jwtService;
         private final AuthenticationManager authenticationManager;
-        private final JavaMailSender javaMailSender;
-
+        private final EmailService emailService;
         static Dotenv dotenv = Dotenv.load();
 
         private static String AES_ALGORITHM = "AES";
@@ -217,9 +213,7 @@ public class AuthenticationService {
                                                         "Email or Password Not Found"));
                         Integer emailCount = user.getEmailAuthRequests();
 
-                        if (emailCount != null) {
-                                emailCount += 1;
-                        } else {
+                        if (emailCount == null) {
                                 emailCount = 1;
                         }
                         user.setEmailAuthRequests(emailCount);
@@ -227,28 +221,30 @@ public class AuthenticationService {
 
                         if (emailCount <= 5) {
                                 String encryptedEmailToken = encryptEmail(email);
-                                MimeMessage message = javaMailSender.createMimeMessage();
-                                MimeMessageHelper helper = new MimeMessageHelper(message, true);
-                                String emailText = String.format(
-                                                "Dear user, to authenticate your account, click the following link: http:/localhost:3000/activate-account/%s%n"
-                                                                + "If you didn't authorize this request, kindly ignore this email.%n"
-                                                                + "Thanks for your support!%n"
-                                                                + "The POPFLIX team",
+                                String emailContent = String.format(
+                                                "<html>"
+                                                                + "<body style='background-color: black; color: white; font-family: Arial, sans-serif;'>"
+                                                                + "<div style='text-align: center; padding: 20px;'>"
+                                                                + "<img src='cid:logoIcon' alt='Popflix Logo' style='max-width: 200px;' />"
+                                                                + "<h1>Activate Your Account</h1>"
+                                                                + "<p>Dear user,</p>"
+                                                                + "<p>To authenticate your account, click <a href='http:/localhost:3000/activate-account/%s' style='color: white;'>here</a>.</p>"
+                                                                + "<p>If you didn't authorize this request, kindly ignore this email.</p>"
+                                                                + "<p>Thanks for your support!<br/>The POPFLIX team</p>"
+                                                                + "</div>"
+                                                                + "</body>"
+                                                                + "</html>",
                                                 encryptedEmailToken);
 
-                                helper.setFrom("POPFLIX <popflix.help@gmail.com>");
-                                helper.setTo(email);
-                                helper.setSubject("Activate your account");
-                                helper.setText(emailText);
+                                emailService.sendEmail(email, "Activate your account", emailContent);
+                                emailCount += 1;
                                 user.setAccountAuthRequestDate(new Date());
-
                                 userRepository.save(user);
-                                javaMailSender.send(message);
                         } else {
                                 throw new TooManyRequestsException("Too many requests, please try again later.");
                         }
-                } catch (ErrSendEmail e) {
-                        throw new ErrSendEmail("There was an error sending your account activation email.");
+                } catch (Exception e) {
+                        throw new Exception("There was an error sending your account activation email.");
                 }
         }
 

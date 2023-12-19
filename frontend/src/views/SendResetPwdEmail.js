@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import resetPwdStyles from "../misc/ResetPassword.module.css"
 import LoginStyles from "../components/Login/login.module.css"
+const SEND_RESET_PWD_ENDPOINT = process.env.REACT_APP_RESET_PWD_ENDPOINT;
 
 export default function ConfirmEmailForPwdReset() {
     const [email, setEmail] = useState("");
@@ -11,7 +12,7 @@ export default function ConfirmEmailForPwdReset() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch("http://localhost:8080/v1/auth/send-password-recovery-email", {
+            const response = await fetch(SEND_RESET_PWD_ENDPOINT, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: email

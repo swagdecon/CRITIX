@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import verificationStyles from "../misc/ResetPassword.module.css";
 import LoginStyles from "../components/Login/login.module.css";
+const ACTIVATE_ACCOUNT_ENDPOINT = process.env.REACT_APP_ACTIVATE_ACCOUNT_ENDPOINT;
 
 export default function AccountVerification() {
     const [message, setMessage] = useState(null);
@@ -10,8 +11,8 @@ export default function AccountVerification() {
     const [countdownInterval, setCountdownInterval] = useState(null);
 
     const currentURL = window.location.href;
-    const url = new URL(currentURL);
-    const encrypedEmail = url.pathname.split('/').pop();
+    const tokenStartIndex = currentURL.indexOf("/activate-account/") + "/activate-account/".length;
+    const encrypedEmail = currentURL.substring(tokenStartIndex, tokenStartIndex + 87);
 
     const startCountdown = () => {
         const interval = setInterval(() => {
@@ -28,7 +29,6 @@ export default function AccountVerification() {
 
     useEffect(() => {
         return () => {
-            // Clear the countdown interval when the component unmounts
             clearInterval(countdownInterval);
         };
     }, [countdownInterval]);
@@ -36,7 +36,7 @@ export default function AccountVerification() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch("http://localhost:8080/v1/auth/activate-account", {
+            const response = await fetch(ACTIVATE_ACCOUNT_ENDPOINT, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: encrypedEmail

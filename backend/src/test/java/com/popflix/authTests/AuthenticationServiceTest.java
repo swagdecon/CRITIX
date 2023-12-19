@@ -10,9 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -55,6 +57,7 @@ import com.popflix.model.TokenType;
 import com.popflix.model.User;
 import com.popflix.repository.TokenRepository;
 import com.popflix.repository.UserRepository;
+import com.popflix.service.EmailService;
 
 import io.jsonwebtoken.io.IOException;
 import jakarta.mail.internet.MimeMessage;
@@ -83,12 +86,20 @@ public class AuthenticationServiceTest {
         private JavaMailSender javaMailSender;
 
         @Mock
+        private EmailService emailService;
+
+        @Mock
         private AuthenticationService authService;
+
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
 
         @InjectMocks
         private AuthenticationService authenticationService;
 
+        String email = "test@example.com";
         String DEFAULT_AVATAR_URL = "test";
+        String encryptedEmail = "95Or_YFh8yS8hVtwmaOxql6Ikji_fdq0FTAIxgeb9ek:pdBK5WgeuA8i5OEn7iVWnIekLCLYjqZMySbtu8voh_s";
 
         ////////////////////////////////////////////////////////////////
         // register tests //////////////////////////////////////////////
@@ -305,7 +316,6 @@ public class AuthenticationServiceTest {
 
         @Test
         public void testAuthenticate_ThrowsException_IfAccountNotActive() {
-                String email = "test@example.com";
                 User user = new User();
                 user.setAccountActive(false);
                 AuthenticationRequest request = new AuthenticationRequest();
@@ -379,7 +389,7 @@ public class AuthenticationServiceTest {
         @Test
         public void test_null_last_reset_pwd_time_isAuthLinkExpired() {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, javaMailSender);
+                                passwordEncoder, jwtService, authenticationManager, emailService);
                 boolean result = authenticationService.isAuthLinkExpired(null);
                 assertTrue(result);
         }
@@ -387,7 +397,7 @@ public class AuthenticationServiceTest {
         @Test
         public void test_less_than_30_minutes_ago_isAuthLinkExpired() {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, javaMailSender);
+                                passwordEncoder, jwtService, authenticationManager, emailService);
                 Date lastResetPwdTime = new Date(System.currentTimeMillis() - 1500000); // 25 minutes ago
                 boolean result = authenticationService.isAuthLinkExpired(lastResetPwdTime);
                 assertFalse(result);
@@ -396,7 +406,7 @@ public class AuthenticationServiceTest {
         @Test
         public void test_exactly_30_minutes_ago_isAuthLinkExpired() {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, javaMailSender);
+                                passwordEncoder, jwtService, authenticationManager, emailService);
                 Date lastResetPwdTime = new Date(System.currentTimeMillis() - 1800000); // 30 minutes ago
                 boolean result = authenticationService.isAuthLinkExpired(lastResetPwdTime);
                 assertTrue(result);
@@ -405,7 +415,7 @@ public class AuthenticationServiceTest {
         @Test
         public void test_more_than_30_minutes_in_future_isAuthLinkExpired() {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, javaMailSender);
+                                passwordEncoder, jwtService, authenticationManager, emailService);
                 Date lastResetPwdTime = new Date(System.currentTimeMillis() + 1900000); // 31 minutes in the future
                 boolean result = authenticationService.isAuthLinkExpired(lastResetPwdTime);
                 assertFalse(result);
@@ -414,7 +424,7 @@ public class AuthenticationServiceTest {
         @Test
         public void test_more_than_30_minutes_ago_isAuthLinkExpired() {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, javaMailSender);
+                                passwordEncoder, jwtService, authenticationManager, emailService);
                 Date lastResetPwdTime = new Date(System.currentTimeMillis() - 1900000); // 31 minutes ago
                 boolean result = authenticationService.isAuthLinkExpired(lastResetPwdTime);
                 assertTrue(result);
@@ -428,7 +438,7 @@ public class AuthenticationServiceTest {
         public void test_valid_encrypted_token() throws Exception {
                 // Arrange
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, javaMailSender);
+                                passwordEncoder, jwtService, authenticationManager, emailService);
                 String encryptedToken = "95Or_YFh8yS8hVtwmaOxql6Ikji_fdq0FTAIxgeb9ek:pdBK5WgeuA8i5OEn7iVWnIekLCLYjqZMySbtu8voh_s";
                 String expectedEmail = "test@example.com";
 
@@ -440,7 +450,7 @@ public class AuthenticationServiceTest {
         @Test
         public void test_null_encrypted_token() {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, javaMailSender);
+                                passwordEncoder, jwtService, authenticationManager, emailService);
 
                 String encryptedToken = null;
 
@@ -452,7 +462,7 @@ public class AuthenticationServiceTest {
         @Test
         public void test_invalid_encrypted_token_format() {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, javaMailSender);
+                                passwordEncoder, jwtService, authenticationManager, emailService);
                 String encryptedToken = "invalid_token_format";
 
                 assertThrows(Exception.class, () -> {
@@ -471,11 +481,10 @@ public class AuthenticationServiceTest {
                 PasswordEncoder passwordEncoder = mock(PasswordEncoder.class);
                 JwtService jwtService = mock(JwtService.class);
                 AuthenticationManager authenticationManager = mock(AuthenticationManager.class);
-                JavaMailSender javaMailSender = mock(JavaMailSender.class);
 
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, javaMailSender);
-                String encryptedEmail = "95Or_YFh8yS8hVtwmaOxql6Ikji_fdq0FTAIxgeb9ek:pdBK5WgeuA8i5OEn7iVWnIekLCLYjqZMySbtu8voh_s";
+                                passwordEncoder, jwtService, authenticationManager, emailService);
+
                 User user = new User();
                 user.setAccountAuthRequestDate(new Date(System.currentTimeMillis() - (29 * 60 * 1000)));
                 when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
@@ -492,11 +501,9 @@ public class AuthenticationServiceTest {
                 PasswordEncoder passwordEncoder = mock(PasswordEncoder.class);
                 JwtService jwtService = mock(JwtService.class);
                 AuthenticationManager authenticationManager = mock(AuthenticationManager.class);
-                JavaMailSender javaMailSender = mock(JavaMailSender.class);
 
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, javaMailSender);
-                String encryptedEmail = "95Or_YFh8yS8hVtwmaOxql6Ikji_fdq0FTAIxgeb9ek:pdBK5WgeuA8i5OEn7iVWnIekLCLYjqZMySbtu8voh_s";
+                                passwordEncoder, jwtService, authenticationManager, emailService);
 
                 User user = new User();
                 user.setAccountAuthRequestDate(new Date(System.currentTimeMillis() - (31 * 60 * 1000)));
@@ -511,8 +518,7 @@ public class AuthenticationServiceTest {
         public void test_throws_username_not_found_exception_when_invalid_encrypted_email_is_provided()
                         throws Exception {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, javaMailSender);
-                String encryptedEmail = "95Or_YFh8yS8hVtwmaOxql6Ikji_fdq0FTAIxgeb9ek:pdBK5WgeuA8i5OEn7iVWnIekLCLYjqZMySbtu8voh_s";
+                                passwordEncoder, jwtService, authenticationManager, emailService);
 
                 assertThrows(UsernameNotFoundException.class,
                                 () -> authenticationService.activateAccount(encryptedEmail));
@@ -525,8 +531,7 @@ public class AuthenticationServiceTest {
         @Test
         public void test_encrypt_email_successfully() throws Exception {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, javaMailSender);
-                String email = "test@example.com";
+                                passwordEncoder, jwtService, authenticationManager, emailService);
 
                 String encryptedToken = authenticationService.encryptEmail(email);
 
@@ -539,94 +544,11 @@ public class AuthenticationServiceTest {
         @Test
         public void test_raise_exception_if_email_is_null() {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, javaMailSender);
+                                passwordEncoder, jwtService, authenticationManager, emailService);
                 String email = null;
 
                 assertThrows(Exception.class, () -> {
                         authenticationService.encryptEmail(email);
-                });
-        }
-
-        ////////////////////////////////////////////////////////////////
-        // sendPasswordAuthenticationEmail tests ///////////////////////
-        ////////////////////////////////////////////////////////////////
-
-        @Test
-        public void test_send_email_with_activation_link() throws Exception {
-                String email = "test@example.com";
-                User user = new User();
-                user.setEmail(email);
-                user.setEmailAuthRequests(0);
-
-                when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
-
-                MimeMessage mimeMessageMock = mock(MimeMessage.class);
-                when(javaMailSender.createMimeMessage()).thenReturn(mimeMessageMock);
-
-                authenticationService.sendPasswordAuthenticationEmail(email);
-
-                verify(javaMailSender, times(1)).send(any(MimeMessage.class));
-                assertEquals(1, user.getEmailAuthRequests().intValue());
-                assertNotNull(user.getAccountAuthRequestDate());
-        }
-
-        @Test
-        public void test_account_auth_request_date_not_null() throws Exception {
-                String email = "test@example.com";
-                AuthenticationService authenticationService = new AuthenticationService(
-                                userRepository, tokenRepository, passwordEncoder, jwtService, authenticationManager,
-                                javaMailSender);
-                User mockUser = new User();
-                mockUser.setEmail(email);
-                mockUser.setEmailAuthRequests(0);
-                MimeMessage mimeMessageMock = mock(MimeMessage.class);
-                when(javaMailSender.createMimeMessage()).thenReturn(mimeMessageMock);
-                when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
-                authenticationService.sendPasswordAuthenticationEmail(email);
-
-                User user = userRepository.findByEmail(email)
-                                .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
-
-                assertNotNull(user.getAccountAuthRequestDate());
-        }
-
-        @Test
-        public void test_throw_tooManyRequestException() throws Exception {
-                // Arrange
-                String email = "test@example.com";
-                AuthenticationService authenticationService = new AuthenticationService(
-                                userRepository, tokenRepository, passwordEncoder, jwtService, authenticationManager,
-                                javaMailSender);
-
-                User user = new User();
-                user.setEmail(email);
-                user.setEmailAuthRequests(10);
-                when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
-
-                assertThrows(TooManyRequestsException.class, () -> {
-                        authenticationService.sendPasswordAuthenticationEmail(email);
-                });
-        }
-
-        @Test
-        public void test_throw_err_send_email_exception() throws Exception {
-                String email = "test@example.com";
-                AuthenticationService authenticationService = new AuthenticationService(
-                                userRepository, tokenRepository, passwordEncoder, jwtService, authenticationManager,
-                                javaMailSender);
-
-                User user = new User();
-                user.setEmail(email);
-                user.setEmailAuthRequests(0);
-                when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
-
-                MimeMessage mimeMessageMock = mock(MimeMessage.class);
-                when(javaMailSender.createMimeMessage()).thenReturn(mimeMessageMock);
-                doThrow(new ErrSendEmail("Simulated mail sending error")).when(javaMailSender)
-                                .send(mimeMessageMock);
-
-                assertThrows(ErrSendEmail.class, () -> {
-                        authenticationService.sendPasswordAuthenticationEmail(email);
                 });
         }
 
@@ -806,7 +728,6 @@ public class AuthenticationServiceTest {
 
         @Test
         public void test_saveRefreshToken_Success() {
-                // Arrange
                 User user = new User();
                 user.setId("1");
                 String refreshToken = "refreshToken";
@@ -832,19 +753,16 @@ public class AuthenticationServiceTest {
 
         @Test
         public void test_valid_refresh_token() throws IOException, JsonProcessingException {
-                // Arrange
-                HttpServletRequest request = mock(HttpServletRequest.class);
-                HttpServletResponse response = mock(HttpServletResponse.class);
+
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, javaMailSender);
+                                passwordEncoder, jwtService, authenticationManager, emailService);
                 String refreshToken = "valid_refresh_token";
-                String userEmail = "test@example.com";
                 User user = User.builder()
-                                .email(userEmail)
+                                .email(email)
                                 .build();
                 when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn("Bearer " + refreshToken);
-                when(jwtService.extractUsername(refreshToken)).thenReturn(userEmail);
-                when(userRepository.findByEmail(userEmail)).thenReturn(Optional.of(user));
+                when(jwtService.extractUsername(refreshToken)).thenReturn(email);
+                when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
                 when(jwtService.isTokenValid(refreshToken, user)).thenReturn(true);
                 String accessToken = "new_access_token";
                 String newRefreshToken = "new_refresh_token";
@@ -861,8 +779,7 @@ public class AuthenticationServiceTest {
 
         @Test
         public void test_missing_or_invalid_authorization_header() throws IOException, JsonProcessingException {
-                HttpServletRequest request = mock(HttpServletRequest.class);
-                HttpServletResponse response = mock(HttpServletResponse.class);
+
                 when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(null);
 
                 JsonNode result = authenticationService.refreshToken(request, response);
@@ -872,8 +789,6 @@ public class AuthenticationServiceTest {
 
         @Test
         public void test_user_email_extracted_from_refresh_token_is_null() throws IOException, JsonProcessingException {
-                HttpServletRequest request = mock(HttpServletRequest.class);
-                HttpServletResponse response = mock(HttpServletResponse.class);
                 String authHeader = "Bearer refreshToken";
                 when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(authHeader);
                 when(jwtService.extractUsername("refreshToken")).thenReturn(null);

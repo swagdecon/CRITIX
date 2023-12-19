@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react"
 import resetPwdStyles from "../misc/ResetPassword.module.css"
 import LoginStyles from "../components/Login/login.module.css"
-
-
+const RESET_PWD_ENDPOINT = process.env.REACT_APP_RESET_PWD_ENDPOINT;
 
 export default function ResetPassword() {
     const [password, setPassword] = useState("");
@@ -44,7 +43,7 @@ export default function ResetPassword() {
             const tokenStartIndex = currentURL.indexOf("/reset-password/") + "/reset-password/".length;
             const token = currentURL.substring(tokenStartIndex, tokenStartIndex + 87);
             try {
-                const response = await fetch("http://localhost:8080/v1/auth/reset-password", {
+                const response = await fetch(RESET_PWD_ENDPOINT, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
