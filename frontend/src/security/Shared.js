@@ -11,8 +11,12 @@ export async function resendAuthEmail(
         const response = await fetch(
             SEND_AUTH_EMAIL,
             {
+                headers: {
+                    "Content-Type": "application/json",
+                },
                 method: "POST",
                 body: JSON.stringify({ email: userEmail }),
+
             }
         )
         const text = await response.text();
@@ -21,7 +25,6 @@ export async function resendAuthEmail(
     } catch (error) {
         setMessage(error)
     }
-
 }
 
 export function Message({ response, message, style, profanityError }) {

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -26,7 +25,8 @@ import com.popflix.config.customExceptions.UserAlreadyExistsException;
 import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
 import com.popflix.config.customExceptions.UserEmailNotAuthenticated;
 import com.popflix.service.PasswordService;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -118,14 +118,27 @@ public class AuthenticationController {
 
         @PostMapping("/send-password-authentication-email")
         public ResponseEntity<String> sendPasswordAuthenticationEmail(@RequestBody Map<String, String> requestBody) {
-                String email = requestBody.get("email");
-                try {
-                        authService.sendPasswordAuthenticationEmail(email);
-                        return ResponseEntity.ok("Please check your email to confirm your account");
-                } catch (Exception e) {
-                        e.printStackTrace();
-                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                        .body(e.getMessage());
+                if (requestBody == null || requestBody.get("email") == null || requestBody.get("email").isEmpty()) {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email cannot be empty or null");
+                } else {
+                        String email = requestBody.get("email");
+
+                        // Regular expression for basic email format validation
+                        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+                        Pattern pattern = Pattern.compile(emailRegex);
+                        Matcher matcher = pattern.matcher(email);
+
+                        if (!matcher.matches()) {
+                                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid email format");
+                        }
+
+                        try {
+                                authService.sendPasswordAuthenticationEmail(email);
+                                return ResponseEntity.ok("Please check your email to confirm your account");
+                        } catch (Exception e) {
+                                e.printStackTrace();
+                                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+                        }
                 }
         }
 
@@ -175,7 +188,7 @@ public class AuthenticationController {
                                         .body(e.getMessage());
                 } catch (Exception e) {
                         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                        .body(e.getMessage());
+                                        .body("Something went wrong, please try again.");
                 }
         }
 }

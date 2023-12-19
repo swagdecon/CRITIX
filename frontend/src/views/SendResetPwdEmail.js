@@ -1,17 +1,18 @@
 import React, { useState } from "react"
 import resetPwdStyles from "../misc/ResetPassword.module.css"
 import LoginStyles from "../components/Login/login.module.css"
+const SEND_RESET_PWD_ENDPOINT = process.env.REACT_APP_SEND_PWD_RESET_ENDPOINT;
 
 export default function ConfirmEmailForPwdReset() {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState(null);
     const [response, setResponse] = useState(null)
-    const [showButton, setShowButton] = useState(true);
+    const [showInputFields, setShowInputFields] = useState(true);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch("http://localhost:8080/v1/auth/send-password-recovery-email", {
+            const response = await fetch(SEND_RESET_PWD_ENDPOINT, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: email
@@ -21,11 +22,11 @@ export default function ConfirmEmailForPwdReset() {
                 setMessage(responseText);
                 setEmail("");
                 setResponse(response);
-                setShowButton(false)
+                setShowInputFields(false)
             } else {
                 setResponse(response);
                 setMessage(responseText);
-                setShowButton(false)
+                setShowInputFields(false)
             }
         } catch (error) {
             setMessage(` ${error.message}`);
@@ -41,20 +42,20 @@ export default function ConfirmEmailForPwdReset() {
                         {message}
                     </div>
                 )}
-                <form onSubmit={handleSubmit}>
-                    <div className={resetPwdStyles["user-box"]}>
-                        <input
-                            type="email"
-                            name="email"
-                            required
-                            autoComplete="off"
-                            onChange={(e) => setEmail(e.target.value)}
-                            value={email}
-                            placeholder=""
-                        />
-                        <label>Email Address</label>
-                    </div>
-                    {showButton ?
+                {showInputFields ?
+                    <form onSubmit={handleSubmit}>
+                        <div className={resetPwdStyles["user-box"]}>
+                            <input
+                                type="email"
+                                name="email"
+                                required
+                                autoComplete="off"
+                                onChange={(e) => setEmail(e.target.value)}
+                                value={email}
+                                placeholder=""
+                            />
+                            <label>Email Address</label>
+                        </div>
                         <div className={resetPwdStyles["centered-button"]}>
                             <button>
                                 <span></span>
@@ -64,8 +65,8 @@ export default function ConfirmEmailForPwdReset() {
                                 Submit
                             </button>
                         </div>
-                        : null}
-                </form>
+                    </form>
+                    : null}
             </div>
         </div>
     );
