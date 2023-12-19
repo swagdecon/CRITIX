@@ -178,7 +178,6 @@ public class AuthenticationService {
 
         public void activateAccount(String encryptedEmail) throws Exception {
                 String userEmail = decryptToken(encryptedEmail);
-                System.out.println(userEmail);
                 User user = userRepository.findByEmail(userEmail)
                                 .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
                 Boolean isExpired = isAuthLinkExpired(user.getAccountAuthRequestDate());

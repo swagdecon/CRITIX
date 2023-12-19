@@ -766,7 +766,6 @@ public class AuthenticationServiceTest {
                 JsonNode result = authenticationService.refreshToken(request, response);
 
                 assertNotNull(result);
-                System.out.println(result);
                 assertEquals(accessToken, result.get("access_token").asText());
                 assertEquals(newRefreshToken, result.get("refresh_token").asText());
         }

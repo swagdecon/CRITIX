@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import resetPwdStyles from "../misc/ResetPassword.module.css"
 import LoginStyles from "../components/Login/login.module.css"
-const SEND_RESET_PWD_ENDPOINT = process.env.REACT_APP_RESET_PWD_ENDPOINT;
+const SEND_RESET_PWD_ENDPOINT = process.env.REACT_APP_SEND_PWD_RESET_ENDPOINT;
 
 export default function ConfirmEmailForPwdReset() {
     const [email, setEmail] = useState("");
