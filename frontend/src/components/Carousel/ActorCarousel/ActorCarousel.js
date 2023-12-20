@@ -60,11 +60,11 @@ export default function MovieActors({ actors }) {
     <div>
       <h3 className={`${Title["movie-title"]} ${Title["ind-movie-actors"]}`}>cast members:</h3>
       <Carousel className={ActorStyle["carousel-actors"]} interval={null} indicators={false} >
-        {actorChunks.map((chunk, chunkIndex) => (
+        {actorChunks.map((movieChunk, chunkIndex) => (
           <Carousel.Item key={chunkIndex}>
             <div className={ActorStyle["profile-container"]}>
-              {chunk.map((actor, index) => {
-                const image = actor.profilePath || null;
+              {movieChunk.map((actor, index) => {
+                const image = actor.profilePath
                 const actorImage = image ? `url(${DEFAULT_TMDB_IMAGE}${image}) center center no-repeat` : defaultImage;
                 const style = image ? { background: actorImage, backgroundSize: "300px" } : defaultStyle;
                 return (

@@ -30,7 +30,6 @@ function ParseYear({ date }) {
 }
 
 function MovieTrailer(trailerUrl) {
-  console.log(trailerUrl);
   if (trailerUrl) {
     const a = document.createElement('a');
     a.href = trailerUrl;

@@ -1,6 +1,6 @@
 import React from "react";
 const SEND_AUTH_EMAIL = process.env.REACT_APP_SEND_AUTH_EMAIL_ENDPOINT;
-
+import PropTypes from "prop-types";
 // Functions Shared Between Signup and Login
 export async function resendAuthEmail(
     userEmail,
@@ -27,35 +27,56 @@ export async function resendAuthEmail(
     }
 }
 
-export function Message({ response, message, style, profanityError }) {
-    let displayErrMsgLogic = null;
-    if (profanityError) {
-        displayErrMsgLogic = (
-            <div className={style["error-msg-wrapper"]}>
-                <div className={style["error-msg"]}>
-                    <i className="fa fa-times-circle" />
-                    {profanityError}
-                </div>
-            </div>
-        )
-    } else if (response && !response.ok) {
-        displayErrMsgLogic = (
-            <div className={style["error-msg-wrapper"]}>
-                <div className={style["error-msg"]}>
-                    <i className="fa fa-times-circle" />
-                    {message}
-                </div>
-            </div>
-        );
-    } else if (response && response.ok) {
-        displayErrMsgLogic = (
-            <div className={style["success-msg-wrapper"]}>
-                <div className={style["success-msg"]}>{message}</div>
-            </div>
-        );
-    }
+// export function Message({ response, message, style, profanityError }) {
+//     let displayErrMsgLogic = null;
+//     if (profanityError) {
+//         displayErrMsgLogic = (
+//             <div className={style["error-msg-wrapper"]}>
+//                 <div className={style["error-msg"]}>
+//                     <i className="fa fa-times-circle" />
+//                     {profanityError}
+//                 </div>
+//             </div>
+//         )
+//     } else if (response && !response.ok) {
+//         displayErrMsgLogic = (
+//             <div className={style["error-msg-wrapper"]}>
+//                 <div className={style["error-msg"]}>
+//                     <i className="fa fa-times-circle" />
+//                     {message}
+//                 </div>
+//             </div>
+//         );
+//     } else if (response && response.ok) {
+//         displayErrMsgLogic = (
+//             <div className={style["success-msg-wrapper"]}>
+//                 <div className={style["success-msg"]}>{message}</div>
+//             </div>
+//         );
+//     }
+//     return displayErrMsgLogic;
+// }
 
-    return displayErrMsgLogic;
+export function Message({ response, message, style, profanityError }) {
+    const isError = profanityError || (response?.ok === false);
+    const isSuccess = response?.ok === true;
+
+    return (
+        <div className={isError ? style["error-msg-wrapper"] : isSuccess ? style["success-msg-wrapper"] : ''}>
+            <div className={isError ? style["error-msg"] : isSuccess ? style["success-msg"] : ''}>
+                {isError ? <i className="fa fa-times-circle" /> : ''}
+                {isError ? profanityError : isSuccess ? message : ''}
+            </div>
+        </div>
+    );
+}
+Message.propTypes = {
+    response: PropTypes.shape({
+        ok: PropTypes.bool,
+    }),
+    message: PropTypes.string,
+    style: PropTypes.objectOf(PropTypes.string),
+    profanityError: PropTypes.string,
 }
 
 export function ProfanityLogic(hasProfanity, setProfanityError) {

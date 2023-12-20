@@ -23,10 +23,10 @@ function MovieCarousel({ title, movies, endpoint }) {
         <h3 className={`${Title["homepage-carousel"]} ${Title["movie-title"]}`}>{title}</h3>
       </div>
       <Carousel className={MovieCarouselStyle["carousel-movie"]} indicators={false} interval={null}>
-        {movieChunks.map((chunk, i) => (
+        {movieChunks.map((movieChunk, i) => (
           <Carousel.Item key={i}>
             <div className={MovieCardStyle.carouselHeader} />
-            {chunk.map((movie) => (
+            {movieChunk.map((movie) => (
               <div className={MovieCardStyle["main-card-container"]} key={movie.id}>
                 <Link to={`${endpoint}/${movie.id}`}>
                   <MovieCard

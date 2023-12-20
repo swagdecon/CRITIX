@@ -84,7 +84,6 @@ export default function MovieList({ endpoint }) {
       setCurrentPage(1);
       fetchBackendData(endpointName, 1)
         .then(data => {
-          console.log(data)
           setMovies(data.movieCardList);
           setTotalPages(data.totalPages);
           setDataLoaded(true);
@@ -119,7 +118,7 @@ export default function MovieList({ endpoint }) {
           setDataLoaded(true);
         });
     }
-    getDetailedMovieData(endpoint.endpointName, currentPage);
+    getDetailedMovieData(endpoint.endpointName);
   }, [endpoint.endpointName]);
 
 

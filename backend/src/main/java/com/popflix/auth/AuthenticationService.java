@@ -137,7 +137,7 @@ public class AuthenticationService {
                 String userEmail = jwtService.extractUsername(accessToken);
                 var user = this.userRepository.findByEmail(userEmail).orElse(null);
 
-                return (user != null && jwtService.isTokenValid(accessToken, user)) ? true : false;
+                return (user != null && jwtService.isTokenValid(accessToken, user));
         }
 
         public boolean authenticateExistingEmail(String email) {

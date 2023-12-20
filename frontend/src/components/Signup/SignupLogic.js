@@ -18,8 +18,11 @@ export default function SignUpFunctionality() {
   const [message, setMessage] = useState(false);
   const [profanityError, setProfanityError] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [response, setResponse] = useState(null)
-
+  const [endpointResponse, setEndpointResponse] = useState(null)
+  const handleEmailChange = (event) => setEmail(event.target.value)
+  const handleFirstNameChange = (event) => setFirstName(event.target.value)
+  const handleLastNameChange = (event) => setLastName(event.target.value)
+  const handlePasswordChange = (event) => setPassword(event.target.value)
   const handleTogglePasswordVisibility = () => {
     togglePasswordVisibility(passwordVisible, setPasswordVisible);
   };
@@ -55,7 +58,7 @@ export default function SignUpFunctionality() {
       body: JSON.stringify(userData),
     });
 
-    setResponse(response);
+    setEndpointResponse(response);
 
     if (response.ok) {
       const data = await response.json();
@@ -78,7 +81,7 @@ export default function SignUpFunctionality() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Message response={response} message={message} style={SignUpStyles} profanityError={profanityError} />
+      <Message response={endpointResponse} message={message} style={SignUpStyles} profanityError={profanityError} />
       {emailErr ?
         <div >
           <button type="button" className={SignUpStyles["resend-pwd-auth"]} onClick={resendEmail}>Resend authentication email</button>
@@ -95,7 +98,7 @@ export default function SignUpFunctionality() {
           pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
           autoComplete="on"
           value={email}
-          onChange={(event) => setEmail(event.target.value)}
+          onChange={handleEmailChange}
           placeholder="Email Address"
           required
         />
@@ -108,7 +111,7 @@ export default function SignUpFunctionality() {
           className={SignUpStyles["text-input"]}
           autoComplete="on"
           value={firstName}
-          onChange={(event) => setFirstName(event.target.value)}
+          onChange={handleFirstNameChange}
           placeholder="First Name"
           required
         />
@@ -121,7 +124,7 @@ export default function SignUpFunctionality() {
           className={SignUpStyles["text-input"]}
           autoComplete="on"
           value={lastName}
-          onChange={(event) => setLastName(event.target.value)}
+          onChange={handleLastNameChange}
           placeholder="Last Name"
           required
         />
@@ -135,7 +138,7 @@ export default function SignUpFunctionality() {
           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}"
           autoComplete="current-password"
           value={password}
-          onChange={(event) => setPassword(event.target.value)}
+          onChange={handlePasswordChange}
           placeholder="Password"
           required
         />

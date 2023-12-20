@@ -28,20 +28,20 @@ export default function IndMovie() {
   const [reviews, setReviews] = useState(null)
   const [recommendedMovies, setRecommendedMovies] = useState(null)
   const [isLoading, setIsLoading] = useState(true);
-
+  const handleTrailerClick = () => MovieTrailer(movie.trailer)
   useEffect(() => {
     async function fetchBackendData() {
       setIsLoading(true);
       try {
         await isTokenExpired();
-        const [movies, reviews, recommendedMovies] = await Promise.all([
+        const [movies, reviewsData, recommendedMovies] = await Promise.all([
           fetchData(id),
           fetchData(`http://localhost:8080/review/${id}`),
           fetchData(`${recommendedEndpoint}${id}`)
         ]);
 
         setMovie(movies);
-        setReviews(reviews)
+        setReviews(reviewsData)
         setRecommendedMovies(recommendedMovies)
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -51,7 +51,7 @@ export default function IndMovie() {
     }
     fetchBackendData();
   }, [id]);
-  console.log(recommendedMovies)
+
   return isLoading || !movie ? (
     <LoadingPage />
   ) : (
@@ -81,7 +81,7 @@ export default function IndMovie() {
               <div className={IndMovieStyle["btn-wrapper"]}>
                 <MovieButton
                   innerIcon="trailer"
-                  onClick={() => MovieTrailer(movie.trailer)}
+                  onClick={handleTrailerClick}
                 />
               </div>
             ) : null}

@@ -35,7 +35,8 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
 
     let token = CookieManager.decryptCookie('accessToken');
     const decodedToken = jwt_decode(token);
-
+    const userId = decodedToken.userId;
+    const firstName = decodedToken.firstName;
     const filter = useMemo(() => new Filter(), []);
     const [reviewRating, setReviewRating] = useState(0);
     const [reviewContent, setReviewContent] = useState("");
@@ -99,14 +100,13 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
         if (!hasReviewProfanity) {
             const currentDate = new Date();
             const formattedDate = format(currentDate, 'dd-MM-yyyy');
-            const userId = decodedToken.userId;
 
             axios
                 .post(`${CREATE_MOVIE_ENDPOINT}${movieId}`, {
                     createdDate: formattedDate,
                     movieId: movieId,
                     userId: userId,
-                    author: decodedToken.firstName,
+                    author: firstName,
                     rating: reviewRating,
                     content: reviewContent,
                 }, {
@@ -136,8 +136,6 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
     }, []);
 
     const renderUserRatingSection = () => {
-        const percentageVoteAverage = useMemo(() => voteAverage || null, [voteAverage]);
-
         return (
             <div className={IndReview["ind-review-wrapper"]}>
                 <div className={IndReview["input-wrapper"]}>
@@ -152,7 +150,7 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
                                     hasReviewProfanity && reviewContent.trim().length > 0
                                         ? "Profanity is not allowed."
                                         : hasSubmittedReview
-                                            ? "You have already submitted a review for this movie."
+                                            ? "Thanks for submitting a review!  "
                                             : "Post A Review"
                                 }
                                 multiline
@@ -200,7 +198,7 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
                             )}
                         </div>
                         <div className={IndReview["total-rating-wrapper"]}>
-                            <PercentageRatingCircle percentageRating={percentageVoteAverage} />
+                            <PercentageRatingCircle percentageRating={voteAverage} />
                         </div>
                     </div>
                     {reviews && reviews.length >= 2 && (

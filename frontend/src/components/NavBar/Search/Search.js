@@ -57,7 +57,6 @@ export default function Search(props) {
 
       const search = await fetchData(endpoint);
       setMovieResults(search);
-      console.log(movieResults)
     } catch (error) {
       console.error("Error fetching data:", error);
     }

@@ -62,8 +62,12 @@ public class MovieService {
 
   @PostConstruct
   public void init() {
-    executor = Executors.newScheduledThreadPool(1);
-    executor.scheduleAtFixedRate(this::saveTopMovies, 0, 24, TimeUnit.HOURS);
+    try {
+      executor = Executors.newScheduledThreadPool(1);
+      executor.scheduleAtFixedRate(this::saveTopMovies, 0, 24, TimeUnit.HOURS);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   public void shutdown() {

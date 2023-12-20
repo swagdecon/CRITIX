@@ -22,6 +22,7 @@ public class ReviewController {
 
         @PostMapping("/create/{movieId}")
         public ResponseEntity<String> createMovieReview(@PathVariable Integer movieId, @RequestBody Review request) {
+                System.out.println(request);
                 String username = request.getAuthor();
                 String userId = request.getUserId();
                 String reviewRating = request.getRating();

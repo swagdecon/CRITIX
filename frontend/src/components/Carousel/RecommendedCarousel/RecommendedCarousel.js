@@ -19,9 +19,9 @@ export default function RecommendedCarousel({ recommendedMovies }) {
   return (
     <div className={MovieCardStyle["carousel-wrapper"]}>
       <Carousel className={RecommendedStyle["carousel-recommended"]} indicators={false} interval={null}>
-        {movieChunks.map((chunk, i) => (
+        {movieChunks.map((movieChunk, i) => (
           <Carousel.Item key={i}>
-            {chunk.map((movie, j) => (
+            {movieChunk.map((movie, j) => (
               <div
                 className={RecommendedStyle["recommended-card-container"]}
                 key={`${i}-${j}`}>
