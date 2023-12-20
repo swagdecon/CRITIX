@@ -19,9 +19,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,7 +32,11 @@ import com.popflix.model.Movie;
 import com.popflix.model.MovieCard;
 import com.popflix.model.MovieResults;
 import com.popflix.model.Person;
+import com.popflix.model.User;
 import com.popflix.repository.MovieRepository;
+import com.popflix.repository.UserRepository;
+import com.popflix.repository.WatchlistRepository;
+
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbMovies;
 import info.movito.themoviedbapi.model.Credits;
@@ -52,6 +59,8 @@ public class MovieService {
 
   private final MovieRepository movieRepository;
   private final MongoTemplate mongoTemplate;
+  @Autowired
+  private UserRepository userRepository;
   private final TmdbApi tmdbApi = new TmdbApi(TMDB_API_KEY);
   private ScheduledExecutorService executor;
 
@@ -539,5 +548,25 @@ public class MovieService {
     } else {
       return "No Trailers Available";
     }
+  }
+
+  public void addMovieToWatchlist(Integer userId, Integer movieId) throws IOException {
+    MovieDb apiResult = tmdbApi.getMovies().getMovie(movieId, "en-US");
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new UsernameNotFoundException("User id not found"));
+
+    MovieCard movieCard = new MovieCard();
+    movieCard.setId(movieId);
+    movieCard.setTitle(apiResult.getTitle());
+    // movieCard.setGenres(apiResult.getGenres());
+    movieCard.setOverview(apiResult.getOverview());
+    movieCard.setTagline(apiResult.getTagline());
+    movieCard.setPosterUrl(TMDB_IMAGE_PREFIX + apiResult.getPosterPath());
+    movieCard.setTrailer(getTrailer(movieId));
+    movieCard.setVoteAverage(Math.round(apiResult.getVoteAverage() * 10));
+    List<MovieCard> watchList = user.getWatchList();
+    watchList.add(movieCard);
+    user.setWatchList(watchList);
+    userRepository.save(user);
   }
 }

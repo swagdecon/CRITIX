@@ -38,6 +38,7 @@ public class User implements UserDetails {
     private Integer passwordResetRequests;
     private Date passwordResetRequestDate;
     private Date lastLoginTime;
+    private List<MovieCard> watchList;
     @Enumerated(EnumType.STRING)
     private Role role;
 

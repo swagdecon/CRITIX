@@ -115,6 +115,7 @@ $dark-color: #1e1b26;
 
 .action-btn {
   text-align: right;
+  display: inline-block;
   i {
     color: $brand-color;
     font-size: 28px;
@@ -261,6 +262,19 @@ h5 {
   text-align: left;
 }
 
+.action-btn-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px; 
+}
+
+
 /* TYPOGRAPHY ENDS */
 
 /** GRID STARTS **/
@@ -296,14 +310,12 @@ h5 {
 .col4rest,
 .col5,
 .col5rest,
-.col6,
-.col6rest {
+.col6 {
   margin: 0% 0.5% 0.5% 0.5%;
   padding: 1%;
   float: left;
   display: block;
 }
-
 /* Columns match, minus margin sum. E.G. margin-left+margin-right=1%, col2=50%-1% - added padding:1%*/
 
 .col1 {

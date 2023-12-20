@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,5 +24,11 @@ public class UserController {
     public ResponseEntity<User> singleUser(@PathVariable String accessToken)
             throws IOException, InterruptedException {
         return new ResponseEntity<User>(authenticationService.getUserDetails(accessToken), HttpStatus.OK);
+    }
+
+    @PostMapping("/watchlist/add")
+    public void addWatchListItem(@PathVariable String accessToken, @PathVariable String movieId)
+            throws IOException, InterruptedException {
+        return;
     }
 }

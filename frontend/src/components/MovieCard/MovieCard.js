@@ -5,7 +5,7 @@ import {
   TruncateDescription,
   MovieTrailer
 } from "../IndMovie/MovieComponents.js";
-
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import { MovieCardActors, MovieCardGenres } from "./MovieCardComponents.js";
 import MovieCardStyle from "./moviecard.module.scss"
 import fetchData from "../../security/FetchApiData.js"
@@ -77,8 +77,7 @@ export default function MovieCard({
               </div>
             </div>
             <div
-              className={`${MovieCardStyle["mr-grid"]} ${MovieCardStyle["actors-row"]}`}
-            >
+              className={`${MovieCardStyle["mr-grid"]} ${MovieCardStyle["actors-row"]}`} >
               <div className={MovieCardStyle.col1}>
                 {actors ?
                   <p className={MovieCardStyle["movie-actors"]}>
@@ -101,20 +100,20 @@ export default function MovieCard({
                   </h3>
                 </button>
               </div>
-              <div
+              {/* <div
                 className={`${MovieCardStyle["col6"]} ${MovieCardStyle["action-btn"]}`}
               >
                 <i className="material-icons">&#xE161;</i>
-              </div>
-              <div
-                className={`${MovieCardStyle["col6"]} ${MovieCardStyle["action-btn"]}`}
-              >
-                <i className="material-icons">&#xE866;</i>
-              </div>
-              <div
-                className={`${MovieCardStyle["col6"]} ${MovieCardStyle["action-btn"]}`}
-              >
-                <i className="material-icons">&#xE80D;</i>
+              </div> */}
+              <div className={MovieCardStyle.col6}>
+                <div className={MovieCardStyle["action-btn-container"]}>
+                  <div className={MovieCardStyle["action-btn"]}>
+                    <i><BookmarkBorderIcon sx={{ fontSize: 30 }} /></i>
+                  </div>
+                  <div className={MovieCardStyle["action-btn"]}>
+                    <i className="material-icons">&#xE80D;</i>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
