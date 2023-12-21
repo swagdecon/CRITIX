@@ -78,7 +78,6 @@ export default function MovieList({ endpoint }) {
         setDataLoaded(true);
       });
   }
-
   useMemo(() => {
     function getDetailedMovieData(endpointName) {
       setCurrentPage(1);
@@ -136,15 +135,14 @@ export default function MovieList({ endpoint }) {
           </div>
         </div>
       </div>
-
       <div className={MovieListStyle["container"]}>
         {movies.map((movie) => (
-          <div key={movie.id}>
-            <Link to={`/movies/movie/${movie.id}`}>
+          <div key={movie.movieId}>
+            <Link to={`/movies/movie/${movie.movieId}`}>
               <MovieCard
-                movieId={movie.id}
-                poster={movie.posterUrl}
-                rating={movie.voteAverage}
+                movieId={movie.movieId}
+                posterUrl={movie.posterUrl}
+                voteAverage={movie.voteAverage}
                 runtime={movie.runtime}
                 genres={movie.genres}
                 overview={movie.overview}

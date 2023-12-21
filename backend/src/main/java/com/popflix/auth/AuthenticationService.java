@@ -329,7 +329,12 @@ public class AuthenticationService {
 
                         if (jwtService.isTokenValid(refreshToken, user)) {
                                 revokeAllUserTokens(user);
-                                var accessToken = jwtService.generateToken(user);
+
+                                var extraClaims = new HashMap<String, Object>();
+                                extraClaims.put("firstName", user.getFirstName());
+                                extraClaims.put("userId", user.getId());
+                                var accessToken = jwtService.generateToken(extraClaims, user);
+
                                 var newRefreshToken = jwtService.generateRefreshToken(user, user.getLastLoginTime());
                                 saveAccessToken(user, accessToken);
                                 saveRefreshToken(user, newRefreshToken);

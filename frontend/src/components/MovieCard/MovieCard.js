@@ -29,7 +29,6 @@ export default function MovieCard({
   const [bookmarkIconStyle, setBookmarkIconStyle] = useState("Empty");
   const token = jwt_decode(CookieManager.decryptCookie("accessToken"))
   const userId = token.userId;
-
   const data = {
     movieId,
     posterUrl,
@@ -61,7 +60,6 @@ export default function MovieCard({
     response.ok ? setBookmarkIconStyle("Empty") : null
     e.stopPropagation();
   }
-
 
   return (
     <div className="container">
