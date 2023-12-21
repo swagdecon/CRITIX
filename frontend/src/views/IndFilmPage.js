@@ -18,7 +18,7 @@ import RecommendedCarousel from "../components/Carousel/RecommendedCarousel/Reco
 import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel";
 import LoadingPage from "./LoadingPage";
 import MovieButton from "../components/Other/btn/MovieButton/Button";
-import fetchData from "../security/FetchApiData";
+import { fetchData } from "../security/FetchApiData";
 import isTokenExpired from "../security/IsTokenExpired.js";
 const recommendedEndpoint = process.env.REACT_APP_RECOMMENDED_ENDPOINT;
 

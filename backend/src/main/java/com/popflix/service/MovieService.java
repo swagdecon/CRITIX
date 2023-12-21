@@ -550,23 +550,35 @@ public class MovieService {
     }
   }
 
-  public void addMovieToWatchlist(Integer userId, Integer movieId) throws IOException {
-    MovieDb apiResult = tmdbApi.getMovies().getMovie(movieId, "en-US");
-    User user = userRepository.findById(userId)
-        .orElseThrow(() -> new UsernameNotFoundException("User id not found"));
+  public void addMovieToWatchlist(String userId, Integer movieId) throws IOException {
+    try {
+      MovieDb apiResult = tmdbApi.getMovies().getMovie(movieId, "en-US");
+      User user = userRepository.findById(userId)
+          .orElseThrow(() -> new UsernameNotFoundException("User id not found"));
+      List<MovieCard> watchList = user.getWatchList();
+      if (watchList == null) {
+        watchList = new ArrayList<>();
+      }
 
-    MovieCard movieCard = new MovieCard();
-    movieCard.setId(movieId);
-    movieCard.setTitle(apiResult.getTitle());
-    // movieCard.setGenres(apiResult.getGenres());
-    movieCard.setOverview(apiResult.getOverview());
-    movieCard.setTagline(apiResult.getTagline());
-    movieCard.setPosterUrl(TMDB_IMAGE_PREFIX + apiResult.getPosterPath());
-    movieCard.setTrailer(getTrailer(movieId));
-    movieCard.setVoteAverage(Math.round(apiResult.getVoteAverage() * 10));
-    List<MovieCard> watchList = user.getWatchList();
-    watchList.add(movieCard);
-    user.setWatchList(watchList);
-    userRepository.save(user);
+      boolean watchListMovieAlreadyExists = userRepository.findByMovieId(userId, movieId);
+
+      if (!watchListMovieAlreadyExists) {
+        MovieCard movieCard = new MovieCard();
+        movieCard.setId(movieId);
+        movieCard.setTitle(apiResult.getTitle());
+        // movieCard.setGenres(apiResult.getGenres());
+        movieCard.setOverview(apiResult.getOverview());
+        movieCard.setTagline(apiResult.getTagline());
+        movieCard.setPosterUrl(TMDB_IMAGE_PREFIX + apiResult.getPosterPath());
+        movieCard.setTrailer(getTrailer(movieId));
+        movieCard.setVoteAverage(Math.round(apiResult.getVoteAverage() * 10));
+
+        watchList.add(movieCard);
+        user.setWatchList(watchList);
+        userRepository.save(user);
+      }
+    } catch (Exception e) {
+      System.out.println(e);
+    }
   }
 }

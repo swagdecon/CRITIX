@@ -9,7 +9,7 @@ import Dropdown from "../Other/Dropdown/SortByDropdown";
 import Pagination from '@mui/material/Pagination';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import isTokenExpired from "../../security/IsTokenExpired";
-import fetchData from "../../security/FetchApiData";
+import { fetchData } from "../../security/FetchApiData";
 const theme = createTheme({
   palette: {
     primary: {

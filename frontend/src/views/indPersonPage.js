@@ -4,7 +4,7 @@ import IndPersonStyle from "../components/IndPerson/ind_person.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import NavBar from "../components/NavBar/NavBar.js";
 import "typeface-ibm-plex-sans";
-import fetchData from "../security/FetchApiData";
+import { fetchData } from "../security/FetchApiData";
 import {
   PersonTitle,
   PersonJobs,

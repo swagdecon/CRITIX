@@ -309,12 +309,16 @@ h5 {
 .col4,
 .col4rest,
 .col5,
-.col5rest,
-.col6 {
+.col5rest {
   margin: 0% 0.5% 0.5% 0.5%;
   padding: 1%;
   float: left;
   display: block;
+}
+.col6 {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 /* Columns match, minus margin sum. E.G. margin-left+margin-right=1%, col2=50%-1% - added padding:1%*/
 
@@ -334,7 +338,7 @@ h5 {
   width: 17%;
 }
 .col6 {
-  width: 13.6666666667%;
+  width: 49%;
 }
 
 /* Columns match with their individual number. E.G. col3+col3rest=full width row */

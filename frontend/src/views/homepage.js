@@ -4,7 +4,7 @@ import MovieCarousel from "../components/Carousel/MovieCarousel/MovieCarousel.js
 import NavBar from "../components/NavBar/NavBar.js";
 import LoadingPage from "./LoadingPage.js";
 import HomePage from "../misc/HomePage.module.css";
-import fetchData from "../security/FetchApiData.js";
+import { fetchData } from "../security/FetchApiData.js";
 import isTokenExpired from "../security/IsTokenExpired.js";
 
 const popularMovieEndpoint = process.env.REACT_APP_POPULAR_MOVIES_ENDPOINT;

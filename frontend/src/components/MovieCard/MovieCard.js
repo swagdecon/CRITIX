@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import {
   MovieAverage,
@@ -6,11 +6,15 @@ import {
   MovieTrailer
 } from "../IndMovie/MovieComponents.js";
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import ShareIcon from '@mui/icons-material/Share';
 import { MovieCardActors, MovieCardGenres } from "./MovieCardComponents.js";
 import MovieCardStyle from "./moviecard.module.scss"
-import fetchData from "../../security/FetchApiData.js"
+import { fetchData, sendData } from "../../security/FetchApiData.js"
 const trailerEndpoint = process.env.REACT_APP_TRAILER_ENDPOINT;
-
+const sendToWatchListEndpoint = process.env.REACT_APP_ADD_TO_WATCHLIST_ENDPOINT;
+import jwt_decode from "jwt-decode";
+import CookieManager from "../../security/CookieManager.js";
 export default function MovieCard({
   movieId,
   poster,
@@ -19,11 +23,22 @@ export default function MovieCard({
   overview,
   actors,
 }) {
-
-  async function handleWatchTrailer() {
+  const [bookmarkIconStyle, setBookmarkIconStyle] = useState("Empty");
+  async function handleWatchTrailer(e) {
+    e.preventDefault();
     const trailer = await fetchData(`${trailerEndpoint}${movieId}`);
     MovieTrailer(trailer)
+    e.stopPropagation();
   }
+  async function handleSaveToWatchlist(e) {
+    e.preventDefault();
+    const token = jwt_decode(CookieManager.decryptCookie("accessToken"))
+    const userId = token.userId;
+    const response = await sendData(`${sendToWatchListEndpoint}${userId}/${movieId}`);
+    response.ok ? setBookmarkIconStyle("Full") : null
+    e.stopPropagation();
+  }
+
 
   return (
     <div className="container">
@@ -100,19 +115,16 @@ export default function MovieCard({
                   </h3>
                 </button>
               </div>
-              {/* <div
-                className={`${MovieCardStyle["col6"]} ${MovieCardStyle["action-btn"]}`}
-              >
-                <i className="material-icons">&#xE161;</i>
-              </div> */}
               <div className={MovieCardStyle.col6}>
-                <div className={MovieCardStyle["action-btn-container"]}>
-                  <div className={MovieCardStyle["action-btn"]}>
-                    <i><BookmarkBorderIcon sx={{ fontSize: 30 }} /></i>
-                  </div>
-                  <div className={MovieCardStyle["action-btn"]}>
-                    <i className="material-icons">&#xE80D;</i>
-                  </div>
+                <div className={MovieCardStyle["action-btn"]}>
+                  {bookmarkIconStyle === "Empty" ?
+                    <i><BookmarkBorderIcon sx={{ fontSize: 30 }} onClick={handleSaveToWatchlist} /></i>
+                    :
+                    <i><BookmarkIcon sx={{ fontSize: 30 }} /></i>
+                  }
+                </div>
+                <div className={MovieCardStyle["action-btn"]}>
+                  <i ><ShareIcon sx={{ fontSize: 30 }} /></i>
                 </div>
               </div>
             </div>

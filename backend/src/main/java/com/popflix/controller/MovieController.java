@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -89,5 +90,15 @@ public class MovieController {
     public ResponseEntity<Object> getMovieReultsPage(@PathVariable String endpoint, @RequestParam Integer page)
             throws IOException, InterruptedException, URISyntaxException {
         return new ResponseEntity<Object>(movieService.getMovieResults(endpoint, page), HttpStatus.OK);
+    }
+
+    @PostMapping("/watchlist/add/{userId}/{movieId}")
+    public void addWatchListItem(@PathVariable String userId, @PathVariable Integer movieId)
+            throws Exception {
+        try {
+            movieService.addMovieToWatchlist(userId, movieId);
+        } catch (Exception e) {
+            throw new Exception("Someting went wong");
+        }
     }
 }
