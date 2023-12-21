@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
+
+import com.popflix.model.MovieCard;
 import com.popflix.model.User;
 
 public interface UserRepository extends MongoRepository<User, String> {
@@ -12,8 +14,10 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     Optional<User> findById(String id);
 
-    @Query(value = "{'_id': ?0, 'watchList.id': ?1}", exists = true)
-    Boolean findByMovieId(String userId, Integer moveiId);
+    @Query(value = "{'_id': ?0, 'watchList.movieId': ?1}", exists = true)
+    Boolean doesMovieExist(String userId, Integer movieId);
+
+    Optional<MovieCard> findMovieById(String userId, Integer movieId);
 
     @Query("{ 'passwordResetRequests' : { $ne: null }, 'emailAuthRequests' : { $ne: null } }")
     List<User> findUsersWithResetRequests();

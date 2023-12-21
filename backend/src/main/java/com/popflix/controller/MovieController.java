@@ -3,17 +3,21 @@ package com.popflix.controller;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.popflix.model.Movie;
+import com.popflix.model.MovieCard;
 import com.popflix.service.MovieService;
 
 @RestController
@@ -92,13 +96,23 @@ public class MovieController {
         return new ResponseEntity<Object>(movieService.getMovieResults(endpoint, page), HttpStatus.OK);
     }
 
-    @PostMapping("/watchlist/add/{userId}/{movieId}")
-    public void addWatchListItem(@PathVariable String userId, @PathVariable Integer movieId)
+    @PostMapping("/watchlist/add/{userId}")
+    public void addWatchListItem(@PathVariable String userId, @RequestBody MovieCard movieCard)
             throws Exception {
         try {
-            movieService.addMovieToWatchlist(userId, movieId);
+            movieService.addMovieToWatchlist(userId, movieCard);
         } catch (Exception e) {
-            throw new Exception("Someting went wong");
+            throw new Exception("Error saving to watchlist", e);
+        }
+    }
+
+    @PostMapping("/watchlist/delete/{userId}/{movieId}")
+    public void deleteWatchListItem(@PathVariable String userId, @PathVariable Integer movieId)
+            throws Exception {
+        try {
+            movieService.deleteMovieFromWatchlist(userId, movieId);
+        } catch (Exception e) {
+            throw new Exception("Error deleting from watchlist", e);
         }
     }
 }

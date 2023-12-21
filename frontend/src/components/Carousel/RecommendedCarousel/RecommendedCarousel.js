@@ -15,7 +15,6 @@ export default function RecommendedCarousel({ recommendedMovies }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useWindowResizeEffect(setWindowWidth);
   const movieChunks = chunk(recommendedMovies, getChunkSize(windowWidth, recommendedCarouselBreakpoints));
-
   return (
     <div className={MovieCardStyle["carousel-wrapper"]}>
       <Carousel className={RecommendedStyle["carousel-recommended"]} indicators={false} interval={null}>
@@ -26,11 +25,11 @@ export default function RecommendedCarousel({ recommendedMovies }) {
                 className={RecommendedStyle["recommended-card-container"]}
                 key={`${i}-${j}`}>
                 <div className={MovieCardStyle.cardWrapper}>
-                  <Link to={`/movies/movie/${movie.id}`}>
+                  <Link to={`/movies/movie/${movie.movieId}`}>
                     <MovieCard
-                      movieId={movie.id}
-                      poster={movie.posterUrl}
-                      rating={movie.voteAverage}
+                      movieId={movie.movieId}
+                      posterUrl={movie.posterUrl}
+                      voteAverage={movie.voteAverage}
                       runtime={movie.runtime}
                       genres={movie.genres}
                       overview={movie.overview}

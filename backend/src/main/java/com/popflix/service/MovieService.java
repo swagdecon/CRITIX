@@ -10,6 +10,7 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -19,7 +20,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -35,8 +35,6 @@ import com.popflix.model.Person;
 import com.popflix.model.User;
 import com.popflix.repository.MovieRepository;
 import com.popflix.repository.UserRepository;
-import com.popflix.repository.WatchlistRepository;
-
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbMovies;
 import info.movito.themoviedbapi.model.Credits;
@@ -517,7 +515,7 @@ public class MovieService {
       double voteAverageValue = JsonNodeVoteAverage.asDouble();
       double roundedVoteAverageValue = Math.round(voteAverageValue * 10.0) / 10.0;
       int voteAverage = (int) Math.round(roundedVoteAverageValue * 10);
-
+      movie.setMovieId(movieNode.get("id").asInt());
       movie.setPosterUrl(posterUrl);
       movie.setVoteAverage(voteAverage);
       movie.setTitle(movie.getTitle());
@@ -550,30 +548,52 @@ public class MovieService {
     }
   }
 
-  public void addMovieToWatchlist(String userId, Integer movieId) throws IOException {
+  public void addMovieToWatchlist(String userId, MovieCard movieCardData) throws Exception {
     try {
-      MovieDb apiResult = tmdbApi.getMovies().getMovie(movieId, "en-US");
       User user = userRepository.findById(userId)
           .orElseThrow(() -> new UsernameNotFoundException("User id not found"));
+
       List<MovieCard> watchList = user.getWatchList();
       if (watchList == null) {
         watchList = new ArrayList<>();
       }
 
-      boolean watchListMovieAlreadyExists = userRepository.findByMovieId(userId, movieId);
+      boolean watchListMovieAlreadyExists = userRepository.doesMovieExist(userId, movieCardData.getMovieId());
 
       if (!watchListMovieAlreadyExists) {
         MovieCard movieCard = new MovieCard();
-        movieCard.setId(movieId);
-        movieCard.setTitle(apiResult.getTitle());
-        // movieCard.setGenres(apiResult.getGenres());
-        movieCard.setOverview(apiResult.getOverview());
-        movieCard.setTagline(apiResult.getTagline());
-        movieCard.setPosterUrl(TMDB_IMAGE_PREFIX + apiResult.getPosterPath());
-        movieCard.setTrailer(getTrailer(movieId));
-        movieCard.setVoteAverage(Math.round(apiResult.getVoteAverage() * 10));
-
+        movieCard.setMovieId(movieCardData.getMovieId());
+        movieCard.setVoteAverage(movieCardData.getVoteAverage());
+        movieCard.setGenres(movieCardData.getGenres());
+        movieCard.setOverview(movieCardData.getOverview());
+        movieCard.setPosterUrl(movieCardData.getPosterUrl());
+        movieCard.setActors(movieCardData.getActors());
         watchList.add(movieCard);
+        user.setWatchList(watchList);
+        userRepository.save(user);
+      }
+    } catch (Exception e) {
+      throw new Exception("Error adding movie to watchlist");
+    }
+  }
+
+  public void deleteMovieFromWatchlist(String userId, Integer movieId) throws IOException {
+    try {
+      User user = userRepository.findById(userId)
+          .orElseThrow(() -> new UsernameNotFoundException("User id not found"));
+
+      List<MovieCard> watchList = user.getWatchList();
+
+      if (watchList != null) {
+        Iterator<MovieCard> iterator = watchList.iterator();
+        while (iterator.hasNext()) {
+          MovieCard movieCard = iterator.next();
+          Integer cardMovieId = movieCard.getMovieId();
+          if (cardMovieId != null && cardMovieId.equals(movieId)) {
+            iterator.remove();
+            break;
+          }
+        }
         user.setWatchList(watchList);
         userRepository.save(user);
       }

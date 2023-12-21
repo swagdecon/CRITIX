@@ -13,29 +13,52 @@ import MovieCardStyle from "./moviecard.module.scss"
 import { fetchData, sendData } from "../../security/FetchApiData.js"
 const trailerEndpoint = process.env.REACT_APP_TRAILER_ENDPOINT;
 const sendToWatchListEndpoint = process.env.REACT_APP_ADD_TO_WATCHLIST_ENDPOINT;
+const deleteFromWatchListEndpoint = process.env.REACT_APP_DELETE_FROM_WATCHLIST_ENDPOINT;
+
 import jwt_decode from "jwt-decode";
 import CookieManager from "../../security/CookieManager.js";
+
 export default function MovieCard({
   movieId,
-  poster,
-  rating,
+  posterUrl,
+  voteAverage,
   genres,
   overview,
   actors,
 }) {
   const [bookmarkIconStyle, setBookmarkIconStyle] = useState("Empty");
+  const token = jwt_decode(CookieManager.decryptCookie("accessToken"))
+  const userId = token.userId;
+
+  const data = {
+    movieId,
+    posterUrl,
+    voteAverage,
+    genres,
+    overview,
+    actors: actors ? actors.map(actor => actor.name).slice(0, 3) : null,
+    userId,
+  };
+
   async function handleWatchTrailer(e) {
     e.preventDefault();
     const trailer = await fetchData(`${trailerEndpoint}${movieId}`);
     MovieTrailer(trailer)
     e.stopPropagation();
   }
+
   async function handleSaveToWatchlist(e) {
     e.preventDefault();
-    const token = jwt_decode(CookieManager.decryptCookie("accessToken"))
-    const userId = token.userId;
-    const response = await sendData(`${sendToWatchListEndpoint}${userId}/${movieId}`);
-    response.ok ? setBookmarkIconStyle("Full") : null
+    const response = await sendData(`${sendToWatchListEndpoint}/${userId}`, data);
+    response.ok ? setBookmarkIconStyle("Full") : null;
+    e.stopPropagation();
+  }
+
+
+  async function handleDeleteFromWatchlist(e) {
+    e.preventDefault();
+    const response = await sendData(`${deleteFromWatchListEndpoint}${userId}/${movieId}`);
+    response.ok ? setBookmarkIconStyle("Empty") : null
     e.stopPropagation();
   }
 
@@ -50,7 +73,7 @@ export default function MovieCard({
           <div
             className={MovieCardStyle["movie-img"]}
             style={{
-              backgroundImage: `url(${poster})`,
+              backgroundImage: `url(${posterUrl})`,
             }}
           />
           <div className={MovieCardStyle["text-movie-cont"]}>
@@ -58,7 +81,7 @@ export default function MovieCard({
               <div className={MovieCardStyle.col1}>
                 <ul className={MovieCardStyle["movie-gen"]}>
                   <li>
-                    <MovieAverage voteAverage={rating} />
+                    <MovieAverage voteAverage={voteAverage} />
                   </li>
                   <li>
                     <MovieCardGenres genres={genres} />
@@ -120,7 +143,7 @@ export default function MovieCard({
                   {bookmarkIconStyle === "Empty" ?
                     <i><BookmarkBorderIcon sx={{ fontSize: 30 }} onClick={handleSaveToWatchlist} /></i>
                     :
-                    <i><BookmarkIcon sx={{ fontSize: 30 }} /></i>
+                    <i><BookmarkIcon sx={{ fontSize: 30 }} onClick={handleDeleteFromWatchlist} /></i>
                   }
                 </div>
                 <div className={MovieCardStyle["action-btn"]}>
@@ -137,8 +160,8 @@ export default function MovieCard({
 
 MovieCard.propTypes = {
   movieId: PropTypes.number,
-  poster: PropTypes.string,
-  rating: PropTypes.number,
+  posterUrl: PropTypes.string,
+  voteAverage: PropTypes.number,
   runtime: PropTypes.number,
   overview: PropTypes.string,
   trailer: PropTypes.string,

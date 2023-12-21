@@ -20,22 +20,18 @@ export async function fetchData(endpoint, options) {
   }
 }
 
-export async function sendData(endpoint, options) {
+export async function sendData(endpoint, data) {
   const token = CookieManager.decryptCookie('accessToken');
+
   try {
-    const response = await fetch(
-      endpoint,
-      {
-        method: "POST",
-        headers: {
-          ContentType: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        params: {
-          options: options,
-        },
-      }
-    );
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
     return response;
   } catch (error) {
     console.error(error);

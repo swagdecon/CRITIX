@@ -31,8 +31,8 @@ function MovieCarousel({ title, movies, endpoint }) {
                 <Link to={`${endpoint}/${movie.id}`}>
                   <MovieCard
                     movieId={movie.id}
-                    poster={movie.posterUrl}
-                    rating={movie.voteAverage}
+                    posterUrl={movie.posterUrl}
+                    voteAverage={movie.voteAverage}
                     genres={movie.genres}
                     overview={movie.overview}
                     actors={movie.actors}
