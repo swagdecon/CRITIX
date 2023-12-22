@@ -20,6 +20,7 @@ import CookieManager from "../../security/CookieManager.js";
 
 export default function MovieCard({
   movieId,
+  title,
   posterUrl,
   voteAverage,
   genres,
@@ -31,14 +32,14 @@ export default function MovieCard({
   const userId = token.userId;
   const data = {
     movieId,
+    title,
     posterUrl,
     voteAverage,
     genres,
     overview,
-    actors: actors ? actors.map(actor => actor.name).slice(0, 3) : null,
+    actors: actors ? actors.slice(0, 3) : null,
     userId,
   };
-
   async function handleWatchTrailer(e) {
     e.preventDefault();
     const trailer = await fetchData(`${trailerEndpoint}${movieId}`);
@@ -158,6 +159,7 @@ export default function MovieCard({
 
 MovieCard.propTypes = {
   movieId: PropTypes.number,
+  title: PropTypes.string,
   posterUrl: PropTypes.string,
   voteAverage: PropTypes.number,
   runtime: PropTypes.number,
@@ -167,10 +169,13 @@ MovieCard.propTypes = {
     PropTypes.string,
     PropTypes.array,
   ]),
-  actors: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-      character: PropTypes.string,
-    })
-  ),
+  actors: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+        character: PropTypes.string,
+      })
+    ),
+    PropTypes.arrayOf(PropTypes.string),
+  ]),
 }

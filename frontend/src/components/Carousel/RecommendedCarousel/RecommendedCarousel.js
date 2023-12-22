@@ -27,6 +27,7 @@ export default function RecommendedCarousel({ recommendedMovies }) {
                 <div className={MovieCardStyle.cardWrapper}>
                   <Link to={`/movies/movie/${movie.movieId}`}>
                     <MovieCard
+                      title={movie.title}
                       movieId={movie.movieId}
                       posterUrl={movie.posterUrl}
                       voteAverage={movie.voteAverage}

@@ -15,7 +15,7 @@ export default function Navigation() {
         <Link className={NavStyle["nav-link"]} to="/popular">
           MOST POPULAR
         </Link>
-        <Link className={NavStyle["nav-link"]} to="#">
+        <Link className={NavStyle["nav-link"]} to="/watchlist">
           WATCHLIST
         </Link>
       </ul>

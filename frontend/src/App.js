@@ -18,6 +18,7 @@ import MovieListPage from "./views/MovieListPage.js";
 import ConfirmEmailForPwdReset from "./views/SendResetPwdEmail.js";
 import ResetPassword from "./views/ResetPassword.js";
 import AccountVerification from "./views/AccountVerification.js"
+import WatchList from "./components/WatchList/Watchlist.js";
 export default function App() {
   return (
     <Router>
@@ -43,6 +44,10 @@ export default function App() {
         <Route
           path="/now_playing"
           element={<PrivateRoute><MovieListPage endpointName="now_playing" /></PrivateRoute>}
+        />
+        <Route
+          path="/watchlist"
+          element={<PrivateRoute><WatchList endpointName="watchlist" /></PrivateRoute>}
         />
         <Route path="/movies/:endpoint/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
         <Route path="/movies/movie/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />

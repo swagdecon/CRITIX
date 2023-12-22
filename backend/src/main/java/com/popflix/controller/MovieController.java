@@ -115,4 +115,14 @@ public class MovieController {
             throw new Exception("Error deleting from watchlist", e);
         }
     }
+
+    @GetMapping("/watchlist/{userId}")
+    public List<MovieCard> getWatchlist(@PathVariable String userId)
+            throws Exception {
+        try {
+            return movieService.getUserWatchlist(userId);
+        } catch (Exception e) {
+            throw new Exception("Error retrieving watchlist", e);
+        }
+    }
 }

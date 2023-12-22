@@ -259,8 +259,11 @@ public class MovieService {
 
       for (MovieDb movieDb : collection) {
         Movie movie = new Movie();
+        // boolean isMovieSavedToWatchlist = userRepository.doesMovieExist(userId,
+        // movieDb.getId());
         String posterUrl = TMDB_IMAGE_PREFIX + movieDb.getPosterPath();
         String backdropUrl = TMDB_IMAGE_PREFIX + movieDb.getBackdropPath();
+        // movie.setSavedOnWatchList(isMovieSavedToWatchlist);
 
         movie.setId(movieDb.getId());
         movie.setTitle(movieDb.getTitle());
@@ -564,6 +567,7 @@ public class MovieService {
         MovieCard movieCard = new MovieCard();
         movieCard.setMovieId(movieCardData.getMovieId());
         movieCard.setVoteAverage(movieCardData.getVoteAverage());
+        movieCard.setTitle(movieCardData.getTitle());
         movieCard.setGenres(movieCardData.getGenres());
         movieCard.setOverview(movieCardData.getOverview());
         movieCard.setPosterUrl(movieCardData.getPosterUrl());
@@ -599,6 +603,15 @@ public class MovieService {
       }
     } catch (Exception e) {
       System.out.println(e);
+    }
+  }
+
+  public List<MovieCard> getUserWatchlist(String userId) throws Exception {
+    try {
+      List<MovieCard> watchList = userRepository.findUserWithWatchListById(userId).get().getWatchList();
+      return watchList;
+    } catch (Exception e) {
+      throw new Exception();
     }
   }
 }

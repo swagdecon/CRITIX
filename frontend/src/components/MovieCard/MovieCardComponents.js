@@ -15,6 +15,7 @@ function MovieCardGenres({ genres }) {
   return flattenedGenres.join(" | ");
 }
 function MovieCardActors({ actors }) {
+  console.log(actors)
   MovieCardActors.propTypes = {
     actors: PropTypes.arrayOf(
       PropTypes.oneOfType([

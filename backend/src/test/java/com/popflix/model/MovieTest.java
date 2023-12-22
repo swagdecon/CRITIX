@@ -43,7 +43,7 @@ class MovieTest {
         List<String> productionCompanies = Arrays.asList("Company 1", "Company 2");
         String movieStatus = "Released";
 
-        Movie movie = new Movie(id, adult, backdropUrl, genreIds, genres, movieId, originalLanguage,
+        Movie movie = new Movie(id, adult, adult, backdropUrl, genreIds, genres, movieId, originalLanguage,
                 originalTitle, overview, popularity, posterUrl, releaseDate, title, trailer, voteAverage, providers,
                 voteCount, imdbId, budget, tagline, revenue, runtime, actors, actorImagePaths, reviews,
                 productionCompanies,

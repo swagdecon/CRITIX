@@ -21,7 +21,7 @@ public class MovieCard {
     private ObjectId mongoId;
     private List<Integer> genreIds;
     private List<String> genres;
-    private List<String> actors;
+    private List<Person> actors;
     private Integer movieId;
     private String overview;
     private String posterUrl;
