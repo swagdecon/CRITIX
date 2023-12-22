@@ -33,6 +33,7 @@ public class Movie {
     private String releaseDate;
     private String title;
     private String trailer;
+    private Boolean isSavedToWatchlist;
     private Integer voteAverage;
     private ProviderResults providerResults;
     private Integer voteCount;

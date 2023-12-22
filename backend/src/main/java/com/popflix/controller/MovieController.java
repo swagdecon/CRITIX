@@ -3,13 +3,13 @@ package com.popflix.controller;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,49 +27,51 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
-    @GetMapping("/movie/{id}")
-    public ResponseEntity<Optional<Movie>> getSingleMovie(@PathVariable Integer id) {
-        return new ResponseEntity<Optional<Movie>>(movieService.singleTmdbMovie(id), HttpStatus.OK);
+    @GetMapping("/movie/{movieId}")
+    public ResponseEntity<Optional<Movie>> getSingleMovie(@PathVariable Integer movieId) {
+        return new ResponseEntity<Optional<Movie>>(movieService.singleTmdbMovie(movieId), HttpStatus.OK);
     }
 
-    @GetMapping("/top_popular")
-    public ResponseEntity<List<Movie>> getPopularMovies() {
-        return new ResponseEntity<List<Movie>>(movieService.getTop20Movies("popular"), HttpStatus.OK);
+    @GetMapping("/top_popular/{userId}")
+    public ResponseEntity<List<Movie>> getPopularMovies(@PathVariable String userId) {
+        return new ResponseEntity<List<Movie>>(movieService.getTop20MoviesForUser("popular", userId), HttpStatus.OK);
     }
 
-    @GetMapping("/top_popular/{id}")
-    public ResponseEntity<Optional<Movie>> getSinglePopularMovie(@PathVariable Integer id) {
-        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(id, "popular"), HttpStatus.OK);
+    @GetMapping("/top_popular/movie/{movieId}")
+    public ResponseEntity<Optional<Movie>> getSinglePopularMovie(@PathVariable Integer movieId) {
+        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(movieId, "popular"), HttpStatus.OK);
     }
 
-    @GetMapping("/top_upcoming")
-    public ResponseEntity<List<Movie>> getUpcomingMovies() {
-        return new ResponseEntity<List<Movie>>(movieService.getTop20Movies("upcoming_movies"), HttpStatus.OK);
+    @GetMapping("/top_upcoming/{userId}")
+    public ResponseEntity<List<Movie>> getUpcomingMovies(@PathVariable String userId) {
+        return new ResponseEntity<List<Movie>>(movieService.getTop20MoviesForUser("upcoming_movies", userId),
+                HttpStatus.OK);
     }
 
-    @GetMapping("/top_upcoming/{id}")
-    public ResponseEntity<Optional<Movie>> getUpcomingMovie(@PathVariable Integer id) {
-        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(id, "upcoming_movies"), HttpStatus.OK);
+    @GetMapping("/top_upcoming/movie/{movieId}")
+    public ResponseEntity<Optional<Movie>> getUpcomingMovie(@PathVariable Integer movieId) {
+        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(movieId, "upcoming_movies"), HttpStatus.OK);
     }
 
-    @GetMapping("/top_rated")
-    public ResponseEntity<List<Movie>> getTopRatedMovies() {
-        return new ResponseEntity<List<Movie>>(movieService.getTop20Movies("top_rated"), HttpStatus.OK);
+    @GetMapping("/top_rated/{userId}")
+    public ResponseEntity<List<Movie>> getTopRatedMovies(@PathVariable String userId) {
+        return new ResponseEntity<List<Movie>>(movieService.getTop20MoviesForUser("top_rated", userId), HttpStatus.OK);
     }
 
-    @GetMapping("/top_rated/{id}")
-    public ResponseEntity<Optional<Movie>> getSingleTopRatedMovie(@PathVariable Integer id) {
-        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(id, "top_rated"), HttpStatus.OK);
+    @GetMapping("/top_rated/movie/{movieId}")
+    public ResponseEntity<Optional<Movie>> getSingleTopRatedMovie(@PathVariable Integer movieId) {
+        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(movieId, "top_rated"), HttpStatus.OK);
     }
 
-    @GetMapping("/now_playing")
-    public ResponseEntity<List<Movie>> getNowPlayingMovies() {
-        return new ResponseEntity<List<Movie>>(movieService.getTop20Movies("now_playing"), HttpStatus.OK);
+    @GetMapping("/now_playing/{userId}")
+    public ResponseEntity<List<Movie>> getNowPlayingMovies(@PathVariable String userId) {
+        return new ResponseEntity<List<Movie>>(movieService.getTop20MoviesForUser("now_playing", userId),
+                HttpStatus.OK);
     }
 
-    @GetMapping("/now_playing/{id}")
-    public ResponseEntity<Optional<Movie>> getSingleNowPlayingMovie(@PathVariable Integer id) {
-        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(id, "now_playing"), HttpStatus.OK);
+    @GetMapping("/now_playing/movie/{movieId}")
+    public ResponseEntity<Optional<Movie>> getSingleNowPlayingMovie(@PathVariable Integer movieId) {
+        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(movieId, "now_playing"), HttpStatus.OK);
     }
 
     @GetMapping("/search/{query}")
@@ -78,16 +80,16 @@ public class MovieController {
         return new ResponseEntity<Object>(movieService.searchResults(query), HttpStatus.OK);
     }
 
-    @GetMapping("/recommended/{id}")
-    public ResponseEntity<Object> getRecommendedMovies(@PathVariable Integer id)
+    @GetMapping("/recommended/{movieId}")
+    public ResponseEntity<Object> getRecommendedMovies(@PathVariable Integer movieId)
             throws IOException, InterruptedException, URISyntaxException {
-        return new ResponseEntity<Object>(movieService.recommendedMovies(id), HttpStatus.OK);
+        return new ResponseEntity<Object>(movieService.recommendedMovies(movieId), HttpStatus.OK);
     }
 
-    @GetMapping("/get-trailer/{id}")
-    public ResponseEntity<Object> getTrailer(@PathVariable Integer id)
+    @GetMapping("/get-trailer/{movieId}")
+    public ResponseEntity<Object> getTrailer(@PathVariable Integer movieId)
             throws IOException, InterruptedException, URISyntaxException {
-        return new ResponseEntity<Object>(movieService.getTrailer(id), HttpStatus.OK);
+        return new ResponseEntity<Object>(movieService.getTrailer(movieId), HttpStatus.OK);
     }
 
     @GetMapping("/movie-list/{endpoint}")

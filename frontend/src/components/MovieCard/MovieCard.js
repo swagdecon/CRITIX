@@ -26,8 +26,9 @@ export default function MovieCard({
   genres,
   overview,
   actors,
+  isSavedToWatchlist
 }) {
-  const [bookmarkIconStyle, setBookmarkIconStyle] = useState("Empty");
+  const [isSavedToWatchListState, setIsSavedToWatchListState] = useState(isSavedToWatchlist)
   const token = jwt_decode(CookieManager.decryptCookie("accessToken"))
   const userId = token.userId;
   const data = {
@@ -38,7 +39,7 @@ export default function MovieCard({
     genres,
     overview,
     actors: actors ? actors.slice(0, 3) : null,
-    userId,
+    userId
   };
   async function handleWatchTrailer(e) {
     e.preventDefault();
@@ -50,7 +51,7 @@ export default function MovieCard({
   async function handleSaveToWatchlist(e) {
     e.preventDefault();
     const response = await sendData(`${sendToWatchListEndpoint}/${userId}`, data);
-    response.ok ? setBookmarkIconStyle("Full") : null;
+    response.ok ? setIsSavedToWatchListState(true) : false;
     e.stopPropagation();
   }
 
@@ -58,7 +59,7 @@ export default function MovieCard({
   async function handleDeleteFromWatchlist(e) {
     e.preventDefault();
     const response = await sendData(`${deleteFromWatchListEndpoint}${userId}/${movieId}`);
-    response.ok ? setBookmarkIconStyle("Empty") : null
+    response.ok ? setIsSavedToWatchListState(false) : false;
     e.stopPropagation();
   }
 
@@ -139,8 +140,8 @@ export default function MovieCard({
               </div>
               <div className={MovieCardStyle.col6}>
                 <div className={MovieCardStyle["action-btn"]}>
-                  {bookmarkIconStyle === "Empty" ?
-                    <i><BookmarkBorderIcon sx={{ fontSize: 30 }} onClick={handleSaveToWatchlist} /></i>
+                  {!isSavedToWatchListState ?
+                    <i> <BookmarkBorderIcon sx={{ fontSize: 30 }} onClick={handleSaveToWatchlist} /></i>
                     :
                     <i><BookmarkIcon sx={{ fontSize: 30 }} onClick={handleDeleteFromWatchlist} /></i>
                   }
@@ -153,13 +154,14 @@ export default function MovieCard({
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 
 MovieCard.propTypes = {
   movieId: PropTypes.number,
   title: PropTypes.string,
+  isSavedToWatchlist: PropTypes.bool,
   posterUrl: PropTypes.string,
   voteAverage: PropTypes.number,
   runtime: PropTypes.number,

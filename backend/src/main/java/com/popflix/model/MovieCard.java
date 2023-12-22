@@ -32,4 +32,5 @@ public class MovieCard {
     private String tagline;
     private Integer runtime;
     private String movieStatus;
+    private Boolean isSavedToWatchlist;
 }

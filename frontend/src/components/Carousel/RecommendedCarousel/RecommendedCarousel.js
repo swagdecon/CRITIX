@@ -34,6 +34,7 @@ export default function RecommendedCarousel({ recommendedMovies }) {
                       runtime={movie.runtime}
                       genres={movie.genres}
                       overview={movie.overview}
+                      isSavedToWatchlist={movie.isSavedToWatchlist}
                     />
                   </Link>
                 </div>

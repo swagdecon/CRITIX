@@ -64,7 +64,7 @@ class MovieControllerTest {
         movieServiceField.set(movieController, movieService);
 
         // Call the getPopularMovies method
-        ResponseEntity<List<Movie>> response = movieController.getPopularMovies();
+        ResponseEntity<List<Movie>> response = movieController.getPopularMovies("123");
 
         // Assert the response
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -91,7 +91,7 @@ class MovieControllerTest {
         movieServiceField.set(movieController, movieService);
 
         // Call the getUpcomingMovies method
-        ResponseEntity<List<Movie>> response = movieController.getUpcomingMovies();
+        ResponseEntity<List<Movie>> response = movieController.getUpcomingMovies("123");
 
         // Assert the response
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -118,7 +118,7 @@ class MovieControllerTest {
         movieServiceField.set(movieController, movieService);
 
         // Call the getTopRated method
-        ResponseEntity<List<Movie>> response = movieController.getTopRatedMovies();
+        ResponseEntity<List<Movie>> response = movieController.getTopRatedMovies("123");
 
         // Assert the response
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -145,7 +145,7 @@ class MovieControllerTest {
         movieServiceField.set(movieController, movieService);
 
         // Call the getNowPlaying method
-        ResponseEntity<List<Movie>> response = movieController.getNowPlayingMovies();
+        ResponseEntity<List<Movie>> response = movieController.getNowPlayingMovies("123");
 
         // Assert the response
         assertEquals(HttpStatus.OK, response.getStatusCode());

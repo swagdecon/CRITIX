@@ -111,6 +111,7 @@ export default function WatchList() {
                                     overview={movie.overview}
                                     actors={movie.actors}
                                     video={movie.video}
+                                    isSavedToWatchlist={movie.isSavedToWatchlist}
                                 />
                             </Link>
                         </div>

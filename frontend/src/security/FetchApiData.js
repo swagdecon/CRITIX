@@ -22,7 +22,7 @@ export async function fetchData(endpoint, options) {
 
 export async function sendData(endpoint, data) {
   const token = CookieManager.decryptCookie('accessToken');
-
+  console.log(data)
   try {
     const response = await fetch(endpoint, {
       method: "POST",

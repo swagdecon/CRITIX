@@ -99,6 +99,18 @@ public class MovieService {
     return movieRepository.findMovieById(id);
   }
 
+  public List<Movie> getTop20MoviesForUser(String collectionName, String userId) {
+    Query query = new Query();
+    List<Movie> movies = mongoTemplate.find(query, Movie.class, collectionName);
+
+    for (Movie movie : movies) {
+      boolean watchListMovieAlreadyExists = userRepository.doesMovieExist(userId, movie.getId());
+      movie.setIsSavedToWatchlist(watchListMovieAlreadyExists);
+    }
+
+    return movies;
+  }
+
   public List<Movie> getTop20Movies(String collectionName) {
     Query query = new Query();
     return mongoTemplate.find(query, Movie.class, collectionName);
@@ -568,6 +580,7 @@ public class MovieService {
         movieCard.setMovieId(movieCardData.getMovieId());
         movieCard.setVoteAverage(movieCardData.getVoteAverage());
         movieCard.setTitle(movieCardData.getTitle());
+        movieCard.setIsSavedToWatchlist(true);
         movieCard.setGenres(movieCardData.getGenres());
         movieCard.setOverview(movieCardData.getOverview());
         movieCard.setPosterUrl(movieCardData.getPosterUrl());
