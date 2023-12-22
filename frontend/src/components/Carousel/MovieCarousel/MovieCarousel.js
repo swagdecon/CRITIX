@@ -17,6 +17,7 @@ function MovieCarousel({ title, movies, endpoint }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useWindowResizeEffect(setWindowWidth);
   const movieChunks = chunk(movies, getChunkSize(windowWidth, movieCarouselBreakpoints));
+
   return (
     <div className={MovieCarouselStyle["carousel-wrapper"]}>
       <div className={MovieCardStyle.titleWrapper}>
@@ -28,7 +29,7 @@ function MovieCarousel({ title, movies, endpoint }) {
             <div className={MovieCardStyle.carouselHeader} />
             {movieChunk.map((movie) => (
               <div className={MovieCardStyle["main-card-container"]} key={movie.id}>
-                <Link to={`${endpoint}/${movie.id}`}>
+                <Link to={`${endpoint}/movie/${movie.id}`}>
                   <MovieCard
                     movieId={movie.id}
                     title={movie.title}

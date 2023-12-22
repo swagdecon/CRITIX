@@ -49,7 +49,7 @@ export default function App() {
           path="/watchlist"
           element={<PrivateRoute><WatchList endpointName="watchlist" /></PrivateRoute>}
         />
-        <Route path="/movies/:endpoint/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
+        <Route path="/movies/:endpoint/movie/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
         <Route path="/movies/movie/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
         <Route path="/person/:id" element={<PrivateRoute><IndPerson /></PrivateRoute>} />
         <Route path="/forgot-password" element={<ConfirmEmailForPwdReset />} />

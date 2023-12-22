@@ -20,6 +20,7 @@ import LoadingPage from "./LoadingPage";
 import MovieButton from "../components/Other/btn/MovieButton/Button";
 import { fetchData } from "../security/FetchApiData";
 import isTokenExpired from "../security/IsTokenExpired.js";
+// import WatchListBtn from "../components/WatchList/Watchlist.js";
 const recommendedEndpoint = process.env.REACT_APP_RECOMMENDED_ENDPOINT;
 
 export default function IndMovie() {
@@ -29,6 +30,7 @@ export default function IndMovie() {
   const [recommendedMovies, setRecommendedMovies] = useState(null)
   const [isLoading, setIsLoading] = useState(true);
   const handleTrailerClick = () => MovieTrailer(movie.trailer)
+
   useEffect(() => {
     async function fetchBackendData() {
       setIsLoading(true);
@@ -83,6 +85,7 @@ export default function IndMovie() {
                   innerIcon="trailer"
                   onClick={handleTrailerClick}
                 />
+                {/* <WatchListBtn /> */}
               </div>
             ) : null}
             <div className={IndMovieStyle.ind_movie_review}>
@@ -128,7 +131,7 @@ export default function IndMovie() {
               placement="userRatingSection"
             />
           </div>
-          {movie.actors.length > 0 ?
+          {movie.actors > 0 ?
             <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-4"]}`}>
               <div className={ActorStyle.CastMembers}>
                 <MovieActors actors={movie.actors} />
