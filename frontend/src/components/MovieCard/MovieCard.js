@@ -102,7 +102,7 @@ export default function MovieCard({
                     124
                   </li>
                   <li>
-                    <i className="material-icons">&#xE813;</i>3
+                    <i className="material-icons">&#xE813;</i>
                   </li>
                 </ul>
               </div>

@@ -25,9 +25,10 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
-    @GetMapping("/movie/{movieId}")
-    public ResponseEntity<Optional<Movie>> getSingleMovie(@PathVariable Integer movieId) {
-        return new ResponseEntity<Optional<Movie>>(movieService.singleTmdbMovie(movieId), HttpStatus.OK);
+    @PostMapping("/movie/{movieId}")
+    public ResponseEntity<Optional<Movie>> getSingleMovie(@PathVariable Integer movieId, @RequestBody String userId) {
+        String test = userId.substring(1, userId.length() - 1);
+        return new ResponseEntity<Optional<Movie>>(movieService.singleTmdbMovie(movieId, test), HttpStatus.OK);
     }
 
     @GetMapping("/top_popular/{userId}")
@@ -35,9 +36,10 @@ public class MovieController {
         return new ResponseEntity<List<Movie>>(movieService.getTop20MoviesForUser("popular", userId), HttpStatus.OK);
     }
 
-    @GetMapping("/top_popular/movie/{movieId}")
-    public ResponseEntity<Optional<Movie>> getSinglePopularMovie(@PathVariable Integer movieId) {
-        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(movieId, "popular"), HttpStatus.OK);
+    @PostMapping("/top_popular/movie/{movieId}")
+    public ResponseEntity<Optional<Movie>> getSinglePopularMovie(@PathVariable Integer movieId,
+            @RequestBody String userId) {
+        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(movieId, "popular", userId), HttpStatus.OK);
     }
 
     @GetMapping("/top_upcoming/{userId}")
@@ -46,9 +48,10 @@ public class MovieController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/top_upcoming/movie/{movieId}")
-    public ResponseEntity<Optional<Movie>> getUpcomingMovie(@PathVariable Integer movieId) {
-        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(movieId, "upcoming_movies"), HttpStatus.OK);
+    @PostMapping("/top_upcoming/movie/{movieId}")
+    public ResponseEntity<Optional<Movie>> getUpcomingMovie(@PathVariable Integer movieId, @RequestBody String userId) {
+        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(movieId, "upcoming_movies", userId),
+                HttpStatus.OK);
     }
 
     @GetMapping("/top_rated/{userId}")
@@ -56,9 +59,11 @@ public class MovieController {
         return new ResponseEntity<List<Movie>>(movieService.getTop20MoviesForUser("top_rated", userId), HttpStatus.OK);
     }
 
-    @GetMapping("/top_rated/movie/{movieId}")
-    public ResponseEntity<Optional<Movie>> getSingleTopRatedMovie(@PathVariable Integer movieId) {
-        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(movieId, "top_rated"), HttpStatus.OK);
+    @PostMapping("/top_rated/movie/{movieId}")
+    public ResponseEntity<Optional<Movie>> getSingleTopRatedMovie(@PathVariable Integer movieId,
+            @RequestBody String userId) {
+        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(movieId, "top_rated", userId),
+                HttpStatus.OK);
     }
 
     @GetMapping("/now_playing/{userId}")
@@ -67,9 +72,11 @@ public class MovieController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/now_playing/movie/{movieId}")
-    public ResponseEntity<Optional<Movie>> getSingleNowPlayingMovie(@PathVariable Integer movieId) {
-        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(movieId, "now_playing"), HttpStatus.OK);
+    @PostMapping("/now_playing/movie/{movieId}")
+    public ResponseEntity<Optional<Movie>> getSingleNowPlayingMovie(@PathVariable Integer movieId,
+            @RequestBody String userId) {
+        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(movieId, "now_playing", userId),
+                HttpStatus.OK);
     }
 
     @GetMapping("/search/{query}")
@@ -102,7 +109,7 @@ public class MovieController {
         try {
             movieService.addMovieToWatchlist(userId, movieCard);
         } catch (Exception e) {
-            throw new Exception("Error saving to watchlist", e);
+            e.printStackTrace();
         }
     }
 

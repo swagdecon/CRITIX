@@ -20,7 +20,6 @@ public class Movie {
     @Id
     private ObjectId mongoId;
     private Boolean adult;
-    private Boolean savedOnWatchList;
     private String backdropUrl;
     private List<Integer> genreIds;
     private List<String> genres;

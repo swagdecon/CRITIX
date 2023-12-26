@@ -166,7 +166,7 @@ function MovieDetails({
           icon="&#xf7f3;"
         />
         <GlassCard
-          name={"Release Date"}
+          name={"RELEASE DATE"}
           value={releaseDate}
           iconString={"&#xebcc;"}
           icon="&#xebcc;"

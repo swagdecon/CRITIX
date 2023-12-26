@@ -30,9 +30,9 @@ function Homepage() {
       try {
         await isTokenExpired();
         const [trendingMovies, topRatedMovies, upcomingMovies] = await Promise.all([
-          fetchData(`${popularMovieEndpoint}/${userId}`),
-          fetchData(`${topRatedMovieEndpoint}/${userId}`),
-          fetchData(`${upcomingMovieEndpoint}/${userId}`),
+          fetchData(`${popularMovieEndpoint}${userId}`),
+          fetchData(`${topRatedMovieEndpoint}${userId}`),
+          fetchData(`${upcomingMovieEndpoint}${userId}`),
         ]);
         setMoviesData({
           trendingMovies,

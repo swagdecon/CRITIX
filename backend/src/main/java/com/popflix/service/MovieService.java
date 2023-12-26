@@ -116,10 +116,18 @@ public class MovieService {
     return mongoTemplate.find(query, Movie.class, collectionName);
   }
 
-  public Optional<Movie> singleMovie(Integer id, String collectionName) {
+  public Optional<Movie> singleMovie(Integer movieId, String collectionName, String userId) {
     Query query = new Query();
-    query.addCriteria(Criteria.where("id").is(id));
-    return Optional.ofNullable(mongoTemplate.findOne(query, Movie.class, collectionName));
+    query.addCriteria(Criteria.where("id").is(movieId));
+
+    Movie movie = mongoTemplate.findOne(query, Movie.class, collectionName);
+    if (movie != null) {
+      boolean watchListMovieAlreadyExists = userRepository.doesMovieExist(userId, movieId);
+      movie.setIsSavedToWatchlist(watchListMovieAlreadyExists);
+      return Optional.of(movie);
+    } else {
+      return Optional.empty();
+    }
   }
 
   private void setMovieDetails(Movie movie, MovieDb movieApi) {
@@ -150,12 +158,17 @@ public class MovieService {
     setTrailer(movie, movieApi);
   }
 
-  public Optional<Movie> singleTmdbMovie(Integer movieId) {
+  public Optional<Movie> singleTmdbMovie(Integer movieId, String userId) {
+
+    boolean watchListMovieAlreadyExists = userRepository.doesMovieExist(userId, movieId);
+    MovieDb movieApi = tmdbApi.getMovies().getMovie(movieId, "en-US");
+
     Movie movie = new Movie();
     movie.setId(movieId);
-    MovieDb movieApi = tmdbApi.getMovies().getMovie(movie.getId(), "en-US");
     movie.setProviderResults(tmdbApi.getMovies().getWatchProviders(movieId));
+    movie.setIsSavedToWatchlist(watchListMovieAlreadyExists);
     setMovieDetails(movie, movieApi);
+
     return Optional.of(movie);
   }
 
@@ -271,12 +284,9 @@ public class MovieService {
 
       for (MovieDb movieDb : collection) {
         Movie movie = new Movie();
-        // boolean isMovieSavedToWatchlist = userRepository.doesMovieExist(userId,
-        // movieDb.getId());
+
         String posterUrl = TMDB_IMAGE_PREFIX + movieDb.getPosterPath();
         String backdropUrl = TMDB_IMAGE_PREFIX + movieDb.getBackdropPath();
-        // movie.setSavedOnWatchList(isMovieSavedToWatchlist);
-
         movie.setId(movieDb.getId());
         movie.setTitle(movieDb.getTitle());
         movie.setOriginalLanguage(movieDb.getOriginalLanguage());
@@ -588,9 +598,11 @@ public class MovieService {
         watchList.add(movieCard);
         user.setWatchList(watchList);
         userRepository.save(user);
+      } else {
+        throw new Exception("User already has movie in watchlist, returning...");
       }
     } catch (Exception e) {
-      throw new Exception("Error adding movie to watchlist");
+      e.printStackTrace();
     }
   }
 

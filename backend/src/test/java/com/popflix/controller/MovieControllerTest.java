@@ -35,16 +35,17 @@ class MovieControllerTest {
     void testGetSingleMovie() {
         int movieId = 1;
         Movie movie = new Movie();
+        String userId = "123abc";
         Optional<Movie> optionalMovie = Optional.of(movie);
 
-        when(movieService.singleTmdbMovie(movieId)).thenReturn(optionalMovie);
+        when(movieService.singleTmdbMovie(movieId, userId)).thenReturn(optionalMovie);
 
-        ResponseEntity<Optional<Movie>> response = movieController.getSingleMovie(movieId);
+        ResponseEntity<Optional<Movie>> response = movieController.getSingleMovie(movieId, userId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(optionalMovie, response.getBody());
 
-        verify(movieService, times(1)).singleTmdbMovie(movieId);
+        verify(movieService, times(1)).singleTmdbMovie(movieId, userId);
         verifyNoMoreInteractions(movieService);
     }
 
