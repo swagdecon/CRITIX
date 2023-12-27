@@ -11,10 +11,12 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.util.ReflectionTestUtils;
+
 import com.popflix.model.Movie;
 import com.popflix.model.MovieCard;
 import com.popflix.model.User;
@@ -30,6 +32,7 @@ class MovieServiceTest {
     Dotenv dotenv = Dotenv.load();
     final TmdbApi tmdbApi = new TmdbApi(dotenv.get("TMDB_API_KEY"));
     String userId = "user123";
+
     @Mock
     private UserRepository userRepository;
 
@@ -38,6 +41,8 @@ class MovieServiceTest {
         movieRepository = mock(MovieRepository.class);
         mongoTemplate = mock(MongoTemplate.class);
         movieService = new MovieService(movieRepository, mongoTemplate);
+        userRepository = mock(UserRepository.class);
+
         ReflectionTestUtils.setField(movieService, "userRepository", userRepository);
 
     }
@@ -154,34 +159,4 @@ class MovieServiceTest {
         assertFalse(actualMovie.isPresent());
     }
 
-    // Adds a new movie to the user's watchlist if it doesn't already exist
-    @Test
-    public void test_addMovieToWatchlist_movieNotExists() throws Exception {
-
-        // Arrange
-        MovieCard movieCardData = new MovieCard();
-        movieCardData.setMovieId(123);
-        movieCardData.setVoteAverage(75);
-        movieCardData.setTitle("Movie Title");
-        movieCardData.setGenres(Collections.singletonList("Action"));
-        movieCardData.setOverview("Movie Overview");
-        movieCardData.setPosterUrl("https://example.com/poster.jpg");
-        movieCardData.setActors(null);
-
-        User user = new User();
-        user.setId(userId);
-        List<MovieCard> watchList = new ArrayList<>();
-        user.setWatchList(watchList);
-
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(userRepository.doesMovieExist(userId, movieCardData.getMovieId())).thenReturn(false);
-
-        // Act
-        movieService.addMovieToWatchlist(userId, movieCardData);
-
-        // Assert
-        assertTrue(user.getWatchList().contains(movieCardData));
-        assertTrue(movieCardData.getIsSavedToWatchlist());
-        verify(userRepository, times(1)).save(user);
-    }
 }

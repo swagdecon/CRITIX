@@ -27,8 +27,7 @@ public class MovieController {
 
     @PostMapping("/movie/{movieId}")
     public ResponseEntity<Optional<Movie>> getSingleMovie(@PathVariable Integer movieId, @RequestBody String userId) {
-        String test = userId.substring(1, userId.length() - 1);
-        return new ResponseEntity<Optional<Movie>>(movieService.singleTmdbMovie(movieId, test), HttpStatus.OK);
+        return new ResponseEntity<Optional<Movie>>(movieService.singleTmdbMovie(movieId, userId), HttpStatus.OK);
     }
 
     @GetMapping("/top_popular/{userId}")
