@@ -27,7 +27,9 @@ public class MovieController {
 
     @PostMapping("/movie/{movieId}")
     public ResponseEntity<Optional<Movie>> getSingleMovie(@PathVariable Integer movieId, @RequestBody String userId) {
-        return new ResponseEntity<Optional<Movie>>(movieService.singleTmdbMovie(movieId, userId), HttpStatus.OK);
+        // WORKAROUND DO NOT DELETE
+        String cleanedUserId = userId.replace("\"", "");
+        return new ResponseEntity<Optional<Movie>>(movieService.singleTmdbMovie(movieId, cleanedUserId), HttpStatus.OK);
     }
 
     @GetMapping("/top_popular/{userId}")
@@ -38,7 +40,10 @@ public class MovieController {
     @PostMapping("/top_popular/movie/{movieId}")
     public ResponseEntity<Optional<Movie>> getSinglePopularMovie(@PathVariable Integer movieId,
             @RequestBody String userId) {
-        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(movieId, "popular", userId), HttpStatus.OK);
+        // WORKAROUND DO NOT DELETE
+        String cleanedUserId = userId.replace("\"", "");
+        return new ResponseEntity<Optional<Movie>>(movieService.singleMovie(movieId, "popular", cleanedUserId),
+                HttpStatus.OK);
     }
 
     @GetMapping("/top_upcoming/{userId}")

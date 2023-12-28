@@ -26,6 +26,8 @@ import CookieManager from "../security/CookieManager.js";
 const sendToWatchListEndpoint = process.env.REACT_APP_ADD_TO_WATCHLIST_ENDPOINT;
 const recommendedEndpoint = process.env.REACT_APP_RECOMMENDED_ENDPOINT;
 const deleteFromWatchListEndpoint = process.env.REACT_APP_DELETE_FROM_WATCHLIST_ENDPOINT
+const getReviewEndpoint = process.env.REACT_APP_GET_REVIEW_ENDPOINT
+
 export default function IndMovie() {
   const { id } = useParams();
   const [movie, setMovie] = useState(null)
@@ -44,7 +46,7 @@ export default function IndMovie() {
         await isTokenExpired();
         const [movies, reviewsData, recommendedMovies] = await Promise.all([
           sendData(id, userId),
-          fetchData(`http://localhost:8080/review/${id}`),
+          fetchData(`${getReviewEndpoint}${id}`),
           fetchData(`${recommendedEndpoint}${id}`)
         ]);
         setMovie(await movies.json());
