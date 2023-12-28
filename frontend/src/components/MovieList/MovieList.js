@@ -133,7 +133,12 @@ export default function MovieList({ endpoint }) {
           <h3 className={Title["movie-title"]}>{title}</h3>
           <div className={MovieListStyle["title-caption"]}>{caption}</div>
           <div className={MovieListStyle["sort-by-btn"]}>
-            <Dropdown onSelectSortBy={handleSortByChange} />
+            <Dropdown onSelectSortBy={handleSortByChange} dropdownItems={["Popularity Desc.",
+              "Popularity Asc.",
+              "A-Z",
+              "Z-A",
+              "Vote Average Desc.",
+              "Vote Average Asc."]} />
           </div>
         </div>
       </div>

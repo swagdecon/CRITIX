@@ -67,9 +67,9 @@ export default function MovieCard({
     <div className="container">
       <div className={MovieCardStyle["cellphone-container"]}>
         <div className={MovieCardStyle.movie}>
-          <div className={MovieCardStyle.menu}>
+          {/* <div className={MovieCardStyle.menu}>
             <i className="material-icons"></i>
-          </div>
+          </div> */}
           <div
             className={MovieCardStyle["movie-img"]}
             style={{
