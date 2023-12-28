@@ -2,7 +2,7 @@ import jwt_decode from "jwt-decode";
 import CookieManager from "./CookieManager";
 import Logout from "./Logout";
 let refreshPromise = null;
-
+const refreshTokenEndpoint = process.env.REACT_APP_REFRESH_TOKEN_ENDPOINT
 export default function isTokenExpired() {
   return new Promise((resolve, reject) => {
     const token = CookieManager.decryptCookie("accessToken");
@@ -11,7 +11,7 @@ export default function isTokenExpired() {
     const refreshTokenLogic = async () => {
       try {
         const refreshResponse = await fetch(
-          "http://localhost:8080/v1/auth/refresh-token",
+          refreshTokenEndpoint,
           {
             method: "POST",
             headers: {

@@ -1,7 +1,7 @@
 
 // import { createTheme } from '@mui/material/styles';
 import isTokenExpired from "../../security/IsTokenExpired";
-import { fetchData } from "../../security/FetchApiData";
+import { fetchData } from "../../security/Data";
 import WatchListStyle from "../MovieList/MovieList.module.css"
 import { React, useMemo, useState, useCallback } from "react";
 import jwt_decode from "jwt-decode";

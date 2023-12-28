@@ -18,7 +18,7 @@ import RecommendedCarousel from "../components/Carousel/RecommendedCarousel/Reco
 import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel";
 import LoadingPage from "./LoadingPage";
 import MovieButton from "../components/Other/btn/MovieButton/Button";
-import { fetchData, sendData } from "../security/FetchApiData";
+import { fetchData, sendData } from "../security/Data";
 import isTokenExpired from "../security/IsTokenExpired.js";
 import WatchListBtn from "..//components/Other/btn/WatchListBtn/WatchListBtn";
 import jwt_decode from "jwt-decode";

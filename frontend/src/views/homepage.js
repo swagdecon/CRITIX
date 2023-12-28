@@ -4,7 +4,7 @@ import MovieCarousel from "../components/Carousel/MovieCarousel/MovieCarousel.js
 import NavBar from "../components/NavBar/NavBar.js";
 import LoadingPage from "./LoadingPage.js";
 import HomePage from "../misc/HomePage.module.css";
-import { fetchData } from "../security/FetchApiData.js";
+import { fetchData } from "../security/Data.js";
 import isTokenExpired from "../security/IsTokenExpired.js";
 import jwt_decode from "jwt-decode";
 import CookieManager from "../security/CookieManager.js";

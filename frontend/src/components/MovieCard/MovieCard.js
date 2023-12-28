@@ -10,7 +10,7 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import ShareIcon from '@mui/icons-material/Share';
 import { MovieCardActors, MovieCardGenres } from "./MovieCardComponents.js";
 import MovieCardStyle from "./moviecard.module.scss"
-import { fetchData, sendData } from "../../security/FetchApiData.js"
+import { fetchData, sendData } from "../../security/Data.js"
 const trailerEndpoint = process.env.REACT_APP_TRAILER_ENDPOINT;
 const sendToWatchListEndpoint = process.env.REACT_APP_ADD_TO_WATCHLIST_ENDPOINT;
 const deleteFromWatchListEndpoint = process.env.REACT_APP_DELETE_FROM_WATCHLIST_ENDPOINT;
@@ -96,7 +96,7 @@ export default function MovieCard({
                 <h5>SUMMARY</h5>
               </div>
               <div className={MovieCardStyle.col2}>
-                <ul className={MovieCardStyle["movie-likes"]}>
+                {/* <ul className={MovieCardStyle["movie-likes"]}>
                   <li>
                     <i className="material-icons">&#xE813;</i>
                     124
@@ -104,7 +104,7 @@ export default function MovieCard({
                   <li>
                     <i className="material-icons">&#xE813;</i>
                   </li>
-                </ul>
+                </ul> */}
               </div>
             </div>
             <div className={MovieCardStyle["mr-grid"]}>

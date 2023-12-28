@@ -15,7 +15,7 @@ import InputSlider from "./Rating/Slider/Slider.js";
 import CookieManager from "../../security/CookieManager";
 import ReCAPTCHA from "react-google-recaptcha";
 import { format } from 'date-fns';
-const CLIENT_API_KEY = process.env.REACT_APP_CLIENT_API_KEY;
+const RECAPTCHA_KEY = process.env.REACT_APP_RECAPTCHA_KEY;
 const RECAPTCHA_ENDPOINT = process.env.REACT_APP_RECAPTCHA_ENDPOINT;
 const CREATE_MOVIE_ENDPOINT = process.env.REACT_APP_CREATE_MOVIE_ENDPOINT;
 
@@ -178,7 +178,7 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
                                     {isRecaptchaVisible && (
                                         <div className={IndReview["recaptcha-btn"]}>
                                             <ReCAPTCHA
-                                                sitekey={CLIENT_API_KEY}
+                                                sitekey={RECAPTCHA_KEY}
                                                 onChange={onChange}
                                             />
                                         </div>

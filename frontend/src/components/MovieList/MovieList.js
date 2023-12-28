@@ -9,7 +9,9 @@ import Dropdown from "../Other/Dropdown/SortByDropdown";
 import Pagination from '@mui/material/Pagination';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import isTokenExpired from "../../security/IsTokenExpired";
-import { fetchData } from "../../security/FetchApiData";
+import { fetchData } from "../../security/Data";
+const movieListEndpoint = process.env.REACT_APP_MOVIE_LIST_ENDPOINT
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -22,7 +24,7 @@ async function fetchBackendData(endpointName, page) {
   try {
     await isTokenExpired();
     const response = await Promise.all([
-      fetchData(`http://localhost:8080/movies/movie-list/${endpointName}?page=${page}`),
+      fetchData(`${movieListEndpoint}${endpointName}?page=${page}`),
     ]);
     return response[0]
   } catch (error) {

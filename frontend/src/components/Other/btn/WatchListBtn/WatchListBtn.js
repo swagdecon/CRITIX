@@ -3,7 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
 import WatchListBtnStyle from "./WatchListBtn.module.css"
 import { useState } from "react";
-import { sendData } from "../../../../security/FetchApiData";
+import { sendData } from "../../../../security/Data";
 import PropTypes from "prop-types";
 export default function WatchListBtn({ movieData, userId, sendToWatchListEndpoint, deleteFromWatchListEndpoint }) {
     const [isAddedToWatchlist, setIsAddedToWatchlist] = useState(movieData.isSavedToWatchlist);
