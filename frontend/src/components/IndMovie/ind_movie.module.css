@@ -53,9 +53,17 @@
 
 .btn-wrapper {
   padding-top: 3%;
-  display: flex;
+  display: inline-flex;
   align-self: start;
 }
+.btn-wrapper-2 {
+  margin-left: 15px
+}
+.watchlist-btn-wrapper {
+  display: inline-flex;
+  align-items: center;
+}
+
 
 .hero-content {
   display: flex;

@@ -1,41 +1,79 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import {
   MovieAverage,
   TruncateDescription,
   MovieTrailer
 } from "../IndMovie/MovieComponents.js";
-
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import ShareIcon from '@mui/icons-material/Share';
 import { MovieCardActors, MovieCardGenres } from "./MovieCardComponents.js";
 import MovieCardStyle from "./moviecard.module.scss"
-import fetchData from "../../security/FetchApiData.js"
+import { fetchData, sendData } from "../../security/Data.js"
 const trailerEndpoint = process.env.REACT_APP_TRAILER_ENDPOINT;
+const sendToWatchListEndpoint = process.env.REACT_APP_ADD_TO_WATCHLIST_ENDPOINT;
+const deleteFromWatchListEndpoint = process.env.REACT_APP_DELETE_FROM_WATCHLIST_ENDPOINT;
+
+import jwt_decode from "jwt-decode";
+import CookieManager from "../../security/CookieManager.js";
 
 export default function MovieCard({
   movieId,
-  poster,
-  rating,
+  title,
+  posterUrl,
+  voteAverage,
   genres,
   overview,
   actors,
+  isSavedToWatchlist
 }) {
-
-  async function handleWatchTrailer() {
+  const [isSavedToWatchListState, setIsSavedToWatchListState] = useState(isSavedToWatchlist)
+  const token = jwt_decode(CookieManager.decryptCookie("accessToken"))
+  const userId = token.userId;
+  const data = {
+    movieId,
+    title,
+    posterUrl,
+    voteAverage,
+    genres,
+    overview,
+    actors: actors ? actors.slice(0, 3) : null,
+    userId
+  };
+  async function handleWatchTrailer(e) {
+    e.preventDefault();
     const trailer = await fetchData(`${trailerEndpoint}${movieId}`);
     MovieTrailer(trailer)
+    e.stopPropagation();
+  }
+
+  async function handleSaveToWatchlist(e) {
+    e.preventDefault();
+    const response = await sendData(`${sendToWatchListEndpoint}/${userId}`, data);
+    response.ok ? setIsSavedToWatchListState(true) : false;
+    e.stopPropagation();
+  }
+
+
+  async function handleDeleteFromWatchlist(e) {
+    e.preventDefault();
+    const response = await sendData(`${deleteFromWatchListEndpoint}${userId}/${movieId}`);
+    response.ok ? setIsSavedToWatchListState(false) : false;
+    e.stopPropagation();
   }
 
   return (
     <div className="container">
       <div className={MovieCardStyle["cellphone-container"]}>
         <div className={MovieCardStyle.movie}>
-          <div className={MovieCardStyle.menu}>
+          {/* <div className={MovieCardStyle.menu}>
             <i className="material-icons"></i>
-          </div>
+          </div> */}
           <div
             className={MovieCardStyle["movie-img"]}
             style={{
-              backgroundImage: `url(${poster})`,
+              backgroundImage: `url(${posterUrl})`,
             }}
           />
           <div className={MovieCardStyle["text-movie-cont"]}>
@@ -43,7 +81,7 @@ export default function MovieCard({
               <div className={MovieCardStyle.col1}>
                 <ul className={MovieCardStyle["movie-gen"]}>
                   <li>
-                    <MovieAverage voteAverage={rating} />
+                    <MovieAverage voteAverage={voteAverage} />
                   </li>
                   <li>
                     <MovieCardGenres genres={genres} />
@@ -58,15 +96,15 @@ export default function MovieCard({
                 <h5>SUMMARY</h5>
               </div>
               <div className={MovieCardStyle.col2}>
-                <ul className={MovieCardStyle["movie-likes"]}>
+                {/* <ul className={MovieCardStyle["movie-likes"]}>
                   <li>
                     <i className="material-icons">&#xE813;</i>
                     124
                   </li>
                   <li>
-                    <i className="material-icons">&#xE813;</i>3
+                    <i className="material-icons">&#xE813;</i>
                   </li>
-                </ul>
+                </ul> */}
               </div>
             </div>
             <div className={MovieCardStyle["mr-grid"]}>
@@ -77,8 +115,7 @@ export default function MovieCard({
               </div>
             </div>
             <div
-              className={`${MovieCardStyle["mr-grid"]} ${MovieCardStyle["actors-row"]}`}
-            >
+              className={`${MovieCardStyle["mr-grid"]} ${MovieCardStyle["actors-row"]}`} >
               <div className={MovieCardStyle.col1}>
                 {actors ?
                   <p className={MovieCardStyle["movie-actors"]}>
@@ -101,33 +138,32 @@ export default function MovieCard({
                   </h3>
                 </button>
               </div>
-              <div
-                className={`${MovieCardStyle["col6"]} ${MovieCardStyle["action-btn"]}`}
-              >
-                <i className="material-icons">&#xE161;</i>
-              </div>
-              <div
-                className={`${MovieCardStyle["col6"]} ${MovieCardStyle["action-btn"]}`}
-              >
-                <i className="material-icons">&#xE866;</i>
-              </div>
-              <div
-                className={`${MovieCardStyle["col6"]} ${MovieCardStyle["action-btn"]}`}
-              >
-                <i className="material-icons">&#xE80D;</i>
+              <div className={MovieCardStyle.col6}>
+                <div className={MovieCardStyle["action-btn"]}>
+                  {!isSavedToWatchListState ?
+                    <i> <BookmarkBorderIcon sx={{ fontSize: 30 }} onClick={handleSaveToWatchlist} /></i>
+                    :
+                    <i><BookmarkIcon sx={{ fontSize: 30 }} onClick={handleDeleteFromWatchlist} /></i>
+                  }
+                </div>
+                <div className={MovieCardStyle["action-btn"]}>
+                  <i ><ShareIcon sx={{ fontSize: 30 }} /></i>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 
 MovieCard.propTypes = {
   movieId: PropTypes.number,
-  poster: PropTypes.string,
-  rating: PropTypes.number,
+  title: PropTypes.string,
+  isSavedToWatchlist: PropTypes.bool,
+  posterUrl: PropTypes.string,
+  voteAverage: PropTypes.number,
   runtime: PropTypes.number,
   overview: PropTypes.string,
   trailer: PropTypes.string,
@@ -135,10 +171,13 @@ MovieCard.propTypes = {
     PropTypes.string,
     PropTypes.array,
   ]),
-  actors: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-      character: PropTypes.string,
-    })
-  ),
+  actors: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+        character: PropTypes.string,
+      })
+    ),
+    PropTypes.arrayOf(PropTypes.string),
+  ]),
 }

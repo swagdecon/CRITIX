@@ -18,9 +18,15 @@ import RecommendedCarousel from "../components/Carousel/RecommendedCarousel/Reco
 import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel";
 import LoadingPage from "./LoadingPage";
 import MovieButton from "../components/Other/btn/MovieButton/Button";
-import fetchData from "../security/FetchApiData";
+import { fetchData, sendData } from "../security/Data";
 import isTokenExpired from "../security/IsTokenExpired.js";
+import WatchListBtn from "..//components/Other/btn/WatchListBtn/WatchListBtn";
+import jwt_decode from "jwt-decode";
+import CookieManager from "../security/CookieManager.js";
+const sendToWatchListEndpoint = process.env.REACT_APP_ADD_TO_WATCHLIST_ENDPOINT;
 const recommendedEndpoint = process.env.REACT_APP_RECOMMENDED_ENDPOINT;
+const deleteFromWatchListEndpoint = process.env.REACT_APP_DELETE_FROM_WATCHLIST_ENDPOINT
+const getReviewEndpoint = process.env.REACT_APP_GET_REVIEW_ENDPOINT
 
 export default function IndMovie() {
   const { id } = useParams();
@@ -28,30 +34,34 @@ export default function IndMovie() {
   const [reviews, setReviews] = useState(null)
   const [recommendedMovies, setRecommendedMovies] = useState(null)
   const [isLoading, setIsLoading] = useState(true);
+  const token = CookieManager.decryptCookie('accessToken');
+  const decodedToken = jwt_decode(token);
+  const userId = decodedToken.userId;
 
+  const handleTrailerClick = () => MovieTrailer(movie.trailer)
   useEffect(() => {
     async function fetchBackendData() {
       setIsLoading(true);
       try {
         await isTokenExpired();
-        const [movies, reviews, recommendedMovies] = await Promise.all([
-          fetchData(id),
-          fetchData(`http://localhost:8080/review/${id}`),
+        const [movies, reviewsData, recommendedMovies] = await Promise.all([
+          sendData(id, userId),
+          fetchData(`${getReviewEndpoint}${id}`),
           fetchData(`${recommendedEndpoint}${id}`)
         ]);
-
-        setMovie(movies);
-        setReviews(reviews)
+        setMovie(await movies.json());
+        setReviews(reviewsData)
         setRecommendedMovies(recommendedMovies)
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", await error);
       } finally {
         setIsLoading(false);
       }
     }
     fetchBackendData();
   }, [id]);
-  console.log(recommendedMovies)
+
+  console.log(movie)
   return isLoading || !movie ? (
     <LoadingPage />
   ) : (
@@ -77,14 +87,15 @@ export default function IndMovie() {
             <div className={IndMovieStyle.movie__description}>
               {movie.overview}
             </div>
-            {movie.trailer ? (
-              <div className={IndMovieStyle["btn-wrapper"]}>
-                <MovieButton
-                  innerIcon="trailer"
-                  onClick={() => MovieTrailer(movie.trailer)}
-                />
+            <div className={IndMovieStyle["btn-wrapper"]}>
+              <MovieButton
+                innerIcon="trailer"
+                onClick={handleTrailerClick}
+              />
+              <div className={IndMovieStyle["btn-wrapper-2"]}>
+                <WatchListBtn movieData={movie} userId={userId} sendToWatchListEndpoint={sendToWatchListEndpoint} deleteFromWatchListEndpoint={deleteFromWatchListEndpoint} />
               </div>
-            ) : null}
+            </div>
             <div className={IndMovieStyle.ind_movie_review}>
               <MovieReviews movieId={movie.id} reviews={reviews} placement="header" />
             </div>
@@ -128,7 +139,7 @@ export default function IndMovie() {
               placement="userRatingSection"
             />
           </div>
-          {movie.actors.length > 0 ?
+          {movie.actors && movie.actors.length > 0 ?
             <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-4"]}`}>
               <div className={ActorStyle.CastMembers}>
                 <MovieActors actors={movie.actors} />

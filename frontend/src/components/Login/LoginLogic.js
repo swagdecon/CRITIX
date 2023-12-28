@@ -15,7 +15,7 @@ export default function LoginLogic() {
   const [profanityError, setProfanityError] = useState("");
   const [message, setMessage] = useState("");
   const filter = useMemo(() => new Filter(), []);
-  const [response, setResponse] = useState(null)
+  const [endpointResponse, setEndpointResponse] = useState(null)
   const [emailErr, setEmailErr] = useState(false)
   const navigate = useNavigate()
 
@@ -48,7 +48,7 @@ export default function LoginLogic() {
       }
     );
 
-    setResponse(response);
+    setEndpointResponse(response);
 
     if (response.ok) {
       const data = await response.json();
@@ -72,7 +72,7 @@ export default function LoginLogic() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Message response={response} message={message} style={LoginStyles} profanityError={profanityError} />
+      <Message response={endpointResponse} message={message} style={LoginStyles} profanityError={profanityError} />
       {emailErr ?
         <div >
           <button type="button" className={LoginStyles["resend-pwd-auth"]} onClick={resendEmail}>Resend authentication email</button>

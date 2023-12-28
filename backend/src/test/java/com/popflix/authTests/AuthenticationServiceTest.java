@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -745,27 +746,49 @@ public class AuthenticationServiceTest {
         // refreshToken tests //////////////////////////////////////////
         ////////////////////////////////////////////////////////////////
 
+        // If the refresh token is valid for the user, revoke all user tokens and
+        // generate a new access token and refresh token
         @Test
-        public void test_valid_refresh_token() throws IOException, JsonProcessingException {
+        void test_refreshToken_validRefreshToken() throws IOException, JsonProcessingException {
+                // Mock request header
+                when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn("Bearer valid_refresh_token");
 
-                AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, emailService);
-                String refreshToken = "valid_refresh_token";
-                User user = User.builder()
-                                .email(email)
-                                .build();
-                when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn("Bearer " + refreshToken);
-                when(jwtService.extractUsername(refreshToken)).thenReturn(email);
-                when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
-                when(jwtService.isTokenValid(refreshToken, user)).thenReturn(true);
+                // Mock JWT extraction and user retrieval
+                String userEmail = "test@example.com";
+                User user = new User();
+                user.setEmail(userEmail);
+                user.setFirstName("Test");
+                user.setId("testId");
+
+                when(jwtService.extractUsername("valid_refresh_token")).thenReturn(userEmail);
+                when(userRepository.findByEmail(userEmail)).thenReturn(Optional.of(user));
+                when(jwtService.isTokenValid("valid_refresh_token", user)).thenReturn(true);
+
+                // Mock token generation
                 String accessToken = "new_access_token";
                 String newRefreshToken = "new_refresh_token";
-                when(jwtService.generateToken(user)).thenReturn(accessToken);
-                when(jwtService.generateRefreshToken(user, user.getLastLoginTime())).thenReturn(newRefreshToken);
+                when(jwtService.generateToken(anyMap(), eq(user))).thenReturn(accessToken);
+                when(jwtService.generateRefreshToken(eq(user), any())).thenReturn(newRefreshToken);
 
+                // Invoke refreshToken method
                 JsonNode result = authenticationService.refreshToken(request, response);
 
+                // Verify interactions
+                verify(request, times(1)).getHeader(HttpHeaders.AUTHORIZATION);
+                verify(jwtService, times(1)).extractUsername("valid_refresh_token");
+                verify(userRepository, times(1)).findByEmail(userEmail);
+                verify(jwtService, times(1)).isTokenValid("valid_refresh_token", user);
+                verify(jwtService, times(1)).generateToken(anyMap(), eq(user));
+                verify(jwtService, times(1)).generateRefreshToken(eq(user), any());
+
+                // Assertions
                 assertNotNull(result);
+
+                // Verify the structure of the returned JSON
+                assertTrue(result.has("access_token"));
+                assertTrue(result.has("refresh_token"));
+
+                // Verify that the returned tokens match the generated ones
                 assertEquals(accessToken, result.get("access_token").asText());
                 assertEquals(newRefreshToken, result.get("refresh_token").asText());
         }

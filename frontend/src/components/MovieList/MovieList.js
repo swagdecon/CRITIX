@@ -9,7 +9,9 @@ import Dropdown from "../Other/Dropdown/SortByDropdown";
 import Pagination from '@mui/material/Pagination';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import isTokenExpired from "../../security/IsTokenExpired";
-import fetchData from "../../security/FetchApiData";
+import { fetchData } from "../../security/Data";
+const movieListEndpoint = process.env.REACT_APP_MOVIE_LIST_ENDPOINT
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -22,7 +24,7 @@ async function fetchBackendData(endpointName, page) {
   try {
     await isTokenExpired();
     const response = await Promise.all([
-      fetchData(`http://localhost:8080/movies/movie-list/${endpointName}?page=${page}`),
+      fetchData(`${movieListEndpoint}${endpointName}?page=${page}`),
     ]);
     return response[0]
   } catch (error) {
@@ -78,13 +80,11 @@ export default function MovieList({ endpoint }) {
         setDataLoaded(true);
       });
   }
-
   useMemo(() => {
     function getDetailedMovieData(endpointName) {
       setCurrentPage(1);
       fetchBackendData(endpointName, 1)
         .then(data => {
-          console.log(data)
           setMovies(data.movieCardList);
           setTotalPages(data.totalPages);
           setDataLoaded(true);
@@ -119,7 +119,7 @@ export default function MovieList({ endpoint }) {
           setDataLoaded(true);
         });
     }
-    getDetailedMovieData(endpoint.endpointName, currentPage);
+    getDetailedMovieData(endpoint.endpointName);
   }, [endpoint.endpointName]);
 
 
@@ -133,19 +133,23 @@ export default function MovieList({ endpoint }) {
           <h3 className={Title["movie-title"]}>{title}</h3>
           <div className={MovieListStyle["title-caption"]}>{caption}</div>
           <div className={MovieListStyle["sort-by-btn"]}>
-            <Dropdown onSelectSortBy={handleSortByChange} />
+            <Dropdown onSelectSortBy={handleSortByChange} dropdownItems={["Popularity Desc.",
+              "Popularity Asc.",
+              "A-Z",
+              "Z-A",
+              "Vote Average Desc.",
+              "Vote Average Asc."]} />
           </div>
         </div>
       </div>
-
       <div className={MovieListStyle["container"]}>
         {movies.map((movie) => (
-          <div key={movie.id}>
-            <Link to={`/movies/movie/${movie.id}`}>
+          <div key={movie.movieId}>
+            <Link to={`/movies/movie/${movie.movieId}`}>
               <MovieCard
-                movieId={movie.id}
-                poster={movie.posterUrl}
-                rating={movie.voteAverage}
+                movieId={movie.movieId}
+                posterUrl={movie.posterUrl}
+                voteAverage={movie.voteAverage}
                 runtime={movie.runtime}
                 genres={movie.genres}
                 overview={movie.overview}

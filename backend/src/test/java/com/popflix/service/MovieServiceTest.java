@@ -5,15 +5,23 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.test.util.ReflectionTestUtils;
+
 import com.popflix.model.Movie;
+import com.popflix.model.MovieCard;
+import com.popflix.model.User;
 import com.popflix.repository.MovieRepository;
+import com.popflix.repository.UserRepository;
 import info.movito.themoviedbapi.TmdbApi;
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -21,15 +29,22 @@ class MovieServiceTest {
     private MovieService movieService;
     private MovieRepository movieRepository;
     private MongoTemplate mongoTemplate;
-
     Dotenv dotenv = Dotenv.load();
     final TmdbApi tmdbApi = new TmdbApi(dotenv.get("TMDB_API_KEY"));
+    String userId = "user123";
+
+    @Mock
+    private UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
         movieRepository = mock(MovieRepository.class);
         mongoTemplate = mock(MongoTemplate.class);
         movieService = new MovieService(movieRepository, mongoTemplate);
+        userRepository = mock(UserRepository.class);
+
+        ReflectionTestUtils.setField(movieService, "userRepository", userRepository);
+
     }
 
     @Test
@@ -85,7 +100,7 @@ class MovieServiceTest {
         when(mongoTemplate.findOne(any(Query.class), eq(Movie.class), eq(collectionName))).thenReturn(expectedMovie);
 
         // Act
-        Optional<Movie> actualMovie = movieService.singleMovie(movieId, collectionName);
+        Optional<Movie> actualMovie = movieService.singleMovie(movieId, collectionName, userId);
 
         // Assert
         assertTrue(actualMovie.isPresent());
@@ -100,7 +115,7 @@ class MovieServiceTest {
         when(mongoTemplate.findOne(any(Query.class), eq(Movie.class), eq(collectionName))).thenReturn(null);
 
         // Act
-        Optional<Movie> actualMovie = movieService.singleMovie(movieId, collectionName);
+        Optional<Movie> actualMovie = movieService.singleMovie(movieId, collectionName, userId);
 
         // Assert
         assertFalse(actualMovie.isPresent());
@@ -138,7 +153,7 @@ class MovieServiceTest {
         String collectionName = "collection_name";
 
         // Act
-        Optional<Movie> actualMovie = movieService.singleMovie(movieId, collectionName);
+        Optional<Movie> actualMovie = movieService.singleMovie(movieId, collectionName, userId);
 
         // Assert
         assertFalse(actualMovie.isPresent());

@@ -5,7 +5,7 @@ const ACTIVATE_ACCOUNT_ENDPOINT = process.env.REACT_APP_ACTIVATE_ACCOUNT_ENDPOIN
 
 export default function AccountVerification() {
     const [message, setMessage] = useState(null);
-    const [response, setResponse] = useState(null)
+    const [endpointResponse, setEndpointResponse] = useState(null);
     const [showButton, setShowButton] = useState(true);
     const [countDown, setCountDown] = useState(5);
     const [countdownInterval, setCountdownInterval] = useState(null);
@@ -45,10 +45,10 @@ export default function AccountVerification() {
             startCountdown();
             if (response.ok) {
                 setMessage(responseText);
-                setResponse(response);
+                setEndpointResponse(response);
                 setShowButton(false)
             } else {
-                setResponse(response);
+                setEndpointResponse(response);
                 setMessage(responseText);
                 setShowButton(false)
             }
@@ -61,8 +61,8 @@ export default function AccountVerification() {
         <div className={verificationStyles.wrapper}>
             <div className={verificationStyles["login-box"]}>
                 <h2>Verify your email</h2>
-                {response && (
-                    <div className={response.ok ? LoginStyles["success-msg"] : LoginStyles["error-msg"]}>
+                {endpointResponse && (
+                    <div className={endpointResponse.ok ? LoginStyles["success-msg"] : LoginStyles["error-msg"]}>
                         {message}
                     </div>
                 )}

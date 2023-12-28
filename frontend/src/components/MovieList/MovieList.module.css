@@ -24,7 +24,10 @@
 .titleWrapper {
   display: flex;
 }
-
+.emptyList {
+  font-size: 30px;
+  color: white;
+}
 .title-caption {
   display: flex;
   justify-content: flex-start;

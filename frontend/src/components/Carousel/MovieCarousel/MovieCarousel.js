@@ -17,25 +17,28 @@ function MovieCarousel({ title, movies, endpoint }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useWindowResizeEffect(setWindowWidth);
   const movieChunks = chunk(movies, getChunkSize(windowWidth, movieCarouselBreakpoints));
+
   return (
     <div className={MovieCarouselStyle["carousel-wrapper"]}>
       <div className={MovieCardStyle.titleWrapper}>
         <h3 className={`${Title["homepage-carousel"]} ${Title["movie-title"]}`}>{title}</h3>
       </div>
       <Carousel className={MovieCarouselStyle["carousel-movie"]} indicators={false} interval={null}>
-        {movieChunks.map((chunk, i) => (
+        {movieChunks.map((movieChunk, i) => (
           <Carousel.Item key={i}>
             <div className={MovieCardStyle.carouselHeader} />
-            {chunk.map((movie) => (
+            {movieChunk.map((movie) => (
               <div className={MovieCardStyle["main-card-container"]} key={movie.id}>
-                <Link to={`${endpoint}/${movie.id}`}>
+                <Link to={`${endpoint}movie/${movie.id}`}>
                   <MovieCard
                     movieId={movie.id}
-                    poster={movie.posterUrl}
-                    rating={movie.voteAverage}
+                    title={movie.title}
+                    posterUrl={movie.posterUrl}
+                    voteAverage={movie.voteAverage}
                     genres={movie.genres}
                     overview={movie.overview}
                     actors={movie.actors}
+                    isSavedToWatchlist={movie.isSavedToWatchlist}
                   />
                 </Link>
               </div>

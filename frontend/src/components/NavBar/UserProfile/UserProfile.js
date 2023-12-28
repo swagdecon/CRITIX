@@ -4,6 +4,7 @@ import Logout from "../../../security/Logout";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import CookieManager from "../../../security/CookieManager";
+const DEFAULT_ACTOR_IMAGE = process.env.REACT_APP_DEFAULT_ACTOR_IMAGE
 const UserProfile = () => {
   const navigate = useNavigate();
 
@@ -20,7 +21,7 @@ const UserProfile = () => {
         < div className={userStyle.name}> {firstName}</div >
         <button className={userStyle.logout} onClick={handleSubmit}>
           <div className={userStyle.image}>
-            <img src="https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745" />
+            <img src={DEFAULT_ACTOR_IMAGE} alt="user-profile-image" />
           </div>
         </button>
       </div >

@@ -21,14 +21,14 @@ public class ReviewService {
     @Autowired
     private UserRepository userRepository;
 
-    public void createNewMovieReview(Integer movieId, String username, String userId, String reviewRating,
+    public void createNewMovieReview(Integer movieId, String author, String userId, String reviewRating,
             String reviewContent, String createdAt) {
         String reviewId = UUID.randomUUID().toString();
         Review review = new Review();
         review.setReviewId(reviewId);
         review.setMovieId(movieId);
         review.setUserId(userId);
-        review.setAuthor(username);
+        review.setAuthor(author);
         review.setRating(reviewRating);
         review.setContent(reviewContent);
         review.setCreatedDate(createdAt);

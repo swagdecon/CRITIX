@@ -1,0 +1,58 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,300);
+
+
+.btn-container {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  
+}
+
+.btn {
+  position: relative;
+  margin: 20px auto;
+  border-radius: 50px;
+  font-weight: bold;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  padding: 18px;
+  box-shadow: 0px 0px 0px 1px #0096ff;
+  color: #0096ff;
+  transition-property: width;
+  transition-duration: .2s;
+}
+
+.btn:hover  {
+  width: 150px;
+}
+
+.btn:hover  .watchlist-label {
+  top: -17px;
+  opacity: 1;
+  line-height: 15px;
+  transition-property: top, opacity;
+  transition-duration: 0.3s;
+  transition-delay: .3s;
+}
+
+.watchlist-label {
+  margin-left: 33px;
+  opacity: 0;
+  position: relative;
+}
+
+.watchlist-label span {
+  color: white;
+  font-size: 12px;
+}
+
+.add-icon {
+  position: absolute;
+  left:17%;
+  top: 15%
+}
+
+.btn i {
+  font-size: 34px;
+}

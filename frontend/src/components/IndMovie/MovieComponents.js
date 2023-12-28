@@ -30,7 +30,6 @@ function ParseYear({ date }) {
 }
 
 function MovieTrailer(trailerUrl) {
-  console.log(trailerUrl);
   if (trailerUrl) {
     const a = document.createElement('a');
     a.href = trailerUrl;
@@ -167,7 +166,7 @@ function MovieDetails({
           icon="&#xf7f3;"
         />
         <GlassCard
-          name={"Release Date"}
+          name={"RELEASE DATE"}
           value={releaseDate}
           iconString={"&#xebcc;"}
           icon="&#xebcc;"

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import ReviewStyle from "./OtherReviews.module.css";
 import UserRating from "../Rating/UserRating/UserRating";
 import Pagination from "@mui/material/Pagination";
@@ -7,6 +7,8 @@ import PropTypes from "prop-types";
 export default function ReviewSection({ reviews }) {
     const [currentPage, setCurrentPage] = useState(1);
     const commentsPerPage = 2;
+    const handlePageChange = useCallback((page) => setCurrentPage(page))
+
     const totalPages = Math.ceil(reviews.length / commentsPerPage);
     const displayReviews = useMemo(() => {
         let reviewsToDisplay = [];
@@ -28,6 +30,7 @@ export default function ReviewSection({ reviews }) {
                                         <img
                                             src={review.avatar}
                                             className={ReviewStyle["profile-picture"]}
+                                            alt="user-profile-image"
                                         />
                                     </div>
                                     <div className={ReviewStyle["media-body"]}>
@@ -39,7 +42,6 @@ export default function ReviewSection({ reviews }) {
 
                                             <div className={ReviewStyle["rating-row"]}>
                                                 {review.rating ? (
-
                                                     <UserRating percentage={(review.reviewId == null ? review.rating * 10 : parseInt(review.rating))} />
                                                 ) : null}
                                             </div>
@@ -56,7 +58,7 @@ export default function ReviewSection({ reviews }) {
                             color="primary"
                             count={totalPages}
                             page={currentPage}
-                            onChange={(e, page) => setCurrentPage(page)}
+                            onChange={handlePageChange}
                             sx={{
                                 "& .MuiPaginationItem-root": {
                                     color: "#ffffff",

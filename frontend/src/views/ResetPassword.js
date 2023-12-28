@@ -7,10 +7,12 @@ export default function ResetPassword() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [message, setMessage] = useState("");
-    const [response, setResponse] = useState(null)
+    const [endpointResponse, setEndpointResponse] = useState(null)
     const [showButton, setShowButton] = useState(true);
     const [countDown, setCountDown] = useState(5);
     const [countdownInterval, setCountdownInterval] = useState(null);
+    const handlePassword = (e) => setPassword(e.target.value)
+    const handleConfirmPassword = (e) => setConfirmPassword(e.target.value)
 
     const startCountdown = () => {
         const interval = setInterval(() => {
@@ -35,9 +37,9 @@ export default function ResetPassword() {
         e.preventDefault();
 
         if (password !== confirmPassword) {
-            setMessage(`Error: Passwords don't match`);
+            setMessage("Error: Passwords don't match");
         } else if (password.length < 7 || confirmPassword.length < 7 || !/[a-zA-Z0-9]/.test(password) || !/[a-zA-Z0-9]/.test(confirmPassword)) {
-            setMessage(`Error: Your password must be a mix of letters and numbers, and at least 7 characters`)
+            setMessage("Error: Your password must be a mix of letters and numbers, and at least 7 characters")
         } else {
             const currentURL = window.location.href;
             const tokenStartIndex = currentURL.indexOf("/reset-password/") + "/reset-password/".length;
@@ -59,10 +61,10 @@ export default function ResetPassword() {
                     setMessage(responseText);
                     setPassword("");
                     setConfirmPassword("");
-                    setResponse(response);
+                    setEndpointResponse(response);
                     setShowButton(false)
                 } else {
-                    setResponse(response);
+                    setEndpointResponse(response);
                     setMessage(responseText);
                     setShowButton(false)
 
@@ -77,8 +79,8 @@ export default function ResetPassword() {
         <div className={resetPwdStyles.wrapper}>
             <div className={resetPwdStyles["login-box"]}>
                 <h2>Reset Password</h2>
-                {response && (
-                    <div className={response.ok ? LoginStyles["success-msg"] : LoginStyles["error-msg"]}>
+                {endpointResponse && (
+                    <div className={endpointResponse.ok ? LoginStyles["success-msg"] : LoginStyles["error-msg"]}>
                         {message}
                     </div>
                 )}
@@ -92,7 +94,7 @@ export default function ResetPassword() {
                             value={password}
                             autoComplete="off"
                             placeholder=""
-                            onChange={(e) => setPassword(e.target.value)} />
+                            onChange={handlePassword} />
                         <label>New Password</label>
                     </div>
                     <div className={resetPwdStyles["user-box"]}>
@@ -104,7 +106,7 @@ export default function ResetPassword() {
                             value={confirmPassword}
                             autoComplete="off"
                             placeholder=""
-                            onChange={(e) => setConfirmPassword(e.target.value)} />
+                            onChange={handleConfirmPassword} />
                         <label>Confirm Password</label>
                         <div />
                     </div>

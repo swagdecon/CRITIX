@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useCallback } from "react"
 import resetPwdStyles from "../misc/ResetPassword.module.css"
 import LoginStyles from "../components/Login/login.module.css"
 const SEND_RESET_PWD_ENDPOINT = process.env.REACT_APP_SEND_PWD_RESET_ENDPOINT;
@@ -6,8 +6,9 @@ const SEND_RESET_PWD_ENDPOINT = process.env.REACT_APP_SEND_PWD_RESET_ENDPOINT;
 export default function ConfirmEmailForPwdReset() {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState(null);
-    const [response, setResponse] = useState(null)
+    const [endpointResponse, setEndpointResponse] = useState(null)
     const [showInputFields, setShowInputFields] = useState(true);
+    const handleClick = useCallback((e) => setEmail(e.target.value))
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -21,10 +22,10 @@ export default function ConfirmEmailForPwdReset() {
             if (response.ok) {
                 setMessage(responseText);
                 setEmail("");
-                setResponse(response);
+                setEndpointResponse(response);
                 setShowInputFields(false)
             } else {
-                setResponse(response);
+                setEndpointResponse(response);
                 setMessage(responseText);
                 setShowInputFields(false)
             }
@@ -37,8 +38,8 @@ export default function ConfirmEmailForPwdReset() {
         <div className={resetPwdStyles.wrapper}>
             <div className={resetPwdStyles["login-box"]}>
                 <h2>Reset Password</h2>
-                {response && (
-                    <div className={response.ok ? LoginStyles["success-msg"] : LoginStyles["error-msg"]}>
+                {endpointResponse && (
+                    <div className={endpointResponse.ok ? LoginStyles["success-msg"] : LoginStyles["error-msg"]}>
                         {message}
                     </div>
                 )}
@@ -50,7 +51,7 @@ export default function ConfirmEmailForPwdReset() {
                                 name="email"
                                 required
                                 autoComplete="off"
-                                onChange={(e) => setEmail(e.target.value)}
+                                onChange={handleClick}
                                 value={email}
                                 placeholder=""
                             />

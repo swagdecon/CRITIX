@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { ParseYear } from "../../IndMovie/MovieComponents";
 import ReactPlaceholderTyping from 'react-placeholder-typing'
 import isTokenExpired from "../../../security/IsTokenExpired";
-import fetchData from "../../../security/FetchApiData";
+import { fetchData } from "../../../security/Data";
 const searchEndpoint = process.env.REACT_APP_SEARCH_ENDPOINT;
 const miniPosterUrl = process.env.REACT_APP_MINI_POSTER_URL;
 
@@ -57,7 +57,6 @@ export default function Search(props) {
 
       const search = await fetchData(endpoint);
       setMovieResults(search);
-      console.log(movieResults)
     } catch (error) {
       console.error("Error fetching data:", error);
     }

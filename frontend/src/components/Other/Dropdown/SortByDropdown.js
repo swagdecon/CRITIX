@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import DropdownStyle from "./dropdown.module.css";
 import PropTypes from "prop-types";
 
-export default function Dropdown({ onSelectSortBy }) {
+export default function Dropdown({ onSelectSortBy, dropdownItems }) {
   const [selectedValue, setSelectedValue] = useState("↓");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -34,14 +34,14 @@ export default function Dropdown({ onSelectSortBy }) {
     };
   }, []);
 
-  const dropdownItems = [
-    "Popularity Desc.",
-    "Popularity Asc.",
-    "A-Z",
-    "Z-A",
-    "Vote Average Desc.",
-    "Vote Average Asc.",
-  ];
+  // const dropdownItems = [
+  //   "Popularity Desc.",
+  //   "Popularity Asc.",
+  //   "A-Z",
+  //   "Z-A",
+  //   "Vote Average Desc.",
+  //   "Vote Average Asc.",
+  // ];
 
   return (
     <div className={DropdownStyle["horizontal-dropdown"]} ref={dropdownRef}>
@@ -63,4 +63,5 @@ export default function Dropdown({ onSelectSortBy }) {
 
 Dropdown.propTypes = {
   onSelectSortBy: PropTypes.func,
+  dropdownItems: PropTypes.array
 };

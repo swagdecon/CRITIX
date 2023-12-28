@@ -10,6 +10,7 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -19,9 +20,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,7 +32,9 @@ import com.popflix.model.Movie;
 import com.popflix.model.MovieCard;
 import com.popflix.model.MovieResults;
 import com.popflix.model.Person;
+import com.popflix.model.User;
 import com.popflix.repository.MovieRepository;
+import com.popflix.repository.UserRepository;
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbMovies;
 import info.movito.themoviedbapi.model.Credits;
@@ -52,6 +57,8 @@ public class MovieService {
 
   private final MovieRepository movieRepository;
   private final MongoTemplate mongoTemplate;
+  @Autowired
+  private UserRepository userRepository;
   private final TmdbApi tmdbApi = new TmdbApi(TMDB_API_KEY);
   private ScheduledExecutorService executor;
 
@@ -62,8 +69,12 @@ public class MovieService {
 
   @PostConstruct
   public void init() {
-    executor = Executors.newScheduledThreadPool(1);
-    executor.scheduleAtFixedRate(this::saveTopMovies, 0, 24, TimeUnit.HOURS);
+    try {
+      executor = Executors.newScheduledThreadPool(1);
+      executor.scheduleAtFixedRate(this::saveTopMovies, 0, 24, TimeUnit.HOURS);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   public void shutdown() {
@@ -88,15 +99,35 @@ public class MovieService {
     return movieRepository.findMovieById(id);
   }
 
+  public List<Movie> getTop20MoviesForUser(String collectionName, String userId) {
+    Query query = new Query();
+    List<Movie> movies = mongoTemplate.find(query, Movie.class, collectionName);
+
+    for (Movie movie : movies) {
+      boolean watchListMovieAlreadyExists = userRepository.doesMovieExist(userId, movie.getId());
+      movie.setIsSavedToWatchlist(watchListMovieAlreadyExists);
+    }
+
+    return movies;
+  }
+
   public List<Movie> getTop20Movies(String collectionName) {
     Query query = new Query();
     return mongoTemplate.find(query, Movie.class, collectionName);
   }
 
-  public Optional<Movie> singleMovie(Integer id, String collectionName) {
+  public Optional<Movie> singleMovie(Integer movieId, String collectionName, String userId) {
     Query query = new Query();
-    query.addCriteria(Criteria.where("id").is(id));
-    return Optional.ofNullable(mongoTemplate.findOne(query, Movie.class, collectionName));
+    query.addCriteria(Criteria.where("id").is(movieId));
+
+    Movie movie = mongoTemplate.findOne(query, Movie.class, collectionName);
+    if (movie != null) {
+      boolean watchListMovieAlreadyExists = userRepository.doesMovieExist(userId, movieId);
+      movie.setIsSavedToWatchlist(watchListMovieAlreadyExists);
+      return Optional.of(movie);
+    } else {
+      return Optional.empty();
+    }
   }
 
   private void setMovieDetails(Movie movie, MovieDb movieApi) {
@@ -127,12 +158,17 @@ public class MovieService {
     setTrailer(movie, movieApi);
   }
 
-  public Optional<Movie> singleTmdbMovie(Integer movieId) {
+  public Optional<Movie> singleTmdbMovie(Integer movieId, String userId) {
+
+    boolean watchListMovieAlreadyExists = userRepository.doesMovieExist(userId, movieId);
+    MovieDb movieApi = tmdbApi.getMovies().getMovie(movieId, "en-US");
+
     Movie movie = new Movie();
     movie.setId(movieId);
-    MovieDb movieApi = tmdbApi.getMovies().getMovie(movie.getId(), "en-US");
     movie.setProviderResults(tmdbApi.getMovies().getWatchProviders(movieId));
+    movie.setIsSavedToWatchlist(watchListMovieAlreadyExists);
     setMovieDetails(movie, movieApi);
+
     return Optional.of(movie);
   }
 
@@ -248,9 +284,9 @@ public class MovieService {
 
       for (MovieDb movieDb : collection) {
         Movie movie = new Movie();
+
         String posterUrl = TMDB_IMAGE_PREFIX + movieDb.getPosterPath();
         String backdropUrl = TMDB_IMAGE_PREFIX + movieDb.getBackdropPath();
-
         movie.setId(movieDb.getId());
         movie.setTitle(movieDb.getTitle());
         movie.setOriginalLanguage(movieDb.getOriginalLanguage());
@@ -504,7 +540,7 @@ public class MovieService {
       double voteAverageValue = JsonNodeVoteAverage.asDouble();
       double roundedVoteAverageValue = Math.round(voteAverageValue * 10.0) / 10.0;
       int voteAverage = (int) Math.round(roundedVoteAverageValue * 10);
-
+      movie.setMovieId(movieNode.get("id").asInt());
       movie.setPosterUrl(posterUrl);
       movie.setVoteAverage(voteAverage);
       movie.setTitle(movie.getTitle());
@@ -534,6 +570,73 @@ public class MovieService {
       return YT_URL_PREFIX + firstTrailerKey;
     } else {
       return "No Trailers Available";
+    }
+  }
+
+  public void addMovieToWatchlist(String userId, MovieCard movieCardData) throws Exception {
+    try {
+      User user = userRepository.findById(userId)
+          .orElseThrow(() -> new UsernameNotFoundException("User id not found"));
+
+      List<MovieCard> watchList = user.getWatchList();
+      if (watchList == null) {
+        watchList = new ArrayList<>();
+      }
+
+      boolean watchListMovieAlreadyExists = userRepository.doesMovieExist(userId, movieCardData.getMovieId());
+
+      if (!watchListMovieAlreadyExists) {
+        MovieCard movieCard = new MovieCard();
+        movieCard.setMovieId(movieCardData.getMovieId());
+        movieCard.setVoteAverage(movieCardData.getVoteAverage());
+        movieCard.setTitle(movieCardData.getTitle());
+        movieCard.setIsSavedToWatchlist(true);
+        movieCard.setGenres(movieCardData.getGenres());
+        movieCard.setOverview(movieCardData.getOverview());
+        movieCard.setPosterUrl(movieCardData.getPosterUrl());
+        movieCard.setActors(movieCardData.getActors());
+        watchList.add(movieCard);
+        user.setWatchList(watchList);
+        userRepository.save(user);
+      } else {
+        throw new Exception("User already has movie in watchlist, returning...");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void deleteMovieFromWatchlist(String userId, Integer movieId) throws IOException {
+    try {
+      User user = userRepository.findById(userId)
+          .orElseThrow(() -> new UsernameNotFoundException("User id not found"));
+
+      List<MovieCard> watchList = user.getWatchList();
+
+      if (watchList != null) {
+        Iterator<MovieCard> iterator = watchList.iterator();
+        while (iterator.hasNext()) {
+          MovieCard movieCard = iterator.next();
+          Integer cardMovieId = movieCard.getMovieId();
+          if (cardMovieId != null && cardMovieId.equals(movieId)) {
+            iterator.remove();
+            break;
+          }
+        }
+        user.setWatchList(watchList);
+        userRepository.save(user);
+      }
+    } catch (Exception e) {
+      System.out.println(e);
+    }
+  }
+
+  public List<MovieCard> getUserWatchlist(String userId) throws Exception {
+    try {
+      List<MovieCard> watchList = userRepository.findUserWithWatchListById(userId).get().getWatchList();
+      return watchList;
+    } catch (Exception e) {
+      throw new Exception();
     }
   }
 }
