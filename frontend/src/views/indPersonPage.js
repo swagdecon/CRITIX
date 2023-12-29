@@ -4,13 +4,13 @@ import IndPersonStyle from "../components/IndPerson/ind_person.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import NavBar from "../components/NavBar/NavBar.js";
 import "typeface-ibm-plex-sans";
-import { fetchData } from "../security/Data";
+import { fetchData } from "../security/Data.js";
 import {
   PersonTitle,
   PersonJobs,
   PersonRoles,
-} from "../components/IndPerson/PersonComponents";
-import LoadingPage from "./LoadingPage";
+} from "../components/IndPerson/PersonComponents.js";
+import LoadingPage from "./LoadingPage.js";
 export default function IndPerson() {
   const { id } = useParams();
 

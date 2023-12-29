@@ -36,7 +36,7 @@ class MovieControllerTest {
     }
 
     @Test
-    void testGetSingleMovie() {
+    void testGetSingleMovie() throws IOException, InterruptedException, URISyntaxException {
         int movieId = 123;
         String userId = "user123";
         Movie movie = new Movie();

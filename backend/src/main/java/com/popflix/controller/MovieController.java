@@ -26,7 +26,8 @@ public class MovieController {
     private MovieService movieService;
 
     @PostMapping("/movie/{movieId}")
-    public ResponseEntity<Optional<Movie>> getSingleMovie(@PathVariable Integer movieId, @RequestBody String userId) {
+    public ResponseEntity<Optional<Movie>> getSingleMovie(@PathVariable Integer movieId, @RequestBody String userId)
+            throws IOException, InterruptedException, URISyntaxException {
         // WORKAROUND DO NOT DELETE
         String cleanedUserId = userId.replace("\"", "");
         return new ResponseEntity<Optional<Movie>>(movieService.singleTmdbMovie(movieId, cleanedUserId), HttpStatus.OK);

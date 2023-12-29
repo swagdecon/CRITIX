@@ -158,14 +158,15 @@ public class MovieService {
     setTrailer(movie, movieApi);
   }
 
-  public Optional<Movie> singleTmdbMovie(Integer movieId, String userId) {
+  public Optional<Movie> singleTmdbMovie(Integer movieId, String userId)
+      throws IOException, InterruptedException, URISyntaxException {
 
     boolean watchListMovieAlreadyExists = userRepository.doesMovieExist(userId, movieId);
     MovieDb movieApi = tmdbApi.getMovies().getMovie(movieId, "en-US");
 
     Movie movie = new Movie();
     movie.setId(movieId);
-    movie.setProviderResults(tmdbApi.getMovies().getWatchProviders(movieId));
+    setProviderResults(movie, movieId);
     movie.setIsSavedToWatchlist(watchListMovieAlreadyExists);
     setMovieDetails(movie, movieApi);
 
@@ -176,6 +177,23 @@ public class MovieService {
     if (movie.getVoteAverage() == null) {
       movie.setVoteAverage(Math.round(movieApi.getVoteAverage() * 10));
     }
+  }
+
+  private void setProviderResults(Movie movie, Integer movieId)
+      throws IOException, InterruptedException, URISyntaxException {
+    String url = "https://api.themoviedb.org/3/movie/" + movieId + "/watch/providers" + "?" +
+        "api_key=" + TMDB_API_KEY;
+
+    HttpClient httpClient = HttpClient.newHttpClient();
+    HttpRequest request = HttpRequest.newBuilder()
+        .uri(new URI(url))
+        .GET()
+        .build();
+
+    HttpResponse<String> response = httpClient.send(request,
+        HttpResponse.BodyHandlers.ofString());
+    String responseBody = response.body();
+    System.out.println(responseBody);
   }
 
   private void setGenres(Movie movie, MovieDb movieApi) {
