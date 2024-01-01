@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
@@ -26,6 +27,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.popflix.model.Movie;
@@ -44,7 +47,6 @@ import info.movito.themoviedbapi.model.ProductionCompany;
 import info.movito.themoviedbapi.model.Reviews;
 import info.movito.themoviedbapi.model.Video;
 import info.movito.themoviedbapi.model.people.PersonCast;
-import info.movito.themoviedbapi.model.providers.ProviderResults;
 import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.annotation.PostConstruct;
 
@@ -130,7 +132,8 @@ public class MovieService {
     }
   }
 
-  private void setMovieDetails(Movie movie, MovieDb movieApi) {
+  private void setMovieDetails(Movie movie, MovieDb movieApi)
+      throws IOException, InterruptedException, URISyntaxException {
 
     String posterUrl = TMDB_IMAGE_PREFIX + movieApi.getPosterPath();
     String backdropUrl = TMDB_IMAGE_PREFIX + movieApi.getBackdropPath();
@@ -147,8 +150,9 @@ public class MovieService {
     movie.setRevenue(movieApi.getRevenue());
     movie.setRuntime(movieApi.getRuntime());
     movie.setVoteCount(movieApi.getVoteCount());
-    movie.setProviderResults(movieApi.getWatchProviders());
+
     // Complex fields which require functions to parse api data
+    setProviderResults(movie, movieApi.getId());
     setVoteAverage(movie, movieApi);
     setGenres(movie, movieApi);
     setActors(movie, movieApi);
@@ -166,7 +170,6 @@ public class MovieService {
 
     Movie movie = new Movie();
     movie.setId(movieId);
-    setProviderResults(movie, movieId);
     movie.setIsSavedToWatchlist(watchListMovieAlreadyExists);
     setMovieDetails(movie, movieApi);
 
@@ -181,8 +184,7 @@ public class MovieService {
 
   private void setProviderResults(Movie movie, Integer movieId)
       throws IOException, InterruptedException, URISyntaxException {
-    String url = "https://api.themoviedb.org/3/movie/" + movieId + "/watch/providers" + "?" +
-        "api_key=" + TMDB_API_KEY;
+    String url = "https://api.themoviedb.org/3/movie/" + movieId + "/watch/providers?api_key=" + TMDB_API_KEY;
 
     HttpClient httpClient = HttpClient.newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
@@ -190,10 +192,34 @@ public class MovieService {
         .GET()
         .build();
 
-    HttpResponse<String> response = httpClient.send(request,
-        HttpResponse.BodyHandlers.ofString());
+    HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
     String responseBody = response.body();
-    System.out.println(responseBody);
+
+    if (response.statusCode() != 200) {
+      throw new RuntimeException("Failed to fetch provider results. Status code: " + response.statusCode());
+    }
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    Map<String, Object> resultMap = new HashMap<>();
+
+    try {
+      JsonNode rootNode = objectMapper.readTree(responseBody);
+      JsonNode resultsNode = rootNode.path("results");
+
+      // Check for the "us" locale and store its data if available
+      if (resultsNode.has("US")) {
+        resultMap.put("US", objectMapper.treeToValue(resultsNode.get("US"), Map.class));
+      }
+
+      // Check for the "uk" locale and store its data if available
+      if (resultsNode.has("GB")) { // "GB" is used for the United Kingdom
+        resultMap.put("UK", objectMapper.treeToValue(resultsNode.get("GB"), Map.class));
+      }
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+      throw new RuntimeException("Failed to parse provider results. Error: " + e.getMessage());
+    }
+    movie.setProviderResults(resultMap);
   }
 
   private void setGenres(Movie movie, MovieDb movieApi) {
@@ -354,17 +380,17 @@ public class MovieService {
           String imdbId = movieDb.getImdbID();
           movie.setImdbId(imdbId);
         }
-        if (movie.getProviderResults() == null) {
-          ProviderResults watchProvider = movieDb.getWatchProviders();
-          movie.setProviderResults(watchProvider);
+        try {
+          setProviderResults(movie, movieDb.getId());
+          setGenres(movie, movieDb);
+          setActors(movie, movieDb);
+          setReviews(movie, movieDb);
+          setProductionCompanies(movie, movieDb);
+          setMovieStatus(movie, movieDb);
+          setTrailer(movie, movieDb);
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+          e.printStackTrace();
         }
-
-        setGenres(movie, movieDb);
-        setActors(movie, movieDb);
-        setReviews(movie, movieDb);
-        setProductionCompanies(movie, movieDb);
-        setMovieStatus(movie, movieDb);
-        setTrailer(movie, movieDb);
 
         mongoTemplate.save(movie, collectionName);
       }
