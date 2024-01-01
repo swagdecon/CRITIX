@@ -10,8 +10,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import info.movito.themoviedbapi.model.providers.ProviderResults;
-
 @Document
 @Data
 @AllArgsConstructor

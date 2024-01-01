@@ -42,8 +42,7 @@ class MovieTest {
 
         Movie movie = new Movie(id, adult, backdropUrl, genreIds, genres, movieId, originalLanguage,
                 originalTitle, overview, popularity, posterUrl, releaseDate, title, trailer, adult, voteAverage,
-                null, providers,
-                voteCount, imdbId, budget, tagline, revenue, runtime, actors, actorImagePaths, reviews,
+                null, voteCount, imdbId, budget, tagline, revenue, runtime, actors, actorImagePaths, reviews,
                 productionCompanies,
                 movieStatus);
 

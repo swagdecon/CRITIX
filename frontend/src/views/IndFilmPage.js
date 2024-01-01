@@ -8,7 +8,7 @@ import MovieReviews from "../components/Review/MovieReviews";
 import backupPoster from "../misc/noPosterAvailable.png"
 import {
   MovieGenres,
-  MovieTrailer,
+  WatchMovieNow,
   MovieAverage,
   ParseYear,
   EmbeddedMovieTrailer,
@@ -38,7 +38,7 @@ export default function IndMovie() {
   const decodedToken = jwt_decode(token);
   const userId = decodedToken.userId;
 
-  const handleTrailerClick = () => MovieTrailer(movie.trailer)
+  const handleWatchNowClick = () => WatchMovieNow(movie.providerResults)
   useEffect(() => {
     async function fetchBackendData() {
       setIsLoading(true);
@@ -89,8 +89,8 @@ export default function IndMovie() {
             </div>
             <div className={IndMovieStyle["btn-wrapper"]}>
               <MovieButton
-                innerIcon="trailer"
-                onClick={handleTrailerClick}
+                innerIcon="watchNow"
+                onClick={handleWatchNowClick}
               />
               <div className={IndMovieStyle["btn-wrapper-2"]}>
                 <WatchListBtn movieData={movie} userId={userId} sendToWatchListEndpoint={sendToWatchListEndpoint} deleteFromWatchListEndpoint={deleteFromWatchListEndpoint} />

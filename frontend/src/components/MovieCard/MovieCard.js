@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import {
   MovieAverage,
   TruncateDescription,
-  MovieTrailer
+  OpenLinkInNewTab
 } from "../IndMovie/MovieComponents.js";
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
@@ -44,7 +44,7 @@ export default function MovieCard({
   async function handleWatchTrailer(e) {
     e.preventDefault();
     const trailer = await fetchData(`${trailerEndpoint}${movieId}`);
-    MovieTrailer(trailer)
+    OpenLinkInNewTab(trailer)
     e.stopPropagation();
   }
 
