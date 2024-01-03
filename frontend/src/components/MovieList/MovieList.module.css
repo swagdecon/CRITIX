@@ -10,6 +10,15 @@
   align-items: flex-end;
   z-index: 1;
 }
+.watchlist-container {
+  padding-top: 6%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 1;
+}
+
 
 .title-container {
   position: absolute;

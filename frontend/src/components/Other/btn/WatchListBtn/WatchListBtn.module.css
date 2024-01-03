@@ -56,18 +56,11 @@
 .btn i {
   font-size: 34px;
 }
-@media (min-width: 1700px) {
-  .content-wrapper .hero-content .movie_hero_info_container {
-    display: flex;
-    flex-wrap: wrap;
+@media (max-width: 1700px) {
+  .btn:hover  {
+  width: 22px;
   }
-
-  .btn-wrapper {
-    width: 100%;
-  }
-
-  .btn-wrapper-2 {
-    width: 100%;
-    margin-top: 10px; /* Adjust as needed for spacing */
+   .watchlist-label {
+    display: none;
   }
 }

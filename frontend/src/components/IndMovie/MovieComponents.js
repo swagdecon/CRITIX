@@ -51,29 +51,30 @@ function OpenLinkInNewTab(url) {
   }
 }
 function WatchMovieNow(watchProviders) {
-  const ukProviders = watchProviders && watchProviders.uk;
-  const usProviders = watchProviders && watchProviders.us;
-  const disneyPlusVideoExists = ukProviders.flatrate.find(provider => provider.provider_name === 'Disney Plus');
-  const amazonVideoExists = ukProviders.buy.find(provider => provider.provider_name === 'Amazon Video');
-  const paramountVideoExists = ukProviders.flatrate.find(provider => provider.provider_name === 'Paramount Plus}');
-  const appleVideoExists = ukProviders.buy.find(provider => provider.provider_name === 'Apple TV');
-  const amcVideoExists = usProviders.buy.find(provider => provider.provider_name === 'AMC on Demand');
-  const nowTVVideoExists = ukProviders.flatrate.find(provider => provider.provider_name === 'Now TV');
+  const disneyPlusVideoExists = watchProviders?.UK?.flatrate?.find(provider => provider.provider_name === 'Disney Plus');
+  const amazonVideoExists = watchProviders?.UK?.buy?.find(provider => provider.provider_name === 'Amazon Video');
+  const paramountVideoExists = watchProviders?.UK?.flatrate?.find(provider => provider.provider_name === 'Paramount Plus');
+  const appleVideoExists = watchProviders?.US?.buy?.find(provider => provider.provider_name === 'Apple TV');
+  const amcVideoExists = watchProviders?.US?.buy?.find(provider => provider.provider_name === 'AMC on Demand');
+  const nowTVVideoExists = watchProviders?.UK?.flatrate?.find(provider => provider.provider_name === 'Now TV');
 
   if (disneyPlusVideoExists) {
     OpenLinkInNewTab(disneyPlusAffiliateUrl);
   } else if (amazonVideoExists) {
     OpenLinkInNewTab(amazonAffiliateUrl);
+  } else if (nowTVVideoExists) {
+    OpenLinkInNewTab(nowTVAffiliateUrl);
   } else if (paramountVideoExists) {
     OpenLinkInNewTab(paramountAffiliateUrl);
   } else if (appleVideoExists) {
     OpenLinkInNewTab(appleAffiliateUrl);
   } else if (amcVideoExists) {
     OpenLinkInNewTab(amcAffiliateUrl);
-  } else if (nowTVVideoExists) {
+  } else {
     OpenLinkInNewTab(nowTVAffiliateUrl);
   }
 }
+
 
 function MovieAverage({ voteAverage }) {
   return (

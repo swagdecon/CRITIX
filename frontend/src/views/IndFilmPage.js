@@ -39,6 +39,7 @@ export default function IndMovie() {
   const userId = decodedToken.userId;
 
   const handleWatchNowClick = () => WatchMovieNow(movie.providerResults)
+
   useEffect(() => {
     async function fetchBackendData() {
       setIsLoading(true);

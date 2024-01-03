@@ -39,6 +39,7 @@ function MovieCarousel({ title, movies, endpoint }) {
                     overview={movie.overview}
                     actors={movie.actors}
                     isSavedToWatchlist={movie.isSavedToWatchlist}
+                    shareLink={`${endpoint}movie/${movie.id}`}
                   />
                 </Link>
               </div>

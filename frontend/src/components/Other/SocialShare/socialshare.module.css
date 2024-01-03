@@ -1,0 +1,19 @@
+
+.popup-content {
+    background: rgb(0, 0, 0);
+    padding: 30px;
+  }
+.title {
+    justify-content: center;
+    display: flex;
+    color: #0096ff;
+    background: rgb(0, 0, 0);
+    font-family: "CoreCircus", sans-serif;
+
+}
+.share_container {
+    display: flex;
+justify-content: space-around;  
+  align-items: center;
+  flex-direction: row;
+}
