@@ -24,7 +24,9 @@ import {
     EmailIcon,
 } from "react-share";
 
-export default function SharePagePopup(shareUrl) {
+export default function SharePagePopup({ shareUrl }) {
+    const title = "Check out this movie on Popflix!"
+    const totalUrl = "https://popflix.netlify.app" + shareUrl
     return (
         <div>
             <div className={socialShareStyle.title}>
@@ -34,70 +36,87 @@ export default function SharePagePopup(shareUrl) {
                 <div className={socialShareStyle.share_container}>
                     <div className="EmailShareButton">
                         <EmailShareButton
-                            url={shareUrl}
+                            title={title}
+                            url={totalUrl}
                         >
                             <EmailIcon size={50} round />
                         </EmailShareButton>
                     </div>
                     <div className="FbShareButton">
                         <FacebookShareButton
-                            url={shareUrl}
+                            title={title}
+                            url={totalUrl}
                         >
                             <FacebookIcon size={50} round />
                         </FacebookShareButton>
                     </div>
                     <div className="FbMsgShareButton">
                         <FacebookMessengerShareButton
-                            url={shareUrl}
+                            url={totalUrl}
+                            title={title}
                         >
                             <FacebookMessengerIcon size={50} round />
                         </FacebookMessengerShareButton>
                     </div>
-                    <div className="ReddotShareButton">
+                    <div className="RedditShareButton">
                         <RedditShareButton
-                            url={shareUrl}
+                            url={totalUrl}
+                            title={title}
+
                         >
                             <RedditIcon size={50} round />
                         </RedditShareButton>
                     </div>
                     <div className="PinterestShareButton">
                         <PinterestShareButton
-                            url={shareUrl}
+                            url={totalUrl}
+                            title={title}
+
                         >
                             <PinterestIcon size={50} round />
                         </PinterestShareButton>
                     </div>
                     <div className="TwitterShareButton">
                         <TwitterShareButton
-                            url={shareUrl}
+                            url={totalUrl}
+                            title={title}
+
                         >
                             <XIcon size={50} round />
                         </TwitterShareButton>
                     </div>
                     <div className="LinkedInShareButton">
                         <LinkedinShareButton
-                            url={shareUrl}
+                            url={totalUrl}
+                            title={title}
+
                         >
                             <LinkedinIcon size={50} round />
                         </LinkedinShareButton>
                     </div>
                     <div className="TelegramShareButton">
                         <TelegramShareButton
-                            url={shareUrl}
+                            url={totalUrl}
+                            title={title}
+
                         >
                             <TelegramIcon size={50} round />
                         </TelegramShareButton>
                     </div>
                     <div className="TumblerShareButton">
                         <TumblrShareButton
-                            url={shareUrl}
+                            url={totalUrl}
+                            title={title}
+
                         >
                             <TumblrIcon size={50} round />
                         </TumblrShareButton>
                     </div>
                     <div className="WhatsappShareButton">
                         <WhatsappShareButton
-                            url={shareUrl}
+                            url={totalUrl}
+                            title={title}
+
                         >
                             <WhatsappIcon size={50} round />
                         </WhatsappShareButton>
@@ -109,5 +128,5 @@ export default function SharePagePopup(shareUrl) {
 }
 
 SharePagePopup.propTypes = {
-    shareLink: PropTypes.string.isRequired,
+    shareUrl: PropTypes.string.isRequired,
 };

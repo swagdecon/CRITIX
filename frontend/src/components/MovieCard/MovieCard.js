@@ -30,7 +30,7 @@ export default function MovieCard({
   overview,
   actors,
   isSavedToWatchlist,
-  shareLink
+  shareUrl
 }) {
   const [isSavedToWatchListState, setIsSavedToWatchListState] = useState(isSavedToWatchlist)
   const token = jwt_decode(CookieManager.decryptCookie("accessToken"))
@@ -154,7 +154,7 @@ export default function MovieCard({
                 <div className={MovieCardStyle["action-btn"]}>
                   <Popup trigger={
                     <i ><ShareIcon sx={{ fontSize: 30 }} onClick={(e) => e.preventDefault()} /></i>
-                  } modal><SharePagePopup shareLink={shareLink} /> </Popup>
+                  } modal><SharePagePopup shareUrl={shareUrl} /> </Popup>
                 </div>
               </div>
             </div>
@@ -187,5 +187,5 @@ MovieCard.propTypes = {
     ),
     PropTypes.arrayOf(PropTypes.string),
   ]),
-  shareLink: PropTypes.string,
+  shareUrl: PropTypes.string,
 }

@@ -35,7 +35,7 @@ export default function RecommendedCarousel({ recommendedMovies }) {
                       genres={movie.genres}
                       overview={movie.overview}
                       isSavedToWatchlist={movie.isSavedToWatchlist}
-                      shareLink={`/movies/movie/${movie.movieId}`}
+                      shareUrl={`/movies/movie/${movie.movieId}`}
                     />
                   </Link>
                 </div>
