@@ -50,7 +50,6 @@ const CarouselArrowStyles = `
 export default function MovieActors({ actors }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useWindowResizeEffect(setWindowWidth);
-  console.log(windowWidth)
 
   const actorChunks = chunk(actors, getChunkSize(windowWidth, ACTOR_CAROUSEL_BREAKPOINT));
   const defaultStyle = {

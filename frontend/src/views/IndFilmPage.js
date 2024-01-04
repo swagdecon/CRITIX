@@ -62,7 +62,6 @@ export default function IndMovie() {
     fetchBackendData();
   }, [id]);
 
-  console.log(movie)
   return isLoading || !movie ? (
     <LoadingPage />
   ) : (

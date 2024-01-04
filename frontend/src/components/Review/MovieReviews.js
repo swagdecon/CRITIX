@@ -46,10 +46,13 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
     const [maxHeight, setMaxHeight] = useState(500);
     const hasReviewProfanity = useMemo(() => filter.isProfane(reviewContent), [filter, reviewContent]);
     const isRecaptchaVisible = useMemo(() => reviewContent.trim().length != 0 && reviewRating != 0 && !hasReviewProfanity[reviewContent, reviewRating, hasReviewProfanity]);
+    const wordCount = reviewContent.trim().split(/\s+/).length;
+
     const isSubmitDisabled = useMemo(
         () =>
             reviewContent.trim().length === 0 ||
             reviewRating === 0 ||
+            wordCount < 15 ||
             !recaptchaResult,
         [reviewContent, reviewRating, recaptchaResult]
     );
@@ -122,7 +125,7 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
                 })
                 .catch((error) => {
                     if (error.response.status === 400 && error.response.data === "User already submitted a review for this movie.") {
-                        setHasSubmittedReview(true);
+                        setHasSubmittedReview(false);
                     }
                 });
         }
@@ -151,7 +154,7 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
                                         ? "Profanity is not allowed."
                                         : hasSubmittedReview
                                             ? "Thanks for submitting a review!  "
-                                            : "Post A Review"
+                                            : "Post A Review (Min. 15 words)"
                                 }
                                 multiline
                                 onChange={(e) => setReviewContent(e.target.value)}

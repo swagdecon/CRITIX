@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 export default function ReviewSection({ reviews }) {
     const [currentPage, setCurrentPage] = useState(1);
     const commentsPerPage = 2;
-    const handlePageChange = useCallback((page) => setCurrentPage(page))
+    const handlePageChange = useCallback((event, page) => setCurrentPage(page));
 
     const totalPages = Math.ceil(reviews.length / commentsPerPage);
     const displayReviews = useMemo(() => {
