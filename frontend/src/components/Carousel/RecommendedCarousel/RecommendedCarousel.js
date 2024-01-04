@@ -10,11 +10,11 @@ import { getChunkSize, useWindowResizeEffect, CarouselArrowStyles } from "../Car
 
 const carouselBreakpoints = process.env.REACT_APP_CAROUSEL_BREAKPOINTS;
 const recommendedCarouselBreakpoints = JSON.parse(carouselBreakpoints);
-
 export default function RecommendedCarousel({ recommendedMovies }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useWindowResizeEffect(setWindowWidth);
   const movieChunks = chunk(recommendedMovies, getChunkSize(windowWidth, recommendedCarouselBreakpoints));
+
   return (
     <div className={MovieCardStyle["carousel-wrapper"]}>
       <Carousel className={RecommendedStyle["carousel-recommended"]} indicators={false} interval={null}>
