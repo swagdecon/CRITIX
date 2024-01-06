@@ -100,10 +100,32 @@
   padding-top: 10px;
 }
 
-.comment-section .media .delete__review__btn {
+ .delete__review__btn {
   background-color: #0096ff;
   color: white;
   border-radius: 10px;
   padding: 5px;
   font-family: "Open Sans", sans-serif;
+}
+.popup__title {
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  color: #0096ff;
+  background: rgb(0, 0, 0);
+  font-family: "CoreCircus", sans-serif;
+  font-size: 23px
+}
+.popup__content {
+  background: rgb(0, 0, 0);
+  padding: 30px;
+  justify-content: center;
+display: flex;
+}
+.response__message {
+  margin: 10px;
+  padding: 10px;
+  border-radius: 20px;
+  color: #ffffff;
+  background-color: #0095ff6b;
 }

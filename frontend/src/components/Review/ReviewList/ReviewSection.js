@@ -4,14 +4,14 @@ import UserRating from "../Rating/UserRating/UserRating";
 import Pagination from "@mui/material/Pagination";
 import PropTypes from "prop-types";
 import parse from 'html-react-parser';
-import { sendData } from "../../../security/Data";
-const deleteUserReviewEndpoint = process.env.REACT_APP_DELETE_USER_REVIEW_ENDPOINT;
+import Popup from 'reactjs-popup';
+import DeleteReviewPopup from "./DeleteReviewPopup";
 
 export default function ReviewSection({ reviews, movieId, userId }) {
     const [currentPage, setCurrentPage] = useState(1);
+
     const commentsPerPage = 2;
     const handlePageChange = useCallback((event, page) => setCurrentPage(page));
-    const [deleteBtnVisible, setDeleteBtnVisible] = useState(true)
     const totalPages = Math.ceil(reviews.length / commentsPerPage);
     const displayReviews = useMemo(() => {
         let reviewsToDisplay = [];
@@ -20,12 +20,7 @@ export default function ReviewSection({ reviews, movieId, userId }) {
         reviewsToDisplay = reviews.slice(startIdx, endIdx);
         return reviewsToDisplay;
     }, [currentPage, reviews]);
-    async function handleDeleteReview(e) {
-        e.preventDefault();
-        const response = await sendData(`${deleteUserReviewEndpoint}${movieId}/${userId}`);
-        response.ok ? setDeleteBtnVisible(false) : true;
-        e.stopPropagation();
-    }
+
 
     return (
         <div className={ReviewStyle["comment-section"]}>
@@ -56,9 +51,10 @@ export default function ReviewSection({ reviews, movieId, userId }) {
                                             </div>
                                         </div>
                                         <div className={ReviewStyle.description}>{parse(review.content)}</div>
-                                        {review.userId === userId && deleteBtnVisible ?
+                                        {review.userId === userId ?
                                             <div className={ReviewStyle.delete__review}>
-                                                <button className={ReviewStyle.delete__review__btn} onClick={handleDeleteReview}>DELETE REVIEW</button>
+                                                <Popup trigger={
+                                                    <button className={ReviewStyle.delete__review__btn}>DELETE REVIEW</button>} modal> <DeleteReviewPopup movieId={movieId} userId={userId} /> </Popup>
                                             </div> : null}
                                     </div>
                                 </div>
