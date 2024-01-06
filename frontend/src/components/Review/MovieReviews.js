@@ -23,8 +23,8 @@ const TEXT_COLLAPSE_OPTIONS = {
     collapse: false,
     collapseText: <span style={{ cursor: "pointer" }}>...show more</span>,
     expandText: <span style={{ cursor: "pointer" }}>show less</span>,
-    minHeight: 210,
-    maxHeight: 300,
+    minHeight: 60,
+    maxHeight: 500,
     textStyle: {
         color: "grey",
         fontSize: "20px"
@@ -222,15 +222,16 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
                         Object.keys(reviews)
                             .slice(0, 2)
                             .map((key, index) => (
-                                <ReactTextCollapse
-                                    key={index}
-                                    options={{ ...TEXT_COLLAPSE_OPTIONS, maxHeight }}
-                                >
-                                    <p className={IndMovieStyle.review__description}>
-                                        {reviews[key].content}
-                                    </p>
-                                    <br />
-                                </ReactTextCollapse>
+                                <div className={IndMovieStyle.header__review__wrapper} key={key}>
+                                    <ReactTextCollapse
+                                        key={index}
+                                        options={{ ...TEXT_COLLAPSE_OPTIONS, maxHeight }}
+                                    >
+                                        <p className={IndMovieStyle.review__description}>
+                                            {reviews[key].content}
+                                        </p>
+                                    </ReactTextCollapse>
+                                </div>
                             ))}
                 </div>
             );

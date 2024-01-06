@@ -62,7 +62,6 @@ export default function ReviewSection({ reviews, movieId, userId }) {
                                             </div> : null}
                                     </div>
                                 </div>
-
                             </div>
                         ))}
                     </div>

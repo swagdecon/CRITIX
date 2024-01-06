@@ -114,7 +114,29 @@
   line-height: 2.1rem;
   text-align: start;
 }
+.review__description::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+}
 
+.review__description::-webkit-scrollbar
+{
+	width: 12px;
+  background-color: rgb(73, 73, 73);
+  border-radius: 10px;
+
+}
+
+.review__description::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #0096ff;
+}
+.header__review__wrapper {
+ margin-bottom: 40px;
+}
 .review__wrapper {
   display: flex;
   flex-direction: column;
