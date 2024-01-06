@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import com.popflix.model.Review;
 import com.popflix.model.User;
@@ -20,6 +23,8 @@ public class ReviewService {
     private ReviewRepository reviewRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     public void createNewMovieReview(Integer movieId, String author, String userId, String reviewRating,
             String reviewContent, String createdAt) {
@@ -63,5 +68,20 @@ public class ReviewService {
         combinedReviews.addAll(externalReviews);
         combinedReviews.addAll(databaseReviews);
         return combinedReviews;
+    }
+
+    public void deleteMovieReview(Integer movieId, String userId) throws IOException, InterruptedException {
+        try {
+            List<Review> movieReviews = getMovieUserReviews(movieId);
+            if (movieReviews != null) {
+                // Assuming you have access to a MongoDBTemplate instance
+                Query query = new Query(Criteria.where("userId").is(userId));
+                mongoTemplate.remove(query, Review.class);
+            } else {
+                throw new Exception("test error");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 }

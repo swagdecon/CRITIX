@@ -125,7 +125,7 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
                 })
                 .catch((error) => {
                     if (error.response.status === 400 && error.response.data === "User already submitted a review for this movie.") {
-                        setHasSubmittedReview(false);
+                        setHasSubmittedReview(true);
                     }
                 });
         }
@@ -205,7 +205,7 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
                         </div>
                     </div>
                     {reviews && reviews.length >= 2 && (
-                        <ReviewSection reviews={reviews} />
+                        <ReviewSection reviews={reviews} movieId={movieId} userId={userId} />
                     )}
                 </div>
             </div>
