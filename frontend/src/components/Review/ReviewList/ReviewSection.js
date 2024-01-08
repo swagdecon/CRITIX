@@ -9,7 +9,11 @@ import DeleteReviewPopup from "./DeleteReviewPopup";
 
 export default function ReviewSection({ reviews, movieId, userId }) {
     const [currentPage, setCurrentPage] = useState(1);
+    const [showDeleteBtn, setShowDeleteBtn] = useState(true);
 
+    const handleDeleteBtnVisibility = (visibility) => {
+        setShowDeleteBtn(visibility);
+    };
     const commentsPerPage = 2;
     const handlePageChange = useCallback((event, page) => setCurrentPage(page));
     const totalPages = Math.ceil(reviews.length / commentsPerPage);
@@ -51,10 +55,10 @@ export default function ReviewSection({ reviews, movieId, userId }) {
                                             </div>
                                         </div>
                                         <div className={ReviewStyle.description}>{parse(review.content)}</div>
-                                        {review.userId === userId ?
+                                        {review.userId === userId && showDeleteBtn ?
                                             <div className={ReviewStyle.delete__review}>
                                                 <Popup trigger={
-                                                    <button className={ReviewStyle.delete__review__btn}>DELETE REVIEW</button>} modal> <DeleteReviewPopup movieId={movieId} userId={userId} /> </Popup>
+                                                    <button className={ReviewStyle.delete__review__btn}>DELETE</button>} modal> <DeleteReviewPopup movieId={movieId} userId={userId} onSuccess={handleDeleteBtnVisibility} /> </Popup>
                                             </div> : null}
                                     </div>
                                 </div>
