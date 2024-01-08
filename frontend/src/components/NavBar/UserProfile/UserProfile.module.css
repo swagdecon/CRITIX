@@ -6,6 +6,7 @@
 /* User */
 .User {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .User .image {
