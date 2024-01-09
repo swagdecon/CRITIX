@@ -4,12 +4,11 @@
     padding: 20px;
     position: fixed;
     width: 100%;
+    justify-content: space-between;
     align-items: center;
-    z-index: 1;
-  }
-  .test {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Space between Navigation and Search */
-    max-width: 100%; /* Optional: Set a max-width for content */
-  }
+    z-index: 2;
+}
+.group__1 {
+  display: flex;
+  align-items: center;
+}

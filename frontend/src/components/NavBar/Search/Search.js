@@ -93,13 +93,6 @@ export default function Search(props) {
                         <span>({<ParseYear date={movie.release_date} />})</span>
                       </div>
                     </div>
-                    {/* <div className={SearchStyle["result-actors"]}>
-                      {movie.actors.slice(0, 3).map((actor, index) => (
-                        <span key={index}>
-                          {index === 0 ? actor : ` | ${actor}`}
-                        </span>
-                      ))}
-                    </div> */}
                   </div>
                   <div className={SearchStyle["result-rating"]}>
                     {movie.vote_average}

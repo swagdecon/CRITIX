@@ -8,13 +8,13 @@ import PropTypes from "prop-types";
 export default function NavBar(props) {
   return (
     <div className={NavBarStyle.NavBar}>
-      <Logo />
-      <div className={NavBarStyle.test}>
+      <div className={NavBarStyle.group__1}>
+        <Logo />
         <Navigation />
-        <Search onSubmit={props.onSubmit} />
       </div>
+      <Search onSubmit={props.onSubmit} />
       <UserProfile />
-    </div>
+    </div >
   )
 }
 NavBar.propTypes = {

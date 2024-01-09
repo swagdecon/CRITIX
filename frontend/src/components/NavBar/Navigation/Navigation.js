@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import NavStyle from "./Navigation.module.css";
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -15,7 +14,7 @@ export default function Navigation() {
     setAnchorEl(null);
   };
   return (
-    <div className={NavStyle.Navigation}>
+    <>
       <Button
         id="basic-button"
         aria-controls={open ? 'basic-menu' : undefined}
@@ -34,6 +33,19 @@ export default function Navigation() {
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}
+        sx={{
+          mt: "1px",
+          "& .MuiMenu-paper": {
+            backgroundColor: "rgba(0, 0, 0, 0.7)", // Adjust the transparency as needed
+            backdropFilter: "blur(8px)", // Apply the blur effect
+          },
+          "& .MuiMenuItem-root a": {
+            transition: "color 0.3s",
+            "&:hover": {
+              color: "#0096ff",
+            },
+          },
+        }}
       >
         <MenuItem onClick={handleClose}><Link to="/now_playing/">
           IN THEATRES
@@ -49,7 +61,7 @@ export default function Navigation() {
           WATCHLIST
         </Link> </MenuItem>
       </Menu>
-    </div>
+    </>
   );
 }
 

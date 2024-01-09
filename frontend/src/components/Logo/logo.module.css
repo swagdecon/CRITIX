@@ -4,7 +4,6 @@
   height: 4ch;
   transition: margin 0.125s ease;
   display: flex;
-  justify-content: flex-start;
   z-index: 999;
 }
 
