@@ -63,16 +63,16 @@ export default function Search(props) {
   }
 
   return (
-    <form onSubmit={props.onSubmit} id="search" className={SearchStyle.Search} ref={searchRef}>
+    <form onSubmit={props.onSubmit} className={SearchStyle.Search} ref={searchRef}>
       <ReactPlaceholderTyping
         placeholders={placeholders}
         value={query}
         onChange={(value) => {
           setQuery(value)
         }}
-        containerStyle={{ borderWidth: "0px" }}
+        containerStyle={{ borderWidth: "0px", justifyContent: "center" }}
       />
-      <ul className={SearchStyle["search-results-list"]}>
+      <div className={SearchStyle["search-results-list"]}>
         {movieResults.map((movie) => {
           if (movie.poster_path && movie.vote_average) {
             return (
@@ -102,7 +102,7 @@ export default function Search(props) {
             );
           }
         })}
-      </ul>
+      </div>
     </form>
   );
 }
