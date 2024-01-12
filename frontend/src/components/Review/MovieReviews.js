@@ -79,10 +79,25 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
                 borderColor: "red",
             },
         },
+        "& ::-webkit-scrollbar": {
+            width: "12px",
+            backgroundColor: "rgb(73, 73, 73)",
+            borderRadius: "10px",
+        },
+        "& ::-webkit-scrollbar-track": {
+            "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.3)",
+            borderRadius: "10px",
+        },
+        "& ::-webkit-scrollbar-thumb": {
+            borderRadius: "10px",
+            "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,.3)",
+            backgroundColor: "#0096ff",
+        },
         width: "60%",
         '@media (max-width: 500px)': {
             width: '100%',
         }
+
     };
     async function onChange(token) {
         try {
