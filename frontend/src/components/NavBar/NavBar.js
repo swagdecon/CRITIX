@@ -9,11 +9,15 @@ export default function NavBar(props) {
   return (
     <div className={NavBarStyle.NavBar}>
       <div className={NavBarStyle.group__1}>
-        <Logo />
+        <div className={NavBarStyle.logo}>
+          <Logo />
+        </div>
         <Navigation />
       </div>
-      <Search onSubmit={props.onSubmit} />
-      <UserProfile />
+      <div className={NavBarStyle.stacked__elements}>
+        <Search onSubmit={props.onSubmit} />
+        <UserProfile />
+      </div>
     </div >
   )
 }

@@ -41,6 +41,7 @@ export default function Navigation() {
           },
           "& .MuiMenuItem-root a": {
             transition: "color 0.3s",
+            color: "white",
             "&:hover": {
               color: "#0096ff",
             },

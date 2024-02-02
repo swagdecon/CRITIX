@@ -12,3 +12,17 @@
   display: flex;
   align-items: center;
 }
+@media screen and (max-width:  900px) {
+  .group__1 {
+    flex-direction: column; /* Stack the logo and navigation vertically */
+    align-items: center;
+    }
+
+  .stacked__elements{
+    display: flex; /* Show the stacked elements */
+    flex-direction: column; /* Stack the search bar, navigation, and user profile */
+    align-items: center;
+    margin-top: 20px; /* Add some space between the logo and the stacked elements */
+  }
+
+} 
