@@ -21,7 +21,6 @@
 
 
 .title-container {
-  position: absolute;
   display: inline-flex;
   justify-content: center;
   flex-direction: column;
@@ -36,6 +35,8 @@
 .emptyList {
   font-size: 30px;
   color: white;
+  margin-top: 10px;
+  text-align: center;
 }
 .title-caption {
   display: flex;

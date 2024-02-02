@@ -12,7 +12,7 @@ export default function LoginLogic() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [profanityError, setProfanityError] = useState("");
+  const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const filter = useMemo(() => new Filter(), []);
   const [endpointResponse, setEndpointResponse] = useState(null)
@@ -32,7 +32,7 @@ export default function LoginLogic() {
     const userData = { email, password };
     const hasProfanity = filter.isProfane(userData["email"]) || filter.isProfane(userData["password"]);
 
-    if (ProfanityLogic(hasProfanity, setProfanityError)) {
+    if (ProfanityLogic(hasProfanity, setError)) {
       // Stops creation of user
       return
     }
@@ -65,14 +65,17 @@ export default function LoginLogic() {
 
       if (messageText === "Please check your email to verify your account") {
         setEmailErr(true);
+        setMessage(messageText);
+      } else {
+        setError("Something went wrong, please try again.")
       }
-      setMessage(messageText);
     }
+
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <Message response={endpointResponse} message={message} style={LoginStyles} profanityError={profanityError} />
+      <Message response={endpointResponse} message={message} style={LoginStyles} error={error} />
       {emailErr ?
         <div >
           <button type="button" className={LoginStyles["resend-pwd-auth"]} onClick={resendEmail}>Resend authentication email</button>

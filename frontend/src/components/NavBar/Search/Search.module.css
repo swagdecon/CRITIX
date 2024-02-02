@@ -11,6 +11,7 @@
   box-sizing: border-box;
 }
 
+
 .Search input {
   font-family: "Open Sans", sans-serif;
   font-weight: 300;
@@ -90,5 +91,15 @@ a:hover {
  @media screen and (max-width:  380px) {
   .Search {
     display: none;
+  }
+} 
+
+@media screen and (max-width:  700px) {
+  .Search {
+    position: static;
+    width: auto;
+    top: auto;
+    left: auto;
+    transform: none;
   }
 } 

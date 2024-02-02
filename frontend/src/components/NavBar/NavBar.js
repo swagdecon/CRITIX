@@ -13,11 +13,9 @@ export default function NavBar(props) {
           <Logo />
         </div>
         <Navigation />
-      </div>
-      <div className={NavBarStyle.stacked__elements}>
         <Search onSubmit={props.onSubmit} />
-        <UserProfile />
       </div>
+      <UserProfile />
     </div >
   )
 }
