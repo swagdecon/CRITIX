@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import {
   MovieAverage,
   TruncateDescription,
-  MovieTrailer
+  OpenLinkInNewTab
 } from "../IndMovie/MovieComponents.js";
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
@@ -11,6 +11,9 @@ import ShareIcon from '@mui/icons-material/Share';
 import { MovieCardActors, MovieCardGenres } from "./MovieCardComponents.js";
 import MovieCardStyle from "./moviecard.module.scss"
 import { fetchData, sendData } from "../../security/Data.js"
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import SharePagePopup from "../Other/SocialShare/SocialShare.js";
 const trailerEndpoint = process.env.REACT_APP_TRAILER_ENDPOINT;
 const sendToWatchListEndpoint = process.env.REACT_APP_ADD_TO_WATCHLIST_ENDPOINT;
 const deleteFromWatchListEndpoint = process.env.REACT_APP_DELETE_FROM_WATCHLIST_ENDPOINT;
@@ -26,7 +29,8 @@ export default function MovieCard({
   genres,
   overview,
   actors,
-  isSavedToWatchlist
+  isSavedToWatchlist,
+  shareUrl
 }) {
   const [isSavedToWatchListState, setIsSavedToWatchListState] = useState(isSavedToWatchlist)
   const token = jwt_decode(CookieManager.decryptCookie("accessToken"))
@@ -41,10 +45,11 @@ export default function MovieCard({
     actors: actors ? actors.slice(0, 3) : null,
     userId
   };
+
   async function handleWatchTrailer(e) {
     e.preventDefault();
     const trailer = await fetchData(`${trailerEndpoint}${movieId}`);
-    MovieTrailer(trailer)
+    OpenLinkInNewTab(trailer)
     e.stopPropagation();
   }
 
@@ -147,7 +152,9 @@ export default function MovieCard({
                   }
                 </div>
                 <div className={MovieCardStyle["action-btn"]}>
-                  <i ><ShareIcon sx={{ fontSize: 30 }} /></i>
+                  <Popup trigger={
+                    <i ><ShareIcon sx={{ fontSize: 30 }} onClick={(e) => e.preventDefault()} /></i>
+                  } modal><SharePagePopup shareUrl={shareUrl} /> </Popup>
                 </div>
               </div>
             </div>
@@ -180,4 +187,5 @@ MovieCard.propTypes = {
     ),
     PropTypes.arrayOf(PropTypes.string),
   ]),
+  shareUrl: PropTypes.string,
 }

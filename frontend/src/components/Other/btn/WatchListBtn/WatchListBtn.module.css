@@ -56,3 +56,11 @@
 .btn i {
   font-size: 34px;
 }
+@media (max-width: 1700px) {
+  .btn:hover  {
+  width: 22px;
+  }
+   .watchlist-label {
+    display: none;
+  }
+}

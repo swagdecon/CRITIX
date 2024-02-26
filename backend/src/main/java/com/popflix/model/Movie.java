@@ -1,6 +1,7 @@
 package com.popflix.model;
 
 import java.util.List;
+import java.util.Map;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,8 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import info.movito.themoviedbapi.model.providers.ProviderResults;
 
 @Document
 @Data
@@ -34,7 +33,7 @@ public class Movie {
     private String trailer;
     private Boolean isSavedToWatchlist;
     private Integer voteAverage;
-    private ProviderResults providerResults;
+    private Map<String, Object> providerResults;
     private Integer voteCount;
     private String imdbId;
     private Long budget;

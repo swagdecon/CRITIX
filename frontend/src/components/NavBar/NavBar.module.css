@@ -4,6 +4,11 @@
     padding: 20px;
     position: fixed;
     width: 100%;
+    justify-content: space-between;
     align-items: center;
     z-index: 2;
-  }
+}
+.group__1 {
+  display: flex;
+  align-items: center;
+}

@@ -3,12 +3,19 @@ import ReviewStyle from "./OtherReviews.module.css";
 import UserRating from "../Rating/UserRating/UserRating";
 import Pagination from "@mui/material/Pagination";
 import PropTypes from "prop-types";
+import parse from 'html-react-parser';
+import Popup from 'reactjs-popup';
+import DeleteReviewPopup from "./DeleteReviewPopup";
 
-export default function ReviewSection({ reviews }) {
+export default function ReviewSection({ reviews, movieId, userId }) {
     const [currentPage, setCurrentPage] = useState(1);
-    const commentsPerPage = 2;
-    const handlePageChange = useCallback((page) => setCurrentPage(page))
+    const [showDeleteBtn, setShowDeleteBtn] = useState(true);
 
+    const handleDeleteBtnVisibility = (visibility) => {
+        setShowDeleteBtn(visibility);
+    };
+    const commentsPerPage = 2;
+    const handlePageChange = useCallback((event, page) => setCurrentPage(page));
     const totalPages = Math.ceil(reviews.length / commentsPerPage);
     const displayReviews = useMemo(() => {
         let reviewsToDisplay = [];
@@ -17,6 +24,7 @@ export default function ReviewSection({ reviews }) {
         reviewsToDisplay = reviews.slice(startIdx, endIdx);
         return reviewsToDisplay;
     }, [currentPage, reviews]);
+
 
     return (
         <div className={ReviewStyle["comment-section"]}>
@@ -46,7 +54,12 @@ export default function ReviewSection({ reviews }) {
                                                 ) : null}
                                             </div>
                                         </div>
-                                        <div className={ReviewStyle["description"]}>{review.content}</div>
+                                        <div className={ReviewStyle.description}>{parse(review.content)}</div>
+                                        {review.userId === userId && showDeleteBtn ?
+                                            <div className={ReviewStyle.delete__review}>
+                                                <Popup trigger={
+                                                    <button className={ReviewStyle.delete__review__btn}>DELETE</button>} modal> <DeleteReviewPopup movieId={movieId} userId={userId} onSuccess={handleDeleteBtnVisibility} /> </Popup>
+                                            </div> : null}
                                     </div>
                                 </div>
                             </div>
@@ -73,5 +86,7 @@ export default function ReviewSection({ reviews }) {
 }
 
 ReviewSection.propTypes = {
+    movieId: PropTypes.integer,
+    userId: PropTypes.string,
     reviews: PropTypes.array,
 };

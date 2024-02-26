@@ -6,7 +6,12 @@ import "../Carousel/MovieCarousel/MovieCarousel.module.css";
 import GlassCard from "./GlassCard";
 import NoTrailer from "./NoTrailerAvailable.png"
 import GlassStyle from "./GlassCard.module.css"
-
+const amazonAffiliateUrl = process.env.REACT_APP_AMAZON_AFFILIATE_URL
+const disneyPlusAffiliateUrl = process.env.REACT_APP_DISNEY_PLUS_AFFILIATE_URL
+const paramountAffiliateUrl = process.env.REACT_APP_PARAMOUNT_AFFILIATE_URL
+const appleAffiliateUrl = process.env.REACT_APP_APPLE_AFFILIATE_URL
+const amcAffiliateUrl = process.env.REACT_APP_AMC_AFFILIATE_URL
+const nowTVAffiliateUrl = process.env.REACT_APP_NOW_TV_AFFILIATE_URL
 function TruncateDescription({ description }) {
   const words = description.split(" ");
 
@@ -29,10 +34,10 @@ function ParseYear({ date }) {
   return year;
 }
 
-function MovieTrailer(trailerUrl) {
-  if (trailerUrl) {
+function OpenLinkInNewTab(url) {
+  if (url) {
     const a = document.createElement('a');
-    a.href = trailerUrl;
+    a.href = url;
     a.target = '_blank'; // Opens the link in a new tab/window
     a.rel = 'noopener noreferrer'; // Security best practice for target="_blank"
 
@@ -43,6 +48,30 @@ function MovieTrailer(trailerUrl) {
       cancelable: true,
     });
     a.dispatchEvent(clickEvent);
+  }
+}
+function WatchMovieNow(watchProviders) {
+  const disneyPlusVideoExists = watchProviders?.UK?.flatrate?.find(provider => provider.provider_name === 'Disney Plus');
+  const amazonVideoExists = watchProviders?.UK?.buy?.find(provider => provider.provider_name === 'Amazon Video');
+  const paramountVideoExists = watchProviders?.UK?.flatrate?.find(provider => provider.provider_name === 'Paramount Plus');
+  const appleVideoExists = watchProviders?.US?.buy?.find(provider => provider.provider_name === 'Apple TV');
+  const amcVideoExists = watchProviders?.US?.buy?.find(provider => provider.provider_name === 'AMC on Demand');
+  const nowTVVideoExists = watchProviders?.UK?.flatrate?.find(provider => provider.provider_name === 'Now TV');
+
+  if (disneyPlusVideoExists) {
+    OpenLinkInNewTab(disneyPlusAffiliateUrl);
+  } else if (amazonVideoExists) {
+    OpenLinkInNewTab(amazonAffiliateUrl);
+  } else if (nowTVVideoExists) {
+    OpenLinkInNewTab(nowTVAffiliateUrl);
+  } else if (paramountVideoExists) {
+    OpenLinkInNewTab(paramountAffiliateUrl);
+  } else if (appleVideoExists) {
+    OpenLinkInNewTab(appleAffiliateUrl);
+  } else if (amcVideoExists) {
+    OpenLinkInNewTab(amcAffiliateUrl);
+  } else {
+    OpenLinkInNewTab(nowTVAffiliateUrl);
   }
 }
 
@@ -191,7 +220,8 @@ export {
   TruncateDescription,
   ParseYear,
   ParseNumber,
-  MovieTrailer,
+  OpenLinkInNewTab,
+  WatchMovieNow,
   MovieAverage,
   EmbeddedMovieTrailer,
   MovieGenres,

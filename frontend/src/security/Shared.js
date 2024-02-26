@@ -57,15 +57,15 @@ export async function resendAuthEmail(
 //     return displayErrMsgLogic;
 // }
 
-export function Message({ response, message, style, profanityError }) {
-    const isError = profanityError || (response?.ok === false);
+export function Message({ response, message, style, error }) {
+    const isError = error || (response?.ok === false);
     const isSuccess = response?.ok === true;
 
     return (
         <div className={isError ? style["error-msg-wrapper"] : isSuccess ? style["success-msg-wrapper"] : ''}>
             <div className={isError ? style["error-msg"] : isSuccess ? style["success-msg"] : ''}>
                 {isError ? <i className="fa fa-times-circle" /> : ''}
-                {isError ? profanityError : isSuccess ? message : ''}
+                {isError ? error : isSuccess ? message : ''}
             </div>
         </div>
     );
@@ -76,16 +76,13 @@ Message.propTypes = {
     }),
     message: PropTypes.string,
     style: PropTypes.objectOf(PropTypes.string),
-    profanityError: PropTypes.string,
+    error: PropTypes.string,
 }
 
-export function ProfanityLogic(hasProfanity, setProfanityError) {
+export function ProfanityLogic(hasProfanity, setError) {
     if (hasProfanity) {
-        setProfanityError("Input(s) cannot contain profanity")
+        setError("Input(s) cannot contain profanity")
         return true
-    } else {
-        setProfanityError("")
-        return false
     }
 }
 

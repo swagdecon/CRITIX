@@ -8,7 +8,7 @@ import Title from "../title.module.scss";
 // import { Link } from "react-router-dom";
 const DEFAULT_ACTOR_IMAGE = process.env.REACT_APP_DEFAULT_ACTOR_IMAGE;
 const DEFAULT_TMDB_IMAGE = process.env.REACT_APP_DEFAULT_TMDB_IMAGE_PREFIX;
-const ACTOR_CAROUSEL_BREAKPOINT = process.env.REACT_APP_ACTOR_CAROUSEL_BREAKPOINTS
+const ACTOR_CAROUSEL_BREAKPOINT = JSON.parse(process.env.REACT_APP_ACTOR_CAROUSEL_BREAKPOINTS)
 const defaultImage = `url(${DEFAULT_ACTOR_IMAGE}) center center no-repeat`;
 
 function onMouseEnter(e, image) {
@@ -47,10 +47,10 @@ const CarouselArrowStyles = `
   margin: 0 5px;
 }`
 
-
 export default function MovieActors({ actors }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useWindowResizeEffect(setWindowWidth);
+
   const actorChunks = chunk(actors, getChunkSize(windowWidth, ACTOR_CAROUSEL_BREAKPOINT));
   const defaultStyle = {
     background: defaultImage,

@@ -44,4 +44,15 @@ public class ReviewController {
                 List<Review> reviews = reviewService.getMovieUserReviews(movieId);
                 return new ResponseEntity<>(reviews, HttpStatus.OK);
         }
+
+        @PostMapping("/delete/{movieId}/{userId}")
+        public ResponseEntity<String> deleteUserMovieReview(@PathVariable Integer movieId,
+                        @PathVariable String userId) throws IOException, InterruptedException {
+                if (reviewService.doesUserIdExistsForMovie(movieId, userId)) {
+                        reviewService.deleteMovieReview(movieId, userId);
+                } else {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong");
+                }
+                return null;
+        }
 }

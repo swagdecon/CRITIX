@@ -2,14 +2,11 @@ package com.popflix.model;
 
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
-
-import info.movito.themoviedbapi.model.providers.ProviderResults;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 class MovieTest {
 
@@ -31,7 +28,7 @@ class MovieTest {
         String trailer = "https://www.youtube.com/watch?v=fui1f23";
         Integer voteAverage = 82;
         Integer voteCount = 1000;
-        ProviderResults providers = new ProviderResults();
+        Map<String, Object> providers = null;
         String imdbId = "tt1234567";
         Long budget = 100000000L;
         String tagline = "Movie tagline";
@@ -45,8 +42,7 @@ class MovieTest {
 
         Movie movie = new Movie(id, adult, backdropUrl, genreIds, genres, movieId, originalLanguage,
                 originalTitle, overview, popularity, posterUrl, releaseDate, title, trailer, adult, voteAverage,
-                providers,
-                voteCount, imdbId, budget, tagline, revenue, runtime, actors, actorImagePaths, reviews,
+                null, voteCount, imdbId, budget, tagline, revenue, runtime, actors, actorImagePaths, reviews,
                 productionCompanies,
                 movieStatus);
 

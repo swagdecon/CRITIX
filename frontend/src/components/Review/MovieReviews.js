@@ -23,8 +23,8 @@ const TEXT_COLLAPSE_OPTIONS = {
     collapse: false,
     collapseText: <span style={{ cursor: "pointer" }}>...show more</span>,
     expandText: <span style={{ cursor: "pointer" }}>show less</span>,
-    minHeight: 210,
-    maxHeight: 300,
+    minHeight: 60,
+    maxHeight: 500,
     textStyle: {
         color: "grey",
         fontSize: "20px"
@@ -46,10 +46,13 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
     const [maxHeight, setMaxHeight] = useState(500);
     const hasReviewProfanity = useMemo(() => filter.isProfane(reviewContent), [filter, reviewContent]);
     const isRecaptchaVisible = useMemo(() => reviewContent.trim().length != 0 && reviewRating != 0 && !hasReviewProfanity[reviewContent, reviewRating, hasReviewProfanity]);
+    const wordCount = reviewContent.trim().split(/\s+/).length;
+
     const isSubmitDisabled = useMemo(
         () =>
             reviewContent.trim().length === 0 ||
             reviewRating === 0 ||
+            wordCount < 15 ||
             !recaptchaResult,
         [reviewContent, reviewRating, recaptchaResult]
     );
@@ -76,10 +79,25 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
                 borderColor: "red",
             },
         },
+        "& ::-webkit-scrollbar": {
+            width: "12px",
+            backgroundColor: "rgb(73, 73, 73)",
+            borderRadius: "10px",
+        },
+        "& ::-webkit-scrollbar-track": {
+            "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.3)",
+            borderRadius: "10px",
+        },
+        "& ::-webkit-scrollbar-thumb": {
+            borderRadius: "10px",
+            "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,.3)",
+            backgroundColor: "#0096ff",
+        },
         width: "60%",
         '@media (max-width: 500px)': {
             width: '100%',
         }
+
     };
     async function onChange(token) {
         try {
@@ -151,7 +169,7 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
                                         ? "Profanity is not allowed."
                                         : hasSubmittedReview
                                             ? "Thanks for submitting a review!  "
-                                            : "Post A Review"
+                                            : "Post A Review (Min. 15 words)"
                                 }
                                 multiline
                                 onChange={(e) => setReviewContent(e.target.value)}
@@ -202,7 +220,7 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
                         </div>
                     </div>
                     {reviews && reviews.length >= 2 && (
-                        <ReviewSection reviews={reviews} />
+                        <ReviewSection reviews={reviews} movieId={movieId} userId={userId} />
                     )}
                 </div>
             </div>
@@ -219,15 +237,16 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
                         Object.keys(reviews)
                             .slice(0, 2)
                             .map((key, index) => (
-                                <ReactTextCollapse
-                                    key={index}
-                                    options={{ ...TEXT_COLLAPSE_OPTIONS, maxHeight }}
-                                >
-                                    <p className={IndMovieStyle.review__description}>
-                                        {reviews[key].content}
-                                    </p>
-                                    <br />
-                                </ReactTextCollapse>
+                                <div className={IndMovieStyle.header__review__wrapper} key={key}>
+                                    <ReactTextCollapse
+                                        key={index}
+                                        options={{ ...TEXT_COLLAPSE_OPTIONS, maxHeight }}
+                                    >
+                                        <p className={IndMovieStyle.review__description}>
+                                            {reviews[key].content}
+                                        </p>
+                                    </ReactTextCollapse>
+                                </div>
                             ))}
                 </div>
             );

@@ -1,4 +1,3 @@
-import "../../../node_modules/video-react/dist/video-react.css";
 import React from "react";
 import PopflixTrailer2 from "./PopflixTrailer2.mp4";
 import "./login.module.css";

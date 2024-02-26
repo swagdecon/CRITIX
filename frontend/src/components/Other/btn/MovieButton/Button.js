@@ -32,14 +32,14 @@ export default function MovieButton(props) {
           </div>
         </button>
       );
-    } else if (props.innerIcon === "trailer") {
+    } else if (props.innerIcon === "watchNow") {
       return (
         <button
           type="submit"
           onClick={props.onClick}
           className={BtnStyles["css-button"]}
         >
-          <p className={BtnStyles["css-button-text"]}>WATCH TRAILER</p>
+          <p className={BtnStyles["css-button-text"]}>WATCH NOW</p>
           <div className={BtnStyles["css-button-inner-popcorn"]}>
             <div className={BtnStyles["reset-skew"]}>
               <div className={BtnStyles["popcorn-wrapper"]} >

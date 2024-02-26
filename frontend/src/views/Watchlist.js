@@ -3,14 +3,13 @@
 import isTokenExpired from "../security/IsTokenExpired.js";
 import { fetchData } from "../security/Data.js";
 import WatchListStyle from "../components/MovieList/MovieList.module.css"
-import { React, useMemo, useState, useCallback } from "react";
+import { React, useMemo, useState } from "react";
 import jwt_decode from "jwt-decode";
 import CookieManager from "../security/CookieManager.js";
 import LoadingPage from "./LoadingPage.js";
 import Title from "../components/Carousel/title.module.scss";
 import { Link } from "react-router-dom";
 import MovieCard from "../components/MovieCard/MovieCard.js";
-import Dropdown from "../components/Other/Dropdown/SortByDropdown.js";
 import NavBar from "../components/NavBar/NavBar.js";
 const GET_WATCHLIST_ENDPOINT = process.env.REACT_APP_GET_WATCHLIST_ENDPOINT;
 
@@ -20,26 +19,26 @@ export default function WatchList() {
     const [movies, setMovies] = useState(null);
     const [dataLoaded, setDataLoaded] = useState(false)
 
-    const handleSortByChange = useCallback((selectedValue) => {
-        let sortedMovies;
-        switch (selectedValue) {
-            case "A-Z":
-                sortedMovies = [...movies].sort((a, b) => a.title.localeCompare(b.title));
-                break;
-            case "Z-A":
-                sortedMovies = [...movies].sort((a, b) => b.title.localeCompare(a.title));
-                break;
-            case "Vote Average Asc.":
-                sortedMovies = [...movies].sort((a, b) => a.voteAverage - b.voteAverage);
-                break;
-            case "Vote Average Desc.":
-                sortedMovies = [...movies].sort((a, b) => b.voteAverage - a.voteAverage);
-                break;
-            default:
-                sortedMovies = [...movies];
-        }
-        setMovies(sortedMovies);
-    }, [movies]);
+    // const handleSortByChange = useCallback((selectedValue) => {
+    //     let sortedMovies;
+    //     switch (selectedValue) {
+    //         case "A-Z":
+    //             sortedMovies = [...movies].sort((a, b) => a.title.localeCompare(b.title));
+    //             break;
+    //         case "Z-A":
+    //             sortedMovies = [...movies].sort((a, b) => b.title.localeCompare(a.title));
+    //             break;
+    //         case "Vote Average Asc.":
+    //             sortedMovies = [...movies].sort((a, b) => a.voteAverage - b.voteAverage);
+    //             break;
+    //         case "Vote Average Desc.":
+    //             sortedMovies = [...movies].sort((a, b) => b.voteAverage - a.voteAverage);
+    //             break;
+    //         default:
+    //             sortedMovies = [...movies];
+    //     }
+    //     setMovies(sortedMovies);
+    // }, [movies]);
 
     async function fetchBackendData() {
         try {
@@ -79,7 +78,7 @@ export default function WatchList() {
                 <div className={WatchListStyle.titleWrapper}>
                     <div className={WatchListStyle["title-container"]}>
                         <h3 className={Title["movie-title"]}>YOUR WATCHLIST</h3>
-                        {movies.length !== 0 ?
+                        {/* {movies.length !== 0 ?
                             <div className={WatchListStyle["sort-by-btn"]}>
                                 <Dropdown onSelectSortBy={handleSortByChange} dropdownItems={[
                                     "A-Z",
@@ -87,10 +86,10 @@ export default function WatchList() {
                                     "Vote Average Desc.",
                                     "Vote Average Asc."]} />
                             </div>
-                            : null}
+                            : null} */}
                     </div>
                 </div>
-                <div className={WatchListStyle["container"]}>
+                <div className={WatchListStyle["watchlist-container"]}>
                     {movies.length !== 0 ? movies.map((movie) => (
 
                         < div key={movie.movieId} >
