@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from '@mui/icons-material/Menu';
 export default function Navigation() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -36,8 +36,8 @@ export default function Navigation() {
         sx={{
           mt: "1px",
           "& .MuiMenu-paper": {
-            backgroundColor: "rgba(0, 0, 0, 0.7)", // Adjust the transparency as needed
-            backdropFilter: "blur(8px)", // Apply the blur effect
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            backdropFilter: "blur(8px)",
           },
           "& .MuiMenuItem-root a": {
             transition: "color 0.3s",

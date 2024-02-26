@@ -1,5 +1,5 @@
 .comment-section {
-  padding: 10px 0px;
+  padding: 5px 0px;
   display: flex;
   flex-direction: column;
 }
@@ -33,14 +33,13 @@
   border-radius: 50%;
   overflow: hidden;
   background: rgb(236, 236, 236);
-  width: 77px;
-  height: 77px;
+  width: 5rem;
+  height:4.7rem;
 }
 
 .profile-picture {
   height: 100%;
   width: 100%;
-  
 }
 
 .comment-section .media .media-user img {
@@ -71,7 +70,7 @@
 .comment-section .media .description {
   font-size: 14px;
   color: #ffffff;
-  max-height: 10.6vh;
+  max-height: 11.2vh;
   overflow: auto;
 }
 .comment-section .media .description::-webkit-scrollbar-track

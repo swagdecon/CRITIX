@@ -250,8 +250,6 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
                             ))}
                 </div>
             );
-        } else {
-            return null
         }
     };
 
