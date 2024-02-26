@@ -32,45 +32,42 @@ export default function LoginLogic() {
     const userData = { email, password };
     const hasProfanity = filter.isProfane(userData["email"]) || filter.isProfane(userData["password"]);
 
-    if (ProfanityLogic(hasProfanity, setError)) {
-      // Stops creation of user
-      return
-    }
+    if (!ProfanityLogic(hasProfanity, setError)) {
 
-    const response = await fetch(
-      LOGIN_ENDPOINT,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      }
-    );
+      const response = await fetch(
+        LOGIN_ENDPOINT,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
 
-    setEndpointResponse(response);
+      setEndpointResponse(response);
 
-    if (response.ok) {
-      const data = await response.json();
-      CookieManager.encryptCookie("accessToken", data.access_token, {
-        expires: 1,
-      });
-      CookieManager.encryptCookie("refreshToken", data.refresh_token, {
-        expires: 7,
-      });
-      setMessage(data.message);
-      navigate("/home")
-    } else {
-      const messageText = await response.text();
-
-      if (messageText === "Please check your email to verify your account") {
-        setEmailErr(true);
-        setMessage(messageText);
+      if (response.ok) {
+        const data = await response.json();
+        CookieManager.encryptCookie("accessToken", data.access_token, {
+          expires: 1,
+        });
+        CookieManager.encryptCookie("refreshToken", data.refresh_token, {
+          expires: 7,
+        });
+        setMessage(data.message);
+        navigate("/home")
       } else {
-        setError("Something went wrong, please try again.")
+        const messageText = await response.text();
+
+        if (messageText === "Please check your email to verify your account") {
+          setEmailErr(true);
+          setMessage(messageText);
+        } else {
+          setError("Something went wrong, please try again.")
+        }
       }
     }
-
   };
 
   return (
