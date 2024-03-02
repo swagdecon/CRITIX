@@ -8,6 +8,7 @@ import {
 import "./index.js";
 import Login from "./views/SigninPage.js";
 import SignUp from "./views/SignupPage.js";
+import UserProfile from "./views/UserProfile.js"
 import Homepage from "./views/Homepage.js";
 import PrivateRoute from "./security/SecuredRoutes.js";
 import Error403 from "./views/errorMessages/403/403error.js";
@@ -50,6 +51,8 @@ export default function App() {
           element={<PrivateRoute><WatchList endpointName="watchlist" /></PrivateRoute>}
         />
         <Route path="/movies/:endpoint/movie/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
+        <Route path="/profile/" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
+
         <Route path="/movies/movie/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
         <Route path="/person/:id" element={<PrivateRoute><IndPerson /></PrivateRoute>} />
         <Route path="/forgot-password" element={<ConfirmEmailForPwdReset />} />

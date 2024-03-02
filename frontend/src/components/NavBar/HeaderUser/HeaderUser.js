@@ -1,5 +1,5 @@
 import { React, useMemo, useState } from "react";
-import userStyle from "./UserProfile.module.css"
+import userStyle from "./HeaderUser.module.css"
 import Logout from "../../../security/Logout";
 import { useNavigate, Link } from "react-router-dom";
 import Menu from '@mui/material/Menu';
@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import jwt_decode from "jwt-decode";
 import CookieManager from "../../../security/CookieManager";
 const DEFAULT_ACTOR_IMAGE = process.env.REACT_APP_DEFAULT_ACTOR_IMAGE
-const UserProfile = () => {
+const HeaderUser = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -75,4 +75,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default HeaderUser;

@@ -3,7 +3,7 @@ import Logo from "../Logo/Logo";
 import Navigation from "./Navigation/Navigation";
 import NavBarStyle from "./NavBar.module.css"
 import Search from "./Search/Search";
-import UserProfile from "./UserProfile/UserProfile";
+import HeaderUser from "./HeaderUser/HeaderUser";
 import PropTypes from "prop-types";
 export default function NavBar(props) {
   return (
@@ -15,7 +15,7 @@ export default function NavBar(props) {
         <Navigation />
         <Search onSubmit={props.onSubmit} />
       </div>
-      <UserProfile />
+      <HeaderUser />
     </div >
   )
 }
