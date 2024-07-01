@@ -1,13 +1,13 @@
 import { React, useState } from 'react';
-import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import PropTypes from "prop-types";
 import { styled } from '@mui/material/styles';
 
 const PopflixSlider = styled(Slider)({
     color: '#0096ff',
-    height: 8,
-    width: "55%",
+    height: 5,
+    width: "59%",
+
     '& .MuiSlider-track': {
         border: 'none',
     },
@@ -57,15 +57,13 @@ export default function InputSlider({ onSliderChange }) {
     };
 
     return (
-        <Box sx={{ m: 3 }}>
-            <PopflixSlider
-                value={value}
-                onChange={handleSliderChange}
-                valueLabelDisplay="auto"
-                aria-label="popflix slider"
-                defaultValue={20}
-            />
-        </Box>
+        <PopflixSlider
+            value={value}
+            onChange={handleSliderChange}
+            valueLabelDisplay="auto"
+            aria-label="popflix slider"
+            defaultValue={20}
+        />
     )
 }
 InputSlider.propTypes = {

@@ -202,6 +202,25 @@
   overflow: hidden;
 }
 
+@media (min-width:2300px) {
+  .EmbeddedMovieTrailerContainer {
+    order: 1;
+  }
+  .NoTrailerContainer .grid-item-1 {
+    order: 2;
+  }
+  .NoTrailerContainer .grid-item-3 {
+    order: 3;
+  }
+  .NoTrailerContainer .grid-item-4 {
+    order: 4;
+  }
+  .NoTrailerContainer {
+    grid-template-columns: minmax(0, 1fr);
+      padding: 0 10px;
+  }
+}
+
 @media (max-width: 2300px) {
   .EmbeddedMovieTrailerContainer {
     order: 1;

@@ -4,7 +4,7 @@ import IndMovieStyle from "../IndMovie/ind_movie.module.css";
 import ReactPlayer from "react-player";
 import "../Carousel/MovieCarousel/MovieCarousel.module.css";
 import GlassCard from "./GlassCard";
-import NoTrailer from "./NoTrailerAvailable.png"
+// import NoTrailer from "./NoTrailerAvailable.png"
 import GlassStyle from "./GlassCard.module.css"
 const amazonAffiliateUrl = process.env.REACT_APP_AMAZON_AFFILIATE_URL
 const disneyPlusAffiliateUrl = process.env.REACT_APP_DISNEY_PLUS_AFFILIATE_URL
@@ -110,27 +110,19 @@ function ParseNumber(num) {
 
 
 function EmbeddedMovieTrailer({ trailer }) {
+  if (!trailer) {
+    return null;
+  }
 
   return (
-    <div>
-      {trailer ? (
-        <div className={IndMovieStyle.EmbeddedMovieTrailer}>
-          <ReactPlayer
-            url={trailer}
-            controls={true}
-            playing={false}
-            width="60vw"
-            height="70vh"
-          />
-        </div>
-      ) : <img
-        className={IndMovieStyle.indMovieEmbeddedTrailer}
-        src={NoTrailer}
-        alt="Movie Trailer Unavailable"
-        width={"100%"}
-        height={"100%"}
+    <div className={IndMovieStyle.EmbeddedMovieTrailer}>
+      <ReactPlayer
+        url={trailer}
+        controls={true}
+        playing={false}
+        width="60vw"
+        height="70vh"
       />
-      }
     </div>
   );
 }

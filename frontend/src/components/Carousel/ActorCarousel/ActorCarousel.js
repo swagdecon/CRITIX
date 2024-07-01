@@ -39,6 +39,10 @@ function onMouseLeave(e, image, actorImage) {
   });
 }
 
+const roundDownToNearestFive = (num) => {
+  num <= 5 ? num : Math.floor(num / 5) * 5;
+};
+
 const CarouselArrowStyles = `
 .carousel-control-prev,
 .carousel-control-next {
@@ -49,47 +53,69 @@ const CarouselArrowStyles = `
 
 export default function MovieActors({ actors }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  useWindowResizeEffect(setWindowWidth);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const actorChunks = chunk(actors, getChunkSize(windowWidth, ACTOR_CAROUSEL_BREAKPOINT));
+  useWindowResizeEffect(setWindowWidth);
+  console.log(actors)
+  const handleSelect = (selectedIndex) => {
+    if (selectedIndex >= actorChunks.length) {
+      setActiveIndex(0);
+    } else {
+      setActiveIndex(selectedIndex);
+    }
+  }
+
+  const roundedActorCount = roundDownToNearestFive(actors.length);
+  const roundedActors = actors.slice(0, roundedActorCount);
+
+  const actorChunks = chunk(roundedActors, getChunkSize(windowWidth, ACTOR_CAROUSEL_BREAKPOINT));
   const defaultStyle = {
     background: defaultImage,
   };
 
-  return (
-    <div>
-      <h3 className={`${Title["movie-title"]} ${Title["ind-movie-actors"]}`}>cast members:</h3>
-      <Carousel className={ActorStyle["carousel-actors"]} interval={null} indicators={false} >
-        {actorChunks.map((movieChunk, chunkIndex) => (
-          <Carousel.Item key={chunkIndex}>
-            <div className={ActorStyle["profile-container"]}>
-              {movieChunk.map((actor, index) => {
-                const image = actor.profilePath
-                const actorImage = image ? `url(${DEFAULT_TMDB_IMAGE}${image}) center center no-repeat` : defaultImage;
-                const style = image ? { background: actorImage, backgroundSize: "300px" } : defaultStyle;
-                return (
-                  <div
-                    key={index}
-                    className={`${ActorStyle.card} ${ActorStyle.card1}`}
-                    style={style}
-                    onMouseEnter={(e) => onMouseEnter(e, image)}
-                    onMouseLeave={(e) => onMouseLeave(e, image, actorImage)}
-                  >
-                    <div className={ActorStyle.border}>
-                      <h3 className={ActorStyle["profile-person"]}>
-                        {actor.name}
-                      </h3>
+  if (actors.length > 0) {
+    return (
+      <div>
+        <h3 className={`${Title["movie-title"]} ${Title["ind-movie-actors"]}`}>cast members</h3>
+        <Carousel className={ActorStyle["carousel-actors"]} interval={null} indicators={false} activeIndex={activeIndex} onSelect={handleSelect}
+        >
+          {actorChunks.map((movieChunk, chunkIndex) => (
+            <Carousel.Item key={chunkIndex}>
+              <div className={ActorStyle["profile-container"]}>
+                {movieChunk.map((actor, index) => {
+                  const image = actor.profilePath
+                  const actorImage = image ? `url(${DEFAULT_TMDB_IMAGE}${image}) center center no-repeat` : defaultImage;
+                  const style = image ? { background: actorImage, backgroundSize: "300px" } : defaultStyle;
+                  return (
+                    <div
+                      key={index}
+                      className={`${ActorStyle.card} ${ActorStyle.card1}`}
+                      style={style}
+                      onMouseEnter={(e) => onMouseEnter(e, image)}
+                      onMouseLeave={(e) => onMouseLeave(e, image, actorImage)}
+                    >
+                      <div className={ActorStyle.border}>
+                        <h3 className={ActorStyle["profile-person"]}>
+                          {actor.name}
+                        </h3>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
-          </Carousel.Item>
-        ))}
-        <style>{CarouselArrowStyles}</style>
-      </Carousel>
-    </div>
-  )
+                  );
+                })}
+              </div>
+            </Carousel.Item>
+          ))}
+          <style>{CarouselArrowStyles}</style>
+        </Carousel>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        Cast List unavailable
+      </div>
+    )
+  }
 }
 
 MovieActors.propTypes = {

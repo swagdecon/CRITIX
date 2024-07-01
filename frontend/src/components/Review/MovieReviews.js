@@ -158,7 +158,6 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
             <div className={IndReview["ind-review-wrapper"]}>
                 <div className={IndReview["input-wrapper"]}>
                     <div className={IndReview["user-review-wrapper"]}>
-                        <div className={IndReview["user-info-wrapper"]} />
                         <div className={IndReview["textField-wrapper"]}>
                             <InputSlider onSliderChange={setReviewRating} />
                             <TextField
@@ -241,6 +240,7 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
                                     <ReactTextCollapse
                                         key={index}
                                         options={{ ...TEXT_COLLAPSE_OPTIONS, maxHeight }}
+                                        className={IndMovieStyle.customScrollbar}
                                     >
                                         <p className={IndMovieStyle.review__description}>
                                             {reviews[key].content}

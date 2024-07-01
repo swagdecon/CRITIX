@@ -23,9 +23,7 @@ import isTokenExpired from "../security/IsTokenExpired.js";
 import WatchListBtn from "..//components/Other/btn/WatchListBtn/WatchListBtn";
 import jwt_decode from "jwt-decode";
 import CookieManager from "../security/CookieManager.js";
-const sendToWatchListEndpoint = process.env.REACT_APP_ADD_TO_WATCHLIST_ENDPOINT;
 const recommendedEndpoint = process.env.REACT_APP_RECOMMENDED_ENDPOINT;
-const deleteFromWatchListEndpoint = process.env.REACT_APP_DELETE_FROM_WATCHLIST_ENDPOINT
 const getReviewEndpoint = process.env.REACT_APP_GET_REVIEW_ENDPOINT
 
 export default function IndMovie() {
@@ -47,8 +45,8 @@ export default function IndMovie() {
         await isTokenExpired();
         const [movies, reviewsData, recommendedMovies] = await Promise.all([
           sendData(id, userId),
-          fetchData(`${getReviewEndpoint}${id}`),
-          fetchData(`${recommendedEndpoint}${id}`)
+          fetchData(`${getReviewEndpoint}${id} `),
+          fetchData(`${recommendedEndpoint}${id} `)
         ]);
         setMovie(await movies.json());
         setReviews(reviewsData)
@@ -61,6 +59,10 @@ export default function IndMovie() {
     }
     fetchBackendData();
   }, [id]);
+
+  const containerClass = movie && movie.trailer
+    ? IndMovieStyle.mainContainer
+    : `${IndMovieStyle.mainContainer} ${IndMovieStyle.NoTrailerContainer}`;
 
   return isLoading || !movie ? (
     <LoadingPage />
@@ -93,14 +95,13 @@ export default function IndMovie() {
                 onClick={handleWatchNowClick}
               />
               <div className={IndMovieStyle["btn-wrapper-2"]}>
-                <WatchListBtn movieData={movie} userId={userId} sendToWatchListEndpoint={sendToWatchListEndpoint} deleteFromWatchListEndpoint={deleteFromWatchListEndpoint} />
+                <WatchListBtn movieData={movie} userId={userId} />
               </div>
             </div>
             <div className={IndMovieStyle.ind_movie_review}>
               <MovieReviews movieId={movie.id} reviews={reviews} placement="header" />
             </div>
           </div>
-
           {movie.posterUrl ?
             <div className={IndMovieStyle["flex-1"]}>
               <img
@@ -115,8 +116,8 @@ export default function IndMovie() {
               alt="fallback poster"
             />}
         </section>
-        <section className={IndMovieStyle.mainContainer}>
-          <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-1"]}`}>
+        <section className={containerClass}>
+          <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-1"]} `}>
             <MovieDetails
               runtime={movie.runtime}
               revenue={movie.revenue}
@@ -128,10 +129,10 @@ export default function IndMovie() {
               releaseDate={movie.releaseDate}
             />
           </div>
-          <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-2"]}`}>
+          <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-2"]} `}>
             <EmbeddedMovieTrailer trailer={movie.trailer} />
           </div>
-          <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-3"]}`}>
+          <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-3"]} `}>
             <MovieReviews
               voteAverage={movie.voteAverage}
               movieId={movie.id}
@@ -140,7 +141,7 @@ export default function IndMovie() {
             />
           </div>
           {movie.actors && movie.actors.length > 0 ?
-            <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-4"]}`}>
+            <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-4"]} `}>
               <div className={ActorStyle.CastMembers}>
                 <MovieActors actors={movie.actors} />
               </div>
@@ -148,7 +149,7 @@ export default function IndMovie() {
             : null}
         </section>
         {recommendedMovies.length >= 4 ?
-          <div className={`${IndMovieStyle["recommended-carousel-wrapper"]}`}>
+          <div className={`${IndMovieStyle["recommended-carousel-wrapper"]} `}>
             <RecommendedCarousel
               recommendedMovies={recommendedMovies}
             />

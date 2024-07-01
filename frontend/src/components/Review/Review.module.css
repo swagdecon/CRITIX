@@ -10,6 +10,7 @@
   overflow: hidden; 
   margin-right:15px
 }
+
 .total-rating-wrapper {
   display: inline-flex;
 }
@@ -36,6 +37,7 @@
 
 .textField-wrapper {
   flex: 1;
+  padding-top: 2vh;
 }
 .user-info-wrapper {
   display: flex;

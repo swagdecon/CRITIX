@@ -1,55 +1,57 @@
 import React from "react"
-import AddIcon from '@mui/icons-material/Add';
-import CheckIcon from '@mui/icons-material/Check';
 import WatchListBtnStyle from "./WatchListBtn.module.css"
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { useState } from "react";
 import { sendData } from "../../../../security/Data";
 import PropTypes from "prop-types";
-export default function WatchListBtn({ movieData, userId, sendToWatchListEndpoint, deleteFromWatchListEndpoint }) {
-    const [isAddedToWatchlist, setIsAddedToWatchlist] = useState(movieData.isSavedToWatchlist);
+const sendToWatchListEndpoint = process.env.REACT_APP_ADD_TO_WATCHLIST_ENDPOINT;
+const deleteFromWatchListEndpoint = process.env.REACT_APP_DELETE_FROM_WATCHLIST_ENDPOINT;
 
-    const handleClick = async () => {
-        if (!isAddedToWatchlist) {
-            const data = {
-                movieId: movieData.id,
-                title: movieData.title,
-                posterUrl: movieData.posterUrl,
-                voteAverage: movieData.voteAverage,
-                genres: movieData.genres,
-                overview: movieData.overview,
-                actors: movieData.actors ? movieData.actors.slice(0, 3) : null,
-                userId: userId
-            };
+export default function WatchListBtn({ movieData, userId }) {
+    const [isSavedToWatchListState, setIsSavedToWatchListState] = useState(movieData.isSavedToWatchlist)
 
-            const response = await sendData(`${sendToWatchListEndpoint}${userId}`, data);
-            response.ok ? setIsAddedToWatchlist(true) : setIsAddedToWatchlist(false);
-        } else {
-            const response = await sendData(`${deleteFromWatchListEndpoint}${userId}/${movieData.id}`);
-            response.ok ? setIsAddedToWatchlist(false) : setIsAddedToWatchlist(true);
-
-        }
+    const data = {
+        movieId: movieData.id,
+        title: movieData.title,
+        posterUrl: movieData.posterUrl,
+        voteAverage: movieData.voteAverage,
+        genres: movieData.genres,
+        overview: movieData.overview,
+        actors: movieData.actors ? movieData.actors.slice(0, 3) : null,
+        userId: userId
     };
 
+    async function handleSaveToWatchlist(e) {
+        e.preventDefault();
+        const response = await sendData(`${sendToWatchListEndpoint}/${userId}`, data);
+        response.ok ? setIsSavedToWatchListState(true) : false;
+        e.stopPropagation();
+    }
+
+    async function handleDeleteFromWatchlist(e) {
+        e.preventDefault();
+        const response = await sendData(`${deleteFromWatchListEndpoint}${userId}/${movieData.id}`);
+        response.ok ? setIsSavedToWatchListState(false) : false;
+        e.stopPropagation();
+    }
+
     return (
-        <div className={WatchListBtnStyle["btn-container"]}>
-            <div className={WatchListBtnStyle['btn']} tabIndex="0" onClick={handleClick}>
-                <div className={WatchListBtnStyle['add-icon']}>
-                    {isAddedToWatchlist ?
-                        <CheckIcon />
-                        :
-                        <AddIcon />}
-                </div>
-                <div className={WatchListBtnStyle['watchlist-label']}>
-                    <span>{isAddedToWatchlist ? 'ADDED TO WATCHLIST' : 'ADD TO WATCHLIST'}</span>
-                </div>
+        <div className={WatchListBtnStyle["circle-container"]}>
+            <div className={WatchListBtnStyle["action-btn"]}>
+                {!isSavedToWatchListState ?
+                    <i> <BookmarkBorderIcon sx={{ fontSize: 30 }} onClick={handleSaveToWatchlist} /></i>
+                    :
+                    <i><BookmarkIcon sx={{ fontSize: 30 }} onClick={handleDeleteFromWatchlist} /></i>
+                }
             </div>
         </div>
     )
 }
+
 WatchListBtn.propTypes = {
     userId: PropTypes.string.isRequired,
-    sendToWatchListEndpoint: PropTypes.string.isRequired,
-    deleteFromWatchListEndpoint: PropTypes.string.isRequired,
+    isSavedToWatchlist: PropTypes.bool.isRequired,
     movieData: PropTypes.shape({
         id: PropTypes.number.isRequired,
         title: PropTypes.string.isRequired,
