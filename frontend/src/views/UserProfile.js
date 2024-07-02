@@ -2,6 +2,7 @@ import React from "react";
 import UserStyle from "../components/UserProfile/UserProfile.module.css"
 import CardProfile from "../components/UserProfile/ProfileImageUpload.js"
 import NavBar from "../components/NavBar/NavBar.js";
+import { LineChart } from "@mui/x-charts/LineChart"
 export default function UserProfile() {
 
     return (
@@ -29,40 +30,78 @@ export default function UserProfile() {
                                 Bio
                             </div>
                             <p className={UserStyle["bio-text"]}>
-                                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                                Hi!, My name is Connor and I am the working on this application!
                             </p>
                         </section>
                     </div>
+                    <div className={UserStyle.MainInfoPanel}>
+                        <div className={UserStyle.ActivityInfo}>
+                            <div className={UserStyle.UserActivityTitles}>Your Activity (Logins)</div>
+                            <LineChart
+                                xAxis={[
+                                    {
+                                        scaleType: 'time',
+                                        data: [
+                                            new Date(2024, 0, 1),
+                                            new Date(2024, 1, 1),
+                                            new Date(2024, 2, 1),
+                                            new Date(2024, 3, 1),
+                                            new Date(2024, 4, 1),
+                                            new Date(2024, 5, 1),
+                                            new Date(2024, 6, 1),
+                                            new Date(2024, 7, 1),
+                                            new Date(2024, 8, 1),
+                                            new Date(2024, 9, 1),
+                                            new Date(2024, 10, 1),
+                                            new Date(2024, 11, 1),
 
-                    <div className={UserStyle["account-info"]}>
-                        <div className={UserStyle.data}>
-                            <section className={UserStyle["user-reviews-section"]}>
-                                <div className={UserStyle["reviews-title"]}>
-                                    all reviews
-                                </div>
-                                <div className={UserStyle["review-list"]}>
-                                    {/* {reviews.map(review.length, (review) => {
-                                        console.log(review)
-                                    })} */}
-                                </div>
-                            </section>
+                                        ],
+                                        tickNumber: 3,
+                                    },
+                                ]}
+                                series={[
+                                    {
+                                        data: [1, 9, 4, 6.5, 7, 13, 2, 5.5, 2, 8.5],
+                                        color: '#0096ff',
+
+                                    },
+                                ]}
+                                width={1000}
+                                height={300}
+                                sx={{
+                                    //change left yAxis label styles
+                                    "& .MuiChartsAxis-left .MuiChartsAxis-tickLabel": {
+                                        strokeWidth: "1",
+                                        fill: "white"
+                                    },
+                                    // change all labels fontFamily shown on both xAxis and yAxis
+                                    "& .MuiChartsAxis-tickContainer .MuiChartsAxis-tickLabel": {
+                                        fontFamily: "Roboto",
+                                    },
+                                    // change bottom label styles
+                                    "& .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel": {
+                                        strokeWidth: "0.5",
+                                        fill: "white"
+                                    },
+                                    // bottomAxis Line Styles
+                                    "& .MuiChartsAxis-bottom .MuiChartsAxis-line": {
+                                        stroke: "white",
+                                        strokeWidth: 1
+                                    },
+                                    // leftAxis Line Styles
+                                    "& .MuiChartsAxis-left .MuiChartsAxis-line": {
+                                        stroke: "white",
+                                        strokeWidth: 1
+                                    },
+                                }}
+                            />
                         </div>
+                        <div className={UserStyle.RecentReviews}>
+                            <div className={UserStyle.RecentReviewsTitle}>Recent reviews</div>
 
-                        <div className={UserStyle["social-media"]}>
-                            <span>Follow me in:</span>
-                            <a href="" className={UserStyle["media-link"]}><i className="fab fa-facebook-square"></i></a>
-                            <a href="https://twitter.com/MammadSahragard" className={UserStyle["media-link"]}><i className="fab fa-twitter-square"></i></a>
-                            <a href="https://www.linkedin.com/in/mohammadsahragard/" className={UserStyle["media-link"]}><i className="fab fa-linkedin"></i></a>
-                            <a href="https://www.instagram.com/mammad.sahragard/" className={UserStyle["media-link"]}><i className="fab fa-instagram-square"></i></a>
-                            <a href="https://github.com/MohammadSahragard" className={UserStyle["media-link"]}><i className="fab fa-github-square"></i></a>
                         </div>
-
-                        <div className={UserStyle["last-post"]}>
-                            <div className={UserStyle["post-cover"]}>
-                                <span className={UserStyle["last-badge"]}>Last Post</span>
-                            </div>
-                            <h3 className={UserStyle["post-title"]}>3D layer</h3>
-                            <button className={UserStyle["post-CTA"]}>View</button>
+                        <div className={UserStyle.AllReviews}>
+                            <div className={UserStyle.AllReviewsTitle}>all reviews</div>
                         </div>
                     </div>
                 </div>
