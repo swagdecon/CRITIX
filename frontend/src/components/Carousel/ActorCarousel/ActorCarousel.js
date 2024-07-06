@@ -56,7 +56,6 @@ export default function MovieActors({ actors }) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useWindowResizeEffect(setWindowWidth);
-  console.log(actors)
   const handleSelect = (selectedIndex) => {
     if (selectedIndex >= actorChunks.length) {
       setActiveIndex(0);

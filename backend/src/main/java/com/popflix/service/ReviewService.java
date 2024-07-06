@@ -61,6 +61,11 @@ public class ReviewService {
         return reviews;
     }
 
+    public List<Review> getAllUserReviews(String userId) {
+        List<Review> reviews = reviewRepository.findByUserId(userId);
+        return reviews;
+    }
+
     public List<Review> getMovieUserReviews(Integer movieId) throws IOException, InterruptedException {
         List<Review> externalReviews = tmdbReviews.getMovieReviews(movieId);
         List<Review> databaseReviews = getAllMovieReviews(movieId);

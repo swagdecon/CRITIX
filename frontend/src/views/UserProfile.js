@@ -1,10 +1,40 @@
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { fetchData } from "../security/Data";
+import CookieManager from "../security/CookieManager.js";
+import isTokenExpired from "../security/IsTokenExpired.js";
 import UserStyle from "../components/UserProfile/UserProfile.module.css"
 import CardProfile from "../components/UserProfile/ProfileImageUpload.js"
 import NavBar from "../components/NavBar/NavBar.js";
 import { LineChart } from "@mui/x-charts/LineChart"
+import jwt_decode from "jwt-decode";
+
+const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
+
 export default function UserProfile() {
 
+    const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
+    const decodedToken = useMemo(() => jwt_decode(token), [token]);
+    const userId = decodedToken.userId
+
+    const [userReviews, setUserReviews] = useState(null)
+    useEffect(() => {
+        async function fetchBackendData() {
+            try {
+                await isTokenExpired();
+                const [allUserReviews] = await Promise.all([
+                    fetchData(`${allUserReviewsEndpoint}${userId}`),
+                ]);
+                setUserReviews({
+                    allUserReviews
+                });
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        fetchBackendData();
+    }, []);
+    console.log(userReviews)
     return (
         <div className={UserStyle.container}>
             <NavBar />

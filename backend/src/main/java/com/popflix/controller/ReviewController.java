@@ -45,6 +45,13 @@ public class ReviewController {
                 return new ResponseEntity<>(reviews, HttpStatus.OK);
         }
 
+        @GetMapping("/get/{userId}")
+        public ResponseEntity<List<Review>> userReviews(@PathVariable String userId)
+                        throws IOException, InterruptedException {
+                List<Review> allUserReviews = reviewService.getAllUserReviews(userId);
+                return new ResponseEntity<>(allUserReviews, HttpStatus.OK);
+        }
+
         @PostMapping("/delete/{movieId}/{userId}")
         public ResponseEntity<String> deleteUserMovieReview(@PathVariable Integer movieId,
                         @PathVariable String userId) throws IOException, InterruptedException {

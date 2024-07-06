@@ -28,7 +28,6 @@ const HeaderUser = () => {
   const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
   const decodedToken = useMemo(() => jwt_decode(token), [token]);
   const firstName = decodedToken.firstName
-
   return (
     <div className={userStyle.UserProfile}>
       <div className={userStyle.User}>
