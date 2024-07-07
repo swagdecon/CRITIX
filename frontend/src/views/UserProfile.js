@@ -15,8 +15,8 @@ export default function UserProfile() {
     const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
     const decodedToken = useMemo(() => jwt_decode(token), [token]);
     const userId = decodedToken.userId
-
     const [userReviews, setUserReviews] = useState(null)
+    const [recentUserReview, setRecentUserReview] = useState(null)
     useEffect(() => {
         async function fetchBackendData() {
             try {
@@ -24,9 +24,10 @@ export default function UserProfile() {
                 const [allUserReviews] = await Promise.all([
                     fetchData(`${allUserReviewsEndpoint}${userId}`),
                 ]);
-                setUserReviews({
+                setUserReviews(
                     allUserReviews
-                });
+                );
+                setRecentUserReview(allUserReviews[0]);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -34,7 +35,7 @@ export default function UserProfile() {
 
         fetchBackendData();
     }, []);
-    console.log(userReviews)
+
     return (
         <div className={UserStyle.container}>
             <NavBar />
@@ -128,14 +129,45 @@ export default function UserProfile() {
                         </div>
                         <div className={UserStyle.RecentReviews}>
                             <div className={UserStyle.RecentReviewsTitle}>Recent reviews</div>
-
+                            <div className={UserStyle.AllUserReviews}>
+                                {recentUserReview ?
+                                    <div className={UserStyle.IndUserReviews} key={recentUserReview.movieId}>
+                                        <div className={UserStyle.ProfilePic}>{recentUserReview.avatar}</div>
+                                        <div className={UserStyle.ContentWrapper}>
+                                            <div className={UserStyle.ContentHeaderWrapper}>
+                                                <div className={UserStyle.UserName}>{recentUserReview.author}</div>
+                                                <div className={UserStyle.TimeAgo}>
+                                                    {recentUserReview.createdDate}
+                                                </div>
+                                            </div>
+                                            <div className={UserStyle.ReviewContent}>{recentUserReview.content}</div>
+                                        </div>
+                                    </div>
+                                    : "No Recent Reviews"}
+                            </div>
                         </div>
                         <div className={UserStyle.AllReviews}>
                             <div className={UserStyle.AllReviewsTitle}>all reviews</div>
+                            <div className={UserStyle.AllUserReviews}>
+                                {userReviews?.map((review) => (
+                                    <div className={UserStyle.IndUserReviews} key={review.movieId}>
+                                        <div className={UserStyle.ProfilePic}>{review.avatar}</div>
+                                        <div className={UserStyle.ContentWrapper}>
+                                            <div className={UserStyle.ContentHeaderWrapper}>
+                                                <div className={UserStyle.UserName}>{review.author}</div>
+                                                <div className={UserStyle.TimeAgo}>
+                                                    {review.createdDate}
+                                                </div>
+                                            </div>
+                                            <div className={UserStyle.ReviewContent}>{review.content}</div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
