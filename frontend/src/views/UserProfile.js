@@ -9,7 +9,7 @@ import { LineChart } from "@mui/x-charts/LineChart"
 import jwt_decode from "jwt-decode";
 
 const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
-
+const getAvatarEndpoint = process.env.REACT_APP_GET_USER_INFO
 export default function UserProfile() {
 
     const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
@@ -17,16 +17,20 @@ export default function UserProfile() {
     const userId = decodedToken.userId
     const [userReviews, setUserReviews] = useState(null)
     const [recentUserReview, setRecentUserReview] = useState(null)
+    const [avatar, setAvatar] = useState(null);
     useEffect(() => {
         async function fetchBackendData() {
             try {
                 await isTokenExpired();
-                const [allUserReviews] = await Promise.all([
+                const [allUserReviews, avatarPic] = await Promise.all([
                     fetchData(`${allUserReviewsEndpoint}${userId}`),
+                    fetchData(`${getAvatarEndpoint}${userId}`),
+
                 ]);
                 setUserReviews(
                     allUserReviews
                 );
+                setAvatar(avatarPic)
                 setRecentUserReview(allUserReviews[0]);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -35,13 +39,14 @@ export default function UserProfile() {
 
         fetchBackendData();
     }, []);
+
     return (
         <div className={UserStyle.container}>
             <NavBar />
             <div className={UserStyle["profile-card"]}>
                 <div className={UserStyle["profile-header"]}>
                     <div className={UserStyle["main-profile"]}>
-                        <CardProfile userId={userId} />
+                        <CardProfile userId={userId} avatar={avatar} />
                         <div className={UserStyle["profile-names"]}>
                             <h1 className={UserStyle.username}>Connor Pant</h1>
                             <small className={UserStyle["page-title"]}>Pilot</small>
@@ -130,7 +135,9 @@ export default function UserProfile() {
                             <div className={UserStyle.AllUserReviews}>
                                 {recentUserReview ?
                                     <div className={UserStyle.IndUserReviews} key={recentUserReview.movieId}>
-                                        <div className={UserStyle.ProfilePic}>{recentUserReview.avatar}</div>
+                                        <div className={UserStyle.ProfilePic}>
+                                            <img src={avatar} alt="User Avatar" />
+                                        </div>
                                         <div className={UserStyle.ContentWrapper}>
                                             <div className={UserStyle.ContentHeaderWrapper}>
                                                 <div className={UserStyle.UserName}>{recentUserReview.author}</div>
@@ -149,7 +156,9 @@ export default function UserProfile() {
                             <div className={UserStyle.AllUserReviews}>
                                 {userReviews?.map((review) => (
                                     <div className={UserStyle.IndUserReviews} key={review.movieId}>
-                                        <div className={UserStyle.ProfilePic}>{review.avatar}</div>
+                                        <div className={UserStyle.ProfilePic}>
+                                            <img src={avatar} alt="User Avatar" />
+                                        </div>
                                         <div className={UserStyle.ContentWrapper}>
                                             <div className={UserStyle.ContentHeaderWrapper}>
                                                 <div className={UserStyle.UserName}>{review.author}</div>

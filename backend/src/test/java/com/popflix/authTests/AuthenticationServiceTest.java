@@ -55,6 +55,8 @@ import com.popflix.model.User;
 import com.popflix.repository.TokenRepository;
 import com.popflix.repository.UserRepository;
 import com.popflix.service.EmailService;
+import com.popflix.service.UserService;
+
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -82,6 +84,9 @@ public class AuthenticationServiceTest {
 
         @Mock
         private EmailService emailService;
+
+        @Mock
+        private UserService userService;
 
         @Mock
         private AuthenticationService authService;
@@ -632,20 +637,32 @@ public class AuthenticationServiceTest {
         ////////////////////////////////////////////////////////////////
 
         @Test
-        public void test_valid_access_token() {
-                String accessToken = "valid_access_token";
-                User expectedUser = new User();
-                Mockito.when(tokenRepository.findUserByToken(accessToken)).thenReturn(expectedUser);
+        public void testGetUserDetails() throws Exception {
+                // Mock input
+                String authHeader = "Bearer mockAccessToken";
 
-                User actualUser = authenticationService.getUserDetails(accessToken);
+                // Mock behavior
+                String userEmail = "testuser@example.com";
+                User mockUser = new User();
+                mockUser.setEmail(userEmail);
+                when(jwtService.extractUsername("mockAccessToken")).thenReturn(userEmail);
+                when(userRepository.findByEmail(userEmail)).thenReturn(Optional.of(mockUser));
 
-                assertEquals(expectedUser, actualUser);
+                // Call the method
+                User returnedUser = authenticationService.getUserDetails(authHeader);
+
+                // Verify the result
+                assertEquals(userEmail, returnedUser.getEmail());
+
+                // Verify interactions
+                verify(jwtService).extractUsername("mockAccessToken");
+                verify(userRepository).findByEmail(userEmail);
         }
 
         @Test
-        public void test_invalid_access_token_userDetails() {
+        public void test_invalid_access_token_userDetails() throws Exception {
                 String accessToken = "invalid_access_token";
-                Mockito.when(tokenRepository.findUserByToken(accessToken)).thenReturn(null);
+                Mockito.when(tokenRepository.findByToken(accessToken)).thenReturn(null);
 
                 User actualUser = authenticationService.getUserDetails(accessToken);
 
@@ -653,7 +670,7 @@ public class AuthenticationServiceTest {
         }
 
         @Test
-        public void test_null_or_empty_access_token() {
+        public void test_null_or_empty_access_token() throws Exception {
                 String nullAccessToken = null;
                 String emptyAccessToken = "";
                 User actualUserWithNullJwt = authenticationService.getUserDetails(nullAccessToken);

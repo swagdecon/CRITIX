@@ -14,8 +14,5 @@ public interface TokenRepository extends MongoRepository<Token, String> {
     @Query("{'userId': ?0, expired: false, revoked: false}")
     List<Token> findAllValidTokensByUser(String userId);
 
-    @Query(value = "{'token': ?0, expired: false, revoked: false}", fields = "{'userId': 1}")
-    User findUserByToken(String token);
-
     Optional<Token> findByToken(String token);
 }

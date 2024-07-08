@@ -2,6 +2,7 @@ package com.popflix.controller;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,9 +16,9 @@ import com.popflix.auth.AuthenticationService;
 import com.popflix.model.User;
 import com.popflix.service.UserService;
 
-import io.jsonwebtoken.io.IOException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @RequestMapping("/user")
 @RestController
@@ -28,9 +29,27 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> singleUser(@PathVariable String accessToken)
-            throws IOException, InterruptedException {
-        return new ResponseEntity<User>(authenticationService.getUserDetails(accessToken), HttpStatus.OK);
+    public ResponseEntity<User> singleUser(@RequestHeader("Authorization") String accessToken)
+            throws Exception {
+        User user = authenticationService.getUserDetails(accessToken);
+
+        if (user != null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/avatar/{id}")
+    public ResponseEntity<String> singleAvatar(@RequestHeader("Authorization") String accessToken)
+            throws Exception {
+        String avatarPic = authenticationService.getUserDetails(accessToken).getAvatar();
+
+        if (avatarPic != null) {
+            return new ResponseEntity<>(avatarPic, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/update/profile-img/{userId}")

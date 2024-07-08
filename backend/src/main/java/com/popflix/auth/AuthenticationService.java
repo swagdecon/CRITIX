@@ -5,6 +5,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -262,9 +263,16 @@ public class AuthenticationService {
                 }
         }
 
-        public User getUserDetails(String accessToken) {
-                User user = tokenRepository.findUserByToken(accessToken);
-                return user;
+        public User getUserDetails(String authHeader) throws Exception {
+                try {
+                        String accessToken = authHeader.substring(7);
+                        String userEmail = jwtService.extractUsername(accessToken);
+                        var user = this.userRepository.findByEmail(userEmail).orElse(null);
+
+                        return user;
+                } catch (Exception e) {
+                        throw new Exception("User Not Found");
+                }
         }
 
         public static SecretKey generateSecretKey() throws Exception {

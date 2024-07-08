@@ -209,12 +209,17 @@
     }
     .ProfilePic {
         background-color: azure;
+        border: 1px solid #000000;
         width: 50px;
         height: 50px;
         border-radius: 50px;
         display: flex;
         margin-left: 2%;
         align-self: center;
+        overflow: hidden;
+    }
+    .ProfilePic img {
+        object-fit: cover;
     }
     .ContentWrapper {
         display: flex;

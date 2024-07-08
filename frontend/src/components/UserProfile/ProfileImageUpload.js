@@ -75,7 +75,7 @@ const ImgUpload = ({ onChange, src, userId }) => {
                         <AddIcon
                             style={{ color: '#0096ff' }}
                             className={UserStyle['add-icon']}
-                            onClick={handleAddClick} // Trigger URL prompt
+                            onClick={handleAddClick}
                         />
                     </>
                 ) : (
@@ -90,9 +90,8 @@ const ImgUpload = ({ onChange, src, userId }) => {
     );
 };
 
-const CardProfile = ({ userId }) => {
-    const [imageURL, setImageURL] = useState(null);
-
+const CardProfile = ({ userId, avatar }) => {
+    const [imageURL, setImageURL] = useState(avatar);
     const photoUpload = (url) => {
         setImageURL(url);
     };
@@ -103,11 +102,13 @@ const CardProfile = ({ userId }) => {
 };
 CardProfile.propTypes = {
     userId: PropTypes.string.isRequired,
+    avatar: PropTypes.string.isRequired
 }
+
 ImgUpload.propTypes = {
     onChange: PropTypes.func.isRequired,
     src: PropTypes.string.isRequired,
-    userId: PropTypes.string.isRequired
+    userId: PropTypes.string.isRequired,
 };
 
 export default CardProfile;
