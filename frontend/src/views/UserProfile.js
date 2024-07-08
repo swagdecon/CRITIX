@@ -35,15 +35,13 @@ export default function UserProfile() {
 
         fetchBackendData();
     }, []);
-
     return (
         <div className={UserStyle.container}>
             <NavBar />
-
             <div className={UserStyle["profile-card"]}>
                 <div className={UserStyle["profile-header"]}>
                     <div className={UserStyle["main-profile"]}>
-                        <CardProfile />
+                        <CardProfile userId={userId} />
                         <div className={UserStyle["profile-names"]}>
                             <h1 className={UserStyle.username}>Connor Pant</h1>
                             <small className={UserStyle["page-title"]}>Pilot</small>
