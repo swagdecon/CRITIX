@@ -5,30 +5,14 @@ import UserStyle from './UserProfile.module.css';
 import AddIcon from '@mui/icons-material/Add';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import { sendData } from '../../security/Data';
-const SaveProfileImgEndpoint = process.env.REACT_APP_UPDATE_PROFILE_IMAGE
+import { validateImageURL } from '../Shared/Shared';
+const saveProfileImgEndpoint = process.env.REACT_APP_UPDATE_PROFILE_IMAGE
+
 const ImgUpload = ({ onChange, src, userId }) => {
     const [editor, setEditor] = useState(null);
     const editorRef = useRef(null);
     const [btn, setBtn] = useState("add");
     const [profilePicture, setProfilePicture] = useState(null);
-
-    const validateImageURL = (url) => {
-        const img = new Image();
-        img.src = url;
-
-        return new Promise((resolve, reject) => {
-            img.onload = () => {
-                if (img.width > 0 && img.height > 0) {
-                    resolve(true);
-                } else {
-                    reject(new Error("Invalid image URL"));
-                }
-            };
-            img.onerror = () => {
-                reject(new Error("Invalid image URL"));
-            };
-        });
-    };
 
     const handleAddClick = async () => {
         const url = window.prompt("Please enter the image URL:");
@@ -49,7 +33,7 @@ const ImgUpload = ({ onChange, src, userId }) => {
             const data = {
                 profilePic: profilePicture
             }
-            const response = await sendData(`${SaveProfileImgEndpoint}/${userId}`, data);
+            const response = await sendData(`${saveProfileImgEndpoint}/${userId}`, data);
             response.ok ? window.alert('New Profile Picture Saved Successfully') : window.alert('An Error Occured, Please try again');
         }
 

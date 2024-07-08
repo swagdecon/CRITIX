@@ -5,20 +5,20 @@ import NavBarStyle from "./NavBar.module.css"
 import Search from "./Search/Search";
 import HeaderUser from "./HeaderUser/HeaderUser";
 import PropTypes from "prop-types";
-import { useState, useEffect, useMemo } from "react"
+import { useState, useMemo } from "react"
 import { fetchData } from '../../security/Data';
 import jwt_decode from "jwt-decode";
 import isTokenExpired from "../../security/IsTokenExpired.js";
 import CookieManager from "../../security/CookieManager.js";
 
-const getAvatarEndpoint = process.env.REACT_APP_GET_USER_INFO
+const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
 
 export default function NavBar(props) {
   const [avatar, setAvatar] = useState(null)
   const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
   const decodedToken = useMemo(() => jwt_decode(token), [token]);
   const userId = decodedToken.userId
-  useEffect(() => {
+  useMemo(() => {
     async function fetchBackendData() {
       try {
         await isTokenExpired();

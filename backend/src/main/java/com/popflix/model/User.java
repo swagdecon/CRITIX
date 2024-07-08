@@ -32,6 +32,7 @@ public class User implements UserDetails {
     private String password;
     private Boolean loggedIn = false;
     private String avatar;
+    private String bannerPicture;
     private Boolean accountActive;
     private Integer emailAuthRequests;
     private Date accountAuthRequestDate;

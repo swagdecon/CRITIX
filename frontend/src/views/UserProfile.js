@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { fetchData } from "../security/Data";
 import CookieManager from "../security/CookieManager.js";
 import isTokenExpired from "../security/IsTokenExpired.js";
@@ -7,9 +7,12 @@ import CardProfile from "../components/UserProfile/ProfileImageUpload.js"
 import NavBar from "../components/NavBar/NavBar.js";
 import { LineChart } from "@mui/x-charts/LineChart"
 import jwt_decode from "jwt-decode";
-
+import BannerImg from "../components/UserProfile/BannerImage.js";
 const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
-const getAvatarEndpoint = process.env.REACT_APP_GET_USER_INFO
+const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
+const getBannerEndpoint = process.env.REACT_APP_GET_USER_BANNER
+const DEFAULT_ACTOR_IMAGE = process.env.REACT_APP_DEFAULT_ACTOR_IMAGE
+
 export default function UserProfile() {
 
     const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
@@ -18,13 +21,15 @@ export default function UserProfile() {
     const [userReviews, setUserReviews] = useState(null)
     const [recentUserReview, setRecentUserReview] = useState(null)
     const [avatar, setAvatar] = useState(null);
+    const [banner, setBanner] = useState(null);
     useEffect(() => {
         async function fetchBackendData() {
             try {
                 await isTokenExpired();
-                const [allUserReviews, avatarPic] = await Promise.all([
+                const [allUserReviews, avatarPic, bannerPic] = await Promise.all([
                     fetchData(`${allUserReviewsEndpoint}${userId}`),
                     fetchData(`${getAvatarEndpoint}${userId}`),
+                    fetchData(`${getBannerEndpoint}${userId}`)
 
                 ]);
                 setUserReviews(
@@ -32,6 +37,7 @@ export default function UserProfile() {
                 );
                 setAvatar(avatarPic)
                 setRecentUserReview(allUserReviews[0]);
+                setBanner(bannerPic)
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -39,17 +45,16 @@ export default function UserProfile() {
 
         fetchBackendData();
     }, []);
-
     return (
         <div className={UserStyle.container}>
             <NavBar />
             <div className={UserStyle["profile-card"]}>
                 <div className={UserStyle["profile-header"]}>
+                    <BannerImg userId={userId} bannerPic={banner} />
                     <div className={UserStyle["main-profile"]}>
                         <CardProfile userId={userId} avatar={avatar} />
                         <div className={UserStyle["profile-names"]}>
                             <h1 className={UserStyle.username}>Connor Pant</h1>
-                            <small className={UserStyle["page-title"]}>Pilot</small>
                         </div>
                     </div>
                 </div>
@@ -136,7 +141,7 @@ export default function UserProfile() {
                                 {recentUserReview ?
                                     <div className={UserStyle.IndUserReviews} key={recentUserReview.movieId}>
                                         <div className={UserStyle.ProfilePic}>
-                                            <img src={avatar} alt="User Avatar" />
+                                            <img src={avatar ? avatar : DEFAULT_ACTOR_IMAGE} alt="User Avatar" />
                                         </div>
                                         <div className={UserStyle.ContentWrapper}>
                                             <div className={UserStyle.ContentHeaderWrapper}>
@@ -154,21 +159,21 @@ export default function UserProfile() {
                         <div className={UserStyle.AllReviews}>
                             <div className={UserStyle.AllReviewsTitle}>all reviews</div>
                             <div className={UserStyle.AllUserReviews}>
-                                {userReviews?.map((review) => (
-                                    <div className={UserStyle.IndUserReviews} key={review.movieId}>
-                                        <div className={UserStyle.ProfilePic}>
-                                            <img src={avatar} alt="User Avatar" />
-                                        </div>
-                                        <div className={UserStyle.ContentWrapper}>
-                                            <div className={UserStyle.ContentHeaderWrapper}>
-                                                <div className={UserStyle.UserName}>{review.author}</div>
-                                                <div className={UserStyle.TimeAgo}>
-                                                    {review.createdDate}
-                                                </div>
-                                            </div>
-                                            <div className={UserStyle.ReviewContent}>{review.content}</div>
-                                        </div>
+                                {userReviews?.map((review) => (<div className={UserStyle.IndUserReviews} key={review.movieId}>
+                                    <div className={UserStyle.ProfilePic}>
+                                        <img src={avatar ? avatar : DEFAULT_ACTOR_IMAGE} alt="User Avatar" />
                                     </div>
+                                    <div className={UserStyle.ContentWrapper}>
+                                        <div className={UserStyle.ContentHeaderWrapper}>
+                                            <div className={UserStyle.UserName}>{review.author}</div>
+                                            <div className={UserStyle.TimeAgo}>
+                                                {review.createdDate}
+                                            </div>
+                                        </div>
+                                        <div className={UserStyle.ReviewContent}>{review.content}</div>
+                                    </div>
+                                </div>
+
                                 ))}
                             </div>
                         </div>

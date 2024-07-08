@@ -28,12 +28,18 @@
 
 /* ------- profile body header */
 .profile-header {
-    background: url('./banner.jpg') center;
     background-size: cover;
     margin: 20px;
     border-radius: 20px;
     position: relative;
     height: 40ch;
+    background-size: cover;
+
+}
+.BannerImg {
+   max-height: 40ch;
+   width: 100%;
+object-fit: cover;
 }
     .main-profile {
         display: flex;
@@ -209,7 +215,7 @@
     }
     .ProfilePic {
         background-color: azure;
-        border: 1px solid #000000;
+        /* border: 2px solid #000000; */
         width: 50px;
         height: 50px;
         border-radius: 50px;
@@ -220,6 +226,7 @@
     }
     .ProfilePic img {
         object-fit: cover;
+        width: 100%;
     }
     .ContentWrapper {
         display: flex;

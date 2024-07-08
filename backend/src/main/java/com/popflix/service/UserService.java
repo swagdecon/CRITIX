@@ -1,6 +1,5 @@
 package com.popflix.service;
 
-import java.io.File;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,17 @@ public class UserService {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             user.setAvatar(profilePic);
+            userRepository.save(user);
+        } else {
+            throw new IllegalArgumentException("User not found with id: " + userId);
+        }
+    }
+
+    public void updateUserBannerImg(String bannerImg, String userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setBannerPicture(bannerImg);
             userRepository.save(user);
         } else {
             throw new IllegalArgumentException("User not found with id: " + userId);

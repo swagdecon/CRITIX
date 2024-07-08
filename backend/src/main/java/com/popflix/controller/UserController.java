@@ -1,8 +1,6 @@
 package com.popflix.controller;
 
-import java.io.File;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -69,4 +67,35 @@ public class UserController {
             return new ResponseEntity<>("Error processing URL", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/update/banner-img/{userId}")
+    public ResponseEntity<String> updateBannerImg(@RequestBody Map<String, String> profileBanner,
+            @PathVariable String userId)
+            throws java.io.IOException {
+        try {
+            String bannerPicUrl = profileBanner.get("bannerPic");
+
+            if (profileBanner == null || !bannerPicUrl.startsWith("https://")) {
+                return new ResponseEntity<>("Invalid URL. The URL must start with 'https://'", HttpStatus.BAD_REQUEST);
+            } else {
+                userService.updateUserBannerImg(bannerPicUrl, userId);
+                return new ResponseEntity<>("Profile Picture Updated", HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error processing URL", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/banner/{id}")
+    public ResponseEntity<String> getBanner(@RequestHeader("Authorization") String accessToken)
+            throws Exception {
+        String avatarPic = authenticationService.getUserDetails(accessToken).getBannerPicture();
+
+        if (avatarPic != null) {
+            return new ResponseEntity<>(avatarPic, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

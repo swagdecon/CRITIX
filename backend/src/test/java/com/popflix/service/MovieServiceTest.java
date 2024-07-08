@@ -5,21 +5,18 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.popflix.model.Movie;
-import com.popflix.model.MovieCard;
-import com.popflix.model.User;
+
 import com.popflix.repository.MovieRepository;
 import com.popflix.repository.UserRepository;
 import info.movito.themoviedbapi.TmdbApi;
