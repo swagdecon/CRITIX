@@ -135,7 +135,7 @@ export default function SignUpFunctionality() {
           id="password"
           name="password"
           className={SignUpStyles["text-input"]}
-          pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}"
+          pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,20}"
           autoComplete="current-password"
           value={password}
           onChange={handlePasswordChange}
