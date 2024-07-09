@@ -252,10 +252,6 @@ object-fit: cover;
         margin-right: 1%;
         font-weight: bold;
     }
-    .TimeAgo {
-        justify-content: flex-start;
-        font-size: 14px;
-    }
     .ReviewContent {
         display: flex;
         font-family: Arial;
@@ -293,7 +289,14 @@ object-fit: cover;
         flex-direction: column;
         border-radius: 20px;
     }
-
+    .UpdateInfoForm {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
     .GridContainer {
         align-items: center;
         display: grid;

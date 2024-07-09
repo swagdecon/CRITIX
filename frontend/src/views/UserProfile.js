@@ -10,6 +10,7 @@ import jwt_decode from "jwt-decode";
 import BannerImg from "../components/UserProfile/BannerImage.js";
 import LoadingPage from "./LoadingPage.js";
 import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
 const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
@@ -40,6 +41,9 @@ export default function UserProfile() {
     const [passwordError, setPasswordError] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("")
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
+    const emailPattern = /^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$/;
+    const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,20}/;
+
     const fetchBackendData = useCallback(async () => {
 
         try {
@@ -75,66 +79,54 @@ export default function UserProfile() {
 
     const handleEmailChange = e => {
         setEmail(e.target.value);
-        if (!/^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$/.test(e.target.value)) {
-            setEmailError("Invalid email address");
-        } else {
-            setEmailError(false);
-        }
-    }
+        setEmailError(emailPattern.test(e.target.value) ? '' : 'Invalid email address');
+    };
 
     const handleEmailConfirmChange = e => {
         setEmailConfirm(e.target.value);
-        if (!/^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$/.test(e.target.value)) {
-            setEmailConfirmError("Invalid email address");
-        } else {
-            setEmailConfirmError(false);
-        }
-    }
+        setEmailConfirmError(e.target.value === email ? '' : 'Email addresses do not match');
+    };
 
     const handleFirstNameChange = e => {
         setFirstName(e.target.value);
-        if (e.target.value.length < 3) {
-            setFirstNameError("Name must be at least 3 characters long");
-        } else if (e.target.value.length > 20) {
-            setFirstNameError("Name must be less than 20 characters long");
-        } else if (!/^[a-zA-Z ]+$/.test(e.target.value)) {
-            setFirstNameError("Name must contain only letters and spaces");
-        } else {
-            setFirstNameError(false);
-        }
-    }
+        setFirstNameError(e.target.value ? '' : 'First name is required');
+    };
 
     const handleLastNameChange = e => {
         setLastName(e.target.value);
-        if (e.target.value.length < 3) {
-            setLastNameError("Name must be at least 3 characters long");
-        } else if (e.target.value.length > 20) {
-            setLastNameError("Name must be less than 20 characters long");
-        } else if (!/^[a-zA-Z ]+$/.test(e.target.value)) {
-            setLastNameError("Name must contain only letters and spaces");
-        } else {
-            setLastNameError(false);
-        }
-    }
-
+        setLastNameError(e.target.value ? '' : 'Last name is required');
+    };
 
     const handlePasswordChange = e => {
         setPassword(e.target.value);
-        if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,20}/.test(e.target.value)) {
-            setPasswordError("Password must be 7-20 characters long, with at least one digit, one lowercase letter, and one uppercase letter.");
-        } else {
-            setPasswordError(false);
-        }
-    }
+        setPasswordError(passwordPattern.test(e.target.value) ? '' : 'Password must be 7-20 characters long, with at least one digit, one lowercase letter, and one uppercase letter');
+    };
 
     const handleConfirmPasswordChange = e => {
         setConfirmPassword(e.target.value);
-        if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,20}/.test(e.target.value)) {
-            setConfirmPasswordError("Password must be 7-20 characters long, with at least one digit, one lowercase letter, and one uppercase letter.");
-        } else {
-            setConfirmPasswordError(false);
+        setConfirmPasswordError(e.target.value === password ? '' : 'Passwords do not match');
+    };
+
+    const handleSubmit = e => {
+        e.preventDefault();
+
+        // Trigger validation for all fields
+        handleEmailChange({ target: { value: email } });
+        handleEmailConfirmChange({ target: { value: emailConfirm } });
+        handleFirstNameChange({ target: { value: firstName } });
+        handleLastNameChange({ target: { value: lastName } });
+        handlePasswordChange({ target: { value: password } });
+        handleConfirmPasswordChange({ target: { value: confirmPassword } });
+
+        // Check for errors
+        if (emailError || emailConfirmError || firstNameError || lastNameError || passwordError || confirmPasswordError) {
+            alert('Please fix the errors in the form');
+            return;
         }
-    }
+
+        // Proceed with form submission
+        alert('Form submitted successfully!');
+    };
 
     return isLoading ? (
         <LoadingPage />
@@ -277,65 +269,69 @@ export default function UserProfile() {
                         :
                         <div className={UserStyle.UserSettings}>
                             <div className={UserStyle.UserSettingsBox}>
-                                <h2 className={UserStyle.AllReviewsTitle}>General Information</h2>
-                                <div className={UserStyle.GridContainer}>
-                                    <div className={UserStyle.GridItem}>
-                                        <TextField
-                                            fullWidth
-                                            label="Email"
-                                            value={email}
-                                            onChange={handleEmailChange}
-                                            error={emailError}
-                                            helperText={emailError}
-                                        />
+                                <h2 className={UserStyle.Title}>General Information</h2>
+                                <form className={UserStyle.UpdateInfoForm} onSubmit={handleSubmit}>
+                                    <div className={UserStyle.GridContainer}>
+                                        <div className={UserStyle.GridItem}>
+                                            <TextField
+                                                fullWidth
+                                                label="Email"
+                                                value={email}
+                                                onChange={handleEmailChange}
+                                                error={emailError}
+                                                helperText={emailError}
+                                            />
+                                        </div>
+                                        <div className={UserStyle.GridItem}>
+                                            <TextField
+                                                fullWidth
+                                                label="Confirm Email"
+                                                value={emailConfirm}
+                                                onChange={handleEmailConfirmChange}
+                                                error={emailConfirmError}
+                                                helperText={emailConfirmError}
+                                            /></div>
+                                        <div className={UserStyle.GridItem}>
+                                            <TextField
+                                                fullWidth
+                                                label="First Name"
+                                                value={firstName}
+                                                onChange={handleFirstNameChange}
+                                                error={firstNameError}
+                                                helperText={firstNameError}
+                                            /></div>
+                                        <div className={UserStyle.GridItem}>
+                                            <TextField
+                                                fullWidth
+                                                label="Last Name"
+                                                value={lastName}
+                                                onChange={handleLastNameChange}
+                                                error={lastNameError}
+                                                helperText={lastNameError}
+                                            /></div>
+                                        <div className={UserStyle.GridItem}>
+                                            <TextField
+                                                fullWidth
+                                                label="Password"
+                                                value={password}
+                                                onChange={handlePasswordChange}
+                                                error={passwordError}
+                                                helperText={passwordError}
+                                            /></div>
+                                        <div className={UserStyle.GridItem}>
+                                            <TextField
+                                                fullWidth
+                                                label="Confirm Password"
+                                                value={confirmPassword}
+                                                onChange={handleConfirmPasswordChange}
+                                                error={confirmPasswordError}
+                                                helperText={confirmPasswordError}
+                                            /></div>
                                     </div>
-                                    <div className={UserStyle.GridItem}>
-                                        <TextField
-                                            fullWidth
-                                            label="Confirm Email"
-                                            value={emailConfirm}
-                                            onChange={handleEmailConfirmChange}
-                                            error={emailConfirmError}
-                                            helperText={emailConfirmError}
-                                        /></div>
-                                    <div className={UserStyle.GridItem}>
-                                        <TextField
-                                            fullWidth
-                                            label="First Name"
-                                            value={firstName}
-                                            onChange={handleFirstNameChange}
-                                            error={firstNameError}
-                                            helperText={firstNameError}
-                                        /></div>
-                                    <div className={UserStyle.GridItem}>
-                                        <TextField
-                                            fullWidth
-                                            label="Last Name"
-                                            value={lastName}
-                                            onChange={handleLastNameChange}
-                                            error={lastNameError}
-                                            helperText={lastNameError}
-                                        /></div>
-                                    <div className={UserStyle.GridItem}>
-                                        <TextField
-                                            fullWidth
-                                            label="Password"
-                                            value={password}
-                                            onChange={handlePasswordChange}
-                                            error={passwordError}
-                                            helperText={passwordError}
-                                        /></div>
-                                    <div className={UserStyle.GridItem}>
-                                        <TextField
-                                            fullWidth
-                                            label="Confirm Password"
-                                            value={confirmPassword}
-                                            onChange={handleConfirmPasswordChange}
-                                            error={confirmPasswordError}
-                                            helperText={confirmPasswordError}
-                                        /></div>
-                                </div>
+                                    <Button variant="contained">Confirm</Button>
+                                </form>
                             </div>
+
                         </div>
                     }
                 </div>
