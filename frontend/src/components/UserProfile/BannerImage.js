@@ -9,6 +9,7 @@ import defaultBannerPic from "./banner.jpg"
 const updateBannerImgEndpoint = process.env.REACT_APP_UPDATE_BANNER_IMAGE
 
 export default function BannerImg({ userId, bannerPic }) {
+    console.log(bannerPic)
     const [bannerPicture, setBannerPicture] = useState(bannerPic);
     const handleAddClick = async () => {
         const url = window.prompt("Please enter the image URL:");
@@ -17,7 +18,7 @@ export default function BannerImg({ userId, bannerPic }) {
                 await validateImageURL(url);
                 setBannerPicture(url)
                 const data = {
-                    bannerPic: bannerPicture
+                    bannerPic: url
                 }
                 const response = await sendData(`${updateBannerImgEndpoint}${userId}`, data);
                 response.ok ?
@@ -33,7 +34,7 @@ export default function BannerImg({ userId, bannerPic }) {
 
     return (
         <>
-            <img className={UserStyle.BannerImg} src={bannerPic ? bannerPic : defaultBannerPic}></img>
+            <img className={UserStyle.BannerImg} src={bannerPicture ? bannerPicture : defaultBannerPic} />
             <label htmlFor="photo-upload" className={UserStyle['custom-file-upload']}>
                 <AddIcon
                     style={{ color: '#0096ff' }}
@@ -47,4 +48,5 @@ export default function BannerImg({ userId, bannerPic }) {
 BannerImg.propTypes = {
     userId: PropTypes.string.isRequired,
     bannerPic: PropTypes.string,
+    refetchBanner: PropTypes.func.isRequired,
 };

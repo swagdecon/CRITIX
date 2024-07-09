@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { fetchData } from "../security/Data";
 import CookieManager from "../security/CookieManager.js";
 import isTokenExpired from "../security/IsTokenExpired.js";
@@ -8,6 +8,7 @@ import NavBar from "../components/NavBar/NavBar.js";
 import { LineChart } from "@mui/x-charts/LineChart"
 import jwt_decode from "jwt-decode";
 import BannerImg from "../components/UserProfile/BannerImage.js";
+import LoadingPage from "./LoadingPage.js";
 const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
 const getBannerEndpoint = process.env.REACT_APP_GET_USER_BANNER
@@ -22,35 +23,41 @@ export default function UserProfile() {
     const [recentUserReview, setRecentUserReview] = useState(null)
     const [avatar, setAvatar] = useState(null);
     const [banner, setBanner] = useState(null);
-    useEffect(() => {
-        async function fetchBackendData() {
-            try {
-                await isTokenExpired();
-                const [allUserReviews, avatarPic, bannerPic] = await Promise.all([
-                    fetchData(`${allUserReviewsEndpoint}${userId}`),
-                    fetchData(`${getAvatarEndpoint}${userId}`),
-                    fetchData(`${getBannerEndpoint}${userId}`)
+    const [isLoading, setIsLoading] = useState(true);
 
-                ]);
-                setUserReviews(
-                    allUserReviews
-                );
-                setAvatar(avatarPic)
-                setRecentUserReview(allUserReviews[0]);
-                setBanner(bannerPic)
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
+    const fetchBackendData = useCallback(async () => {
+        try {
+            await isTokenExpired();
+            const [allUserReviews, avatarPic, bannerPic] = await Promise.all([
+                fetchData(`${allUserReviewsEndpoint}${userId}`),
+                fetchData(`${getAvatarEndpoint}${userId}`),
+                fetchData(`${getBannerEndpoint}${userId}`)
+            ]);
+            setUserReviews(allUserReviews);
+            setAvatar(avatarPic);
+            setRecentUserReview(allUserReviews[0]);
+            setBanner(bannerPic);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            setIsLoading(false);
         }
-
-        fetchBackendData();
     }, []);
-    return (
+
+    useEffect(() => {
+        fetchBackendData();
+    }, [fetchBackendData]);
+
+    return isLoading ? (
+        <LoadingPage />
+    ) : (
         <div className={UserStyle.container}>
             <NavBar />
             <div className={UserStyle["profile-card"]}>
                 <div className={UserStyle["profile-header"]}>
-                    <BannerImg userId={userId} bannerPic={banner} />
+                    {!isLoading ?
+                        < BannerImg userId={userId} bannerPic={banner} refetchBanner={fetchBackendData} /> : null}
+
                     <div className={UserStyle["main-profile"]}>
                         <CardProfile userId={userId} avatar={avatar} />
                         <div className={UserStyle["profile-names"]}>
