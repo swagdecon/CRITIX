@@ -11,17 +11,18 @@ import BannerImg from "../components/UserProfile/BannerImage.js";
 import LoadingPage from "./LoadingPage.js";
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-
+import Pagination from "@mui/material/Pagination";
+import IndUserReview from "../components/Review/NewReview/IndUserReview.js";
 const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
 const getBannerEndpoint = process.env.REACT_APP_GET_USER_BANNER
-const DEFAULT_ACTOR_IMAGE = process.env.REACT_APP_DEFAULT_ACTOR_IMAGE
 
 export default function UserProfile() {
 
     const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
     const decodedToken = useMemo(() => jwt_decode(token), [token]);
     const userId = decodedToken.userId
+    const reviewsPerPage = 4;
     const [userReviews, setUserReviews] = useState(null)
     const [recentUserReview, setRecentUserReview] = useState(null)
     const [avatar, setAvatar] = useState(null);
@@ -29,10 +30,6 @@ export default function UserProfile() {
     const [isLoading, setIsLoading] = useState(true);
     const [renderUserSettings, setRenderUserSettings] = useState(false);
     const [renderUserHome, setRenderUserHome] = useState(true);
-    const [email, setEmail] = useState("");
-    const [emailConfirm, setEmailConfirm] = useState("");
-    const [emailConfirmError, setEmailConfirmError] = useState("");
-    const [emailError, setEmailError] = useState(false);
     const [firstName, setFirstName] = useState("");
     const [firstNameError, setFirstNameError] = useState("");
     const [lastName, setLastName] = useState("");
@@ -41,7 +38,18 @@ export default function UserProfile() {
     const [passwordError, setPasswordError] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("")
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
-    const emailPattern = /^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$/;
+    const [currentPage, setCurrentPage] = useState(1);
+    const handlePageChange = useCallback((event, page) => setCurrentPage(page));
+
+    const displayReviews = useMemo(() => {
+        let reviewsToDisplay = [];
+        const startIdx = (currentPage - 1) * reviewsPerPage;
+        const endIdx = startIdx + reviewsPerPage;
+        reviewsToDisplay = userReviews?.slice(startIdx, endIdx);
+        return reviewsToDisplay;
+    }, [currentPage, userReviews]);
+
+    const totalPages = userReviews ? Math.ceil(userReviews.length / reviewsPerPage) : 1;
     const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,20}/;
 
     const fetchBackendData = useCallback(async () => {
@@ -57,13 +65,14 @@ export default function UserProfile() {
             setAvatar(avatarPic);
             setRecentUserReview(allUserReviews[0]);
             setBanner(bannerPic);
+
         } catch (error) {
             console.error("Error fetching data:", error);
         } finally {
             setIsLoading(false);
         }
     }, []);
-
+    console.log(userReviews)
     useEffect(() => {
         fetchBackendData();
     }, [fetchBackendData]);
@@ -76,16 +85,6 @@ export default function UserProfile() {
         setRenderUserHome(true)
         setRenderUserSettings(false)
     }
-
-    const handleEmailChange = e => {
-        setEmail(e.target.value);
-        setEmailError(emailPattern.test(e.target.value) ? '' : 'Invalid email address');
-    };
-
-    const handleEmailConfirmChange = e => {
-        setEmailConfirm(e.target.value);
-        setEmailConfirmError(e.target.value === email ? '' : 'Email addresses do not match');
-    };
 
     const handleFirstNameChange = e => {
         setFirstName(e.target.value);
@@ -111,15 +110,13 @@ export default function UserProfile() {
         e.preventDefault();
 
         // Trigger validation for all fields
-        handleEmailChange({ target: { value: email } });
-        handleEmailConfirmChange({ target: { value: emailConfirm } });
         handleFirstNameChange({ target: { value: firstName } });
         handleLastNameChange({ target: { value: lastName } });
         handlePasswordChange({ target: { value: password } });
         handleConfirmPasswordChange({ target: { value: confirmPassword } });
 
         // Check for errors
-        if (emailError || emailConfirmError || firstNameError || lastNameError || passwordError || confirmPasswordError) {
+        if (firstNameError || lastNameError || passwordError || confirmPasswordError) {
             alert('Please fix the errors in the form');
             return;
         }
@@ -127,7 +124,6 @@ export default function UserProfile() {
         // Proceed with form submission
         alert('Form submitted successfully!');
     };
-
     return isLoading ? (
         <LoadingPage />
     ) : (
@@ -146,8 +142,6 @@ export default function UserProfile() {
 
                 <div className={UserStyle["profile-body"]}>
                     <div className={UserStyle["profile-actions"]}>
-                        {/* <button className={UserStyle.follow}>Follow</button>
-                        <button className={UserStyle.message}>Message</button> */}
                         <button className={UserStyle.settings} onClick={showUserHome}>Home</button>
 
                         <button className={UserStyle.settings} onClick={showUserSettings}>Settings</button>
@@ -225,44 +219,33 @@ export default function UserProfile() {
                                 />
                             </div>
                             <div className={UserStyle.RecentReviews}>
-                                <h2 className={UserStyle.Title}>Recent reviews</h2>
+                                <h2 className={UserStyle.Title}>Recent review</h2>
                                 <div className={UserStyle.AllUserReviews}>
                                     {recentUserReview ?
-                                        <div className={UserStyle.IndUserReviews} key={recentUserReview.movieId}>
-                                            <div className={UserStyle.ProfilePic}>
-                                                <img src={avatar ? avatar : DEFAULT_ACTOR_IMAGE} alt="User Avatar" />
-                                            </div>
-                                            <div className={UserStyle.ContentWrapper}>
-                                                <div className={UserStyle.ContentHeaderWrapper}>
-                                                    <div className={UserStyle.UserName}>{recentUserReview.author}</div>
-                                                    <div className={UserStyle.TimeAgo}>
-                                                        {recentUserReview.createdDate}
-                                                    </div>
-                                                </div>
-                                                <div className={UserStyle.ReviewContent}>{recentUserReview.content}</div>
-                                            </div>
-                                        </div>
+                                        <IndUserReview key={recentUserReview.movieId} avatar={recentUserReview.avatar} movieTitle={recentUserReview.movieTitle} createdDate={recentUserReview.createdDate} content={recentUserReview.content} rating={recentUserReview.rating} />
                                         : "No Recent Reviews"}
                                 </div>
                             </div>
                             <div className={UserStyle.AllReviews}>
                                 <h2 className={UserStyle.Title}>all reviews</h2>
                                 <div className={UserStyle.AllUserReviews}>
-                                    {userReviews?.map((review) => (<div className={UserStyle.IndUserReviews} key={review.movieId}>
-                                        <div className={UserStyle.ProfilePic}>
-                                            <img src={avatar ? avatar : DEFAULT_ACTOR_IMAGE} alt="User Avatar" />
-                                        </div>
-                                        <div className={UserStyle.ContentWrapper}>
-                                            <div className={UserStyle.ContentHeaderWrapper}>
-                                                <div className={UserStyle.UserName}>{review.author}</div>
-                                                <div className={UserStyle.TimeAgo}>
-                                                    {review.createdDate}
-                                                </div>
-                                            </div>
-                                            <div className={UserStyle.ReviewContent}>{review.content}</div>
-                                        </div>
-                                    </div>
+                                    {displayReviews.map((review) => (
+                                        <IndUserReview key={review.movieId} avatar={review.avatar} movieTitle={review.movieTitle} createdDate={review.createdDate} content={review.content} rating={review.rating} />
                                     ))}
+                                </div>
+                                <div className={UserStyle.PaginationWrapper}>
+                                    <Pagination
+                                        size="large"
+                                        color="primary"
+                                        count={totalPages}
+                                        page={currentPage}
+                                        onChange={handlePageChange}
+                                        sx={{
+                                            "& .MuiPaginationItem-root": {
+                                                color: "#ffffff",
+                                            },
+                                        }}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -272,25 +255,6 @@ export default function UserProfile() {
                                 <h2 className={UserStyle.Title}>General Information</h2>
                                 <form className={UserStyle.UpdateInfoForm} onSubmit={handleSubmit}>
                                     <div className={UserStyle.GridContainer}>
-                                        <div className={UserStyle.GridItem}>
-                                            <TextField
-                                                fullWidth
-                                                label="Email"
-                                                value={email}
-                                                onChange={handleEmailChange}
-                                                error={emailError}
-                                                helperText={emailError}
-                                            />
-                                        </div>
-                                        <div className={UserStyle.GridItem}>
-                                            <TextField
-                                                fullWidth
-                                                label="Confirm Email"
-                                                value={emailConfirm}
-                                                onChange={handleEmailConfirmChange}
-                                                error={emailConfirmError}
-                                                helperText={emailConfirmError}
-                                            /></div>
                                         <div className={UserStyle.GridItem}>
                                             <TextField
                                                 fullWidth
@@ -328,7 +292,9 @@ export default function UserProfile() {
                                                 helperText={confirmPasswordError}
                                             /></div>
                                     </div>
-                                    <Button variant="contained">Confirm</Button>
+                                    <div className={UserStyle.BtnWrapper}>
+                                        <Button fullWidth sx={{ width: "50%" }} variant="contained">Confirm</Button>
+                                    </div>
                                 </form>
                             </div>
 

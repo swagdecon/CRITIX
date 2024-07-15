@@ -202,63 +202,18 @@ object-fit: cover;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-        height: 100%;
     }
-    .IndUserReviews {
+    .PaginationWrapper {
         display: flex;
-        background: rgba(255, 255, 255, 0.18);
-        border-radius: 16px;
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        backdrop-filter: blur(11.4px);
-        -webkit-backdrop-filter: blur(11.4px);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        width: 80%;
-        height: fit-content;
-        padding-bottom: 1%;
-        margin-bottom: 2%;
+        justify-content: center;
+    }
+    .IndReviewWrapper {
+        display: flex;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+    }
 
-    }
-    .ProfilePic {
-        background-color: azure;
-        /* border: 2px solid #000000; */
-        width: 50px;
-        height: 50px;
-        border-radius: 50px;
-        display: flex;
-        margin-left: 2%;
-        align-self: center;
-        overflow: hidden;
-    }
-    .ProfilePic img {
-        object-fit: cover;
-        width: 100%;
-    }
-    .ContentWrapper {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        margin-left: 1%;
-    }
-    .ContentHeaderWrapper {
-        display: flex;
-        flex-direction: row;
-        margin-top: 1%;
-        align-items: center;
-    }
-    .UserName {
-        font-family: Arial;
-        display: flex;
-        width: fit-content;
-        margin-right: 1%;
-        font-weight: bold;
-    }
-    .ReviewContent {
-        display: flex;
-        font-family: Arial;
-        color:#000000;
-        width: 98%;
-        height: fit-content;
-    }
     .Title {
         text-transform: uppercase;
         font-weight: 500;
@@ -283,11 +238,17 @@ object-fit: cover;
         -webkit-backdrop-filter: blur(11.4px);
         border: 1px solid rgba(255, 255, 255, 0.3);
         display: flex;
-        height: 100%;
-        width: 70%;
+        height: 50%;
+        width: 30%;
         align-items: center;
         flex-direction: column;
         border-radius: 20px;
+    }
+    .BtnWrapper {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        margin-top: 2%;
     }
     .UpdateInfoForm {
         display: flex;

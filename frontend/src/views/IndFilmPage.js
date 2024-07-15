@@ -136,6 +136,7 @@ export default function IndMovie() {
             <MovieReviews
               voteAverage={movie.voteAverage}
               movieId={movie.id}
+              movieTitle={movie.title}
               reviews={reviews}
               placement="userRatingSection"
             />

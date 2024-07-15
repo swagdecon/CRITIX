@@ -22,8 +22,10 @@ public class ReviewController {
 
         @PostMapping("/create/{movieId}")
         public ResponseEntity<String> createMovieReview(@PathVariable Integer movieId, @RequestBody Review request) {
+                System.out.println(request.getMovieTitle());
                 String username = request.getAuthor();
                 String userId = request.getUserId();
+                String movieTitle = request.getMovieTitle();
                 String reviewRating = request.getRating();
                 String reviewContent = request.getContent();
                 String createdAt = request.getCreatedDate();
@@ -32,7 +34,8 @@ public class ReviewController {
                         String errorMessage = "User already submitted a review for this movie.";
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
                 } else {
-                        reviewService.createNewMovieReview(movieId, username, userId, reviewRating, reviewContent,
+                        reviewService.createNewMovieReview(movieId, username, userId, movieTitle, reviewRating,
+                                        reviewContent,
                                         createdAt);
                 }
                 return null;

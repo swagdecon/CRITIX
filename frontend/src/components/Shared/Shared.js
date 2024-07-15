@@ -1,5 +1,4 @@
 // Functions that are shared between components should be put here 
-
 export function validateImageURL(url) {
     const img = new Image();
     img.src = url;

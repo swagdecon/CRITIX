@@ -26,12 +26,14 @@ public class ReviewService {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public void createNewMovieReview(Integer movieId, String author, String userId, String reviewRating,
+    public void createNewMovieReview(Integer movieId, String author, String userId, String movieTitle,
+            String reviewRating,
             String reviewContent, String createdAt) {
         String reviewId = UUID.randomUUID().toString();
         Review review = new Review();
         review.setReviewId(reviewId);
         review.setMovieId(movieId);
+        review.setMovieTitle(movieTitle);
         review.setUserId(userId);
         review.setAuthor(author);
         review.setRating(reviewRating);

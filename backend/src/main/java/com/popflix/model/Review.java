@@ -20,6 +20,7 @@ public class Review {
 
     private String userId;
     private Integer movieId;
+    private String movieTitle;
     private String author;
     private String avatar;
     private String rating;

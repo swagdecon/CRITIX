@@ -1,0 +1,108 @@
+.IndUserReviews {
+    display: flex;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(11.4px);
+    -webkit-backdrop-filter: blur(11.4px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    width: 80%;
+    height: fit-content;
+    padding-bottom: 1%;
+    margin-bottom: 2%;
+
+}
+.ContentWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-left: 1%;
+    margin-top: 1%;
+}
+
+.UserName {
+    font-family: Arial;
+    display: flex;
+    width: fit-content;
+    margin-right: 1%;
+    font-weight: bold;
+}
+.TimeAgo {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    color: #00000059;
+    font-weight: bold;
+    font-size: 14px;
+    margin-right: 1%;
+    }
+.ReviewHeader {
+    display: flex;
+    font-weight: bold;
+    width: 107%;
+    flex-direction: column;
+}
+.MovieTitle {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.ReviewInfoWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-right: 1%;
+    width: 100%;
+}
+.ProfilePic {
+    background-color: azure;
+    /* border: 2px solid #000000; */
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    display: flex;
+    align-self: center;
+    overflow: hidden;
+    margin-right: 1%;
+}
+.ProfilePic img {
+    object-fit: cover;
+    width: 100%;
+}
+.ReviewInfo {
+    display: flex;
+    flex-direction: row;
+}
+.ReviewContent {
+    display: flex;
+    font-family: Arial;
+    color:#000000;
+    width: 98%;
+    height: fit-content;
+    max-width: 100%;
+    padding-right: 4%;
+}
+.ReviewRating {
+    display: flex;
+    flex-direction: row;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    flex-direction: row;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
+}
+.ReviewInfo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.Review {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}

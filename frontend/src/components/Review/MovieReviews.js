@@ -31,7 +31,7 @@ const TEXT_COLLAPSE_OPTIONS = {
     }
 };
 
-const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
+const MovieReviews = ({ voteAverage, reviews, movieId, movieTitle, placement }) => {
 
     let token = CookieManager.decryptCookie('accessToken');
     const decodedToken = jwt_decode(token);
@@ -117,13 +117,15 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
     const handleSubmit = useCallback(() => {
         if (!hasReviewProfanity) {
             const currentDate = new Date();
-            const formattedDate = format(currentDate, 'dd-MM-yyyy');
+            // DO NOT CHANGE
+            const formattedDate = format(currentDate, 'MM-dd-yyyy HH:mm');
 
             axios
                 .post(`${CREATE_MOVIE_ENDPOINT}${movieId}`, {
                     createdDate: formattedDate,
-                    movieId: movieId,
-                    userId: userId,
+                    movieId,
+                    userId,
+                    movieTitle,
                     author: firstName,
                     rating: reviewRating,
                     content: reviewContent,
@@ -263,6 +265,7 @@ const MovieReviews = ({ voteAverage, reviews, movieId, placement }) => {
 
 MovieReviews.propTypes = {
     voteAverage: PropTypes.number,
+    movieTitle: PropTypes.string,
     reviews: PropTypes.array,
     movieId: PropTypes.number,
     placement: PropTypes.string

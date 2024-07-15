@@ -9,7 +9,7 @@ import defaultBannerPic from "./banner.jpg"
 const updateBannerImgEndpoint = process.env.REACT_APP_UPDATE_BANNER_IMAGE
 
 export default function BannerImg({ userId, bannerPic }) {
-    console.log(bannerPic)
+
     const [bannerPicture, setBannerPicture] = useState(bannerPic);
     const handleAddClick = async () => {
         const url = window.prompt("Please enter the image URL:");
