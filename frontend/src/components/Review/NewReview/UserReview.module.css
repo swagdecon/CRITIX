@@ -1,6 +1,6 @@
 .IndUserReviews {
     display: flex;
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(11.4px);
@@ -87,14 +87,25 @@
     display: flex;
     flex-direction: row;
     width: 50px;
-    height: 50px;
+    height: 40px;
     border-radius: 50px;
     flex-direction: row;
-    background-color: red;
     color: white;
     font-weight: bold;
     justify-content: center;
     align-items: center;
+}
+.ReviewRating.blue {
+    background-color: blue;
+}
+.ReviewRating.green {
+    background-color: rgb(3, 187, 3);
+}
+.ReviewRating.yellow {
+    background-color: yellow;
+}
+.ReviewRating.red {
+    background-color: red;
 }
 .ReviewInfo {
     display: flex;

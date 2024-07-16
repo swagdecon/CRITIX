@@ -4,7 +4,21 @@ import PropTypes from "prop-types";
 import UserReviewStyle from "./UserReview.module.css"
 const DEFAULT_ACTOR_IMAGE = process.env.REACT_APP_DEFAULT_ACTOR_IMAGE
 
+function getColourClassName(rating) {
+    if (rating >= 80) {
+        return "blue"
+    } else if (rating >= 60) {
+        return "green"
+    } else if (rating >= 40) {
+        return "yellow"
+    } else {
+        return "red"
+    }
+}
+
 export default function IndUserReview({ avatar, movieTitle, createdDate, content, rating }) {
+    const colourRating = getColourClassName(rating);
+    console.log(`${UserReviewStyle.ReviewRating} ${colourRating}`)
     return (
         <div className={UserReviewStyle.IndUserReviews}>
             <div className={UserReviewStyle.ContentWrapper}>
@@ -22,7 +36,9 @@ export default function IndUserReview({ avatar, movieTitle, createdDate, content
                             </div>
                             <div className={UserReviewStyle.ReviewContent}>{content}</div>
                         </div>
-                        <div className={UserReviewStyle.ReviewRating}>{rating}</div>
+                        <div className={`${UserReviewStyle.ReviewRating} ${UserReviewStyle[colourRating]}`}>
+                            {rating}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -215,6 +215,7 @@ object-fit: cover;
     }
 
     .Title {
+        margin-top: 2%;
         text-transform: uppercase;
         font-weight: 500;
         display: flex;

@@ -13,6 +13,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Pagination from "@mui/material/Pagination";
 import IndUserReview from "../components/Review/NewReview/IndUserReview.js";
+import { reviewInputStyles, UserGraphStyle } from "../components/Shared/SharedMUI.js"
 const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
 const getBannerEndpoint = process.env.REACT_APP_GET_USER_BANNER
@@ -22,7 +23,7 @@ export default function UserProfile() {
     const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
     const decodedToken = useMemo(() => jwt_decode(token), [token]);
     const userId = decodedToken.userId
-    const reviewsPerPage = 4;
+    const reviewsPerPage = 3;
     const [userReviews, setUserReviews] = useState(null)
     const [recentUserReview, setRecentUserReview] = useState(null)
     const [avatar, setAvatar] = useState(null);
@@ -49,6 +50,16 @@ export default function UserProfile() {
         return reviewsToDisplay;
     }, [currentPage, userReviews]);
 
+    const commonTextFieldProps = {
+        fullWidth: true,
+        sx: reviewInputStyles,
+        InputLabelProps: {
+            style: {
+                color: "white"
+            }
+        }
+    }
+
     const totalPages = userReviews ? Math.ceil(userReviews.length / reviewsPerPage) : 1;
     const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,20}/;
 
@@ -72,7 +83,7 @@ export default function UserProfile() {
             setIsLoading(false);
         }
     }, []);
-    console.log(userReviews)
+
     useEffect(() => {
         fetchBackendData();
     }, [fetchBackendData]);
@@ -190,32 +201,7 @@ export default function UserProfile() {
                                     ]}
                                     width={1000}
                                     height={300}
-                                    sx={{
-                                        //change left yAxis label styles
-                                        "& .MuiChartsAxis-left .MuiChartsAxis-tickLabel": {
-                                            strokeWidth: "1",
-                                            fill: "white"
-                                        },
-                                        // change all labels fontFamily shown on both xAxis and yAxis
-                                        "& .MuiChartsAxis-tickContainer .MuiChartsAxis-tickLabel": {
-                                            fontFamily: "Roboto",
-                                        },
-                                        // change bottom label styles
-                                        "& .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel": {
-                                            strokeWidth: "0.5",
-                                            fill: "white"
-                                        },
-                                        // bottomAxis Line Styles
-                                        "& .MuiChartsAxis-bottom .MuiChartsAxis-line": {
-                                            stroke: "white",
-                                            strokeWidth: 1
-                                        },
-                                        // leftAxis Line Styles
-                                        "& .MuiChartsAxis-left .MuiChartsAxis-line": {
-                                            stroke: "white",
-                                            strokeWidth: 1
-                                        },
-                                    }}
+                                    sx={UserGraphStyle}
                                 />
                             </div>
                             <div className={UserStyle.RecentReviews}>
@@ -257,39 +243,39 @@ export default function UserProfile() {
                                     <div className={UserStyle.GridContainer}>
                                         <div className={UserStyle.GridItem}>
                                             <TextField
-                                                fullWidth
                                                 label="First Name"
                                                 value={firstName}
                                                 onChange={handleFirstNameChange}
                                                 error={firstNameError}
                                                 helperText={firstNameError}
+                                                {...commonTextFieldProps}
                                             /></div>
                                         <div className={UserStyle.GridItem}>
                                             <TextField
-                                                fullWidth
                                                 label="Last Name"
                                                 value={lastName}
                                                 onChange={handleLastNameChange}
                                                 error={lastNameError}
                                                 helperText={lastNameError}
+                                                {...commonTextFieldProps}
                                             /></div>
                                         <div className={UserStyle.GridItem}>
                                             <TextField
-                                                fullWidth
                                                 label="Password"
                                                 value={password}
                                                 onChange={handlePasswordChange}
                                                 error={passwordError}
                                                 helperText={passwordError}
+                                                {...commonTextFieldProps}
                                             /></div>
                                         <div className={UserStyle.GridItem}>
                                             <TextField
-                                                fullWidth
                                                 label="Confirm Password"
                                                 value={confirmPassword}
                                                 onChange={handleConfirmPasswordChange}
                                                 error={confirmPasswordError}
                                                 helperText={confirmPasswordError}
+                                                {...commonTextFieldProps}
                                             /></div>
                                     </div>
                                     <div className={UserStyle.BtnWrapper}>
@@ -297,7 +283,6 @@ export default function UserProfile() {
                                     </div>
                                 </form>
                             </div>
-
                         </div>
                     }
                 </div>
