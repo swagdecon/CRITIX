@@ -23,7 +23,7 @@ export default function UserProfile() {
     const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
     const decodedToken = useMemo(() => jwt_decode(token), [token]);
     const userId = decodedToken.userId
-    const reviewsPerPage = 3;
+    const reviewsPerPage = 2;
     const [userReviews, setUserReviews] = useState(null)
     const [recentUserReview, setRecentUserReview] = useState(null)
     const [avatar, setAvatar] = useState(null);
