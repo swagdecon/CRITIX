@@ -4,7 +4,7 @@ import Filter from "bad-words";
 import SignUpStyles from "../Login/login.module.css";
 import MovieButton from "../Other/btn/MovieButton/Button.js";
 import CookieManager from "../../security/CookieManager";
-import { togglePasswordVisibility, resendAuthEmail, Message, ProfanityLogic } from "../../security/Shared";
+import { togglePasswordVisibility, resendAuthEmail, Message, ProfanityLogic } from "../Shared/Shared.js";
 const SIGNUP_URL = process.env.REACT_APP_SIGNUP_ENDPOINT;
 
 export default function SignUpFunctionality() {

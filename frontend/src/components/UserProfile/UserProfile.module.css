@@ -266,7 +266,9 @@ object-fit: cover;
         grid-template-rows: repeat(3, auto); 
         width: 70%;
     }
-    
+    .GridItem:first-child {
+        grid-column: span 2; /* Span the full width */
+    }
     .GridItem {
         padding: 10px;
         border-radius: 5px;
