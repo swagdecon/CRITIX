@@ -221,7 +221,9 @@ const MovieReviews = ({ voteAverage, reviews, movieId, movieTitle, placement }) 
                         </div>
                     </div>
                     {reviews && reviews.length >= 2 && (
-                        <ReviewSection reviews={reviews} movieId={movieId} userId={userId} />
+                        <div className={IndReview.IndReviewWrapper}>
+                            <ReviewSection reviews={reviews} movieId={movieId} userId={userId} />
+                        </div>
                     )}
                 </div>
             </div>

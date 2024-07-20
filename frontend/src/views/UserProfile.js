@@ -76,7 +76,7 @@ export default function UserProfile() {
         setRenderUserHome(true)
         setRenderUserSettings(false)
     }
-
+    console.log(userReviews)
     return isLoading ? (
         <LoadingPage />
     ) : (
@@ -84,7 +84,7 @@ export default function UserProfile() {
             <NavBar />
             <div className={UserStyle["profile-card"]}>
                 <div className={UserStyle["profile-header"]}>
-                    < BannerImg userId={userId} bannerPic={banner} refetchBanner={fetchBackendData} /> :
+                    < BannerImg userId={userId} bannerPic={banner} refetchBanner={fetchBackendData} />
                     <div className={UserStyle["main-profile"]}>
                         <CardProfile userId={userId} avatar={avatar} />
                         <div className={UserStyle["profile-names"]}>
@@ -149,7 +149,7 @@ export default function UserProfile() {
                                 <h2 className={UserStyle.Title}>Recent review</h2>
                                 <div className={UserStyle.AllUserReviews}>
                                     {recentUserReview ?
-                                        <IndUserReview key={recentUserReview.movieId} avatar={recentUserReview.avatar} movieTitle={recentUserReview.movieTitle} createdDate={recentUserReview.createdDate} content={recentUserReview.content} rating={recentUserReview.rating} />
+                                        <IndUserReview key={recentUserReview.movieId} avatar={avatar} movieTitle={recentUserReview.movieTitle} createdDate={recentUserReview.createdDate} content={recentUserReview.content} rating={recentUserReview.rating} />
                                         : "No Recent Reviews"}
                                 </div>
                             </div>
@@ -157,7 +157,7 @@ export default function UserProfile() {
                                 <h2 className={UserStyle.Title}>all reviews</h2>
                                 <div className={UserStyle.AllUserReviews}>
                                     {displayReviews.map((review) => (
-                                        <IndUserReview key={review.movieId} avatar={review.avatar} movieTitle={review.movieTitle} createdDate={review.createdDate} content={review.content} rating={review.rating} />
+                                        <IndUserReview key={review.movieId} avatar={avatar} movieTitle={review.movieTitle} createdDate={review.createdDate} content={review.content} rating={review.rating} />
                                     ))}
                                 </div>
                                 <div className={UserStyle.PaginationWrapper}>

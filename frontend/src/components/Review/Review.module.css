@@ -1,23 +1,15 @@
 .ind-review-wrapper {
-  background-color: rgba(255, 255, 255, 0.074);
-  border: 1px solid rgba(255, 255, 255, 0.222);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
+  background: linear-gradient(#141e30, #0096ff);
   border-radius: 0.7rem;
   padding: 20px;
   text-align: left;
   width: 50.5em;
   overflow: hidden; 
-  margin-right:15px
+  margin-right:15px;
 }
 
 .total-rating-wrapper {
   display: inline-flex;
-}
-
-.ind-review-section-title {
-  color: #0096ff !important;
-  text-align: center;
 }
 
 .user-review-wrapper {
@@ -39,25 +31,13 @@
   flex: 1;
   padding-top: 2vh;
 }
-.user-info-wrapper {
+
+.IndReviewWrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-left: 10px;
-  margin-top: 3%
 }
 
-.profile-img {
-  width: 60px;
-}
-
-.name-wrapper {
-  text-align: center;
-}
-
-.section-line {
-  border-bottom: thin solid #8f8f8f;
-}
 @media screen and (max-width: 650px) {
   .MuiInputBase-input {
     display: none;
