@@ -134,7 +134,6 @@ export default function IndMovie() {
           </div>
           <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-3"]} `}>
             <MovieReviews
-              voteAverage={movie.voteAverage}
               movieId={movie.id}
               movieTitle={movie.title}
               reviews={reviews}

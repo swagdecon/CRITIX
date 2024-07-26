@@ -5,21 +5,24 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.popflix.model.Review;
+
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class AllMovieReviews {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final Map<Integer, List<Review>> reviewCache = new HashMap<>();
     static Dotenv dotenv = Dotenv.load();
+    String TMDB_API_KEY = dotenv.get("TMDB_API_KEY");
     private static String DEFAULT_AVATAR_URL = dotenv.get("DEFAULT_AVATAR_URL");
 
     public static String getImageUrl(String avatar) {
@@ -36,11 +39,10 @@ public class AllMovieReviews {
 
     public List<Review> getMovieReviews(Integer movieId)
             throws IOException, InterruptedException {
+
         if (reviewCache.containsKey(movieId)) {
             return reviewCache.get(movieId);
         }
-        Dotenv dotenv = Dotenv.load();
-        String TMDB_API_KEY = dotenv.get("TMDB_API_KEY");
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(
@@ -54,6 +56,18 @@ public class AllMovieReviews {
                 HttpResponse.BodyHandlers.ofString());
         List<Review> reviews = parseMovieReviews(response.body());
 
+        for (Review review : reviews) {
+            String ratingStr = review.getRating();
+            if (ratingStr != null && !ratingStr.isEmpty()) {
+                try {
+                    float ratingFloat = Float.parseFloat(ratingStr);
+                    int amendedRating = Math.round(ratingFloat * 10);
+                    review.setRating(Integer.toString(amendedRating));
+                } catch (NumberFormatException e) {
+                    review.setRating(null);
+                }
+            }
+        }
         reviewCache.put(movieId, reviews);
         return reviews;
     }

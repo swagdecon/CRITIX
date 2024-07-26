@@ -10,7 +10,7 @@ import jwt_decode from "jwt-decode";
 import IndReview from "./Review.module.css";
 import IndMovieStyle from "../IndMovie/ind_movie.module.css";
 import ReviewSection from "./ReviewList/ReviewSection";
-import PercentageRatingCircle from "./Rating/PercentageCircle/PercentageCircle";
+// import PercentageRatingCircle from "./Rating/PercentageCircle/PercentageCircle";
 import InputSlider from "./Rating/Slider/Slider.js";
 import CookieManager from "../../security/CookieManager";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -31,7 +31,7 @@ const TEXT_COLLAPSE_OPTIONS = {
     }
 };
 
-const MovieReviews = ({ voteAverage, reviews, movieId, movieTitle, placement }) => {
+const MovieReviews = ({ reviews, movieId, movieTitle, placement }) => {
 
     let token = CookieManager.decryptCookie('accessToken');
     const decodedToken = jwt_decode(token);
@@ -48,16 +48,16 @@ const MovieReviews = ({ voteAverage, reviews, movieId, movieTitle, placement }) 
     const isRecaptchaVisible = useMemo(() => reviewContent.trim().length != 0 && reviewRating != 0 && !hasReviewProfanity[reviewContent, reviewRating, hasReviewProfanity]);
     const wordCount = reviewContent.trim().split(/\s+/).length;
 
-    const isSubmitDisabled = useMemo(
-        () =>
-            reviewContent.trim().length === 0 ||
-            reviewRating === 0 ||
-            wordCount < 15 ||
-            !recaptchaResult,
+    const isSubmitDisabled = useMemo(() =>
+        reviewContent.trim().length === 0 ||
+        reviewRating === 0 ||
+        wordCount < 15 ||
+        !recaptchaResult,
         [reviewContent, reviewRating, recaptchaResult]
     );
     const reviewRef = useRef(null);
     const reviewInputStyles = {
+        width: "80%",
         borderRadius: "15px",
         fieldSet: {
             borderRadius: "15px"
@@ -93,12 +93,11 @@ const MovieReviews = ({ voteAverage, reviews, movieId, movieTitle, placement }) 
             "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,.3)",
             backgroundColor: "#0096ff",
         },
-        width: "60%",
         '@media (max-width: 500px)': {
             width: '100%',
         }
-
     };
+
     async function onChange(token) {
         try {
             await axios.post(RECAPTCHA_ENDPOINT, {
@@ -155,83 +154,75 @@ const MovieReviews = ({ voteAverage, reviews, movieId, movieTitle, placement }) 
         }
     }, []);
 
-    const renderUserRatingSection = () => {
+    function renderUserRatingSection() {
         return (
             <div className={IndReview["ind-review-wrapper"]}>
-                <div className={IndReview["input-wrapper"]}>
-                    <div className={IndReview["user-review-wrapper"]}>
-                        <div className={IndReview["textField-wrapper"]}>
-                            <InputSlider onSliderChange={setReviewRating} />
-                            <TextField
-                                size="small"
-                                id="outlined-multiline-flexible"
-                                label={
-                                    hasReviewProfanity && reviewContent.trim().length > 0
-                                        ? "Profanity is not allowed."
-                                        : hasSubmittedReview
-                                            ? "Thanks for submitting a review!  "
-                                            : "Post A Review (Min. 15 words)"
+                {/* <PercentageRatingCircle percentageRating={voteAverage} /> */}
+                <div className={IndReview["user-review-wrapper"]}>
+                    <div className={IndReview["textField-wrapper"]}>
+                        <InputSlider onSliderChange={setReviewRating} />
+                        <br />
+                        <TextField
+                            label={
+                                hasReviewProfanity && reviewContent.trim().length > 0
+                                    ? "Profanity is not allowed."
+                                    : hasSubmittedReview
+                                        ? "Thanks for submitting a review!  "
+                                        : "Post A Review (Min. 15 words)"
+                            }
+                            multiline
+                            onChange={(e) => setReviewContent(e.target.value)}
+                            maxRows={4}
+                            value={reviewContent}
+                            InputLabelProps={{
+                                style: {
+                                    color: "white"
                                 }
-                                multiline
-                                onChange={(e) => setReviewContent(e.target.value)}
-                                maxRows={4}
-                                value={reviewContent}
-                                className={IndReview["mui-input-field"]}
-                                InputLabelProps={{
-                                    style: {
-                                        color: "white"
-                                    }
-                                }}
-                                inputProps={{
-                                    disabled: disabledInput,
-                                    sx: {
-                                        color: "white"
-                                    }
-                                }}
-                                error={hasReviewProfanity && reviewContent.trim().length > 0}
-                                sx={reviewInputStyles}
-                            />
+                            }}
+                            inputProps={{
+                                disabled: disabledInput,
+                                sx: {
+                                    color: "white"
+                                }
+                            }}
+                            error={hasReviewProfanity && reviewContent.trim().length > 0}
+                            sx={reviewInputStyles}
+                        />
 
-                            {!hasSubmittedReview && !hasReviewProfanity && (
-                                <div>
-                                    {isRecaptchaVisible && (
-                                        <div className={IndReview["recaptcha-btn"]}>
-                                            <ReCAPTCHA
-                                                sitekey={RECAPTCHA_KEY}
-                                                onChange={onChange}
-                                            />
-                                        </div>
-                                    )}
-                                    <div className={IndReview["post-review-btn"]}>
-                                        <Button
-                                            variant="contained"
-                                            endIcon={<MovieCreationOutlinedIcon />}
-                                            size="medium"
-                                            onClick={handleSubmit}
-                                            disabled={isSubmitDisabled}
-                                        >
-                                            SUBMIT
-                                        </Button>
+                        {!hasSubmittedReview && !hasReviewProfanity && (
+                            <div>
+                                {isRecaptchaVisible && (
+                                    <div className={IndReview["recaptcha-btn"]}>
+                                        <ReCAPTCHA
+                                            sitekey={RECAPTCHA_KEY}
+                                            onChange={onChange}
+                                        />
                                     </div>
+                                )}
+                                <div className={IndReview["post-review-btn"]}>
+                                    <Button
+                                        variant="contained"
+                                        endIcon={<MovieCreationOutlinedIcon />}
+                                        size="medium"
+                                        onClick={handleSubmit}
+                                        disabled={isSubmitDisabled}>
+                                        SUBMIT
+                                    </Button>
                                 </div>
-                            )}
-                        </div>
-                        <div className={IndReview["total-rating-wrapper"]}>
-                            <PercentageRatingCircle percentageRating={voteAverage} />
-                        </div>
+                            </div>
+                        )}
                     </div>
-                    {reviews && reviews.length >= 2 && (
-                        <div className={IndReview.IndReviewWrapper}>
-                            <ReviewSection reviews={reviews} movieId={movieId} userId={userId} />
-                        </div>
-                    )}
                 </div>
+                {reviews && reviews.length >= 2 && (
+                    <div className={IndReview.IndReviewWrapper}>
+                        <ReviewSection reviews={reviews} movieId={movieId} userId={userId} />
+                    </div>
+                )}
             </div>
         );
+    }
 
-    };
-
-    const renderHeaderSection = () => {
+    function renderHeaderSection() {
         if (reviews.length > 0) {
             return (
                 <div className={IndMovieStyle.review__wrapper} ref={reviewRef}>
@@ -255,7 +246,7 @@ const MovieReviews = ({ voteAverage, reviews, movieId, movieTitle, placement }) 
                 </div>
             );
         }
-    };
+    }
 
     return (
         <>

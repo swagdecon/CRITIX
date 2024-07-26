@@ -18,7 +18,6 @@ function getColourClassName(rating) {
 
 export default function IndUserReview({ avatar, movieTitle, createdDate, content, rating }) {
     const colourRating = getColourClassName(rating);
-    console.log(`${UserReviewStyle.ReviewRating} ${colourRating}`)
     return (
         <div className={UserReviewStyle.IndUserReviews}>
             <div className={UserReviewStyle.ContentWrapper}>
@@ -36,9 +35,11 @@ export default function IndUserReview({ avatar, movieTitle, createdDate, content
                             </div>
                             <div className={UserReviewStyle.ReviewContent}>{content}</div>
                         </div>
-                        <div className={`${UserReviewStyle.ReviewRating} ${UserReviewStyle[colourRating]}`}>
-                            {rating}
-                        </div>
+                        {rating ?
+                            <div className={`${UserReviewStyle.ReviewRating} ${UserReviewStyle[colourRating]}`}>
+                                {rating}
+                            </div>
+                            : null}
                     </div>
                 </div>
             </div>

@@ -26,7 +26,6 @@ export default function ReviewSection({ reviews }) {
         return reviewsToDisplay;
     }, [currentPage, reviews]);
 
-
     return (
         <>
             {displayReviews.map((review) => (
