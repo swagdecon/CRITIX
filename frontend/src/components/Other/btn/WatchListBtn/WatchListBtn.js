@@ -8,38 +8,27 @@ import PropTypes from "prop-types";
 const sendToWatchListEndpoint = process.env.REACT_APP_ADD_TO_WATCHLIST_ENDPOINT;
 const deleteFromWatchListEndpoint = process.env.REACT_APP_DELETE_FROM_WATCHLIST_ENDPOINT;
 
-export default function WatchListBtn({ movieData }) {
-    const [isSavedToWatchListState, setIsSavedToWatchListState] = useState(movieData.isSavedToWatchlist)
-
-    const data = {
-        movieId: movieData.id,
-        title: movieData.title,
-        posterUrl: movieData.posterUrl,
-        voteAverage: movieData.voteAverage,
-        genres: movieData.genres,
-        overview: movieData.overview,
-        actors: movieData.actors ? movieData.actors.slice(0, 3) : null,
-
-    };
+export default function WatchListBtn({ movieData, outline }) {
+    const [isSavedToWatchList, setIsSavedToWatchList] = useState(movieData.isSavedToWatchlist)
 
     async function handleSaveToWatchlist(e) {
         e.preventDefault();
-        const response = await sendData(sendToWatchListEndpoint, data);
-        response.ok ? setIsSavedToWatchListState(true) : false;
+        const response = await sendData(sendToWatchListEndpoint, movieData);
+        response.ok ? setIsSavedToWatchList(true) : false;
         e.stopPropagation();
     }
 
     async function handleDeleteFromWatchlist(e) {
         e.preventDefault();
-        const response = await sendData(`${deleteFromWatchListEndpoint}${movieData.id}`);
-        response.ok ? setIsSavedToWatchListState(false) : false;
+        const response = await sendData(`${deleteFromWatchListEndpoint}${movieData.movieId}`);
+        response.ok ? setIsSavedToWatchList(false) : false;
         e.stopPropagation();
     }
 
     return (
-        <div className={WatchListBtnStyle["circle-container"]}>
+        <div className={outline ? WatchListBtnStyle["circle-container"] : null}>
             <div className={WatchListBtnStyle["action-btn"]}>
-                {!isSavedToWatchListState ?
+                {!isSavedToWatchList ?
                     <i> <BookmarkBorderIcon sx={{ fontSize: 30 }} onClick={handleSaveToWatchlist} /></i>
                     :
                     <i><BookmarkIcon sx={{ fontSize: 30 }} onClick={handleDeleteFromWatchlist} /></i>
@@ -51,8 +40,9 @@ export default function WatchListBtn({ movieData }) {
 
 WatchListBtn.propTypes = {
     isSavedToWatchlist: PropTypes.bool.isRequired,
+    outline: PropTypes.bool.isRequired,
     movieData: PropTypes.shape({
-        id: PropTypes.number.isRequired,
+        movieId: PropTypes.number.isRequired,
         title: PropTypes.string.isRequired,
         posterUrl: PropTypes.string.isRequired,
         voteAverage: PropTypes.number.isRequired,

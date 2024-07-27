@@ -108,10 +108,11 @@ public class MovieService {
     List<Movie> movies = mongoTemplate.find(query, Movie.class, collectionName);
 
     for (Movie movie : movies) {
-      boolean watchListMovieAlreadyExists = userRepository.doesMovieExist(userId, movie.getId());
+      boolean watchListMovieAlreadyExists = userRepository.doesWatchlistMovieExist(userId, movie.getId());
+      boolean favouriteMovieAlreadyExists = userRepository.doesFavouriteMovieExist(userId, movie.getId());
       movie.setIsSavedToWatchlist(watchListMovieAlreadyExists);
+      movie.setIsSavedToFavouriteMoviesList(favouriteMovieAlreadyExists);
     }
-
     return movies;
   }
 
@@ -126,8 +127,10 @@ public class MovieService {
 
     Movie movie = mongoTemplate.findOne(query, Movie.class, collectionName);
     if (movie != null) {
-      boolean watchListMovieAlreadyExists = userRepository.doesMovieExist(userId, movieId);
+      boolean watchListMovieAlreadyExists = userRepository.doesWatchlistMovieExist(userId, movie.getId());
+      boolean favouriteMovieAlreadyExists = userRepository.doesFavouriteMovieExist(userId, movie.getId());
       movie.setIsSavedToWatchlist(watchListMovieAlreadyExists);
+      movie.setIsSavedToFavouriteMoviesList(favouriteMovieAlreadyExists);
       return Optional.of(movie);
     } else {
       return Optional.empty();
@@ -167,12 +170,15 @@ public class MovieService {
   public Optional<Movie> singleTmdbMovie(Integer movieId, String userId)
       throws IOException, InterruptedException, URISyntaxException {
 
-    boolean watchListMovieAlreadyExists = userRepository.doesMovieExist(userId, movieId);
+    boolean watchListMovieAlreadyExists = userRepository.doesWatchlistMovieExist(userId, movieId);
+    boolean favouriteMovieAlreadyExists = userRepository.doesFavouriteMovieExist(userId, movieId);
+
     MovieDb movieApi = tmdbApi.getMovies().getMovie(movieId, "en-US");
 
     Movie movie = new Movie();
     movie.setId(movieId);
     movie.setIsSavedToWatchlist(watchListMovieAlreadyExists);
+    movie.setIsSavedToFavouriteMoviesList(favouriteMovieAlreadyExists);
     setMovieDetails(movie, movieApi);
 
     return Optional.of(movie);
@@ -629,7 +635,7 @@ public class MovieService {
         watchList = new ArrayList<>();
       }
 
-      boolean watchListMovieAlreadyExists = userRepository.doesMovieExist(userId, movieCardData.getMovieId());
+      boolean watchListMovieAlreadyExists = userRepository.doesWatchlistMovieExist(userId, movieCardData.getMovieId());
 
       if (!watchListMovieAlreadyExists) {
         MovieCard movieCard = new MovieCard();
@@ -680,9 +686,87 @@ public class MovieService {
   public List<MovieCard> getUserWatchlist(String userId) throws Exception {
     try {
       List<MovieCard> watchList = userRepository.findUserWithWatchListById(userId).get().getWatchList();
+      for (MovieCard movie : watchList) {
+        boolean favouriteMovieAlreadyExists = userRepository.doesFavouriteMovieExist(userId, movie.getMovieId());
+        movie.setIsSavedToFavouriteMoviesList(favouriteMovieAlreadyExists);
+      }
       return watchList;
     } catch (Exception e) {
-      throw new Exception();
+      throw new Exception("Error fetching user's watchlist", e);
+    }
+  }
+
+  public void addMovieToFavourites(String userId, MovieCard movieCardData) throws Exception {
+    try {
+      User user = userRepository.findById(userId)
+          .orElseThrow(() -> new UsernameNotFoundException("User id not found"));
+
+      List<MovieCard> favouriteMovieList = user.getFavouriteMoviesList();
+      if (favouriteMovieList == null) {
+        favouriteMovieList = new ArrayList<>();
+      }
+
+      boolean favouriteMovieAlreadyExists = userRepository.doesFavouriteMovieExist(userId, movieCardData.getMovieId());
+
+      if (!favouriteMovieAlreadyExists) {
+        MovieCard movieCard = new MovieCard();
+        movieCard.setMovieId(movieCardData.getMovieId());
+        movieCard.setVoteAverage(movieCardData.getVoteAverage());
+        movieCard.setTitle(movieCardData.getTitle());
+        movieCard.setIsSavedToFavouriteMoviesList(true);
+        movieCard.setGenres(movieCardData.getGenres());
+        movieCard.setOverview(movieCardData.getOverview());
+        movieCard.setPosterUrl(movieCardData.getPosterUrl());
+        movieCard.setActors(movieCardData.getActors());
+        favouriteMovieList.add(movieCard);
+        user.setFavouriteMoviesList(favouriteMovieList);
+        userRepository.save(user);
+      } else {
+        throw new Exception("User already has movie in favourite movie list, returning...");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void deleteMovieFromFavouriteMoviesList(String userId, Integer movieId) throws IOException {
+    try {
+      User user = userRepository.findById(userId)
+          .orElseThrow(() -> new UsernameNotFoundException("User id not found"));
+
+      List<MovieCard> favouriteMoviesList = user.getFavouriteMoviesList();
+
+      if (favouriteMoviesList != null) {
+        Iterator<MovieCard> iterator = favouriteMoviesList.iterator();
+        while (iterator.hasNext()) {
+          MovieCard movieCard = iterator.next();
+          Integer cardMovieId = movieCard.getMovieId();
+          if (cardMovieId != null && cardMovieId.equals(movieId)) {
+            iterator.remove();
+            break;
+          }
+        }
+        user.setFavouriteMoviesList(favouriteMoviesList);
+        userRepository.save(user);
+      }
+    } catch (Exception e) {
+      System.out.println(e);
+    }
+  }
+
+  public List<MovieCard> getUserFavouriteMoviesList(String userId) throws Exception {
+    try {
+      List<MovieCard> favouriteMovieList = userRepository.findUserWithFavouriteMoviesListById(userId).get()
+          .getFavouriteMoviesList();
+
+      for (MovieCard movie : favouriteMovieList) {
+        boolean isInWatchlist = userRepository.doesWatchlistMovieExist(userId, movie.getMovieId());
+        movie.setIsSavedToWatchlist(isInWatchlist);
+      }
+
+      return favouriteMovieList;
+    } catch (Exception e) {
+      throw new Exception("Error fetching user's favourite movies list", e);
     }
   }
 }

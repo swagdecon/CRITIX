@@ -44,6 +44,7 @@ function Homepage() {
 
     fetchBackendData();
   }, []);
+
   return isLoading || !moviesData ? (
     <LoadingPage />
   ) : (
@@ -55,8 +56,8 @@ function Homepage() {
           title="Trending movies"
           movies={moviesData.trendingMovies}
           endpoint={popularMovieEndpoint}
-
         />
+
         <MovieCarousel
           title="Top Rated"
           movies={moviesData.topRatedMovies}

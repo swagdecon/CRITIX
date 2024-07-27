@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { fetchData } from "../security/Data";
+import MovieCarousel from "../components/Carousel/MovieCarousel/MovieCarousel.js";
 import isTokenExpired from "../security/IsTokenExpired.js";
 import UserStyle from "../components/UserProfile/UserProfile.module.css"
 import CardProfile from "../components/UserProfile/ProfileImageUpload.js"
@@ -14,10 +15,11 @@ import InfoUpdate from "../components/UserProfile/InfoUpdate/InfoUpdate.js";
 const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
 const getBannerEndpoint = process.env.REACT_APP_GET_USER_BANNER
-
+const getUserFavouriteMoviesEndpoint = process.env.REACT_APP_GET_FAVOURITE_MOVIES_ENDPOINT
 export default function UserProfile() {
 
     const reviewsPerPage = 2;
+    const [favouriteMovies, setFavouriteMovies] = useState(null);
     const [userReviews, setUserReviews] = useState(null)
     const [recentUserReview, setRecentUserReview] = useState(null)
     const [avatar, setAvatar] = useState(null);
@@ -42,11 +44,13 @@ export default function UserProfile() {
 
         try {
             await isTokenExpired();
-            const [allUserReviews, avatarPic, bannerPic] = await Promise.all([
+            const [useFavouriteMovies, allUserReviews, avatarPic, bannerPic] = await Promise.all([
+                fetchData(getUserFavouriteMoviesEndpoint),
                 fetchData(allUserReviewsEndpoint),
                 fetchData(getAvatarEndpoint),
                 fetchData(getBannerEndpoint)
             ]);
+            setFavouriteMovies(useFavouriteMovies)
             setUserReviews(allUserReviews);
             setAvatar(avatarPic);
             setRecentUserReview(allUserReviews[0]);
@@ -58,7 +62,6 @@ export default function UserProfile() {
             setIsLoading(false);
         }
     }, []);
-
     useEffect(() => {
         fetchBackendData();
     }, [fetchBackendData]);
@@ -71,7 +74,6 @@ export default function UserProfile() {
         setRenderUserHome(true)
         setRenderUserSettings(false)
     }
-
     return isLoading ? (
         <LoadingPage />
     ) : (
@@ -104,7 +106,7 @@ export default function UserProfile() {
                     </div>
                     {renderUserHome && !renderUserSettings ?
                         <div className={UserStyle.MainInfoPanel}>
-                            <div className={UserStyle.ActivityInfo}>
+                            <section className={UserStyle.ActivityInfo}>
                                 <h2 className={UserStyle.Title}>Activity</h2>
                                 <LineChart
                                     xAxis={[
@@ -139,16 +141,16 @@ export default function UserProfile() {
                                     height={300}
                                     sx={UserGraphStyle}
                                 />
-                            </div>
-                            <div className={UserStyle.RecentReviews}>
+                            </section>
+                            <section className={UserStyle.RecentReviews}>
                                 <h2 className={UserStyle.Title}>Recent review</h2>
                                 <div className={UserStyle.AllUserReviews}>
                                     {recentUserReview ?
                                         <IndUserReview key={recentUserReview.movieId} avatar={avatar} movieTitle={recentUserReview.movieTitle} createdDate={recentUserReview.createdDate} content={recentUserReview.content} rating={recentUserReview.rating} />
                                         : "No Recent Reviews"}
                                 </div>
-                            </div>
-                            <div className={UserStyle.AllReviews}>
+                            </section>
+                            <section className={UserStyle.AllReviews}>
                                 <h2 className={UserStyle.Title}>all reviews</h2>
                                 <div className={UserStyle.AllUserReviews}>
                                     {displayReviews.map((review) => (
@@ -169,7 +171,16 @@ export default function UserProfile() {
                                         }}
                                     />
                                 </div>
-                            </div>
+                            </section>
+                            <section className={UserStyle.FavouriteMovies}>
+                                <h2 className={UserStyle.Title}>Your Favourite Movies</h2>
+                                {favouriteMovies ?
+                                    <MovieCarousel
+                                        movies={favouriteMovies}
+                                        endpoint="/movies/movie"
+                                    />
+                                    : null}
+                            </section>
                         </div>
                         :
                         <InfoUpdate />

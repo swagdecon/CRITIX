@@ -21,6 +21,7 @@ import MovieButton from "../components/Other/btn/MovieButton/Button";
 import { fetchData, sendData } from "../security/Data";
 import isTokenExpired from "../security/IsTokenExpired.js";
 import WatchListBtn from "..//components/Other/btn/WatchListBtn/WatchListBtn";
+import FavouriteBtn from "../components/Other/btn/FavouriteBtn/FavouriteBtn.js";
 const recommendedEndpoint = process.env.REACT_APP_RECOMMENDED_ENDPOINT;
 const getReviewEndpoint = process.env.REACT_APP_GET_REVIEW_ENDPOINT
 
@@ -89,8 +90,11 @@ export default function IndMovie() {
                 innerIcon="watchNow"
                 onClick={handleWatchNowClick}
               />
-              <div className={IndMovieStyle["btn-wrapper-2"]}>
-                <WatchListBtn movieData={movie} />
+              <div className={IndMovieStyle["btn-wrapper-el"]}>
+                <WatchListBtn movieData={movie} outline={true} />
+              </div>
+              <div className={IndMovieStyle["btn-wrapper-el"]}>
+                <FavouriteBtn movieData={movie} outline={true} />
               </div>
             </div>
             {/* <div className={IndMovieStyle.ind_movie_review}>

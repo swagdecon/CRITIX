@@ -33,4 +33,5 @@ public class MovieCard {
     private Integer runtime;
     private String movieStatus;
     private Boolean isSavedToWatchlist;
+    private Boolean isSavedToFavouriteMoviesList;
 }

@@ -41,7 +41,7 @@ class MovieTest {
         String movieStatus = "Released";
 
         Movie movie = new Movie(id, adult, backdropUrl, genreIds, genres, movieId, originalLanguage,
-                originalTitle, overview, popularity, posterUrl, releaseDate, title, trailer, adult, voteAverage,
+                originalTitle, overview, popularity, posterUrl, releaseDate, title, trailer, adult, adult, voteAverage,
                 null, voteCount, imdbId, budget, tagline, revenue, runtime, actors, actorImagePaths, reviews,
                 productionCompanies,
                 movieStatus);

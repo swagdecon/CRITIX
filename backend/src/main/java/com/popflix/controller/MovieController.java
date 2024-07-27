@@ -171,4 +171,37 @@ public class MovieController {
             throw new Exception("Error retrieving watchlist", e);
         }
     }
+
+    @PostMapping("/favourite-movies/add")
+    public void addFavouriteMovie(@RequestHeader("Authorization") String accessToken, @RequestBody MovieCard movieCard)
+            throws Exception {
+        try {
+            String userId = authenticationService.getUserDetails(accessToken).getId();
+            movieService.addMovieToFavourites(userId, movieCard);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @PostMapping("/favourite-movies/delete/{movieId}")
+    public void deleteFavouriteMovie(@RequestHeader("Authorization") String accessToken, @PathVariable Integer movieId)
+            throws Exception {
+        try {
+            String userId = authenticationService.getUserDetails(accessToken).getId();
+            movieService.deleteMovieFromFavouriteMoviesList(userId, movieId);
+        } catch (Exception e) {
+            throw new Exception("Error deleting from favourite movie list", e);
+        }
+    }
+
+    @GetMapping("/favourite-movies")
+    public List<MovieCard> getFavouriteMovies(@RequestHeader("Authorization") String accessToken)
+            throws Exception {
+        try {
+            String userId = authenticationService.getUserDetails(accessToken).getId();
+            return movieService.getUserFavouriteMoviesList(userId);
+        } catch (Exception e) {
+            throw new Exception("Error retrieving favourite movie list", e);
+        }
+    }
 }

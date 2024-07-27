@@ -40,6 +40,8 @@ public class User implements UserDetails {
     private Date passwordResetRequestDate;
     private Date lastLoginTime;
     private List<MovieCard> watchList;
+    private List<MovieCard> favouriteMoviesList;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 

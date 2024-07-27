@@ -32,6 +32,7 @@ public class Movie {
     private String title;
     private String trailer;
     private Boolean isSavedToWatchlist;
+    private Boolean isSavedToFavouriteMoviesList;
     private Integer voteAverage;
     private Map<String, Object> providerResults;
     private Integer voteCount;

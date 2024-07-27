@@ -80,6 +80,7 @@ export default function MovieList({ endpoint }) {
         setDataLoaded(true);
       });
   }
+  console.log(movies)
   useMemo(() => {
     function getDetailedMovieData(endpointName) {
       setCurrentPage(1);

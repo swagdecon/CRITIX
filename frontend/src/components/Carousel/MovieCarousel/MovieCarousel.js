@@ -13,11 +13,9 @@ const carouselBreakpoints = process.env.REACT_APP_CAROUSEL_BREAKPOINTS;
 const movieCarouselBreakpoints = JSON.parse(carouselBreakpoints);
 
 function MovieCarousel({ title, movies, endpoint }) {
-
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useWindowResizeEffect(setWindowWidth);
   const movieChunks = chunk(movies, getChunkSize(windowWidth, movieCarouselBreakpoints));
-
   return (
     <div className={MovieCarouselStyle["carousel-wrapper"]}>
       <div className={MovieCardStyle.titleWrapper}>
@@ -29,9 +27,9 @@ function MovieCarousel({ title, movies, endpoint }) {
             <div className={MovieCardStyle.carouselHeader} />
             {movieChunk.map((movie) => (
               <div className={MovieCardStyle["main-card-container"]} key={movie.id}>
-                <Link to={`${endpoint}/${movie.id}`}>
+                <Link to={`${endpoint}/${movie.id || movie.movieId}`}>
                   <MovieCard
-                    movieId={movie.id}
+                    movieId={movie.id || movie.movieId}
                     title={movie.title}
                     posterUrl={movie.posterUrl}
                     voteAverage={movie.voteAverage}
@@ -39,6 +37,7 @@ function MovieCarousel({ title, movies, endpoint }) {
                     overview={movie.overview}
                     actors={movie.actors}
                     isSavedToWatchlist={movie.isSavedToWatchlist}
+                    isSavedToFavouriteMoviesList={movie.isSavedToFavouriteMoviesList}
                     shareUrl={`${endpoint}movie/${movie.id}`}
                   />
                 </Link>

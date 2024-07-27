@@ -1,22 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import {
   MovieAverage,
   TruncateDescription,
   OpenLinkInNewTab
 } from "../IndMovie/MovieComponents.js";
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
+import FavouriteBtn from "../Other/btn/FavouriteBtn/FavouriteBtn.js"
 import ShareIcon from '@mui/icons-material/Share';
 import { MovieCardActors, MovieCardGenres } from "./MovieCardComponents.js";
 import MovieCardStyle from "./moviecard.module.scss"
-import { fetchData, sendData } from "../../security/Data.js"
+import { fetchData } from "../../security/Data.js"
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import SharePagePopup from "../Other/SocialShare/SocialShare.js";
+import WatchListBtn from "../Other/btn/WatchListBtn/WatchListBtn.js";
 const trailerEndpoint = process.env.REACT_APP_TRAILER_ENDPOINT;
-const sendToWatchListEndpoint = process.env.REACT_APP_ADD_TO_WATCHLIST_ENDPOINT;
-const deleteFromWatchListEndpoint = process.env.REACT_APP_DELETE_FROM_WATCHLIST_ENDPOINT;
 
 export default function MovieCard({
   movieId,
@@ -27,9 +25,10 @@ export default function MovieCard({
   overview,
   actors,
   isSavedToWatchlist,
+  isSavedToFavouriteMoviesList,
   shareUrl
 }) {
-  const [isSavedToWatchListState, setIsSavedToWatchListState] = useState(isSavedToWatchlist)
+
   const data = {
     movieId,
     title,
@@ -38,6 +37,8 @@ export default function MovieCard({
     genres,
     overview,
     actors: actors ? actors.slice(0, 3) : null,
+    isSavedToWatchlist,
+    isSavedToFavouriteMoviesList
   };
 
   async function handleWatchTrailer(e) {
@@ -46,22 +47,6 @@ export default function MovieCard({
     OpenLinkInNewTab(trailer)
     e.stopPropagation();
   }
-
-  async function handleSaveToWatchlist(e) {
-    e.preventDefault();
-    const response = await sendData(sendToWatchListEndpoint, data);
-    response.ok ? setIsSavedToWatchListState(true) : false;
-    e.stopPropagation();
-  }
-
-
-  async function handleDeleteFromWatchlist(e) {
-    e.preventDefault();
-    const response = await sendData(`${deleteFromWatchListEndpoint}${movieId}`);
-    response.ok ? setIsSavedToWatchListState(false) : false;
-    e.stopPropagation();
-  }
-
   return (
     <div className="container">
       <div className={MovieCardStyle["cellphone-container"]}>
@@ -139,11 +124,10 @@ export default function MovieCard({
               </div>
               <div className={MovieCardStyle.col6}>
                 <div className={MovieCardStyle["action-btn"]}>
-                  {!isSavedToWatchListState ?
-                    <i> <BookmarkBorderIcon sx={{ fontSize: 30 }} onClick={handleSaveToWatchlist} /></i>
-                    :
-                    <i><BookmarkIcon sx={{ fontSize: 30 }} onClick={handleDeleteFromWatchlist} /></i>
-                  }
+                  <WatchListBtn movieData={data} outline={false} />
+                </div>
+                <div className={MovieCardStyle["action-btn"]}>
+                  <FavouriteBtn movieData={data} outline={false} />
                 </div>
                 <div className={MovieCardStyle["action-btn"]}>
                   <Popup trigger={
@@ -163,6 +147,7 @@ MovieCard.propTypes = {
   movieId: PropTypes.number,
   title: PropTypes.string,
   isSavedToWatchlist: PropTypes.bool,
+  isSavedToFavouriteMoviesList: PropTypes.bool,
   posterUrl: PropTypes.string,
   voteAverage: PropTypes.number,
   runtime: PropTypes.number,

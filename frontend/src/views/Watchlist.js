@@ -63,7 +63,6 @@ export default function WatchList() {
         getDetailedMovieData();
     }, []);
 
-
     if (!dataLoaded || movies === null) {
         return <LoadingPage />;
     }
@@ -100,6 +99,7 @@ export default function WatchList() {
                                     overview={movie.overview}
                                     actors={movie.actors}
                                     video={movie.video}
+                                    isSavedToFavouriteMoviesList={movie.isSavedToFavouriteMoviesList}
                                     isSavedToWatchlist={movie.isSavedToWatchlist}
                                 />
                             </Link>

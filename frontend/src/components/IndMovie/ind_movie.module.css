@@ -56,14 +56,9 @@
   display: inline-flex;
   align-self: start;
 }
-.btn-wrapper-2 {
+.btn-wrapper-el {
   margin-left: 15px
 }
-.watchlist-btn-wrapper {
-  display: inline-flex;
-  align-items: center;
-}
-
 
 .hero-content {
   display: flex;
