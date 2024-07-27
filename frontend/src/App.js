@@ -50,7 +50,7 @@ export default function App() {
           path="/watchlist"
           element={<PrivateRoute><WatchList endpointName="watchlist" /></PrivateRoute>}
         />
-        <Route path="/movies/:endpoint/movie/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
+        <Route path="/movies/:endpoint/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
         <Route path="/profile" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
 
         <Route path="/movies/movie/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />

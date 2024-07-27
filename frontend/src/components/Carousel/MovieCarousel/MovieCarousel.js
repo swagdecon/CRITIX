@@ -29,7 +29,7 @@ function MovieCarousel({ title, movies, endpoint }) {
             <div className={MovieCardStyle.carouselHeader} />
             {movieChunk.map((movie) => (
               <div className={MovieCardStyle["main-card-container"]} key={movie.id}>
-                <Link to={`${endpoint}movie/${movie.id}`}>
+                <Link to={`${endpoint}/${movie.id}`}>
                   <MovieCard
                     movieId={movie.id}
                     title={movie.title}

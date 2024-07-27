@@ -29,7 +29,6 @@
 /* ------- profile body header */
 .profile-header {
     background-size: cover;
-    margin: 20px;
     border-radius: 20px;
     position: relative;
     height: 40ch;
@@ -39,7 +38,7 @@
 .BannerImg {
    max-height: 40ch;
    width: 100%;
-object-fit: cover;
+    object-fit: cover;
 }
     .main-profile {
         display: flex;
@@ -109,9 +108,7 @@ object-fit: cover;
     grid-template-columns: 150px auto;
     gap: 70px;
     padding: 70px;
-    margin: 20px;
     margin-top: 15ch;
-    border-radius: 20px;
     background: linear-gradient(#141e30, #0096ff);
 }
     .profile-actions {

@@ -1,12 +1,10 @@
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { fetchData } from "../security/Data";
-import CookieManager from "../security/CookieManager.js";
 import isTokenExpired from "../security/IsTokenExpired.js";
 import UserStyle from "../components/UserProfile/UserProfile.module.css"
 import CardProfile from "../components/UserProfile/ProfileImageUpload.js"
 import NavBar from "../components/NavBar/NavBar.js";
 import { LineChart } from "@mui/x-charts/LineChart"
-import jwt_decode from "jwt-decode";
 import BannerImg from "../components/UserProfile/BannerImage.js";
 import LoadingPage from "./LoadingPage.js";
 import Pagination from "@mui/material/Pagination";
@@ -19,9 +17,6 @@ const getBannerEndpoint = process.env.REACT_APP_GET_USER_BANNER
 
 export default function UserProfile() {
 
-    const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
-    const decodedToken = useMemo(() => jwt_decode(token), [token]);
-    const userId = decodedToken.userId
     const reviewsPerPage = 2;
     const [userReviews, setUserReviews] = useState(null)
     const [recentUserReview, setRecentUserReview] = useState(null)
@@ -48,9 +43,9 @@ export default function UserProfile() {
         try {
             await isTokenExpired();
             const [allUserReviews, avatarPic, bannerPic] = await Promise.all([
-                fetchData(`${allUserReviewsEndpoint}${userId}`),
-                fetchData(`${getAvatarEndpoint}${userId}`),
-                fetchData(`${getBannerEndpoint}${userId}`)
+                fetchData(allUserReviewsEndpoint),
+                fetchData(getAvatarEndpoint),
+                fetchData(getBannerEndpoint)
             ]);
             setUserReviews(allUserReviews);
             setAvatar(avatarPic);
@@ -76,7 +71,7 @@ export default function UserProfile() {
         setRenderUserHome(true)
         setRenderUserSettings(false)
     }
-    console.log(userReviews)
+
     return isLoading ? (
         <LoadingPage />
     ) : (
@@ -84,9 +79,9 @@ export default function UserProfile() {
             <NavBar />
             <div className={UserStyle["profile-card"]}>
                 <div className={UserStyle["profile-header"]}>
-                    < BannerImg userId={userId} bannerPic={banner} refetchBanner={fetchBackendData} />
+                    <BannerImg bannerPic={banner} refetchBanner={fetchBackendData} />
                     <div className={UserStyle["main-profile"]}>
-                        <CardProfile userId={userId} avatar={avatar} />
+                        <CardProfile avatar={avatar} />
                         <div className={UserStyle["profile-names"]}>
                             <h1 className={UserStyle.username}>Connor Pant</h1>
                         </div>
@@ -110,7 +105,7 @@ export default function UserProfile() {
                     {renderUserHome && !renderUserSettings ?
                         <div className={UserStyle.MainInfoPanel}>
                             <div className={UserStyle.ActivityInfo}>
-                                <h2 className={UserStyle.Title}>Your Activity (Logins)</h2>
+                                <h2 className={UserStyle.Title}>Activity</h2>
                                 <LineChart
                                     xAxis={[
                                         {

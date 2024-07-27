@@ -8,7 +8,7 @@ import { sendData } from '../../security/Data';
 import { validateImageURL } from '../Shared/Shared';
 const saveProfileImgEndpoint = process.env.REACT_APP_UPDATE_PROFILE_IMAGE
 
-const ImgUpload = ({ onChange, src, userId }) => {
+const ImgUpload = ({ onChange, src }) => {
     const [editor, setEditor] = useState(null);
     const editorRef = useRef(null);
     const [btn, setBtn] = useState("add");
@@ -33,7 +33,7 @@ const ImgUpload = ({ onChange, src, userId }) => {
             const data = {
                 profilePic: profilePicture
             }
-            const response = await sendData(`${saveProfileImgEndpoint}/${userId}`, data);
+            const response = await sendData(saveProfileImgEndpoint, data);
             response.ok ? window.alert('New Profile Picture Saved Successfully') : window.alert('An Error Occured, Please try again');
         }
 
@@ -74,25 +74,23 @@ const ImgUpload = ({ onChange, src, userId }) => {
     );
 };
 
-const CardProfile = ({ userId, avatar }) => {
+const CardProfile = ({ avatar }) => {
     const [imageURL, setImageURL] = useState(avatar);
     const photoUpload = (url) => {
         setImageURL(url);
     };
 
     return (
-        <ImgUpload onChange={photoUpload} userId={userId} src={imageURL || "https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"} />
+        <ImgUpload onChange={photoUpload} src={imageURL || "https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"} />
     );
 };
 CardProfile.propTypes = {
-    userId: PropTypes.string.isRequired,
     avatar: PropTypes.string.isRequired
 }
 
 ImgUpload.propTypes = {
     onChange: PropTypes.func.isRequired,
     src: PropTypes.string.isRequired,
-    userId: PropTypes.string.isRequired,
 };
 
 export default CardProfile;

@@ -35,7 +35,6 @@ const MovieReviews = ({ reviews, movieId, movieTitle, placement }) => {
 
     let token = CookieManager.decryptCookie('accessToken');
     const decodedToken = jwt_decode(token);
-    const userId = decodedToken.userId;
     const firstName = decodedToken.firstName;
     const filter = useMemo(() => new Filter(), []);
     const [reviewRating, setReviewRating] = useState(0);
@@ -51,7 +50,7 @@ const MovieReviews = ({ reviews, movieId, movieTitle, placement }) => {
     const isSubmitDisabled = useMemo(() =>
         reviewContent.trim().length === 0 ||
         reviewRating === 0 ||
-        wordCount < 15 ||
+        wordCount < 40 ||
         !recaptchaResult,
         [reviewContent, reviewRating, recaptchaResult]
     );
@@ -123,7 +122,6 @@ const MovieReviews = ({ reviews, movieId, movieTitle, placement }) => {
                 .post(`${CREATE_MOVIE_ENDPOINT}${movieId}`, {
                     createdDate: formattedDate,
                     movieId,
-                    userId,
                     movieTitle,
                     author: firstName,
                     rating: reviewRating,
@@ -168,7 +166,7 @@ const MovieReviews = ({ reviews, movieId, movieTitle, placement }) => {
                                     ? "Profanity is not allowed."
                                     : hasSubmittedReview
                                         ? "Thanks for submitting a review!  "
-                                        : "Post A Review (Min. 15 words)"
+                                        : "Post A Review (Min. 40 words)"
                             }
                             multiline
                             onChange={(e) => setReviewContent(e.target.value)}
@@ -215,7 +213,7 @@ const MovieReviews = ({ reviews, movieId, movieTitle, placement }) => {
                 </div>
                 {reviews && reviews.length >= 2 && (
                     <div className={IndReview.IndReviewWrapper}>
-                        <ReviewSection reviews={reviews} movieId={movieId} userId={userId} />
+                        <ReviewSection reviews={reviews} movieId={movieId} />
                     </div>
                 )}
             </div>

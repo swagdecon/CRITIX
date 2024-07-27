@@ -6,17 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.popflix.auth.AuthenticationService;
 import com.popflix.model.User;
 import com.popflix.service.UserService;
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 @RequestMapping("/user")
 @RestController
@@ -26,7 +24,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/")
     public ResponseEntity<User> singleUser(@RequestHeader("Authorization") String accessToken)
             throws Exception {
         User user = authenticationService.getUserDetails(accessToken);
@@ -38,7 +36,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/avatar/{id}")
+    @GetMapping("/avatar")
     public ResponseEntity<String> singleAvatar(@RequestHeader("Authorization") String accessToken)
             throws Exception {
         String avatarPic = authenticationService.getUserDetails(accessToken).getAvatar();
@@ -50,11 +48,12 @@ public class UserController {
         }
     }
 
-    @PostMapping("/update/profile-img/{userId}")
+    @PostMapping("/update/profile-img")
     public ResponseEntity<String> updateProfileImg(@RequestBody Map<String, String> profilePic,
-            @PathVariable String userId)
+            @RequestHeader("Authorization") String accessToken)
             throws java.io.IOException {
         try {
+            String userId = authenticationService.getUserDetails(accessToken).getId();
             String profilePicURL = profilePic.get("profilePic");
 
             if (profilePic == null || !profilePicURL.startsWith("https://")) {
@@ -68,11 +67,12 @@ public class UserController {
         }
     }
 
-    @PostMapping("/update/banner-img/{userId}")
+    @PostMapping("/update/banner-img")
     public ResponseEntity<String> updateBannerImg(@RequestBody Map<String, String> profileBanner,
-            @PathVariable String userId)
+            @RequestHeader("Authorization") String accessToken)
             throws java.io.IOException {
         try {
+            String userId = authenticationService.getUserDetails(accessToken).getId();
             String bannerPicUrl = profileBanner.get("bannerPic");
 
             if (profileBanner == null || !bannerPicUrl.startsWith("https://")) {
@@ -86,7 +86,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/banner/{id}")
+    @GetMapping("/banner")
     public ResponseEntity<String> getBanner(@RequestHeader("Authorization") String accessToken)
             throws Exception {
         String avatarPic = authenticationService.getUserDetails(accessToken).getBannerPicture();
@@ -97,5 +97,12 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    // @GetMapping("/activity/reviews/{id}")
+    // public ResponseEntity<JSONArray>
+    // getReviewActivity(@RequestHeader("Authorization") String accessToken) throws
+    // Exception {
+    // JSONArray array = userService.getUserReviewActivity()
+    // }
 
 }

@@ -21,8 +21,6 @@ import MovieButton from "../components/Other/btn/MovieButton/Button";
 import { fetchData, sendData } from "../security/Data";
 import isTokenExpired from "../security/IsTokenExpired.js";
 import WatchListBtn from "..//components/Other/btn/WatchListBtn/WatchListBtn";
-import jwt_decode from "jwt-decode";
-import CookieManager from "../security/CookieManager.js";
 const recommendedEndpoint = process.env.REACT_APP_RECOMMENDED_ENDPOINT;
 const getReviewEndpoint = process.env.REACT_APP_GET_REVIEW_ENDPOINT
 
@@ -32,9 +30,6 @@ export default function IndMovie() {
   const [reviews, setReviews] = useState(null)
   const [recommendedMovies, setRecommendedMovies] = useState(null)
   const [isLoading, setIsLoading] = useState(true);
-  const token = CookieManager.decryptCookie('accessToken');
-  const decodedToken = jwt_decode(token);
-  const userId = decodedToken.userId;
 
   const handleWatchNowClick = () => WatchMovieNow(movie.providerResults)
 
@@ -44,7 +39,7 @@ export default function IndMovie() {
       try {
         await isTokenExpired();
         const [movies, reviewsData, recommendedMovies] = await Promise.all([
-          sendData(id, userId),
+          sendData(id),
           fetchData(`${getReviewEndpoint}${id} `),
           fetchData(`${recommendedEndpoint}${id} `)
         ]);
@@ -95,12 +90,12 @@ export default function IndMovie() {
                 onClick={handleWatchNowClick}
               />
               <div className={IndMovieStyle["btn-wrapper-2"]}>
-                <WatchListBtn movieData={movie} userId={userId} />
+                <WatchListBtn movieData={movie} />
               </div>
             </div>
-            <div className={IndMovieStyle.ind_movie_review}>
+            {/* <div className={IndMovieStyle.ind_movie_review}>
               <MovieReviews movieId={movie.id} reviews={reviews} placement="header" />
-            </div>
+            </div> */}
           </div>
           {movie.posterUrl ?
             <div className={IndMovieStyle["flex-1"]}>

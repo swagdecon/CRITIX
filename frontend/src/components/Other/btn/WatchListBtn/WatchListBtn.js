@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 const sendToWatchListEndpoint = process.env.REACT_APP_ADD_TO_WATCHLIST_ENDPOINT;
 const deleteFromWatchListEndpoint = process.env.REACT_APP_DELETE_FROM_WATCHLIST_ENDPOINT;
 
-export default function WatchListBtn({ movieData, userId }) {
+export default function WatchListBtn({ movieData }) {
     const [isSavedToWatchListState, setIsSavedToWatchListState] = useState(movieData.isSavedToWatchlist)
 
     const data = {
@@ -19,19 +19,19 @@ export default function WatchListBtn({ movieData, userId }) {
         genres: movieData.genres,
         overview: movieData.overview,
         actors: movieData.actors ? movieData.actors.slice(0, 3) : null,
-        userId: userId
+
     };
 
     async function handleSaveToWatchlist(e) {
         e.preventDefault();
-        const response = await sendData(`${sendToWatchListEndpoint}/${userId}`, data);
+        const response = await sendData(sendToWatchListEndpoint, data);
         response.ok ? setIsSavedToWatchListState(true) : false;
         e.stopPropagation();
     }
 
     async function handleDeleteFromWatchlist(e) {
         e.preventDefault();
-        const response = await sendData(`${deleteFromWatchListEndpoint}${userId}/${movieData.id}`);
+        const response = await sendData(`${deleteFromWatchListEndpoint}${movieData.id}`);
         response.ok ? setIsSavedToWatchListState(false) : false;
         e.stopPropagation();
     }
@@ -50,7 +50,6 @@ export default function WatchListBtn({ movieData, userId }) {
 }
 
 WatchListBtn.propTypes = {
-    userId: PropTypes.string.isRequired,
     isSavedToWatchlist: PropTypes.bool.isRequired,
     movieData: PropTypes.shape({
         id: PropTypes.number.isRequired,

@@ -18,9 +18,6 @@ const trailerEndpoint = process.env.REACT_APP_TRAILER_ENDPOINT;
 const sendToWatchListEndpoint = process.env.REACT_APP_ADD_TO_WATCHLIST_ENDPOINT;
 const deleteFromWatchListEndpoint = process.env.REACT_APP_DELETE_FROM_WATCHLIST_ENDPOINT;
 
-import jwt_decode from "jwt-decode";
-import CookieManager from "../../security/CookieManager.js";
-
 export default function MovieCard({
   movieId,
   title,
@@ -33,8 +30,6 @@ export default function MovieCard({
   shareUrl
 }) {
   const [isSavedToWatchListState, setIsSavedToWatchListState] = useState(isSavedToWatchlist)
-  const token = jwt_decode(CookieManager.decryptCookie("accessToken"))
-  const userId = token.userId;
   const data = {
     movieId,
     title,
@@ -43,7 +38,6 @@ export default function MovieCard({
     genres,
     overview,
     actors: actors ? actors.slice(0, 3) : null,
-    userId
   };
 
   async function handleWatchTrailer(e) {
@@ -55,7 +49,7 @@ export default function MovieCard({
 
   async function handleSaveToWatchlist(e) {
     e.preventDefault();
-    const response = await sendData(`${sendToWatchListEndpoint}/${userId}`, data);
+    const response = await sendData(sendToWatchListEndpoint, data);
     response.ok ? setIsSavedToWatchListState(true) : false;
     e.stopPropagation();
   }
@@ -63,7 +57,7 @@ export default function MovieCard({
 
   async function handleDeleteFromWatchlist(e) {
     e.preventDefault();
-    const response = await sendData(`${deleteFromWatchListEndpoint}${userId}/${movieId}`);
+    const response = await sendData(`${deleteFromWatchListEndpoint}${movieId}`);
     response.ok ? setIsSavedToWatchListState(false) : false;
     e.stopPropagation();
   }

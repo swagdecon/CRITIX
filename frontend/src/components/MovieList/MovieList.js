@@ -127,7 +127,7 @@ export default function MovieList({ endpoint }) {
     return <LoadingPage />;
   }
   return (
-    <div className={MovieListStyle["page-wrapper"]}>
+    <>
       <div className={MovieListStyle.titleWrapper}>
         <div className={MovieListStyle["title-container"]}>
           <h3 className={Title["movie-title"]}>{title}</h3>
@@ -178,7 +178,7 @@ export default function MovieList({ endpoint }) {
           />
         </ThemeProvider>
       </div>
-    </div>
+    </ >
   );
 }
 

@@ -8,7 +8,7 @@ import defaultBannerPic from "./banner.jpg"
 
 const updateBannerImgEndpoint = process.env.REACT_APP_UPDATE_BANNER_IMAGE
 
-export default function BannerImg({ userId, bannerPic }) {
+export default function BannerImg({ bannerPic }) {
 
     const [bannerPicture, setBannerPicture] = useState(bannerPic);
     const handleAddClick = async () => {
@@ -20,7 +20,7 @@ export default function BannerImg({ userId, bannerPic }) {
                 const data = {
                     bannerPic: url
                 }
-                const response = await sendData(`${updateBannerImgEndpoint}${userId}`, data);
+                const response = await sendData(updateBannerImgEndpoint, data);
                 response.ok ?
                     window.alert('New Banner Picture Saved Successfully')
                     :
@@ -46,7 +46,6 @@ export default function BannerImg({ userId, bannerPic }) {
     );
 }
 BannerImg.propTypes = {
-    userId: PropTypes.string.isRequired,
     bannerPic: PropTypes.string,
     refetchBanner: PropTypes.func.isRequired,
 };

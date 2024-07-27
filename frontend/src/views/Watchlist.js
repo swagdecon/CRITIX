@@ -4,8 +4,6 @@ import isTokenExpired from "../security/IsTokenExpired.js";
 import { fetchData } from "../security/Data.js";
 import WatchListStyle from "../components/MovieList/MovieList.module.css"
 import { React, useMemo, useState } from "react";
-import jwt_decode from "jwt-decode";
-import CookieManager from "../security/CookieManager.js";
 import LoadingPage from "./LoadingPage.js";
 import Title from "../components/Carousel/title.module.scss";
 import { Link } from "react-router-dom";
@@ -14,8 +12,7 @@ import NavBar from "../components/NavBar/NavBar.js";
 const GET_WATCHLIST_ENDPOINT = process.env.REACT_APP_GET_WATCHLIST_ENDPOINT;
 
 export default function WatchList() {
-    const token = jwt_decode(CookieManager.decryptCookie("accessToken"))
-    const userId = token.userId;
+
     const [movies, setMovies] = useState(null);
     const [dataLoaded, setDataLoaded] = useState(false)
 
@@ -44,7 +41,7 @@ export default function WatchList() {
         try {
             await isTokenExpired();
             const response = await Promise.all([
-                fetchData(`${GET_WATCHLIST_ENDPOINT}/${userId}`),
+                fetchData(GET_WATCHLIST_ENDPOINT),
             ]);
             return response[0]
         } catch (error) {

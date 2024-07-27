@@ -36,7 +36,7 @@ class MovieControllerTest {
     }
 
     @Test
-    void testGetSingleMovie() throws IOException, InterruptedException, URISyntaxException {
+    void testGetSingleMovie() throws Exception {
         int movieId = 123;
         String userId = "user123";
         Movie movie = new Movie();
@@ -49,7 +49,7 @@ class MovieControllerTest {
     }
 
     @Test
-    void testGetPopularMovies() {
+    void testGetPopularMovies() throws Exception {
 
         String userId = "user123";
         List<Movie> mockMovies = new ArrayList<>();
@@ -65,7 +65,7 @@ class MovieControllerTest {
     }
 
     @Test
-    void testGetSinglePopularMovie() {
+    void testGetSinglePopularMovie() throws Exception {
 
         int movieId = 123;
         String userId = "user123";
@@ -81,7 +81,7 @@ class MovieControllerTest {
     }
 
     @Test
-    void testGetUpcomingMovies() {
+    void testGetUpcomingMovies() throws Exception {
 
         String userId = "user123";
         List<Movie> mockMovies = new ArrayList<>();
@@ -97,7 +97,7 @@ class MovieControllerTest {
     }
 
     @Test
-    void testGetTopRatedMovies() {
+    void testGetTopRatedMovies() throws Exception {
 
         String userId = "user123";
         List<Movie> mockMovies = new ArrayList<>();
@@ -113,7 +113,7 @@ class MovieControllerTest {
     }
 
     @Test
-    void testGetNowPlayingMovies() {
+    void testGetNowPlayingMovies() throws Exception {
 
         String userId = "user123";
         List<Movie> mockMovies = new ArrayList<>();
@@ -129,7 +129,7 @@ class MovieControllerTest {
     }
 
     @Test
-    void testGetSingleNowPlayingMovie() {
+    void testGetSingleNowPlayingMovie() throws Exception {
 
         int movieId = 123;
         String userId = "user123";
