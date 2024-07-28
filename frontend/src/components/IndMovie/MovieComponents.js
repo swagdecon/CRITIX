@@ -148,48 +148,40 @@ function MovieDetails({
           name="RUNTIME"
           value={runtime}
           icon="&#xe8b5;"
-          iconString="&#xe8b5;"
         />
         <GlassCard
           name="BUDGET"
           value={budget}
-          iconString="&#xef63;"
           icon="&#xef63;"
         />
         <GlassCard
           name="REVENUE"
           value={revenue}
-          iconString="&#xf041;"
           icon="&#xf041;"
         />
         <GlassCard
           name="VOTE COUNT"
           value={voteCount}
-          iconString="&#xe175;"
           icon="&#xe175;"
         />
         <GlassCard
           name="LANGUAGE"
           value={language}
-          iconString="&#xe8e2;"
           icon="&#xe8e2;"
         />
         <GlassCard
           name="PRODUCTION"
           value={productionCompanies}
-          iconString="&#xe04b;"
           icon="&#xe04b;"
         />
         <GlassCard
           name="MOVIE STATUS"
           value={movieStatus}
-          iconString="&#xf7f3;"
           icon="&#xf7f3;"
         />
         <GlassCard
           name="RELEASE DATE"
           value={releaseDate}
-          iconString="&#xebcc;"
           icon="&#xebcc;"
         />
       </div>

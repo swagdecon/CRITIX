@@ -128,40 +128,39 @@ const languageMap = {
   "ji": "Yiddish",
   "zu": "Zulu",
 };
-export default function GlassCard({ name, value, icon, iconString }) {
 
-  let data;
-  function getLanguageName(isoCode) {
+function getLanguageName(isoCode) {
 
-    const hasKey = isoCode in languageMap;
+  const hasKey = isoCode in languageMap;
 
-    if (hasKey) {
-      return languageMap[isoCode];
-    } else {
-      return "Unknown";
-    }
+  if (hasKey) {
+    return languageMap[isoCode];
+  } else {
+    return "Unknown";
   }
+}
+export default function GlassCard({ name, value, icon }) {
+  let data;
 
   !value ? (value = "N/A") : value;
 
-  if (iconString === "&#xef63;") {
+  if (name === "BUDGET") {
     // Budget
     data = "$ " + ParseNumber(value);
-  } else if (iconString === "&#xe8b5;") {
+  } else if (name === "RUNTIME") {
     // Minutes
     data = ` ${value} minutes`;
-  } else if (iconString === "&#xf041;") {
+  } else if (name === "REVENUE") {
     // Revenue
     data = "$ " + ParseNumber(value);
-  } else if (iconString === "&#xe175;") {
+  } else if (name === "VOTE COUNT") {
     // Vote Count
     data = ParseNumber(value);
-  } else if (iconString === "&#xe8e2;") {
+  } else if (name === "LANGUAGE") {
     // Language
-
     let language = getLanguageName(value);
     data = ` ${language} `;
-  } else if (iconString === "&#xe04b;") {
+  } else if (name === "PRODUCTION") {
     // Get the first production company or returns N/A
     const productionCompany = Array.isArray(value) && value.length > 0 ? value[0] : null;
     // If the value exists and its length is less than or equal to 18 characters, return it as is
@@ -171,15 +170,15 @@ export default function GlassCard({ name, value, icon, iconString }) {
       // Otherwise, return the first 18 characters plus "..."
       productionCompany ? productionCompany.slice(0, 18) + "..." : "N/A";
 
-  } else if (iconString === "&#xf7f3;") {
+  } else if (name === "MOVIE STATUS") {
     // Movie Status
     data = ` ${value} `;
-  } else if (iconString === "&#xebcc;") {
+  } else if (name === "RELEASE DATE") {
     // Release Date
     data = ` ${value} `;
+  } else {
+    data = "N/A"
   }
-
-
 
   return (
     <div className={GlassStyle.container}>

@@ -33,7 +33,6 @@ export default function IndMovie() {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleWatchNowClick = () => WatchMovieNow(movie.providerResults)
-
   useEffect(() => {
     async function fetchBackendData() {
       setIsLoading(true);
