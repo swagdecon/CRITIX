@@ -156,6 +156,8 @@ export default function MovieList({ endpoint }) {
                 overview={movie.overview}
                 actors={movie.actors}
                 video={movie.video}
+                isSavedToFavouriteMoviesList={movie.isSavedToFavouriteMoviesList}
+                isSavedToWatchlist={movie.isSavedToWatchlist}
               />
             </Link>
           </div>

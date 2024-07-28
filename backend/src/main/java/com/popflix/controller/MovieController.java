@@ -122,9 +122,12 @@ public class MovieController {
     }
 
     @GetMapping("/recommended/{movieId}")
-    public ResponseEntity<Object> getRecommendedMovies(@PathVariable Integer movieId)
-            throws IOException, InterruptedException, URISyntaxException {
-        return new ResponseEntity<Object>(movieService.recommendedMovies(movieId), HttpStatus.OK);
+    public ResponseEntity<Object> getRecommendedMovies(@PathVariable Integer movieId,
+            @RequestHeader("Authorization") String accessToken)
+            throws Exception {
+        String userId = authenticationService.getUserDetails(accessToken).getId();
+
+        return new ResponseEntity<Object>(movieService.recommendedMovies(movieId, userId), HttpStatus.OK);
     }
 
     @GetMapping("/get-trailer/{movieId}")
@@ -134,9 +137,12 @@ public class MovieController {
     }
 
     @GetMapping("/movie-list/{endpoint}")
-    public ResponseEntity<Object> getMovieReultsPage(@PathVariable String endpoint, @RequestParam Integer page)
-            throws IOException, InterruptedException, URISyntaxException {
-        return new ResponseEntity<Object>(movieService.getMovieResults(endpoint, page), HttpStatus.OK);
+    public ResponseEntity<Object> getMovieReultsPage(@PathVariable String endpoint, @RequestParam Integer page,
+            @RequestHeader("Authorization") String accessToken)
+            throws Exception {
+        String userId = authenticationService.getUserDetails(accessToken).getId();
+
+        return new ResponseEntity<Object>(movieService.getMovieResults(endpoint, page, userId), HttpStatus.OK);
     }
 
     @PostMapping("/watchlist/add")

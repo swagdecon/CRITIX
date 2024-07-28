@@ -451,7 +451,7 @@ public class MovieService {
   // return new MovieResults(updatedMoviesResults, totalPages);
   // }
 
-  public MovieResults getMovieResults(String endpoint, Integer page)
+  public MovieResults getMovieResults(String endpoint, Integer page, String userId)
       throws IOException, InterruptedException, URISyntaxException {
     String url = "https://api.themoviedb.org/3/movie/" + endpoint + "?" +
         "api_key=" + TMDB_API_KEY
@@ -473,7 +473,7 @@ public class MovieService {
     List<MovieCard> movieCardList = new ArrayList<>();
     Integer totalPages = objectMapper.readTree(responseBody).get("total_pages").asInt();
 
-    legacyMovieCardLooping(resultsNode, movieCardList, objectMapper);
+    legacyMovieCardLooping(resultsNode, movieCardList, userId, objectMapper);
 
     return new MovieResults(movieCardList, totalPages);
   }
@@ -555,9 +555,9 @@ public class MovieService {
   // return movieList;
   // }
 
-  public List<MovieCard> recommendedMovies(Integer id)
+  public List<MovieCard> recommendedMovies(Integer movieId, String userId)
       throws IOException, InterruptedException, URISyntaxException {
-    String url = "https://api.themoviedb.org/3/movie/" + id
+    String url = "https://api.themoviedb.org/3/movie/" + movieId
         + "/recommendations?language=en-US&page=1&include_adult=false" + "&api_key="
         + TMDB_API_KEY;
 
@@ -578,12 +578,13 @@ public class MovieService {
 
     JsonNode resultsNode = objectMapper.readTree(responseBody).get("results");
     List<MovieCard> recommendedMovies = new ArrayList<>();
-    legacyMovieCardLooping(resultsNode, recommendedMovies, objectMapper);
+    legacyMovieCardLooping(resultsNode, recommendedMovies, userId, objectMapper);
     return recommendedMovies;
 
   };
 
-  public void legacyMovieCardLooping(JsonNode resultsNode, List<MovieCard> movies, ObjectMapper objectMapper) {
+  public void legacyMovieCardLooping(JsonNode resultsNode, List<MovieCard> movies, String userId,
+      ObjectMapper objectMapper) {
 
     resultsNode.forEach(movieNode -> {
       MovieCard movie = objectMapper.convertValue(movieNode, MovieCard.class);
@@ -592,6 +593,7 @@ public class MovieService {
       double voteAverageValue = JsonNodeVoteAverage.asDouble();
       double roundedVoteAverageValue = Math.round(voteAverageValue * 10.0) / 10.0;
       int voteAverage = (int) Math.round(roundedVoteAverageValue * 10);
+
       movie.setMovieId(movieNode.get("id").asInt());
       movie.setPosterUrl(posterUrl);
       movie.setVoteAverage(voteAverage);
@@ -601,6 +603,10 @@ public class MovieService {
       movie.setTagline(movie.getTagline());
       movie.setRuntime(movie.getRuntime());
 
+      boolean isInWatchlist = userRepository.doesWatchlistMovieExist(userId, movie.getMovieId());
+      boolean favouriteMovieAlreadyExists = userRepository.doesFavouriteMovieExist(userId, movie.getMovieId());
+      movie.setIsSavedToWatchlist(isInWatchlist);
+      movie.setIsSavedToFavouriteMoviesList(favouriteMovieAlreadyExists);
       setGenresProperty(movie, movieNode, "genre_ids");
       movies.add(movie);
     });

@@ -35,10 +35,12 @@ class MovieControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    String userId = "user123";
+    int movieId = 123;
+
     @Test
     void testGetSingleMovie() throws Exception {
         int movieId = 123;
-        String userId = "user123";
         Movie movie = new Movie();
 
         when(movieService.singleTmdbMovie(movieId, userId)).thenReturn(Optional.of(movie));
@@ -51,7 +53,6 @@ class MovieControllerTest {
     @Test
     void testGetPopularMovies() throws Exception {
 
-        String userId = "user123";
         List<Movie> mockMovies = new ArrayList<>();
         mockMovies.add(new Movie());
         mockMovies.add(new Movie());
@@ -67,8 +68,6 @@ class MovieControllerTest {
     @Test
     void testGetSinglePopularMovie() throws Exception {
 
-        int movieId = 123;
-        String userId = "user123";
         Movie mockMovie = new Movie(); // Create a mock Movie object
         Optional<Movie> optionalMovie = Optional.of(mockMovie);
 
@@ -83,7 +82,6 @@ class MovieControllerTest {
     @Test
     void testGetUpcomingMovies() throws Exception {
 
-        String userId = "user123";
         List<Movie> mockMovies = new ArrayList<>();
         mockMovies.add(new Movie());
         mockMovies.add(new Movie());
@@ -99,7 +97,6 @@ class MovieControllerTest {
     @Test
     void testGetTopRatedMovies() throws Exception {
 
-        String userId = "user123";
         List<Movie> mockMovies = new ArrayList<>();
         mockMovies.add(new Movie());
         mockMovies.add(new Movie());
@@ -115,7 +112,6 @@ class MovieControllerTest {
     @Test
     void testGetNowPlayingMovies() throws Exception {
 
-        String userId = "user123";
         List<Movie> mockMovies = new ArrayList<>();
         mockMovies.add(new Movie());
         mockMovies.add(new Movie());
@@ -131,8 +127,6 @@ class MovieControllerTest {
     @Test
     void testGetSingleNowPlayingMovie() throws Exception {
 
-        int movieId = 123;
-        String userId = "user123";
         Movie mockMovie = new Movie(); // Create a mock Movie object
         Optional<Movie> optionalMovie = Optional.of(mockMovie);
 
@@ -146,8 +140,8 @@ class MovieControllerTest {
 
     @Test
     void testGetSearchResults() throws IOException, InterruptedException, URISyntaxException {
-
         String query = "searchQuery";
+
         List<MovieDb> searchResults = Collections.singletonList(new MovieDb()); // Mocked search results of type MovieDb
 
         when(movieService.searchResults(anyString())).thenReturn(searchResults);
@@ -159,39 +153,38 @@ class MovieControllerTest {
     }
 
     @Test
-    void testGetRecommendedMovies() throws IOException, InterruptedException, URISyntaxException {
+    void testGetRecommendedMovies() throws Exception {
 
-        int movieId = 123;
         List<MovieCard> recommendedMovies = Collections.singletonList(new MovieCard()); // Replace with actual MovieCard
                                                                                         // data
 
-        when(movieService.recommendedMovies(movieId)).thenReturn(recommendedMovies);
+        when(movieService.recommendedMovies(movieId, userId)).thenReturn(recommendedMovies);
 
-        ResponseEntity<Object> response = movieController.getRecommendedMovies(movieId);
+        ResponseEntity<Object> response = movieController.getRecommendedMovies(movieId, userId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(recommendedMovies, response.getBody());
 
         // Verify method call and arguments passed to movieService.recommendedMovies
-        verify(movieService).recommendedMovies(movieId);
+        verify(movieService).recommendedMovies(movieId, "123");
     }
 
     @Test
-    void testGetMovieResultsPage() throws IOException, InterruptedException, URISyntaxException {
+    void testGetMovieResultsPage() throws Exception {
 
         String endpoint = "popular";
         int page = 1;
         MovieResults movieResults = new MovieResults(); // Replace with actual MovieResults object
 
-        when(movieService.getMovieResults(endpoint, page)).thenReturn(movieResults);
+        when(movieService.getMovieResults(endpoint, page, userId)).thenReturn(movieResults);
 
-        ResponseEntity<Object> response = movieController.getMovieReultsPage(endpoint, page);
+        ResponseEntity<Object> response = movieController.getMovieReultsPage(endpoint, page, userId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(movieResults, response.getBody());
 
         // Verify method call and arguments passed to movieService.getMovieResults
-        verify(movieService).getMovieResults(endpoint, page);
+        verify(movieService).getMovieResults(endpoint, page, userId);
     }
 
     @Test
@@ -221,7 +214,6 @@ class MovieControllerTest {
     @Test
     void testGetWatchlist() throws Exception {
 
-        String userId = "user789";
         List<MovieCard> expectedWatchlist = Arrays.asList(new MovieCard(), new MovieCard()); // Replace with actual
                                                                                              // MovieCard objects
 
