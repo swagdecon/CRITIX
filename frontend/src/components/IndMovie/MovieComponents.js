@@ -1,6 +1,6 @@
 import { React } from "react";
 import PropTypes from "prop-types";
-import IndMovieStyle from "../IndMovie/ind_movie.module.css";
+import IndMovieStyle from "../IndMovie/IndMovie.module.css";
 import ReactPlayer from "react-player";
 import "../Carousel/MovieCarousel/MovieCarousel.module.css";
 import GlassCard from "./GlassCard";
@@ -77,11 +77,7 @@ function WatchMovieNow(watchProviders) {
 
 
 function MovieAverage({ voteAverage }) {
-  return (
-    <div className={IndMovieStyle.rating}>
-      {voteAverage ? `${voteAverage} kernels` : "No Rating"}
-    </div>
-  )
+  return voteAverage ? `${voteAverage} kernels` : "No Rating"
 }
 
 MovieAverage.propTypes = {
@@ -115,15 +111,13 @@ function EmbeddedMovieTrailer({ trailer }) {
   }
 
   return (
-    <div className={IndMovieStyle.EmbeddedMovieTrailer}>
-      <ReactPlayer
-        url={trailer}
-        controls={true}
-        playing={false}
-        width="60vw"
-        height="70vh"
-      />
-    </div>
+    <ReactPlayer
+      url={trailer}
+      controls={true}
+      playing={false}
+      width="100%"
+      height="100%"
+    />
   );
 }
 

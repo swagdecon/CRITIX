@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import IndMovieStyle from "../components/IndMovie/ind_movie.module.css";
-import ActorStyle from "../components/Carousel/ActorCarousel/ActorCarousel.module.css";
+import IndMovieStyle from "../components/IndMovie/IndMovie.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import NavBar from "../components/NavBar/NavBar.js";
 import MovieReviews from "../components/Review/MovieReviews";
@@ -15,7 +14,7 @@ import {
   MovieDetails,
 } from "../components/IndMovie/MovieComponents";
 import RecommendedCarousel from "../components/Carousel/RecommendedCarousel/RecommendedCarousel";
-import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel";
+// import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel";
 import LoadingPage from "./LoadingPage";
 import MovieButton from "../components/Other/btn/MovieButton/Button";
 import { fetchData, sendData } from "../security/Data";
@@ -73,7 +72,7 @@ export default function IndMovie() {
       <div className={IndMovieStyle["content-wrapper"]}>
         <section className={IndMovieStyle["hero-content"]}>
           <div className={IndMovieStyle.movie_hero_info_container}>
-            <div className={IndMovieStyle.movie__score}>
+            <div className={IndMovieStyle.rating}>
               <MovieAverage voteAverage={movie.voteAverage} />
             </div>
             <h2 className={IndMovieStyle.movie__title}>{movie.title}</h2>
@@ -89,25 +88,22 @@ export default function IndMovie() {
                 innerIcon="watchNow"
                 onClick={handleWatchNowClick}
               />
-              <div className={IndMovieStyle["btn-wrapper-el"]}>
-                <WatchListBtn movieData={movie} outline={true} />
-              </div>
-              <div className={IndMovieStyle["btn-wrapper-el"]}>
-                <FavouriteBtn movieData={movie} outline={true} />
+              <div className={IndMovieStyle.BtnResponsive}>
+                <div className={IndMovieStyle["btn-wrapper-el"]}>
+                  <WatchListBtn movieData={movie} outline={true} />
+                </div>
+                <div className={IndMovieStyle["btn-wrapper-el"]}>
+                  <FavouriteBtn movieData={movie} outline={true} />
+                </div>
               </div>
             </div>
-            {/* <div className={IndMovieStyle.ind_movie_review}>
-              <MovieReviews movieId={movie.id} reviews={reviews} placement="header" />
-            </div> */}
           </div>
           {movie.posterUrl ?
-            <div className={IndMovieStyle["flex-1"]}>
-              <img
-                className={IndMovieStyle["hero-poster"]}
-                src={movie.posterUrl}
-                alt="Movie Poster"
-              />
-            </div>
+            <img
+              className={IndMovieStyle["hero-poster"]}
+              src={movie.posterUrl}
+              alt="Movie Poster"
+            />
             : <img
               className={IndMovieStyle["hero-poster"]}
               src={backupPoster}
@@ -138,13 +134,11 @@ export default function IndMovie() {
               placement="userRatingSection"
             />
           </div>
-          {movie.actors && movie.actors.length > 0 ?
+          {/* {movie.actors && movie.actors.length > 0 ?
             <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-4"]} `}>
-              <div className={ActorStyle.CastMembers}>
-                <MovieActors actors={movie.actors} />
-              </div>
+              <MovieActors actors={movie.actors} />
             </div>
-            : null}
+            : null} */}
         </section>
         {recommendedMovies.length >= 4 ?
           <div className={`${IndMovieStyle["recommended-carousel-wrapper"]} `}>

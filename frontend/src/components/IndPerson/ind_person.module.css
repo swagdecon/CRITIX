@@ -368,18 +368,7 @@ ind-person-nav {
 }
 
 /* CAST MEMBERS */
-.CastMembers {
-  position: flex;
-  align-items: center;
-  justify-content: center;
-  width: 95rem;
-  transform: translateY(215%) translateX(-22%);
-}
-.profile-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
+
 
 .card {
   display: flex;

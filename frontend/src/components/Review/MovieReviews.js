@@ -1,14 +1,14 @@
-import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import PropTypes from "prop-types";
 import TextField from '@mui/material/TextField';
 import Button from "@mui/material/Button";
 import MovieCreationOutlinedIcon from '@mui/icons-material/MovieCreationOutlined';
-import ReactTextCollapse from "react-text-collapse/dist/ReactTextCollapse";
+// import ReactTextCollapse from "react-text-collapse/dist/ReactTextCollapse";
 import Filter from "bad-words";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import IndReview from "./Review.module.css";
-import IndMovieStyle from "../IndMovie/ind_movie.module.css";
+// import IndMovieStyle from "../IndMovie/ind_movie.module.css";
 import ReviewSection from "./ReviewList/ReviewSection";
 // import PercentageRatingCircle from "./Rating/PercentageCircle/PercentageCircle";
 import InputSlider from "./Rating/Slider/Slider.js";
@@ -19,17 +19,18 @@ const RECAPTCHA_KEY = process.env.REACT_APP_RECAPTCHA_KEY;
 const RECAPTCHA_ENDPOINT = process.env.REACT_APP_RECAPTCHA_ENDPOINT;
 const CREATE_MOVIE_ENDPOINT = process.env.REACT_APP_CREATE_MOVIE_ENDPOINT;
 
-const TEXT_COLLAPSE_OPTIONS = {
-    collapse: false,
-    collapseText: <span style={{ cursor: "pointer" }}>...show more</span>,
-    expandText: <span style={{ cursor: "pointer" }}>show less</span>,
-    minHeight: 60,
-    maxHeight: 500,
-    textStyle: {
-        color: "grey",
-        fontSize: "20px"
-    }
-};
+
+// const TEXT_COLLAPSE_OPTIONS = {
+//     collapse: false,
+//     collapseText: <span style={{ cursor: "pointer" }}>...show more</span>,
+//     expandText: <span style={{ cursor: "pointer" }}>show less</span>,
+//     minHeight: 60,
+//     maxHeight: 500,
+//     textStyle: {
+//         color: "grey",
+//         fontSize: "20px"
+//     }
+// };
 
 const MovieReviews = ({ reviews, movieId, movieTitle, placement }) => {
 
@@ -42,7 +43,7 @@ const MovieReviews = ({ reviews, movieId, movieTitle, placement }) => {
     const [disabledInput, setDisabledInputLogic] = useState(false);
     const [hasSubmittedReview, setHasSubmittedReview] = useState(false);
     const [recaptchaResult, setRecaptchaResult] = useState(false)
-    const [maxHeight, setMaxHeight] = useState(500);
+    // const [maxHeight, setMaxHeight] = useState(500);
     const hasReviewProfanity = useMemo(() => filter.isProfane(reviewContent), [filter, reviewContent]);
     const isRecaptchaVisible = useMemo(() => reviewContent.trim().length != 0 && reviewRating != 0 && !hasReviewProfanity[reviewContent, reviewRating, hasReviewProfanity]);
     const wordCount = reviewContent.trim().split(/\s+/).length;
@@ -54,7 +55,7 @@ const MovieReviews = ({ reviews, movieId, movieTitle, placement }) => {
         !recaptchaResult,
         [reviewContent, reviewRating, recaptchaResult]
     );
-    const reviewRef = useRef(null);
+    // const reviewRef = useRef(null);
     const reviewInputStyles = {
         width: "80%",
         borderRadius: "15px",
@@ -145,12 +146,12 @@ const MovieReviews = ({ reviews, movieId, movieTitle, placement }) => {
         }
     }, [movieId, decodedToken, reviewRating, reviewContent, token, hasReviewProfanity]);
 
-    useEffect(() => {
-        if (reviewRef.current) {
-            const reviewHeight = reviewRef.current.offsetHeight;
-            setMaxHeight(reviewHeight);
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (reviewRef.current) {
+    //         const reviewHeight = reviewRef.current.offsetHeight;
+    //         setMaxHeight(reviewHeight);
+    //     }
+    // }, []);
 
     function renderUserRatingSection() {
         return (
@@ -220,36 +221,36 @@ const MovieReviews = ({ reviews, movieId, movieTitle, placement }) => {
         );
     }
 
-    function renderHeaderSection() {
-        if (reviews.length > 0) {
-            return (
-                <div className={IndMovieStyle.review__wrapper} ref={reviewRef}>
-                    <h3 className={IndMovieStyle.ind_review_title}>Reviews</h3>
-                    {
-                        Object.keys(reviews)
-                            .slice(0, 2)
-                            .map((key, index) => (
-                                <div className={IndMovieStyle.header__review__wrapper} key={key}>
-                                    <ReactTextCollapse
-                                        key={index}
-                                        options={{ ...TEXT_COLLAPSE_OPTIONS, maxHeight }}
-                                        className={IndMovieStyle.customScrollbar}
-                                    >
-                                        <p className={IndMovieStyle.review__description}>
-                                            {reviews[key].content}
-                                        </p>
-                                    </ReactTextCollapse>
-                                </div>
-                            ))}
-                </div>
-            );
-        }
-    }
+    // function renderHeaderSection() {
+    //     if (reviews.length > 0) {
+    //         return (
+    //             <div className={IndMovieStyle.review__wrapper} ref={reviewRef}>
+    //                 <h3 className={IndMovieStyle.ind_review_title}>Reviews</h3>
+    //                 {
+    //                     Object.keys(reviews)
+    //                         .slice(0, 2)
+    //                         .map((key, index) => (
+    //                             <div className={IndMovieStyle.header__review__wrapper} key={key}>
+    //                                 <ReactTextCollapse
+    //                                     key={index}
+    //                                     options={{ ...TEXT_COLLAPSE_OPTIONS, maxHeight }}
+    //                                     className={IndMovieStyle.customScrollbar}
+    //                                 >
+    //                                     <p className={IndMovieStyle.review__description}>
+    //                                         {reviews[key].content}
+    //                                     </p>
+    //                                 </ReactTextCollapse>
+    //                             </div>
+    //                         ))}
+    //             </div>
+    //         );
+    //     }
+    // }
 
     return (
         <>
             {placement === "userRatingSection" && renderUserRatingSection()}
-            {placement === "header" && renderHeaderSection()}
+            {/* {placement === "header" && renderHeaderSection()} */}
         </>
     );
 };

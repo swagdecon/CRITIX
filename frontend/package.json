@@ -37,10 +37,11 @@
     "react-router-dom": "^6.14.2",
     "react-scripts": "^5.0.1",
     "react-share": "^5.0.3",
-    "react-text-collapse": "^0.6.1",
+    "react-slick": "^0.30.2",
     "react-timeago": "^7.2.0",
     "reactjs-popup": "^2.0.6",
     "sha256": "^0.2.0",
+    "slick-carousel": "^1.8.1",
     "typeface-ibm-plex-sans": "^1.1.13",
     "web-vitals": "^2.1.4",
     "yarn": "^1.22.19"
