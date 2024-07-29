@@ -9,62 +9,62 @@ import Title from "../title.module.scss";
 const DEFAULT_ACTOR_IMAGE = process.env.REACT_APP_DEFAULT_ACTOR_IMAGE;
 const DEFAULT_TMDB_IMAGE = process.env.REACT_APP_DEFAULT_TMDB_IMAGE_PREFIX;
 const defaultImage = `url(${DEFAULT_ACTOR_IMAGE}) center center no-repeat`;
-
 export default function MovieActors({ actors }) {
 
 
   const settings = {
     dots: false,
-    arrows: true,
     infinite: true,
     slidesToShow: 5,
     slidesToScroll: 5,
     responsive: [
       {
-        breakpoint: 2500,
+        breakpoint: 950,
         settings: {
-          slidesToShow: 9,
-          slidesToScroll: 5,
-          infinite: true,
-          dots: false
-        }
-      },
-      {
-        breakpoint: 2850,
-        settings: {
-          slidesToShow: 5,
-          slidesToScroll: 5,
-          infinite: true,
-          dots: false
-        }
-      },
-      {
-        breakpoint: 2450,
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 5,
-          initialSlide: 2
-        }
-      },
-      {
-        breakpoint: 1950,
-        settings: {
-          slidesToShow: 3,
+          slidesToShow: 1,
           slidesToScroll: 1
         }
       },
       {
         breakpoint: 1420,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 5,
           slidesToScroll: 2
         }
       },
       {
-        breakpoint: 950,
+        breakpoint: 1420,
         settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1
+          slidesToShow: 5,
+          slidesToScroll: 2
+        }
+      },
+      {
+        breakpoint: 2545,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 4
+        }
+      },
+      {
+        breakpoint: 2860,
+        settings: {
+          slidesToShow: 5,
+          slidesToScroll: 5,
+        }
+      },
+      {
+        breakpoint: 3380,
+        settings: {
+          slidesToShow: 6,
+          slidesToScroll: 6
+        }
+      },
+      {
+        breakpoint: 4000,
+        settings: {
+          slidesToShow: 7,
+          slidesToScroll: 7
         }
       }
     ]
@@ -76,7 +76,7 @@ export default function MovieActors({ actors }) {
   return (
     <div>
       <h3 className={`${Title["movie-title"]} ${Title["ind-movie-actors"]}`}>cast members:</h3>
-      <Slider {...settings}>
+      <Slider {...settings} className={ActorStyle.Slider}>
         {actors.map((actor, i) => {
           const image = actor.profilePath
           const actorImage = image ? `url(${DEFAULT_TMDB_IMAGE}${image})` : defaultImage;

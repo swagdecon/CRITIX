@@ -134,11 +134,12 @@ export default function IndMovie() {
               placement="userRatingSection"
             />
           </div>
-          {movie.actors && movie.actors.length > 0 ?
-            <div className={`${IndMovieStyle["grid-item-4"]}`}>
+          <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-4"]}`}>
+            {movie.actors && movie.actors.length > 0 ?
               <MovieActors actors={movie.actors} />
-            </div>
-            : null}
+              : null}
+
+          </div>
         </section>
         {recommendedMovies.length >= 4 ?
           <div className={`${IndMovieStyle["recommended-carousel-wrapper"]} `}>

@@ -157,18 +157,26 @@ display: flex;
   display: grid;
   z-index: 1;
   grid-template-columns: 1fr 2fr;
-  height: fit-content;
+  grid-template-rows: auto;
+  grid-template-rows: auto;
   min-height: 100vh;
+  max-width: 100%;
   padding: 0 20px;
   box-sizing: border-box;
   padding-bottom: 1%;
+  overflow: hidden;
 }
 .grid-item {
   flex-basis: 100%;
+  box-sizing: border-box;
 }
 
 .grid-item-2 {
   grid-row: span 2;
+  width: 100%;
+  height: fit-content !important;
+  margin: 0;
+  padding: 0;
 }
 
 .grid-item-3 {
@@ -178,10 +186,13 @@ display: flex;
   height: fit-content;
 }
 .grid-item-4 {
-  display: block;
   grid-row: span 1;
   max-width: 64vw;
+  display: block;
+  margin: 0 auto;
+  text-align: center;
 }
+
 @media (min-width: 3000px) {
   .hero-poster {
     display: flex;
@@ -218,7 +229,6 @@ display: flex;
   }
   .grid-item-2 {
     order: 1;
-    min-height: 60em;
   }
   .grid-item-3 {
     order: 3;
@@ -230,6 +240,8 @@ display: flex;
   .mainContainer {
     grid-template-columns: 1fr;
     padding: 0 10px;
+    margin: 0;
+    padding: 0;
   }
 }
 

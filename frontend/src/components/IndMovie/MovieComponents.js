@@ -4,6 +4,7 @@ import IndMovieStyle from "../IndMovie/IndMovie.module.css";
 import ReactPlayer from "react-player";
 import "../Carousel/MovieCarousel/MovieCarousel.module.css";
 import GlassCard from "./GlassCard";
+import "./Player.css"
 // import NoTrailer from "./NoTrailerAvailable.png"
 import GlassStyle from "./GlassCard.module.css"
 const amazonAffiliateUrl = process.env.REACT_APP_AMAZON_AFFILIATE_URL
@@ -111,13 +112,16 @@ function EmbeddedMovieTrailer({ trailer }) {
   }
 
   return (
-    <ReactPlayer
-      url={trailer}
-      controls={true}
-      playing={false}
-      width="100%"
-      height="100%"
-    />
+    <div className="player-wrapper">
+      <ReactPlayer
+        url={trailer}
+        className="react-player"
+        controls={true}
+        playing={false}
+        width='100%'
+        height='100%'
+      />
+    </div>
   );
 }
 
