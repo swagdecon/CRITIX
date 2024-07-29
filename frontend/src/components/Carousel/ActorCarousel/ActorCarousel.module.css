@@ -2,58 +2,72 @@
 .card {
   height: 379px;
   max-width: 300px;
-  background: grey;
   border-radius: 10px;
-  transition: background 0.8s;
   overflow: hidden;
   background: black;
   box-shadow: 0 70px 63px -60px #000000;
-  display: inline;
-  align-items: center;
   position: relative;
 }
 
+.Img {
+  max-width: 100%;
+  max-height: 100%;
+  background-repeat: no-repeat;
+  background-position: center; 
+  background-size: cover; 
+}
+
+.Img:hover .border {
+  border: 1px solid #fff;
+  opacity: 1;
+}
+
+.Img:hover .border .icons {
+  opacity: 1;
+}
+
 .border {
-  height: 400px;
-  width: 295px;
-  opacity: 0;
+  height: 379px;
+  width: 300px;
+  opacity: 0; 
   background: transparent;
   border-radius: 10px;
-  transition: border 1s;
+  transition: opacity 0.8s, border 0.8s; 
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-start;
 }
+
+.icons {
+  fill: #fff;
+  color: #fff;
+  height: 26vh;
+  width: 50px;
+  justify-content: flex-end;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  padding: 5%;
+  cursor: pointer;
+  color: #0096ff;
+  opacity: 0; 
+  transition: opacity 0.8s; 
+}
+
 .border:hover {
   border: 1px solid #fff;
   opacity: 1;
 }
-.border h3 {
-  transition: opacity 1s;
+
+.profile-person {
+  font-size: 30px;
+  font-weight: bold;
 }
-.card:hover .profile-person,
-.fa {
+
+.Img:hover .profile-person .icons  {
   opacity: 1;
   color: #0096ff;
   font-family: "CoreCircus", sans-serif;
-  font-size: 30px;
   overflow: hidden;
 }
 
-.carousel-actors {
-  margin-bottom: 70px;
-}
-
-.icons {
-  position: absolute;
-  fill: #fff;
-  color: #fff;
-  height: 130px;
-  top: 226px;
-  width: 50px;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 5%;
-  cursor: pointer;
-  color: #0096ff;
-}

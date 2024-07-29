@@ -177,9 +177,10 @@ display: flex;
   justify-content: center;
   height: fit-content;
 }
-.test {
+.grid-item-4 {
   display: block;
-  width: 50vw;
+  grid-row: span 1;
+  max-width: 64vw;
 }
 @media (min-width: 3000px) {
   .hero-poster {

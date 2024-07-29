@@ -135,7 +135,7 @@ export default function IndMovie() {
             />
           </div>
           {movie.actors && movie.actors.length > 0 ?
-            <div className={IndMovieStyle.test}>
+            <div className={`${IndMovieStyle["grid-item-4"]}`}>
               <MovieActors actors={movie.actors} />
             </div>
             : null}
