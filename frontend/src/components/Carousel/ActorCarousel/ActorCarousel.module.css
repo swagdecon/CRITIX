@@ -1,17 +1,16 @@
-/* CAST MEMBERS */
-
 
 .card {
-  margin: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  height: 379px;
+  max-width: 300px;
   background: grey;
   border-radius: 10px;
   transition: background 0.8s;
   overflow: hidden;
   background: black;
   box-shadow: 0 70px 63px -60px #000000;
+  display: inline;
+  align-items: center;
+  position: relative;
 }
 
 .border {
@@ -21,7 +20,6 @@
   background: transparent;
   border-radius: 10px;
   transition: border 1s;
-  position: relative;
 }
 .border:hover {
   border: 1px solid #fff;
@@ -30,14 +28,32 @@
 .border h3 {
   transition: opacity 1s;
 }
-.card1:hover .profile-person,
+.card:hover .profile-person,
 .fa {
   opacity: 1;
   color: #0096ff;
   font-family: "CoreCircus", sans-serif;
   font-size: 30px;
+  overflow: hidden;
 }
 
 .carousel-actors {
   margin-bottom: 70px;
+}
+
+.icons {
+  position: absolute;
+  fill: #fff;
+  color: #fff;
+  height: 130px;
+  top: 226px;
+  width: 50px;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 5%;
+  cursor: pointer;
+  color: #0096ff;
 }

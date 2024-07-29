@@ -14,7 +14,7 @@ import {
   MovieDetails,
 } from "../components/IndMovie/MovieComponents";
 import RecommendedCarousel from "../components/Carousel/RecommendedCarousel/RecommendedCarousel";
-// import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel";
+import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel.js";
 import LoadingPage from "./LoadingPage";
 import MovieButton from "../components/Other/btn/MovieButton/Button";
 import { fetchData, sendData } from "../security/Data";
@@ -134,11 +134,11 @@ export default function IndMovie() {
               placement="userRatingSection"
             />
           </div>
-          {/* {movie.actors && movie.actors.length > 0 ?
-            <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-4"]} `}>
+          {movie.actors && movie.actors.length > 0 ?
+            <div className={IndMovieStyle.test}>
               <MovieActors actors={movie.actors} />
             </div>
-            : null} */}
+            : null}
         </section>
         {recommendedMovies.length >= 4 ?
           <div className={`${IndMovieStyle["recommended-carousel-wrapper"]} `}>
