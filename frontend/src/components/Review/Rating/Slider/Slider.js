@@ -10,8 +10,8 @@ const PopflixSlider = styled(Slider)({
     '& .MuiSlider-valueLabel': {
         backgroundColor: '#0096ff',
     },
-    '@media (max-width: 500px)': {
-        width: '53%',
+    '@media (max-width: 600px)': {
+        width: '60vw',
     }
 });
 

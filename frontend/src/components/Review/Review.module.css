@@ -7,7 +7,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-    /* width: 60em; */
   overflow: hidden; 
   margin-right:15px;
 }
@@ -61,5 +60,23 @@
   .post-review-btn, .recaptcha-btn {
     justify-content: center;
     align-items: center;
+  }
+}
+
+@media screen and (max-width: 2535px) {
+  .ind-review-wrapper{
+  width: 60vw;
+  margin-right:0px;
+  }
+}
+
+@media screen and (max-width: 1350px) {
+  .ind-review-wrapper{
+  width: 51em;
+  }
+}
+@media screen and (max-width: 830px) {
+  .ind-review-wrapper{
+  width: 90vw;
   }
 }

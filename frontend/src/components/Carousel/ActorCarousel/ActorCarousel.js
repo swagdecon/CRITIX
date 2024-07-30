@@ -5,12 +5,10 @@ import "slick-carousel/slick/slick-theme.css";
 import PropTypes from "prop-types"
 import ActorStyle from "./ActorCarousel.module.css";
 import Title from "../title.module.scss";
-
 const DEFAULT_ACTOR_IMAGE = process.env.REACT_APP_DEFAULT_ACTOR_IMAGE;
 const DEFAULT_TMDB_IMAGE = process.env.REACT_APP_DEFAULT_TMDB_IMAGE_PREFIX;
 const defaultImage = `url(${DEFAULT_ACTOR_IMAGE}) center center no-repeat`;
 export default function MovieActors({ actors }) {
-
 
   const settings = {
     dots: false,
@@ -19,31 +17,52 @@ export default function MovieActors({ actors }) {
     slidesToScroll: 5,
     responsive: [
       {
-        breakpoint: 950,
+        breakpoint: 800,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1
         }
       },
       {
-        breakpoint: 1420,
+        breakpoint: 1040,
         settings: {
-          slidesToShow: 5,
+          slidesToShow: 2,
           slidesToScroll: 2
         }
       },
       {
-        breakpoint: 1420,
+        breakpoint: 1370,
         settings: {
-          slidesToShow: 5,
-          slidesToScroll: 2
+          slidesToShow: 3,
+          slidesToScroll: 3
         }
       },
       {
-        breakpoint: 2545,
+        breakpoint: 1700,
         settings: {
           slidesToShow: 4,
           slidesToScroll: 4
+        }
+      },
+      {
+        breakpoint: 2050,
+        settings: {
+          slidesToShow: 5,
+          slidesToScroll: 5
+        }
+      },
+      {
+        breakpoint: 2400,
+        settings: {
+          slidesToShow: 6,
+          slidesToScroll: 6
+        }
+      },
+      {
+        breakpoint: 2535,
+        settings: {
+          slidesToShow: 7,
+          slidesToScroll: 7
         }
       },
       {

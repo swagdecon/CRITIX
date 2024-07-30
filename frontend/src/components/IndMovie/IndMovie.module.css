@@ -184,6 +184,10 @@ display: flex;
   display: flex;
   justify-content: center;
   height: fit-content;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  
 }
 .grid-item-4 {
   grid-row: span 1;
@@ -198,7 +202,6 @@ display: flex;
     display: flex;
     max-width: 49em;
   }
-
 }
 .recommended-carousel-wrapper {
   overflow: hidden;
@@ -223,7 +226,7 @@ display: flex;
   }
 }
 
-@media (max-width: 2000px) {
+@media (max-width: 2535px) {
   .grid-item-1 {
     order: 2;
   }
@@ -235,6 +238,7 @@ display: flex;
   }
   .grid-item-4 {
     order: 4;
+    min-width: 90vw;
   }
 
   .mainContainer {
@@ -282,6 +286,11 @@ display: flex;
     order: 2; 
   }
 }
+@media (max-width: 1100px) {
+  .hero-content {
+    padding-top: 10vh;
+   }
+ }
 @media (max-width: 1000px) {
  .hero-poster {
     max-width: 70vw;

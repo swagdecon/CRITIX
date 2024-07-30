@@ -93,8 +93,8 @@ const MovieReviews = ({ reviews, movieId, movieTitle, placement }) => {
             "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,.3)",
             backgroundColor: "#0096ff",
         },
-        '@media (max-width: 500px)': {
-            width: '100%',
+        '@media (max-width: 600px)': {
+            width: '60vw',
         }
     };
 
