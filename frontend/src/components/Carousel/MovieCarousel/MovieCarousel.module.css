@@ -1,14 +1,9 @@
-.carousel-wrapper {
-  text-align: center;
+.carousel-parent {
+  width: 100%;
+  justify-content: center;
 }
 
-
-@media screen and (min-width: 3340px) {
-  .carousel-control-prev {
-    justify-content: flex-end;
-  }
-  
-  .carousel-control-next {
-    justify-content: flex-start;
-  }
+.carousel-wrapper {
+  text-align: center;
+  width: 100%;
 }

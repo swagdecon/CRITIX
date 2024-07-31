@@ -16,6 +16,53 @@ const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
 const getBannerEndpoint = process.env.REACT_APP_GET_USER_BANNER
 const getUserFavouriteMoviesEndpoint = process.env.REACT_APP_GET_FAVOURITE_MOVIES_ENDPOINT
+
+const breakpoints = [
+    {
+        breakpoint: 3450,
+        settings: {
+            slidesToShow: 6,
+            slidesToScroll: 6,
+            infinite: true,
+            dots: false
+        }
+    },
+    {
+        breakpoint: 3140,
+        settings: {
+            slidesToShow: 5,
+            slidesToScroll: 5,
+        }
+    },
+    {
+        breakpoint: 2680,
+        settings: {
+            slidesToShow: 4,
+            slidesToScroll: 4,
+        }
+    },
+    {
+        breakpoint: 2220,
+        settings: {
+            slidesToShow: 3,
+            slidesToScroll: 3
+        }
+    },
+    {
+        breakpoint: 1750,
+        settings: {
+            slidesToShow: 2,
+            slidesToScroll: 2
+        }
+    },
+    {
+        breakpoint: 950,
+        settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+        }
+    }
+]
 export default function UserProfile() {
 
     const reviewsPerPage = 2;
@@ -178,6 +225,7 @@ export default function UserProfile() {
                                     <MovieCarousel
                                         movies={favouriteMovies}
                                         endpoint="/movies/movie"
+                                        breakpoints={breakpoints}
                                     />
                                     : null}
                             </section>

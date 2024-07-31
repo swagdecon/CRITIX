@@ -48,7 +48,7 @@ export default function MovieCard({
     e.stopPropagation();
   }
   return (
-    <div className="container">
+    <div className={MovieCardStyle.Container}>
       <div className={MovieCardStyle["cellphone-container"]}>
         <div className={MovieCardStyle.movie}>
           {/* <div className={MovieCardStyle.menu}>

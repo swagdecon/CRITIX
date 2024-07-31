@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import IndMovieStyle from "../components/IndMovie/IndMovie.module.css";
 import "font-awesome/css/font-awesome.min.css";
-// import NavBar from "../components/NavBar/NavBar.js";
+import NavBar from "../components/NavBar/NavBar.js";
 import MovieReviews from "../components/Review/MovieReviews";
 import backupPoster from "../misc/noPosterAvailable.png"
 import {
@@ -62,7 +62,7 @@ export default function IndMovie() {
     <LoadingPage />
   ) : (
     <div className={IndMovieStyle["ind-movie-page-wrapper"]}>
-      {/* <NavBar /> */}
+      <NavBar />
       <div
         className={IndMovieStyle.background}
         style={{

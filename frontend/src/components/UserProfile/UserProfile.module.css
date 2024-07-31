@@ -286,6 +286,31 @@
         display: flex;
     }
 /* ------------ media queries */
+
+@media screen and (max-width: 1700px) {
+    .profile-body {
+        grid-template-columns: 1;
+        gap: 20px;
+        margin-top: 0;
+        margin: 0 auto;
+    }
+    .profile-actions {
+        margin-top: 10%;
+        width: 100%;
+        justify-content: center;
+    }
+    .AllReviews {
+        grid-column: 1/3;
+        grid-row:2/4
+    }
+    .RecentReviews {
+        grid-row: 3/4;
+    }
+    .FavouriteMoviesList {
+        grid-column: 1/3;
+        grid-row: 4/4;
+    }
+}
 @media screen and (max-width: 950px) {
     .last-post {
         display: none;
@@ -323,4 +348,13 @@
                 .bio {grid-column: 1/3;}
 
             .data {gap: 20px;}
+}
+
+@media screen and (max-width: 950px) {
+    .last-post {
+        display: none;
+    }
+    .data, .social-media {
+        grid-column: 1/4;
+    }
 }
