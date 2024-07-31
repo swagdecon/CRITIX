@@ -1,6 +1,8 @@
 
 
 .dropdown-header {
+  display: flex;
+  justify-content: center;
   padding: 10px;
   border: 2px;
   border-radius: 20px;
@@ -11,29 +13,30 @@
 
 .dropdown-menu {
   display: flex;
-  flex-direction: row;
-  position: absolute;
+  flex-direction: row; 
+  position: absolute; 
   left: 50%;
-  transform: translateX(-50%);
+  top: 130%;
+  transform: translate(-50%, -50%);
   background-color: #343a40;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 1;
   border-radius: 20px;
+  overflow: hidden; 
 }
 
 .dropdown-item {
-  width: 100%;
   padding: 5px;
+  width: 15.3vw;
   text-align: center;
   border: none;
   background: none;
   color: #ffffff;
   cursor: pointer;
-  
 }
 
 .dropdown-item:hover {
   background-color: #0096ff;
+  transition: background 0.8s;
   border: 2px;
   border-radius: 20px;
   color: white;

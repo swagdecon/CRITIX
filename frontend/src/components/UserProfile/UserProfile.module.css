@@ -277,7 +277,7 @@
         width: 70%;
     }
     .GridItem:first-child {
-        grid-column: span 2; /* Span the full width */
+        grid-column: span 2;
     }
     .GridItem {
         padding: 10px;

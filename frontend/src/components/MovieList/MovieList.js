@@ -143,7 +143,7 @@ export default function MovieList({ endpoint }) {
           </div>
         </div>
       </div>
-      <div className={MovieListStyle["container"]}>
+      <div className={MovieListStyle.Container}>
         {movies.map((movie) => (
           <div key={movie.movieId}>
             <Link to={`/movies/movie/${movie.movieId}`}>
