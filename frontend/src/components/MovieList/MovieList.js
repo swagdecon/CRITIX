@@ -40,6 +40,7 @@ export default function MovieList({ endpoint }) {
   const [caption, setCaption] = useState("");
   const handleSortByChange = useCallback((selectedValue) => {
     let sortedMovies;
+    console.log(movies)
     switch (selectedValue) {
       case "A-Z":
         sortedMovies = [...movies].sort((a, b) => a.title.localeCompare(b.title));
@@ -54,10 +55,10 @@ export default function MovieList({ endpoint }) {
         sortedMovies = [...movies].sort((a, b) => b.popularity - a.popularity);
         break;
       case "Vote Average Asc.":
-        sortedMovies = [...movies].sort((a, b) => a.vote_average - b.vote_average);
+        sortedMovies = [...movies].sort((a, b) => a.voteAverage - b.voteAverage);
         break;
       case "Vote Average Desc.":
-        sortedMovies = [...movies].sort((a, b) => b.vote_average - a.vote_average);
+        sortedMovies = [...movies].sort((a, b) => b.voteAverage - a.voteAverage);
         break;
       default:
         sortedMovies = [...movies];
