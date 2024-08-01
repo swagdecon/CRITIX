@@ -2,6 +2,8 @@ package com.popflix.model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import info.movito.themoviedbapi.model.people.Gender;
+
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -21,10 +23,10 @@ public class Person {
     private String placeOfBirth;
     private String biography;
     private String knownForDepartment;
-    private Integer gender;
+    private Gender gender;
     private String profilePath;
     private String deathday;
-    private Float popularity;
+    private Double popularity;
     private String imdbId;
     private String job;
     private List<String> imdbPersonImages;

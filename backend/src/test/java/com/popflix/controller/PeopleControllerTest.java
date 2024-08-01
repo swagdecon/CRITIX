@@ -12,10 +12,12 @@ import org.springframework.http.ResponseEntity;
 import com.popflix.model.Person;
 import com.popflix.service.PersonService;
 
+import info.movito.themoviedbapi.tools.TmdbException;
+
 class PeopleControllerTest {
 
     @Test
-    void testSinglePerson() throws IOException, InterruptedException {
+    void testSinglePerson() throws IOException, InterruptedException, TmdbException {
         // Create a mock PersonService
         PersonService personService = mock(PersonService.class);
         Optional<Person> person = Optional.of(new Person()); // create a dummy Person object

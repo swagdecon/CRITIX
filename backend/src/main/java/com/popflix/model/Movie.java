@@ -26,7 +26,7 @@ public class Movie {
     private String originalLanguage;
     private String originalTitle;
     private String overview;
-    private Float popularity;
+    private Double popularity;
     private String posterUrl;
     private String releaseDate;
     private String title;
@@ -37,7 +37,7 @@ public class Movie {
     private Map<String, Object> providerResults;
     private Integer voteCount;
     private String imdbId;
-    private Long budget;
+    private Integer budget;
     private String tagline;
     private Long revenue;
     private Integer runtime;

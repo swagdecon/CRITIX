@@ -2,19 +2,24 @@ package com.popflix.service;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.stereotype.Service;
+
 import com.popflix.model.Person;
 import com.popflix.service.imdbRequests.AllImdbPersonImages;
 import com.popflix.service.imdbRequests.AllImdbPersonJobs;
 import com.popflix.service.imdbRequests.PersonImdbJobInfo;
 
 import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.model.people.PersonPeople;
+import info.movito.themoviedbapi.model.people.PersonDb;
+import info.movito.themoviedbapi.tools.TmdbException;
+import io.github.cdimascio.dotenv.Dotenv;
 
 @Service
 public class PersonService {
-
-    private final TmdbApi tmdbApi = new TmdbApi("d84f9365179dc98dc69ab22833381835");
+    static Dotenv dotenv = Dotenv.load();
+    private String TMDB_ACCESS_TOKEN = dotenv.get("TMDB_ACCESS_TOKEN");
+    private final TmdbApi tmdbApi = new TmdbApi(TMDB_ACCESS_TOKEN);
 
     private final AllImdbPersonImages allPersonImages = new AllImdbPersonImages();
 
@@ -51,21 +56,21 @@ public class PersonService {
 
     }
 
-    public Optional<Person> singlePerson(Integer id) throws java.io.IOException, InterruptedException {
+    public Optional<Person> singlePerson(Integer id) throws java.io.IOException, InterruptedException, TmdbException {
         Person person = new Person();
         person.setId(id);
 
-        PersonPeople personDb = tmdbApi.getPeople().getPersonInfo(person.getId());
+        PersonDb personDb = tmdbApi.getPeople().getDetails(person.getId(), "en-US");
         // Information from TMDB
         person.setName(personDb.getName());
         person.setBirthday(personDb.getBirthday());
-        person.setDeathday(personDb.getDeathday());
+        person.setDeathday(personDb.getDeathDay());
         person.setGender(personDb.getGender());
         person.setBiography(personDb.getBiography());
         person.setPopularity(personDb.getPopularity());
         person.setKnownForDepartment(personDb.getKnownForDepartment());
-        person.setJob(personDb.getJob());
-        person.setPlaceOfBirth(personDb.getBirthplace());
+        // person.setJob(personDb.getJob());
+        person.setPlaceOfBirth(personDb.getPlaceOfBirth());
         person.setProfilePath(personDb.getProfilePath());
         person.setImdbId(personDb.getImdbId());
 
@@ -100,8 +105,8 @@ public class PersonService {
     // executor.shutdown();
     // }
 
-    public void updateTmdbPersonDetails(Person person) {
-        PersonPeople personDb = tmdbApi.getPeople().getPersonInfo(person.getId());
+    public void updateTmdbPersonDetails(Person person) throws TmdbException {
+        PersonDb personDb = tmdbApi.getPeople().getDetails(person.getId(), "en-US");
 
         if (person.getBirthday() == null || person.getBirthday().isEmpty()) {
             person.setBirthday(personDb.getBirthday());
@@ -110,7 +115,7 @@ public class PersonService {
             person.setKnownForDepartment(personDb.getKnownForDepartment());
         }
         if (person.getDeathday() == null || person.getDeathday().isEmpty()) {
-            person.setDeathday(personDb.getDeathday());
+            person.setDeathday(personDb.getDeathDay());
         }
         if (person.getGender() == null) {
             person.setGender(personDb.getGender());
@@ -120,7 +125,7 @@ public class PersonService {
         }
 
         if (person.getPopularity() == null) {
-            float popularity = personDb.getPopularity();
+            Double popularity = personDb.getPopularity();
             person.setPopularity(popularity);
         }
 

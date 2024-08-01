@@ -1,6 +1,7 @@
 package com.popflix.model;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
@@ -12,16 +13,16 @@ class PersonTest {
     void testPerson() {
         // Create a Person object
         Person person = new Person();
+        person.setGender(null);
         person.setId(1);
         person.setName("John Doe");
         person.setBirthday("1990-01-01");
         person.setPlaceOfBirth("New York");
         person.setBiography("Some biography");
         person.setKnownForDepartment("Acting");
-        person.setGender(1);
         person.setProfilePath("/profile.jpg");
         person.setDeathday("2022-03-15");
-        person.setPopularity(7.5f);
+        person.setPopularity(7.5);
         person.setImdbId("nm1234567");
         person.setJob("Actor");
 

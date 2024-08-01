@@ -13,6 +13,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import com.popflix.model.Person;
 
+import info.movito.themoviedbapi.tools.TmdbException;
+
 class PeopleServiceTest {
     private PersonService personService;
 
@@ -23,7 +25,7 @@ class PeopleServiceTest {
     }
 
     @Test
-    void testSinglePerson() throws IOException, InterruptedException {
+    void testSinglePerson() throws IOException, InterruptedException, TmdbException {
         Integer id = 12345;
         Person person = new Person();
         person.setId(id);

@@ -22,6 +22,8 @@ import com.popflix.model.Movie;
 import com.popflix.model.MovieCard;
 import com.popflix.service.MovieService;
 
+import info.movito.themoviedbapi.tools.TmdbException;
+
 @RestController
 @RequestMapping("/movies")
 public class MovieController {
@@ -117,7 +119,7 @@ public class MovieController {
 
     @GetMapping("/search/{query}")
     public ResponseEntity<Object> getSearchResults(@PathVariable String query)
-            throws IOException, InterruptedException, URISyntaxException {
+            throws IOException, InterruptedException, URISyntaxException, TmdbException {
         return new ResponseEntity<Object>(movieService.searchResults(query), HttpStatus.OK);
     }
 
@@ -132,7 +134,7 @@ public class MovieController {
 
     @GetMapping("/get-trailer/{movieId}")
     public ResponseEntity<Object> getTrailer(@PathVariable Integer movieId)
-            throws IOException, InterruptedException, URISyntaxException {
+            throws IOException, InterruptedException, URISyntaxException, TmdbException {
         return new ResponseEntity<Object>(movieService.getTrailer(movieId), HttpStatus.OK);
     }
 

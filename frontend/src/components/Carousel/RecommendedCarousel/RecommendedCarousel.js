@@ -65,7 +65,6 @@ const settings = {
 };
 export default function RecommendedCarousel({ recommendedMovies }) {
 
-
   return (
     <div className={MovieCardStyle["carousel-wrapper"]}>
       <Slider {...settings} className={MovieCardStyle.Slider}>

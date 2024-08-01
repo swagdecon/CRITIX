@@ -41,21 +41,22 @@ import com.popflix.repository.MovieRepository;
 import com.popflix.repository.UserRepository;
 
 import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.TmdbMovies;
-import info.movito.themoviedbapi.model.Credits;
-import info.movito.themoviedbapi.model.Genre;
-import info.movito.themoviedbapi.model.MovieDb;
-import info.movito.themoviedbapi.model.ProductionCompany;
-import info.movito.themoviedbapi.model.Reviews;
-import info.movito.themoviedbapi.model.Video;
-import info.movito.themoviedbapi.model.people.PersonCast;
+import info.movito.themoviedbapi.model.core.Genre;
+import info.movito.themoviedbapi.model.core.ProductionCompany;
+import info.movito.themoviedbapi.model.core.Review;
+import info.movito.themoviedbapi.model.core.video.Video;
+import info.movito.themoviedbapi.model.core.video.VideoResults;
+import info.movito.themoviedbapi.model.movies.Cast;
+import info.movito.themoviedbapi.model.movies.Credits;
+import info.movito.themoviedbapi.model.movies.MovieDb;
+import info.movito.themoviedbapi.tools.TmdbException;
 import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.annotation.PostConstruct;
 
 @Service
 public class MovieService {
   static Dotenv dotenv = Dotenv.load();
-  private String TMDB_API_KEY = dotenv.get("TMDB_API_KEY");
+  private String TMDB_ACCESS_TOKEN = dotenv.get("TMDB_ACCESS_TOKEN");
   private String YT_URL_PREFIX = dotenv.get("YT_URL_PREFIX");
   private String TMDB_IMAGE_PREFIX = dotenv.get("TMDB_IMAGE_PREFIX");
 
@@ -63,7 +64,7 @@ public class MovieService {
   private final MongoTemplate mongoTemplate;
   @Autowired
   private UserRepository userRepository;
-  private final TmdbApi tmdbApi = new TmdbApi(TMDB_API_KEY);
+  private TmdbApi tmdbApi = new TmdbApi(TMDB_ACCESS_TOKEN);
   private ScheduledExecutorService executor;
 
   public MovieService(MovieRepository movieRepository, MongoTemplate mongoTemplate) {
@@ -138,7 +139,7 @@ public class MovieService {
   }
 
   private void setMovieDetails(Movie movie, MovieDb movieApi)
-      throws IOException, InterruptedException, URISyntaxException {
+      throws IOException, InterruptedException, URISyntaxException, TmdbException {
 
     String posterUrl = TMDB_IMAGE_PREFIX + movieApi.getPosterPath();
     String backdropUrl = TMDB_IMAGE_PREFIX + movieApi.getBackdropPath();
@@ -168,12 +169,12 @@ public class MovieService {
   }
 
   public Optional<Movie> singleTmdbMovie(Integer movieId, String userId)
-      throws IOException, InterruptedException, URISyntaxException {
+      throws IOException, InterruptedException, URISyntaxException, TmdbException {
 
     boolean watchListMovieAlreadyExists = userRepository.doesWatchlistMovieExist(userId, movieId);
     boolean favouriteMovieAlreadyExists = userRepository.doesFavouriteMovieExist(userId, movieId);
 
-    MovieDb movieApi = tmdbApi.getMovies().getMovie(movieId, "en-US");
+    MovieDb movieApi = tmdbApi.getMovies().getDetails(movieId, "en-US");
 
     Movie movie = new Movie();
     movie.setId(movieId);
@@ -186,16 +187,17 @@ public class MovieService {
 
   private void setVoteAverage(Movie movie, MovieDb movieApi) {
     if (movie.getVoteAverage() == null) {
-      movie.setVoteAverage(Math.round(movieApi.getVoteAverage() * 10));
+      movie.setVoteAverage((int) Math.round(movieApi.getVoteAverage() * 10));
     }
   }
 
   private void setProviderResults(Movie movie, Integer movieId)
       throws IOException, InterruptedException, URISyntaxException {
-    String url = "https://api.themoviedb.org/3/movie/" + movieId + "/watch/providers?api_key=" + TMDB_API_KEY;
+    String url = "https://api.themoviedb.org/3/movie/" + movieId + "/watch/providers";
 
     HttpClient httpClient = HttpClient.newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
+        .header("Authorization", "Bearer " + TMDB_ACCESS_TOKEN)
         .uri(new URI(url))
         .GET()
         .build();
@@ -245,12 +247,12 @@ public class MovieService {
     }
   }
 
-  private void setActors(Movie movie, MovieDb movieApi) {
+  private void setActors(Movie movie, MovieDb movieApi) throws TmdbException {
     if (movie.getActors() == null || movie.getActors().isEmpty()) {
-      Credits movieCredits = tmdbApi.getMovies().getCredits(movie.getId());
-      List<PersonCast> castList = movieCredits.getCast();
+      Credits movieCredits = tmdbApi.getMovies().getCredits(movie.getId(), "en-US");
+      List<Cast> castList = movieCredits.getCast();
       List<Person> actors = new ArrayList<>();
-      for (PersonCast cast : castList) {
+      for (Cast cast : castList) {
         Person person = new Person();
         person.setId(cast.getId());
         person.setName(cast.getName());
@@ -261,11 +263,11 @@ public class MovieService {
     }
   }
 
-  private void setReviews(Movie movie, MovieDb movieApi) {
+  private void setReviews(Movie movie, MovieDb movieApi) throws TmdbException {
     if (movie.getReviews() == null || movie.getReviews().isEmpty()) {
-      List<Reviews> reviews = tmdbApi.getReviews().getReviews(movie.getId(), "en-US", 1).getResults();
+      List<Review> reviews = tmdbApi.getMovies().getReviews(movie.getId(), "en-US", 1).getResults();
       List<String> reviewTexts = new ArrayList<>();
-      for (Reviews review : reviews) {
+      for (Review review : reviews) {
         String content = review.getContent();
         if (content.split("\\s+").length < 300 && !content.contains("SPOILER-FREE")
             && content.split("\\s+").length > 20) {
@@ -287,16 +289,16 @@ public class MovieService {
     }
   }
 
-  private void setMovieStatus(Movie movie, MovieDb movieApi) {
+  private void setMovieStatus(Movie movie, MovieDb movieApi) throws TmdbException {
     if (movie.getMovieStatus() == null || movie.getMovieStatus().isEmpty()) {
-      String movieStatus = tmdbApi.getMovies().getMovie(movie.getId(), "en-US").getStatus();
+      String movieStatus = tmdbApi.getMovies().getDetails(movie.getId(), "en-US").getStatus();
       movie.setMovieStatus(movieStatus);
     }
   }
 
-  private void setTrailer(Movie movie, MovieDb movieApi) {
+  private void setTrailer(Movie movie, MovieDb movieApi) throws TmdbException {
     if (movie.getTrailer() == null || movie.getTrailer().isEmpty()) {
-      List<Video> movieVideos = tmdbApi.getMovies().getVideos(movie.getId(), "en-US");
+      VideoResults movieVideos = tmdbApi.getMovies().getVideos(movie.getId(), "en-US");
       String mainTrailerKey = null;
       for (Video video : movieVideos) {
         if (video.getType().equals("Trailer") && video.getSite().equals("YouTube")) {
@@ -313,32 +315,49 @@ public class MovieService {
   public CompletableFuture<Void> saveTop20ListDetails(String collectionName) {
     return CompletableFuture.runAsync(() -> {
       List<Movie> movies = new ArrayList<>();
-      List<MovieDb> collection = null;
+      List<info.movito.themoviedbapi.model.core.Movie> collection = null;
 
       mongoTemplate.dropCollection(collectionName);
 
       switch (collectionName) {
         case "now_playing":
-          collection = tmdbApi.getMovies().getNowPlayingMovies("en-US", 1, "").getResults();
+          try {
+            collection = tmdbApi.getMovieLists().getNowPlaying("en-US", 1, null).getResults();
+          } catch (TmdbException e) {
+            e.printStackTrace();
+          }
           break;
         case "popular":
-          collection = tmdbApi.getMovies().getPopularMovies("en-US", 1).getResults();
+          try {
+            collection = tmdbApi.getMovieLists().getPopular("en-US", 1, null).getResults();
+          } catch (TmdbException e) {
+            e.printStackTrace();
+          }
           break;
         case "top_rated":
-          collection = tmdbApi.getMovies().getTopRatedMovies("en-US", 1).getResults();
+          try {
+            collection = tmdbApi.getMovieLists().getTopRated("en-US", 1, null).getResults();
+          } catch (TmdbException e) {
+            e.printStackTrace();
+          }
           break;
         case "upcoming_movies":
-          collection = tmdbApi.getMovies().getUpcoming("en-US", 1, "").getResults();
+          try {
+            collection = tmdbApi.getMovieLists().getUpcoming("en-US", 1, null).getResults();
+          } catch (TmdbException e) {
+            e.printStackTrace();
+          }
           break;
         default:
           throw new IllegalArgumentException("Invalid method name: " + collectionName);
       }
 
-      for (MovieDb movieDb : collection) {
+      for (info.movito.themoviedbapi.model.core.Movie movieDb : collection) {
         Movie movie = new Movie();
 
         String posterUrl = TMDB_IMAGE_PREFIX + movieDb.getPosterPath();
         String backdropUrl = TMDB_IMAGE_PREFIX + movieDb.getBackdropPath();
+
         movie.setId(movieDb.getId());
         movie.setTitle(movieDb.getTitle());
         movie.setOriginalLanguage(movieDb.getOriginalLanguage());
@@ -347,7 +366,7 @@ public class MovieService {
         movie.setPosterUrl(posterUrl);
         movie.setBackdropUrl(backdropUrl);
         movie.setReleaseDate(movieDb.getReleaseDate());
-        setVoteAverage(movie, movieDb);
+        movie.setVoteAverage((int) Math.round(movieDb.getVoteAverage() * 10));
         updateMovieDbDetails(collectionName);
         movies.add(movie);
       }
@@ -362,45 +381,50 @@ public class MovieService {
     return CompletableFuture.runAsync(() -> {
       List<Movie> movies = getTop20Movies(collectionName);
       for (Movie movie : movies) {
-        MovieDb movieDb = tmdbApi.getMovies().getMovie(movie.getId(), "en-US");
-
-        if (movie.getTagline() == null) {
-          movie.setTagline(movieDb.getTagline());
-        }
-        if (movie.getVoteAverage() == null) {
-          Integer voteAverage = Math.round(movieDb.getVoteAverage() * 10);
-          movie.setVoteAverage(Math.round(voteAverage));
-        }
-        if (movie.getVoteCount() == null) {
-          Integer voteCount = movieDb.getVoteCount();
-          movie.setVoteCount(voteCount);
-        }
-        if (movie.getBudget() == null) {
-          movie.setBudget(movieDb.getBudget());
-        }
-        if (movie.getRevenue() == null) {
-          movie.setRevenue(movieDb.getRevenue());
-        }
-        if (movie.getRuntime() == null) {
-          movie.setRuntime(movieDb.getRuntime());
-        }
-        if (movie.getImdbId() == null) {
-          String imdbId = movieDb.getImdbID();
-          movie.setImdbId(imdbId);
-        }
         try {
-          setProviderResults(movie, movieDb.getId());
-          setGenres(movie, movieDb);
-          setActors(movie, movieDb);
-          setReviews(movie, movieDb);
-          setProductionCompanies(movie, movieDb);
-          setMovieStatus(movie, movieDb);
-          setTrailer(movie, movieDb);
-        } catch (IOException | InterruptedException | URISyntaxException e) {
+
+          MovieDb movieDb = tmdbApi.getMovies().getDetails(movie.getId(), "en-US");
+
+          if (movie.getTagline() == null) {
+            movie.setTagline(movieDb.getTagline());
+          }
+          if (movie.getVoteAverage() == null) {
+            Integer voteAverage = (int) Math.round(movieDb.getVoteAverage() * 10);
+            movie.setVoteAverage(voteAverage);
+          }
+          if (movie.getVoteCount() == null) {
+            Integer voteCount = movieDb.getVoteCount();
+            movie.setVoteCount(voteCount);
+          }
+          if (movie.getBudget() == null) {
+            movie.setBudget(movieDb.getBudget());
+          }
+          if (movie.getRevenue() == null) {
+            movie.setRevenue(movieDb.getRevenue());
+          }
+          if (movie.getRuntime() == null) {
+            movie.setRuntime(movieDb.getRuntime());
+          }
+          if (movie.getImdbId() == null) {
+            String imdbId = movieDb.getImdbID();
+            movie.setImdbId(imdbId);
+          }
+          try {
+            setProviderResults(movie, movieDb.getId());
+            setGenres(movie, movieDb);
+            setActors(movie, movieDb);
+            setReviews(movie, movieDb);
+            setProductionCompanies(movie, movieDb);
+            setMovieStatus(movie, movieDb);
+            setTrailer(movie, movieDb);
+          } catch (IOException | InterruptedException | URISyntaxException | TmdbException e) {
+            e.printStackTrace();
+          }
+
+          mongoTemplate.save(movie, collectionName);
+        } catch (TmdbException e) {
           e.printStackTrace();
         }
-
-        mongoTemplate.save(movie, collectionName);
       }
     });
   }
@@ -453,13 +477,12 @@ public class MovieService {
 
   public MovieResults getMovieResults(String endpoint, Integer page, String userId)
       throws IOException, InterruptedException, URISyntaxException {
-    String url = "https://api.themoviedb.org/3/movie/" + endpoint + "?" +
-        "api_key=" + TMDB_API_KEY
-        + "&language=en-US&page=" + page
+    String url = "https://api.themoviedb.org/3/movie/" + endpoint + "?&language=en-US&page=" + page
         + "&include_adult=false";
 
     HttpClient httpClient = HttpClient.newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
+        .header("Authorization", "Bearer " + TMDB_ACCESS_TOKEN)
         .uri(new URI(url))
         .GET()
         .build();
@@ -514,22 +537,25 @@ public class MovieService {
     }
   }
 
-  public List<MovieDb> searchResults(String query) throws IOException, InterruptedException, URISyntaxException {
+  public List<info.movito.themoviedbapi.model.core.Movie> searchResults(String query)
+      throws IOException, InterruptedException, URISyntaxException, TmdbException {
 
-    List<MovieDb> searchResults = tmdbApi.getSearch().searchMovie(query, 0, "", false, 1).getResults();
+    List<info.movito.themoviedbapi.model.core.Movie> searchResults = tmdbApi.getSearch()
+        .searchMovie(query, false, "en-US", null, null, null, null)
+        .getResults();
 
-    List<MovieDb> updatedSearchResults = searchResults.stream()
+    List<info.movito.themoviedbapi.model.core.Movie> updatedSearchResults = searchResults.stream()
         .limit(5)
         .peek(movie -> {
-          Integer voteAverage = Math.round(movie.getVoteAverage() * 10);
-          movie.setVoteAverage(voteAverage);
+          movie.setVoteAverage((double) Math.round(movie.getVoteAverage() * 10));
+
         })
         .collect(Collectors.toList());
 
     return updatedSearchResults;
   }
 
-  // public List<Movie> recommendedMovies(Integer movieId)
+  // public List<MovieCard> recommendedMovies(Integer movieId, String userId)
   // throws IOException, InterruptedException, URISyntaxException {
   // List<MovieDb> recommendedMovies =
   // tmdbApi.getMovies().getRecommendedMovies(movieId, "", 1).getResults();
@@ -558,12 +584,12 @@ public class MovieService {
   public List<MovieCard> recommendedMovies(Integer movieId, String userId)
       throws IOException, InterruptedException, URISyntaxException {
     String url = "https://api.themoviedb.org/3/movie/" + movieId
-        + "/recommendations?language=en-US&page=1&include_adult=false" + "&api_key="
-        + TMDB_API_KEY;
+        + "/recommendations?language=en-US&page=1&include_adult=false";
 
     HttpClient httpClient = HttpClient.newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
         .uri(new URI(url))
+        .header("Authorization", "Bearer " + TMDB_ACCESS_TOKEN)
         .GET()
         .build();
 
@@ -612,16 +638,16 @@ public class MovieService {
     });
   }
 
-  public String getTrailer(Integer movieId) {
-    TmdbMovies.MovieMethod appendVideos = TmdbMovies.MovieMethod.videos;
+  public String getTrailer(Integer movieId) throws TmdbException {
     List<String> youtubeKeys = new ArrayList<>();
 
-    List<Video> trailer = tmdbApi.getMovies().getMovie(movieId, "en-US", appendVideos).getVideos();
-
-    youtubeKeys = trailer.stream()
-        .filter(video -> "Trailer".equals(video.getType()) && "YouTube".equals(video.getSite()))
-        .map(Video::getKey)
-        .collect(Collectors.toList());
+    VideoResults allVideos = tmdbApi.getMovies().getVideos(movieId, "en-US");
+    System.out.println(allVideos);
+    for (Video video : allVideos) {
+      if ("Trailer".equals(video.getType()) && "YouTube".equals(video.getSite())) {
+        youtubeKeys.add(video.getKey());
+      }
+    }
 
     if (!youtubeKeys.isEmpty()) {
       String firstTrailerKey = youtubeKeys.get(0);

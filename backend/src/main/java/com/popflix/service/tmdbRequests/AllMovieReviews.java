@@ -22,7 +22,7 @@ public class AllMovieReviews {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final Map<Integer, List<Review>> reviewCache = new HashMap<>();
     static Dotenv dotenv = Dotenv.load();
-    String TMDB_API_KEY = dotenv.get("TMDB_API_KEY");
+    String TMDB_ACCESS_TOKEN = dotenv.get("TMDB_ACCESS_TOKEN");
     private static String DEFAULT_AVATAR_URL = dotenv.get("DEFAULT_AVATAR_URL");
 
     public static String getImageUrl(String avatar) {
@@ -47,8 +47,9 @@ public class AllMovieReviews {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(
                         "https://api.themoviedb.org/3/movie/" + movieId
-                                + "/reviews?language=en-US&page=1&api_key=" + TMDB_API_KEY))
+                                + "/reviews?language=en-US&page=1"))
                 .header("accept", "application/json")
+                .header("Authorization", "Bearer " + TMDB_ACCESS_TOKEN)
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
 

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.popflix.model.Person;
 import com.popflix.service.PersonService;
 
+import info.movito.themoviedbapi.tools.TmdbException;
+
 @RestController
 @RequestMapping("/person")
 public class PeopleController {
@@ -21,7 +23,7 @@ public class PeopleController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Person>> singlePerson(@PathVariable Integer id)
-            throws IOException, InterruptedException {
+            throws IOException, InterruptedException, TmdbException {
         return new ResponseEntity<Optional<Person>>(PersonService.singlePerson(id), HttpStatus.OK);
     }
 }
