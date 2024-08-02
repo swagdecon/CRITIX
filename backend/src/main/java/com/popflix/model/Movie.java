@@ -26,6 +26,7 @@ public class Movie {
     private String originalLanguage;
     private String originalTitle;
     private String overview;
+    private Map<String, Object> watchProviders;
     private Double popularity;
     private String posterUrl;
     private String releaseDate;

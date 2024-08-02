@@ -26,11 +26,10 @@ public class MovieCard {
     private String overview;
     private String posterUrl;
     private String releaseDate;
+    private Double popularity;
     private String title;
     private String trailer;
     private Integer voteAverage;
-    private String tagline;
-    private Integer runtime;
     private String movieStatus;
     private Boolean isSavedToWatchlist;
     private Boolean isSavedToFavouriteMoviesList;

@@ -13,21 +13,24 @@ import "slick-carousel/slick/slick-theme.css";
 const MovieCardSlider = styled(Slider)`
 .slick-prev {
   left: .25vw;
+  z-index:1;
 }
 .slick-next {
   right: .25vw;
+    z-index:1;
 }
 `
 function MovieCarousel({ title, movies, endpoint, breakpoints }) {
   const settings = {
     dots: false,
-    infinite: true,
-    speed: 1000,
+    infinite: false,
+    speed: 500,
     slidesToShow: 6,
     slidesToScroll: 5,
     initialSlide: 0,
     responsive: breakpoints
   };
+  console.log(movies)
   return (
     <div className={MovieCarouselStyle["carousel-parent"]}>
       <div className={MovieCarouselStyle["carousel-wrapper"]}>

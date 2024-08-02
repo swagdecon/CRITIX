@@ -17,54 +17,8 @@ const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
 const getBannerEndpoint = process.env.REACT_APP_GET_USER_BANNER
 const getUserFavouriteMoviesEndpoint = process.env.REACT_APP_GET_FAVOURITE_MOVIES_ENDPOINT
 
-const breakpoints = [
-    {
-        breakpoint: 3450,
-        settings: {
-            slidesToShow: 6,
-            slidesToScroll: 6,
-            infinite: true,
-            dots: false
-        }
-    },
-    {
-        breakpoint: 3140,
-        settings: {
-            slidesToShow: 5,
-            slidesToScroll: 5,
-        }
-    },
-    {
-        breakpoint: 2680,
-        settings: {
-            slidesToShow: 4,
-            slidesToScroll: 4,
-        }
-    },
-    {
-        breakpoint: 2220,
-        settings: {
-            slidesToShow: 3,
-            slidesToScroll: 3
-        }
-    },
-    {
-        breakpoint: 1750,
-        settings: {
-            slidesToShow: 2,
-            slidesToScroll: 2
-        }
-    },
-    {
-        breakpoint: 950,
-        settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1
-        }
-    }
-]
-export default function UserProfile() {
 
+export default function UserProfile() {
     const reviewsPerPage = 2;
     const [favouriteMovies, setFavouriteMovies] = useState(null);
     const [userReviews, setUserReviews] = useState(null)
@@ -77,6 +31,51 @@ export default function UserProfile() {
     const [currentPage, setCurrentPage] = useState(1);
     const handlePageChange = useCallback((event, page) => setCurrentPage(page));
 
+    const breakpoints = [
+        {
+            breakpoint: 4000,
+            settings: {
+                slidesToShow: favouriteMovies?.length <= 5 ? favouriteMovies.length : 6,
+                infinite: favouriteMovies?.length <= 10 ? true : false,
+                dots: false
+            }
+        },
+        {
+            breakpoint: 3140,
+            settings: {
+                slidesToShow: favouriteMovies?.length <= 5 ? favouriteMovies.length : 5,
+                slidesToScroll: 5,
+            }
+        },
+        {
+            breakpoint: 2680,
+            settings: {
+                slidesToShow: favouriteMovies?.length <= 5 ? favouriteMovies.length : 4,
+                slidesToScroll: 4,
+            }
+        },
+        {
+            breakpoint: 2220,
+            settings: {
+                slidesToShow: favouriteMovies?.length <= 5 ? favouriteMovies.length : 3,
+                slidesToScroll: 3
+            }
+        },
+        {
+            breakpoint: 1750,
+            settings: {
+                slidesToShow: favouriteMovies?.length <= 5 ? favouriteMovies.length : 2,
+                slidesToScroll: 2
+            }
+        },
+        {
+            breakpoint: 950,
+            settings: {
+                slidesToShow: favouriteMovies?.length <= 5 ? favouriteMovies.length : 1,
+                slidesToScroll: 1
+            }
+        }
+    ]
     const displayReviews = useMemo(() => {
         let reviewsToDisplay = [];
         const startIdx = (currentPage - 1) * reviewsPerPage;
@@ -220,6 +219,7 @@ export default function UserProfile() {
                                 </div>
                             </section>
                             <section className={UserStyle.FavouriteMovies}>
+
                                 <h2 className={UserStyle.Title}>Your Favourite Movies</h2>
                                 {favouriteMovies ?
                                     <MovieCarousel
