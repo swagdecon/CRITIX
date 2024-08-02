@@ -210,7 +210,9 @@ h5 {
     font-weight: $semi-bold;
   }
 }
-
+.voteAverage {
+  color: $brand-color
+}
 .movie-likes {
   @extend .movie-gen;
   float: right;

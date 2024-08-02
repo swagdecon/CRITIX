@@ -5,6 +5,7 @@ import ReactPlayer from "react-player";
 import "../Carousel/MovieCarousel/MovieCarousel.module.css";
 import GlassCard from "./GlassCard";
 import "./Player.css"
+import MovieCardStyle from "../MovieCard/moviecard.module.scss"
 // import NoTrailer from "./NoTrailerAvailable.png"
 import GlassStyle from "./GlassCard.module.css"
 const amazonAffiliateUrl = process.env.REACT_APP_AMAZON_AFFILIATE_URL
@@ -78,7 +79,7 @@ function WatchMovieNow(watchProviders) {
 
 
 function MovieAverage({ voteAverage }) {
-  return voteAverage ? `${voteAverage} kernels` : "No Rating"
+  return <div className={MovieCardStyle.voteAverage}>{voteAverage ? `${voteAverage} KERNELS` : "No Rating"}</div>
 }
 
 MovieAverage.propTypes = {

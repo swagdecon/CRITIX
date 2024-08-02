@@ -64,6 +64,7 @@ const settings = {
   ]
 };
 export default function RecommendedCarousel({ recommendedMovies }) {
+  console.log(recommendedMovies)
 
   return (
     <div className={MovieCardStyle["carousel-wrapper"]}>

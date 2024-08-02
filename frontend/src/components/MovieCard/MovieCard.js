@@ -40,7 +40,6 @@ export default function MovieCard({
     isSavedToWatchlist,
     isSavedToFavouriteMoviesList
   };
-
   async function handleWatchTrailer(e) {
     e.preventDefault();
     const trailer = await fetchData(`${trailerEndpoint}${movieId}`);
