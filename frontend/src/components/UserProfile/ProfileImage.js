@@ -6,23 +6,24 @@ import AddIcon from '@mui/icons-material/Add';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import { sendData } from '../../security/Data';
 import { validateImageURL } from '../Shared/Shared';
-const saveProfileImgEndpoint = process.env.REACT_APP_UPDATE_PROFILE_IMAGE
+
+const saveProfileImgEndpoint = process.env.REACT_APP_UPDATE_PROFILE_IMAGE;
 
 const ImgUpload = ({ onChange, src }) => {
     const [editor, setEditor] = useState(null);
     const editorRef = useRef(null);
     const [btn, setBtn] = useState("add");
-    const [profilePicture, setProfilePicture] = useState(null);
 
     const handleAddClick = async () => {
         const url = window.prompt("Please enter the image URL:");
         if (url) {
             try {
-                await validateImageURL(url);
-                setProfilePicture(url)
+                const sanitizedUrl = new URL(url).href;
+                await validateImageURL(sanitizedUrl);
                 onChange(url);
                 setBtn("save");
             } catch (error) {
+                console.error(error);
                 window.alert('Please enter a valid image URL');
             }
         }
@@ -30,14 +31,18 @@ const ImgUpload = ({ onChange, src }) => {
 
     const onClickSave = async () => {
         if (editor) {
-            const data = {
-                profilePic: profilePicture
-            }
-            const response = await sendData(saveProfileImgEndpoint, data);
-            response.ok ? window.alert('New Profile Picture Saved Successfully') : window.alert('An Error Occured, Please try again');
-        }
+            const profilePic = editor.getImageScaledToCanvas().toDataURL();
 
+            const data = JSON.stringify(profilePic)
+
+
+            const response = await sendData(saveProfileImgEndpoint, data);
+            response.ok
+                ? window.alert('New Profile Picture Saved Successfully')
+                : window.alert('An Error Occurred, Please try again');
+        }
     };
+
     return (
         <div className={UserStyle['img-container']}>
             <AvatarEditor
@@ -47,10 +52,10 @@ const ImgUpload = ({ onChange, src }) => {
                 height={150}
                 scale={1}
                 borderRadius={125}
+                className={UserStyle.AvatarEditor}
                 rotate={0}
                 color={[23, 23, 23]}
                 crossOrigin="anonymous"
-                className={UserStyle['img-wrap']}
                 onImageReady={() => setEditor(editorRef.current)}
             />
             <label htmlFor="photo-upload" className={UserStyle['custom-file-upload']}>
@@ -74,17 +79,29 @@ const ImgUpload = ({ onChange, src }) => {
     );
 };
 
-const CardProfile = ({ avatar }) => {
-    const [imageURL, setImageURL] = useState(avatar);
+export default function ProfilePicture({ avatar }) {
+    const [imageURL, setImageURL] = useState(() => {
+        try {
+            const parsedData = JSON.parse(avatar);
+            return parsedData;
+        } catch {
+            return avatar;
+        }
+    });
+
     const photoUpload = (url) => {
         setImageURL(url);
     };
 
     return (
-        <ImgUpload onChange={photoUpload} src={imageURL || "https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"} />
+        <ImgUpload
+            onChange={photoUpload}
+            src={imageURL || avatar}
+        />
     );
-};
-CardProfile.propTypes = {
+}
+
+ProfilePicture.propTypes = {
     avatar: PropTypes.string.isRequired
 }
 
@@ -92,7 +109,3 @@ ImgUpload.propTypes = {
     onChange: PropTypes.func.isRequired,
     src: PropTypes.string.isRequired,
 };
-
-export default CardProfile;
-
-

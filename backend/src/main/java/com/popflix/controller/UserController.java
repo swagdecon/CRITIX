@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,14 +55,17 @@ public class UserController {
             throws java.io.IOException {
         try {
             String userId = authenticationService.getUserDetails(accessToken).getId();
-            String profilePicURL = profilePic.get("profilePic");
 
-            if (profilePic == null || !profilePicURL.startsWith("https://")) {
-                return new ResponseEntity<>("Invalid URL. The URL must start with 'https://'", HttpStatus.BAD_REQUEST);
-            } else {
-                userService.updateUserProfilePic(profilePicURL, userId);
-                return new ResponseEntity<>("Profile Picture Updated", HttpStatus.OK);
+            String profilePicURL = profilePic.get("profilePic");
+            if (profilePicURL == null || profilePicURL.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
+            if (!profilePicURL.contains("data:image/")) {
+                return new ResponseEntity<>("Invalid data format.", HttpStatus.BAD_REQUEST);
+            }
+            userService.updateUserProfilePic(profilePicURL, userId);
+            return new ResponseEntity<>("Profile Picture Updated", HttpStatus.OK);
+
         } catch (Exception e) {
             return new ResponseEntity<>("Error processing URL", HttpStatus.INTERNAL_SERVER_ERROR);
         }

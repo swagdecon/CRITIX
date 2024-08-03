@@ -3,7 +3,7 @@ import { fetchData } from "../security/Data";
 import MovieCarousel from "../components/Carousel/MovieCarousel/MovieCarousel.js";
 import isTokenExpired from "../security/IsTokenExpired.js";
 import UserStyle from "../components/UserProfile/UserProfile.module.css"
-import CardProfile from "../components/UserProfile/ProfileImageUpload.js"
+import ProfilePicture from "../components/UserProfile/ProfileImage.js"
 import NavBar from "../components/NavBar/NavBar.js";
 import { LineChart } from "@mui/x-charts/LineChart"
 import BannerImg from "../components/UserProfile/BannerImage.js";
@@ -69,7 +69,7 @@ export default function UserProfile() {
             }
         },
         {
-            breakpoint: 950,
+            breakpoint: 1250,
             settings: {
                 slidesToShow: favouriteMovies?.length <= 5 ? favouriteMovies.length : 1,
                 slidesToScroll: 1
@@ -129,7 +129,7 @@ export default function UserProfile() {
                 <div className={UserStyle["profile-header"]}>
                     <BannerImg bannerPic={banner} refetchBanner={fetchBackendData} />
                     <div className={UserStyle["main-profile"]}>
-                        <CardProfile avatar={avatar} />
+                        <ProfilePicture avatar={avatar} />
                         <div className={UserStyle["profile-names"]}>
                             <h1 className={UserStyle.username}>Connor Pant</h1>
                         </div>
