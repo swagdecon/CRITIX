@@ -280,7 +280,7 @@
         margin-top: 5%;
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: repeat(3, auto); 
-        width: 70%;
+        width: 90%;
     }
     .GridItem:first-child {
         grid-column: span 2;

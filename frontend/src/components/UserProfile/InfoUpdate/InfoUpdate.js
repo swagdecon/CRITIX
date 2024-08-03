@@ -10,11 +10,12 @@ export default function InfoUpdate() {
     const [fieldMsg, setFieldMsg] = useState(null);
     const [email, setEmail] = useState("");
     const [emailError, setEmailError] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [firstNameError, setFirstNameError] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [lastNameError, setLastNameError] = useState("");
+    const [password, setPassword] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [confirmPasswordError, setConfirmPasswordError] = useState("");
     const emailPattern = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$";
+    const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,20}/;
 
     const filter = useMemo(() => new Filter(), []);
 
@@ -31,45 +32,35 @@ export default function InfoUpdate() {
         setEmail(e.target.value);
         setEmailError(e.target.value ? '' : 'Email is required');
     }
-    function handleFirstNameChange(e) {
-        setFirstName(e.target.value);
-        setFirstNameError(e.target.value ? '' : 'First name is required');
+
+    function handlePasswordChange(e) {
+        const newPassword = e.target.value;
+        setPassword(newPassword);
+        setPasswordError(passwordPattern.test(newPassword) ? '' : 'Password must be 7-20 characters long, with at least one digit, one lowercase letter, and one uppercase letter');
     }
 
-    function handleLastNameChange(e) {
-        setLastName(e.target.value);
-        setLastNameError(e.target.value ? '' : 'Last name is required');
+    function handleConfirmPasswordChange(e) {
+        setConfirmPassword(e.target.value);
+        setConfirmPasswordError(e.target.value === password ? '' : 'Passwords do not match');
     }
-
-    // function handlePasswordChange(e) {
-    //     setPassword(e.target.value);
-    //     setPasswordError(passwordPattern.test(e.target.value) ? '' : 'Password must be 7-20 characters long, with at least one digit, one lowercase letter, and one uppercase letter');
-    // }
-
-    // function handleConfirmPasswordChange(e) {
-    //     setConfirmPassword(e.target.value);
-    //     setConfirmPasswordError(e.target.value === password ? '' : 'Passwords do not match');
-    // }
 
     async function handleSubmit(e) {
         e.preventDefault();
-        const hasProfanity = filter.isProfane({ target: { value: firstName } }) || filter.isProfane({ target: { value: lastName } }) || filter.isProfane({ target: { value: email } });
+        const hasProfanity = filter.isProfane({ target: { value: email } });
 
         // Trigger validation for all fields
         handleEmailChange({ target: { value: email } });
-        handleFirstNameChange({ target: { value: firstName } });
-        handleLastNameChange({ target: { value: lastName } });
-        // handlePasswordChange({ target: { value: password } });
-        // handleConfirmPasswordChange({ target: { value: confirmPassword } });
+        handlePasswordChange({ target: { value: password } });
+        handleConfirmPasswordChange({ target: { value: confirmPassword } });
 
         // Check for errors
-        if (firstNameError || lastNameError || emailError) {
+        if (emailError || passwordError || confirmPasswordError) {
             alert('Please fix the errors in the form');
             return;
         }
 
         if (!ProfanityLogic(hasProfanity)) {
-            const userData = { firstName, lastName };
+            const userData = { email, password };
             const response = await fetch(
                 UPDATE_USER_DETAILS_ENDPOINT,
                 {
@@ -105,20 +96,22 @@ export default function InfoUpdate() {
                             /></div>
                         <div className={UserStyle.GridItem}>
                             <TextField
-                                label="First Name"
-                                value={firstName}
-                                onChange={handleFirstNameChange}
-                                error={firstNameError}
-                                helperText={firstNameError}
+                                label="Password"
+                                value={password}
+                                onChange={handlePasswordChange}
+                                pattern={passwordPattern.toString().slice(1, -1)}
+                                error={passwordError}
+                                helperText={passwordError}
                                 {...commonTextFieldProps}
                             /></div>
                         <div className={UserStyle.GridItem}>
                             <TextField
-                                label="Last Name"
-                                value={lastName}
-                                onChange={handleLastNameChange}
-                                error={lastNameError}
-                                helperText={lastNameError}
+                                label="Confirm Password"
+                                value={confirmPassword}
+                                onChange={handleConfirmPasswordChange}
+                                pattern={passwordPattern.toString().slice(1, -1)}
+                                error={confirmPasswordError}
+                                helperText={confirmPasswordError}
                                 {...commonTextFieldProps}
                             /></div>
                     </div>

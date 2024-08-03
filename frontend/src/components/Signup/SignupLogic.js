@@ -19,10 +19,10 @@ export default function SignUpFunctionality() {
   const [profanityError, setProfanityError] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [endpointResponse, setEndpointResponse] = useState(null)
-  const handleEmailChange = (event) => setEmail(event.target.value)
-  const handleFirstNameChange = (event) => setFirstName(event.target.value)
-  const handleLastNameChange = (event) => setLastName(event.target.value)
-  const handlePasswordChange = (event) => setPassword(event.target.value)
+  const handleEmailChange = (e) => setEmail(e.target.value)
+  const handleFirstNameChange = (e) => setFirstName(e.target.value)
+  const handleLastNameChange = (e) => setLastName(e.target.value)
+  const handlePasswordChange = (e) => setPassword(e.target.value)
   const handleTogglePasswordVisibility = () => {
     togglePasswordVisibility(passwordVisible, setPasswordVisible);
   };
@@ -38,47 +38,43 @@ export default function SignUpFunctionality() {
     resendAuthEmail(email, setMessage, setEmailErr);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
     const userData = { firstName, lastName, email, password };
     const hasProfanity = filter.isProfane(userData["firstName"]) || filter.isProfane(userData["lastName"]) || filter.isProfane(userData["email"]) || filter.isProfane(userData["password"]);
 
-    if (ProfanityLogic(hasProfanity, setProfanityError)) {
-      // Stops creation of user
-      return
-    }
+    if (!ProfanityLogic(hasProfanity, setProfanityError)) {
 
-
-    const response = await fetch(SIGNUP_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userData),
-    });
-
-    setEndpointResponse(response);
-
-    if (response.ok) {
-      const data = await response.json();
-      CookieManager.encryptCookie("accessToken", data.access_token, {
-        expires: 0.5,
+      const response = await fetch(SIGNUP_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
       });
-      CookieManager.encryptCookie("refreshToken", data.refresh_token, {
-        expires: 7,
-      });
-      setMessage(data.message);
-      resetInputFields()
-    } else {
-      const messageText = await response.text();
-      if (messageText === "There was an error sending your account activation email.") {
-        setEmailErr(true);
+
+      setEndpointResponse(response);
+
+      if (response.ok) {
+        const data = await response.json();
+        CookieManager.encryptCookie("accessToken", data.access_token, {
+          expires: 0.5,
+        });
+        CookieManager.encryptCookie("refreshToken", data.refresh_token, {
+          expires: 7,
+        });
+        setMessage(data.message);
+        resetInputFields()
+      } else {
+        const messageText = await response.text();
+        if (messageText === "There was an error sending your account activation email.") {
+          setEmailErr(true);
+        }
+        setMessage(messageText);
       }
-      setMessage(messageText);
     }
   }
-
   return (
     <form onSubmit={handleSubmit}>
       <Message response={endpointResponse} message={message} style={SignUpStyles} profanityError={profanityError} />
