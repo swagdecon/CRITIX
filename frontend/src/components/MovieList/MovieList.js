@@ -40,7 +40,6 @@ export default function MovieList({ endpoint }) {
   const [caption, setCaption] = useState("");
   const handleSortByChange = useCallback((selectedValue) => {
     let sortedMovies;
-    console.log(movies)
     switch (selectedValue) {
       case "A-Z":
         sortedMovies = [...movies].sort((a, b) => a.title.localeCompare(b.title));

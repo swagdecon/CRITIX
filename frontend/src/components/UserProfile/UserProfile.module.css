@@ -65,7 +65,14 @@
         border-radius: 50%;
     }
     
-    
+    .NoContent {
+        border-radius: 10px;
+        padding: .5%;
+        text-align: center;
+        font-weight: 400;
+        font-size: 16px;
+        color: white;
+    }
     .custom-file-upload {
         position: absolute;
         bottom: 0;

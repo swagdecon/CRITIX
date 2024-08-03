@@ -81,7 +81,7 @@ export default function UserProfile() {
         const startIdx = (currentPage - 1) * reviewsPerPage;
         const endIdx = startIdx + reviewsPerPage;
         reviewsToDisplay = userReviews?.slice(startIdx, endIdx);
-        return reviewsToDisplay;
+        reviewsToDisplay > 0 ? reviewsToDisplay : null
     }, [currentPage, userReviews]);
 
     const totalPages = userReviews ? Math.ceil(userReviews.length / reviewsPerPage) : 1;
@@ -90,13 +90,13 @@ export default function UserProfile() {
 
         try {
             await isTokenExpired();
-            const [useFavouriteMovies, allUserReviews, avatarPic, bannerPic] = await Promise.all([
+            const [favouriteMovies, allUserReviews, avatarPic, bannerPic] = await Promise.all([
                 fetchData(getUserFavouriteMoviesEndpoint),
                 fetchData(allUserReviewsEndpoint),
                 fetchData(getAvatarEndpoint),
                 fetchData(getBannerEndpoint)
             ]);
-            setFavouriteMovies(useFavouriteMovies)
+            setFavouriteMovies(favouriteMovies)
             setUserReviews(allUserReviews);
             setAvatar(avatarPic);
             setRecentUserReview(allUserReviews[0]);
@@ -193,41 +193,49 @@ export default function UserProfile() {
                                 <div className={UserStyle.AllUserReviews}>
                                     {recentUserReview ?
                                         <IndUserReview key={recentUserReview.movieId} avatar={avatar} movieTitle={recentUserReview.movieTitle} createdDate={recentUserReview.createdDate} content={recentUserReview.content} rating={recentUserReview.rating} />
-                                        : "No Recent Reviews"}
+                                        : <div className={UserStyle.NoContent}>
+                                            Start posting reviews to fill this spot with your insights.
+                                        </div>}
                                 </div>
                             </section>
                             <section className={UserStyle.AllReviews}>
                                 <h2 className={UserStyle.Title}>all reviews</h2>
                                 <div className={UserStyle.AllUserReviews}>
-                                    {displayReviews.map((review) => (
-                                        <IndUserReview key={review.movieId} avatar={avatar} movieTitle={review.movieTitle} createdDate={review.createdDate} content={review.content} rating={review.rating} />
-                                    ))}
+                                    {displayReviews ?
+                                        displayReviews.map((review) => (
+                                            <IndUserReview key={review.movieId} avatar={avatar} movieTitle={review.movieTitle} createdDate={review.createdDate} content={review.content} rating={review.rating} />
+                                        ))
+                                        : <div className={UserStyle.NoContent}>
+                                            Start posting reviews to fill this spot with your insights.
+                                        </div>}
                                 </div>
-                                <div className={UserStyle.PaginationWrapper}>
-                                    <Pagination
-                                        size="large"
-                                        color="primary"
-                                        count={totalPages}
-                                        page={currentPage}
-                                        onChange={handlePageChange}
-                                        sx={{
-                                            "& .MuiPaginationItem-root": {
-                                                color: "#ffffff",
-                                            },
-                                        }}
-                                    />
-                                </div>
+                                {displayReviews ?
+                                    <div className={UserStyle.PaginationWrapper}>
+                                        <Pagination
+                                            size="large"
+                                            color="primary"
+                                            count={totalPages}
+                                            page={currentPage}
+                                            onChange={handlePageChange}
+                                            sx={{
+                                                "& .MuiPaginationItem-root": {
+                                                    color: "#ffffff",
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                    : null}
                             </section>
                             <section className={UserStyle.FavouriteMovies}>
 
                                 <h2 className={UserStyle.Title}>Your Favourite Movies</h2>
-                                {favouriteMovies ?
+                                {favouriteMovies.length > 0 ?
                                     <MovieCarousel
                                         movies={favouriteMovies}
                                         endpoint="/movies/movie"
                                         breakpoints={breakpoints}
                                     />
-                                    : null}
+                                    : <div className={UserStyle.NoContent}>Your favorite films deserve the spotlight. Start adding them here.</div>}
                             </section>
                         </div>
                         :
