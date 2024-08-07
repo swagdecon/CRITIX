@@ -9,7 +9,7 @@ import LoginPlayer from "../components/Login/LoginVideo";
 import LoginFunctionality from "../components/Login/LoginLogic.js";
 import LoginStyles from "../components/Login/login.module.css";
 
-export default function LogIn() {
+export default function Login() {
   return (
     <div>
       <div id={LoginStyles.left}>

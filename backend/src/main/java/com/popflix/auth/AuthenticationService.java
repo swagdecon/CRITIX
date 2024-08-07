@@ -5,12 +5,10 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,7 +16,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,7 +31,6 @@ import com.popflix.model.User;
 import com.popflix.repository.TokenRepository;
 import com.popflix.repository.UserRepository;
 import com.popflix.service.EmailService;
-
 import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -205,6 +201,51 @@ public class AuthenticationService {
                 return encryptedToken;
         }
 
+        public String encryptEmails(String currentEmail, String newEmail) throws Exception {
+                SecretKey secretKey = generateSecretKey();
+                Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
+                cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+
+                // Concatenate emails with a delimiter
+                String emailsToEncrypt = currentEmail + ":" + newEmail;
+
+                byte[] encryptedBytes = cipher.doFinal(emailsToEncrypt.getBytes(StandardCharsets.UTF_8));
+                String encryptedToken = Base64.getUrlEncoder().withoutPadding().encodeToString(encryptedBytes);
+
+                // Include the key in the token
+                String keyString = Base64.getUrlEncoder().withoutPadding().encodeToString(secretKey.getEncoded());
+                encryptedToken = keyString + ":" + encryptedToken;
+
+                return encryptedToken;
+        }
+
+        public String[] decryptTokens(String encryptedToken) throws Exception {
+                // Split the key and encrypted data
+                String[] parts = encryptedToken.split(":");
+                String keyString = parts[0];
+                String encryptedEmails = parts[1];
+
+                // Decode the key
+                byte[] keyBytes = Base64.getUrlDecoder().decode(keyString);
+                SecretKey secretKey = new SecretKeySpec(keyBytes, AES_ALGORITHM);
+
+                // Decrypt using the key
+                Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
+                cipher.init(Cipher.DECRYPT_MODE, secretKey);
+
+                byte[] decryptedBytes = cipher.doFinal(Base64.getUrlDecoder().decode(encryptedEmails));
+                String decryptedEmails = new String(decryptedBytes, StandardCharsets.UTF_8);
+
+                // Split decrypted emails based on delimiter
+                String[] decryptedEmailArray = decryptedEmails.split(":");
+
+                if (decryptedEmailArray.length != 2) {
+                        throw new IllegalArgumentException("Invalid encrypted token");
+                }
+
+                return decryptedEmailArray;
+        }
+
         public void sendPasswordAuthenticationEmail(String email) throws Exception {
                 try {
                         User user = userRepository.findByEmail(email)
@@ -359,5 +400,103 @@ public class AuthenticationService {
                         }
                 }
                 return null;
+        }
+
+        public void sendPasswordRecoveryEmail(String email) throws Exception {
+                User user = userRepository.findByEmail(email)
+                                .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
+                Integer resetCount = user.getPasswordResetRequests();
+                if (resetCount == null) {
+                        resetCount = 1;
+                }
+                user.setPasswordResetRequests(resetCount);
+                resetCount = user.getPasswordResetRequests();
+
+                if (resetCount <= 3) {
+                        String encryptedEmailToken = encryptEmail(email);
+
+                        String emailContent = "<html>"
+                                        + "<body style='background-color: black; color: white; font-family: Arial, sans-serif;'>"
+                                        + "<div style='text-align: center; padding: 20px;'>"
+                                        + "<img src='cid:logoIcon' alt='Popflix Logo' style='max-width: 200px;' />"
+                                        + "<h1>Password Reset Request</h1>"
+                                        + "<p>Dear user,</p>"
+                                        + "<p>To reset your password, click <a href='http:/localhost:3000/reset-password/"
+                                        + encryptedEmailToken + "' style='color: white;'>here</a>.</p>"
+                                        + "<p>If you didn't authorize this request, kindly ignore this email.</p>"
+                                        + "<p>Thanks for your support!<br/>The POPFLIX team</p>"
+                                        + "</div>"
+                                        + "</body>"
+                                        + "</html>";
+
+                        emailService.sendEmail(email, "Password Reset Request", emailContent);
+
+                        user.setPasswordResetRequestDate(new Date());
+                        resetCount += 1;
+                        user.setPasswordResetRequests(resetCount);
+                        userRepository.save(user);
+                } else {
+                        throw new TooManyRequestsException("Too many requests, please try again later.");
+                }
+        }
+
+        public void resetUserPwd(String encryptedEmail, String newPassword) throws Exception {
+                String userEmail = decryptToken(encryptedEmail);
+                User user = userRepository.findByEmail(userEmail)
+                                .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
+
+                Boolean isExpired = isAuthLinkExpired(user.getPasswordResetRequestDate());
+
+                if (!isExpired) {
+                        var encodedPassword = passwordEncoder.encode(newPassword);
+                        user.setPassword(encodedPassword);
+                        userRepository.save(user);
+                } else {
+                        throw new TokenExpiredException("This link is no longer valid, please try again.");
+                }
+        }
+
+        public void sendRecoveryEmail(String currentEmail, String newEmail) throws Exception {
+                User user = userRepository.findByEmail(currentEmail)
+                                .orElseThrow(() -> new UsernameNotFoundException("Email Not Found"));
+
+                Integer resetCount = user.getEmailResetRequests();
+                if (resetCount == null) {
+                        resetCount = 1;
+                }
+                user.setEmailResetRequests(resetCount);
+                resetCount = user.getEmailResetRequests();
+
+                if (resetCount <= 3) {
+                        String encryptedEmailToken = encryptEmails(currentEmail, newEmail);
+
+                        String emailContent = "<html>"
+                                        + "<body style='background-color: black; color: white; font-family: Arial, sans-serif;'>"
+                                        + "<div style='text-align: center; padding: 20px;'>"
+                                        + "<img src='cid:logoIcon' alt='Popflix Logo' style='max-width: 200px;' />"
+                                        + "<h1>Email Change Request</h1>"
+                                        + "<p>Dear user,</p>"
+                                        + "<p>To reset your email, click <a href='http:/localhost:3000/reset-email/"
+                                        + encryptedEmailToken + "' style='color: white;'>here</a>.</p>"
+                                        + "<p>If you didn't authorize this request, kindly ignore this email.</p>"
+                                        + "<p>Thanks for your support!<br/>The POPFLIX team</p>"
+                                        + "</div>"
+                                        + "</body>"
+                                        + "</html>";
+
+                        emailService.sendEmail(currentEmail, "Email Change Request", emailContent);
+
+                        user.setEmailResetRequestDate(new Date());
+                        resetCount += 1;
+                        user.setEmailResetRequests(resetCount);
+                        userRepository.save(user);
+                } else {
+                        throw new TooManyRequestsException("Too many requests, please try again later.");
+                }
+        }
+
+        public void updateEmail(String token) throws Exception {
+                String[] decryptedEmail = decryptTokens(token);
+                System.out.println(decryptedEmail);
         }
 }

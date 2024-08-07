@@ -38,6 +38,8 @@ public class User implements UserDetails {
     private Date accountAuthRequestDate;
     private Integer passwordResetRequests;
     private Date passwordResetRequestDate;
+    private Integer emailResetRequests;
+    private Date emailResetRequestDate;
     private Date lastLoginTime;
     private List<MovieCard> watchList;
     private List<MovieCard> favouriteMoviesList;

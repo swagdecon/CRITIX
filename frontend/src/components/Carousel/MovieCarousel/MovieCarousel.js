@@ -30,7 +30,7 @@ function MovieCarousel({ title, movies, endpoint, breakpoints }) {
     initialSlide: 0,
     responsive: breakpoints
   };
-  console.log(movies)
+
   return (
     <div className={MovieCarouselStyle["carousel-parent"]}>
       <div className={MovieCarouselStyle["carousel-wrapper"]}>

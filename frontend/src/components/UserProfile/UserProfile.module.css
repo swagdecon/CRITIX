@@ -89,17 +89,12 @@
         cursor: pointer;
     }
     
-    
-    input[type="file"] {
-        display: none;
-    }
         .profile-names {
             display: flex;
             flex-direction: column;
             justify-content: center;
-            color: var(--primary-color);
-            background-color: var(--primary-bg);
-            padding: 10px 30px;
+            background-color: black;
+            padding: 2px 30px;
             border-radius: 0 50px 50px 0;
             transform: translateX(-10px);
         }
@@ -275,21 +270,36 @@
         margin: 0;
     }
     .GridContainer {
-        align-items: center;
         display: grid;
+        grid-template-columns: 1fr 1fr; 
+        gap: 10px; 
         margin-top: 5%;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(3, auto); 
         width: 90%;
     }
-    .GridItem:first-child {
-        grid-column: span 2;
-    }
+
     .GridItem {
         padding: 10px;
         border-radius: 5px;
         justify-content: center;
-        display: flex;
+        grid-column: span 1;
+    }
+    .SubmitInfo {
+        padding: 2%;
+        width: 80%;
+        border-radius: 20px;
+        color: white;
+        text-align: center;
+        background-color: green;
+    }
+    .RedirectResetPwd {
+        padding-top: 5%;
+        color: white;
+        width: 100%;
+        text-align: center;        
+    }
+    
+    .RedirectPwdLink, .redirectPwdLink:hover {
+        color: #0096ff;
     }
 /* ------------ media queries */
 

@@ -20,6 +20,7 @@ import ConfirmEmailForPwdReset from "./views/SendResetPwdEmail.js";
 import ResetPassword from "./views/ResetPassword.js";
 import AccountVerification from "./views/AccountVerification.js"
 import WatchList from "./views/Watchlist.js";
+import ResetEmail from "./views/ResetEmail.js"
 export default function App() {
   return (
     <Router>
@@ -57,6 +58,7 @@ export default function App() {
         <Route path="/person/:id" element={<PrivateRoute><IndPerson /></PrivateRoute>} />
         <Route path="/forgot-password" element={<ConfirmEmailForPwdReset />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/reset-email/:id" element={<ResetEmail />} />
         <Route path="/activate-account/:token" element={<AccountVerification />} />
         <Route path="/403" element={<Error403 />} />
         <Route path="*" element={<Error404 />} />

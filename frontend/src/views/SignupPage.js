@@ -8,7 +8,7 @@ import SignUpPlayer from "../components/Signup/SignUpVideo.js";
 import SignUpFunctionality from "../components/Signup/SignupLogic.js";
 import SignUpStyles from "../components/Login/login.module.css";
 
-export default function SignUp() {
+export default function Signup() {
   return (
     <div>
       <div id={SignUpStyles.left}>

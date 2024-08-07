@@ -10,9 +10,12 @@ import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
@@ -24,7 +27,6 @@ import com.popflix.config.customExceptions.TooManyRequestsException;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
 import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
 import com.popflix.config.customExceptions.UserEmailNotAuthenticated;
-import com.popflix.service.PasswordService;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -39,7 +41,6 @@ import lombok.RequiredArgsConstructor;
 public class AuthenticationController {
 
         private final AuthenticationService authService;
-        private final PasswordService passwordService;
 
         Dotenv dotenv = Dotenv.load();
         String recaptchaSecretKey = dotenv.get("RECAPTCHA_SECRET_KEY");
@@ -160,7 +161,7 @@ public class AuthenticationController {
         public ResponseEntity<String> sendPasswordRecoveryEmail(@RequestBody String email) {
                 try {
                         if (authService.authenticateExistingEmail(email)) {
-                                passwordService.sendPasswordRecoveryEmail(email);
+                                authService.sendPasswordRecoveryEmail(email);
                                 return ResponseEntity.ok("Password recovery email sent successfully.");
                         } else {
                                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email not found");
@@ -181,7 +182,7 @@ public class AuthenticationController {
                 try {
                         String encrypedEmail = requestBody.get("emaiL");
                         String newPassword = requestBody.get("password");
-                        passwordService.resetUserPwd(encrypedEmail, newPassword);
+                        authService.resetUserPwd(encrypedEmail, newPassword);
                         return ResponseEntity.ok("Password successfully updated.");
                 } catch (TokenExpiredException e) {
                         return ResponseEntity.status(HttpStatus.GONE)
@@ -189,6 +190,37 @@ public class AuthenticationController {
                 } catch (Exception e) {
                         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                                         .body("Something went wrong, please try again.");
+                }
+        }
+
+        @PostMapping("/send-reset-email-request")
+        public ResponseEntity<String> updateEmail(String newEmail, @RequestHeader("Authorization") String accessToken)
+                        throws Exception {
+                String currentEmail = authService.getUserDetails(accessToken).getEmail();
+
+                // If user tries to update their new email to the same email, return an error
+                if (currentEmail == newEmail) {
+                        return new ResponseEntity<>(HttpStatus.IM_USED);
+                } else {
+                        try {
+                                authService.sendRecoveryEmail(currentEmail, newEmail);
+                                return new ResponseEntity<>(HttpStatus.OK);
+                        } catch (Exception e) {
+                                System.out.println(e);
+                                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                        }
+                }
+        }
+
+        @GetMapping("/reset-email/:token")
+        public ResponseEntity<String> updateEmail(@RequestParam String token)
+                        throws Exception {
+
+                try {
+                        authService.updateEmail(token);
+                        return new ResponseEntity<>(HttpStatus.OK);
+                } catch (Exception e) {
+                        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }
         }
 }

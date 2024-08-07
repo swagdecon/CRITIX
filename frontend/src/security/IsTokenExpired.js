@@ -1,4 +1,4 @@
-import jwt_decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import CookieManager from "./CookieManager";
 import Logout from "./Logout";
 let refreshPromise = null;
@@ -39,7 +39,7 @@ export default function isTokenExpired() {
       return reject("No token found"); // Reject immediately if no token is found
     }
 
-    const decodedToken = jwt_decode(token);
+    const decodedToken = jwtDecode(token);
     const currentTime = Date.now() / 1000;
 
     if (decodedToken.exp >= currentTime) {

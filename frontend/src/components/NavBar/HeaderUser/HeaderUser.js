@@ -4,7 +4,7 @@ import Logout from "../../../security/Logout";
 import { useNavigate, Link } from "react-router-dom";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import jwt_decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import CookieManager from "../../../security/CookieManager";
 import PropTypes from "prop-types";
 
@@ -28,7 +28,7 @@ const HeaderUser = ({ avatar }) => {
   };
 
   const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
-  const decodedToken = useMemo(() => jwt_decode(token), [token]);
+  const decodedToken = useMemo(() => jwtDecode(token), [token]);
   const firstName = decodedToken.firstName
   return (
     <div className={userStyle.UserProfile}>

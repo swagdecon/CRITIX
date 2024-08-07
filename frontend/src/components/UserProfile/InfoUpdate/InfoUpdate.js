@@ -1,21 +1,23 @@
 import React, { useState, useMemo } from "react";
 import { ProfanityLogic } from "../../Shared/Shared.js"
+import { sendData } from "../../../security/Data.js";
 import Filter from "bad-words";
 import UserStyle from "../UserProfile.module.css"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { reviewInputStyles } from "../../Shared/SharedMUI.js"
-const UPDATE_USER_DETAILS_ENDPOINT = process.env.REACT_APP_UPDATE_USER_DETAILS_ENDPOINT
+import { Link } from "react-router-dom";
+const UPDATE_EMAIL_ENDPOINT = process.env.REACT_APP_UPDATE_EMAIL_ENDPOINT
+
 export default function InfoUpdate() {
     const [fieldMsg, setFieldMsg] = useState(null);
     const [email, setEmail] = useState("");
-    const [emailError, setEmailError] = useState("");
-    const [password, setPassword] = useState("");
-    const [passwordError, setPasswordError] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [confirmPasswordError, setConfirmPasswordError] = useState("");
+    const [emailError, setEmailError] = useState(null);
+    const [confirmEmail, setConfirmEmail] = useState("");
+    const [confirmEmailError, setConfirmEmailError] = useState(null);
+
+
     const emailPattern = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$";
-    const passwordPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,20}/;
 
     const filter = useMemo(() => new Filter(), []);
 
@@ -30,18 +32,12 @@ export default function InfoUpdate() {
     }
     function handleEmailChange(e) {
         setEmail(e.target.value);
-        setEmailError(e.target.value ? '' : 'Email is required');
+        setEmailError(e.target.value ? null : 'New Email is required');
     }
 
-    function handlePasswordChange(e) {
-        const newPassword = e.target.value;
-        setPassword(newPassword);
-        setPasswordError(passwordPattern.test(newPassword) ? '' : 'Password must be 7-20 characters long, with at least one digit, one lowercase letter, and one uppercase letter');
-    }
-
-    function handleConfirmPasswordChange(e) {
-        setConfirmPassword(e.target.value);
-        setConfirmPasswordError(e.target.value === password ? '' : 'Passwords do not match');
+    function handleConfirmEmailChange(e) {
+        setConfirmEmail(e.target.value);
+        setConfirmEmailError(e.target.value === email ? null : 'New Emails do not match');
     }
 
     async function handleSubmit(e) {
@@ -50,29 +46,21 @@ export default function InfoUpdate() {
 
         // Trigger validation for all fields
         handleEmailChange({ target: { value: email } });
-        handlePasswordChange({ target: { value: password } });
-        handleConfirmPasswordChange({ target: { value: confirmPassword } });
+        handleConfirmEmailChange({ target: { value: confirmEmail } });
+
 
         // Check for errors
-        if (emailError || passwordError || confirmPasswordError) {
+        if (emailError || confirmEmailError) {
             alert('Please fix the errors in the form');
             return;
         }
 
         if (!ProfanityLogic(hasProfanity)) {
-            const userData = { email, password };
-            const response = await fetch(
-                UPDATE_USER_DETAILS_ENDPOINT,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(userData),
-                }
-            );
+            const response = await sendData(UPDATE_EMAIL_ENDPOINT, email);
             if (response.ok) {
-                setFieldMsg("New Details Saved, If you have requested a password change, please reset it through the link we sent you.")
+                setFieldMsg("Please reset your email through the link we sent your current email address.")
+            } else {
+                console.error(response)
             }
         }
     }
@@ -80,46 +68,41 @@ export default function InfoUpdate() {
         <div className={UserStyle.UserSettings}>
             <div className={UserStyle.UserSettingsBox}>
                 <h2 className={UserStyle.Title}>General Information</h2>
-                <div className={UserStyle.SubmitInfo}>{fieldMsg}</div>
-                <form className={UserStyle.UpdateInfoForm} onSubmit={handleSubmit}>
+                {fieldMsg ?
+                    <div className={UserStyle.SubmitInfo}>{fieldMsg}</div>
+                    : null}
+                <form className={UserStyle.UpdateInfoForm}>
                     <div className={UserStyle.GridContainer}>
                         <div className={UserStyle.GridItem}>
                             <TextField
-                                label="Email"
+                                label="New Email"
                                 value={email}
                                 onChange={handleEmailChange}
                                 pattern={emailPattern}
-                                autoComplete="on"
-                                error={emailError}
+                                error={emailError !== null ? true : false}
                                 helperText={emailError}
                                 {...commonTextFieldProps}
-                            /></div>
+                            />
+                        </div>
                         <div className={UserStyle.GridItem}>
                             <TextField
-                                label="Password"
-                                value={password}
-                                onChange={handlePasswordChange}
-                                pattern={passwordPattern.toString().slice(1, -1)}
-                                error={passwordError}
-                                helperText={passwordError}
-                                {...commonTextFieldProps}
-                            /></div>
-                        <div className={UserStyle.GridItem}>
-                            <TextField
-                                label="Confirm Password"
-                                value={confirmPassword}
-                                onChange={handleConfirmPasswordChange}
-                                pattern={passwordPattern.toString().slice(1, -1)}
-                                error={confirmPasswordError}
-                                helperText={confirmPasswordError}
+                                label="Confirm New Email"
+                                value={confirmEmail}
+                                onChange={handleConfirmEmailChange}
+                                pattern={emailPattern}
+                                error={confirmEmailError === null ? false : true}
+                                helperText={confirmEmailError}
                                 {...commonTextFieldProps}
                             /></div>
                     </div>
                     <div className={UserStyle.BtnWrapper}>
-                        <Button fullWidth sx={{ width: "50%" }} variant="contained">Confirm</Button>
+                        <Button fullWidth sx={{ width: "50%" }} onClick={handleSubmit} variant="contained">Confirm</Button>
                     </div>
-                </form>
-            </div>
+                </form >
+                <div className={UserStyle.RedirectResetPwd}>
+                    If you need to reset your password, please click <Link className={UserStyle.RedirectPwdLink} to="/forgot-password">here</Link>
+                </div >
+            </div >
         </div>
     )
 }

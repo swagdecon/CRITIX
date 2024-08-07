@@ -54,7 +54,7 @@ const ImgUpload = ({ onChange, src }) => {
                 borderRadius={125}
                 className={UserStyle.AvatarEditor}
                 rotate={0}
-                color={[23, 23, 23]}
+                color={[0, 0, 0]}
                 crossOrigin="anonymous"
                 onImageReady={() => setEditor(editorRef.current)}
             />

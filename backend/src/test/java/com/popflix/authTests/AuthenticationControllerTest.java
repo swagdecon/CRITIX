@@ -37,7 +37,6 @@ import com.popflix.auth.RegistrationResponse;
 import com.popflix.config.customExceptions.TooManyRequestsException;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
 import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
-import com.popflix.service.PasswordService;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -46,9 +45,6 @@ class AuthenticationControllerTest {
 
     @Mock
     private AuthenticationService service;
-
-    @Mock
-    private PasswordService passwordService;
 
     @Mock
     private HttpServletRequest httpRequest;
@@ -161,7 +157,7 @@ class AuthenticationControllerTest {
     public void test_valid_token() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         AuthenticationService authService = mock(AuthenticationService.class);
-        AuthenticationController controller = new AuthenticationController(authService, null);
+        AuthenticationController controller = new AuthenticationController(authService);
         String authHeader = "valid_token";
 
         when(request.getHeader("Authorization")).thenReturn(authHeader);
@@ -176,7 +172,7 @@ class AuthenticationControllerTest {
     public void test_invalid_token() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         AuthenticationService authService = mock(AuthenticationService.class);
-        AuthenticationController controller = new AuthenticationController(authService, null);
+        AuthenticationController controller = new AuthenticationController(authService);
         String authHeader = "invalid_token";
 
         when(request.getHeader("Authorization")).thenReturn(authHeader);
@@ -208,7 +204,7 @@ class AuthenticationControllerTest {
         when(response.body()).thenReturn(expectedResponse);
         when(client.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class))).thenReturn(response);
 
-        AuthenticationController authenticationController = new AuthenticationController(service, passwordService);
+        AuthenticationController authenticationController = new AuthenticationController(service);
         String actualResponse = authenticationController.authenticateRecaptchaToken(recaptchaRequest);
 
         assertEquals(stripWhitespace(expectedResponse), stripWhitespace(actualResponse));
@@ -286,8 +282,7 @@ class AuthenticationControllerTest {
     public void test_invalid_email_not_found() {
         String email = "invalid_email";
         AuthenticationService authService = mock(AuthenticationService.class);
-        PasswordService passwordService = mock(PasswordService.class);
-        AuthenticationController controller = new AuthenticationController(authService, passwordService);
+        AuthenticationController controller = new AuthenticationController(authService);
         when(authService.authenticateExistingEmail(email)).thenReturn(false);
 
         ResponseEntity<String> response = controller.sendPasswordRecoveryEmail(email);
@@ -295,16 +290,14 @@ class AuthenticationControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertEquals("Email not found", response.getBody());
         verify(authService).authenticateExistingEmail(email);
-        verifyNoInteractions(passwordService);
     }
 
     @Test
     public void test_too_many_requests() {
+        AuthenticationService authService = mock(AuthenticationService.class);
+
         // Arrange
         String email = "valid_email@example.com";
-        AuthenticationService authService = mock(AuthenticationService.class);
-        PasswordService passwordService = mock(PasswordService.class);
-        AuthenticationController controller = new AuthenticationController(authService, passwordService);
         when(authService.authenticateExistingEmail(email)).thenThrow(new TooManyRequestsException("Too many requests"));
 
         // Act
@@ -314,7 +307,6 @@ class AuthenticationControllerTest {
         assertEquals(HttpStatus.TOO_MANY_REQUESTS, response.getStatusCode());
         assertEquals("Too many requests", response.getBody());
         verify(authService).authenticateExistingEmail(email);
-        verifyNoInteractions(passwordService);
     }
 
     /// //////////////////////////////////////////////////////////////
@@ -323,13 +315,14 @@ class AuthenticationControllerTest {
 
     @Test
     public void test_resetPassword_validEmailAndPassword() {
+        AuthenticationService authService = mock(AuthenticationService.class);
         // Arrange
 
         String encryptedPwd = "valid_encrypted_email";
         String newPwd = "new_password";
 
         try {
-            passwordService.resetUserPwd(encryptedPwd, newPwd);
+            authService.resetUserPwd(encryptedPwd, newPwd);
         } catch (Exception e) {
             fail("An error occurred: " + e.getMessage());
         }

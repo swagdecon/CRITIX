@@ -1,18 +1,15 @@
 package com.popflix.controller;
 
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.popflix.auth.AuthenticationService;
 import com.popflix.model.User;
 import com.popflix.service.UserService;
@@ -101,12 +98,5 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-    // @GetMapping("/activity/reviews/{id}")
-    // public ResponseEntity<JSONArray>
-    // getReviewActivity(@RequestHeader("Authorization") String accessToken) throws
-    // Exception {
-    // JSONArray array = userService.getUserReviewActivity()
-    // }
 
 }

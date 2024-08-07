@@ -6,7 +6,7 @@ import MovieCreationOutlinedIcon from '@mui/icons-material/MovieCreationOutlined
 // import ReactTextCollapse from "react-text-collapse/dist/ReactTextCollapse";
 import Filter from "bad-words";
 import axios from "axios";
-import jwt_decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import IndReview from "./Review.module.css";
 // import IndMovieStyle from "../IndMovie/ind_movie.module.css";
 import ReviewSection from "./ReviewList/ReviewSection";
@@ -35,7 +35,7 @@ const CREATE_MOVIE_ENDPOINT = process.env.REACT_APP_CREATE_MOVIE_ENDPOINT;
 const MovieReviews = ({ reviews, movieId, movieTitle, placement }) => {
 
     let token = CookieManager.decryptCookie('accessToken');
-    const decodedToken = jwt_decode(token);
+    const decodedToken = jwtDecode(token);
     const firstName = decodedToken.firstName;
     const filter = useMemo(() => new Filter(), []);
     const [reviewRating, setReviewRating] = useState(0);

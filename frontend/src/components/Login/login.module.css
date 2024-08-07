@@ -172,6 +172,15 @@ h6 {
   height: 100%;
 }
 
+.reset-pwd {
+  color: white;
+}
+
+.reset-pwd:hover {
+color: #0096ff;
+transition: color 0.8s;
+}
+
 .resend-pwd-auth {
    padding: 5%;
    color: white;  

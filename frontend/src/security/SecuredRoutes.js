@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Navigate } from "react-router-dom";
-import jwt_decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import CookieManager from "./CookieManager";
 
 export default function PrivateRoute({ children }) {
@@ -11,7 +11,7 @@ export default function PrivateRoute({ children }) {
   const currentTime = Date.now() / 1000;
 
   try {
-    decodedToken = jwt_decode(accessToken);
+    decodedToken = jwtDecode(accessToken);
   } catch (e) {
     return <Navigate to="/403" />;
   }
