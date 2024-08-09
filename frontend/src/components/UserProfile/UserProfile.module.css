@@ -291,6 +291,16 @@
         text-align: center;
         background-color: green;
     }
+    .SubmitInfoErr {
+        padding: 2%;
+        width: 80%;
+        border-radius: 20px;
+        color: white;
+        text-align: center;
+        background-color: red;
+    }
+
+
     .RedirectResetPwd {
         padding-top: 5%;
         color: white;

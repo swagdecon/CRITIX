@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import verificationStyles from "../misc/ResetPassword.module.css";
+import verificationStyles from "../misc/ResetDetails.module.css";
 import LoginStyles from "../components/Login/login.module.css";
 const ACTIVATE_ACCOUNT_ENDPOINT = process.env.REACT_APP_ACTIVATE_ACCOUNT_ENDPOINT;
 

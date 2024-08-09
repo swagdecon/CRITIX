@@ -131,14 +131,14 @@ public class AuthenticationService {
 
                 String accessToken = authHeader.substring(7);
                 String userEmail = jwtService.extractUsername(accessToken);
-                var user = this.userRepository.findByEmail(userEmail).orElse(null);
+                var user = userRepository.findByEmail(userEmail).orElse(null);
 
                 return (user != null && jwtService.isTokenValid(accessToken, user));
         }
 
         public boolean authenticateExistingEmail(String email) {
                 String userEmail = email;
-                var user = this.userRepository.findByEmail(userEmail).orElse(null);
+                var user = userRepository.findByEmail(userEmail).orElse(null);
                 return user != null;
         }
 
@@ -201,51 +201,6 @@ public class AuthenticationService {
                 return encryptedToken;
         }
 
-        public String encryptEmails(String currentEmail, String newEmail) throws Exception {
-                SecretKey secretKey = generateSecretKey();
-                Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
-                cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-
-                // Concatenate emails with a delimiter
-                String emailsToEncrypt = currentEmail + ":" + newEmail;
-
-                byte[] encryptedBytes = cipher.doFinal(emailsToEncrypt.getBytes(StandardCharsets.UTF_8));
-                String encryptedToken = Base64.getUrlEncoder().withoutPadding().encodeToString(encryptedBytes);
-
-                // Include the key in the token
-                String keyString = Base64.getUrlEncoder().withoutPadding().encodeToString(secretKey.getEncoded());
-                encryptedToken = keyString + ":" + encryptedToken;
-
-                return encryptedToken;
-        }
-
-        public String[] decryptTokens(String encryptedToken) throws Exception {
-                // Split the key and encrypted data
-                String[] parts = encryptedToken.split(":");
-                String keyString = parts[0];
-                String encryptedEmails = parts[1];
-
-                // Decode the key
-                byte[] keyBytes = Base64.getUrlDecoder().decode(keyString);
-                SecretKey secretKey = new SecretKeySpec(keyBytes, AES_ALGORITHM);
-
-                // Decrypt using the key
-                Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
-                cipher.init(Cipher.DECRYPT_MODE, secretKey);
-
-                byte[] decryptedBytes = cipher.doFinal(Base64.getUrlDecoder().decode(encryptedEmails));
-                String decryptedEmails = new String(decryptedBytes, StandardCharsets.UTF_8);
-
-                // Split decrypted emails based on delimiter
-                String[] decryptedEmailArray = decryptedEmails.split(":");
-
-                if (decryptedEmailArray.length != 2) {
-                        throw new IllegalArgumentException("Invalid encrypted token");
-                }
-
-                return decryptedEmailArray;
-        }
-
         public void sendPasswordAuthenticationEmail(String email) throws Exception {
                 try {
                         User user = userRepository.findByEmail(email)
@@ -292,10 +247,11 @@ public class AuthenticationService {
         public void resetAuthLinkRetryCount() {
                 try {
                         // Find users with reset requests
-                        List<User> users = this.userRepository.findUsersWithResetRequests();
+                        List<User> users = userRepository.findUsersWithResetRequests();
                         // Reset password retry count for each user
                         for (User user : users) {
                                 user.setPasswordResetRequests(0);
+                                user.setEmailResetRequests(0);
                                 userRepository.save(user);
                         }
                 } catch (Exception e) {
@@ -307,7 +263,7 @@ public class AuthenticationService {
                 try {
                         String accessToken = authHeader.substring(7);
                         String userEmail = jwtService.extractUsername(accessToken);
-                        var user = this.userRepository.findByEmail(userEmail).orElse(null);
+                        var user = userRepository.findByEmail(userEmail).orElse(null);
 
                         return user;
                 } catch (Exception e) {
@@ -372,7 +328,7 @@ public class AuthenticationService {
                 userEmail = jwtService.extractUsername(refreshToken);
 
                 if (userEmail != null) {
-                        var user = this.userRepository.findByEmail(userEmail)
+                        var user = userRepository.findByEmail(userEmail)
                                         .orElseThrow();
 
                         if (jwtService.isTokenValid(refreshToken, user)) {
@@ -456,7 +412,7 @@ public class AuthenticationService {
                 }
         }
 
-        public void sendRecoveryEmail(String currentEmail, String newEmail) throws Exception {
+        public void sendRecoveryEmail(String currentEmail) throws Exception {
                 User user = userRepository.findByEmail(currentEmail)
                                 .orElseThrow(() -> new UsernameNotFoundException("Email Not Found"));
 
@@ -468,7 +424,7 @@ public class AuthenticationService {
                 resetCount = user.getEmailResetRequests();
 
                 if (resetCount <= 3) {
-                        String encryptedEmailToken = encryptEmails(currentEmail, newEmail);
+                        String encryptedEmailToken = encryptEmail(currentEmail);
 
                         String emailContent = "<html>"
                                         + "<body style='background-color: black; color: white; font-family: Arial, sans-serif;'>"
@@ -495,8 +451,20 @@ public class AuthenticationService {
                 }
         }
 
-        public void updateEmail(String token) throws Exception {
-                String[] decryptedEmail = decryptTokens(token);
-                System.out.println(decryptedEmail);
+        public void updateEmail(String currentEmail, String newEmail) throws Exception {
+                String currentUserEmail = decryptToken(currentEmail);
+                if (currentUserEmail == newEmail) {
+                        throw new Error("New User Email cannot be existing email");
+                }
+
+                if (currentEmail != null && newEmail != null) {
+                        User user = userRepository.findByEmail(currentUserEmail)
+                                        .orElseThrow(() -> new UsernameNotFoundException(
+                                                        "Email or Password Not Found"));
+                        user.setEmail(newEmail);
+                        userRepository.save(user);
+                } else {
+                        throw new Error("Something went wrong with updating the users email address");
+                }
         }
 }

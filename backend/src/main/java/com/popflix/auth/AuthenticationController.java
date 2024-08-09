@@ -5,6 +5,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -15,8 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -27,8 +29,7 @@ import com.popflix.config.customExceptions.TooManyRequestsException;
 import com.popflix.config.customExceptions.UserAlreadyExistsException;
 import com.popflix.config.customExceptions.UserAlreadyLoggedInException;
 import com.popflix.config.customExceptions.UserEmailNotAuthenticated;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -194,30 +195,26 @@ public class AuthenticationController {
         }
 
         @PostMapping("/send-reset-email-request")
-        public ResponseEntity<String> updateEmail(String newEmail, @RequestHeader("Authorization") String accessToken)
+        public ResponseEntity<String> resetEmailRequest(@RequestHeader("Authorization") String accessToken)
                         throws Exception {
                 String currentEmail = authService.getUserDetails(accessToken).getEmail();
 
-                // If user tries to update their new email to the same email, return an error
-                if (currentEmail == newEmail) {
-                        return new ResponseEntity<>(HttpStatus.IM_USED);
-                } else {
-                        try {
-                                authService.sendRecoveryEmail(currentEmail, newEmail);
-                                return new ResponseEntity<>(HttpStatus.OK);
-                        } catch (Exception e) {
-                                System.out.println(e);
-                                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                        }
+                try {
+                        authService.sendRecoveryEmail(currentEmail);
+                        return new ResponseEntity<>(HttpStatus.OK);
+                } catch (Exception e) {
+                        return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
                 }
+
         }
 
-        @GetMapping("/reset-email/:token")
-        public ResponseEntity<String> updateEmail(@RequestParam String token)
+        @PostMapping("/reset-email/")
+        public ResponseEntity<String> updateEmail(@RequestBody Map<String, String> requestBody)
                         throws Exception {
-
+                String currentEmail = requestBody.get("currentEmail");
+                String newEmailToken = requestBody.get("newEmail");
                 try {
-                        authService.updateEmail(token);
+                        authService.updateEmail(currentEmail, newEmailToken);
                         return new ResponseEntity<>(HttpStatus.OK);
                 } catch (Exception e) {
                         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

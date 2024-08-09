@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react"
-import resetPwdStyles from "../misc/ResetPassword.module.css"
+import resetPwdStyles from "../misc/ResetDetails.module.css"
 import LoginStyles from "../components/Login/login.module.css"
 const SEND_RESET_PWD_ENDPOINT = process.env.REACT_APP_SEND_PWD_RESET_ENDPOINT;
 
