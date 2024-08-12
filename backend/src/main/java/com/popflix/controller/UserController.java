@@ -14,6 +14,8 @@ import com.popflix.auth.AuthenticationService;
 import com.popflix.model.User;
 import com.popflix.service.UserService;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 @RequestMapping("/user")
 @RestController
 public class UserController {
@@ -21,6 +23,9 @@ public class UserController {
     private AuthenticationService authenticationService;
     @Autowired
     private UserService userService;
+    Dotenv dotenv = Dotenv.load();
+
+    private String defaultAvatar = dotenv.get("DEFAULT_AVATAR_URL");
 
     @GetMapping("/")
     public ResponseEntity<User> singleUser(@RequestHeader("Authorization") String accessToken)
@@ -38,11 +43,10 @@ public class UserController {
     public ResponseEntity<String> singleAvatar(@RequestHeader("Authorization") String accessToken)
             throws Exception {
         String avatarPic = authenticationService.getUserDetails(accessToken).getAvatar();
-
         if (avatarPic != null) {
             return new ResponseEntity<>(avatarPic, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(defaultAvatar, HttpStatus.OK);
         }
     }
 

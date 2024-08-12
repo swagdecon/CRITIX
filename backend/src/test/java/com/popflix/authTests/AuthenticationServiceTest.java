@@ -255,7 +255,7 @@ public class AuthenticationServiceTest {
                 User mockUser = new User();
                 mockUser.setAccountActive(true);
                 mockUser.setLoggedIn(false);
-                mockUser.setLastLoginTime(null);
+                mockUser.getUserAuth().setLastLoginTime(null);
                 when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(mockUser));
 
                 when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
@@ -271,7 +271,7 @@ public class AuthenticationServiceTest {
                 assertEquals("access_token", response.getAccessToken());
                 assertEquals("refresh_token", response.getRefreshToken());
 
-                assertNotNull(mockUser.getLastLoginTime());
+                assertNotNull(mockUser.getUserAuth().getLastLoginTime());
                 assertTrue(mockUser.getLoggedIn());
 
                 verify(userRepository, times(1)).save(mockUser);
@@ -282,7 +282,7 @@ public class AuthenticationServiceTest {
                 User mockUser = new User();
                 mockUser.setAccountActive(true);
                 mockUser.setLoggedIn(false);
-                mockUser.setLastLoginTime(null);
+                mockUser.getUserAuth().setLastLoginTime(null);
                 when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(mockUser));
 
                 when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
@@ -295,7 +295,7 @@ public class AuthenticationServiceTest {
                 AuthenticationRequest request = new AuthenticationRequest("test@example.com", "password");
                 authenticationService.authenticate(request, null);
 
-                assertNotNull(mockUser.getLastLoginTime());
+                assertNotNull(mockUser.getUserAuth().getLastLoginTime());
                 assertTrue(mockUser.getLoggedIn());
 
                 verify(userRepository, times(1)).save(mockUser);
@@ -486,7 +486,7 @@ public class AuthenticationServiceTest {
                                 passwordEncoder, jwtService, authenticationManager, emailService);
 
                 User user = new User();
-                user.setAccountAuthRequestDate(new Date(System.currentTimeMillis() - (29 * 60 * 1000)));
+                user.getUserAuth().setAccountAuthRequestDate(new Date(System.currentTimeMillis() - (29 * 60 * 1000)));
                 when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
 
                 authenticationService.activateAccount(encryptedEmail);
@@ -506,7 +506,7 @@ public class AuthenticationServiceTest {
                                 passwordEncoder, jwtService, authenticationManager, emailService);
 
                 User user = new User();
-                user.setAccountAuthRequestDate(new Date(System.currentTimeMillis() - (31 * 60 * 1000)));
+                user.getUserAuth().setAccountAuthRequestDate(new Date(System.currentTimeMillis() - (31 * 60 * 1000)));
                 when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
 
                 assertThrows(TokenExpiredException.class, () -> authenticationService.activateAccount(encryptedEmail));
@@ -560,9 +560,9 @@ public class AuthenticationServiceTest {
         public void test_resetAuthLinkRetryCount_Success() {
                 List<User> usersWithResetRequests = new ArrayList<>();
                 User user1 = new User();
-                user1.setPasswordResetRequests(3);
+                user1.getUserAuth().setPasswordResetRequests(3);
                 User user2 = new User();
-                user2.setPasswordResetRequests(2);
+                user2.getUserAuth().setPasswordResetRequests(2);
                 usersWithResetRequests.add(user1);
                 usersWithResetRequests.add(user2);
                 Mockito.when(userRepository.findUsersWithResetRequests()).thenReturn(usersWithResetRequests);
@@ -573,8 +573,8 @@ public class AuthenticationServiceTest {
                 verify(userRepository, times(2)).save(userCaptor.capture());
 
                 List<User> capturedUsers = userCaptor.getAllValues();
-                assertEquals(0, capturedUsers.get(0).getPasswordResetRequests());
-                assertEquals(0, capturedUsers.get(1).getPasswordResetRequests());
+                assertEquals(0, capturedUsers.get(0).getUserAuth().getPasswordResetRequests());
+                assertEquals(0, capturedUsers.get(1).getUserAuth().getPasswordResetRequests());
         }
 
         @Test
@@ -607,17 +607,17 @@ public class AuthenticationServiceTest {
 
                 List<User> usersWithResetRequests = new ArrayList<>();
                 User user1 = new User();
-                user1.setPasswordResetRequests(3);
+                user1.getUserAuth().setPasswordResetRequests(3);
 
                 User user2 = new User();
-                user2.setPasswordResetRequests(2);
+                user2.getUserAuth().setPasswordResetRequests(2);
 
                 usersWithResetRequests.add(user1);
                 usersWithResetRequests.add(user2);
 
                 List<User> allUsers = new ArrayList<>();
                 User user3 = new User();
-                user3.setPasswordResetRequests(1);
+                user3.getUserAuth().setPasswordResetRequests(1);
 
                 allUsers.add(user1);
                 allUsers.add(user2);
@@ -627,9 +627,9 @@ public class AuthenticationServiceTest {
 
                 authenticationService.resetAuthLinkRetryCount();
 
-                assertEquals(0, user1.getPasswordResetRequests());
-                assertEquals(0, user2.getPasswordResetRequests());
-                assertEquals(1, user3.getPasswordResetRequests());
+                assertEquals(0, user1.getUserAuth().getPasswordResetRequests());
+                assertEquals(0, user2.getUserAuth().getPasswordResetRequests());
+                assertEquals(1, user3.getUserAuth().getPasswordResetRequests());
         }
 
         ////////////////////////////////////////////////////////////////

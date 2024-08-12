@@ -8,7 +8,6 @@ import { jwtDecode } from "jwt-decode";
 import CookieManager from "../../../security/CookieManager";
 import PropTypes from "prop-types";
 
-const DEFAULT_ACTOR_IMAGE = process.env.REACT_APP_DEFAULT_ACTOR_IMAGE
 const HeaderUser = ({ avatar }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -36,7 +35,7 @@ const HeaderUser = ({ avatar }) => {
         < div className={userStyle.name}>{firstName}</div >
         <button className={userStyle.logout} aria-haspopup="true" onClick={handleClick}>
           <div className={userStyle.image}>
-            <img src={avatar ? avatar : DEFAULT_ACTOR_IMAGE} alt="user-profile-image" />
+            <img src={avatar} alt="user-profile-image" />
           </div>
         </button>
         <Menu

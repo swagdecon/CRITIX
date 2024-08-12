@@ -60,7 +60,7 @@ public class AuthenticationController {
                 } catch (ErrSendEmail e) {
                         return ResponseEntity.badRequest().body(e.getMessage());
                 } catch (Exception e) {
-                        System.out.println(e);
+                        System.out.println(e.getMessage());
                         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                                         .body("An error occurred during registration");
                 }
@@ -153,8 +153,7 @@ public class AuthenticationController {
                         return ResponseEntity.status(HttpStatus.GONE)
                                         .body(e.getMessage());
                 } catch (Exception e) {
-                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                        .body(e.getMessage());
+                        return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
                 }
         }
 

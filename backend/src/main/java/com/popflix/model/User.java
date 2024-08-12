@@ -1,15 +1,12 @@
 package com.popflix.model;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
@@ -30,17 +27,11 @@ public class User implements UserDetails {
     private String lastName;
     private String email;
     private String password;
-    private Boolean loggedIn = false;
+    private Boolean loggedIn;
     private String avatar;
     private String bannerPicture;
     private Boolean accountActive;
-    private Integer emailAuthRequests;
-    private Date accountAuthRequestDate;
-    private Integer passwordResetRequests;
-    private Date passwordResetRequestDate;
-    private Integer emailResetRequests;
-    private Date emailResetRequestDate;
-    private Date lastLoginTime;
+    private UserAuth userAuth;
     private List<MovieCard> watchList;
     private List<MovieCard> favouriteMoviesList;
 

@@ -37,6 +37,7 @@ public class ReviewService {
         review.setMovieId(movieId);
         review.setMovieTitle(movieTitle);
         review.setUserId(userId);
+        review.setAvatar(userRepository.findById(userId).get().getAvatar());
         review.setAuthor(author);
         review.setRating(reviewRating);
         review.setContent(reviewContent);
@@ -44,7 +45,7 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
-    public boolean doesUserIdExistsForMovie(Integer movieId, String userId) {
+    public boolean doesUserIdExistForMovie(Integer movieId, String userId) {
         List<Review> movieReviews = getAllMovieReviews(movieId);
         for (Review review : movieReviews) {
             if (review.getUserId().equals(userId)) {
@@ -56,12 +57,6 @@ public class ReviewService {
 
     public List<Review> getAllMovieReviews(Integer movieId) {
         List<Review> reviews = reviewRepository.findByMovieId(movieId);
-        for (Review review : reviews) {
-            User user = userRepository.findById(review.getUserId()).orElse(null);
-            if (user != null) {
-                review.setAvatar(user.getAvatar());
-            }
-        }
         return reviews;
     }
 
@@ -83,7 +78,6 @@ public class ReviewService {
         try {
             List<Review> movieReviews = getMovieUserReviews(movieId);
             if (movieReviews != null) {
-                // Assuming you have access to a MongoDBTemplate instance
                 Query query = new Query(Criteria.where("userId").is(userId));
                 mongoTemplate.remove(query, Review.class);
             } else {

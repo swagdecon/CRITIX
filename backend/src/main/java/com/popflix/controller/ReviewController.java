@@ -36,7 +36,7 @@ public class ReviewController {
                 String reviewContent = request.getContent();
                 String createdAt = request.getCreatedDate();
 
-                if (reviewService.doesUserIdExistsForMovie(movieId, userId)) {
+                if (reviewService.doesUserIdExistForMovie(movieId, userId)) {
                         String errorMessage = "User already submitted a review for this movie.";
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
                 } else {
@@ -68,7 +68,7 @@ public class ReviewController {
                         @RequestHeader("Authorization") String accessToken) throws Exception {
                 String userId = authenticationService.getUserDetails(accessToken).getId();
 
-                if (reviewService.doesUserIdExistsForMovie(movieId, userId)) {
+                if (reviewService.doesUserIdExistForMovie(movieId, userId)) {
                         reviewService.deleteMovieReview(movieId, userId);
                 } else {
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong");

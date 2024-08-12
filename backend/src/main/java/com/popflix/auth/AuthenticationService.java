@@ -5,10 +5,12 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,9 +31,11 @@ import com.popflix.model.Role;
 import com.popflix.model.Token;
 import com.popflix.model.TokenType;
 import com.popflix.model.User;
+import com.popflix.model.UserAuth;
 import com.popflix.repository.TokenRepository;
 import com.popflix.repository.UserRepository;
 import com.popflix.service.EmailService;
+
 import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -57,11 +62,21 @@ public class AuthenticationService {
                 if (userRepository.findByEmail(request.getEmail()).isPresent()) {
                         throw new UserAlreadyExistsException("A User With This Email Already Exists");
                 } else {
+                        UserAuth userAuth = UserAuth.builder()
+                                        .accountAuthRequestDate(new Date())
+                                        .emailAuthRequests(0)
+                                        .passwordResetRequests(0)
+                                        .passwordResetRequestDate(null)
+                                        .emailResetRequests(0)
+                                        .emailResetRequestDate(null)
+                                        .lastLoginTime(null)
+                                        .build();
 
                         var user = User.builder()
                                         .firstName(request.getFirstName())
                                         .lastName(request.getLastName())
                                         .email(request.getEmail())
+                                        .userAuth(userAuth)
                                         .password(passwordEncoder.encode(request.getPassword()))
                                         .accountActive(false)
                                         .avatar(DEFAULT_AVATAR_URL)
@@ -101,7 +116,7 @@ public class AuthenticationService {
                 if (user.getAccountActive()) {
                         Date lastLoginTime = new Date();
                         user.setLoggedIn(true);
-                        user.setLastLoginTime(lastLoginTime);
+                        user.getUserAuth().setLastLoginTime(lastLoginTime);
                         userRepository.save(user);
                         String firstName = user.getFirstName();
                         var extraClaims = new HashMap<String, Object>();
@@ -114,7 +129,7 @@ public class AuthenticationService {
                                                         request.getPassword()));
 
                         var accessToken = jwtService.generateToken(extraClaims, user);
-                        var refreshToken = jwtService.generateRefreshToken(user, user.getLastLoginTime());
+                        var refreshToken = jwtService.generateRefreshToken(user, user.getUserAuth().getLastLoginTime());
                         revokeAllUserTokens(user);
                         saveAccessToken(user, accessToken);
                         saveRefreshToken(user, refreshToken);
@@ -176,7 +191,7 @@ public class AuthenticationService {
                 String userEmail = decryptToken(encryptedEmail);
                 User user = userRepository.findByEmail(userEmail)
                                 .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
-                Boolean isExpired = isAuthLinkExpired(user.getAccountAuthRequestDate());
+                Boolean isExpired = isAuthLinkExpired(user.getUserAuth().getAccountAuthRequestDate());
 
                 if (!isExpired) {
                         user.setAccountActive(true);
@@ -206,13 +221,14 @@ public class AuthenticationService {
                         User user = userRepository.findByEmail(email)
                                         .orElseThrow(() -> new UsernameNotFoundException(
                                                         "Email or Password Not Found"));
-                        Integer emailCount = user.getEmailAuthRequests();
+                        Integer emailCount = user.getUserAuth().getEmailAuthRequests();
 
                         if (emailCount == null) {
                                 emailCount = 1;
                         }
-                        user.setEmailAuthRequests(emailCount);
-                        emailCount = user.getEmailAuthRequests();
+                        user.getUserAuth().setEmailAuthRequests(emailCount);
+
+                        emailCount = user.getUserAuth().getEmailAuthRequests();
 
                         if (emailCount <= 5) {
                                 String encryptedEmailToken = encryptEmail(email);
@@ -233,12 +249,13 @@ public class AuthenticationService {
 
                                 emailService.sendEmail(email, "Activate your account", emailContent);
                                 emailCount += 1;
-                                user.setAccountAuthRequestDate(new Date());
+                                user.getUserAuth().setAccountAuthRequestDate(new Date());
                                 userRepository.save(user);
                         } else {
                                 throw new TooManyRequestsException("Too many requests, please try again later.");
                         }
                 } catch (Exception e) {
+                        System.out.println(e);
                         throw new Exception("There was an error sending your account activation email.");
                 }
         }
@@ -250,8 +267,8 @@ public class AuthenticationService {
                         List<User> users = userRepository.findUsersWithResetRequests();
                         // Reset password retry count for each user
                         for (User user : users) {
-                                user.setPasswordResetRequests(0);
-                                user.setEmailResetRequests(0);
+                                user.getUserAuth().setPasswordResetRequests(0);
+                                user.getUserAuth().setEmailResetRequests(0);
                                 userRepository.save(user);
                         }
                 } catch (Exception e) {
@@ -339,7 +356,8 @@ public class AuthenticationService {
                                 extraClaims.put("userId", user.getId());
                                 var accessToken = jwtService.generateToken(extraClaims, user);
 
-                                var newRefreshToken = jwtService.generateRefreshToken(user, user.getLastLoginTime());
+                                var newRefreshToken = jwtService.generateRefreshToken(user,
+                                                user.getUserAuth().getLastLoginTime());
                                 saveAccessToken(user, accessToken);
                                 saveRefreshToken(user, newRefreshToken);
 
@@ -361,12 +379,12 @@ public class AuthenticationService {
         public void sendPasswordRecoveryEmail(String email) throws Exception {
                 User user = userRepository.findByEmail(email)
                                 .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
-                Integer resetCount = user.getPasswordResetRequests();
+                Integer resetCount = user.getUserAuth().getPasswordResetRequests();
                 if (resetCount == null) {
                         resetCount = 1;
                 }
-                user.setPasswordResetRequests(resetCount);
-                resetCount = user.getPasswordResetRequests();
+                user.getUserAuth().setPasswordResetRequests(resetCount);
+                resetCount = user.getUserAuth().getPasswordResetRequests();
 
                 if (resetCount <= 3) {
                         String encryptedEmailToken = encryptEmail(email);
@@ -387,9 +405,9 @@ public class AuthenticationService {
 
                         emailService.sendEmail(email, "Password Reset Request", emailContent);
 
-                        user.setPasswordResetRequestDate(new Date());
+                        user.getUserAuth().setPasswordResetRequestDate(new Date());
                         resetCount += 1;
-                        user.setPasswordResetRequests(resetCount);
+                        user.getUserAuth().setPasswordResetRequests(resetCount);
                         userRepository.save(user);
                 } else {
                         throw new TooManyRequestsException("Too many requests, please try again later.");
@@ -401,7 +419,7 @@ public class AuthenticationService {
                 User user = userRepository.findByEmail(userEmail)
                                 .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
 
-                Boolean isExpired = isAuthLinkExpired(user.getPasswordResetRequestDate());
+                Boolean isExpired = isAuthLinkExpired(user.getUserAuth().getPasswordResetRequestDate());
 
                 if (!isExpired) {
                         var encodedPassword = passwordEncoder.encode(newPassword);
@@ -416,12 +434,12 @@ public class AuthenticationService {
                 User user = userRepository.findByEmail(currentEmail)
                                 .orElseThrow(() -> new UsernameNotFoundException("Email Not Found"));
 
-                Integer resetCount = user.getEmailResetRequests();
+                Integer resetCount = user.getUserAuth().getEmailResetRequests();
                 if (resetCount == null) {
                         resetCount = 1;
                 }
-                user.setEmailResetRequests(resetCount);
-                resetCount = user.getEmailResetRequests();
+                user.getUserAuth().setEmailResetRequests(resetCount);
+                resetCount = user.getUserAuth().getEmailResetRequests();
 
                 if (resetCount <= 3) {
                         String encryptedEmailToken = encryptEmail(currentEmail);
@@ -442,9 +460,9 @@ public class AuthenticationService {
 
                         emailService.sendEmail(currentEmail, "Email Change Request", emailContent);
 
-                        user.setEmailResetRequestDate(new Date());
+                        user.getUserAuth().setEmailResetRequestDate(new Date());
                         resetCount += 1;
-                        user.setEmailResetRequests(resetCount);
+                        user.getUserAuth().setEmailResetRequests(resetCount);
                         userRepository.save(user);
                 } else {
                         throw new TooManyRequestsException("Too many requests, please try again later.");

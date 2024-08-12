@@ -39,8 +39,8 @@ export default function IndMovie() {
         await isTokenExpired();
         const [movies, reviewsData, recommendedMovies] = await Promise.all([
           sendData(id),
-          fetchData(`${getReviewEndpoint}${id} `),
-          fetchData(`${recommendedEndpoint}${id} `)
+          fetchData(`${getReviewEndpoint}${id}`),
+          fetchData(`${recommendedEndpoint}${id}`)
         ]);
         setMovie(await movies.json());
         setReviews(reviewsData)

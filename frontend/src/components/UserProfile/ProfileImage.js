@@ -9,10 +9,10 @@ import { validateImageURL } from '../Shared/Shared';
 
 const saveProfileImgEndpoint = process.env.REACT_APP_UPDATE_PROFILE_IMAGE;
 
-const ImgUpload = ({ onChange, src }) => {
-    const [editor, setEditor] = useState(null);
+const ImgUpload = ({ picture }) => {
     const editorRef = useRef(null);
     const [btn, setBtn] = useState("add");
+    const [avatar, setAvatar] = useState(picture)
 
     const handleAddClick = async () => {
         const url = window.prompt("Please enter the image URL:");
@@ -20,7 +20,7 @@ const ImgUpload = ({ onChange, src }) => {
             try {
                 const sanitizedUrl = new URL(url).href;
                 await validateImageURL(sanitizedUrl);
-                onChange(url);
+                setAvatar(sanitizedUrl)
                 setBtn("save");
             } catch (error) {
                 console.error(error);
@@ -28,18 +28,11 @@ const ImgUpload = ({ onChange, src }) => {
             }
         }
     };
-
     const onClickSave = async () => {
-        if (editor) {
-            const profilePic = editor.getImageScaledToCanvas().toDataURL();
-
-            const data = JSON.stringify(profilePic)
-
-
-            const response = await sendData(saveProfileImgEndpoint, data);
-            response.ok
-                ? window.alert('New Profile Picture Saved Successfully')
-                : window.alert('An Error Occurred, Please try again');
+        if (editorRef.current) {
+            const profilePicture = editorRef.current.getImageScaledToCanvas().toDataURL();
+            const response = await sendData(saveProfileImgEndpoint, { profilePic: profilePicture });
+            window.alert(response.ok ? 'New Profile Picture Saved Successfully' : 'An Error Occurred, Please try again');
         }
     };
 
@@ -47,7 +40,7 @@ const ImgUpload = ({ onChange, src }) => {
         <div className={UserStyle['img-container']}>
             <AvatarEditor
                 ref={editorRef}
-                image={src}
+                image={avatar}
                 width={150}
                 height={150}
                 scale={1}
@@ -56,7 +49,7 @@ const ImgUpload = ({ onChange, src }) => {
                 rotate={0}
                 color={[0, 0, 0]}
                 crossOrigin="anonymous"
-                onImageReady={() => setEditor(editorRef.current)}
+                onImageReady={() => setBtn("save")}
             />
             <label htmlFor="photo-upload" className={UserStyle['custom-file-upload']}>
                 {btn === "add" ? (
@@ -78,27 +71,8 @@ const ImgUpload = ({ onChange, src }) => {
         </div>
     );
 };
-
 export default function ProfilePicture({ avatar }) {
-    const [imageURL, setImageURL] = useState(() => {
-        try {
-            const parsedData = JSON.parse(avatar);
-            return parsedData;
-        } catch {
-            return avatar;
-        }
-    });
-
-    const photoUpload = (url) => {
-        setImageURL(url);
-    };
-
-    return (
-        <ImgUpload
-            onChange={photoUpload}
-            src={imageURL || avatar}
-        />
-    );
+    return <ImgUpload picture={avatar} />;
 }
 
 ProfilePicture.propTypes = {
@@ -106,6 +80,5 @@ ProfilePicture.propTypes = {
 }
 
 ImgUpload.propTypes = {
-    onChange: PropTypes.func.isRequired,
-    src: PropTypes.string.isRequired,
+    picture: PropTypes.string.isRequired,
 };

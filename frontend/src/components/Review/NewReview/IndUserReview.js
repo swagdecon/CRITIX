@@ -2,7 +2,6 @@ import TimeAgo from 'react-timeago'
 import React from "react";
 import PropTypes from "prop-types";
 import UserReviewStyle from "./UserReview.module.css"
-const DEFAULT_ACTOR_IMAGE = process.env.REACT_APP_DEFAULT_ACTOR_IMAGE
 
 function getColourClassName(rating) {
     if (rating >= 80) {
@@ -24,7 +23,7 @@ export default function IndUserReview({ avatar, movieTitle, createdDate, content
                 <div className={UserReviewStyle.ReviewInfoWrapper}>
                     <div className={UserReviewStyle.ReviewInfo}>
                         <div className={UserReviewStyle.ProfilePic}>
-                            <img src={avatar ? avatar : DEFAULT_ACTOR_IMAGE} alt="User Avatar" />
+                            <img src={avatar} alt="User Avatar" />
                         </div>
                         <div className={UserReviewStyle.Review}>
                             <div className={UserReviewStyle.ReviewHeader}>
