@@ -469,8 +469,8 @@ public class MovieService {
         .forEach(movieApi -> {
           MovieCard movieCard = new MovieCard();
           String posterUrl = TMDB_IMAGE_PREFIX + movieApi.getPosterPath();
-          boolean isInWatchlist = userRepository.doesWatchlistMovieExist(userId, movieCard.getMovieId());
-          boolean favouriteMovieAlreadyExists = userRepository.doesFavouriteMovieExist(userId, movieCard.getMovieId());
+          boolean isInWatchlist = userRepository.doesWatchlistMovieExist(userId, movieApi.getId());
+          boolean favouriteMovieAlreadyExists = userRepository.doesFavouriteMovieExist(userId, movieApi.getId());
           movieCard.setMovieId(movieApi.getId());
           movieCard.setPosterUrl(posterUrl);
           movieCard.setTitle(movieApi.getTitle());

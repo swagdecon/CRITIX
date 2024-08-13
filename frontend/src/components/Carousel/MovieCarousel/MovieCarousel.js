@@ -37,26 +37,48 @@ function MovieCarousel({ title, movies, endpoint, breakpoints }) {
         <div className={MovieCardStyle.titleWrapper}>
           <h3 className={`${Title["homepage-carousel"]} ${Title["movie-title"]}`}>{title}</h3>
         </div>
-        <MovieCardSlider {...settings}>
-          {movies.map((movie, i) => (
-            <div key={i}>
-              <Link to={`${endpoint}/${movie.id || movie.movieId}`}>
-                <MovieCard
-                  movieId={movie.id || movie.movieId}
-                  title={movie.title}
-                  posterUrl={movie.posterUrl}
-                  voteAverage={movie.voteAverage}
-                  genres={movie.genres}
-                  overview={movie.overview}
-                  actors={movie.actors}
-                  isSavedToWatchlist={movie.isSavedToWatchlist}
-                  isSavedToFavouriteMoviesList={movie.isSavedToFavouriteMoviesList}
-                  shareUrl={`${endpoint}movie/${movie.id}`}
-                />
-              </Link>
-            </div>
-          ))}
-        </MovieCardSlider>
+        {movies.length > 5 ?
+          <MovieCardSlider {...settings}>
+            {movies.map((movie, i) => (
+              <div key={i}>
+                <Link to={`${endpoint}/${movie.id || movie.movieId}`}>
+                  <MovieCard
+                    movieId={movie.id || movie.movieId}
+                    title={movie.title}
+                    posterUrl={movie.posterUrl}
+                    voteAverage={movie.voteAverage}
+                    genres={movie.genres}
+                    overview={movie.overview}
+                    actors={movie.actors}
+                    isSavedToWatchlist={movie.isSavedToWatchlist}
+                    isSavedToFavouriteMoviesList={movie.isSavedToFavouriteMoviesList}
+                    shareUrl={`${endpoint}movie/${movie.id}`}
+                  />
+                </Link>
+              </div>
+            ))}
+          </MovieCardSlider>
+          : <div className={MovieCarouselStyle.ShortList}>
+            {movies.map((movie, i) => (
+              <div key={i}>
+                <Link to={`${endpoint}/${movie.id || movie.movieId}`}>
+                  <MovieCard
+                    movieId={movie.id || movie.movieId}
+                    title={movie.title}
+                    posterUrl={movie.posterUrl}
+                    voteAverage={movie.voteAverage}
+                    genres={movie.genres}
+                    overview={movie.overview}
+                    actors={movie.actors}
+                    isSavedToWatchlist={movie.isSavedToWatchlist}
+                    isSavedToFavouriteMoviesList={movie.isSavedToFavouriteMoviesList}
+                    shareUrl={`${endpoint}movie/${movie.id}`}
+                  />
+                </Link>
+              </div>
+            ))}
+          </div>
+        }
       </div >
     </div>
   );

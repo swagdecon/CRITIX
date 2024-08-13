@@ -37,7 +37,6 @@ export default function UserProfile() {
             settings: {
                 slidesToShow: favouriteMovies?.length <= 5 ? favouriteMovies.length : 6,
                 infinite: favouriteMovies?.length <= 10 ? true : false,
-                dots: false
             }
         },
         {
@@ -76,6 +75,7 @@ export default function UserProfile() {
             }
         }
     ]
+
     let reviewsToDisplay = [];
     const startIdx = (currentPage - 1) * reviewsPerPage;
     const endIdx = startIdx + reviewsPerPage;
