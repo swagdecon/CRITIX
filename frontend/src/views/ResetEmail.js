@@ -55,7 +55,6 @@ export default function ResetPassword() {
                 });
                 const responseText = await response.text()
                 startCountdown();
-                console.log(response)
                 if (response.ok) {
                     setMessage(responseText);
                     setNewEmail("");

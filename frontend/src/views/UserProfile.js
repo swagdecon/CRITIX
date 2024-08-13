@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { fetchData } from "../security/Data";
 import MovieCarousel from "../components/Carousel/MovieCarousel/MovieCarousel.js";
 import isTokenExpired from "../security/IsTokenExpired.js";
@@ -76,13 +76,12 @@ export default function UserProfile() {
             }
         }
     ]
-    const displayReviews = useMemo(() => {
-        let reviewsToDisplay = [];
-        const startIdx = (currentPage - 1) * reviewsPerPage;
-        const endIdx = startIdx + reviewsPerPage;
-        reviewsToDisplay = userReviews?.slice(startIdx, endIdx);
-        reviewsToDisplay > 0 ? reviewsToDisplay : null
-    }, [currentPage, userReviews]);
+    let reviewsToDisplay = [];
+    const startIdx = (currentPage - 1) * reviewsPerPage;
+    const endIdx = startIdx + reviewsPerPage;
+    reviewsToDisplay = userReviews?.slice(startIdx, endIdx);
+    reviewsToDisplay > 0 ? reviewsToDisplay : null
+
 
     const totalPages = userReviews ? Math.ceil(userReviews.length / reviewsPerPage) : 1;
 
@@ -120,6 +119,7 @@ export default function UserProfile() {
         setRenderUserHome(true)
         setRenderUserSettings(false)
     }
+
     return isLoading ? (
         <LoadingPage />
     ) : (
@@ -201,15 +201,15 @@ export default function UserProfile() {
                             <section className={UserStyle.AllReviews}>
                                 <h2 className={UserStyle.Title}>all reviews</h2>
                                 <div className={UserStyle.AllUserReviews}>
-                                    {displayReviews ?
-                                        displayReviews.map((review) => (
+                                    {reviewsToDisplay ?
+                                        reviewsToDisplay.map((review) => (
                                             <IndUserReview key={review.movieId} avatar={avatar} movieTitle={review.movieTitle} createdDate={review.createdDate} content={review.content} rating={review.rating} />
                                         ))
                                         : <div className={UserStyle.NoContent}>
                                             Start posting reviews to fill this spot with your insights.
                                         </div>}
                                 </div>
-                                {displayReviews ?
+                                {reviewsToDisplay ?
                                     <div className={UserStyle.PaginationWrapper}>
                                         <Pagination
                                             size="large"

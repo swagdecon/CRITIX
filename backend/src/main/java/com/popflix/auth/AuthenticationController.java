@@ -35,6 +35,7 @@ import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/v1/auth")
@@ -219,4 +220,15 @@ public class AuthenticationController {
                         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }
         }
+
+        @GetMapping("/proxy/image")
+        public ResponseEntity<?> proxyRequest(@RequestParam String url) {
+                try {
+                        return authService.proxyImage(url);
+                } catch (Exception e) {
+                        System.out.println(e);
+                }
+                return null;
+        }
+
 }

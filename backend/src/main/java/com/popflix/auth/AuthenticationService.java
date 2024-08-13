@@ -11,13 +11,21 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -51,6 +59,8 @@ public class AuthenticationService {
         private final JwtService jwtService;
         private final AuthenticationManager authenticationManager;
         private final EmailService emailService;
+        private final RestTemplate restTemplate = new RestTemplate();
+
         static Dotenv dotenv = Dotenv.load();
 
         private static String AES_ALGORITHM = "AES";
@@ -483,6 +493,29 @@ public class AuthenticationService {
                         userRepository.save(user);
                 } else {
                         throw new Error("Something went wrong with updating the users email address");
+                }
+        }
+
+        public ResponseEntity<ByteArrayResource> proxyImage(@RequestParam String url) {
+                try {
+                        // Create headers and HttpEntity
+                        HttpHeaders headers = new HttpHeaders();
+                        headers.set("Accept", "*/*"); // Accept any type of content
+                        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+                        // Fetch the image from the external URL
+                        ResponseEntity<byte[]> response = restTemplate.exchange(url, HttpMethod.GET, entity,
+                                        byte[].class);
+
+                        // Prepare the response with appropriate headers
+                        HttpHeaders responseHeaders = new HttpHeaders();
+                        responseHeaders.setContentType(response.getHeaders().getContentType());
+                        ByteArrayResource resource = new ByteArrayResource(response.getBody());
+
+                        return new ResponseEntity<>(resource, responseHeaders, response.getStatusCode());
+                } catch (Exception e) {
+                        // Handle errors
+                        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
         }
 }

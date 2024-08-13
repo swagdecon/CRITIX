@@ -5,22 +5,22 @@ import UserStyle from './UserProfile.module.css';
 import AddIcon from '@mui/icons-material/Add';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import { sendData } from '../../security/Data';
-import { validateImageURL } from '../Shared/Shared';
+// import { validateImageURL } from '../Shared/Shared';
 
 const saveProfileImgEndpoint = process.env.REACT_APP_UPDATE_PROFILE_IMAGE;
+const proxyImgEndpoint = process.env.REACT_APP_PROXY_IMG;
 
 const ImgUpload = ({ picture }) => {
-    const editorRef = useRef(null);
     const [btn, setBtn] = useState("add");
     const [avatar, setAvatar] = useState(picture)
+    const editorRef = useRef(null);
 
     const handleAddClick = async () => {
         const url = window.prompt("Please enter the image URL:");
         if (url) {
             try {
-                const sanitizedUrl = new URL(url).href;
-                await validateImageURL(sanitizedUrl);
-                setAvatar(sanitizedUrl)
+                setAvatar(`${proxyImgEndpoint}?url=${encodeURIComponent(url)}`)
+
                 setBtn("save");
             } catch (error) {
                 console.error(error);
@@ -29,11 +29,10 @@ const ImgUpload = ({ picture }) => {
         }
     };
     const onClickSave = async () => {
-        if (editorRef.current) {
-            const profilePicture = editorRef.current.getImageScaledToCanvas().toDataURL();
-            const response = await sendData(saveProfileImgEndpoint, { profilePic: profilePicture });
-            window.alert(response.ok ? 'New Profile Picture Saved Successfully' : 'An Error Occurred, Please try again');
-        }
+        const profilePicture = editorRef.current.getImageScaledToCanvas().toDataURL()
+        const response = await sendData(saveProfileImgEndpoint, { profilePic: profilePicture });
+        window.alert(response.ok ? 'New Profile Picture Saved Successfully' : 'An Error Occurred, Please try again');
+
     };
 
     return (
@@ -48,8 +47,7 @@ const ImgUpload = ({ picture }) => {
                 className={UserStyle.AvatarEditor}
                 rotate={0}
                 color={[0, 0, 0]}
-                crossOrigin="anonymous"
-                onImageReady={() => setBtn("save")}
+                crossOrigin='anonymous'
             />
             <label htmlFor="photo-upload" className={UserStyle['custom-file-upload']}>
                 {btn === "add" ? (
