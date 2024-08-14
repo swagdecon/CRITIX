@@ -2,12 +2,9 @@ package com.popflix.repository;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-
 import com.popflix.model.Token;
-import com.popflix.model.User;
 
 public interface TokenRepository extends MongoRepository<Token, String> {
 
