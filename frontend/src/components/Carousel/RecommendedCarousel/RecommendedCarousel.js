@@ -6,25 +6,28 @@ import MovieCard from "../../MovieCard/MovieCard.js";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import styled from "styled-components";
+
+const RecommendedCardSlider = styled(Slider)`
+.slick-prev {
+  left: .25vw;
+  z-index:1;
+}
+.slick-next {
+  right: .25vw;
+    z-index:1;
+}
+`
 const settings = {
   dots: false,
   infinite: true,
   speed: 1000,
-  slidesToShow: 7,
+  slidesToShow: 6,
   slidesToScroll: 5,
   initialSlide: 0,
   responsive: [
     {
-      breakpoint: 3350,
-      settings: {
-        slidesToShow: 6,
-        slidesToScroll: 5,
-        infinite: true,
-        dots: false
-      }
-    },
-    {
-      breakpoint: 2850,
+      breakpoint: 3140,
       settings: {
         slidesToShow: 5,
         slidesToScroll: 5,
@@ -33,7 +36,7 @@ const settings = {
       }
     },
     {
-      breakpoint: 2450,
+      breakpoint: 2570,
       settings: {
         slidesToShow: 4,
         slidesToScroll: 5,
@@ -41,21 +44,21 @@ const settings = {
       }
     },
     {
-      breakpoint: 1950,
+      breakpoint: 2040,
       settings: {
         slidesToShow: 3,
         slidesToScroll: 1
       }
     },
     {
-      breakpoint: 1420,
+      breakpoint: 1560,
       settings: {
         slidesToShow: 2,
         slidesToScroll: 2
       }
     },
     {
-      breakpoint: 950,
+      breakpoint: 1030,
       settings: {
         slidesToShow: 1,
         slidesToScroll: 1
@@ -67,7 +70,7 @@ export default function RecommendedCarousel({ recommendedMovies }) {
 
   return (
     <div className={MovieCardStyle["carousel-wrapper"]}>
-      <Slider {...settings} className={MovieCardStyle.Slider}>
+      <RecommendedCardSlider {...settings} className={MovieCardStyle.Slider}>
         {recommendedMovies.map((movie, i) => (
           <div key={i}>
             <Link to={`/movies/movie/${movie.movieId}`}>
@@ -86,7 +89,7 @@ export default function RecommendedCarousel({ recommendedMovies }) {
             </Link>
           </div>
         ))}
-      </Slider>
+      </RecommendedCardSlider>
     </div >
   );
 }
