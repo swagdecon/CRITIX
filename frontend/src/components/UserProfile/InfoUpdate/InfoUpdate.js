@@ -2,13 +2,17 @@ import React, { useState } from "react";
 import { sendData } from "../../../security/Data.js";
 import UserStyle from "../UserProfile.module.css"
 import Button from '@mui/material/Button';
-import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 const UPDATE_EMAIL_ENDPOINT = process.env.REACT_APP_UPDATE_EMAIL_ENDPOINT
 
 export default function InfoUpdate() {
     const [fieldMsg, setFieldMsg] = useState(null);
     const [fieldMsgErr, setFieldMsgErr] = useState(null);
+    const navigate = useNavigate();
 
+    const handleResetPassword = () => {
+        navigate('/forgot-password');
+    };
 
     async function SubmitEmailChange() {
         const response = await sendData(UPDATE_EMAIL_ENDPOINT);
@@ -34,7 +38,7 @@ export default function InfoUpdate() {
                     </div>
                 </form >
                 <div className={UserStyle.RedirectResetPwd}>
-                    If you need to reset your password, please click <Link className={UserStyle.RedirectPwdLink} to="/forgot-password">here</Link>
+                    <Button fullWidth sx={{ width: "50%" }} onClick={handleResetPassword} variant="contained" >Reset Password</Button>
                 </div >
             </div >
         </div>

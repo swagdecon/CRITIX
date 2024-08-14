@@ -115,7 +115,7 @@
         display: grid;
         grid-template-rows: repeat(2, max-content) auto;
         gap: 10px;
-        margin-top: 40%;
+        margin-top: 70px;
     }
     .profile-actions button {
         padding: 10px;
@@ -303,6 +303,7 @@
 
     .RedirectResetPwd {
         padding-top: 5%;
+        height: 100%;
         color: white;
         width: 100%;
         text-align: center;        
@@ -312,31 +313,55 @@
         color: #0096ff;
     }
 /* ------------ media queries */
-
-@media screen and (max-width: 1700px) {
+/* ------------ media queries */
+@media screen and (max-width: 1300px) {
     .profile-body {
-        grid-template-columns: 1;
-        gap: 20px;
-        margin-top: 0;
-        margin: 0 auto;
+        grid-template-columns: 1fr; 
+        gap: 30px; 
+        padding: 30px; 
+
     }
     .profile-actions {
-        margin-top: 10%;
+        justify-content: flex-start;
+        display: flex;
+        flex-direction: column;
+        }
+
+
+        .bio {
+            order: 1; 
+        }
+    
+        .settings {
+            order: 2
+        }
+
+    .MainInfoPanel {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto; 
+    }
+
+    .ActivityInfo, .RecentReviews, .AllReviews, .FavouriteMovies {
+        grid-column: 1 / 2; 
+        grid-row: auto;
+    }
+
+    .FavouriteMovies {
+        grid-column: 1 / 2; 
+        grid-row: auto;
+    }
+
+    /* Info Update Styling */
+    .UserSettings {
+        height: 100%;
         width: 100%;
-        justify-content: center;
+        padding: 10px;
     }
-    .AllReviews {
-        grid-column: 1/3;
-        grid-row:2/4
-    }
-    .RecentReviews {
-        grid-row: 3/4;
-    }
-    .FavouriteMoviesList {
-        grid-column: 1/3;
-        grid-row: 4/4;
+    .Title {
+       text-align: center;
     }
 }
+
 @media screen and (max-width: 950px) {
     .last-post {
         display: none;

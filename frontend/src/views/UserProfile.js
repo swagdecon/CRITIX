@@ -137,11 +137,9 @@ export default function UserProfile() {
                         </div>
                     </div>
                 </div>
-
                 <div className={UserStyle["profile-body"]}>
                     <div className={UserStyle["profile-actions"]}>
-                        <button className={UserStyle.settings} onClick={showUserHome}>Home</button>
-                        <button className={UserStyle.settings} onClick={showUserSettings}>Settings</button>
+                        <button className={UserStyle.settings} onClick={renderUserHome ? showUserSettings : showUserHome}>{renderUserHome ? "Settings" : "Home"}</button>
                         <section className={UserStyle.bio}>
                             <div className={UserStyle["bio-header"]}>
                                 <i className="fa fa-info-circle"></i>
@@ -171,7 +169,7 @@ export default function UserProfile() {
                             <section className={UserStyle.AllReviews}>
                                 <h2 className={UserStyle.Title}>all reviews</h2>
                                 <div className={UserStyle.AllUserReviews}>
-                                    {reviewsToDisplay ?
+                                    {reviewsToDisplay.length > 0 ?
                                         reviewsToDisplay.map((review) => (
                                             <IndUserReview key={review.movieId} avatar={avatar} movieTitle={review.movieTitle} createdDate={review.createdDate} content={review.content} rating={review.rating} />
                                         ))
@@ -179,7 +177,7 @@ export default function UserProfile() {
                                             Start posting reviews to fill this spot with your insights.
                                         </div>}
                                 </div>
-                                {reviewsToDisplay ?
+                                {reviewsToDisplay.length > 0 ?
                                     <div className={UserStyle.PaginationWrapper}>
                                         <Pagination
                                             size="large"

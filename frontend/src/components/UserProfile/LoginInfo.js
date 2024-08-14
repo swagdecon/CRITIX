@@ -47,7 +47,6 @@ export default function LoginInfo({ data }) {
                     color: '#0096ff',
                 },
             ]}
-            width={1000}
             height={300}
             sx={UserGraphStyle}
         />
