@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.popflix.auth.AuthenticationService;
+import com.popflix.model.LoginEvents;
 import com.popflix.model.User;
 import com.popflix.service.UserService;
-
 import io.github.cdimascio.dotenv.Dotenv;
 
 @RequestMapping("/user")
@@ -103,4 +103,17 @@ public class UserController {
         }
     }
 
+    @GetMapping("/login-info")
+    public ResponseEntity<LoginEvents> getLoginsPerMonth(@RequestHeader("Authorization") String accessToken)
+            throws Exception {
+        String userId = authenticationService.getUserDetails(accessToken).getId();
+
+        try {
+            return new ResponseEntity<>(userService.retrieveLoginInfo(userId), HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+    }
 }

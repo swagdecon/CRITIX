@@ -5,22 +5,22 @@ import isTokenExpired from "../security/IsTokenExpired.js";
 import UserStyle from "../components/UserProfile/UserProfile.module.css"
 import ProfilePicture from "../components/UserProfile/ProfileImage.js"
 import NavBar from "../components/NavBar/NavBar.js";
-import { LineChart } from "@mui/x-charts/LineChart"
 import BannerImg from "../components/UserProfile/BannerImage.js";
 import LoadingPage from "./LoadingPage.js";
 import Pagination from "@mui/material/Pagination";
 import IndUserReview from "../components/Review/NewReview/IndUserReview.js";
-import { UserGraphStyle } from "../components/Shared/SharedMUI.js"
 import InfoUpdate from "../components/UserProfile/InfoUpdate/InfoUpdate.js";
+import LoginInfo from "../components/UserProfile/LoginInfo.js";
 const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
 const getBannerEndpoint = process.env.REACT_APP_GET_USER_BANNER
 const getUserFavouriteMoviesEndpoint = process.env.REACT_APP_GET_FAVOURITE_MOVIES_ENDPOINT
-
+const getLoginInfoEndpoint = process.env.REACT_APP_GET_LOGIN_INFO_ENDPOINT
 
 export default function UserProfile() {
     const reviewsPerPage = 2;
     const [favouriteMovies, setFavouriteMovies] = useState(null);
+    const [loginInfo, setLoginInfo] = useState(null);
     const [userReviews, setUserReviews] = useState(null)
     const [recentUserReview, setRecentUserReview] = useState(null)
     const [avatar, setAvatar] = useState(null);
@@ -89,12 +89,14 @@ export default function UserProfile() {
 
         try {
             await isTokenExpired();
-            const [favouriteMovies, allUserReviews, avatarPic, bannerPic] = await Promise.all([
+            const [loginInfo, favouriteMovies, allUserReviews, avatarPic, bannerPic] = await Promise.all([
+                fetchData(getLoginInfoEndpoint),
                 fetchData(getUserFavouriteMoviesEndpoint),
                 fetchData(allUserReviewsEndpoint),
                 fetchData(getAvatarEndpoint),
                 fetchData(getBannerEndpoint)
             ]);
+            setLoginInfo(loginInfo)
             setFavouriteMovies(favouriteMovies)
             setUserReviews(allUserReviews);
             setAvatar(avatarPic);
@@ -119,7 +121,7 @@ export default function UserProfile() {
         setRenderUserHome(true)
         setRenderUserSettings(false)
     }
-
+    console.log(loginInfo)
     return isLoading ? (
         <LoadingPage />
     ) : (
@@ -154,39 +156,7 @@ export default function UserProfile() {
                         <div className={UserStyle.MainInfoPanel}>
                             <section className={UserStyle.ActivityInfo}>
                                 <h2 className={UserStyle.Title}>Activity</h2>
-                                <LineChart
-                                    xAxis={[
-                                        {
-                                            scaleType: 'time',
-                                            data: [
-                                                new Date(2024, 0, 1),
-                                                new Date(2024, 1, 1),
-                                                new Date(2024, 2, 1),
-                                                new Date(2024, 3, 1),
-                                                new Date(2024, 4, 1),
-                                                new Date(2024, 5, 1),
-                                                new Date(2024, 6, 1),
-                                                new Date(2024, 7, 1),
-                                                new Date(2024, 8, 1),
-                                                new Date(2024, 9, 1),
-                                                new Date(2024, 10, 1),
-                                                new Date(2024, 11, 1),
-
-                                            ],
-                                            tickNumber: 3,
-                                        },
-                                    ]}
-                                    series={[
-                                        {
-                                            data: [1, 9, 4, 6.5, 7, 13, 2, 5.5, 2, 8.5, 4, 7.1],
-                                            color: '#0096ff',
-
-                                        },
-                                    ]}
-                                    width={1000}
-                                    height={300}
-                                    sx={UserGraphStyle}
-                                />
+                                <LoginInfo data={loginInfo} />
                             </section>
                             <section className={UserStyle.RecentReviews}>
                                 <h2 className={UserStyle.Title}>Recent review</h2>

@@ -389,7 +389,7 @@ public class AuthenticationServiceTest {
         @Test
         public void test_null_last_reset_pwd_time_isAuthLinkExpired() {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, emailService);
+                                passwordEncoder, jwtService, userService, authenticationManager, emailService);
                 boolean result = authenticationService.isAuthLinkExpired(null);
                 assertTrue(result);
         }
@@ -397,7 +397,7 @@ public class AuthenticationServiceTest {
         @Test
         public void test_less_than_30_minutes_ago_isAuthLinkExpired() {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, emailService);
+                                passwordEncoder, jwtService, userService, authenticationManager, emailService);
                 Date lastResetPwdTime = new Date(System.currentTimeMillis() - 1500000); // 25 minutes ago
                 boolean result = authenticationService.isAuthLinkExpired(lastResetPwdTime);
                 assertFalse(result);
@@ -406,7 +406,7 @@ public class AuthenticationServiceTest {
         @Test
         public void test_exactly_30_minutes_ago_isAuthLinkExpired() {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, emailService);
+                                passwordEncoder, jwtService, userService, authenticationManager, emailService);
                 Date lastResetPwdTime = new Date(System.currentTimeMillis() - 1800000); // 30 minutes ago
                 boolean result = authenticationService.isAuthLinkExpired(lastResetPwdTime);
                 assertTrue(result);
@@ -415,7 +415,7 @@ public class AuthenticationServiceTest {
         @Test
         public void test_more_than_30_minutes_in_future_isAuthLinkExpired() {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, emailService);
+                                passwordEncoder, jwtService, userService, authenticationManager, emailService);
                 Date lastResetPwdTime = new Date(System.currentTimeMillis() + 1900000); // 31 minutes in the future
                 boolean result = authenticationService.isAuthLinkExpired(lastResetPwdTime);
                 assertFalse(result);
@@ -424,7 +424,7 @@ public class AuthenticationServiceTest {
         @Test
         public void test_more_than_30_minutes_ago_isAuthLinkExpired() {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, emailService);
+                                passwordEncoder, jwtService, userService, authenticationManager, emailService);
                 Date lastResetPwdTime = new Date(System.currentTimeMillis() - 1900000); // 31 minutes ago
                 boolean result = authenticationService.isAuthLinkExpired(lastResetPwdTime);
                 assertTrue(result);
@@ -438,7 +438,7 @@ public class AuthenticationServiceTest {
         public void test_valid_encrypted_token() throws Exception {
                 // Arrange
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, emailService);
+                                passwordEncoder, jwtService, userService, authenticationManager, emailService);
                 String encryptedToken = "95Or_YFh8yS8hVtwmaOxql6Ikji_fdq0FTAIxgeb9ek:pdBK5WgeuA8i5OEn7iVWnIekLCLYjqZMySbtu8voh_s";
                 String expectedEmail = "test@example.com";
 
@@ -450,7 +450,7 @@ public class AuthenticationServiceTest {
         @Test
         public void test_null_encrypted_token() {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, emailService);
+                                passwordEncoder, jwtService, userService, authenticationManager, emailService);
 
                 String encryptedToken = null;
 
@@ -462,7 +462,7 @@ public class AuthenticationServiceTest {
         @Test
         public void test_invalid_encrypted_token_format() {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, emailService);
+                                passwordEncoder, jwtService, userService, authenticationManager, emailService);
                 String encryptedToken = "invalid_token_format";
 
                 assertThrows(Exception.class, () -> {
@@ -483,7 +483,7 @@ public class AuthenticationServiceTest {
                 AuthenticationManager authenticationManager = mock(AuthenticationManager.class);
 
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, emailService);
+                                passwordEncoder, jwtService, userService, authenticationManager, emailService);
 
                 User user = new User();
                 user.getUserAuth().setAccountAuthRequestDate(new Date(System.currentTimeMillis() - (29 * 60 * 1000)));
@@ -501,9 +501,8 @@ public class AuthenticationServiceTest {
                 PasswordEncoder passwordEncoder = mock(PasswordEncoder.class);
                 JwtService jwtService = mock(JwtService.class);
                 AuthenticationManager authenticationManager = mock(AuthenticationManager.class);
-
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, emailService);
+                                passwordEncoder, jwtService, userService, authenticationManager, emailService);
 
                 User user = new User();
                 user.getUserAuth().setAccountAuthRequestDate(new Date(System.currentTimeMillis() - (31 * 60 * 1000)));
@@ -518,7 +517,7 @@ public class AuthenticationServiceTest {
         public void test_throws_username_not_found_exception_when_invalid_encrypted_email_is_provided()
                         throws Exception {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, emailService);
+                                passwordEncoder, jwtService, userService, authenticationManager, emailService);
 
                 assertThrows(UsernameNotFoundException.class,
                                 () -> authenticationService.activateAccount(encryptedEmail));
@@ -531,7 +530,7 @@ public class AuthenticationServiceTest {
         @Test
         public void test_encrypt_email_successfully() throws Exception {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, emailService);
+                                passwordEncoder, jwtService, userService, authenticationManager, emailService);
 
                 String encryptedToken = authenticationService.encryptEmail(email);
 
@@ -544,7 +543,7 @@ public class AuthenticationServiceTest {
         @Test
         public void test_raise_exception_if_email_is_null() {
                 AuthenticationService authenticationService = new AuthenticationService(userRepository, tokenRepository,
-                                passwordEncoder, jwtService, authenticationManager, emailService);
+                                passwordEncoder, jwtService, userService, authenticationManager, emailService);
                 String email = null;
 
                 assertThrows(Exception.class, () -> {
