@@ -49,21 +49,21 @@ export default function UserProfile() {
         {
             breakpoint: 2680,
             settings: {
-                slidesToShow: favouriteMovies?.length <= 5 ? favouriteMovies.length : 4,
+                slidesToShow: favouriteMovies?.length < 5 ? favouriteMovies.length : 4,
                 slidesToScroll: 4,
             }
         },
         {
             breakpoint: 2220,
             settings: {
-                slidesToShow: favouriteMovies?.length <= 5 ? favouriteMovies.length : 3,
+                slidesToShow: favouriteMovies?.length < 5 ? favouriteMovies.length : 3,
                 slidesToScroll: 3
             }
         },
         {
             breakpoint: 1750,
             settings: {
-                slidesToShow: favouriteMovies?.length <= 5 ? favouriteMovies.length : 2,
+                slidesToShow: favouriteMovies?.length < 5 ? favouriteMovies.length : 2,
                 slidesToScroll: 2
             }
         },
