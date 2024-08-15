@@ -137,8 +137,8 @@
         border-radius: 10px;
     }
     .profile-actions button:hover {
-        background-color: var(--accent-bg); /* Change to desired hover background color */
-        color: var(white); /* Change to desired hover text color */
+        background-color: var(--accent-bg);
+        color: var(white); 
     }
         .bio-header {
             display: flex;
@@ -153,6 +153,18 @@
         gap: 10px;
         grid-auto-rows: minmax(100, auto);
     }
+
+    .HeaderContent {
+        display: flex;
+        width: 100%;
+    }
+    .DropdownWrapper {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        padding-right: 4%;
+    }
+    
     .ActivityInfo {
         background: rgba(255, 255, 255, 0.18);
         border-radius: 16px;
@@ -306,14 +318,14 @@
         height: 100%;
         color: white;
         width: 100%;
-        text-align: center;        
+        text-align: center;
     }
     
     .RedirectPwdLink, .redirectPwdLink:hover {
         color: #0096ff;
     }
-/* ------------ media queries */
-/* ------------ media queries */
+
+    /* ------------ media queries */
 @media screen and (max-width: 1300px) {
     .profile-body {
         grid-template-columns: 1fr; 

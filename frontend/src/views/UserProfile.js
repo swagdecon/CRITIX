@@ -152,10 +152,7 @@ export default function UserProfile() {
                     </div>
                     {renderUserHome && !renderUserSettings ?
                         <div className={UserStyle.MainInfoPanel}>
-                            <section className={UserStyle.ActivityInfo}>
-                                <h2 className={UserStyle.Title}>Activity</h2>
-                                <LoginInfo data={loginInfo} />
-                            </section>
+                            <LoginInfo data={loginInfo} />
                             <section className={UserStyle.RecentReviews}>
                                 <h2 className={UserStyle.Title}>Recent review</h2>
                                 <div className={UserStyle.AllUserReviews}>
