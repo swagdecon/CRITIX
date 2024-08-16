@@ -11,12 +11,15 @@ import Pagination from "@mui/material/Pagination";
 import IndUserReview from "../components/Review/NewReview/IndUserReview.js";
 import InfoUpdate from "../components/UserProfile/InfoUpdate/InfoUpdate.js";
 import LoginInfo from "../components/UserProfile/LoginInfo.js";
+import { Link } from "react-router-dom";
+import favouriteMovieBreakpoints from "../components/Carousel/Other/General.js";
+import MovieCard from "../components/MovieCard/MovieCard.js";
 const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
 const getBannerEndpoint = process.env.REACT_APP_GET_USER_BANNER
 const getUserFavouriteMoviesEndpoint = process.env.REACT_APP_GET_FAVOURITE_MOVIES_ENDPOINT
 const getLoginInfoEndpoint = process.env.REACT_APP_GET_LOGIN_INFO_ENDPOINT
-
+const endpoint = "/movies/movie"
 export default function UserProfile() {
     const reviewsPerPage = 2;
     const [favouriteMovies, setFavouriteMovies] = useState(null);
@@ -30,51 +33,6 @@ export default function UserProfile() {
     const [renderUserHome, setRenderUserHome] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const handlePageChange = useCallback((event, page) => setCurrentPage(page));
-
-    const breakpoints = [
-        {
-            breakpoint: 4000,
-            settings: {
-                slidesToShow: favouriteMovies?.length <= 5 ? favouriteMovies.length : 6,
-                infinite: favouriteMovies?.length <= 10 ? true : false,
-            }
-        },
-        {
-            breakpoint: 3140,
-            settings: {
-                slidesToShow: favouriteMovies?.length <= 5 ? favouriteMovies.length : 5,
-                slidesToScroll: 5,
-            }
-        },
-        {
-            breakpoint: 2680,
-            settings: {
-                slidesToShow: favouriteMovies?.length < 5 ? favouriteMovies.length : 4,
-                slidesToScroll: 4,
-            }
-        },
-        {
-            breakpoint: 2220,
-            settings: {
-                slidesToShow: favouriteMovies?.length < 5 ? favouriteMovies.length : 3,
-                slidesToScroll: 3
-            }
-        },
-        {
-            breakpoint: 1750,
-            settings: {
-                slidesToShow: favouriteMovies?.length < 5 ? favouriteMovies.length : 2,
-                slidesToScroll: 2
-            }
-        },
-        {
-            breakpoint: 1250,
-            settings: {
-                slidesToShow: favouriteMovies?.length <= 5 ? favouriteMovies.length : 1,
-                slidesToScroll: 1
-            }
-        }
-    ]
 
     let reviewsToDisplay = [];
     const startIdx = (currentPage - 1) * reviewsPerPage;
@@ -194,13 +152,41 @@ export default function UserProfile() {
                             <section className={UserStyle.FavouriteMovies}>
 
                                 <h2 className={UserStyle.Title}>Your Favourite Movies</h2>
-                                {favouriteMovies.length > 0 ?
+                                {/* The carousel styling makes cards look strange below 5 cards, therefore we will show just a simple loop through the cards in the else statement */}
+                                {favouriteMovies.length > 5 ? (
                                     <MovieCarousel
                                         movies={favouriteMovies}
-                                        endpoint="/movies/movie"
-                                        breakpoints={breakpoints}
+                                        endpoint={endpoint}
+                                        breakpoints={favouriteMovieBreakpoints()}
                                     />
-                                    : <div className={UserStyle.NoContent}>Your favorite films deserve the spotlight. Start adding them here.</div>}
+                                ) : favouriteMovies.length > 0 ? (
+                                    <div className={UserStyle.FavouriteMovieWrapper}>
+                                        {favouriteMovies.map((movie, i) => (
+                                            <div className={UserStyle.ShortFavouriteMovieList} key={i}>
+                                                <Link to={`${endpoint}/${movie.id || movie.movieId}`}>
+                                                    <MovieCard
+                                                        movieId={movie.id || movie.movieId}
+                                                        title={movie.title}
+                                                        posterUrl={movie.posterUrl}
+                                                        voteAverage={movie.voteAverage}
+                                                        genres={movie.genres}
+                                                        overview={movie.overview}
+                                                        actors={movie.actors}
+                                                        isSavedToWatchlist={movie.isSavedToWatchlist}
+                                                        isSavedToFavouriteMoviesList={movie.isSavedToFavouriteMoviesList}
+                                                        shareUrl={`${endpoint}movie/${movie.id}`}
+                                                    />
+                                                </Link>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className={UserStyle.NoContent}>
+                                        Your favorite films deserve the spotlight. Start adding them here.
+                                    </div>
+                                )}
+
+
                             </section>
                         </div>
                         :
