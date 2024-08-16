@@ -12,14 +12,14 @@ import IndUserReview from "../components/Review/NewReview/IndUserReview.js";
 import InfoUpdate from "../components/UserProfile/InfoUpdate/InfoUpdate.js";
 import LoginInfo from "../components/UserProfile/LoginInfo.js";
 import { Link } from "react-router-dom";
-import favouriteMovieBreakpoints from "../components/Carousel/Other/General.js";
+import { favouriteMovieBreakpoints } from "../components/Carousel/Other/General.js";
 import MovieCard from "../components/MovieCard/MovieCard.js";
 const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
 const getBannerEndpoint = process.env.REACT_APP_GET_USER_BANNER
 const getUserFavouriteMoviesEndpoint = process.env.REACT_APP_GET_FAVOURITE_MOVIES_ENDPOINT
 const getLoginInfoEndpoint = process.env.REACT_APP_GET_LOGIN_INFO_ENDPOINT
-const endpoint = "/movies/movie"
+const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
 export default function UserProfile() {
     const reviewsPerPage = 2;
     const [favouriteMovies, setFavouriteMovies] = useState(null);
@@ -156,14 +156,14 @@ export default function UserProfile() {
                                 {favouriteMovies.length > 5 ? (
                                     <MovieCarousel
                                         movies={favouriteMovies}
-                                        endpoint={endpoint}
+                                        endpoint={indMovieEndpoint}
                                         breakpoints={favouriteMovieBreakpoints()}
                                     />
                                 ) : favouriteMovies.length > 0 ? (
                                     <div className={UserStyle.FavouriteMovieWrapper}>
                                         {favouriteMovies.map((movie, i) => (
                                             <div className={UserStyle.ShortFavouriteMovieList} key={i}>
-                                                <Link to={`${endpoint}/${movie.id || movie.movieId}`}>
+                                                <Link to={`${indMovieEndpoint}/${movie.id || movie.movieId}`}>
                                                     <MovieCard
                                                         movieId={movie.id || movie.movieId}
                                                         title={movie.title}
@@ -174,7 +174,7 @@ export default function UserProfile() {
                                                         actors={movie.actors}
                                                         isSavedToWatchlist={movie.isSavedToWatchlist}
                                                         isSavedToFavouriteMoviesList={movie.isSavedToFavouriteMoviesList}
-                                                        shareUrl={`${endpoint}movie/${movie.id}`}
+                                                        shareUrl={`${indMovieEndpoint}/${movie.id}`}
                                                     />
                                                 </Link>
                                             </div>
