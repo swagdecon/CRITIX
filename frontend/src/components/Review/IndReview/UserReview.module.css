@@ -35,14 +35,24 @@
     font-weight: bold;
     font-size: 14px;
     margin-right: 1%;
-    }
+}
 .ReviewHeader {
+    display: flex;
+    flex-direction: row;
+}
+
+.ReviewHeaderCol {
     display: flex;
     font-weight: bold;
     width: 107%;
     flex-direction: column;
 }
 .MovieTitle {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.Author {
     display: flex;
     flex-direction: column;
     width: 100%;

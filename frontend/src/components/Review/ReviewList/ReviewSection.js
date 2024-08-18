@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import parse from 'html-react-parser';
 // import Popup from 'reactjs-popup';
 // import DeleteReviewPopup from "./DeleteReviewPopup";
-import IndUserReview from "../../Review/NewReview/IndUserReview";
+import IndUserReview from "../IndReview/IndUserReview";
 
 export default function ReviewSection({ reviews }) {
     const [currentPage, setCurrentPage] = useState(1);
@@ -25,11 +25,10 @@ export default function ReviewSection({ reviews }) {
         reviewsToDisplay = reviews.slice(startIdx, endIdx);
         return reviewsToDisplay;
     }, [currentPage, reviews]);
-
     return (
         <>
             {displayReviews.map((review) => (
-                <IndUserReview key={review.author} avatar={review.avatar} movieTitle={review.movieTitle} createdDate={review.createdDate} content={parse(review.content)} rating={review.rating} />
+                <IndUserReview key={review.author} avatar={review.avatar} author={review.author} movieTitle={review.movieTitle} createdDate={review.createdDate} content={parse(review.content)} rating={review.rating} />
             ))}
             {reviews && reviews.length > 0 && totalPages > 0 && (
                 <Pagination

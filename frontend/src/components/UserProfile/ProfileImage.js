@@ -49,23 +49,25 @@ const ImgUpload = ({ picture }) => {
                 color={[0, 0, 0]}
                 crossOrigin='anonymous'
             />
-            <label htmlFor="photo-upload" className={UserStyle['custom-file-upload']}>
-                {btn === "add" ? (
-                    <>
-                        <AddIcon
+            <div className={UserStyle.AvatarAddBtnWrapper}>
+                <label htmlFor="photo-upload" className={UserStyle['custom-file-upload']}>
+                    {btn === "add" ? (
+                        <>
+                            <AddIcon
+                                style={{ color: '#0096ff' }}
+                                className={UserStyle['add-icon']}
+                                onClick={handleAddClick}
+                            />
+                        </>
+                    ) : (
+                        <SaveAltIcon
                             style={{ color: '#0096ff' }}
-                            className={UserStyle['add-icon']}
-                            onClick={handleAddClick}
+                            onClick={onClickSave}
+                            className={UserStyle['save-icon']}
                         />
-                    </>
-                ) : (
-                    <SaveAltIcon
-                        style={{ color: '#0096ff' }}
-                        onClick={onClickSave}
-                        className={UserStyle['save-icon']}
-                    />
-                )}
-            </label>
+                    )}
+                </label>
+            </div>
         </div>
     );
 };

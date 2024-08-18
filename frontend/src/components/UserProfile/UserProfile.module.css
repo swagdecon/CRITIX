@@ -28,8 +28,8 @@
 
 /* ------- profile body header */
 .profile-header {
-    background-size: cover;
-    border-radius: 20px;
+display:flex;
+flex-wrap:wrap;
     position: relative;
     height: 40ch;
 
@@ -340,7 +340,9 @@
     .profile-body {
         grid-template-columns: 1fr; 
         margin-top: 0ch;
-
+        width: 100vw;
+        padding: 4%;
+        max-height: fit-content;
     }
     .profile-header {
         background-size: cover;
@@ -377,32 +379,26 @@
     .settings {
         order: 2
     }
-
-    .MainInfoPanel {
-        grid-template-columns: 1fr;
-        justify-self: center;
-
-
-    }
     .ActivityInfo, .RecentReviews, .AllReviews, .FavouriteMovies {
         grid-column: 1 / -1;
         grid-row: auto; 
         height: 90vh;
-        max-width: 80vw;
+        max-width: 100vw;
+        justify-content: center;
     }
     .ActivityInfo {
-        max-height: 100vh;
+        max-height: 40vh;
     }
     .RecentReviews {
-        max-height: 50vh;
+        max-height: 40vh;
     }
     
     .AllReviews {
-        max-height: 90vh;
+        max-height: 70vh;
 
     } 
     .FavouriteMovies {
-        max-height: fit-content;
+        max-height: 100vh;
     }
     
     .UserSettings {

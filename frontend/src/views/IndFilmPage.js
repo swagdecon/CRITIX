@@ -131,14 +131,12 @@ export default function IndMovie() {
               movieId={movie.id}
               movieTitle={movie.title}
               reviews={reviews}
-              placement="userRatingSection"
             />
           </div>
           <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-4"]}`}>
             {movie.actors && movie.actors.length > 0 ?
               <MovieActors actors={movie.actors} />
               : null}
-
           </div>
         </section>
         {recommendedMovies.length >= 4 ?

@@ -551,9 +551,11 @@ public class MovieService {
   public List<MovieCard> getUserWatchlist(String userId) throws Exception {
     try {
       List<MovieCard> watchList = userRepository.findUserWithWatchListById(userId).get().getWatchList();
-      for (MovieCard movie : watchList) {
-        boolean favouriteMovieAlreadyExists = userRepository.doesFavouriteMovieExist(userId, movie.getMovieId());
-        movie.setIsSavedToFavouriteMoviesList(favouriteMovieAlreadyExists);
+      if (watchList != null) {
+        for (MovieCard movie : watchList) {
+          boolean favouriteMovieAlreadyExists = userRepository.doesFavouriteMovieExist(userId, movie.getMovieId());
+          movie.setIsSavedToFavouriteMoviesList(favouriteMovieAlreadyExists);
+        }
       }
       return watchList;
     } catch (Exception e) {

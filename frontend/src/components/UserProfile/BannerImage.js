@@ -35,13 +35,15 @@ export default function BannerImg({ bannerPic }) {
     return (
         <>
             <img className={UserStyle.BannerImg} src={bannerPicture ? bannerPicture : defaultBannerPic} />
-            <label htmlFor="photo-upload" className={UserStyle['custom-file-upload']}>
-                <AddIcon
-                    style={{ color: '#0096ff' }}
-                    className={UserStyle['add-icon']}
-                    onClick={handleAddClick}
-                />
-            </label>
+            <div className={UserStyle.BannerAddBtnWrapper}>
+                <label htmlFor="photo-upload" className={UserStyle['custom-file-upload']}>
+                    <AddIcon
+                        style={{ color: '#0096ff' }}
+                        className={UserStyle['add-icon']}
+                        onClick={handleAddClick}
+                    />
+                </label>
+            </div>
         </>
     );
 }
