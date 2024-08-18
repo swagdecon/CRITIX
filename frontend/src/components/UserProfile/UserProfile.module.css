@@ -344,6 +344,14 @@ flex-wrap:wrap;
         padding: 4%;
         max-height: fit-content;
     }
+
+    .profile-names {
+       width: 100vw;
+       display: flex;
+       align-items: center;
+       background-color:#00000000
+    }
+
     .profile-header {
         background-size: cover;
         border-radius: 20px;
@@ -386,35 +394,30 @@ flex-wrap:wrap;
     }
     .FavouriteMovies {
         grid-row: auto; 
-        height: 55rem;
+        height: 67rem;
     }
     .ActivityInfo {
         max-height: 35rem;
     }
     .RecentReviews {
-        max-height: 22rem;
+        max-height: 32rem;
     }
     
     .AllReviews {
-        max-height: 40rem;
+        max-height: 68rem;
 
     } 
-    
-    .UserSettings {
+    .UserSettingsBox {
         height: 100%;
+        width: 100%;
+        padding-bottom: 2%;
+    }
+    .UserSettings {
+        height: 100;
         width: 100%;
         padding: 10px;
     }
     .Title {
        text-align: center;
-    }
-}
-
-@media screen and (max-width: 950px) {
-    .last-post {
-        display: none;
-    }
-    .data, .social-media {
-        grid-column: 1/4;
     }
 }
