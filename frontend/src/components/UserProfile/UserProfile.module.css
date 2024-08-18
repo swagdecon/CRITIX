@@ -357,7 +357,7 @@ flex-wrap:wrap;
         justify-content: flex-start;
         display: flex;
         flex-direction: column;
-        padding-top: 14vh;
+        padding-top: 16rem;
     }
     
     .profile-names {
@@ -379,27 +379,26 @@ flex-wrap:wrap;
     .settings {
         order: 2
     }
-    .ActivityInfo, .RecentReviews, .AllReviews, .FavouriteMovies {
+    .ActivityInfo, .RecentReviews, .AllReviews {
         grid-column: 1 / -1;
         grid-row: auto; 
         height: 90vh;
-        max-width: 100vw;
-        justify-content: center;
+    }
+    .FavouriteMovies {
+        grid-row: auto; 
+        height: 55rem;
     }
     .ActivityInfo {
-        max-height: 40vh;
+        max-height: 35rem;
     }
     .RecentReviews {
-        max-height: 40vh;
+        max-height: 22rem;
     }
     
     .AllReviews {
-        max-height: 70vh;
+        max-height: 40rem;
 
     } 
-    .FavouriteMovies {
-        max-height: 100vh;
-    }
     
     .UserSettings {
         height: 100%;
