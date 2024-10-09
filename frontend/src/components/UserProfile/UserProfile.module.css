@@ -18,9 +18,8 @@
 }
 .profile-card {
     min-width: 100vw;
-    min-height: 100vh;
+    height: fit-content;
     background-color: var(--primary-bg);
-    overflow-y: hidden;
     display: grid;
     grid-template-rows: 220px auto;
     background-color: #000000;
@@ -28,8 +27,8 @@
 
 /* ------- profile body header */
 .profile-header {
-display:flex;
-flex-wrap:wrap;
+    display:flex;
+    flex-wrap:wrap;
     position: relative;
     height: 40ch;
 
@@ -230,8 +229,11 @@ flex-wrap:wrap;
     }
     .ShortFavouriteMovieList {
         display: flex;
-        flex-direction: row;
+        flex-wrap: wrap; 
         justify-content: center;
+        gap: 16px; 
+        overflow-y: auto; 
+        padding: 16px;
     }
 
 
@@ -337,6 +339,12 @@ flex-wrap:wrap;
 
     /* ------------ media queries */
 @media screen and (max-width: 1000px) {
+
+    .profile-card {
+        height: fit-content;
+        display: relative;
+        height: inherit;
+    }
     .profile-body {
         grid-template-columns: 1fr; 
         margin-top: 0ch;
@@ -394,7 +402,7 @@ flex-wrap:wrap;
     }
     .FavouriteMovies {
         grid-row: auto; 
-        height: 67rem;
+        /* height: 67rem; */
     }
     .ActivityInfo {
         max-height: 35rem;

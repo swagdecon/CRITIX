@@ -159,7 +159,7 @@ export default function UserProfile() {
                                         breakpoints={favouriteMovieBreakpoints()}
                                     />
                                 ) : favouriteMovies.length > 0 ? (
-                                    <div className={UserStyle.ShortList}>
+                                    <div className={UserStyle.ShortFavouriteMovieList}>
                                         {favouriteMovies.map((movie, i) => (
                                             <div className={UserStyle.ShortFavouriteMovieList} key={i}>
                                                 <Link to={`${indMovieEndpoint}/${movie.id || movie.movieId}`}>
