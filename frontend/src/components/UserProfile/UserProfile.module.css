@@ -18,7 +18,7 @@
 }
 .profile-card {
     min-width: 100vw;
-    height: fit-content;
+    height: 100vh;
     background-color: var(--primary-bg);
     display: grid;
     grid-template-rows: 220px auto;
@@ -273,7 +273,7 @@
         -webkit-backdrop-filter: blur(11.4px);
         border: 1px solid rgba(255, 255, 255, 0.3);
         display: flex;
-        height: 50%;
+        height: 20vh;
         width: 30%;
         align-items: center;
         flex-direction: column;
@@ -282,6 +282,7 @@
     .BtnWrapper {
         display: flex;
         width: 100%;
+        height: 100%;
         justify-content: center;
         margin-top: 2%;
     }

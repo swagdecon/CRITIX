@@ -1,5 +1,7 @@
 .ind-review-wrapper {
-  background: linear-gradient(#141e30, #0096ff);
+  /* background: linear-gradient(#141e30, #0096ff); */
+    background: #2c2c2c;
+
   border-radius: 0.7rem;
   padding: 20px;
   text-align: left;
