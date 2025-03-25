@@ -15,7 +15,7 @@
 	<description>Application where users can find, rate and review their favourite movies</description>
 
 	<properties>
-		<java.version>19</java.version>
+		<java.version>21</java.version>
 		<javax.version>1.1.4</javax.version>
 		<dotenv.version>5.2.2</dotenv.version>
 		<moviedbapi.version>2.1.2</moviedbapi.version>
