@@ -6,16 +6,16 @@ import {
   Navigate,
 } from "react-router-dom";
 import "./index.js";
-import Login from "./views/SigninPage.js";
-import SignUp from "./views/SignupPage.js";
+import Login from "./views/Signin.js";
+import SignUp from "./views/Signup.js";
 import UserProfile from "./views/UserProfile.js"
 import Homepage from "./views/Home.js";
 import PrivateRoute from "./security/SecuredRoutes.js";
 import Error403 from "./views/errorMessages/403/403error.js";
 import Error404 from "./views/errorMessages/404/404error.js";
-import IndMovie from "./views/IndFilmPage.js";
-import IndPerson from "./views/IndPersonPage.js";
-import MovieListPage from "./views/MovieListPage.js";
+import IndMovie from "./views/IndFilm.js";
+import IndPerson from "./views/IndPerson.js";
+import MovieListPage from "./views/MovieList.js";
 import ConfirmEmailForPwdReset from "./views/SendResetPwdEmail.js";
 import ResetPassword from "./views/ResetPassword.js";
 import AccountVerification from "./views/AccountVerification.js"
