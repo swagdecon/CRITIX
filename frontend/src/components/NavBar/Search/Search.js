@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import SearchStyle from "./Search.module.css";
 import PropTypes from "prop-types";
 import { ParseYear } from "../../IndMovie/MovieComponents";
-import ReactPlaceholderTyping from 'react-placeholder-typing'
+import { TypeAnimation } from 'react-type-animation';
 import isTokenExpired from "../../../security/IsTokenExpired";
 import { fetchData } from "../../../security/Data";
 const searchEndpoint = process.env.REACT_APP_SEARCH_ENDPOINT;
@@ -16,7 +16,7 @@ export default function Search(props) {
   const placeholders = [
     'Discover cinematic brilliance',
     'Unearth hidden gems',
-    'Share your filmic insights',
+    'Share your film critiques',
     'Find your next favorite movie',
     'Explore cinematic wonders',
     'Express your movie passion',
@@ -64,14 +64,39 @@ export default function Search(props) {
 
   return (
     <form onSubmit={props.onSubmit} className={SearchStyle.Search} ref={searchRef}>
-      <ReactPlaceholderTyping
-        placeholders={placeholders}
-        value={query}
-        onChange={(value) => {
-          setQuery(value)
-        }}
-        containerStyle={{ borderWidth: "0px", justifyContent: "center" }}
-      />
+      <div style={{ position: "relative", display: "inline-block" }}>
+        {query === "" && (
+          <TypeAnimation
+            sequence={placeholders}
+            speed={20}
+            style={{
+              position: "absolute",
+              color: "gray",
+              pointerEvents: "none",
+              left: "10px",
+              top: "50%",
+              transform: "translateY(-50%)",
+            }}
+            repeat={Infinity}
+          />
+        )}
+
+        {/* Search Input */}
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder=""
+          style={{
+            width: "300px",
+            padding: "10px",
+            fontSize: "1em",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+            outline: "none",
+          }}
+        />
+      </div>
       <div className={SearchStyle["search-results-list"]}>
         {movieResults.map((movie) => {
           if (movie.poster_path && movie.vote_average) {

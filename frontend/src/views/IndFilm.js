@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import IndMovieStyle from "../components/IndMovie/IndMovie.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import NavBar from "../components/NavBar/NavBar.js";
-import MovieReviews from "../components/Review/MovieReviews";
+import MovieReviews from "../components/Review/MovieReviews.js";
 import backupPoster from "../misc/noPosterAvailable.png"
 import {
   MovieGenres,
@@ -12,14 +12,14 @@ import {
   ParseYear,
   EmbeddedMovieTrailer,
   MovieDetails,
-} from "../components/IndMovie/MovieComponents";
-import RecommendedCarousel from "../components/Carousel/RecommendedCarousel/RecommendedCarousel";
+} from "../components/IndMovie/MovieComponents.js";
+import RecommendedCarousel from "../components/Carousel/RecommendedCarousel/RecommendedCarousel.js";
 import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel.js";
 import LoadingPage from "./Loading.js";
-import MovieButton from "../components/Other/btn/MovieButton/Button";
-import { fetchData, sendData } from "../security/Data";
+import MovieButton from "../components/Other/btn/MovieButton/Button.js";
+import { fetchData, sendData } from "../security/Data.js";
 import isTokenExpired from "../security/IsTokenExpired.js";
-import WatchListBtn from "..//components/Other/btn/WatchListBtn/WatchListBtn";
+import WatchListBtn from "../components/Other/btn/WatchListBtn/WatchListBtn.js";
 import FavouriteBtn from "../components/Other/btn/FavouriteBtn/FavouriteBtn.js";
 const recommendedEndpoint = process.env.REACT_APP_RECOMMENDED_ENDPOINT;
 const getReviewEndpoint = process.env.REACT_APP_GET_REVIEW_ENDPOINT
