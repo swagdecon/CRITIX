@@ -9,7 +9,7 @@ import "./index.js";
 import Login from "./views/SigninPage.js";
 import SignUp from "./views/SignupPage.js";
 import UserProfile from "./views/UserProfile.js"
-import Homepage from "./views/Homepage.js";
+import Homepage from "./views/Home.js";
 import PrivateRoute from "./security/SecuredRoutes.js";
 import Error403 from "./views/errorMessages/403/403error.js";
 import Error404 from "./views/errorMessages/404/404error.js";
