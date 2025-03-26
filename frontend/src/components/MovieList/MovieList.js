@@ -4,7 +4,7 @@ import MovieCard from "../../components/MovieCard/MovieCard";
 import { Link } from "react-router-dom";
 import Title from "../Carousel/title.module.scss";
 import PropTypes from "prop-types";
-import LoadingPage from "../../views/LoadingPage";
+import LoadingPage from "../../views/Loading";
 import Dropdown from "../Other/Dropdown/SortByDropdown";
 import Pagination from '@mui/material/Pagination';
 import { createTheme, ThemeProvider } from '@mui/material/styles';

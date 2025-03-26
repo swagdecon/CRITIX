@@ -6,7 +6,7 @@ import UserStyle from "../components/UserProfile/UserProfile.module.css"
 import ProfilePicture from "../components/UserProfile/ProfileImage.js"
 import NavBar from "../components/NavBar/NavBar.js";
 import BannerImg from "../components/UserProfile/BannerImage.js";
-import LoadingPage from "./LoadingPage.js";
+import LoadingPage from "./Loading.js";
 import Pagination from "@mui/material/Pagination";
 import IndUserReview from "../components/Review/IndReview/IndUserReview.js";
 import InfoUpdate from "../components/UserProfile/InfoUpdate/InfoUpdate.js";

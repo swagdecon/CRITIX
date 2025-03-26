@@ -15,7 +15,7 @@ import {
 } from "../components/IndMovie/MovieComponents";
 import RecommendedCarousel from "../components/Carousel/RecommendedCarousel/RecommendedCarousel";
 import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel.js";
-import LoadingPage from "./LoadingPage";
+import LoadingPage from "./Loading.js";
 import MovieButton from "../components/Other/btn/MovieButton/Button";
 import { fetchData, sendData } from "../security/Data";
 import isTokenExpired from "../security/IsTokenExpired.js";

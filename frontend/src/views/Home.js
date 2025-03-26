@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import HeroCarousel from "../components/Carousel/HeroCarousel/HeroCarousel.js";
 import MovieCarousel from "../components/Carousel/MovieCarousel/MovieCarousel.js";
 import NavBar from "../components/NavBar/NavBar.js";
-import LoadingPage from "./LoadingPage.js";
+import LoadingPage from "./Loading.js";
 import HomePage from "../misc/HomePage.module.css";
 import { fetchData } from "../security/Data.js";
 import isTokenExpired from "../security/IsTokenExpired.js";

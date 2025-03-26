@@ -10,7 +10,7 @@ import {
   PersonJobs,
   PersonRoles,
 } from "../components/IndPerson/PersonComponents.js";
-import LoadingPage from "./LoadingPage.js";
+import LoadingPage from "./Loading.js";
 export default function IndPerson() {
   const { id } = useParams();
 

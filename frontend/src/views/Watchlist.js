@@ -4,7 +4,7 @@ import isTokenExpired from "../security/IsTokenExpired.js";
 import { fetchData } from "../security/Data.js";
 import WatchListStyle from "../components/MovieList/MovieList.module.css"
 import { React, useMemo, useState } from "react";
-import LoadingPage from "./LoadingPage.js";
+import LoadingPage from "./Loading.js";
 import Title from "../components/Carousel/title.module.scss";
 import { Link } from "react-router-dom";
 import MovieCard from "../components/MovieCard/MovieCard.js";
