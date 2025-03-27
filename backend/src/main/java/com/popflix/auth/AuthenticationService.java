@@ -77,7 +77,6 @@ public class AuthenticationService {
                 if (userRepository.findByEmail(request.getEmail()).isPresent()) {
                         throw new UserAlreadyExistsException("A User With This Email Already Exists");
                 } else {
-                        System.out.println("GOING HERE 1");
                         UserAuth userAuth = UserAuth.builder()
                                         .accountAuthRequestDate(new Date())
                                         .emailAuthRequests(0)
