@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.popflix.config.EnvLoader;
 import com.popflix.model.Person;
 import com.popflix.service.imdbRequests.AllImdbPersonImages;
 import com.popflix.service.imdbRequests.AllImdbPersonJobs;
@@ -17,8 +18,9 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 @Service
 public class PersonService {
-    static Dotenv dotenv = Dotenv.load();
-    private String TMDB_ACCESS_TOKEN = dotenv.get("TMDB_ACCESS_TOKEN");
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+    private EnvLoader envLoader = new EnvLoader();;
+    private String TMDB_ACCESS_TOKEN = envLoader.getEnv("TMDB_ACCESS_TOKEN", dotenv);
     private final TmdbApi tmdbApi = new TmdbApi(TMDB_ACCESS_TOKEN);
 
     private final AllImdbPersonImages allPersonImages = new AllImdbPersonImages();

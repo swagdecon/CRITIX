@@ -6,10 +6,12 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,9 +26,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.popflix.config.EnvLoader;
 import com.popflix.config.JwtService;
 import com.popflix.config.customExceptions.TokenExpiredException;
 import com.popflix.config.customExceptions.TooManyRequestsException;
@@ -60,13 +64,13 @@ public class AuthenticationService {
         private final AuthenticationManager authenticationManager;
         private final EmailService emailService;
         private final RestTemplate restTemplate = new RestTemplate();
+        private EnvLoader envLoader = new EnvLoader();
 
-        static Dotenv dotenv = Dotenv.load();
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
 
         private static String AES_ALGORITHM = "AES";
         private static int KEY_SIZE = 256;
-
-        private String DEFAULT_AVATAR_URL = dotenv.get("DEFAULT_AVATAR_URL");
+        private String DEFAULT_AVATAR_URL = envLoader.getEnv("DEFAULT_AVATAR_URL", dotenv);
 
         public RegistrationResponse register(RegisterRequest request) throws Exception {
                 if (userRepository.findByEmail(request.getEmail()).isPresent()) {

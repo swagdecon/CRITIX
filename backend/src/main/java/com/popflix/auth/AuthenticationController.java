@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.popflix.config.EnvLoader;
 import com.popflix.config.customExceptions.BadRequestException;
 import com.popflix.config.customExceptions.ErrSendEmail;
 import com.popflix.config.customExceptions.TokenExpiredException;
@@ -40,9 +41,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AuthenticationController {
 
         private final AuthenticationService authService;
+        private EnvLoader envLoader = new EnvLoader();
 
-        Dotenv dotenv = Dotenv.load();
-        String recaptchaSecretKey = dotenv.get("RECAPTCHA_SECRET_KEY");
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+        String recaptchaSecretKey = envLoader.getEnv("RECAPTCHA_SECRET_KEY", dotenv);
+
         JSONObject requestBody = new JSONObject();
         HttpClient client = HttpClient.newHttpClient();
 

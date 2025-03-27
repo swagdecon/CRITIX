@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import resetEmailStyles from "../misc/ResetDetails.module.css"
 import LoginStyles from "../components/Login/login.module.css"
 const RESET_EMAIL_ENDPOINT = process.env.REACT_APP_AUTHENTICATE_NEW_EMAIL;
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
 
 export default function ResetPassword() {
     const [newEmail, setNewEmail] = useState("");
@@ -43,7 +44,7 @@ export default function ResetPassword() {
             const currentEmailToken = currentURL.substring(tokenStartIndex, tokenStartIndex + 87);
 
             try {
-                const response = await fetch(RESET_EMAIL_ENDPOINT, {
+                const response = await fetch(`${API_URL}${RESET_EMAIL_ENDPOINT}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

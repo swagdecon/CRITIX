@@ -1,8 +1,9 @@
 // Functions that are shared between components should be put here 
 
 import React from "react";
-const SEND_AUTH_EMAIL = process.env.REACT_APP_SEND_AUTH_EMAIL_ENDPOINT;
 import PropTypes from "prop-types";
+const SEND_AUTH_EMAIL = process.env.REACT_APP_SEND_AUTH_EMAIL_ENDPOINT;
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
 export function validateImageURL(url) {
     const img = new Image();
     img.src = url;
@@ -29,7 +30,7 @@ export async function resendAuthEmail(
 ) {
     try {
         const response = await fetch(
-            SEND_AUTH_EMAIL,
+            `${API_URL}${SEND_AUTH_EMAIL}`,
             {
                 headers: {
                     "Content-Type": "application/json",

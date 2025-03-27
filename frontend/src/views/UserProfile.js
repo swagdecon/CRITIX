@@ -20,6 +20,8 @@ const getBannerEndpoint = process.env.REACT_APP_GET_USER_BANNER
 const getUserFavouriteMoviesEndpoint = process.env.REACT_APP_GET_FAVOURITE_MOVIES_ENDPOINT
 const getLoginInfoEndpoint = process.env.REACT_APP_GET_LOGIN_INFO_ENDPOINT
 const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
+
 export default function UserProfile() {
     const reviewsPerPage = 2;
     const [favouriteMovies, setFavouriteMovies] = useState(null);
@@ -48,11 +50,11 @@ export default function UserProfile() {
         try {
             await isTokenExpired();
             const [loginInfo, favouriteMovies, allUserReviews, avatarPic, bannerPic] = await Promise.all([
-                fetchData(getLoginInfoEndpoint),
-                fetchData(getUserFavouriteMoviesEndpoint),
-                fetchData(allUserReviewsEndpoint),
-                fetchData(getAvatarEndpoint),
-                fetchData(getBannerEndpoint)
+                fetchData(`${API_URL}${getLoginInfoEndpoint}`),
+                fetchData(`${API_URL}${getUserFavouriteMoviesEndpoint}`),
+                fetchData(`${API_URL}${allUserReviewsEndpoint}`),
+                fetchData(`${API_URL}${getAvatarEndpoint}`),
+                fetchData(`${API_URL}${getBannerEndpoint}`)
             ]);
             setLoginInfo(loginInfo)
             setFavouriteMovies(favouriteMovies)
@@ -155,14 +157,14 @@ export default function UserProfile() {
                                 {favouriteMovies.length > 5 ? (
                                     <MovieCarousel
                                         movies={favouriteMovies}
-                                        endpoint={indMovieEndpoint}
+                                        endpoint={`${API_URL}${indMovieEndpoint}`}
                                         breakpoints={favouriteMovieBreakpoints()}
                                     />
                                 ) : favouriteMovies.length > 0 ? (
                                     <div className={UserStyle.ShortFavouriteMovieList}>
                                         {favouriteMovies.map((movie, i) => (
                                             <div className={UserStyle.ShortFavouriteMovieList} key={i}>
-                                                <Link to={`${indMovieEndpoint}/${movie.id || movie.movieId}`}>
+                                                <Link to={`${API_URL}${indMovieEndpoint}/${movie.id || movie.movieId}`}>
                                                     <MovieCard
                                                         movieId={movie.id || movie.movieId}
                                                         title={movie.title}
@@ -173,7 +175,7 @@ export default function UserProfile() {
                                                         actors={movie.actors}
                                                         isSavedToWatchlist={movie.isSavedToWatchlist}
                                                         isSavedToFavouriteMoviesList={movie.isSavedToFavouriteMoviesList}
-                                                        shareUrl={`${indMovieEndpoint}/${movie.id}`}
+                                                        shareUrl={`${API_URL}${indMovieEndpoint}/${movie.id}`}
                                                     />
                                                 </Link>
                                             </div>

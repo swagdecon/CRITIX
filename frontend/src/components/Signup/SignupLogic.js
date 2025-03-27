@@ -6,7 +6,7 @@ import MovieButton from "../Other/btn/MovieButton/Button.js";
 import CookieManager from "../../security/CookieManager";
 import { togglePasswordVisibility, resendAuthEmail, Message, ProfanityLogic } from "../Shared/Shared.js";
 const SIGNUP_URL = process.env.REACT_APP_SIGNUP_ENDPOINT;
-
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
 export default function SignUpFunctionality() {
 
   const [emailErr, setEmailErr] = useState(false)
@@ -46,7 +46,7 @@ export default function SignUpFunctionality() {
 
     if (!ProfanityLogic(hasProfanity, setProfanityError)) {
 
-      const response = await fetch(SIGNUP_URL, {
+      const response = await fetch(`${API_URL}${SIGNUP_URL}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

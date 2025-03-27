@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import MovieCard from "../components/MovieCard/MovieCard.js";
 import NavBar from "../components/NavBar/NavBar.js";
 const GET_WATCHLIST_ENDPOINT = process.env.REACT_APP_GET_WATCHLIST_ENDPOINT;
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
 
 export default function WatchList() {
 
@@ -41,7 +42,7 @@ export default function WatchList() {
         try {
             await isTokenExpired();
             const response = await Promise.all([
-                fetchData(GET_WATCHLIST_ENDPOINT),
+                fetchData(`${API_URL}${GET_WATCHLIST_ENDPOINT}`),
             ]);
             return response[0]
         } catch (error) {

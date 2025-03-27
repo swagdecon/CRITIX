@@ -14,6 +14,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.popflix.config.EnvLoader;
 import com.popflix.model.Review;
 
 import io.github.cdimascio.dotenv.Dotenv;
@@ -21,9 +22,11 @@ import io.github.cdimascio.dotenv.Dotenv;
 public class AllMovieReviews {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final Map<Integer, List<Review>> reviewCache = new HashMap<>();
-    static Dotenv dotenv = Dotenv.load();
-    String TMDB_ACCESS_TOKEN = dotenv.get("TMDB_ACCESS_TOKEN");
-    private static String DEFAULT_AVATAR_URL = dotenv.get("DEFAULT_AVATAR_URL");
+    private static Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+    private static EnvLoader envLoader = new EnvLoader();;
+
+    String TMDB_ACCESS_TOKEN = envLoader.getEnv("TMDB_ACCESS_TOKEN", dotenv);
+    private static String DEFAULT_AVATAR_URL = envLoader.getEnv("DEFAULT_AVATAR_URL", dotenv);
 
     public static String getImageUrl(String avatar) {
         if (avatar != null && !avatar.equals("null")) {

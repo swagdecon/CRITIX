@@ -7,6 +7,7 @@ import { validateImageURL } from '../Shared/Shared';
 import defaultBannerPic from "./banner.jpg"
 
 const updateBannerImgEndpoint = process.env.REACT_APP_UPDATE_BANNER_IMAGE
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
 
 export default function BannerImg({ bannerPic }) {
 
@@ -20,7 +21,7 @@ export default function BannerImg({ bannerPic }) {
                 const data = {
                     bannerPic: url
                 }
-                const response = await sendData(updateBannerImgEndpoint, data);
+                const response = await sendData(`${API_URL}${updateBannerImgEndpoint}`, data);
                 response.ok ?
                     window.alert('New Banner Picture Saved Successfully')
                     :

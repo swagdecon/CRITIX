@@ -8,6 +8,7 @@ import ActorStyle from "./ActorCarousel.module.css";
 const DEFAULT_ACTOR_IMAGE = process.env.REACT_APP_DEFAULT_ACTOR_IMAGE;
 const DEFAULT_TMDB_IMAGE = process.env.REACT_APP_DEFAULT_TMDB_IMAGE_PREFIX;
 const defaultImage = `url(${DEFAULT_ACTOR_IMAGE}) center center no-repeat`;
+
 export default function MovieActors({ actors }) {
 
   const settings = {

@@ -7,20 +7,21 @@ import { sendData } from "../../../../security/Data";
 import PropTypes from "prop-types";
 const sendToFavouriteMoviesEndpoint = process.env.REACT_APP_ADD_TO_FAVOURITE_MOVIES_ENDPOINT;
 const deleteFromFavouriteMoviesEndpoint = process.env.REACT_APP_DELETE_FROM_FAVOURITE_MOVIES_ENDPOINT;
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
 
 export default function FavouriteBtn({ movieData, outline }) {
 
     const [isSavedToFavouriteMovies, setIsSavedToFavouriteMovies] = useState(movieData.isSavedToFavouriteMoviesList)
     async function handleSaveToFavouriteMovies(e) {
         e.preventDefault();
-        const response = await sendData(sendToFavouriteMoviesEndpoint, movieData);
+        const response = await sendData(`${API_URL}${sendToFavouriteMoviesEndpoint}`, movieData);
         response.ok ? setIsSavedToFavouriteMovies(true) : false;
         e.stopPropagation();
     }
 
     async function handleDeleteFromFavouriteMovies(e) {
         e.preventDefault();
-        const response = await sendData(`${deleteFromFavouriteMoviesEndpoint}${movieData.movieId}`);
+        const response = await sendData(`${API_URL}${deleteFromFavouriteMoviesEndpoint}${movieData.movieId}`);
         response.ok ? setIsSavedToFavouriteMovies(false) : false;
         e.stopPropagation();
     }

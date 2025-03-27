@@ -10,6 +10,7 @@ import { homepageBreakpoints } from "../components/Carousel/Other/General.js";
 const popularMovieEndpoint = process.env.REACT_APP_POPULAR_MOVIES_ENDPOINT;
 const topRatedMovieEndpoint = process.env.REACT_APP_TOP_RATED_MOVIES_ENDPOINT;
 const upcomingMovieEndpoint = process.env.REACT_APP_UPCOMING_MOVIES_ENDPOINT;
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
 
 function Homepage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -27,9 +28,9 @@ function Homepage() {
       try {
         await isTokenExpired();
         const [trendingMovies, topRatedMovies, upcomingMovies] = await Promise.all([
-          fetchData(popularMovieEndpoint),
-          fetchData(topRatedMovieEndpoint),
-          fetchData(upcomingMovieEndpoint),
+          fetchData(`${API_URL}${popularMovieEndpoint}`),
+          fetchData(`${API_URL}${topRatedMovieEndpoint}`),
+          fetchData(`${API_URL}${upcomingMovieEndpoint}`),
         ]);
         setMoviesData({
           trendingMovies,

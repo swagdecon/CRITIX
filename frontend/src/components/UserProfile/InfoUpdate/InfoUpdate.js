@@ -4,6 +4,7 @@ import UserStyle from "../UserProfile.module.css"
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 const UPDATE_EMAIL_ENDPOINT = process.env.REACT_APP_UPDATE_EMAIL_ENDPOINT
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
 
 export default function InfoUpdate() {
     const [fieldMsg, setFieldMsg] = useState(null);
@@ -15,7 +16,7 @@ export default function InfoUpdate() {
     };
 
     async function SubmitEmailChange() {
-        const response = await sendData(UPDATE_EMAIL_ENDPOINT);
+        const response = await sendData(`${API_URL}${UPDATE_EMAIL_ENDPOINT}`);
         if (response.ok) {
             setFieldMsg("Please reset your email through the link we sent your email address.")
         } else {

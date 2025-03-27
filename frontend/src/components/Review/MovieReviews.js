@@ -15,6 +15,7 @@ import { format } from 'date-fns';
 const RECAPTCHA_KEY = process.env.REACT_APP_RECAPTCHA_KEY;
 const RECAPTCHA_ENDPOINT = process.env.REACT_APP_RECAPTCHA_ENDPOINT;
 const CREATE_MOVIE_ENDPOINT = process.env.REACT_APP_CREATE_MOVIE_ENDPOINT;
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
 
 
 
@@ -84,7 +85,7 @@ export default function MovieReviews({ reviews, movieId, movieTitle }) {
 
     async function onChange(token) {
         try {
-            await axios.post(RECAPTCHA_ENDPOINT, {
+            await axios.post(`${API_URL}${RECAPTCHA_ENDPOINT}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -104,7 +105,7 @@ export default function MovieReviews({ reviews, movieId, movieTitle }) {
             const formattedDate = format(currentDate, 'MM-dd-yyyy HH:mm');
 
             axios
-                .post(`${CREATE_MOVIE_ENDPOINT}${movieId}`, {
+                .post(`${API_URL}${CREATE_MOVIE_ENDPOINT}${movieId}`, {
                     createdDate: formattedDate,
                     movieId,
                     movieTitle,

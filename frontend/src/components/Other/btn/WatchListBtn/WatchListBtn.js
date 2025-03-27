@@ -7,20 +7,21 @@ import { sendData } from "../../../../security/Data";
 import PropTypes from "prop-types";
 const sendToWatchListEndpoint = process.env.REACT_APP_ADD_TO_WATCHLIST_ENDPOINT;
 const deleteFromWatchListEndpoint = process.env.REACT_APP_DELETE_FROM_WATCHLIST_ENDPOINT;
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
 
 export default function WatchListBtn({ movieData, outline }) {
     const [isSavedToWatchList, setIsSavedToWatchList] = useState(movieData.isSavedToWatchlist)
 
     async function handleSaveToWatchlist(e) {
         e.preventDefault();
-        const response = await sendData(sendToWatchListEndpoint, movieData);
+        const response = await sendData(`${API_URL}${sendToWatchListEndpoint}`, movieData);
         response.ok ? setIsSavedToWatchList(true) : false;
         e.stopPropagation();
     }
 
     async function handleDeleteFromWatchlist(e) {
         e.preventDefault();
-        const response = await sendData(`${deleteFromWatchListEndpoint}${movieData.movieId}`);
+        const response = await sendData(`${API_URL}${deleteFromWatchListEndpoint}${movieData.movieId}`);
         response.ok ? setIsSavedToWatchList(false) : false;
         e.stopPropagation();
     }

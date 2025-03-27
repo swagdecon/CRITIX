@@ -23,6 +23,7 @@ import WatchListBtn from "../components/Other/btn/WatchListBtn/WatchListBtn.js";
 import FavouriteBtn from "../components/Other/btn/FavouriteBtn/FavouriteBtn.js";
 const recommendedEndpoint = process.env.REACT_APP_RECOMMENDED_ENDPOINT;
 const getReviewEndpoint = process.env.REACT_APP_GET_REVIEW_ENDPOINT
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
 
 export default function IndMovie() {
   const { id } = useParams();
@@ -38,9 +39,9 @@ export default function IndMovie() {
       try {
         await isTokenExpired();
         const [movies, reviewsData, recommendedMovies] = await Promise.all([
-          sendData(id),
-          fetchData(`${getReviewEndpoint}${id}`),
-          fetchData(`${recommendedEndpoint}${id}`)
+          sendData(`${API_URL}/movies/movie/${id}`),
+          fetchData(`${API_URL}${getReviewEndpoint}${id}`),
+          fetchData(`${API_URL}${recommendedEndpoint}${id}`)
         ]);
         setMovie(await movies.json());
         setReviews(reviewsData)

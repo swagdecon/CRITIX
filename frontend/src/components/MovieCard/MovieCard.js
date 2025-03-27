@@ -15,6 +15,7 @@ import 'reactjs-popup/dist/index.css';
 import SharePagePopup from "../Other/SocialShare/SocialShare.js";
 import WatchListBtn from "../Other/btn/WatchListBtn/WatchListBtn.js";
 const trailerEndpoint = process.env.REACT_APP_TRAILER_ENDPOINT;
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
 
 export default function MovieCard({
   movieId,
@@ -42,7 +43,7 @@ export default function MovieCard({
   };
   async function handleWatchTrailer(e) {
     e.preventDefault();
-    const trailer = await fetchData(`${trailerEndpoint}${movieId}`);
+    const trailer = await fetchData(`${API_URL}${trailerEndpoint}${movieId}`);
     OpenLinkInNewTab(trailer)
     e.stopPropagation();
   }

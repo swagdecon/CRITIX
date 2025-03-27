@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import verificationStyles from "../misc/ResetDetails.module.css";
 import LoginStyles from "../components/Login/login.module.css";
 const ACTIVATE_ACCOUNT_ENDPOINT = process.env.REACT_APP_ACTIVATE_ACCOUNT_ENDPOINT;
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
 
 export default function AccountVerification() {
     const [message, setMessage] = useState(null);
@@ -36,7 +37,7 @@ export default function AccountVerification() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(ACTIVATE_ACCOUNT_ENDPOINT, {
+            const response = await fetch(`${API_URL}${ACTIVATE_ACCOUNT_ENDPOINT}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: encrypedEmail

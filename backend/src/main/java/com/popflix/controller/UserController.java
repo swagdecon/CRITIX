@@ -1,6 +1,7 @@
 package com.popflix.controller;
 
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,10 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.popflix.auth.AuthenticationService;
+import com.popflix.config.EnvLoader;
 import com.popflix.model.LoginEvents;
 import com.popflix.model.User;
 import com.popflix.service.UserService;
+
 import io.github.cdimascio.dotenv.Dotenv;
 
 @RequestMapping("/user")
@@ -22,10 +26,12 @@ public class UserController {
     @Autowired
     private AuthenticationService authenticationService;
     @Autowired
-    private UserService userService;
-    Dotenv dotenv = Dotenv.load();
 
-    private String defaultAvatar = dotenv.get("DEFAULT_AVATAR_URL");
+    private UserService userService;
+    private EnvLoader envLoader = new EnvLoader();
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+
+    private String defaultAvatar = envLoader.getEnv("DEFAULT_AVATAR_URL", dotenv);
 
     @GetMapping("/")
     public ResponseEntity<User> singleUser(@RequestHeader("Authorization") String accessToken)

@@ -10,6 +10,7 @@ import { fetchData } from '../../security/Data';
 import isTokenExpired from "../../security/IsTokenExpired.js";
 
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
 
 export default function NavBar(props) {
   const [avatar, setAvatar] = useState(null)
@@ -19,7 +20,7 @@ export default function NavBar(props) {
       try {
         await isTokenExpired();
         const [avatarPic] = await Promise.all([
-          fetchData(getAvatarEndpoint),
+          fetchData(`${API_URL}${getAvatarEndpoint}`),
 
         ]);
         setAvatar(avatarPic)

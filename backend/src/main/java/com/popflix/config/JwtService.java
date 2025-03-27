@@ -18,34 +18,14 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
-    private final String SECRET_KEY;
-    private final Long jwtExpiration;
-    private final Long refreshExpiration;
 
-    public JwtService() {
-        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+    private EnvLoader envLoader = new EnvLoader();
 
-        SECRET_KEY = getEnv("SECRET_KEY", dotenv);
-        jwtExpiration = Long.parseLong(getEnv("SECRET_KEY_EXPIRATION", dotenv));
-        refreshExpiration = Long.parseLong(getEnv("REFRESH_TOKEN_EXPIRATION", dotenv));
-    }
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
 
-    private String getEnv(String key, Dotenv dotenv) {
-        // First, check if the variable is available as a system environment variable
-        String value = System.getenv(key);
-
-        // If not found in system env, check .env file
-        if (value == null) {
-            value = dotenv.get(key);
-        }
-
-        // If still not found, throw an error to prevent silent failures
-        if (value == null) {
-            throw new RuntimeException("Missing required environment variable: " + key);
-        }
-
-        return value;
-    }
+    String SECRET_KEY = envLoader.getEnv("SECRET_KEY", dotenv);
+    Long jwtExpiration = Long.parseLong(envLoader.getEnv("SECRET_KEY_EXPIRATION", dotenv));
+    Long refreshExpiration = Long.parseLong(envLoader.getEnv("REFRESH_TOKEN_EXPIRATION", dotenv));
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

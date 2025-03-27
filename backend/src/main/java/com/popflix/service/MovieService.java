@@ -23,6 +23,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import com.popflix.config.EnvLoader;
 import com.popflix.model.Movie;
 import com.popflix.model.MovieCard;
 import com.popflix.model.MovieResults;
@@ -49,11 +51,13 @@ import jakarta.annotation.PostConstruct;
 @Service
 public class MovieService {
   private ScheduledExecutorService executor;
+  private EnvLoader envLoader = new EnvLoader();
 
-  static Dotenv dotenv = Dotenv.load();
-  private String TMDB_ACCESS_TOKEN = dotenv.get("TMDB_ACCESS_TOKEN");
-  private String YT_URL_PREFIX = dotenv.get("YT_URL_PREFIX");
-  private String TMDB_IMAGE_PREFIX = dotenv.get("TMDB_IMAGE_PREFIX");
+  Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+
+  private String TMDB_ACCESS_TOKEN = envLoader.getEnv("TMDB_ACCESS_TOKEN", dotenv);
+  private String YT_URL_PREFIX = envLoader.getEnv("YT_URL_PREFIX", dotenv);
+  private String TMDB_IMAGE_PREFIX = envLoader.getEnv("TMDB_IMAGE_PREFIX", dotenv);
 
   private final MovieRepository movieRepository;
   private final MongoTemplate mongoTemplate;

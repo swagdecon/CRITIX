@@ -11,6 +11,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import isTokenExpired from "../../security/IsTokenExpired";
 import { fetchData } from "../../security/Data";
 const movieListEndpoint = process.env.REACT_APP_MOVIE_LIST_ENDPOINT
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
 
 const theme = createTheme({
   palette: {
@@ -24,7 +25,7 @@ async function fetchBackendData(endpointName, page) {
   try {
     await isTokenExpired();
     const response = await Promise.all([
-      fetchData(`${movieListEndpoint}${endpointName}?page=${page}`),
+      fetchData(`${API_URL}${movieListEndpoint}${endpointName}?page=${page}`),
     ]);
     return response[0]
   } catch (error) {

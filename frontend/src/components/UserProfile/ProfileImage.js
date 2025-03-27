@@ -9,6 +9,7 @@ import { sendData } from '../../security/Data';
 
 const saveProfileImgEndpoint = process.env.REACT_APP_UPDATE_PROFILE_IMAGE;
 const proxyImgEndpoint = process.env.REACT_APP_PROXY_IMG;
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
 
 const ImgUpload = ({ picture }) => {
     const [btn, setBtn] = useState("add");
@@ -19,7 +20,7 @@ const ImgUpload = ({ picture }) => {
         const url = window.prompt("Please enter the image URL:");
         if (url) {
             try {
-                setAvatar(`${proxyImgEndpoint}?url=${encodeURIComponent(url)}`)
+                setAvatar(`${API_URL}${proxyImgEndpoint}?url=${encodeURIComponent(url)}`)
 
                 setBtn("save");
             } catch (error) {
