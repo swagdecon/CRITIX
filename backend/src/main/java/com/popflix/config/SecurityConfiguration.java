@@ -53,6 +53,7 @@ public class SecurityConfiguration {
         public CorsConfigurationSource corsConfigurationSource() {
                 CorsConfiguration configuration = new CorsConfiguration();
                 configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000",
+                                "https://frontend-production-9727.up.railway.app",
                                 "https://backend-production-51a7.up.railway.app"));
                 configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
                 configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
