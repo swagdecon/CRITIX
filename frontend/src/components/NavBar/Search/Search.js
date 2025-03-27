@@ -54,10 +54,10 @@ export default function Search(props) {
     try {
       await isTokenExpired();
       const formattedQuery = searchQuery.includes(' ') ? searchQuery.trim().split(' ').join('+') : searchQuery.trim();
-      const endpoint = `${API_URL}${searchEndpoint}/${formattedQuery}`;
+      const endpoint = `${API_URL}${searchEndpoint}${formattedQuery}`;
 
       const search = await fetchData(endpoint);
-      setMovieResults(search);
+      setMovieResults(search || []);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
