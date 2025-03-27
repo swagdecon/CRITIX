@@ -76,6 +76,7 @@ public class AuthenticationService {
                 if (userRepository.findByEmail(request.getEmail()).isPresent()) {
                         throw new UserAlreadyExistsException("A User With This Email Already Exists");
                 } else {
+                        System.out.println("GOING HERE 1");
                         UserAuth userAuth = UserAuth.builder()
                                         .accountAuthRequestDate(new Date())
                                         .emailAuthRequests(0)
@@ -112,10 +113,14 @@ public class AuthenticationService {
                                         .refreshToken(refreshToken)
                                         .build();
                         try {
+                                System.out.println("GOING HERE 2");
+
                                 sendPasswordAuthenticationEmail(request.getEmail());
                                 return new RegistrationResponse(authenticationResponse,
                                                 "Please check your email to verify your account.");
                         } catch (UserEmailNotAuthenticated e) {
+                                System.out.println("GOING HERE 3");
+
                                 e.printStackTrace();
                                 throw new UserEmailNotAuthenticated("Failed to send authentication email.");
                         }

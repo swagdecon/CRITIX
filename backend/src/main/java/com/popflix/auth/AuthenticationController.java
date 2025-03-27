@@ -230,5 +230,4 @@ public class AuthenticationController {
                 }
                 return null;
         }
-
 }
