@@ -53,25 +53,16 @@ public class AuthenticationController {
         public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
                 try {
                         RegistrationResponse registrationResponse = authService.register(request);
-                        System.out.println("GOING HERE 4");
 
                         return ResponseEntity.ok(registrationResponse);
 
                 } catch (UserEmailNotAuthenticated e) {
-                        System.out.println("GOING HERE 5");
-
                         return ResponseEntity.badRequest().body(e.getMessage());
                 } catch (UserAlreadyExistsException e) {
-                        System.out.println("GOING HERE 6");
-
-                        return ResponseEntity.badRequest().body(e.getMessage());
+                        return ResponseEntity.badRequest().body("A user with this email already exists");
                 } catch (ErrSendEmail e) {
-                        System.out.println("GOING HERE 7");
-
-                        return ResponseEntity.badRequest().body(e.getMessage());
+                        return ResponseEntity.badRequest().body("There was an error sending the signup email");
                 } catch (Exception e) {
-                        System.out.println("GOING HERE 8");
-
                         System.out.println(e.getMessage());
                         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                                         .body("An error occurred during registration");

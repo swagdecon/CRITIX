@@ -71,6 +71,7 @@ public class AuthenticationService {
         private static String AES_ALGORITHM = "AES";
         private static int KEY_SIZE = 256;
         private String DEFAULT_AVATAR_URL = envLoader.getEnv("DEFAULT_AVATAR_URL", dotenv);
+        private String FRONTEND_API_URL = envLoader.getEnv("FRONTEND_API_URL", dotenv);
 
         public RegistrationResponse register(RegisterRequest request) throws Exception {
                 if (userRepository.findByEmail(request.getEmail()).isPresent()) {
@@ -113,14 +114,10 @@ public class AuthenticationService {
                                         .refreshToken(refreshToken)
                                         .build();
                         try {
-                                System.out.println("GOING HERE 2");
-
                                 sendPasswordAuthenticationEmail(request.getEmail());
                                 return new RegistrationResponse(authenticationResponse,
                                                 "Please check your email to verify your account.");
                         } catch (UserEmailNotAuthenticated e) {
-                                System.out.println("GOING HERE 3");
-
                                 e.printStackTrace();
                                 throw new UserEmailNotAuthenticated("Failed to send authentication email.");
                         }
@@ -284,13 +281,13 @@ public class AuthenticationService {
                                                                 + "<img src='cid:logoIcon' alt='Popflix Logo' style='max-width: 200px;' />"
                                                                 + "<h1>Activate Your Account</h1>"
                                                                 + "<p>Dear user,</p>"
-                                                                + "<p>To authenticate your account, click <a href='http:/localhost:3000/activate-account/%s' style='color: white;'>here</a>.</p>"
+                                                                + "<p>To authenticate your account, click <a href='%s/activate-account/%s' style='color: white;'>here</a>.</p>"
                                                                 + "<p>If you didn't authorize this request, kindly ignore this email.</p>"
                                                                 + "<p>Thanks for your support!<br/>The POPFLIX team</p>"
                                                                 + "</div>"
                                                                 + "</body>"
                                                                 + "</html>",
-                                                encryptedEmailToken);
+                                                FRONTEND_API_URL, encryptedEmailToken);
 
                                 emailService.sendEmail(email, "Activate your account", emailContent);
                                 emailCount += 1;
@@ -434,19 +431,18 @@ public class AuthenticationService {
                 if (resetCount <= 3) {
                         String encryptedEmailToken = encryptEmail(email);
 
-                        String emailContent = "<html>"
+                        String emailContent = String.format("<html>"
                                         + "<body style='background-color: black; color: white; font-family: Arial, sans-serif;'>"
                                         + "<div style='text-align: center; padding: 20px;'>"
                                         + "<img src='cid:logoIcon' alt='Popflix Logo' style='max-width: 200px;' />"
                                         + "<h1>Password Reset Request</h1>"
                                         + "<p>Dear user,</p>"
-                                        + "<p>To reset your password, click <a href='http:/localhost:3000/reset-password/"
-                                        + encryptedEmailToken + "' style='color: white;'>here</a>.</p>"
+                                        + "<p>To reset your password, click <a href='%s/reset-password/%s' style='color: white;'>here</a>.</p>"
                                         + "<p>If you didn't authorize this request, kindly ignore this email.</p>"
                                         + "<p>Thanks for your support!<br/>The POPFLIX team</p>"
                                         + "</div>"
                                         + "</body>"
-                                        + "</html>";
+                                        + "</html>", FRONTEND_API_URL, encryptedEmailToken);
 
                         emailService.sendEmail(email, "Password Reset Request", emailContent);
 
@@ -489,19 +485,18 @@ public class AuthenticationService {
                 if (resetCount <= 3) {
                         String encryptedEmailToken = encryptEmail(currentEmail);
 
-                        String emailContent = "<html>"
+                        String emailContent = String.format("<html>"
                                         + "<body style='background-color: black; color: white; font-family: Arial, sans-serif;'>"
                                         + "<div style='text-align: center; padding: 20px;'>"
                                         + "<img src='cid:logoIcon' alt='Popflix Logo' style='max-width: 200px;' />"
                                         + "<h1>Email Change Request</h1>"
                                         + "<p>Dear user,</p>"
-                                        + "<p>To reset your email, click <a href='http:/localhost:3000/reset-email/"
-                                        + encryptedEmailToken + "' style='color: white;'>here</a>.</p>"
+                                        + "<p>To reset your email, click <a href='%s/reset-email/%s' style='color: white;'>here</a>.</p>"
                                         + "<p>If you didn't authorize this request, kindly ignore this email.</p>"
                                         + "<p>Thanks for your support!<br/>The POPFLIX team</p>"
                                         + "</div>"
                                         + "</body>"
-                                        + "</html>";
+                                        + "</html>", FRONTEND_API_URL, encryptedEmailToken);
 
                         emailService.sendEmail(currentEmail, "Email Change Request", emailContent);
 
