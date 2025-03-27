@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.0</version>
+		<version>3.3.10</version>
 		<relativePath/> 
 	</parent>
 	<groupId>com.popflix</groupId>
@@ -21,7 +21,7 @@
 		<jackson-datatype.version>2.15.2</jackson-datatype.version>
 		<jjwt.version>0.11.5</jjwt.version>
 		<okhttp.version>4.11.0</okhttp.version>
-		<sb-dev-tools.version>3.3.1</sb-dev-tools.version>
+		<sb-dev-tools.version>3.3.10</sb-dev-tools.version>
 	</properties>
 		<dependencies>
 			<dependency>
@@ -36,7 +36,6 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-devtools</artifactId>
-				<version>${sb-dev-tools.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
@@ -45,13 +44,11 @@
 			<dependency>
 				<groupId>org.junit.jupiter</groupId>
 				<artifactId>junit-jupiter-api</artifactId>
-				<version>5.10.1</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-mail</artifactId>
-				<version>3.2.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
@@ -74,7 +71,6 @@
 			<dependency>
 				<groupId>com.fasterxml.jackson.datatype</groupId>
 				<artifactId>jackson-datatype-json-org</artifactId>
-				<version>${jackson-datatype.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.projectlombok</groupId>
