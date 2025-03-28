@@ -31,7 +31,7 @@ const ImgUpload = ({ picture }) => {
     };
     const onClickSave = async () => {
         const profilePicture = editorRef.current.getImageScaledToCanvas().toDataURL()
-        const response = await sendData(saveProfileImgEndpoint, { profilePic: profilePicture });
+        const response = await sendData(`${API_URL}${saveProfileImgEndpoint}`, { profilePic: profilePicture });
         window.alert(response.ok ? 'New Profile Picture Saved Successfully' : 'An Error Occurred, Please try again');
 
     };

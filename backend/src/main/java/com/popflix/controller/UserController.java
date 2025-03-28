@@ -65,15 +65,20 @@ public class UserController {
 
             String profilePicURL = profilePic.get("profilePic");
             if (profilePicURL == null || profilePicURL.isEmpty()) {
+                System.out.println("GOING HERE 1");
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             if (!profilePicURL.contains("data:image/")) {
+                System.out.println("GOING HERE 2");
+
                 return new ResponseEntity<>("Invalid data format.", HttpStatus.BAD_REQUEST);
             }
             userService.updateUserProfilePic(profilePicURL, userId);
             return new ResponseEntity<>("Profile Picture Updated", HttpStatus.OK);
 
         } catch (Exception e) {
+            System.out.println("GOING HERE 3");
+
             return new ResponseEntity<>("Error processing URL", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
