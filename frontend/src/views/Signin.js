@@ -42,15 +42,11 @@ export default function Login() {
         </footer>
       </div>
       <div id={LoginStyles.right}>
-        <div id={LoginStyles.showcase}>
-          <div className={LoginStyles["showcase-content"]}>
-            <div className={LoginStyles.overlay}>
-              <LoginPlayer />
-            </div>
-            <div className={LoginStyles["responsive-background"]} />
-          </div>
+        <div className={LoginStyles.overlay}>
+          <LoginPlayer />
         </div>
+        <div className={LoginStyles["responsive-background"]} />
       </div>
-    </div >
+    </div>
   );
 }

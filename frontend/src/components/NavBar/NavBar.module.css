@@ -12,3 +12,17 @@
   display: flex;
   align-items: center;
 }
+.MobileSearchBar {
+  display: none;
+}
+@media screen and (max-width: 650px) {
+  .MobileSearchBar  {
+    display: inline;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+  }
+  .SearchBar {
+    display: none;
+  }
+}

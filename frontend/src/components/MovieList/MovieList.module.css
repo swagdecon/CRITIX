@@ -33,8 +33,7 @@
   text-align: center;
 }
 .title-caption {
-  display: flex;
-  justify-content: flex-start;
+  text-align: center;
   font-family: "CoreCircus", sans-serif;
   font-size: 20px;
   color: white;

@@ -1,9 +1,14 @@
 import React from "react";
-import PopflixTrailer2 from "./PopflixTrailer2.mp4";
+// import PopflixTrailer2 from "./PopflixTrailer2.mp4";
 import "./login.module.css";
 
 export default function LoginPlayer() {
   return (
-    <video autoPlay loop muted src={PopflixTrailer2} type="video/mp4" />
-  );
+    <iframe
+      src="https://player.vimeo.com/video/1070142939?h=9961953776&autoplay=1&loop=1&muted=1&background=1"
+      width="100%"
+      height="100%"
+      allow="autoplay; fullscreen"
+    ></iframe>
+  )
 }

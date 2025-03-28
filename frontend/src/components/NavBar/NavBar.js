@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 import { useState, useMemo } from "react"
 import { fetchData } from '../../security/Data';
 import isTokenExpired from "../../security/IsTokenExpired.js";
+import MobileSearchBar from "./Search/MobileSearch.js";
 
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
 const API_URL = process.env.REACT_APP_BACKEND_API_URL
@@ -38,7 +39,12 @@ export default function NavBar(props) {
           <Logo />
         </div>
         <Navigation />
-        <Search onSubmit={props.onSubmit} />
+        <div className={NavBarStyle.MobileSearchBar}>
+          <MobileSearchBar onSubmit={props.onSubmit} />
+        </div>
+        <div className={NavBarStyle.SearchBar}>
+          <Search onSubmit={props.onSubmit} />
+        </div>
       </div>
       <HeaderUser avatar={avatar} />
     </div >
