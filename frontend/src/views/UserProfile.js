@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { fetchData } from "../security/Data";
 import MovieCarousel from "../components/Carousel/MovieCarousel/MovieCarousel.js";
 import isTokenExpired from "../security/IsTokenExpired.js";
@@ -14,6 +14,9 @@ import LoginInfo from "../components/UserProfile/LoginInfo.js";
 import { Link } from "react-router-dom";
 import { favouriteMovieBreakpoints } from "../components/Carousel/Other/General.js";
 import MovieCard from "../components/MovieCard/MovieCard.js";
+import { jwtDecode } from "jwt-decode";
+import CookieManager from "../security/CookieManager.js";
+
 const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
 const getBannerEndpoint = process.env.REACT_APP_GET_USER_BANNER
@@ -36,6 +39,10 @@ export default function UserProfile() {
     const [currentPage, setCurrentPage] = useState(1);
     const handlePageChange = useCallback((event, page) => setCurrentPage(page));
 
+    const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
+    const decodedToken = useMemo(() => jwtDecode(token), [token]);
+    const firstName = decodedToken.firstName
+
     let reviewsToDisplay = [];
     const startIdx = (currentPage - 1) * reviewsPerPage;
     const endIdx = startIdx + reviewsPerPage;
@@ -54,7 +61,7 @@ export default function UserProfile() {
                 fetchData(`${API_URL}${getUserFavouriteMoviesEndpoint}`),
                 fetchData(`${API_URL}${allUserReviewsEndpoint}`),
                 fetchData(`${API_URL}${getAvatarEndpoint}`),
-                fetchData(`${API_URL}${getBannerEndpoint}`)
+                fetchData(`${API_URL}${getBannerEndpoint}`),
             ]);
             setLoginInfo(loginInfo)
             setFavouriteMovies(favouriteMovies)
@@ -92,7 +99,7 @@ export default function UserProfile() {
                     <div className={UserStyle["main-profile"]}>
                         <ProfilePicture avatar={avatar} />
                         <div className={UserStyle["profile-names"]}>
-                            <h1 className={UserStyle.username}>Connor Pant</h1>
+                            <h1 className={UserStyle.username}>{firstName}</h1>
                         </div>
                     </div>
                 </div>
