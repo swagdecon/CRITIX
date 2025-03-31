@@ -253,7 +253,8 @@
     .bio-input {
         background-color: #262626;
         color: white;
-        max-height: 50vh;
+        min-height: 10vh;
+        max-height: 30vh;
         text-align: center;
     }
     .bio-save-btn {

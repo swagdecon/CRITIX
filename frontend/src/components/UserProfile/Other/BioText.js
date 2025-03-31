@@ -3,7 +3,9 @@ import DOMPurify from "dompurify";
 import UserStyle from "../UserProfile.module.css"
 
 export default function EditableBio() {
-    const [bio, setBio] = useState("Here you can change your bio, be creative! (50 words max)");
+    const defaultBio = "Here you can change your bio, be creative! (50 words max)";
+
+    const [bio, setBio] = useState(defaultBio);
     const [editing, setEditing] = useState(false);
 
     const handleChange = (e) => {
@@ -17,7 +19,7 @@ export default function EditableBio() {
     const toggleEditing = () => {
         if (editing) {
             const sanitizedBio = DOMPurify.sanitize(bio);
-            setBio(sanitizedBio);
+            setBio(sanitizedBio.trim() === "" ? defaultBio : sanitizedBio);
         }
         setEditing(!editing);
     };

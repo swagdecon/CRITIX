@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import SearchStyle from "./Search.module.css";
 import PropTypes from "prop-types";
-import { ParseYear } from "../../IndMovie/MovieComponents";
+import { ParseYear } from "../../IndFilm/MovieComponents";
 import isTokenExpired from "../../../security/IsTokenExpired";
 import { fetchData } from "../../../security/Data";
 

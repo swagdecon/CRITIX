@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import IndMovieStyle from "../components/IndMovie/IndMovie.module.css";
+import IndMovieStyle from "../components/IndFilm/IndMovie.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import NavBar from "../components/NavBar/NavBar.js";
 import MovieReviews from "../components/Review/MovieReviews.js";
@@ -12,7 +12,7 @@ import {
   ParseYear,
   EmbeddedMovieTrailer,
   MovieDetails,
-} from "../components/IndMovie/MovieComponents.js";
+} from "../components/IndFilm/MovieComponents.js";
 import RecommendedCarousel from "../components/Carousel/RecommendedCarousel/RecommendedCarousel.js";
 import MovieActors from "../components/Carousel/ActorCarousel/ActorCarousel.js";
 import LoadingPage from "./Loading.js";

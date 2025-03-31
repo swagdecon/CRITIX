@@ -1,6 +1,6 @@
 import { React } from "react";
 import PropTypes from "prop-types";
-import IndMovieStyle from "../IndMovie/IndMovie.module.css";
+import IndMovieStyle from "../IndFilm/IndMovie.module.css";
 import ReactPlayer from "react-player";
 import "../Carousel/MovieCarousel/MovieCarousel.module.css";
 import GlassCard from "./GlassCard";
@@ -111,7 +111,7 @@ function EmbeddedMovieTrailer({ trailer }) {
   if (!trailer) {
     return null;
   }
-
+  console.log(trailer)
   return (
     <div className="player-wrapper">
       <ReactPlayer

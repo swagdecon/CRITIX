@@ -4,7 +4,7 @@ import {
   MovieAverage,
   TruncateDescription,
   OpenLinkInNewTab
-} from "../IndMovie/MovieComponents.js";
+} from "../IndFilm/MovieComponents.js";
 import FavouriteBtn from "../Other/btn/FavouriteBtn/FavouriteBtn.js"
 import ShareIcon from '@mui/icons-material/Share';
 import { MovieCardActors, MovieCardGenres } from "./MovieCardComponents.js";

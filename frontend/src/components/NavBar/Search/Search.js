@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import SearchStyle from "./Search.module.css";
 import PropTypes from "prop-types";
-import { ParseYear } from "../../IndMovie/MovieComponents";
+import { ParseYear } from "../../IndFilm/MovieComponents";
 import { TypeAnimation } from 'react-type-animation';
 import isTokenExpired from "../../../security/IsTokenExpired";
 import { fetchData } from "../../../security/Data";
