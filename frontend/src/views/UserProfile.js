@@ -16,6 +16,7 @@ import { favouriteMovieBreakpoints } from "../components/Carousel/Other/General.
 import MovieCard from "../components/MovieCard/MovieCard.js";
 import { jwtDecode } from "jwt-decode";
 import CookieManager from "../security/CookieManager.js";
+import EditableBio from "../components/UserProfile/Other/BioText.js";
 
 const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
@@ -111,9 +112,7 @@ export default function UserProfile() {
                                 <i className="fa fa-info-circle"></i>
                                 Bio
                             </div>
-                            <p className={UserStyle["bio-text"]}>
-                                Hi!, My name is Connor and I am the working on this application!
-                            </p>
+                            <EditableBio />
                         </section>
                     </div>
                     {renderUserHome && !renderUserSettings ?
