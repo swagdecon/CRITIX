@@ -111,7 +111,6 @@ function EmbeddedMovieTrailer({ trailer }) {
   if (!trailer) {
     return null;
   }
-  console.log(trailer)
   return (
     <div className="player-wrapper">
       <ReactPlayer
