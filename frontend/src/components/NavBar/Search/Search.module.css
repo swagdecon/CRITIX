@@ -10,21 +10,20 @@
   box-sizing: border-box;
 }
 
-
 .Search input {
   font-family: "Open Sans", sans-serif;
   font-weight: 300;
   font-size: 14px;
-  height: 37px;
+  height: 40px;
   width: 100%;
   background: transparent;
   color: #ffffff;
   appearance: none;
   border: 2px solid rgb(162, 162, 162);
   outline: none;
-  border-radius: 37px;
-  padding: 0 10px;
-  transition: border 0.25s ease, width 0.125s ease 0.125s;
+  border-radius: 20px;
+  padding: 0 15px;
+  transition: border 0.2s ease-in-out;
 }
 
 .Search ::placeholder {
@@ -37,45 +36,78 @@
 
 .search-results-list {
   list-style-type: none;
-  display: flex;
+  display: none;
   flex-direction: column;
   position: absolute;
   top: 100%;
+  width: 100%;
+  background: rgba(42, 42, 42, 0.95);
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.search-results-list:has(.ind-search-result) {
+  display: flex;
 }
 
 .ind-search-result {
-  background-color: #2a2a2ac8;
-  backdrop-filter: blur(10px);
+  background: linear-gradient(135deg, rgba(58, 58, 58, 0.9), rgba(32, 32, 32, 0.9));
+  backdrop-filter: blur(12px);
   display: flex;
-  min-width: 15vw;
-  margin: 5px;
-  border: 3px solid #ccc;
-  border-radius: 8px;
+  align-items: center;
+  min-width: 250px;
+  margin: 8px 0;
+  padding: 10px;
+  border: 2px solid transparent;
+  border-radius: 12px;
   font-family: "Open Sans", sans-serif;
   color: white;
+  transition: transform 0.15s linear, border-color 0.15s linear;
 }
 
 .ind-search-result:hover {
-  border: 3px solid #0096ff;
+  border-color: #0096ff;
+  transform: scale(1.02);
+}
+
+.ind-search-result img {
+  width: 50px;
+  height: 75px;
+  border-radius: 6px;
+  margin-right: 10px;
+  object-fit: cover;
 }
 
 .result-title-data {
-  transform: translateY(4vh);
-  padding-left: 3%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.result-title {
+  font-weight: bold;
+  font-size: 1em;
 }
 
 .result-release-date {
   color: #0096ff;
-  display: inline;
-  margin-left: 10px;
-  font-weight: bolder;
+  font-size: 0.9em;
+  margin-top: 4px;
+  font-weight: bold;
 }
 
 .result-rating {
-  margin-left: auto;
-  margin-right: 1.25ch; 
-  color: #0096ff;
+  background: #0096ff;
+  color: white;
   font-weight: bold;
+  font-size: 0.9em;
+  padding: 5px 10px;
+  border-radius: 8px;
+  align-self: flex-end;
 }
 
 a {
@@ -87,13 +119,13 @@ a:hover {
   color: inherit;
 }
 
- @media screen and (max-width:  380px) {
+@media screen and (max-width: 380px) {
   .Search {
     display: none;
   }
-} 
+}
 
-@media screen and (max-width:  700px) {
+@media screen and (max-width: 700px) {
   .Search {
     position: static;
     width: auto;
@@ -101,4 +133,4 @@ a:hover {
     left: auto;
     transform: none;
   }
-} 
+}
