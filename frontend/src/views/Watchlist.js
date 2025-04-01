@@ -11,7 +11,7 @@ import MovieCard from "../components/MovieCard/MovieCard.js";
 import NavBar from "../components/NavBar/NavBar.js";
 const GET_WATCHLIST_ENDPOINT = process.env.REACT_APP_GET_WATCHLIST_ENDPOINT;
 const API_URL = process.env.REACT_APP_BACKEND_API_URL
-
+import Footer from "../components/Footer/Footer.js";
 export default function WatchList() {
 
     const [movies, setMovies] = useState(null);
@@ -109,10 +109,10 @@ export default function WatchList() {
 
                         <div className={WatchListStyle.emptyList}> Include films in your watchlist to have them displayed here!
                         </div>
-
                     }
                 </div>
             </div>
+            <Footer />
         </div >
     );
 }

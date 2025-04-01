@@ -7,6 +7,7 @@ import HomePage from "../misc/HomePage.module.css";
 import { fetchData } from "../security/Data.js";
 import isTokenExpired from "../security/IsTokenExpired.js";
 import { homepageBreakpoints } from "../components/Carousel/Other/General.js";
+import Footer from "../components/Footer/Footer.js";
 const popularMovieEndpoint = process.env.REACT_APP_POPULAR_MOVIES_ENDPOINT;
 const topRatedMovieEndpoint = process.env.REACT_APP_TOP_RATED_MOVIES_ENDPOINT;
 const upcomingMovieEndpoint = process.env.REACT_APP_UPCOMING_MOVIES_ENDPOINT;
@@ -74,6 +75,7 @@ function Homepage() {
           breakpoints={homepageBreakpoints()}
         />
       </div>
+      <Footer />
     </div>
   );
 }
