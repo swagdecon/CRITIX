@@ -35,6 +35,7 @@ public class User implements UserDetails {
     private UserAuth userAuth;
     private List<MovieCard> watchList;
     private List<MovieCard> favouriteMoviesList;
+    private String bio;
 
     @Enumerated(EnumType.STRING)
     private Role role;

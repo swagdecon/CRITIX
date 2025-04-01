@@ -45,7 +45,7 @@ export default function SignUpFunctionality() {
     const hasProfanity = filter.isProfane(userData["firstName"]) || filter.isProfane(userData["lastName"]) || filter.isProfane(userData["email"]) || filter.isProfane(userData["password"]);
 
     if (!ProfanityLogic(hasProfanity, setProfanityError)) {
-      console.log(`${API_URL}${SIGNUP_URL}`)
+
       const response = await fetch(`${API_URL}${SIGNUP_URL}`, {
         method: "POST",
         headers: {

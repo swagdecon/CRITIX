@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import DOMPurify from "dompurify";
 import UserStyle from "../UserProfile.module.css"
+import { sendData } from "../../../security/Data";
+import PropTypes from "prop-types";
 
-export default function EditableBio() {
+const updateBioEndpoint = process.env.REACT_APP_UPDATE_PROFILE_BIO
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
+
+export default function EditableBio({ bioText }) {
     const defaultBio = "Here you can change your bio, be creative! (50 words max)";
-
-    const [bio, setBio] = useState(defaultBio);
+    const [bio, setBio] = useState(bioText || defaultBio);
     const [editing, setEditing] = useState(false);
+    const [saving, setSaving] = useState(false);
+    const [lastSavedTime, setLastSavedTime] = useState(0);
 
     const handleChange = (e) => {
         let value = e.target.value;
@@ -16,10 +22,32 @@ export default function EditableBio() {
         }
     };
 
-    const toggleEditing = () => {
+    const toggleEditing = async () => {
         if (editing) {
-            const sanitizedBio = DOMPurify.sanitize(bio);
-            setBio(sanitizedBio.trim() === "" ? defaultBio : sanitizedBio);
+            if (Date.now() - lastSavedTime < 30000) { // 30-second cooldown
+                alert("Please wait before saving again.");
+                return;
+            }
+
+            const sanitizedBio = DOMPurify.sanitize(bio).trim();
+            setBio(sanitizedBio === "" ? defaultBio : sanitizedBio);
+            setSaving(true);
+
+            try {
+                const data = { bioText: sanitizedBio };
+                const response = await sendData(`${API_URL}${updateBioEndpoint}`, data);
+
+                if (response.ok) {
+                    setLastSavedTime(Date.now());
+                    alert("New Bio Saved Successfully");
+                } else {
+                    alert("An Error Occurred, Please try again");
+                }
+            } catch (error) {
+                alert("An Error Occurred, Please try again later");
+            }
+
+            setSaving(false);
         }
         setEditing(!editing);
     };
@@ -33,13 +61,21 @@ export default function EditableBio() {
                     maxLength={300}
                     className={UserStyle["bio-input"]}
                     rows={3}
+                    disabled={saving}
                 />
             ) : (
                 <p className={UserStyle["bio-text"]}>{bio}</p>
             )}
-            <button onClick={toggleEditing} className={UserStyle["bio-save-btn"]}>
-                {editing ? "Save" : "Edit Bio"}
+            <button
+                onClick={toggleEditing}
+                className={UserStyle["bio-save-btn"]}
+                disabled={saving}
+            >
+                {saving ? "Saving..." : editing ? "Save" : "Edit Bio"}
             </button>
         </div>
     );
 }
+EditableBio.propTypes = {
+    bioText: PropTypes.string
+};

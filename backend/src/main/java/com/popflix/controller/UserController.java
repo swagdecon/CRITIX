@@ -65,11 +65,9 @@ public class UserController {
 
             String profilePicURL = profilePic.get("profilePic");
             if (profilePicURL == null || profilePicURL.isEmpty()) {
-                System.out.println("GOING HERE 1");
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             if (!profilePicURL.contains("data:image/")) {
-                System.out.println("GOING HERE 2");
 
                 return new ResponseEntity<>("Invalid data format.", HttpStatus.BAD_REQUEST);
             }
@@ -77,8 +75,6 @@ public class UserController {
             return new ResponseEntity<>("Profile Picture Updated", HttpStatus.OK);
 
         } catch (Exception e) {
-            System.out.println("GOING HERE 3");
-
             return new ResponseEntity<>("Error processing URL", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -99,6 +95,30 @@ public class UserController {
             }
         } catch (Exception e) {
             return new ResponseEntity<>("Error processing URL", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/update/bio")
+    public ResponseEntity<String> updateBannerBio(@RequestBody Map<String, String> bioText,
+            @RequestHeader("Authorization") String accessToken)
+            throws java.io.IOException {
+        try {
+            String userId = authenticationService.getUserDetails(accessToken).getId();
+            String userBio = bioText.get("bioText");
+            userService.updateUserBio(userBio, userId);
+            return new ResponseEntity<>("Bio Updated", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error processing text", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/bio")
+    public ResponseEntity<String> getBannerBio(@RequestHeader("Authorization") String accessToken) throws Exception {
+        String bio = authenticationService.getUserDetails(accessToken).getBio();
+        if (bio != null) {
+            return new ResponseEntity<>(bio, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 

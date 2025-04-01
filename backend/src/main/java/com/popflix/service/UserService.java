@@ -39,6 +39,17 @@ public class UserService {
         }
     }
 
+    public void updateUserBio(String bioText, String userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setBio(bioText);
+            userRepository.save(user);
+        } else {
+            throw new IllegalArgumentException("User not found with id: " + userId);
+        }
+    }
+
     public LoginEvents retrieveLoginInfo(String userId) {
         LoginEvents loginInfo = userRepository.findById(userId).get().getLoginEvents();
         return loginInfo;
