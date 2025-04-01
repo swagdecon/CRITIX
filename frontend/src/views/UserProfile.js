@@ -17,7 +17,6 @@ import MovieCard from "../components/MovieCard/MovieCard.js";
 import { jwtDecode } from "jwt-decode";
 import CookieManager from "../security/CookieManager.js";
 import EditableBio from "../components/UserProfile/Other/BioText.js";
-import Footer from "../components/Footer/Footer.js";
 
 const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
@@ -205,7 +204,6 @@ export default function UserProfile() {
                     }
                 </div>
             </div>
-            <Footer />
         </div >
     )
 }
