@@ -1,17 +1,11 @@
 /* Logo */
 .Logo {
   width: 15ch;
-  height: 4ch;
   transition: margin 0.125s ease;
   display: flex;
-  z-index: 999;
+  margin-top: 5%;
 }
 
-.Logo:hover {
-  cursor: pointer;
-  margin-top: 2px;
-  filter: grayscale(100%) brightness(150%);
-}
 @media screen and (max-width: 832px) {
   .Logo {
     width: 120px;

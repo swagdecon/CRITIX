@@ -8,10 +8,10 @@
 		<version>3.3.10</version>
 		<relativePath/> 
 	</parent>
-	<groupId>com.popflix</groupId>
-	<artifactId>popflix</artifactId>
+	<groupId>com.critix</groupId>
+	<artifactId>critix</artifactId>
 	<version>0.0.1</version>
-	<name>popflix</name>
+	<name>critix</name>
 	<description>Application where users can find, rate and review their favourite movies</description>
 
 	<properties>

@@ -21,12 +21,16 @@ import ResetPassword from "./views/ResetPassword.js";
 import AccountVerification from "./views/AccountVerification.js"
 import WatchList from "./views/Watchlist.js";
 import ResetEmail from "./views/ResetEmail.js"
+import PricingPage from "./views/Premium.js"
 export default function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
+        <Route
+          path="/premium"
+          element={<PricingPage />}></Route>
         <Route
           path="/home"
           element={

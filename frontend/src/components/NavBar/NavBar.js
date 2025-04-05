@@ -9,7 +9,7 @@ import { useState, useMemo } from "react"
 import { fetchData } from '../../security/Data';
 import isTokenExpired from "../../security/IsTokenExpired.js";
 import MobileSearchBar from "./Search/MobileSearch.js";
-
+import PremiumBtn from "./Premium/PremiumBtn.js";
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
 const API_URL = process.env.REACT_APP_BACKEND_API_URL
 
@@ -35,9 +35,7 @@ export default function NavBar(props) {
   return (
     <div className={NavBarStyle.NavBar}>
       <div className={NavBarStyle.group__1}>
-        <div className={NavBarStyle.logo}>
-          <Logo />
-        </div>
+        <Logo />
         <Navigation />
         <div className={NavBarStyle.MobileSearchBar}>
           <MobileSearchBar onSubmit={props.onSubmit} />
@@ -45,6 +43,7 @@ export default function NavBar(props) {
         <div className={NavBarStyle.SearchBar}>
           <Search onSubmit={props.onSubmit} />
         </div>
+        <PremiumBtn />
       </div>
       <HeaderUser avatar={avatar} />
     </div >

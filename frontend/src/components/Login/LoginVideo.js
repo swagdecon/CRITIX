@@ -1,5 +1,4 @@
 import React from "react";
-// import PopflixTrailer2 from "./PopflixTrailer2.mp4";
 import "./login.module.css";
 
 export default function LoginPlayer() {

@@ -5,7 +5,7 @@ export default function Footer() {
     return (
         <footer className={FooterStyle["footer"]}>
             <div className={FooterStyle["footer-content"]}>
-                <p className={FooterStyle["footer-text"]}>© 2025 POPFLIX</p>
+                <p className={FooterStyle["footer-text"]}>© 2025 Critix</p>
                 <div className={FooterStyle["social-links"]}>
                     <a href="#" className={FooterStyle["social-icon"]}>
                         <i className="fab fa-facebook-f"></i>

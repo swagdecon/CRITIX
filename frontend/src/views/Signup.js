@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "../components/Login/login.module.css";
 import "../components/Logo/logo.module.scss";
 import Logo from "../components/Logo/Loader.js";
-import Logo_Text from "../components/Logo/POPFLIX_LOGO_OFFICIAL.png";
+import Logo_Text from "../components/Logo/CRITIX_LOGO_OFFICIAL.png";
 import SignUpPlayer from "../components/Signup/SignUpVideo.js";
 import SignUpFunctionality from "../components/Signup/SignupLogic.js";
 import SignUpStyles from "../components/Login/login.module.css";
@@ -32,7 +32,7 @@ export default function Signup() {
           </Link>
         </div>
         <footer id={SignUpStyles["main-footer"]}>
-          <p>&copy; 2023 POPFLIX, All Rights Reserved</p>
+          <p>&copy; 2023 CRITIX, All Rights Reserved</p>
           <div>
             <Link to="#">Terms of Use</Link> |{" "}
             <Link to="#">Privacy Policy</Link>

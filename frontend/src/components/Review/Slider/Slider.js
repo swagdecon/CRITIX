@@ -3,7 +3,7 @@ import Slider from '@mui/material/Slider';
 import PropTypes from "prop-types";
 import { styled } from '@mui/material/styles';
 
-const PopflixSlider = styled(Slider)({
+const CritixSlider = styled(Slider)({
     color: '#0096ff',
     height: 5,
     width: "80%",
@@ -25,11 +25,11 @@ export default function InputSlider({ onSliderChange }) {
     };
 
     return (
-        <PopflixSlider
+        <CritixSlider
             value={value}
             onChange={handleSliderChange}
             valueLabelDisplay="auto"
-            aria-label="popflix slider"
+            aria-label="critix slider"
             defaultValue={20}
         />
     )
