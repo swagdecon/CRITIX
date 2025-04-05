@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -21,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -83,6 +87,29 @@ public class MovieService {
 
   public void shutdown() {
     executor.shutdown();
+  }
+
+  @PostConstruct // This will make sure the method runs once when the application starts
+  public void startNowAndSchedule() {
+    // Execute the task immediately after application starts
+    updateRecommendationsForAllUsers();
+  }
+
+  // This method will now run for all users automatically every 24 hours
+  @Scheduled(cron = "0 0 0 * * *") // Runs every day at midnight
+  public void updateRecommendationsForAllUsers() {
+    // Get all users from the database (this may need pagination if you have many
+    // users)
+    List<User> users = userRepository.findAll();
+
+    // Loop through all users to update their recommendations
+    for (User user : users) {
+      try {
+        updateUserRecommendations(user);
+      } catch (Exception e) {
+        System.out.println("Error updating recommendations for user " + user.getId() + ": " + e.getMessage());
+      }
+    }
   }
 
   public void saveTopMovies() {
@@ -527,6 +554,65 @@ public class MovieService {
     }
   }
 
+  public void updateUserRecommendations(User user) {
+    try {
+      List<MovieCard> favMovieList = userRepository.findUserWithFavouriteMoviesListById(user.getId()).get()
+          .getFavouriteMoviesList();
+
+      if (favMovieList == null || favMovieList.isEmpty()) {
+        return;
+      }
+      if (user.getRecommendedMovies() == null) {
+        user.setRecommendedMovies(new ArrayList<>());
+      }
+
+      Collections.shuffle(favMovieList);
+      List<MovieCard> selectedMovies = favMovieList.subList(0, Math.min(3, favMovieList.size()));
+
+      Set<Integer> recommendedIds = new HashSet<>();
+      HashMap<Integer, String> movieGenres = parseGenreIds();
+
+      for (MovieCard fav : selectedMovies) {
+        List<info.movito.themoviedbapi.model.core.Movie> recs = tmdbApi.getMovies()
+            .getRecommendations(fav.getMovieId(), "", 1)
+            .getResults();
+        System.out.println("GOING HERE 1");
+        for (int i = 0; i < Math.min(2, recs.size()); i++) {
+          info.movito.themoviedbapi.model.core.Movie recommendedMovie = recs.get(i);
+
+          recommendedIds.add(recommendedMovie.getId());
+
+          MovieCard movieCard = new MovieCard();
+          movieCard.setMovieId(recommendedMovie.getId());
+          movieCard.setTitle(recommendedMovie.getTitle());
+          movieCard.setOverview(recommendedMovie.getOverview());
+          movieCard.setPosterUrl(recommendedMovie.getPosterPath());
+          movieCard.setReleaseDate(recommendedMovie.getReleaseDate());
+          movieCard.setPopularity(recommendedMovie.getPopularity());
+          movieCard.setVoteAverage((int) Math.round(recommendedMovie.getVoteAverage() * 10));
+
+          movieCard.setGenres(recommendedMovie.getGenreIds().stream()
+              .map(movieGenres::get)
+              .collect(Collectors.toList()));
+
+          user.getRecommendedMovies().add(movieCard);
+
+          if (user.getRecommendedMovies().size() >= 6) {
+            break;
+          }
+        }
+
+        if (user.getRecommendedMovies().size() >= 6) {
+          break;
+        }
+      }
+      userRepository.save(user);
+
+    } catch (Exception e) {
+      System.out.println("Error updating recommendations: " + e.getMessage());
+    }
+  }
+
   public void deleteMovieFromWatchlist(String userId, Integer movieId) throws IOException {
     try {
       User user = userRepository.findById(userId)
@@ -573,8 +659,10 @@ public class MovieService {
           .orElseThrow(() -> new UsernameNotFoundException("User id not found"));
 
       List<MovieCard> favouriteMovieList = user.getFavouriteMoviesList();
+
       if (favouriteMovieList == null) {
         favouriteMovieList = new ArrayList<>();
+        return;
       }
 
       boolean favouriteMovieAlreadyExists = userRepository.doesFavouriteMovieExist(userId, movieCardData.getMovieId());
