@@ -573,12 +573,16 @@ public class MovieService {
           .filter(Objects::nonNull)
           .collect(Collectors.toSet());
 
+      Set<Integer> favouriteMovieIds = favMovieList.stream()
+          .map(MovieCard::getMovieId)
+          .filter(Objects::nonNull)
+          .collect(Collectors.toSet());
+
       Collections.shuffle(favMovieList);
-      List<MovieCard> selectedMovies = favMovieList.subList(0, Math.min(3, favMovieList.size()));
 
       HashMap<Integer, String> movieGenres = parseGenreIds();
 
-      for (MovieCard fav : selectedMovies) {
+      for (MovieCard fav : favMovieList) {
         if (fav.getMovieId() == null) {
           continue;
         }
@@ -587,19 +591,17 @@ public class MovieService {
             .getRecommendations(fav.getMovieId(), "", 1)
             .getResults();
 
-        for (int i = 0; i < Math.min(2, recs.size()); i++) {
-          info.movito.themoviedbapi.model.core.Movie recommendedMovie = recs.get(i);
+        for (info.movito.themoviedbapi.model.core.Movie recommendedMovie : recs) {
           int recommendedId = recommendedMovie.getId();
 
-          if (existingRecommendedIds.contains(recommendedId)) {
+          if (existingRecommendedIds.contains(recommendedId) || favouriteMovieIds.contains(recommendedId)) {
             continue;
           }
-          System.out.println(recommendedId);
+
           String posterUrl = TMDB_IMAGE_PREFIX + recommendedMovie.getPosterPath();
           String backdropUrl = TMDB_IMAGE_PREFIX + recommendedMovie.getBackdropPath();
           boolean isInWatchlist = userRepository.doesWatchlistMovieExist(user.getId(), recommendedId);
-          boolean favouriteMovieAlreadyExists = userRepository.doesFavouriteMovieExist(user.getId(),
-              recommendedId);
+          boolean favouriteMovieAlreadyExists = userRepository.doesFavouriteMovieExist(user.getId(), recommendedId);
 
           MovieCard movieCard = new MovieCard();
           movieCard.setMovieId(recommendedId);
