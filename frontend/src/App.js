@@ -22,6 +22,7 @@ import AccountVerification from "./views/AccountVerification.js"
 import WatchList from "./views/Watchlist.js";
 import ResetEmail from "./views/ResetEmail.js"
 import PricingPage from "./views/Premium.js"
+import Recommendations from "./components/Recommendations/Recommendations.js";
 export default function App() {
   return (
     <Router>
@@ -55,6 +56,10 @@ export default function App() {
           path="/watchlist"
           element={<PrivateRoute><WatchList endpointName="watchlist" /></PrivateRoute>}
         />
+        <Route
+          path="/recommendations"
+          element={<Recommendations />}>
+        </Route>
         <Route path="/movies/:endpoint/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
         <Route path="/profile" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
 

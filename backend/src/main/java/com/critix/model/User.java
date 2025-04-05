@@ -35,7 +35,7 @@ public class User implements UserDetails {
     private UserAuth userAuth;
     private List<MovieCard> watchList;
     private List<MovieCard> favouriteMoviesList;
-    private List<MovieCard> recommendedMovies;
+    private List<MovieCard> recommendedMoviesList;
     private String bio;
     private Boolean isPro;
     private Boolean isUltimate;

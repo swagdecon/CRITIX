@@ -170,7 +170,7 @@ class MovieControllerTest {
 
         when(movieService.recommendedMovies(movieId, userId)).thenReturn(recommendedMovies);
 
-        ResponseEntity<Object> response = movieController.getRecommendedMovies(movieId, userId);
+        ResponseEntity<Object> response = movieController.getRecommendedMoviesList(movieId, userId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(recommendedMovies, response.getBody());

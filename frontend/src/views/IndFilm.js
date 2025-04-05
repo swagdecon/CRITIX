@@ -54,7 +54,6 @@ export default function IndMovie() {
     }
     fetchBackendData();
   }, [id]);
-
   const containerClass = movie && movie.trailer
     ? IndMovieStyle.mainContainer
     : `${IndMovieStyle.mainContainer} ${IndMovieStyle.NoTrailerContainer}`;

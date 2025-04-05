@@ -124,7 +124,7 @@ public class MovieController {
     }
 
     @GetMapping("/recommended/{movieId}")
-    public ResponseEntity<Object> getRecommendedMovies(@PathVariable Integer movieId,
+    public ResponseEntity<Object> getRecommendedMoviesList(@PathVariable Integer movieId,
             @RequestHeader("Authorization") String accessToken)
             throws Exception {
         String userId = authenticationService.getUserDetails(accessToken).getId();
@@ -210,6 +210,19 @@ public class MovieController {
             return movieService.getUserFavouriteMoviesList(userId);
         } catch (Exception e) {
             throw new Exception("Error retrieving favourite movie list", e);
+        }
+    }
+
+    @GetMapping("/recommended-movies")
+    public ResponseEntity<List<MovieCard>> getrecommendations(@RequestHeader("Authorization") String accessToken)
+            throws Exception {
+        String userId = authenticationService.getUserDetails(accessToken).getId();
+
+        try {
+            return new ResponseEntity<>(movieService.getRecommendationsForUser(userId), HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

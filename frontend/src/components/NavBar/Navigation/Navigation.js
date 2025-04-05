@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from '@mui/icons-material/Menu';
+import PremiumIcon from "../../Other/crown.webp"
 export default function Navigation() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -60,6 +61,9 @@ export default function Navigation() {
         </MenuItem>
         <MenuItem onClick={handleClose}> <Link to="/watchlist">
           WATCHLIST
+        </Link> </MenuItem>
+        <MenuItem onClick={handleClose}> <Link to="/recommendations">
+          <img src={PremiumIcon} alt="Premium" style={{ width: '20px', marginRight: '8px' }} /> RECOMMENDED
         </Link> </MenuItem>
       </Menu>
     </>

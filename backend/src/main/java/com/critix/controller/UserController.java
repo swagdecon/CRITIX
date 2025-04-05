@@ -1,5 +1,6 @@
 package com.critix.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.critix.auth.AuthenticationService;
 import com.critix.config.EnvLoader;
 import com.critix.model.LoginEvents;
+import com.critix.model.MovieCard;
 import com.critix.model.User;
+import com.critix.service.MovieService;
 import com.critix.service.UserService;
 
 import io.github.cdimascio.dotenv.Dotenv;
@@ -28,6 +31,7 @@ public class UserController {
     @Autowired
 
     private UserService userService;
+
     private EnvLoader envLoader = new EnvLoader();
     Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
 
@@ -138,13 +142,11 @@ public class UserController {
     public ResponseEntity<LoginEvents> getLoginsPerMonth(@RequestHeader("Authorization") String accessToken)
             throws Exception {
         String userId = authenticationService.getUserDetails(accessToken).getId();
-
         try {
             return new ResponseEntity<>(userService.retrieveLoginInfo(userId), HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
     }
 }

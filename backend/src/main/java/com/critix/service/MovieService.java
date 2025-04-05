@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
@@ -562,54 +563,86 @@ public class MovieService {
       if (favMovieList == null || favMovieList.isEmpty()) {
         return;
       }
-      if (user.getRecommendedMovies() == null) {
-        user.setRecommendedMovies(new ArrayList<>());
+
+      if (user.getRecommendedMoviesList() == null) {
+        user.setRecommendedMoviesList(new ArrayList<>());
       }
+
+      Set<Integer> existingRecommendedIds = user.getRecommendedMoviesList().stream()
+          .map(MovieCard::getMovieId)
+          .filter(Objects::nonNull)
+          .collect(Collectors.toSet());
 
       Collections.shuffle(favMovieList);
       List<MovieCard> selectedMovies = favMovieList.subList(0, Math.min(3, favMovieList.size()));
 
-      Set<Integer> recommendedIds = new HashSet<>();
       HashMap<Integer, String> movieGenres = parseGenreIds();
 
       for (MovieCard fav : selectedMovies) {
+        if (fav.getMovieId() == null) {
+          continue;
+        }
+
         List<info.movito.themoviedbapi.model.core.Movie> recs = tmdbApi.getMovies()
             .getRecommendations(fav.getMovieId(), "", 1)
             .getResults();
-        System.out.println("GOING HERE 1");
+
         for (int i = 0; i < Math.min(2, recs.size()); i++) {
           info.movito.themoviedbapi.model.core.Movie recommendedMovie = recs.get(i);
+          int recommendedId = recommendedMovie.getId();
 
-          recommendedIds.add(recommendedMovie.getId());
+          if (existingRecommendedIds.contains(recommendedId)) {
+            continue;
+          }
+          System.out.println(recommendedId);
+          String posterUrl = TMDB_IMAGE_PREFIX + recommendedMovie.getPosterPath();
+          String backdropUrl = TMDB_IMAGE_PREFIX + recommendedMovie.getBackdropPath();
+          boolean isInWatchlist = userRepository.doesWatchlistMovieExist(user.getId(), recommendedId);
+          boolean favouriteMovieAlreadyExists = userRepository.doesFavouriteMovieExist(user.getId(),
+              recommendedId);
 
           MovieCard movieCard = new MovieCard();
-          movieCard.setMovieId(recommendedMovie.getId());
+          movieCard.setMovieId(recommendedId);
           movieCard.setTitle(recommendedMovie.getTitle());
           movieCard.setOverview(recommendedMovie.getOverview());
-          movieCard.setPosterUrl(recommendedMovie.getPosterPath());
+          movieCard.setPosterUrl(posterUrl);
+          movieCard.setBackdropUrl(backdropUrl);
           movieCard.setReleaseDate(recommendedMovie.getReleaseDate());
           movieCard.setPopularity(recommendedMovie.getPopularity());
           movieCard.setVoteAverage((int) Math.round(recommendedMovie.getVoteAverage() * 10));
-
+          movieCard.setIsSavedToWatchlist(isInWatchlist);
+          movieCard.setIsSavedToFavouriteMoviesList(favouriteMovieAlreadyExists);
           movieCard.setGenres(recommendedMovie.getGenreIds().stream()
               .map(movieGenres::get)
               .collect(Collectors.toList()));
 
-          user.getRecommendedMovies().add(movieCard);
+          user.getRecommendedMoviesList().add(movieCard);
+          existingRecommendedIds.add(recommendedId);
 
-          if (user.getRecommendedMovies().size() >= 6) {
+          if (user.getRecommendedMoviesList().size() >= 10) {
             break;
           }
         }
 
-        if (user.getRecommendedMovies().size() >= 6) {
+        if (user.getRecommendedMoviesList().size() >= 10) {
           break;
         }
       }
+
       userRepository.save(user);
 
     } catch (Exception e) {
       System.out.println("Error updating recommendations: " + e.getMessage());
+    }
+  }
+
+  public List<MovieCard> getRecommendationsForUser(String userId) throws Exception {
+    try {
+      List<MovieCard> recommendations = userRepository.findUserWithRecommendedeMoviesListById(userId).get()
+          .getRecommendedMoviesList();
+      return recommendations;
+    } catch (Exception e) {
+      throw new Exception("Error fetching user's watchlist", e);
     }
   }
 
@@ -662,7 +695,6 @@ public class MovieService {
 
       if (favouriteMovieList == null) {
         favouriteMovieList = new ArrayList<>();
-        return;
       }
 
       boolean favouriteMovieAlreadyExists = userRepository.doesFavouriteMovieExist(userId, movieCardData.getMovieId());

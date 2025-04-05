@@ -25,6 +25,7 @@ public class MovieCard {
     private Integer movieId;
     private String overview;
     private String posterUrl;
+    private String backdropUrl;
     private String releaseDate;
     private Double popularity;
     private String title;
