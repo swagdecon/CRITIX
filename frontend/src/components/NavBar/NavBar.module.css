@@ -1,17 +1,17 @@
 .NavBar {
-    background-image: linear-gradient(to bottom, var(--blackblack), #00000000);
-    display: flex;
-    position: fixed;
-    width: 100%;
-    justify-content: space-between;
-    margin-top: -1%;
-    padding: 0.5%;
-    align-items: center;
-    z-index: 2;
+  background-image: linear-gradient(to bottom, var(--blackblack), #00000000);
+  display: flex;
+  position: fixed;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0.5%;
+  align-items: flex-start; 
+  z-index: 2;
 }
 .group__1 {
   display: flex;
-  align-items: center;
+  justify-content: flex-start;
+  flex-grow: 1;
 }
 .MobileSearchBar {
   display: none;

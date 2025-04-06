@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.critix.auth.AuthenticationService;
+import com.critix.model.DiscoverMovieRequest;
 import com.critix.model.Movie;
 import com.critix.model.MovieCard;
 import com.critix.service.MovieService;
 
+import info.movito.themoviedbapi.model.core.MovieResultsPage;
 import info.movito.themoviedbapi.tools.TmdbException;
 
 @RestController
@@ -220,6 +222,17 @@ public class MovieController {
 
         try {
             return new ResponseEntity<>(movieService.getRecommendationsForUser(userId), HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/discover-movies")
+    public ResponseEntity<MovieResultsPage> getDiscovery(DiscoverMovieRequest discoverMovieRequest)
+            throws Exception {
+        try {
+            return new ResponseEntity<>(movieService.discoverMovies(discoverMovieRequest), HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

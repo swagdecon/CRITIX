@@ -2,8 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../components/Login/login.module.css";
 import "../components/Logo/logo.module.scss";
-import Logo from "../components/Logo/Loader.js";
-import Logo_Text from "../components/Logo/CRITIX_LOGO_OFFICIAL.png";
+import Logo from "../components/Logo/Logo.js";
 import SignUpPlayer from "../components/Signup/SignUpVideo.js";
 import SignUpFunctionality from "../components/Signup/SignupLogic.js";
 import SignUpStyles from "../components/Login/login.module.css";
@@ -14,12 +13,6 @@ export default function Signup() {
       <div id={SignUpStyles.left}>
         <div id={SignUpStyles.signin}>
           <Logo />
-          <img
-            src={Logo_Text}
-            className={SignUpStyles["homepage-logo"]}
-            alt="logo"
-          />
-
           <SignUpFunctionality />
           {/* REDIRECT TO LOG IN PAGE */}
           <div className={SignUpStyles.or}>

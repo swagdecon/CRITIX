@@ -37,13 +37,13 @@ export default function NavBar(props) {
       <div className={NavBarStyle.group__1}>
         <Logo />
         <Navigation />
+        <PremiumBtn />
         <div className={NavBarStyle.MobileSearchBar}>
           <MobileSearchBar onSubmit={props.onSubmit} />
         </div>
         <div className={NavBarStyle.SearchBar}>
           <Search onSubmit={props.onSubmit} />
         </div>
-        <PremiumBtn />
       </div>
       <HeaderUser avatar={avatar} />
     </div >

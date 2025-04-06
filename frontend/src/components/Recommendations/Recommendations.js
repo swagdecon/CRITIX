@@ -10,9 +10,10 @@ import { fetchData } from "../../security/Data.js";
 import isTokenExpired from "../../security/IsTokenExpired";
 import backupPoster from "../../misc/noPosterAvailable.png";
 import Slider from "react-slick";
-
+import styled from "styled-components";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import IntroSlide from "./IntroSlide.js";
 
 const API_URL = process.env.REACT_APP_BACKEND_API_URL;
 const userRecommendedMovies = process.env.REACT_APP_GET_USER_RECOMMENDED_MOVIES;
@@ -49,15 +50,46 @@ export default function recommendationsCarousel() {
         nextArrow: <div className="slick-next">Next</div>,
     };
 
+    const RecommendedSlider = styled(Slider)`
+    .slick-prev,
+    .slick-next {
+        z-index: 1;
+        width: 3rem;
+        height: 3rem;
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.4);
+        border-radius: 50%;
+        transition: background 0.3s ease;
+    }
+
+    .slick-prev {
+        left: 0.25vw;
+    }
+
+    .slick-next {
+        right: 0.25vw;
+    }
+
+    .slick-prev::before,
+    .slick-next::before {
+        font-size: 2rem; 
+        color: white;
+    }
+`;
+
+
     if (isLoading || !recommendedMovies) {
         return <LoadingPage />;
     }
-    console.log(recommendedMovies)
+
     return (
         <div className={IndMovieStyle["ind-movie-page-wrapper"]}>
             <NavBar />
             <div className={IndMovieStyle.sliderWrapper}>
-                <Slider {...settings}>
+                <RecommendedSlider {...settings}>
+                    <IntroSlide />
                     {recommendedMovies.map((movie, i) => (
                         <div key={i} className={IndMovieStyle.fullPageSlide}>
                             <div
@@ -115,7 +147,7 @@ export default function recommendationsCarousel() {
                             </div>
                         </div>
                     ))}
-                </Slider>
+                </RecommendedSlider>
             </div>
         </div>
     );

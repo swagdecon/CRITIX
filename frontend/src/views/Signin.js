@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import "../components/Login/login.module.css";
 import "../components/Logo/logo.module.scss";
 import "../components/Logo/logo.module.css";
-import Logo from "../components/Logo/Loader.js";
-import Logo_Text from "../components/Logo/CRITIX_LOGO_OFFICIAL.png";
+// import Logo from "../components/Logo/Loader.js";
+import Logo from "../components/Logo/Logo.js";
 import LoginPlayer from "../components/Login/LoginVideo";
 import LoginFunctionality from "../components/Login/LoginLogic.js";
 import LoginStyles from "../components/Login/login.module.css";
@@ -15,11 +15,6 @@ export default function Login() {
       <div id={LoginStyles.left}>
         <div id={LoginStyles.signin}>
           <Logo />
-          <img
-            src={Logo_Text}
-            className={LoginStyles["homepage-logo"]}
-            alt="logo"
-          />
           <LoginFunctionality />
           <div className={LoginStyles["reset-pwd"]}>
             <Link to="/forgot-password">Forgot Password</Link>

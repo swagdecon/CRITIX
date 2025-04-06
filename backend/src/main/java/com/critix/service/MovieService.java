@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,6 +31,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.critix.config.EnvLoader;
+import com.critix.model.DiscoverMovieRequest;
 import com.critix.model.Movie;
 import com.critix.model.MovieCard;
 import com.critix.model.MovieResults;
@@ -50,6 +52,8 @@ import info.movito.themoviedbapi.model.movies.Credits;
 import info.movito.themoviedbapi.model.movies.MovieDb;
 import info.movito.themoviedbapi.tools.TmdbException;
 import info.movito.themoviedbapi.tools.appendtoresponse.MovieAppendToResponse;
+import info.movito.themoviedbapi.tools.builders.discover.DiscoverMovieParamBuilder;
+import info.movito.themoviedbapi.tools.sortby.DiscoverMovieSortBy;
 import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.annotation.PostConstruct;
 
@@ -568,6 +572,10 @@ public class MovieService {
         user.setRecommendedMoviesList(new ArrayList<>());
       }
 
+      if (user.getRecommendedMoviesList().size() >= 15) {
+        return;
+      }
+
       Set<Integer> existingRecommendedIds = user.getRecommendedMoviesList().stream()
           .map(MovieCard::getMovieId)
           .filter(Objects::nonNull)
@@ -762,5 +770,103 @@ public class MovieService {
     } catch (Exception e) {
       throw new Exception("Error fetching user's favourite movies list", e);
     }
+  }
+
+  public MovieResultsPage discoverMovies(DiscoverMovieRequest req)
+      throws IOException, InterruptedException, URISyntaxException, TmdbException {
+
+    DiscoverMovieParamBuilder builder = new DiscoverMovieParamBuilder();
+
+    if (req.sortBy != null)
+      builder.sortBy(DiscoverMovieSortBy.valueOf(req.sortBy.toUpperCase().replace('.', '_')));
+    if (req.certification != null)
+      builder.certification(req.certification);
+    if (req.certificationGte != null)
+      builder.certificationGte(req.certificationGte);
+    if (req.certificationLte != null)
+      builder.certificationLte(req.certificationLte);
+    if (req.certificationCountry != null)
+      builder.certificationCountry(req.certificationCountry);
+    if (req.includeAdult != null)
+      builder.includeAdult(req.includeAdult);
+    if (req.includeVideo != null)
+      builder.includeVideo(req.includeVideo);
+    if (req.language != null)
+      builder.language(req.language);
+    if (req.page != null)
+      builder.page(req.page);
+    if (req.primaryReleaseYear != null)
+      builder.primaryReleaseYear(req.primaryReleaseYear);
+    if (req.primaryReleaseDateGte != null)
+      builder.primaryReleaseDateGte(req.primaryReleaseDateGte);
+    if (req.primaryReleaseDateLte != null)
+      builder.primaryReleaseDateLte(req.primaryReleaseDateLte);
+    if (req.region != null)
+      builder.region(req.region);
+    if (req.releaseDateGte != null)
+      builder.releaseDateGte(req.releaseDateGte);
+    if (req.releaseDateLte != null)
+      builder.releaseDateLte(req.releaseDateLte);
+    if (req.voteAverageGte != null)
+      builder.voteAverageGte(req.voteAverageGte);
+    if (req.voteAverageLte != null)
+      builder.voteAverageLte(req.voteAverageLte);
+    if (req.voteCountGte != null)
+      builder.voteCountGte(req.voteCountGte);
+    if (req.voteCountLte != null)
+      builder.voteCountLte(req.voteCountLte);
+    if (req.withCast != null)
+      builder.withCast(parseIdList(req.withCast), false);
+    if (req.withCompanies != null)
+      builder.withCompanies(parseIdList(req.withCompanies), false);
+    if (req.withCrew != null)
+      builder.withCrew(parseIdList(req.withCrew), false);
+    if (req.withGenres != null)
+      builder.withGenres(parseIdList(req.withGenres), false);
+    if (req.withKeywords != null)
+      builder.withKeywords(parseIdList(req.withKeywords), false);
+    if (req.withPeople != null)
+      builder.withPeople(parseIdList(req.withPeople), false);
+    if (req.withReleaseType != null)
+      builder.withReleaseType(parseIdList(req.withReleaseType), false);
+    if (req.withOriginCountry != null)
+      builder.withOriginCountry(req.withOriginCountry);
+    if (req.withOriginalLanguage != null)
+      builder.withOriginalLanguage(req.withOriginalLanguage);
+    if (req.withRuntimeGte != null)
+      builder.withRuntimeGte(req.withRuntimeGte);
+    if (req.withRuntimeLte != null)
+      builder.withRuntimeLte(req.withRuntimeLte);
+    if (req.withoutCompanies != null)
+      builder.withoutCompanies(parseIdList(req.withoutCompanies));
+    if (req.withoutGenres != null)
+      builder.withoutGenres(parseIdList(req.withoutGenres));
+    if (req.withoutKeywords != null)
+      builder.withoutKeywords(parseStrList(req.withoutKeywords));
+
+    if (req.year != null)
+      builder.year(req.year);
+
+    if (req.withWatchProviders != null || req.withWatchMonetizationTypes != null || req.watchRegion != null
+        || req.withoutWatchProviders != null) {
+      System.out.println("Watch provider filters not currently supported by this wrapper.");
+    }
+
+    return tmdbApi.getDiscover().getMovie(builder);
+  }
+
+  private List<Integer> parseIdList(String ids) {
+    return Arrays.stream(ids.split("[,|]"))
+        .map(String::trim)
+        .filter(s -> !s.isEmpty())
+        .map(Integer::parseInt)
+        .collect(Collectors.toList());
+  }
+
+  private List<String> parseStrList(String input) {
+    return Arrays.stream(input.split("[,|]"))
+        .map(String::trim)
+        .filter(s -> !s.isEmpty())
+        .collect(Collectors.toList());
   }
 }

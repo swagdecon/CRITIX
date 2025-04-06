@@ -1,9 +1,15 @@
 /* Logo */
+
+.LogoWrapper {
+  display: flex;
+  align-items: flex-start;
+}
 .Logo {
-  width: 15ch;
+  width: 150px;
+  height: 40px;
   transition: margin 0.125s ease;
   display: flex;
-  margin-top: 5%;
+  align-items: flex-start;
 }
 
 @media screen and (max-width: 832px) {
