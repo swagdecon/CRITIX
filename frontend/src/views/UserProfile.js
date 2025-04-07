@@ -47,11 +47,12 @@ export default function UserProfile() {
     const decodedToken = useMemo(() => jwtDecode(token), [token]);
     const firstName = decodedToken.firstName
 
-    let reviewsToDisplay = [];
-    const startIdx = (currentPage - 1) * reviewsPerPage;
-    const endIdx = startIdx + reviewsPerPage;
-    reviewsToDisplay = userReviews?.slice(startIdx, endIdx);
-    reviewsToDisplay > 0 ? reviewsToDisplay : null
+    const reviewsToDisplay = useMemo(() => {
+        if (!userReviews) return [];
+        const startIdx = (currentPage - 1) * reviewsPerPage;
+        return userReviews.slice(startIdx, startIdx + reviewsPerPage);
+    }, [userReviews, currentPage]);
+
 
 
     const totalPages = userReviews ? Math.ceil(userReviews.length / reviewsPerPage) : 1;

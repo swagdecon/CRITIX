@@ -61,10 +61,13 @@ export default function Navigation() {
         </MenuItem>
         <MenuItem onClick={handleClose}> <Link to="/watchlist">
           WATCHLIST
-        </Link> </MenuItem>
+        </Link></MenuItem>
         <MenuItem onClick={handleClose}> <Link to="/recommendations">
           <img src={PremiumIcon} alt="Premium" style={{ width: '20px', marginRight: '8px' }} /> RECOMMENDED
-        </Link> </MenuItem>
+        </Link></MenuItem>
+        <MenuItem onClick={handleClose}> <Link to="/discover-movies">
+          <img src={PremiumIcon} alt="Premium" style={{ width: '20px', marginRight: '8px' }} /> DISCOVER
+        </Link></MenuItem>
       </Menu>
     </>
   );
