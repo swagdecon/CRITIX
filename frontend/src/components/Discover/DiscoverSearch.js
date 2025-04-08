@@ -18,7 +18,7 @@ import {
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from "dayjs";
 import { Autocomplete } from "@mui/material";
-import ISO3166 from 'iso-3166-1'
+import * as ISO3166 from 'iso-3166-1';
 const languageMap = {
     "af": "Afrikaans",
     "sq": "Albanian",
@@ -151,21 +151,42 @@ const languageOptions = Object.entries(languageMap).map(([code, name]) => ({
     value: code,
 }));
 
+const gbCertifications = ["U", "PG", "12", "12A", "15", "18", "R18"];
+
+const certificationOptions = [
+    {
+        group: "Specific",
+        options: gbCertifications.map(cert => ({
+            label: cert,
+            value: { type: "eq", cert }
+        }))
+    },
+    {
+        group: "Minimum",
+        options: gbCertifications.map(cert => ({
+            label: `At least ${cert}`,
+            value: { type: "gte", cert }
+        }))
+    },
+    {
+        group: "Maximum",
+        options: gbCertifications.map(cert => ({
+            label: `Up to ${cert}`,
+            value: { type: "lte", cert }
+        }))
+    }
+];
+
 const allFilters = [
-    { label: "Certification", key: "certification", type: "string" },
-    { label: "Min Certification", key: "certification.gte", type: "string" },
-    { label: "Max Certification", key: "certification.lte", type: "string" },
-    { label: "Certification Country", key: "certification_country", type: "string" },
+    { label: "Certification", key: "certification", type: "certification" },
     { label: "Include Adult Content", key: "include_adult", type: "boolean" },
     { label: "Include Videos", key: "include_video", type: "boolean" },
     { label: "Language", key: "language", type: "string" },
     { label: "Page", key: "page", type: "int" },
-    { label: "Primary Release Year", key: "primary_release_year", type: "int" },
-    { label: "Primary Release Date From", key: "primary_release_date.gte", type: "date" },
-    { label: "Primary Release Date To", key: "primary_release_date.lte", type: "date" },
-    { label: "Region", key: "region", type: "string" },
+    { label: "Release Year", key: "primary_release_year", type: "date" },
     { label: "Release Date From", key: "release_date.gte", type: "date" },
     { label: "Release Date To", key: "release_date.lte", type: "date" },
+    { label: "Region", key: "region", type: "string" },
     { label: "Sort By", key: "sort_by", type: "select", options: ["popularity.desc", "release_date.desc", "vote_average.desc"] },
     { label: "Min Vote Average", key: "vote_average.gte", type: "float" },
     { label: "Max Vote Average", key: "vote_average.lte", type: "float" },
@@ -189,12 +210,14 @@ const allFilters = [
     { label: "Exclude Genres", key: "without_genres", type: "string" },
     { label: "Exclude Keywords", key: "without_keywords", type: "string" },
     { label: "Exclude Watch Providers", key: "without_watch_providers", type: "string" },
-    { label: "Year", key: "year", type: "int" },
+    // { label: "Year", key: "year", type: "int" },
 ];
 const regionOptions = ISO3166.all().map((country) => ({
     code: country.alpha2,
     label: country.name,
 }));
+
+
 export default function DiscoverSearch() {
     const [query, setQuery] = useState("");
     const [anchorEl, setAnchorEl] = useState(null);
@@ -222,14 +245,7 @@ export default function DiscoverSearch() {
                     options={languageOptions}
                     getOptionLabel={(option) => option.label}
                     isOptionEqualToValue={(option, value) => option.value === value.value}
-                    filterOptions={(options, state) =>
-                        options.filter((opt) =>
-                            opt.label.toLowerCase().includes(state.inputValue.toLowerCase())
-                        )
-                    }
-                    value={
-                        languageOptions.find((opt) => opt.value === filters[filter.key]) || null
-                    }
+                    value={languageOptions.find(opt => opt.value === filters[filter.key]) || null}
                     onChange={(e, newVal) =>
                         handleChange(filter.key, newVal ? newVal.value : "")
                     }
@@ -238,27 +254,65 @@ export default function DiscoverSearch() {
                     )}
                 />
             );
-        } else if (filter.key.includes("region")) {
-            const selectedRegion = regionOptions.find(
-                (region) => region.code === filters[filter.key]
-            ) || null;
-
+        } else if (
+            filter.key === "region" || filter.key === "with_origin_country"
+        ) {
             return (
                 <Autocomplete
                     options={regionOptions}
-                    getOptionLabel={(option) => option.label}
-                    isOptionEqualToValue={(option, value) => option.code === value.code}
-                    value={selectedRegion}
-                    onChange={(event, newValue) => {
-                        handleChange(filter.key, newValue?.code || "");
-                    }}
+                    getOptionLabel={(option) => {
+                        if (typeof option === "string") return option;
+                        if (option && typeof option === "object") {
+                            return option.label || option.code || "";
+                        }
+                        return "";
+                    }} isOptionEqualToValue={(option, value) => option.code === value.code}
+                    value={regionOptions.find(opt => opt.code === filters[filter.key]) || null}
+                    onChange={(e, newVal) =>
+                        handleChange(filter.key, newVal ? newVal.code : "")
+                    }
                     renderInput={(params) => (
-                        <TextField {...params} label="Region" variant="outlined" />
+                        <TextField {...params} label={filter.label} fullWidth />
+                    )}
+                />
+            );
+        } else if (filter.key === "certification") {
+            const flatOptions = certificationOptions.flatMap(group => group.options);
+            const selectedValues = filters[filter.key] || [];
+            const currentValues = flatOptions.filter(option =>
+                selectedValues.some(
+                    val =>
+                        val.type === option.value.type &&
+                        val.cert === option.value.cert
+                )
+            );
+            return (
+                <Autocomplete
+                    multiple
+                    options={flatOptions}
+                    groupBy={(option) => {
+                        const match = certificationOptions.find(group =>
+                            group.options.includes(option)
+                        );
+                        return match?.group || "";
+                    }}
+                    getOptionLabel={(option) => option.label}
+                    isOptionEqualToValue={(option, value) =>
+                        option.value.type === value.value.type && option.value.cert === value.value.cert
+                    }
+                    value={currentValues}
+                    onChange={(e, newVals) =>
+                        handleChange(
+                            filter.key,
+                            newVals.map((val) => val.value)
+                        )
+                    }
+                    renderInput={(params) => (
+                        <TextField {...params} label={filter.label} fullWidth />
                     )}
                 />
             );
         }
-
         switch (filter.type) {
             case "boolean":
                 return (
@@ -295,8 +349,62 @@ export default function DiscoverSearch() {
                         onChange={(newVal) => handleChange(filter.key, newVal ? newVal.toISOString() : null)}
                     />
                 );
-            case "int":
+            case "int": {
+                const isRuntime =
+                    filter.key === "with_runtime.gte" || filter.key === "with_runtime.lte";
+                const isPage = filter.key === "page";
+
+                return (
+                    <TextField
+                        fullWidth
+                        label={filter.label}
+                        type="number"
+                        inputProps={{
+                            min: isPage ? 1 : isRuntime ? 1 : undefined,
+                            max: isPage ? 100 : isRuntime ? 500 : undefined,
+                        }}
+                        value={filters[filter.key] || ""}
+                        onChange={(e) => {
+                            const val = parseInt(e.target.value, 10);
+                            if (!isNaN(val)) {
+                                if (isPage && (val < 1 || val > 100)) return;
+                                if (isRuntime && (val < 1 || val > 500)) return;
+                            }
+                            handleChange(filter.key, e.target.value);
+                        }}
+                    />
+                );
+            }
             case "float":
+                return (
+                    <FormControl fullWidth>
+                        <InputLabel>{filter.label}</InputLabel>
+                        <Select
+                            label={filter.label}
+                            value={filters[filter.key] ?? ""}
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                handleChange(filter.key, val === "" ? null : parseInt(val, 10));
+                            }}
+                            MenuProps={{
+                                PaperProps: {
+                                    sx: {
+                                        maxHeight: "31vh"
+                                    },
+                                },
+                            }}
+                        >
+                            {[...Array(100)].map((_, i) => {
+                                const value = i + 1;
+                                return (
+                                    <MenuItem key={value} value={value}>
+                                        {value} kernels
+                                    </MenuItem>
+                                );
+                            })}
+                        </Select>
+                    </FormControl>
+                );
             case "string":
             default:
                 return (
@@ -325,18 +433,59 @@ export default function DiscoverSearch() {
         >
             <TextField
                 variant="outlined"
-                placeholder="Search movies..."
+                placeholder="Search movies…"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 sx={{
                     width: "100%",
-                    maxWidth: "500px",
-                    backgroundColor: "white",
-                    borderRadius: "10px",
-                    input: { fontSize: "1.1em" },
+                    maxWidth: "600px",
+                    background: "linear-gradient(135deg, rgba(138,43,226,0.2), rgba(0,204,255,0.1))",
+                    borderRadius: "16px",
+                    backdropFilter: "blur(14px)",
+                    boxShadow: "0 8px 24px rgba(0, 0, 0, 0.4)",
+                    input: {
+                        color: "#fff",
+                        padding: "14px 20px",
+                        fontSize: "1.1rem",
+                        fontWeight: 500,
+                        letterSpacing: "0.5px",
+                    },
+                    fieldset: {
+                        borderRadius: "16px",
+                    },
+                    "& .MuiOutlinedInput-root": {
+                        "&:hover fieldset": {
+                            borderColor: "rgba(255,255,255,0.25)",
+                        },
+                        "&.Mui-focused fieldset": {
+                            border: "2px solid #8A2BE2",
+                            boxShadow: "0 0 8px #8A2BE2",
+                        },
+                    },
+                    transition: "all 0.3s ease-in-out",
+                }}
+                InputProps={{
+                    endAdornment: (
+                        <Button
+                            variant="contained"
+                            sx={{
+                                ml: 1,
+                                borderRadius: "12px",
+                                background: "linear-gradient(135deg, #00ccff, #8A2BE2)",
+                                color: "#fff",
+                                textTransform: "none",
+                                fontWeight: "bold",
+                                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                                "&:hover": {
+                                    background: "linear-gradient(135deg, #00a3cc, #7a1fd2)",
+                                },
+                            }}
+                        >
+                            Search
+                        </Button>
+                    ),
                 }}
             />
-
             <Box
                 sx={{
                     marginTop: "2rem",
