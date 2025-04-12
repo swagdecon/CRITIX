@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +15,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.critix.auth.AuthenticationService;
 import com.critix.model.DiscoverMovieRequest;
 import com.critix.model.Movie;
 import com.critix.model.MovieCard;
 import com.critix.service.MovieService;
-
-import info.movito.themoviedbapi.model.core.MovieResultsPage;
 import info.movito.themoviedbapi.tools.TmdbException;
 
 @RestController
@@ -229,7 +225,8 @@ public class MovieController {
     }
 
     @GetMapping("/discover-movies")
-    public ResponseEntity<MovieResultsPage> getDiscovery(DiscoverMovieRequest discoverMovieRequest)
+    public ResponseEntity<List<info.movito.themoviedbapi.model.core.Movie>> getDiscovery(
+            DiscoverMovieRequest discoverMovieRequest)
             throws Exception {
         try {
             return new ResponseEntity<>(movieService.discoverMovies(discoverMovieRequest), HttpStatus.OK);

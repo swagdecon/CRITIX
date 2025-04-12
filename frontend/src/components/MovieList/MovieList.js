@@ -181,7 +181,7 @@ export default function MovieList({ endpoint }) {
           />
         </ThemeProvider>
       </div>
-    </ >
+    </>
   );
 }
 

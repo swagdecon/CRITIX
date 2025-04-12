@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +28,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import com.critix.config.EnvLoader;
 import com.critix.model.DiscoverMovieRequest;
 import com.critix.model.Movie;
@@ -772,7 +770,7 @@ public class MovieService {
     }
   }
 
-  public MovieResultsPage discoverMovies(DiscoverMovieRequest req)
+  public List<info.movito.themoviedbapi.model.core.Movie> discoverMovies(DiscoverMovieRequest req)
       throws IOException, InterruptedException, URISyntaxException, TmdbException {
 
     DiscoverMovieParamBuilder builder = new DiscoverMovieParamBuilder();
@@ -851,8 +849,7 @@ public class MovieService {
         || req.withoutWatchProviders != null) {
       System.out.println("Watch provider filters not currently supported by this wrapper.");
     }
-
-    return tmdbApi.getDiscover().getMovie(builder);
+    return tmdbApi.getDiscover().getMovie(builder).getResults();
   }
 
   private List<Integer> parseIdList(String ids) {
