@@ -1,8 +1,14 @@
 package com.critix.model;
 
+import info.movito.themoviedbapi.tools.sortby.DiscoverMovieSortBy;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
 public class DiscoverMovieRequest {
 
-    public String sortBy;
+    public DiscoverMovieSortBy sortBy;
     public String certification;
     public String certificationGte;
     public String certificationLte;

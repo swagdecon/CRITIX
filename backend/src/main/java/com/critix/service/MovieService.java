@@ -770,13 +770,13 @@ public class MovieService {
     }
   }
 
-  public List<info.movito.themoviedbapi.model.core.Movie> discoverMovies(DiscoverMovieRequest req)
+  public List<MovieCard> discoverMovies(DiscoverMovieRequest req, String userId)
       throws IOException, InterruptedException, URISyntaxException, TmdbException {
 
     DiscoverMovieParamBuilder builder = new DiscoverMovieParamBuilder();
 
     if (req.sortBy != null)
-      builder.sortBy(DiscoverMovieSortBy.valueOf(req.sortBy.toUpperCase().replace('.', '_')));
+      builder.sortBy(req.sortBy);
     if (req.certification != null)
       builder.certification(req.certification);
     if (req.certificationGte != null)
@@ -821,8 +821,6 @@ public class MovieService {
       builder.withCrew(parseIdList(req.withCrew), false);
     if (req.withGenres != null)
       builder.withGenres(parseIdList(req.withGenres), false);
-    if (req.withKeywords != null)
-      builder.withKeywords(parseIdList(req.withKeywords), false);
     if (req.withPeople != null)
       builder.withPeople(parseIdList(req.withPeople), false);
     if (req.withReleaseType != null)
@@ -849,7 +847,30 @@ public class MovieService {
         || req.withoutWatchProviders != null) {
       System.out.println("Watch provider filters not currently supported by this wrapper.");
     }
-    return tmdbApi.getDiscover().getMovie(builder).getResults();
+    HashMap<Integer, String> movieGenres = parseGenreIds();
+    List<MovieCard> discoverMovieList = new ArrayList<>();
+
+    tmdbApi.getDiscover().getMovie(builder).getResults().stream().limit(20).forEach(discoverMovie -> {
+      MovieCard movieCard = new MovieCard();
+      String posterUrl = TMDB_IMAGE_PREFIX + discoverMovie.getPosterPath();
+      boolean isInWatchlist = userRepository.doesWatchlistMovieExist(userId, discoverMovie.getId());
+      boolean favouriteMovieAlreadyExists = userRepository.doesFavouriteMovieExist(userId, discoverMovie.getId());
+      movieCard.setMovieId(discoverMovie.getId());
+      movieCard.setPosterUrl(posterUrl);
+      movieCard.setTitle(discoverMovie.getTitle());
+      movieCard.setOverview(discoverMovie.getOverview());
+      movieCard.setReleaseDate(discoverMovie.getReleaseDate());
+      movieCard.setVoteAverage((int) Math.round(discoverMovie.getVoteAverage() * 10));
+      movieCard.setIsSavedToWatchlist(isInWatchlist);
+      movieCard.setIsSavedToFavouriteMoviesList(favouriteMovieAlreadyExists);
+
+      movieCard.setGenres(discoverMovie.getGenreIds().stream()
+          .map(movieGenres::get)
+          .collect(Collectors.toList()));
+
+      discoverMovieList.add(movieCard);
+    });
+    return discoverMovieList;
   }
 
   private List<Integer> parseIdList(String ids) {

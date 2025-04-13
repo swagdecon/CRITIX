@@ -1,4 +1,5 @@
-import React, { useState, useCallback, Link } from "react";
+import React, { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
     TextField, Button, Popover, MenuItem, Checkbox, FormControlLabel,
@@ -8,23 +9,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from "dayjs";
 import * as ISO3166 from 'iso-3166-1';
 import { languageMap, gbCertifications, allFilters } from "./FilterDropdownOptions";
-import { fetchData } from "../../security/Data"
-import MovieListStyle from "../MovieList/MovieList.module.css"
-import MovieCard from "../MovieCard/MovieCard";
-import Pagination from '@mui/material/Pagination';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-const API_URL = process.env.REACT_APP_BACKEND_API_URL
-const DISCOVER_MOVIES_ENDPOINT = process.env.REACT_APP_GET_DISCOVER_MOVIES
-
-
-const theme = createTheme({
-    palette: {
-        primary: {
-            main: "#0096ff",
-        },
-    },
-});
 
 const languageOptions = Object.entries(languageMap).map(([code, name]) => ({
     label: name,
@@ -47,53 +32,30 @@ const regionOptions = ISO3166.all().map(country => {
     };
 });
 
-const buildQueryString = (filters, query, page) => {
-    const queryParts = [];
+function buildQueryString(filters, page = 1) {
+    const params = new URLSearchParams();
 
-    if (query) {
-        queryParts.push(`with_keywords=${encodeURIComponent(query)}`);
-    }
-
-    Object.keys(filters).forEach((key) => {
-        const value = filters[key];
-
-        if (!value) return;
+    Object.entries(filters).forEach(([key, value]) => {
+        if (value == null || value === "") return;
 
         if (Array.isArray(value)) {
-            const filterValues = value.map((v) => {
-                if (typeof v === "object") {
-                    return "";
-                }
-                if (typeof v === 'string' && v.includes(',')) {
-                    return v.split(',').map((val) => `${key}=${val.trim()}`).join('&');
-                }
-                if (typeof v === 'string' && v.includes('|')) {
-                    return v.split('|').map((val) => `${key}=${val.trim()}`).join('&');
-                }
-                return `${key}=${v}`;
-            }).filter(Boolean).join('&');
-            queryParts.push(filterValues);
-        } else if (typeof value !== "object") {
-            queryParts.push(`${key}=${value}`);
+            value.forEach(item => params.append(key, item));
+        } else {
+            params.append(key, value);
         }
     });
 
-    if (typeof page === "number" || typeof page === "string") {
-        queryParts.push(`page=${page}`);
-    }
-
-    return queryParts.join('&');
-};
+    params.set("page", page.toString());
+    return params.toString();
+}
 
 
 export default function DiscoverSearch() {
-    const [query, setQuery] = useState("");
     const [anchorEl, setAnchorEl] = useState(null);
     const [activeFilter, setActiveFilter] = useState(null);
     const [filters, setFilters] = useState({});
-    const [movies, setMovies] = useState([]);
-    const [totalPages, setTotalPages] = useState(1);
-    const [currentPage, setCurrentPage] = useState(1);
+    const navigate = useNavigate();
+    // const [page, setPage] = useState(1);
 
     const openPopover = useCallback((event, key) => {
         setAnchorEl(event.currentTarget);
@@ -110,22 +72,12 @@ export default function DiscoverSearch() {
     }, []);
 
     const handleSearch = async (page = 1) => {
-        setCurrentPage(page);
-        const queryString = buildQueryString(filters, query, page);
-        const url = `${API_URL}${DISCOVER_MOVIES_ENDPOINT}?${queryString}`;
-        console.log(url)
-        try {
-            const response = await fetchData(url);
-            setMovies(response || []);
-            console.log(movies)
-            setTotalPages(response.total_pages || 1);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
+        const pageNumber = typeof page === 'object' ? parseInt(page?.value || page?.target?.value || "1", 10) : parseInt(page, 10);
+        const queryString = buildQueryString(filters, isNaN(pageNumber) ? 1 : pageNumber);
+        navigate(`/discover/results?${queryString}`);
     };
-    const handlePageChange = (_, value) => {
-        handleSearch(value);
-    };
+
+
 
     const renderField = useCallback((filter) => {
         const value = filters[filter.key];
@@ -135,7 +87,16 @@ export default function DiscoverSearch() {
                 fullWidth
                 label={filter.label}
                 value={value || ""}
-                onChange={(e) => handleChange(filter.key, e.target.value)}
+                onChange={(_, newVals) => {
+                    const flat = {};
+                    newVals.forEach(val => {
+                        const { type, cert } = val.value;
+                        if (!flat[type]) flat[type] = [];
+                        flat[type].push(cert);
+                    });
+                    setFilters(prev => ({ ...prev, ...flat }));
+                }}
+
                 {...extraProps}
             />
         );
@@ -249,11 +210,15 @@ export default function DiscoverSearch() {
                             onChange={(e) => handleChange(filter.key, e.target.value)}
                         >
                             {filter.options.map((option) => (
-                                <MenuItem key={option} value={option}>{option}</MenuItem>
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </MenuItem>
                             ))}
                         </Select>
+
                     </FormControl>
                 );
+
             case "date":
                 return (
                     <DatePicker
@@ -360,191 +325,109 @@ export default function DiscoverSearch() {
     }, [filters, handleChange]);
 
     const clearAllFilters = useCallback(() => setFilters({}), []);
-    if (movies.length === 0) {
-        return (
-            <Box sx={{ height: "100vh", background: "linear-gradient(#141e30, #0096ff)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", p: 4, color: "white" }}>
-                <TextField
-                    variant="outlined"
-                    placeholder="Search movies…"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    sx={{
-                        width: "100%",
-                        maxWidth: "600px",
-                        background: "linear-gradient(135deg, rgba(138,43,226,0.2), rgba(0,204,255,0.1))",
-                        borderRadius: "16px",
-                        backdropFilter: "blur(14px)",
-                        boxShadow: "0 8px 24px rgba(0, 0, 0, 0.4)",
-                        input: {
-                            color: "#fff",
-                            padding: "14px 20px",
-                            fontSize: "1.1rem",
-                            fontWeight: 500,
-                            letterSpacing: "0.5px",
-                        },
-                        fieldset: {
-                            borderRadius: "16px",
-                        },
-                        "& .MuiOutlinedInput-root": {
-                            "&:hover fieldset": {
-                                borderColor: "rgba(255,255,255,0.25)",
-                            },
-                            "&.Mui-focused fieldset": {
-                                border: "2px solid #8A2BE2",
-                                boxShadow: "0 0 8px #8A2BE2",
-                            },
-                        },
-                        transition: "all 0.3s ease-in-out",
-                    }}
-                    InputProps={{
-                        endAdornment: (
+    return (
+        <Box sx={{ height: "100vh", background: "linear-gradient(#141e30, #0096ff)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", p: 4, color: "white" }}>
+            <Button
+                variant="contained"
+                onClick={handleSearch}
+                sx={{
+                    px: 4,
+                    py: 1.5,
+                    fontSize: "1.2rem",
+                    borderRadius: "12px",
+                    background: "linear-gradient(135deg, #00ccff, #8A2BE2)",
+                    color: "#fff",
+                    textTransform: "none",
+                    fontWeight: "bold",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                    "&:hover": {
+                        background: "linear-gradient(135deg, #00a3cc, #7a1fd2)",
+                    },
+                }}
+            >
+                Search
+            </Button>
+
+            <Box
+                sx={{
+                    marginTop: "2rem",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "0.5rem",
+                    justifyContent: "center",
+                }}
+            ></Box>
+            <Box sx={{ mt: 4, display: "flex", flexWrap: "wrap", gap: 1, justifyContent: "center" }}>
+                {allFilters.map((filter) => {
+                    const isActive = filters[filter.key] !== undefined && filters[filter.key] !== "" && filters[filter.key] !== null;
+                    return (
+                        <Box
+                            key={filter.key}
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                bgcolor: isActive ? "rgba(0,150,255,0.2)" : "rgba(255,255,255,0.1)",
+                                borderRadius: 2,
+                                pl: 1,
+                                pr: 0.5,
+                                py: 0.5,
+                            }}
+                        >
                             <Button
-                                variant="contained"
-                                onClick={handleSearch}
+                                onClick={(e) => openPopover(e, filter.key)}
                                 sx={{
-                                    ml: 1,
-                                    borderRadius: "12px",
-                                    background: "linear-gradient(135deg, #00ccff, #8A2BE2)",
                                     color: "#fff",
-                                    textTransform: "none",
                                     fontWeight: "bold",
-                                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-                                    "&:hover": {
-                                        background: "linear-gradient(135deg, #00a3cc, #7a1fd2)",
-                                    },
+                                    textTransform: "none",
+                                    p: 0,
+                                    minWidth: 0,
+                                    mr: 1,
                                 }}
                             >
-                                Search
+                                {filter.label}
                             </Button>
-                        ),
-                    }} />
-                <Box
-                    sx={{
-                        marginTop: "2rem",
-                        display: "flex",
-                        flexWrap: "wrap",
-                        gap: "0.5rem",
-                        justifyContent: "center",
-                    }}
-                ></Box>
-                <Box sx={{ mt: 4, display: "flex", flexWrap: "wrap", gap: 1, justifyContent: "center" }}>
-                    {allFilters.map((filter) => {
-                        const isActive = filters[filter.key] !== undefined && filters[filter.key] !== "" && filters[filter.key] !== null;
-                        return (
-                            <Box
-                                key={filter.key}
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    bgcolor: isActive ? "rgba(0,150,255,0.2)" : "rgba(255,255,255,0.1)",
-                                    borderRadius: 2,
-                                    pl: 1,
-                                    pr: 0.5,
-                                    py: 0.5,
-                                }}
-                            >
-                                <Button
-                                    onClick={(e) => openPopover(e, filter.key)}
+                            {isActive && (
+                                <Box
+                                    onClick={() => handleChange(filter.key, "")}
                                     sx={{
+                                        cursor: "pointer",
                                         color: "#fff",
+                                        backgroundColor: "#f44",
+                                        borderRadius: "50%",
+                                        width: 20,
+                                        height: 20,
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        fontSize: "0.8rem",
                                         fontWeight: "bold",
-                                        textTransform: "none",
-                                        p: 0,
-                                        minWidth: 0,
-                                        mr: 1,
+                                        lineHeight: 1,
                                     }}
                                 >
-                                    {filter.label}
-                                </Button>
-                                {isActive && (
-                                    <Box
-                                        onClick={() => handleChange(filter.key, "")}
-                                        sx={{
-                                            cursor: "pointer",
-                                            color: "#fff",
-                                            backgroundColor: "#f44",
-                                            borderRadius: "50%",
-                                            width: 20,
-                                            height: 20,
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            fontSize: "0.8rem",
-                                            fontWeight: "bold",
-                                            lineHeight: 1,
-                                        }}
-                                    >
-                                        ×
-                                    </Box>
-                                )}
-                            </Box>
-                        );
-                    })}
-                    <Button onClick={clearAllFilters} variant="outlined" sx={{ position: "absolute", bottom: "2rem", left: "50%", transform: "translateX(-50%)" }}>
-                        Clear All Filters
-                    </Button>
-                </Box>
-
-                <Popover
-                    open={Boolean(anchorEl)}
-                    anchorEl={anchorEl}
-                    onClose={closePopover}
-                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                    transformOrigin={{ vertical: "top", horizontal: "center" }}
-                    PaperProps={{ sx: { p: 2, minWidth: 250 } }}
-                >
-                    {activeFilter && renderField(allFilters.find(f => f.key === activeFilter))}
-                </Popover>
+                                    ×
+                                </Box>
+                            )}
+                        </Box>
+                    );
+                })}
+                <Button onClick={clearAllFilters} variant="outlined" sx={{ position: "absolute", bottom: "2rem", left: "50%", transform: "translateX(-50%)" }}>
+                    Clear All Filters
+                </Button>
             </Box>
 
-        );
-    } else {
-        return (
-            <Box sx={{ mt: 6, width: "100%", maxWidth: "1200px" }}>
-                <div className={MovieListStyle.Container}>
-                    {movies.map((movie) => (
-                        <div key={movie.movieId}>
-                            <Link to={`/movies/movie/${movie.movieId}`}>
-                                <MovieCard
-                                    movieId={movie.movieId}
-                                    posterUrl={movie.posterUrl}
-                                    voteAverage={movie.voteAverage}
-                                    runtime={movie.runtime}
-                                    genres={movie.genres}
-                                    overview={movie.overview}
-                                    actors={movie.actors}
-                                    video={movie.video}
-                                    isSavedToFavouriteMoviesList={movie.isSavedToFavouriteMoviesList}
-                                    isSavedToWatchlist={movie.isSavedToWatchlist}
-                                />
-                            </Link>
-                        </div>
-                    ))}
-                </div>
+            <Popover
+                open={Boolean(anchorEl)}
+                anchorEl={anchorEl}
+                onClose={closePopover}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                transformOrigin={{ vertical: "top", horizontal: "center" }}
+                PaperProps={{ sx: { p: 2, minWidth: 250 } }}
+            >
+                {activeFilter && renderField(allFilters.find(f => f.key === activeFilter))}
+            </Popover>
+        </Box>
 
-                {totalPages > 1 && (
-                    <div className={MovieListStyle["pagination-container"]}>
-                        <ThemeProvider theme={theme}>
-                            <Pagination
-                                onChange={handlePageChange}
-                                count={totalPages}
-                                siblingCount={4}
-                                boundaryCount={1}
-                                page={currentPage}
-                                size="large"
-                                color="primary"
-                                sx={{
-                                    '& .MuiPaginationItem-root': {
-                                        color: '#ffffff',
-                                    },
-                                }}
-                            />
-                        </ThemeProvider>
-                    </div>
-                )}
-            </Box>
-        )
-    }
+    );
 }
 
 DiscoverSearch.propTypes = {

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -225,13 +226,14 @@ public class MovieController {
     }
 
     @GetMapping("/discover-movies")
-    public ResponseEntity<List<info.movito.themoviedbapi.model.core.Movie>> getDiscovery(
-            DiscoverMovieRequest discoverMovieRequest)
-            throws Exception {
+    public ResponseEntity<List<MovieCard>> getDiscovery(@RequestHeader("Authorization") String accessToken,
+            @ModelAttribute DiscoverMovieRequest discoverMovieRequest) throws Exception {
+        String userId = authenticationService.getUserDetails(accessToken).getId();
         try {
-            return new ResponseEntity<>(movieService.discoverMovies(discoverMovieRequest), HttpStatus.OK);
+            System.out.println(discoverMovieRequest);
+            return new ResponseEntity<>(movieService.discoverMovies(discoverMovieRequest, userId), HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
