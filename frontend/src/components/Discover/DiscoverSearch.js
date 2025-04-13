@@ -53,9 +53,8 @@ function buildQueryString(filters, page = 1) {
 export default function DiscoverSearch() {
     const [anchorEl, setAnchorEl] = useState(null);
     const [activeFilter, setActiveFilter] = useState(null);
-    const [filters, setFilters] = useState({});
+    const [filters, setFilters] = useState({ includeAdult: false });
     const navigate = useNavigate();
-    // const [page, setPage] = useState(1);
 
     const openPopover = useCallback((event, key) => {
         setAnchorEl(event.currentTarget);
@@ -71,13 +70,12 @@ export default function DiscoverSearch() {
         setFilters(prev => ({ ...prev, [key]: value }));
     }, []);
 
-    const handleSearch = async (page = 1) => {
-        const pageNumber = typeof page === 'object' ? parseInt(page?.value || page?.target?.value || "1", 10) : parseInt(page, 10);
-        const queryString = buildQueryString(filters, isNaN(pageNumber) ? 1 : pageNumber);
+    const handleSearch = async () => {
+        const { page, ...rest } = filters;
+        const pageNumber = Number(page);
+        const queryString = buildQueryString(rest, isNaN(pageNumber) ? 1 : pageNumber);
         navigate(`/discover/results?${queryString}`);
     };
-
-
 
     const renderField = useCallback((filter) => {
         const value = filters[filter.key];
@@ -114,7 +112,7 @@ export default function DiscoverSearch() {
             );
         }
 
-        if (["region", "with_origin_country", 'watch_region'].includes(filter.key)) {
+        if (["region", "withOriginCountry", 'watchRegion'].includes(filter.key)) {
             return (
                 <Autocomplete
                     options={regionOptions}
@@ -155,25 +153,40 @@ export default function DiscoverSearch() {
                 />
             );
         }
-        if (["with_genres", "without_genres"].includes(filter.key)) {
+        if (["withGenres", "withoutGenres"].includes(filter.key)) {
+            const selectedGenreValues = (value || "").split(",").map((val) => parseInt(val, 10));
+            const selectedGenres = filter.options.filter((opt) => selectedGenreValues.includes(opt.value));
+
             return (
-                <FormControl fullWidth>
-                    <InputLabel>{filter.label}</InputLabel>
-                    <Select
-                        label={filter.label}
-                        value={value || ""}
-                        onChange={(e) => handleChange(filter.key, e.target.value)}
-                    >
-                        {filter.options.map((genre) => (
-                            <MenuItem key={genre} value={genre}>
-                                {genre}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+                <Autocomplete
+                    multiple
+                    options={filter.options}
+                    getOptionLabel={(option) => option.label}
+                    value={selectedGenres}
+                    onChange={(_, newVals) => handleChange(filter.key, newVals.map((val) => val.value).join(","))}
+                    renderInput={(params) => <TextField {...params} label={filter.label} fullWidth />}
+                />
             );
         }
-        if (filter.key === "with_release_type") {
+        if (filter.key === "primaryReleaseYear") {
+            return (
+                <DatePicker
+                    views={["year"]}
+                    label={filter.label}
+                    value={value ? dayjs(`${value}`) : null}
+                    onChange={(newVal) => {
+                        const year = newVal ? dayjs(newVal).year() : null;
+                        handleChange(filter.key, year);
+                    }}
+                    slotProps={{
+                        textField: {
+                            fullWidth: true,
+                        }
+                    }}
+                />
+            );
+        }
+        if (filter.key === "withReleaseType") {
             return (
                 <FormControl fullWidth>
                     <InputLabel>{filter.label}</InputLabel>
@@ -224,9 +237,10 @@ export default function DiscoverSearch() {
                     <DatePicker
                         label={filter.label}
                         value={value ? dayjs(value) : null}
-                        onChange={(newVal) => handleChange(filter.key, newVal?.toISOString() || null)}
+                        onChange={(newVal) => handleChange(filter.key, newVal ? dayjs(newVal).format("YYYY-MM-DD") : null)}
                     />
                 );
+
             case "int": {
                 const isRuntime = filter.key.includes("runtime");
                 const isPage = filter.key === "page";
@@ -359,7 +373,10 @@ export default function DiscoverSearch() {
             ></Box>
             <Box sx={{ mt: 4, display: "flex", flexWrap: "wrap", gap: 1, justifyContent: "center" }}>
                 {allFilters.map((filter) => {
-                    const isActive = filters[filter.key] !== undefined && filters[filter.key] !== "" && filters[filter.key] !== null;
+                    const isActive = (
+                        filter.key === "includeAdult"
+                            ? filters[filter.key] === true
+                            : filters[filter.key] !== undefined && filters[filter.key] !== "" && filters[filter.key] !== null);
                     return (
                         <Box
                             key={filter.key}

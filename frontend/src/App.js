@@ -24,7 +24,7 @@ import ResetEmail from "./views/ResetEmail.js"
 import PricingPage from "./views/Premium.js"
 import Recommendations from "./components/Recommendations/Recommendations.js";
 import DiscoverMovies from "./views/Discover.js";
-import DiscoverResults from "./components/Discover/DiscoverResults.js";
+import DiscoverResults from "./views/DiscoverResults.js";
 export default function App() {
   return (
     <Router>

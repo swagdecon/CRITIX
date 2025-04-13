@@ -806,9 +806,9 @@ public class MovieService {
     if (req.releaseDateLte != null)
       builder.releaseDateLte(req.releaseDateLte);
     if (req.voteAverageGte != null)
-      builder.voteAverageGte(req.voteAverageGte);
+      builder.voteAverageGte(req.voteAverageGte / 10);
     if (req.voteAverageLte != null)
-      builder.voteAverageLte(req.voteAverageLte);
+      builder.voteAverageLte(req.voteAverageLte / 10);
     if (req.voteCountGte != null)
       builder.voteCountGte(req.voteCountGte);
     if (req.voteCountLte != null)
