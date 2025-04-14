@@ -11,10 +11,11 @@ import * as ISO3166 from 'iso-3166-1';
 import { languageMap, gbCertifications, allFilters } from "./FilterDropdownOptions";
 
 
-const languageOptions = Object.entries(languageMap).map(([code, name]) => ({
-    label: name,
-    value: code,
+const languageOptions = Object.entries(languageMap).map(([value, label]) => ({
+    value,
+    label,
 }));
+
 
 const certificationOptions = [
     { group: "Specific", options: gbCertifications.map(cert => ({ label: cert, value: { type: "eq", cert } })) },
@@ -85,21 +86,14 @@ export default function DiscoverSearch() {
                 fullWidth
                 label={filter.label}
                 value={value || ""}
-                onChange={(_, newVals) => {
-                    const flat = {};
-                    newVals.forEach(val => {
-                        const { type, cert } = val.value;
-                        if (!flat[type]) flat[type] = [];
-                        flat[type].push(cert);
-                    });
-                    setFilters(prev => ({ ...prev, ...flat }));
-                }}
-
+                onChange={(e) => handleChange(filter.key, e.target.value)}
                 {...extraProps}
+                placeholder="e.g. Tom Hanks, Meg Ryan"
             />
         );
 
-        if (filter.key.includes("language")) {
+
+        if (filter.key.includes("withOriginalLanguage")) {
             return (
                 <Autocomplete
                     options={languageOptions}
@@ -107,7 +101,9 @@ export default function DiscoverSearch() {
                     isOptionEqualToValue={(o, v) => o.value === v.value}
                     value={languageOptions.find(opt => opt.value === value) || null}
                     onChange={(_, newVal) => handleChange(filter.key, newVal ? newVal.value : "")}
-                    renderInput={(params) => <TextField {...params} label={filter.label} fullWidth />}
+                    renderInput={(params) => (
+                        <TextField {...params} label={filter.label} fullWidth />
+                    )}
                 />
             );
         }
@@ -187,21 +183,18 @@ export default function DiscoverSearch() {
             );
         }
         if (filter.key === "withReleaseType") {
+            const selectedReleaseValues = (value || "").split(",").map((val) => parseInt(val, 10));
+            const selectedReleases = filter.options.filter((opt) => selectedReleaseValues.includes(opt.value));
+
             return (
-                <FormControl fullWidth>
-                    <InputLabel>{filter.label}</InputLabel>
-                    <Select
-                        label={filter.label}
-                        value={value || ""}
-                        onChange={(e) => handleChange(filter.key, e.target.value)}
-                    >
-                        {filter.options.map((releaseType) => (
-                            <MenuItem key={releaseType} value={releaseType}>
-                                {releaseType}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+                <Autocomplete
+                    multiple
+                    options={filter.options}
+                    getOptionLabel={(option) => option.label}
+                    value={selectedReleases}
+                    onChange={(_, newVals) => handleChange(filter.key, newVals.map((val) => val.value).join(","))}
+                    renderInput={(params) => <TextField {...params} label={filter.label} fullWidth />}
+                />
             );
         }
 
@@ -314,24 +307,31 @@ export default function DiscoverSearch() {
                             </Select>
                         </FormControl>
                     );
-                } else if (["with_watch_providers", "without_watch_providers"].includes(filter.key)) {
+                } else if (["withWatchProviders", "withoutWatchProviders"].includes(filter.key)) {
+                    const getSelectedOptions = (options, value) =>
+                        Array.isArray(options)
+                            ? options.filter(opt => (value || "").split(',').includes(opt.value))
+                            : [];
                     return (
                         <FormControl fullWidth>
                             <InputLabel>{filter.label}</InputLabel>
-                            <Select
-                                value={value || ""}
-                                onChange={(e) => handleChange(filter.key, e.target.value)}
-                                label={filter.label}
-                            >
-                                {filter.options.map(option => (
-                                    <MenuItem key={option} value={option}>{option}</MenuItem>
-                                ))}
-                            </Select>
+                            <Autocomplete
+                                multiple
+                                options={filter.options}
+                                getOptionLabel={(option) => option.label}
+                                isOptionEqualToValue={(o, v) => o.value === v.value}
+                                value={getSelectedOptions(filter.options, value)}
+                                onChange={(_, newVals) =>
+                                    handleChange(filter.key, newVals.map(val => val.value).join(','))
+                                }
+                                renderInput={(params) => <TextField {...params} label={filter.label} fullWidth />}
+                            />
                         </FormControl>
                     );
                 } else {
                     return commonTextField();
                 }
+
             default:
                 return commonTextField();
 

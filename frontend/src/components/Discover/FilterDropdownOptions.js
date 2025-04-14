@@ -1,11 +1,12 @@
-export const newWatchProviders = [
-    'Disney Plus',
-    'Amazon Video',
-    'Paramount Plus',
-    'Apple TV',
-    'AMC on Demand',
-    'Now TV'
+export const watchProviders = [
+    { label: 'Disney Plus', value: '337' },
+    { label: 'Amazon Video', value: '10' },
+    { label: 'Paramount Plus', value: '531' },
+    { label: 'Apple TV', value: '2' },
+    { label: 'AMC on Demand', value: '185' },
+    { label: 'Now TV', value: '35' },
 ];
+
 export const languageMap = {
     "af": "Afrikaans",
     "sq": "Albanian",
@@ -158,19 +159,19 @@ export const genreOptions = [
 ];
 
 export const releaseTypeOptions = [
-    "Premiere",
-    "Theatrical (limited)",
-    "Theatrical",
-    "Digital",
-    "Physical",
-    "TV",
+    { label: "Premiere", value: "1" },
+    { label: "Theatrical (limited)", value: '2' },
+    { label: "Theatrical", value: '3' },
+    { label: "Digital", value: '4' },
+    { label: "Physical", value: '5' },
+    { label: 'TV', value: '6' }
 ];
 
 export const allFilters = [
     { label: "Certification", key: "certification", type: "certification" },
     { label: "Include Adult Content", key: "includeAdult", type: "boolean" },
     { label: "Include Videos", key: "includeVideo", type: "boolean" },
-    { label: "Language", key: "language", type: "string" },
+    { label: "Language", key: "language", type: "string", options: languageMap },
     { label: "Page", key: "page", type: "int" },
     { label: "Release Year", key: "primaryReleaseYear", type: "int" },
     { label: "Release Date From", key: "releaseDateGte", type: "date" },
@@ -205,6 +206,6 @@ export const allFilters = [
     { label: "Min Runtime (min)", key: "withRuntimeGte", type: "int" },
     { label: "Max Runtime (min)", key: "withRuntimeLte", type: "int" },
     { label: "Monetization Types", key: "withWatchMonetizationTypes", type: "string" },
-    { label: "Watch Providers", key: "withWatchProviders", type: "string", options: [...newWatchProviders] },
-    { label: "Exclude Watch Providers", key: "withoutWatchProviders", type: "string", options: [...newWatchProviders] },
+    { label: "Watch Providers", key: "withWatchProviders", type: "string", options: watchProviders },
+    { label: "Exclude Watch Providers", key: "withoutWatchProviders", type: "string", options: watchProviders },
 ];

@@ -38,11 +38,14 @@ import com.critix.model.User;
 import com.critix.repository.MovieRepository;
 import com.critix.repository.UserRepository;
 import info.movito.themoviedbapi.TmdbApi;
+import info.movito.themoviedbapi.TmdbPeople;
+import info.movito.themoviedbapi.TmdbPeopleLists;
 import info.movito.themoviedbapi.model.core.Genre;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 import info.movito.themoviedbapi.model.core.ProductionCompany;
 import info.movito.themoviedbapi.model.core.Review;
 import info.movito.themoviedbapi.model.core.ReviewResultsPage;
+import info.movito.themoviedbapi.model.core.popularperson.PopularPersonResultsPage;
 import info.movito.themoviedbapi.model.core.video.VideoResults;
 import info.movito.themoviedbapi.model.core.watchproviders.WatchProviders;
 import info.movito.themoviedbapi.model.movielists.MovieResultsPageWithDates;
@@ -51,7 +54,6 @@ import info.movito.themoviedbapi.model.movies.MovieDb;
 import info.movito.themoviedbapi.tools.TmdbException;
 import info.movito.themoviedbapi.tools.appendtoresponse.MovieAppendToResponse;
 import info.movito.themoviedbapi.tools.builders.discover.DiscoverMovieParamBuilder;
-import info.movito.themoviedbapi.tools.sortby.DiscoverMovieSortBy;
 import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.annotation.PostConstruct;
 
@@ -92,20 +94,15 @@ public class MovieService {
     executor.shutdown();
   }
 
-  @PostConstruct // This will make sure the method runs once when the application starts
+  @PostConstruct
   public void startNowAndSchedule() {
-    // Execute the task immediately after application starts
     updateRecommendationsForAllUsers();
   }
 
-  // This method will now run for all users automatically every 24 hours
-  @Scheduled(cron = "0 0 0 * * *") // Runs every day at midnight
+  @Scheduled(cron = "0 0 0 * * *")
   public void updateRecommendationsForAllUsers() {
-    // Get all users from the database (this may need pagination if you have many
-    // users)
     List<User> users = userRepository.findAll();
 
-    // Loop through all users to update their recommendations
     for (User user : users) {
       try {
         updateUserRecommendations(user);
@@ -774,7 +771,6 @@ public class MovieService {
       throws IOException, InterruptedException, URISyntaxException, TmdbException {
 
     DiscoverMovieParamBuilder builder = new DiscoverMovieParamBuilder();
-
     if (req.sortBy != null)
       builder.sortBy(req.sortBy);
     if (req.certification != null)
@@ -813,12 +809,30 @@ public class MovieService {
       builder.voteCountGte(req.voteCountGte);
     if (req.voteCountLte != null)
       builder.voteCountLte(req.voteCountLte);
-    if (req.withCast != null)
-      builder.withCast(parseIdList(req.withCast), false);
+    if (req.withCast != null) {
+      List<Integer> personIds = Arrays.stream(req.withCast.split(","))
+          .map(String::trim)
+          .map(this::getPersonIdByName)
+          .filter(Objects::nonNull)
+          .collect(Collectors.toList());
+
+      if (!personIds.isEmpty()) {
+        builder.withCast(personIds, false);
+      }
+    }
     if (req.withCompanies != null)
       builder.withCompanies(parseIdList(req.withCompanies), false);
-    if (req.withCrew != null)
-      builder.withCrew(parseIdList(req.withCrew), false);
+    if (req.withCrew != null) {
+      List<Integer> personIds = Arrays.stream(req.withCrew.split(","))
+          .map(String::trim)
+          .map(this::getPersonIdByName)
+          .filter(Objects::nonNull)
+          .collect(Collectors.toList());
+
+      if (!personIds.isEmpty()) {
+        builder.withCrew(personIds, false);
+      }
+    }
     if (req.withGenres != null)
       builder.withGenres(parseIdList(req.withGenres), false);
     if (req.withPeople != null)
@@ -843,10 +857,6 @@ public class MovieService {
     if (req.year != null)
       builder.year(req.year);
 
-    if (req.withWatchProviders != null || req.withWatchMonetizationTypes != null || req.watchRegion != null
-        || req.withoutWatchProviders != null) {
-      System.out.println("Watch provider filters not currently supported by this wrapper.");
-    }
     HashMap<Integer, String> movieGenres = parseGenreIds();
     List<MovieCard> discoverMovieList = new ArrayList<>();
 
@@ -887,4 +897,20 @@ public class MovieService {
         .filter(s -> !s.isEmpty())
         .collect(Collectors.toList());
   }
+
+  public Integer getPersonIdByName(String name) {
+    try {
+      PopularPersonResultsPage results = tmdbApi.getSearch()
+          .searchPerson(name, false, null, 1);
+
+      if (results != null && results.getResults() != null && !results.getResults().isEmpty()) {
+        return results.getResults().get(0).getId();
+      }
+    } catch (TmdbException e) {
+      e.printStackTrace();
+    }
+
+    return null;
+  }
+
 }
