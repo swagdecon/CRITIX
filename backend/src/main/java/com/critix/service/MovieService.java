@@ -38,8 +38,6 @@ import com.critix.model.User;
 import com.critix.repository.MovieRepository;
 import com.critix.repository.UserRepository;
 import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.TmdbPeople;
-import info.movito.themoviedbapi.TmdbPeopleLists;
 import info.movito.themoviedbapi.model.core.Genre;
 import info.movito.themoviedbapi.model.core.MovieResultsPage;
 import info.movito.themoviedbapi.model.core.ProductionCompany;
@@ -845,6 +843,14 @@ public class MovieService {
       builder.withOriginalLanguage(req.withOriginalLanguage);
     if (req.withRuntimeGte != null)
       builder.withRuntimeGte(req.withRuntimeGte);
+    if (req.watchRegion != null)
+      builder.watchRegion(req.watchRegion);
+    if (req.withWatchProviders != null)
+      builder.withWatchProviders(parseIdList(req.withWatchProviders), false);
+    if (req.withoutWatchProviders != null)
+      builder.withoutWatchProviders(parseIdList(req.withoutWatchProviders));
+    if (req.withWatchMonetizationTypes != null)
+      builder.withWatchMonetizationTypes(parseStrList(req.withWatchMonetizationTypes), false);
     if (req.withRuntimeLte != null)
       builder.withRuntimeLte(req.withRuntimeLte);
     if (req.withoutCompanies != null)
@@ -853,7 +859,6 @@ public class MovieService {
       builder.withoutGenres(parseIdList(req.withoutGenres));
     if (req.withoutKeywords != null)
       builder.withoutKeywords(parseStrList(req.withoutKeywords));
-
     if (req.year != null)
       builder.year(req.year);
 

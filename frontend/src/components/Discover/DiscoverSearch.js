@@ -18,9 +18,13 @@ const languageOptions = Object.entries(languageMap).map(([value, label]) => ({
 
 
 const certificationOptions = [
-    { group: "Specific", options: gbCertifications.map(cert => ({ label: cert, value: { type: "eq", cert } })) },
-    { group: "Minimum", options: gbCertifications.map(cert => ({ label: `At least ${cert}`, value: { type: "gte", cert } })) },
-    { group: "Maximum", options: gbCertifications.map(cert => ({ label: `Up to ${cert}`, value: { type: "lte", cert } })) },
+    {
+        group: "Certification",
+        options: gbCertifications.map(cert => ({
+            label: cert,
+            value: { type: "eq", cert },
+        })),
+    },
 ];
 
 const flatCertificationOptions = certificationOptions.flatMap(group => group.options);
@@ -74,6 +78,14 @@ export default function DiscoverSearch() {
     const handleSearch = async () => {
         const { page, ...rest } = filters;
         const pageNumber = Number(page);
+
+        if (
+            (rest.withWatchProviders || rest.withWatchMonetizationTypes || rest.withoutWatchProviders) &&
+            !rest.watchRegion
+        ) {
+            rest.watchRegion = "GB";
+        }
+
         const queryString = buildQueryString(rest, isNaN(pageNumber) ? 1 : pageNumber);
         navigate(`/discover/results?${queryString}`);
     };
@@ -124,9 +136,8 @@ export default function DiscoverSearch() {
         if (filter.key === "certification") {
             const selectedValues = value || [];
             const currentValues = flatCertificationOptions.filter(opt =>
-                selectedValues.some(val => val.type === opt.value.type && val.cert === opt.value.cert)
+                selectedValues.includes(opt.value.cert)
             );
-
             return (
                 <Autocomplete
                     multiple
@@ -143,7 +154,7 @@ export default function DiscoverSearch() {
                     }
                     value={currentValues}
                     onChange={(_, newVals) =>
-                        handleChange(filter.key, newVals.map(val => val.value))
+                        handleChange(filter.key, newVals.map(val => val.value.cert).join(','))
                     }
                     renderInput={(params) => <TextField {...params} label={filter.label} fullWidth />}
                 />
@@ -183,17 +194,27 @@ export default function DiscoverSearch() {
             );
         }
         if (filter.key === "withReleaseType") {
-            const selectedReleaseValues = (value || "").split(",").map((val) => parseInt(val, 10));
-            const selectedReleases = filter.options.filter((opt) => selectedReleaseValues.includes(opt.value));
+            const selectedReleaseValues = typeof value === "string"
+                ? value.split(",").map((v) => v.trim()).filter(Boolean)
+                : [];
+
+            const selectedReleases = filter.options.filter((opt) =>
+                selectedReleaseValues.includes(opt.value)
+            );
 
             return (
                 <Autocomplete
                     multiple
                     options={filter.options}
                     getOptionLabel={(option) => option.label}
+                    isOptionEqualToValue={(option, value) => option.value === value.value}
                     value={selectedReleases}
-                    onChange={(_, newVals) => handleChange(filter.key, newVals.map((val) => val.value).join(","))}
-                    renderInput={(params) => <TextField {...params} label={filter.label} fullWidth />}
+                    onChange={(_, newVals) =>
+                        handleChange(filter.key, newVals.map((val) => val.value).join(","))
+                    }
+                    renderInput={(params) => (
+                        <TextField {...params} label={filter.label} fullWidth />
+                    )}
                 />
             );
         }
@@ -291,8 +312,8 @@ export default function DiscoverSearch() {
                 );
             }
             case "string":
-                if (filter.key === "with_watch_monetization_types") {
-                    const monetizationOptions = ["Flatrate", "Free", "Ads", "Rent", "Buy"];
+                if (filter.key === "withWatchMonetizationTypes") {
+                    const monetizationOptions = ["flatrate", "free", "ads", "rent", "buy"];
                     return (
                         <FormControl fullWidth>
                             <InputLabel>{filter.label}</InputLabel>
