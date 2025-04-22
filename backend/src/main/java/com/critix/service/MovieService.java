@@ -773,10 +773,10 @@ public class MovieService {
       builder.sortBy(req.sortBy);
     if (req.certification != null)
       builder.certification(req.certification);
-    if (req.certificationGte != null)
-      builder.certificationGte(req.certificationGte);
-    if (req.certificationLte != null)
-      builder.certificationLte(req.certificationLte);
+    // if (req.certificationGte != null)
+    // builder.certificationGte(req.certificationGte);
+    // if (req.certificationLte != null)
+    // builder.certificationLte(req.certificationLte);
     if (req.certificationCountry != null)
       builder.certificationCountry(req.certificationCountry);
     if (req.includeAdult != null)

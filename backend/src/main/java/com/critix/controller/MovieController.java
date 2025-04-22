@@ -230,7 +230,6 @@ public class MovieController {
             @ModelAttribute DiscoverMovieRequest discoverMovieRequest) throws Exception {
         String userId = authenticationService.getUserDetails(accessToken).getId();
         try {
-            System.out.println(discoverMovieRequest);
             return new ResponseEntity<>(movieService.discoverMovies(discoverMovieRequest, userId), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

@@ -24,7 +24,6 @@ import ResetEmail from "./views/ResetEmail.js"
 import PricingPage from "./views/Premium.js"
 import Recommendations from "./components/Recommendations/Recommendations.js";
 import DiscoverMovies from "./views/Discover.js";
-import DiscoverResults from "./views/DiscoverResults.js";
 export default function App() {
   return (
     <Router>
@@ -68,7 +67,6 @@ export default function App() {
         </Route>
         <Route path="/movies/:endpoint/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
         <Route path="/profile" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
-        <Route path="/discover/:query" element={<PrivateRoute><DiscoverResults /></PrivateRoute>} />
         <Route path="/movies/movie/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
         <Route path="/person/:id" element={<PrivateRoute><IndPerson /></PrivateRoute>} />
         <Route path="/forgot-password" element={<ConfirmEmailForPwdReset />} />

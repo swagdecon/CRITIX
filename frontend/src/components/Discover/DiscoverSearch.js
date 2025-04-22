@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
     TextField, Button, Popover, MenuItem, Checkbox, FormControlLabel,
@@ -37,29 +36,11 @@ const regionOptions = ISO3166.all().map(country => {
     };
 });
 
-function buildQueryString(filters, page = 1) {
-    const params = new URLSearchParams();
 
-    Object.entries(filters).forEach(([key, value]) => {
-        if (value == null || value === "") return;
-
-        if (Array.isArray(value)) {
-            value.forEach(item => params.append(key, item));
-        } else {
-            params.append(key, value);
-        }
-    });
-
-    params.set("page", page.toString());
-    return params.toString();
-}
-
-
-export default function DiscoverSearch() {
+export default function DiscoverSearch({ onSubmit }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [activeFilter, setActiveFilter] = useState(null);
     const [filters, setFilters] = useState({ includeAdult: false });
-    const navigate = useNavigate();
 
     const openPopover = useCallback((event, key) => {
         setAnchorEl(event.currentTarget);
@@ -75,19 +56,29 @@ export default function DiscoverSearch() {
         setFilters(prev => ({ ...prev, [key]: value }));
     }, []);
 
+    const getUserCountry = () => {
+        const lang = navigator.language || "en-GB";
+        const country = lang.split("-")[1];
+        return country || "GB";
+    };
+
     const handleSearch = async () => {
         const { page, ...rest } = filters;
         const pageNumber = Number(page);
+        const userCountry = getUserCountry();
 
         if (
-            (rest.withWatchProviders || rest.withWatchMonetizationTypes || rest.withoutWatchProviders) &&
+            (rest.withWatchProviders || rest.withWatchMonetizationTypes || rest.withoutWatchProvider) &&
             !rest.watchRegion
         ) {
-            rest.watchRegion = "GB";
+            rest.watchRegion = userCountry;
         }
 
-        const queryString = buildQueryString(rest, isNaN(pageNumber) ? 1 : pageNumber);
-        navigate(`/discover/results?${queryString}`);
+        if (!rest.certificationCountry) {
+            rest.certificationCountry = userCountry;
+        }
+
+        onSubmit({ ...rest }, isNaN(pageNumber) ? 1 : pageNumber);
     };
 
     const renderField = useCallback((filter) => {
@@ -120,7 +111,7 @@ export default function DiscoverSearch() {
             );
         }
 
-        if (["region", "withOriginCountry", 'watchRegion'].includes(filter.key)) {
+        if (["region", "withOriginCountry", 'watchRegion', 'certificationCountry'].includes(filter.key)) {
             return (
                 <Autocomplete
                     options={regionOptions}
@@ -361,28 +352,7 @@ export default function DiscoverSearch() {
 
     const clearAllFilters = useCallback(() => setFilters({}), []);
     return (
-        <Box sx={{ height: "100vh", background: "linear-gradient(#141e30, #0096ff)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", p: 4, color: "white" }}>
-            <Button
-                variant="contained"
-                onClick={handleSearch}
-                sx={{
-                    px: 4,
-                    py: 1.5,
-                    fontSize: "1.2rem",
-                    borderRadius: "12px",
-                    background: "linear-gradient(135deg, #00ccff, #8A2BE2)",
-                    color: "#fff",
-                    textTransform: "none",
-                    fontWeight: "bold",
-                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-                    "&:hover": {
-                        background: "linear-gradient(135deg, #00a3cc, #7a1fd2)",
-                    },
-                }}
-            >
-                Search
-            </Button>
-
+        <Box sx={{ height: "30vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", p: 4, color: "white" }}>
             <Box
                 sx={{
                     marginTop: "2rem",
@@ -448,9 +418,6 @@ export default function DiscoverSearch() {
                         </Box>
                     );
                 })}
-                <Button onClick={clearAllFilters} variant="outlined" sx={{ position: "absolute", bottom: "2rem", left: "50%", transform: "translateX(-50%)" }}>
-                    Clear All Filters
-                </Button>
             </Box>
 
             <Popover
@@ -463,6 +430,29 @@ export default function DiscoverSearch() {
             >
                 {activeFilter && renderField(allFilters.find(f => f.key === activeFilter))}
             </Popover>
+            <Button
+                variant="contained"
+                onClick={handleSearch}
+                sx={{
+                    px: 4,
+                    py: 1.5,
+                    fontSize: "1.2rem",
+                    borderRadius: "12px",
+                    background: "linear-gradient(135deg, #00ccff, #8A2BE2)",
+                    color: "#fff",
+                    textTransform: "none",
+                    fontWeight: "bold",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                    "&:hover": {
+                        background: "linear-gradient(135deg, #00a3cc, #7a1fd2)",
+                    },
+                }}
+            >
+                Search
+            </Button>
+            <Button onClick={clearAllFilters} variant="outlined">
+                Clear All Filters
+            </Button>
         </Box>
 
     );
