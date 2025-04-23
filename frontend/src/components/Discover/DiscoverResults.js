@@ -5,7 +5,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MovieCard from "../MovieCard/MovieCard";
 import MovieListStyle from "../MovieList/MovieList.module.css"
 import { Pagination } from "@mui/material";
-// import LoadingPage from "../../views/Loading";
 
 const theme = createTheme({
     palette: {
@@ -15,8 +14,7 @@ const theme = createTheme({
     },
 });
 
-export default function DiscoverResults({ movies, totalPages, currentPage, onPageChange }) {
-    console.log("Total Pages:", totalPages);
+export default function DiscoverResults({ movies, currentPage, onPageChange }) {
 
     return (
         <div>
@@ -37,7 +35,7 @@ export default function DiscoverResults({ movies, totalPages, currentPage, onPag
                 <ThemeProvider theme={theme}>
                     <Pagination
                         onChange={(_, value) => onPageChange(value)}
-                        count={totalPages}
+                        count={100}
                         siblingCount={4}
                         boundaryCount={1}
                         page={currentPage}
@@ -56,7 +54,6 @@ export default function DiscoverResults({ movies, totalPages, currentPage, onPag
 }
 DiscoverResults.propTypes = {
     movies: PropTypes.array.isRequired,
-    totalPages: PropTypes.number.isRequired,
     currentPage: PropTypes.number.isRequired,
     onPageChange: PropTypes.func.isRequired,
 };

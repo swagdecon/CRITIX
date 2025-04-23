@@ -53,7 +53,11 @@ export default function DiscoverSearch({ onSubmit }) {
     }, []);
 
     const handleChange = useCallback((key, value) => {
-        setFilters(prev => ({ ...prev, [key]: value }));
+        setFilters(prev => {
+            const updatedFilters = { ...prev, [key]: value };
+            handleSearch(updatedFilters);
+            return updatedFilters;
+        });
     }, []);
 
     const getUserCountry = () => {
@@ -62,8 +66,8 @@ export default function DiscoverSearch({ onSubmit }) {
         return country || "GB";
     };
 
-    const handleSearch = async () => {
-        const { page, ...rest } = filters;
+    const handleSearch = useCallback((updatedFilters = filters) => {
+        const { page, ...rest } = updatedFilters;
         const pageNumber = Number(page);
         const userCountry = getUserCountry();
 
@@ -79,7 +83,7 @@ export default function DiscoverSearch({ onSubmit }) {
         }
 
         onSubmit({ ...rest }, isNaN(pageNumber) ? 1 : pageNumber);
-    };
+    }, [filters, onSubmit]);
 
     const renderField = useCallback((filter) => {
         const value = filters[filter.key];
@@ -430,26 +434,6 @@ export default function DiscoverSearch({ onSubmit }) {
             >
                 {activeFilter && renderField(allFilters.find(f => f.key === activeFilter))}
             </Popover>
-            <Button
-                variant="contained"
-                onClick={handleSearch}
-                sx={{
-                    px: 4,
-                    py: 1.5,
-                    fontSize: "1.2rem",
-                    borderRadius: "12px",
-                    background: "linear-gradient(135deg, #00ccff, #8A2BE2)",
-                    color: "#fff",
-                    textTransform: "none",
-                    fontWeight: "bold",
-                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-                    "&:hover": {
-                        background: "linear-gradient(135deg, #00a3cc, #7a1fd2)",
-                    },
-                }}
-            >
-                Search
-            </Button>
             <Button onClick={clearAllFilters} variant="outlined">
                 Clear All Filters
             </Button>
