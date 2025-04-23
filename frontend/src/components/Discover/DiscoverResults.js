@@ -31,24 +31,26 @@ export default function DiscoverResults({ movies, currentPage, onPageChange }) {
                     <div>No results found</div>
                 )}
             </div>
-            <div className={MovieListStyle["pagination-container"]}>
-                <ThemeProvider theme={theme}>
-                    <Pagination
-                        onChange={(_, value) => onPageChange(value)}
-                        count={100}
-                        siblingCount={4}
-                        boundaryCount={1}
-                        page={currentPage}
-                        size="large"
-                        color="primary"
-                        sx={{
-                            '& .MuiPaginationItem-root': {
-                                color: '#ffffff',
-                            },
-                        }}
-                    />
-                </ThemeProvider>
-            </div>
+            {movies?.length > 0 ? (
+                <div className={MovieListStyle["pagination-container"]}>
+                    <ThemeProvider theme={theme}>
+                        <Pagination
+                            onChange={(_, value) => onPageChange(value)}
+                            count={100}
+                            siblingCount={4}
+                            boundaryCount={1}
+                            page={currentPage}
+                            size="large"
+                            color="primary"
+                            sx={{
+                                '& .MuiPaginationItem-root': {
+                                    color: '#ffffff',
+                                },
+                            }}
+                        />
+                    </ThemeProvider>
+                </div>
+            ) : null}
         </div>
     );
 }

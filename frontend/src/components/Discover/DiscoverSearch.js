@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
+import debounce from "lodash.debounce";
 import PropTypes from "prop-types";
 import {
     TextField, Button, Popover, MenuItem, Checkbox, FormControlLabel,
@@ -35,12 +36,36 @@ const regionOptions = ISO3166.all().map(country => {
         label: `${name} (${country.alpha2})`,
     };
 });
+const getUserCountry = () => {
+    const lang = navigator.language || "en-GB";
+    const country = lang.split("-")[1];
+    return country || "GB";
+};
 
 
 export default function DiscoverSearch({ onSubmit }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [activeFilter, setActiveFilter] = useState(null);
     const [filters, setFilters] = useState({ includeAdult: false });
+
+    const debouncedSearch = useRef(debounce((updatedFilters) => {
+        const { page, ...rest } = updatedFilters;
+        const pageNumber = Number(page);
+        const userCountry = getUserCountry();
+
+        if (
+            (rest.withWatchProviders || rest.withWatchMonetizationTypes || rest.withoutWatchProvider) &&
+            !rest.watchRegion
+        ) {
+            rest.watchRegion = userCountry;
+        }
+
+        if (!rest.certificationCountry) {
+            rest.certificationCountry = userCountry;
+        }
+
+        onSubmit({ ...rest }, isNaN(pageNumber) ? 1 : pageNumber);
+    }, 500)).current;
 
     const openPopover = useCallback((event, key) => {
         setAnchorEl(event.currentTarget);
@@ -55,16 +80,10 @@ export default function DiscoverSearch({ onSubmit }) {
     const handleChange = useCallback((key, value) => {
         setFilters(prev => {
             const updatedFilters = { ...prev, [key]: value };
-            handleSearch(updatedFilters);
+            debouncedSearch(updatedFilters);
             return updatedFilters;
         });
     }, []);
-
-    const getUserCountry = () => {
-        const lang = navigator.language || "en-GB";
-        const country = lang.split("-")[1];
-        return country || "GB";
-    };
 
     const handleSearch = useCallback((updatedFilters = filters) => {
         const { page, ...rest } = updatedFilters;
@@ -354,7 +373,11 @@ export default function DiscoverSearch({ onSubmit }) {
         }
     }, [filters, handleChange]);
 
-    const clearAllFilters = useCallback(() => setFilters({}), []);
+    const clearAllFilters = useCallback(() => {
+        const resetFilters = { includeAdult: false };
+        setFilters(resetFilters);
+        handleSearch(resetFilters);
+    }, [handleSearch]);
     return (
         <Box sx={{ height: "30vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", p: 4, color: "white" }}>
             <Box
@@ -434,7 +457,7 @@ export default function DiscoverSearch({ onSubmit }) {
             >
                 {activeFilter && renderField(allFilters.find(f => f.key === activeFilter))}
             </Popover>
-            <Button onClick={clearAllFilters} variant="outlined">
+            <Button onClick={clearAllFilters} variant="outlined" sx={{ marginTop: "1vh" }}>
                 Clear All Filters
             </Button>
         </Box>
