@@ -186,10 +186,10 @@ export const allFilters = [
             { label: "Vote Average", value: "VOTE_AVERAGE_DESC" },
         ]
     },
-    { label: "Min Vote Average", key: "voteAverageGte", type: "float" },
-    { label: "Max Vote Average", key: "voteAverageLte", type: "float" },
-    { label: "Min Vote Count", key: "voteCountGte", type: "int" },
-    { label: "Max Vote Count", key: "voteCountLte", type: "int" },
+    { label: "Min Kernels", key: "voteAverageGte", type: "float" },
+    { label: "Max Kernels", key: "voteAverageLte", type: "float" },
+    { label: "Min Vote Count", key: "voteCountGte", type: "float" },
+    // { label: "Max Vote Count", key: "voteCountLte", type: "float" }, NOT WORKING RIGHT NOW, SEEMS TO BE DiscoverMovieParamBuilder issue on backend
     { label: "Watch Region", key: "watchRegion", type: "string" },
     { label: "Cast", key: "withCast", type: "string" },
     { label: "Companies", key: "withCompanies", type: "string" },

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import HeroCarousel from "../components/Carousel/HeroCarousel/HeroCarousel.js";
 import MovieCarousel from "../components/Carousel/MovieCarousel/MovieCarousel.js";
 import NavBar from "../components/NavBar/NavBar.js";
@@ -15,45 +15,43 @@ const API_URL = process.env.REACT_APP_BACKEND_API_URL
 
 function Homepage() {
   const [isLoading, setIsLoading] = useState(true);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  // const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [moviesData, setMoviesData] = useState(null);
 
-  useEffect(() => {
-    window.addEventListener("resize", setWindowWidth(window.innerWidth));
-    return () => {
-      window.removeEventListener("resize", setWindowWidth(window.innerWidth));
-    };
-  }, []);
-  useEffect(() => {
-    async function fetchBackendData() {
-      try {
-        await isTokenExpired();
-        const [trendingMovies, topRatedMovies, upcomingMovies] = await Promise.all([
-          fetchData(`${API_URL}${popularMovieEndpoint}`),
-          fetchData(`${API_URL}${topRatedMovieEndpoint}`),
-          fetchData(`${API_URL}${upcomingMovieEndpoint}`),
-        ]);
-        setMoviesData({
-          trendingMovies,
-          topRatedMovies,
-          upcomingMovies,
-        });
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setIsLoading(false);
-      }
+  // useEffect(() => {
+  //   window.addEventListener("resize", setWindowWidth(window.innerWidth));
+  //   return () => {
+  //     window.removeEventListener("resize", setWindowWidth(window.innerWidth));
+  //   };
+  // }, []);
+  async function fetchBackendData() {
+    try {
+      await isTokenExpired();
+      const [trendingMovies, topRatedMovies, upcomingMovies] = await Promise.all([
+        fetchData(`${API_URL}${popularMovieEndpoint}`),
+        fetchData(`${API_URL}${topRatedMovieEndpoint}`),
+        fetchData(`${API_URL}${upcomingMovieEndpoint}`),
+      ]);
+      setMoviesData({
+        trendingMovies,
+        topRatedMovies,
+        upcomingMovies,
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
     }
+  }
 
-    fetchBackendData();
-  }, []);
+  fetchBackendData();
 
   return isLoading || !moviesData ? (
     <LoadingPage />
   ) : (
     <div>
       <NavBar />
-      {!(windowWidth < 900) ? <HeroCarousel /> : null}
+      <HeroCarousel />
       <div className={HomePage.movie_carousel_wrapper}>
         <MovieCarousel
           title="Trending movies"

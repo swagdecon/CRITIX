@@ -16,7 +16,6 @@ const languageOptions = Object.entries(languageMap).map(([value, label]) => ({
     label,
 }));
 
-
 const certificationOptions = [
     {
         group: "Certification",
@@ -295,35 +294,51 @@ export default function DiscoverSearch({ onSubmit }) {
                 );
             }
             case "float": {
-                return (
-                    <FormControl fullWidth>
-                        <InputLabel>{filter.label}</InputLabel>
-                        <Select
+                if (filter.key === "voteAverageGte" || filter.key === "voteAverageLte") {
+                    return (
+                        <FormControl fullWidth>
+                            <InputLabel>{filter.label}</InputLabel>
+                            <Select
+                                label={filter.label}
+                                value={filters[filter.key] ?? ""}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    handleChange(filter.key, val === "" ? null : parseInt(val, 10));
+                                }}
+                                MenuProps={{
+                                    PaperProps: {
+                                        sx: {
+                                            maxHeight: "31vh"
+                                        },
+                                    },
+                                }}
+                            >
+                                {[...Array(100)].map((_, i) => {
+                                    const value = i + 1;
+                                    return (
+                                        <MenuItem key={value} value={value}>
+                                            {value} {value === 1 ? "kernel" : "kernels"}
+                                        </MenuItem>
+                                    );
+                                })}
+                            </Select>
+                        </FormControl>
+                    );
+                } else {
+                    return (
+                        <TextField
+                            fullWidth
                             label={filter.label}
-                            value={filters[filter.key] ?? ""}
+                            type="number"
+                            value={filters[filter.key] || ""}
                             onChange={(e) => {
                                 const val = e.target.value;
-                                handleChange(filter.key, val === "" ? null : parseInt(val, 10));
+                                const parsed = val === "" ? null : parseFloat(val);
+                                handleChange(filter.key, parsed);
                             }}
-                            MenuProps={{
-                                PaperProps: {
-                                    sx: {
-                                        maxHeight: "31vh"
-                                    },
-                                },
-                            }}
-                        >
-                            {[...Array(100)].map((_, i) => {
-                                const value = i + 1;
-                                return (
-                                    <MenuItem key={value} value={value}>
-                                        {value} {value === 1 ? "kernel" : "kernels"}
-                                    </MenuItem>
-                                );
-                            })}
-                        </Select>
-                    </FormControl>
-                );
+                        />
+                    );
+                }
             }
             case "string":
                 if (filter.key === "withWatchMonetizationTypes") {
