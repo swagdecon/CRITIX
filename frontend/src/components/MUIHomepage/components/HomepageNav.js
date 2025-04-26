@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
@@ -13,6 +13,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import Logo from '../../Logo/Logo'
 import { useNavigate } from 'react-router-dom';
+import PropTypes from "prop-types"
+
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -29,13 +31,21 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   padding: '8px 12px',
 }));
 
-export default function AppAppBar() {
-  const [open, setOpen] = React.useState(false);
+export default function HomepageNav() {
+  const [open, setOpen] = useState(false);
+
   const navigate = useNavigate()
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
-
+  const handleClick = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      console.warn(`${sectionId} section not found`);
+    }
+  };
   return (
     <AppBar
       position="fixed"
@@ -52,22 +62,22 @@ export default function AppAppBar() {
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
             <Logo placement="homepage" />
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <Button variant="text" color="info" size="small">
+              <Button variant="text" color="info" size="small" onClick={() => handleClick('features')}>
                 Features
               </Button>
-              <Button variant="text" color="info" size="small">
+              <Button variant="text" color="info" size="small" onClick={() => handleClick('testimonials')}>
                 Testimonials
               </Button>
-              <Button variant="text" color="info" size="small">
+              <Button variant="text" color="info" size="small" onClick={() => handleClick('highlights')}>
                 Highlights
               </Button>
-              <Button variant="text" color="info" size="small">
+              <Button variant="text" color="info" size="small" onClick={() => handleClick('pricing')}>
                 Pricing
               </Button>
-              <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }}>
+              <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }} onClick={() => handleClick('faq')}>
                 FAQ
               </Button>
-              <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }}>
+              <Button variant="text" color="info" size="small" sx={{ minWidth: 0 }} onClick={() => handleClick('blog')}>
                 Blog
               </Button>
             </Box>
@@ -82,7 +92,7 @@ export default function AppAppBar() {
             <Button color="primary" variant="text" size="small" onClick={() => navigate('/login')}>
               Sign in
             </Button>
-            <Button color="primary" variant="contained" size="small" onClick={() => navigate('/')}>
+            <Button color="primary" variant="contained" size="small" onClick={() => navigate('/signup')}>
               Sign up
             </Button>
             {/* <ColorModeIconDropdown /> */}
@@ -123,7 +133,7 @@ export default function AppAppBar() {
                 <Divider sx={{ my: 3 }} />
                 <MenuItem>
                   <MenuItem>
-                    <Button color="primary" variant="contained" fullWidth onClick={() => navigate('/')}>
+                    <Button color="primary" variant="contained" fullWidth onClick={() => navigate('/signup')}>
                       Sign up
                     </Button>
                   </MenuItem>
@@ -141,3 +151,6 @@ export default function AppAppBar() {
     </AppBar>
   );
 }
+HomepageNav.propTypes = {
+  sectionRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+};

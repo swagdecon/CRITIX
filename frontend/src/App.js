@@ -24,13 +24,13 @@ import ResetEmail from "./views/ResetEmail.js"
 import PricingPage from "./views/Premium.js"
 import Recommendations from "./components/Recommendations/Recommendations.js";
 import DiscoverMovies from "./views/Discover.js";
-import CritixHomepage from "./components/MUIHomepage/MarketingPage.js";
+import CritixHomepage from "./views/CritixHomepage.js"
 export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path='/homepage' element={<CritixHomepage />} />
-        <Route path="/" element={<SignUp />} />
+        <Route path='/' element={<CritixHomepage />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route
           path="/premium"

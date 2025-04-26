@@ -27,29 +27,32 @@ const tiers = [
     buttonColor: 'primary',
   },
   {
-    title: 'Professional',
+    title: 'CRITIX PRO',
     subheader: 'Recommended',
-    price: '15',
+    price: '8',
     description: [
-      '20 users included',
-      '10 GB of storage',
-      'Help center access',
-      'Priority email support',
-      'Dedicated team',
-      'Best deals',
+      'Priority Review Placement',
+      'Advanced Search Filters',
+      'Review Performance Insights ',
+      'Smart Review Assistance',
+      'Threaded Comments',
+      'Ad-Free Experience',
+      'Editorial Picks Access'
     ],
     buttonText: 'Start now',
     buttonVariant: 'contained',
     buttonColor: 'secondary',
   },
   {
-    title: 'Enterprise',
-    price: '30',
+    title: 'CRITIX ULTIMATE',
+    price: '20',
     description: [
-      '50 users included',
-      '30 GB of storage',
-      'Help center access',
-      'Phone & email support',
+      'Early Access Content',
+      'Featured Reviewer Status',
+      'Detailed Analytics',
+      'Personalized Recommendations',
+      'Editorial Influence',
+      'Exclusive Perks'
     ],
     buttonText: 'Contact us',
     buttonVariant: 'outlined',
@@ -81,15 +84,14 @@ export default function Pricing() {
           component="h2"
           variant="h4"
           gutterBottom
-          sx={{ color: 'text.primary' }}
+          sx={{
+            color: 'text.primary', textAlign: 'center'
+          }}
         >
           Pricing
         </Typography>
         <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-          Quickly build an effective pricing table for your potential customers with
-          this layout. <br />
-          It&apos;s built with default Material UI components with little
-          customization.
+          Our 2 Tier subscription model allows you to make the most out of everything we have to offer.
         </Typography>
       </Box>
       <Grid
@@ -99,7 +101,7 @@ export default function Pricing() {
       >
         {tiers.map((tier) => (
           <Grid
-            size={{ xs: 12, sm: tier.title === 'Enterprise' ? 12 : 6, md: 4 }}
+            size={{ xs: 12, sm: tier.title === 'CRITIX ULTIMATE' ? 12 : 6, md: 4 }}
             key={tier.title}
           >
             <Card
@@ -110,18 +112,18 @@ export default function Pricing() {
                   flexDirection: 'column',
                   gap: 4,
                 },
-                tier.title === 'Professional' &&
-                  ((theme) => ({
-                    border: 'none',
+                tier.title === 'CRITIX PRO' &&
+                ((theme) => ({
+                  border: 'none',
+                  background:
+                    'radial-gradient(circle at 50% 0%, hsl(220, 20%, 35%), hsl(220, 30%, 6%))',
+                  boxShadow: `0 8px 12px hsla(220, 20%, 42%, 0.2)`,
+                  ...theme.applyStyles('dark', {
                     background:
-                      'radial-gradient(circle at 50% 0%, hsl(220, 20%, 35%), hsl(220, 30%, 6%))',
-                    boxShadow: `0 8px 12px hsla(220, 20%, 42%, 0.2)`,
-                    ...theme.applyStyles('dark', {
-                      background:
-                        'radial-gradient(circle at 50% 0%, hsl(220, 20%, 20%), hsl(220, 30%, 16%))',
-                      boxShadow: `0 8px 12px hsla(0, 0%, 0%, 0.8)`,
-                    }),
-                  })),
+                      'radial-gradient(circle at 50% 0%, hsl(220, 20%, 20%), hsl(220, 30%, 16%))',
+                    boxShadow: `0 8px 12px hsla(0, 0%, 0%, 0.8)`,
+                  }),
+                })),
               ]}
             >
               <CardContent>
@@ -134,7 +136,7 @@ export default function Pricing() {
                       alignItems: 'center',
                       gap: 2,
                     },
-                    tier.title === 'Professional'
+                    tier.title === 'CRITIX PRO'
                       ? { color: 'grey.100' }
                       : { color: '' },
                   ]}
@@ -142,7 +144,7 @@ export default function Pricing() {
                   <Typography component="h3" variant="h6">
                     {tier.title}
                   </Typography>
-                  {tier.title === 'Professional' && (
+                  {tier.title === 'CRITIX PRO' && (
                     <Chip icon={<AutoAwesomeIcon />} label={tier.subheader} />
                   )}
                 </Box>
@@ -152,13 +154,13 @@ export default function Pricing() {
                       display: 'flex',
                       alignItems: 'baseline',
                     },
-                    tier.title === 'Professional'
+                    tier.title === 'CRITIX PRO'
                       ? { color: 'grey.50' }
                       : { color: null },
                   ]}
                 >
                   <Typography component="h3" variant="h2">
-                    ${tier.price}
+                    £{tier.price}
                   </Typography>
                   <Typography component="h3" variant="h6">
                     &nbsp; per month
@@ -175,7 +177,7 @@ export default function Pricing() {
                         {
                           width: 20,
                         },
-                        tier.title === 'Professional'
+                        tier.title === 'CRITIX PRO'
                           ? { color: 'primary.light' }
                           : { color: 'primary.main' },
                       ]}
@@ -184,7 +186,7 @@ export default function Pricing() {
                       variant="subtitle2"
                       component={'span'}
                       sx={[
-                        tier.title === 'Professional'
+                        tier.title === 'CRITIX PRO'
                           ? { color: 'grey.50' }
                           : { color: null },
                       ]}

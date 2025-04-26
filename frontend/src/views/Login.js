@@ -23,7 +23,7 @@ export default function Login() {
             <span>OR</span>
             <hr className={LoginStyles.bar} />
           </div>
-          <Link to="/" className={LoginStyles["secondary-btn"]}>
+          <Link to="/signup" className={LoginStyles["secondary-btn"]}>
             SIGN UP
           </Link>
         </div>
