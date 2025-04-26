@@ -6,7 +6,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@million/lint": "^1.0.14",
-    "@mui/icons-material": "^5.16.6",
+    "@mui/icons-material": "^5.17.1",
     "@mui/material": "^5.17.1",
     "@mui/x-charts": "^7.12.0",
     "@mui/x-date-pickers": "^7.28.3",
@@ -69,6 +69,7 @@
     "@craco/craco": "^7.1.0",
     "@types/react": "^18.3.3",
     "babel-plugin-react-compiler": "^19.1.0-rc.1",
+    "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-react-hooks": "^6.0.0-rc.1",
     "webpack-cli": "^6.0.1"
   }

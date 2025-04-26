@@ -805,8 +805,10 @@ public class MovieService {
       builder.voteAverageLte(req.voteAverageLte / 10);
     if (req.voteCountGte != null)
       builder.voteCountGte(req.voteCountGte);
-    if (req.voteCountLte != null)
-      builder.voteCountLte(req.voteCountLte);
+    // System.out.println("VoteCountLte: " + req.voteCountLte); // Debug line
+    // if (req.voteCountLte != null) {
+    // builder.voteCountLte(req.voteCountLte.floatValue());
+    // }
     if (req.withCast != null) {
       List<Integer> personIds = Arrays.stream(req.withCast.split(","))
           .map(String::trim)

@@ -6,7 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import "./index.js";
-import Login from "./views/Signin.js";
+import Login from "./views/Login.js";
 import SignUp from "./views/Signup.js";
 import UserProfile from "./views/UserProfile.js"
 import Homepage from "./views/Home.js";
@@ -24,10 +24,12 @@ import ResetEmail from "./views/ResetEmail.js"
 import PricingPage from "./views/Premium.js"
 import Recommendations from "./components/Recommendations/Recommendations.js";
 import DiscoverMovies from "./views/Discover.js";
+import CritixHomepage from "./components/MUIHomepage/MarketingPage.js";
 export default function App() {
   return (
     <Router>
       <Routes>
+        <Route path='/homepage' element={<CritixHomepage />} />
         <Route path="/" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route

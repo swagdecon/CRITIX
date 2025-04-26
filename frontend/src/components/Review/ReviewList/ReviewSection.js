@@ -49,6 +49,6 @@ export default function ReviewSection({ reviews }) {
 }
 
 ReviewSection.propTypes = {
-    movieId: PropTypes.integer,
+    movieId: PropTypes.number,
     reviews: PropTypes.array,
 };

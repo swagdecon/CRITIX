@@ -1,17 +1,26 @@
 /* Logo */
 
-.LogoWrapper {
-  display: flex;
-  align-items: flex-start;
-}
-.Logo {
+.NavbarLogo {
   width: 150px;
-  height: 40px;
+  height: auto;
   transition: margin 0.125s ease;
   display: flex;
   align-items: flex-start;
 }
-
+.HomepageLogo {
+  width: 120px;
+  height: 60px;
+  transition: margin 0.125s ease;
+  display: flex;
+  align-items: flex-start;
+}
+.LoginLogo {
+  width: 200px;
+  height: 100px;
+  transition: margin 0.125s ease;
+  display: flex;
+  align-items: flex-start;
+}
 @media screen and (max-width: 832px) {
   .Logo {
     width: 120px;

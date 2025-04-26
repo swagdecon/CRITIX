@@ -25,8 +25,8 @@ public class DiscoverMovieRequest {
     public String releaseDateLte;
     public Float voteAverageGte;
     public Float voteAverageLte;
-    public Integer voteCountGte;
-    public Integer voteCountLte;
+    public Float voteCountGte;
+    public Float voteCountLte;
     public String withCast;
     public String withCompanies;
     public String withCrew;

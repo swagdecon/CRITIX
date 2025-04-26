@@ -3,9 +3,8 @@ import { Link } from "react-router-dom";
 import "../components/Login/login.module.css";
 import "../components/Logo/logo.module.scss";
 import "../components/Logo/logo.module.css";
-// import Logo from "../components/Logo/Loader.js";
 import Logo from "../components/Logo/Logo.js";
-import LoginPlayer from "../components/Login/LoginVideo";
+import LoginPlayer from "../components/Login/LoginVideo.js";
 import LoginFunctionality from "../components/Login/LoginLogic.js";
 import LoginStyles from "../components/Login/login.module.css";
 
@@ -14,7 +13,7 @@ export default function Login() {
     <div>
       <div id={LoginStyles.left}>
         <div id={LoginStyles.signin}>
-          <Logo />
+          <Logo placement="login" />
           <LoginFunctionality />
           <div className={LoginStyles["reset-pwd"]}>
             <Link to="/forgot-password">Forgot Password</Link>

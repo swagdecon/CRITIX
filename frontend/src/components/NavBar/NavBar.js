@@ -35,7 +35,7 @@ export default function NavBar(props) {
   return (
     <div className={NavBarStyle.NavBar}>
       <div className={NavBarStyle.group__1}>
-        <Logo />
+        <Logo placement="navbar" />
         <Navigation />
         <PremiumBtn />
         <div className={NavBarStyle.MobileSearchBar}>

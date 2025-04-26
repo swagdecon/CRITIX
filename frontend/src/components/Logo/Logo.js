@@ -1,13 +1,25 @@
 import React from "react";
 import CritixLogo from "./CRITIX_LOGO_OFFICIAL.webp";
-import AnimatedLogo from "./logo.module.css";
-import { Link } from "react-router-dom";
-export default function Logo() {
+import LogoStyle from "./logo.module.css";
+// import { Link } from "react-router-dom";
+import PropTypes from "prop-types"
+export default function Logo({ placement }) {
   return (
-    <Link to="/home">
-      <div id="logo" className={AnimatedLogo.LogoWrapper}>
-        <img src={CritixLogo} className={AnimatedLogo.Logo} alt="logo" />
-      </div>
-    </Link>
+    // <Link to="/home">
+    <>
+      {placement === 'homepage' && (
+        <img src={CritixLogo} className={LogoStyle.HomepageLogo} alt="logo" />
+      )}
+      {placement === 'login' && (
+        <img src={CritixLogo} className={LogoStyle.LoginLogo} alt="logo" />
+      )}
+      {placement === 'navbar' && (
+        <img src={CritixLogo} className={LogoStyle.NavbarLogo} alt="logo" />
+      )}
+    </>
+    // </Link>
   );
 }
+Logo.propTypes = {
+  placement: PropTypes.string
+};

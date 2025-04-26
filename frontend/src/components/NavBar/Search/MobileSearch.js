@@ -141,20 +141,16 @@ export default function MobileSearchBar({ onSubmit }) {
 }
 
 MobileSearchBar.propTypes = {
-    onSubmit: PropTypes.func.isRequired,
-};
-
-MobileSearchBar.propTypes = {
-    onSubmit: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func,
     movieResults: PropTypes.arrayOf(
         PropTypes.shape({
-            id: PropTypes.number.isRequired,
-            title: PropTypes.string.isRequired,
+            id: PropTypes.number,
+            title: PropTypes.string,
             poster_path: PropTypes.string,
             vote_average: PropTypes.number,
             release_date: PropTypes.string,
         })
-    ).isRequired,
-    setMovieResults: PropTypes.func.isRequired,
-    miniPosterUrl: PropTypes.string.isRequired,
+    ),
+    setMovieResults: PropTypes.func,
+    miniPosterUrl: PropTypes.string,
 };

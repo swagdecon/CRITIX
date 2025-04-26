@@ -12,7 +12,7 @@ export default function Signup() {
     <div>
       <div id={SignUpStyles.left}>
         <div id={SignUpStyles.signin}>
-          <Logo />
+          <Logo placement='login' />
           <SignUpFunctionality />
           {/* REDIRECT TO LOG IN PAGE */}
           <div className={SignUpStyles.or}>

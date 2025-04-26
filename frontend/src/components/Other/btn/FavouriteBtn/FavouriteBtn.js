@@ -42,13 +42,13 @@ export default function FavouriteBtn({ movieData, outline }) {
 FavouriteBtn.propTypes = {
     outline: PropTypes.bool,
     movieData: PropTypes.shape({
-        movieId: PropTypes.number.isRequired,
-        title: PropTypes.string.isRequired,
-        posterUrl: PropTypes.string.isRequired,
-        voteAverage: PropTypes.number.isRequired,
-        genres: PropTypes.array.isRequired,
-        overview: PropTypes.string.isRequired,
+        movieId: PropTypes.number,
+        title: PropTypes.string,
+        posterUrl: PropTypes.string,
+        voteAverage: PropTypes.number,
+        genres: PropTypes.array,
+        overview: PropTypes.string,
         actors: PropTypes.array,
-        isSavedToFavouriteMoviesList: PropTypes.bool.isRequired,
+        isSavedToFavouriteMoviesList: PropTypes.bool,
     }).isRequired,
 }

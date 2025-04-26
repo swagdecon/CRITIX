@@ -176,7 +176,7 @@ export default function UserProfile() {
                                     <div className={UserStyle.ShortFavouriteMovieList}>
                                         {favouriteMovies.map((movie, i) => (
                                             <div className={UserStyle.ShortFavouriteMovieList} key={i}>
-                                                <Link to={`${API_URL}${indMovieEndpoint}/${movie.id || movie.movieId}`}>
+                                                <Link to={`${indMovieEndpoint}/${movie.id || movie.movieId}`}>
                                                     <MovieCard
                                                         movieId={movie.id || movie.movieId}
                                                         title={movie.title}
@@ -187,7 +187,7 @@ export default function UserProfile() {
                                                         actors={movie.actors}
                                                         isSavedToWatchlist={movie.isSavedToWatchlist}
                                                         isSavedToFavouriteMoviesList={movie.isSavedToFavouriteMoviesList}
-                                                        shareUrl={`${API_URL}${indMovieEndpoint}/${movie.id}`}
+                                                        shareUrl={`${indMovieEndpoint}/${movie.id}`}
                                                     />
                                                 </Link>
                                             </div>

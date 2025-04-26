@@ -54,10 +54,10 @@ export default function IndUserReview({ avatar, author, movieTitle, createdDate,
     )
 }
 IndUserReview.propTypes = {
-    avatar: PropTypes.string.isRequired,
+    avatar: PropTypes.string,
     author: PropTypes.string,
-    movieTitle: PropTypes.string.isRequired,
-    createdDate: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-    rating: PropTypes.number.isRequired,
+    movieTitle: PropTypes.string,
+    createdDate: PropTypes.string,
+    content: PropTypes.string,
+    rating: PropTypes.number,
 };

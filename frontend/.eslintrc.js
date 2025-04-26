@@ -9,6 +9,8 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  plugins: ["react"],
-  rules: {},
+  plugins: ["react", "import"],  // Add 'import' plugin here
+  rules: {
+    "import/prefer-default-export": "off",  // Disable the prefer-default-export rule
+  },
 };

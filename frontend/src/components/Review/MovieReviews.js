@@ -70,18 +70,19 @@ export default function MovieReviews({ reviews, movieId, movieTitle }) {
             borderRadius: "10px",
         },
         "& ::-webkit-scrollbar-track": {
-            "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.3)",
+            WebkitBoxShadow: "inset 0 0 6px rgba(0,0,0,0.3)",
             borderRadius: "10px",
         },
         "& ::-webkit-scrollbar-thumb": {
             borderRadius: "10px",
-            "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,.3)",
+            WebkitBoxShadow: "inset 0 0 6px rgba(0,0,0,.3)",
             backgroundColor: "#0096ff",
         },
         '@media (max-width: 600px)': {
             width: '60vw',
         }
     };
+
 
     async function onChange(token) {
         try {
