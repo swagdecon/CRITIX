@@ -69,7 +69,7 @@ export default function MovieActors({ actors }) {
       {
         breakpoint: 2860,
         settings: {
-          slidesToShow: 5,
+          slidesToShow: 7,
           slidesToScroll: 5,
         }
       },
@@ -96,32 +96,34 @@ export default function MovieActors({ actors }) {
   return (
     <>
       {/* <h3 className={`${Title["movie-title"]} ${Title["ind-movie-actors"]}`}>cast members:</h3> */}
-      <Slider {...settings} className={ActorStyle.Slider}>
-        {actors.map((actor, i) => {
-          const image = actor.profilePath
-          const actorImage = image ? `url(${DEFAULT_TMDB_IMAGE}${image})` : defaultImage;
-          const style = image ? { background: actorImage, backgroundSize: "300px" } : defaultStyle;
-          return (
-            <div className={ActorStyle.card} key={i}>
-              <div className={ActorStyle.Img} style={style} >
+      <div className={ActorStyle.Wrapper}>
+        <Slider {...settings} className={ActorStyle.Slider}>
+          {actors.map((actor, i) => {
+            const image = actor.profilePath
+            const actorImage = image ? `url(${DEFAULT_TMDB_IMAGE}${image})` : defaultImage;
+            const style = image ? { background: actorImage, backgroundSize: "300px" } : defaultStyle;
+            return (
+              <div className={ActorStyle.card} key={i}>
+                <div className={ActorStyle.Img} style={style} >
 
-                <div className={ActorStyle.border}>
-                  <h3 className={ActorStyle["profile-person"]}>
-                    {actor.name}
-                  </h3>
-                  <div className={ActorStyle.icons}>
-                    <i className={`fa fa-instagram ${ActorStyle.iconEl}`} aria-hidden="true"></i>
-                    <i className={`fa fa-twitter ${ActorStyle.iconEl}`} aria-hidden="true"></i>
-                    <i className={`fa fa-facebook ${ActorStyle.iconEl}`} aria-hidden="true"></i>
+                  <div className={ActorStyle.border}>
+                    <h3 className={ActorStyle["profile-person"]}>
+                      {actor.name}
+                    </h3>
+                    <div className={ActorStyle.icons}>
+                      <i className={`fa fa-instagram ${ActorStyle.iconEl}`} aria-hidden="true"></i>
+                      <i className={`fa fa-twitter ${ActorStyle.iconEl}`} aria-hidden="true"></i>
+                      <i className={`fa fa-facebook ${ActorStyle.iconEl}`} aria-hidden="true"></i>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
-      </Slider >
-    </ >
-  );
+            );
+          })}
+        </Slider >
+      </div>
+    </>
+  )
 }
 
 MovieActors.propTypes = {

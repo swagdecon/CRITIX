@@ -25,6 +25,7 @@ import PricingPage from "./views/Premium.js"
 import Recommendations from "./components/Recommendations/Recommendations.js";
 import DiscoverMovies from "./views/Discover.js";
 import CritixHomepage from "./views/CritixHomepage.js"
+
 export default function App() {
   return (
     <Router>

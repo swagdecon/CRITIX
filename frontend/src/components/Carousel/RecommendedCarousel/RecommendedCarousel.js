@@ -7,6 +7,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styled from "styled-components";
+const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
 
 const RecommendedCardSlider = styled(Slider)`
 .slick-prev {
@@ -73,7 +74,7 @@ export default function RecommendedCarousel({ recommendedMovies }) {
       <RecommendedCardSlider {...settings} className={MovieCardStyle.Slider}>
         {recommendedMovies.map((movie, i) => (
           <div key={i}>
-            <Link to={`/movies/movie/${movie.movieId}`}>
+            <Link to={`${indMovieEndpoint}${movie.movieId}`}>
               <MovieCard
                 title={movie.title}
                 movieId={movie.movieId}
@@ -84,7 +85,7 @@ export default function RecommendedCarousel({ recommendedMovies }) {
                 overview={movie.overview}
                 isSavedToFavouriteMovieList={movie.isSavedToFavouriteMovieList}
                 isSavedToWatchlist={movie.isSavedToWatchlist}
-                shareUrl={`/movies/movie/${movie.movieId}`}
+                shareUrl={`${indMovieEndpoint}${movie.movieId}`}
               />
             </Link>
           </div>

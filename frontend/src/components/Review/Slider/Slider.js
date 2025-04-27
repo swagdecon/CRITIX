@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles';
 const CritixSlider = styled(Slider)({
     color: '#0096ff',
     height: 5,
-    width: "80%",
+    width: "100%",
     '& .MuiSlider-valueLabel': {
         backgroundColor: '#0096ff',
     },

@@ -1,4 +1,18 @@
 
+.Wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.Slider {
+  width: 90vw;
+  margin: 0 auto;
+  position: relative;
+  padding: 0 70px;
+  box-sizing: border-box;
+}
+
 .card {
   height: 379px;
   max-width: 300px;

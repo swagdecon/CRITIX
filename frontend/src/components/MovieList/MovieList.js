@@ -12,6 +12,7 @@ import isTokenExpired from "../../security/IsTokenExpired";
 import { fetchData } from "../../security/Data";
 const movieListEndpoint = process.env.REACT_APP_MOVIE_LIST_ENDPOINT
 const API_URL = process.env.REACT_APP_BACKEND_API_URL
+const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
 
 const theme = createTheme({
   palette: {
@@ -146,7 +147,7 @@ export default function MovieList({ endpoint }) {
       <div className={MovieListStyle.Container}>
         {movies.map((movie) => (
           <div key={movie.movieId}>
-            <Link to={`/movies/movie/${movie.movieId}`}>
+            <Link to={`${indMovieEndpoint}${movie.movieId}`}>
               <MovieCard
                 movieId={movie.movieId}
                 posterUrl={movie.posterUrl}

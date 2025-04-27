@@ -8,6 +8,7 @@ import { fetchData } from "../../../security/Data";
 const searchEndpoint = process.env.REACT_APP_SEARCH_ENDPOINT;
 const miniPosterUrl = process.env.REACT_APP_MINI_POSTER_URL;
 const API_URL = process.env.REACT_APP_BACKEND_API_URL
+const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
 
 export default function Search(props) {
   const [query, setQuery] = useState("");
@@ -103,7 +104,7 @@ export default function Search(props) {
           if (movie.poster_path && movie.vote_average) {
             return (
               <a
-                href={`/movies/movie/${movie.id}`}
+                href={`${indMovieEndpoint}${movie.id}`}
                 key={movie.id}
                 onClick={() => setMovieResults([])}
               >

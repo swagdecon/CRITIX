@@ -111,33 +111,27 @@ export default function IndMovie() {
             />}
         </section>
         <section className={containerClass}>
-          <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-1"]} `}>
-            <MovieDetails
-              runtime={movie.runtime}
-              revenue={movie.revenue}
-              budget={movie.budget}
-              voteCount={movie.voteCount}
-              language={movie.originalLanguage}
-              productionCompanies={movie.productionCompanies}
-              movieStatus={movie.movieStatus}
-              releaseDate={movie.releaseDate}
-            />
-          </div>
-          <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-2"]} `}>
-            <EmbeddedMovieTrailer trailer={movie.trailer} />
-          </div>
-          <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-3"]} `}>
-            <MovieReviews
-              movieId={movie.id}
-              movieTitle={movie.title}
-              reviews={reviews}
-            />
-          </div>
-          <div className={`${IndMovieStyle["grid-item"]} ${IndMovieStyle["grid-item-4"]}`}>
-            {movie.actors && movie.actors.length > 0 ?
-              <MovieActors actors={movie.actors} />
-              : null}
-          </div>
+          <MovieReviews
+            movieId={movie.id}
+            movieTitle={movie.title}
+            movieTagline={movie.tagline}
+            reviews={reviews}
+          />
+          {console.log(movie)}
+          <MovieDetails
+            runtime={movie.runtime}
+            revenue={movie.revenue}
+            budget={movie.budget}
+            voteCount={movie.voteCount}
+            language={movie.originalLanguage}
+            productionCompanies={movie.productionCompanies}
+            movieStatus={movie.movieStatus}
+            releaseDate={movie.releaseDate}
+          />
+          <EmbeddedMovieTrailer trailer={movie.trailer} />
+          {movie.actors && movie.actors.length > 0 ?
+            <MovieActors actors={movie.actors} />
+            : null}
         </section>
         {recommendedMovies.length >= 4 ?
           <div className={`${IndMovieStyle["recommended-carousel-wrapper"]} `}>

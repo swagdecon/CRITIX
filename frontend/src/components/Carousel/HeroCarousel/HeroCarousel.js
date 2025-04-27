@@ -4,6 +4,7 @@ import HeroStyle from "./HeroCarousel.module.scss";
 import WatchTrailerBtn from "./WatchTrailerbtn";
 import "../../Logo/Loader.js";
 import { Link } from "react-router-dom";
+const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
 
 const heroMovies = [
   {
@@ -58,7 +59,7 @@ export default function HeroCarousel() {
     <Carousel className={HeroStyle["carousel-hero"]}>
       {heroMovies.map((movie) => (
         <Carousel.Item interval={5000} key={movie.id}>
-          <Link to={`/movies/movie/${movie.id}`} className={HeroStyle["hero-movie-page"]}>
+          <Link to={`${indMovieEndpoint}${movie.id}`} className={HeroStyle["hero-movie-page"]}>
             <img
               className="d-block w-100"
               src={movie.image}

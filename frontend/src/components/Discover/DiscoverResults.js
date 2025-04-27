@@ -5,6 +5,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MovieCard from "../MovieCard/MovieCard";
 import MovieListStyle from "../MovieList/MovieList.module.css"
 import { Pagination } from "@mui/material";
+const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
 
 const theme = createTheme({
     palette: {
@@ -22,7 +23,7 @@ export default function DiscoverResults({ movies, currentPage, onPageChange }) {
                 {movies?.length > 0 ? (
                     movies.map((movie, index) => (
                         <div key={movie.id || index}>
-                            <Link to={`/movies/movie/${movie.movieId}`}>
+                            <Link to={`${indMovieEndpoint}${movie.movieId}`}>
                                 <MovieCard {...movie} />
                             </Link>
                         </div>

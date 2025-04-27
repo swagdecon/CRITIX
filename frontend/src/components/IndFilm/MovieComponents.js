@@ -4,7 +4,6 @@ import IndMovieStyle from "../IndFilm/IndMovie.module.css";
 import ReactPlayer from "react-player";
 import "../Carousel/MovieCarousel/MovieCarousel.module.css";
 import GlassCard from "./GlassCard";
-import "./Player.css"
 import MovieCardStyle from "../MovieCard/moviecard.module.scss"
 // import NoTrailer from "./NoTrailerAvailable.png"
 import GlassStyle from "./GlassCard.module.css"
@@ -112,16 +111,11 @@ function EmbeddedMovieTrailer({ trailer }) {
     return null;
   }
   return (
-    <div className="player-wrapper">
-      <ReactPlayer
-        url={trailer}
-        className="react-player"
-        controls={true}
-        playing={false}
-        width='100%'
-        height='100%'
-      />
-    </div>
+    <ReactPlayer
+      url={trailer}
+      controls={true}
+      playing={false}
+    />
   );
 }
 

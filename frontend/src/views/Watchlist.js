@@ -11,6 +11,8 @@ import MovieCard from "../components/MovieCard/MovieCard.js";
 import NavBar from "../components/NavBar/NavBar.js";
 const GET_WATCHLIST_ENDPOINT = process.env.REACT_APP_GET_WATCHLIST_ENDPOINT;
 const API_URL = process.env.REACT_APP_BACKEND_API_URL
+const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
+
 import Footer from "../components/Footer/Footer.js";
 export default function WatchList() {
 
@@ -90,7 +92,7 @@ export default function WatchList() {
                     {movies.length !== 0 ? movies.map((movie) => (
 
                         < div key={movie.movieId} >
-                            <Link to={`/movies/movie/${movie.movieId}`}>
+                            <Link to={`${indMovieEndpoint}${movie.movieId}`}>
                                 <MovieCard
                                     movieId={movie.movieId}
                                     posterUrl={movie.posterUrl}
