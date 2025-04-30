@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../components/Login/login.module.css";
 import "../components/Logo/logo.module.scss";
@@ -6,8 +6,20 @@ import Logo from "../components/Logo/Logo.js";
 import SignUpPlayer from "../components/Signup/SignUpVideo.js";
 import SignUpFunctionality from "../components/Signup/SignupLogic.js";
 import SignUpStyles from "../components/Login/login.module.css";
-
+import SignupMobile from "../components/Signup/SignupMUIMobile.js";
 export default function Signup() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 900);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  if (isMobile) {
+    return <SignupMobile />;
+  }
+
   return (
     <div>
       <div id={SignUpStyles.left}>

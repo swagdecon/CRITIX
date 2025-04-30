@@ -1,4 +1,4 @@
-import { React } from "react";
+import { React, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../components/Login/login.module.css";
 import "../components/Logo/logo.module.scss";
@@ -7,8 +7,21 @@ import Logo from "../components/Logo/Logo.js";
 import LoginPlayer from "../components/Login/LoginVideo.js";
 import LoginFunctionality from "../components/Login/LoginLogic.js";
 import LoginStyles from "../components/Login/login.module.css";
+import LoginMobile from "../components/Login/LoginMUIMobile.js";
 
 export default function Login() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 900);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  if (isMobile) {
+    return <LoginMobile />;
+  }
+
   return (
     <div>
       <div id={LoginStyles.left}>

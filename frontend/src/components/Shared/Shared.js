@@ -91,6 +91,7 @@ export function Message({ response, message, style, error }) {
         </div>
     );
 }
+
 Message.propTypes = {
     response: PropTypes.shape({
         ok: PropTypes.bool,

@@ -340,7 +340,7 @@ export default function MovieReviews({ reviews, movieId, movieTitle, movieTaglin
                                 )}
                             </div>
                             {isRecaptchaVisible && (
-                                <div style={{ marginTop: "20px" }}>
+                                <div style={{ marginTop: "20px", display: 'flex', justifyContent: 'center' }}>
                                     <ReCAPTCHA
                                         sitekey={RECAPTCHA_KEY}
                                         onChange={onChangeCaptcha}
@@ -397,10 +397,8 @@ const modalStyles = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: { xs: '95%', sm: '900px', md: '1000px' },
-    bgcolor: 'rgba(30, 30, 30, 0.6)',
-    boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-    backdropFilter: 'blur(15px)',
-    WebkitBackdropFilter: 'blur(15px)',
+    bgcolor: 'rgba(30, 30, 30, 0.97)',
+    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
     borderRadius: '20px',
     border: '1px solid rgba(255, 255, 255, 0.18)',
     color: 'white',
