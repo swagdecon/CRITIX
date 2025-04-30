@@ -35,17 +35,21 @@ export default function NavBar(props) {
   return (
     <div className={NavBarStyle.NavBar}>
       <div className={NavBarStyle.group__1}>
-        <Logo placement="navbar" />
-        <Navigation />
-        <PremiumBtn />
+        <div className={NavBarStyle.left}>
+          <Logo placement="navbar" />
+          <Navigation />
+          <PremiumBtn />
+        </div>
         <div className={NavBarStyle.MobileSearchBar}>
           <MobileSearchBar onSubmit={props.onSubmit} />
         </div>
         <div className={NavBarStyle.SearchBar}>
           <Search onSubmit={props.onSubmit} />
         </div>
+        <div className={NavBarStyle.right}>
+          <HeaderUser avatar={avatar} />
+        </div>
       </div>
-      <HeaderUser avatar={avatar} />
     </div >
   )
 }

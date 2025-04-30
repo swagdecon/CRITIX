@@ -1,37 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=DM+Sans:wght@400;700&family=Roboto+Mono&display=swap');
+
 .IndUserReviews {
-    display: flex;
-    flex-direction: column;
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 20px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    padding: 24px;
-    margin: 24px auto;
-    width: 90%;
-    max-width: 750px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: 'DM Sans', sans-serif;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+    border-radius: 28px;
+    padding: 32px;
+    margin: 32px auto;
+    width: 95%;
+    max-width: 960px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 0 0 1000px rgba(255, 255, 255, 0.01), 0 8px 40px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.UltimateUser {
+    box-shadow:
+        0 0 12px #ffd700,
+        0 0 24px #ff8c00,
+        0 0 36px #ff8c00,
+        inset 0 0 0 1000px rgba(255, 255, 255, 0.01),
+        0 8px 40px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ffae00;
 }
 
 .IndUserReviews:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+    transform: translateY(-8px);
+}
+.TopBar {
+    display: flex;
+    justify-content: flex-end;
 }
 
 .ReviewInfoWrapper {
     display: flex;
-    gap: 16px;
+    gap: 24px;
     align-items: flex-start;
 }
-
+.TopWrapper {
+    display: inline-flex;
+    justify-content: space-between;
+}
 .ProfilePic {
-    width: 64px;
-    height: 64px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .ProfilePic img {
@@ -49,10 +64,16 @@
 .ReviewHeader {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-bottom: 8px;
-}
+    align-items: flex-start;
+    margin-bottom: 14px;
+    gap: 16px;
+  }
+  
+  .ReviewHeaderLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
 
 .ReviewHeaderCol {
     display: flex;
@@ -62,31 +83,33 @@
 
 .MovieTitle,
 .Author {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 1.05rem;
-    color: #111;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .TimeAgo {
     font-size: 0.85rem;
-    color: #777;
+    color: #cccccc;
     font-family: 'Roboto Mono', monospace;
 }
-
+.ReviewRatingWrapper {
+    display: inline-flex;
+    justify-content: flex-end;
+}
 .ReviewRating {
-    padding: 6px 14px;
+    padding: 10px 20px;
     border-radius: 999px;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 700;
     color: white;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-    display: flex;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    width: 50px;
+    height: 50px;
 }
 
 .ReviewRating.blue { background: linear-gradient(135deg, #3a8bfd, #005bff); }
@@ -95,30 +118,85 @@
 .ReviewRating.red { background: linear-gradient(135deg, #ff4444, #cc0000); }
 
 .ReviewContent {
-    margin-top: 12px;
-    font-size: 0.97rem;
-    line-height: 1.6;
-    color: #333;
-    background-color: rgba(255, 255, 255, 0.6);
-    padding: 16px;
-    border-radius: 12px;
-    border: 1px solid #e0e0e0;
-    overflow-y: auto;
-    max-height: 24vh;
-    word-break: break-word;
+    margin-top: 20px;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #f2f2f2;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 20px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-family: 'Inter', sans-serif;
     text-align: justify;
-    font-family: 'Open Sans', sans-serif;
+    max-height: 35vh;
+    overflow-y: auto;
+}
+
+.HighlightTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.HighlightTag {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-transform: capitalize;
+    font-weight: 500;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.HighlightTag:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #000;
+}
+
+.Badge {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 8px;
+    display: inline-block;
+    letter-spacing: 0.3px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.CritixPro {
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    color: #fff;
+}
+
+.CritixUltimate {
+    background: linear-gradient(90deg, #ffd700, #ff8c00);
+    color: #111;
+    font-weight: 900;
+    border: 1px solid #e8b400;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
 }
 
 .ReviewContent::-webkit-scrollbar {
-    width: 6px;
-}
-
-.ReviewContent::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-}
-
-.ReviewContent::-webkit-scrollbar-track {
-    background: transparent;
-}
+    width: 10px;
+  }
+  
+  .ReviewContent::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+  }
+  
+  .ReviewContent::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #0096ff, #0096ff);
+    border-radius: 10px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+  }
+  
+  .ReviewContent::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #0096ff, #0096ff);
+  }

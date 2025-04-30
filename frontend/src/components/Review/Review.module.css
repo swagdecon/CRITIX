@@ -1,68 +1,41 @@
 .ind-review-wrapper {
-  background: linear-gradient(#141e30, #0096ff);
-  border-radius: 0.7rem;
-  padding: 20px;
-  text-align: left;
-  width: 50.5em;
-  margin-right:15px;
+  background: linear-gradient(135deg, rgba(0, 150, 255, 0.15), rgba(0, 80, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 1.2rem;
+  padding: 30px 25px;
+  width: 95%;
+  max-width: 900px;
+  margin: 30px auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: hidden; 
+  background-blend-mode: overlay;
+  box-shadow: inset 0 0 0.5px rgba(255, 255, 255, 0.1), 0 8px 24px rgba(0, 150, 255, 0.35);
+  transition: all 0.3s ease;
+  color: white;
 }
-
 
 .user-review-wrapper {
   display: flex;
   justify-content: center;
-  width: 38em;
-  border-color:  #0096ff;
-  border-width: 15px;
-}
-.recaptcha-btn {
-  display: flex;
-  padding-top: 1vh;
-}
-.post-review-btn {
-  display: flex;
-  padding-top: 1vh;
-  padding-bottom: 1vh;
-  justify-content: center;
-}
-
-.textField-wrapper {
-  display: flex;
-  flex-direction: column;
-  padding-top: 4vh;
-  justify-content: center;
-  align-items: center;
   width: 100%;
+  padding: 20px;
+  background: rgba(0, 150, 255, 0.07);
+  border: 2px dashed #00e676;
+  border-radius: 1rem;
+  transition: all 0.3s ease;
 }
 
+.user-review-wrapper:hover {
+  background: rgba(0, 150, 255, 0.12);
+  border-color: #00c0ff;
+}
 .IndReviewWrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-@media screen and (max-width: 650px) {
-  .MuiInputBase-input {
-    display: none;
-  }
-  .textField-wrapper {
-    order: 2;
-    min-width: 100%;
-    text-align: center;
-  }
-   .user-review-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .post-review-btn, .recaptcha-btn {
-    justify-content: center;
-    align-items: center;
-  }
+  width: 100%;
+  margin-top: 20px;
 }
 
 @media screen and (max-width: 2535px) {

@@ -1,4 +1,25 @@
 .PremiumBtn {
-    display: flex;
-    align-items: center;
-  }
+  display: flex;
+  align-items: center;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.coolButton {
+  background: linear-gradient(135deg, #a864fd, #6c3baa);
+  color: white;
+  padding: 0.6rem 1.4rem;
+  border-radius: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 0 12px rgba(108, 59, 170, 0.5);
+  transition: all 0.3s ease;
+}
+
+.coolButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(168, 100, 253, 0.7);
+  background: linear-gradient(135deg, #b784f7, #7a49d8);
+}

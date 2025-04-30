@@ -63,7 +63,7 @@ const ideaSuggestions = [
 ];
 
 export default function MovieReviews({ reviews, movieId, movieTitle, movieTagline }) {
-    console.log(movieTagline)
+
     const token = CookieManager.decryptCookie('accessToken');
     const decodedToken = jwtDecode(token);
     const firstName = decodedToken.firstName;
@@ -73,6 +73,8 @@ export default function MovieReviews({ reviews, movieId, movieTitle, movieTaglin
     const [recaptchaResult, setRecaptchaResult] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [randomIdea, setRandomIdea] = useState('');
+    const [containsSpoilers, setContainsSpoilers] = useState(false);
+
     const handleGetIdea = () => {
         const randomIndex = Math.floor(Math.random() * ideaSuggestions.length);
         setRandomIdea(ideaSuggestions[randomIndex]);
@@ -306,6 +308,40 @@ export default function MovieReviews({ reviews, movieId, movieTitle, movieTaglin
                                     </Box>
                                 </Box>
                             </Box>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    mt: 3,
+                                    background: 'rgba(255, 255, 255, 0.05)',
+                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                    borderRadius: '12px',
+                                    padding: '10px 15px',
+                                    gap: '12px',
+                                    color: 'white',
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        background: 'rgba(0, 150, 255, 0.08)',
+                                        boxShadow: '0 0 10px rgba(0, 150, 255, 0.3)',
+                                    },
+                                }}
+                            >
+                                <input
+                                    type="checkbox"
+                                    id="spoilerToggle"
+                                    checked={containsSpoilers}
+                                    onChange={() => setContainsSpoilers(!containsSpoilers)}
+                                    style={{
+                                        width: '20px',
+                                        height: '20px',
+                                        accentColor: '#00e676',
+                                        cursor: 'pointer',
+                                    }}
+                                />
+                                <label htmlFor="spoilerToggle" style={{ fontSize: '15px', cursor: 'pointer' }}>
+                                    This review contains spoilers
+                                </label>
+                            </Box>
                             <div style={centeredContentStyles}>
                                 <Box sx={{ width: '80%', margin: '10px auto' }}>
                                     <Typography variant="body2" color="white" mb={1}>
@@ -498,14 +534,15 @@ const editorContainerStyles = {
     }
 };
 const suggestionBoxStyles = {
-    background: 'rgba(255,255,255,0.06)',
-    border: '1px solid rgba(255,255,255,0.1)',
+    background: 'linear-gradient(135deg, rgba(0,150,255,0.08), rgba(0,150,255,0.02))',
+    border: '1px solid rgba(255,255,255,0.12)',
     borderRadius: '15px',
     padding: '20px',
     marginTop: '20px',
     transition: 'all 0.3s ease',
+    color: 'white',
     '&:hover': {
-        background: 'rgba(255,255,255,0.12)',
+        background: 'linear-gradient(135deg, rgba(0,150,255,0.15), rgba(0,150,255,0.05))',
         boxShadow: '0px 0px 15px rgba(0,150,255,0.2)',
     },
 };

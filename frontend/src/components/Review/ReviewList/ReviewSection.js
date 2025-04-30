@@ -1,36 +1,65 @@
 import React, { useState, useMemo, useCallback } from "react";
-// import ReviewStyle from "./OtherReviews.module.css";
-// import UserRating from "../Rating/UserRating/UserRating";
 import Pagination from "@mui/material/Pagination";
 import PropTypes from "prop-types";
 import parse from 'html-react-parser';
-// import Popup from 'reactjs-popup';
-// import DeleteReviewPopup from "./DeleteReviewPopup";
 import IndUserReview from "../IndReview/IndUserReview";
 
 export default function ReviewSection({ reviews }) {
     const [currentPage, setCurrentPage] = useState(1);
-    // const [showDeleteBtn, setShowDeleteBtn] = useState(true);
-
-    // const handleDeleteBtnVisibility = (visibility) => {
-    //     setShowDeleteBtn(visibility);
-    // };
     const commentsPerPage = 2;
-    const handlePageChange = useCallback((event, page) => setCurrentPage(page));
-    const totalPages = Math.ceil(reviews.length / commentsPerPage);
+
+    // Template subscription reviews
+    const templateReviews = [
+        {
+            avatar: "/pro_avatar.png",
+            author: "Critix Pro Reviewer",
+            movieTitle: "Inception",
+            createdDate: new Date().toISOString(),
+            content: "Mind-bending, visually stunning, and thought-provoking. A must-watch for sci-fi lovers.",
+            rating: 90,
+            tier: "CritixPro",
+            tags: ["mind-blowing", "visual feast", "smart"]
+        },
+        {
+            avatar: "/ultimate_avatar.png",
+            author: "Critix Ultimate",
+            movieTitle: "The Godfather",
+            createdDate: new Date().toISOString(),
+            content: "A cinematic masterpiece. Every frame and line is iconic. Timeless and powerful.",
+            rating: 98,
+            tier: "CritixUltimate",
+            tags: ["masterpiece", "gripping", "iconic"]
+        }
+    ];
+
+    // Combine template with actual reviews
+    const allReviews = [...templateReviews, ...reviews];
+    const totalPages = Math.ceil(allReviews.length / commentsPerPage);
+
+    const handlePageChange = useCallback((event, page) => setCurrentPage(page), []);
+
     const displayReviews = useMemo(() => {
-        let reviewsToDisplay = [];
         const startIdx = (currentPage - 1) * commentsPerPage;
         const endIdx = startIdx + commentsPerPage;
-        reviewsToDisplay = reviews.slice(startIdx, endIdx);
-        return reviewsToDisplay;
-    }, [currentPage, reviews]);
+        return allReviews.slice(startIdx, endIdx);
+    }, [currentPage, allReviews]);
+
     return (
         <>
-            {displayReviews.map((review) => (
-                <IndUserReview key={review.author} avatar={review.avatar} author={review.author} movieTitle={review.movieTitle} createdDate={review.createdDate} content={parse(review.content)} rating={review.rating} />
+            {displayReviews.map((review, index) => (
+                <IndUserReview
+                    key={`${review.author}-${index}`}
+                    avatar={review.avatar}
+                    author={review.author}
+                    movieTitle={review.movieTitle}
+                    createdDate={review.createdDate}
+                    content={parse(review.content)}
+                    rating={review.rating}
+                    tier={review.tier}
+                    tags={review.tags}
+                />
             ))}
-            {reviews && reviews.length > 0 && totalPages > 0 && (
+            {totalPages > 1 && (
                 <Pagination
                     size="large"
                     color="primary"
@@ -41,6 +70,9 @@ export default function ReviewSection({ reviews }) {
                         "& .MuiPaginationItem-root": {
                             color: "#ffffff",
                         },
+                        marginTop: "24px",
+                        display: "flex",
+                        justifyContent: "center"
                     }}
                 />
             )}
@@ -49,6 +81,5 @@ export default function ReviewSection({ reviews }) {
 }
 
 ReviewSection.propTypes = {
-    movieId: PropTypes.number,
-    reviews: PropTypes.array,
+    reviews: PropTypes.array.isRequired,
 };

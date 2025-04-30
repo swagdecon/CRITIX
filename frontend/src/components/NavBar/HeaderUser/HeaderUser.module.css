@@ -1,9 +1,10 @@
-
-
-/* User */
+.UserProfile {
+  align-items: center;
+  display: flex;
+}
 .User {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
 }
 
 .User .image {

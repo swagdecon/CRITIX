@@ -2,9 +2,6 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%);
   box-sizing: border-box;
 }
 
