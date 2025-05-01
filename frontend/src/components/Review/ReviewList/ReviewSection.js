@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback } from "react";
 import Pagination from "@mui/material/Pagination";
 import PropTypes from "prop-types";
 import parse from 'html-react-parser';
-import IndUserReview from "../IndReview/IndUserReview";
+import IndUserReview from "./IndUserReview";
 
 export default function ReviewSection({ reviews }) {
     const [currentPage, setCurrentPage] = useState(1);
