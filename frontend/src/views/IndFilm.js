@@ -117,7 +117,6 @@ export default function IndMovie() {
             movieTagline={movie.tagline}
             reviews={reviews}
           />
-          {console.log(movie)}
           <MovieDetails
             runtime={movie.runtime}
             revenue={movie.revenue}

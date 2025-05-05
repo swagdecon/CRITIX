@@ -1,16 +1,12 @@
 
 .Wrapper {
-  width: 100%;
   display: flex;
-  justify-content: center;
-  position: relative;
+  /* justify-content: center; */
 }
 .Slider {
-  width: 90vw;
-  margin: 0 auto;
-  position: relative;
+  width: 100vw;
+  display: flex;
   padding: 0 70px;
-  box-sizing: border-box;
 }
 
 .card {

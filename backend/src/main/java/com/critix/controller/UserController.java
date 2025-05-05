@@ -1,8 +1,6 @@
 package com.critix.controller;
 
-import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,15 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.critix.auth.AuthenticationService;
 import com.critix.config.EnvLoader;
 import com.critix.model.LoginEvents;
-import com.critix.model.MovieCard;
 import com.critix.model.User;
-import com.critix.service.MovieService;
 import com.critix.service.UserService;
-
 import io.github.cdimascio.dotenv.Dotenv;
 
 @RequestMapping("/user")

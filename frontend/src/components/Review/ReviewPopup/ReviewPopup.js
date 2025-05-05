@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect } from "react";
+import React, { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import FormatBoldIcon from '@mui/icons-material/FormatBold';
 import FormatItalicIcon from '@mui/icons-material/FormatItalic';
@@ -31,11 +31,12 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import CloseIcon from '@mui/icons-material/Close';
 import { Extension } from "@tiptap/react";
+import { sendData } from "../../../security/Data";
 const RECAPTCHA_ENDPOINT = process.env.REACT_APP_RECAPTCHA_ENDPOINT;
-const CREATE_MOVIE_ENDPOINT = process.env.REACT_APP_CREATE_MOVIE_ENDPOINT;
+const CREATE_REVIEW_ENDPOINT = process.env.REACT_APP_CREATE_REVIEW_ENDPOINT;
 const API_URL = process.env.REACT_APP_BACKEND_API_URL;
 const RECAPTCHA_KEY = process.env.REACT_APP_RECAPTCHA_KEY;
-
+const AI_SUGGESTIONS_ENDPOINT = process.env.REACT_APP_AI_SUGGESTIONS_ENDPOINT
 const LimitParagraphs = (setLineLimitReached) => Extension.create({
     addKeyboardShortcuts() {
         return {
@@ -70,6 +71,8 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, openMod
     const [lineLimitReached, setLineLimitReached] = useState(false)
     const [reviewRating, setReviewRating] = useState(0);
     const [recaptchaResult, setRecaptchaResult] = useState(false);
+    const lastWordCheckpointRef = useRef(0);
+    const [suggestionsList, setSuggestionsList] = useState([]);
 
     const handleGetIdea = () => {
         const randomIndex = Math.floor(Math.random() * ideaSuggestions.length);
@@ -93,11 +96,22 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, openMod
             }),
         ],
         onUpdate: ({ editor }) => {
-            const paragraphCount = editor.state.doc.content.content.filter(node => node.type.name === 'paragraph').length;
-            if (paragraphCount >= 20) {
-                setLineLimitReached(true);
-            } else {
-                setLineLimitReached(false);
+            const plainText = editor.getText().trim();
+            const words = plainText.match(/\b\w+\b/g) || [];
+            const currentWordCount = words.length;
+
+            const paragraphCount = editor.state.doc.content.content.filter(
+                node => node.type.name === 'paragraph'
+            ).length;
+            setLineLimitReached(paragraphCount >= 20);
+
+            if (
+                currentWordCount >= 15 &&
+                currentWordCount % 15 === 0 &&
+                currentWordCount !== lastWordCheckpointRef.current
+            ) {
+                fetchSuggestions(plainText);
+                lastWordCheckpointRef.current = currentWordCount;
             }
         },
         content: '',
@@ -138,7 +152,7 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, openMod
             const formattedDate = format(currentDate, 'MM-dd-yyyy HH:mm');
 
             axios
-                .post(`${API_URL}${CREATE_MOVIE_ENDPOINT}${movieId}`, {
+                .post(`${API_URL}${CREATE_REVIEW_ENDPOINT}${movieId}`, {
                     createdDate: formattedDate,
                     movieId,
                     movieTitle,
@@ -169,11 +183,25 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, openMod
         }
     }, [openModal, editor]);
 
+
+    const fetchSuggestions = async (reviewText) => {
+        try {
+            const response = await sendData(`${API_URL}${AI_SUGGESTIONS_ENDPOINT}`, { review: reviewText });
+            const data = await response.json();
+            if (response.ok && Array.isArray(data)) {
+                setSuggestionsList(data);
+            } else {
+                console.error("Suggestions are not an array:", data);
+            }
+        } catch (error) {
+            console.error("Error fetching suggestions:", error);
+        }
+    };
+
     return (
         <Modal open={openModal} onClose={() => setOpenModal(false)} closeAfterTransition>
             <Fade in={openModal}>
                 <Box sx={modalStyles}>
-                    {/* "X" close button */}
                     <IconButton
                         aria-label="close"
                         onClick={() => setOpenModal(false)}
@@ -257,7 +285,7 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, openMod
                     <Box sx={editorAndSuggestionsWrapperStyles}>
                         <Box sx={editorContainerStyles}>
                             <Box sx={semanticsBoxStyles}>
-                                <Typography variant="h6" mb={2}>Semantics Analysis</Typography>
+                                <Typography variant="h6" sx={{ textAlign: 'center' }} mb={2}>Semantics Analysis</Typography>
                                 <Box sx={suggestionListStyles}>
                                     {['Positive', 'Detailed', 'Personal'].map((semantic, idx) => (
                                         <Box key={idx} sx={suggestionItemStyles}>
@@ -280,11 +308,15 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, openMod
                         <Box sx={suggestionBoxStyles}>
                             <Typography variant="h6" mb={2}>Suggestions</Typography>
                             <Box sx={suggestionListStyles}>
-                                {['Try summarizing the plot', 'Mention standout performances', 'Talk about the cinematography'].map((suggestion, idx) => (
-                                    <Box key={idx} sx={suggestionItemStyles}>
-                                        {suggestion}
-                                    </Box>
-                                ))}
+                                {suggestionsList.length > 0 ? (
+                                    suggestionsList.map((suggestion, idx) => (
+                                        <Box key={idx} sx={suggestionItemStyles}>
+                                            {suggestion}
+                                        </Box>
+                                    ))
+                                ) : (
+                                    <Typography variant="body2" color="gray">Type your review to get suggestions...</Typography>
+                                )}
                             </Box>
                         </Box>
                     </Box>
@@ -497,6 +529,7 @@ const editorContainerStyles = {
     boxShadow: '0 4px 30px rgba(0,0,0,0.2)',
     overflowY: 'auto',
     color: 'white',
+    alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
     transition: 'background 0.3s ease, box-shadow 0.3s ease',
@@ -507,6 +540,7 @@ const editorContainerStyles = {
 };
 const suggestionBoxStyles = {
     background: 'linear-gradient(135deg, rgba(0,150,255,0.08), rgba(0,150,255,0.02))',
+    width: '60%',
     border: '1px solid rgba(255,255,255,0.12)',
     borderRadius: '15px',
     padding: '20px',
@@ -536,9 +570,11 @@ const suggestionItemStyles = {
 const semanticsBoxStyles = {
     ...suggestionBoxStyles,
     marginTop: '10px',
+
 };
 const suggestionListStyles = {
     display: 'flex',
     flexWrap: 'wrap',
     gap: '10px',
+    justifyContent: 'center'
 };

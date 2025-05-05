@@ -20,13 +20,17 @@
 		<moviedbapi.version>2.1.2</moviedbapi.version>
 		<jackson-datatype.version>2.15.2</jackson-datatype.version>
 		<jjwt.version>0.11.5</jjwt.version>
-		<okhttp.version>4.11.0</okhttp.version>
-		<sb-dev-tools.version>3.3.10</sb-dev-tools.version>
+		<jvm-openai.version>0.11.0</jvm-openai.version>
 	</properties>
 		<dependencies>
 			<dependency>
 				<groupId>jakarta.persistence</groupId>
 				<artifactId>jakarta.persistence-api</artifactId>
+			</dependency>
+			<dependency>
+				<groupId>io.github.stefanbratanov</groupId>
+				<artifactId>jvm-openai</artifactId>
+				<version>${jvm-openai.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>javax.json</groupId>
@@ -49,6 +53,14 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-mail</artifactId>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-webflux</artifactId>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>

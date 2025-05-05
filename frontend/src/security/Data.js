@@ -30,6 +30,7 @@ export async function sendData(endpoint, data) {
       },
       body: JSON.stringify(data),
     });
+    console.log(response)
     return response;
   } catch (error) {
     console.error(error);
