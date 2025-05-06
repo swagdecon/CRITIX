@@ -25,6 +25,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
 import TextAlign from '@tiptap/extension-text-align';
 import CookieManager from "../../../security/CookieManager";
+import { motion, AnimatePresence } from 'framer-motion'
 import { format } from "date-fns";
 import Filter from "bad-words";
 import axios from "axios";
@@ -37,6 +38,8 @@ const CREATE_REVIEW_ENDPOINT = process.env.REACT_APP_CREATE_REVIEW_ENDPOINT;
 const API_URL = process.env.REACT_APP_BACKEND_API_URL;
 const RECAPTCHA_KEY = process.env.REACT_APP_RECAPTCHA_KEY;
 const AI_SUGGESTIONS_ENDPOINT = process.env.REACT_APP_AI_SUGGESTIONS_ENDPOINT
+const AI_SEMANTICS_ENDPOINT = process.env.REACT_APP_AI_SEMANTICS_ENDPOINT
+
 const LimitParagraphs = (setLineLimitReached) => Extension.create({
     addKeyboardShortcuts() {
         return {
@@ -73,7 +76,11 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, openMod
     const [recaptchaResult, setRecaptchaResult] = useState(false);
     const lastWordCheckpointRef = useRef(0);
     const [suggestionsList, setSuggestionsList] = useState([]);
+    const [semanticsList, setSemanticsList] = useState([]);
 
+    const handleRemoveSuggestion = (indexToRemove) => {
+        setSuggestionsList(prev => prev.filter((_, index) => index !== indexToRemove));
+    };
     const handleGetIdea = () => {
         const randomIndex = Math.floor(Math.random() * ideaSuggestions.length);
         setRandomIdea(ideaSuggestions[randomIndex]);
@@ -186,12 +193,17 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, openMod
 
     const fetchSuggestions = async (reviewText) => {
         try {
-            const response = await sendData(`${API_URL}${AI_SUGGESTIONS_ENDPOINT}`, { review: reviewText });
-            const data = await response.json();
-            if (response.ok && Array.isArray(data)) {
-                setSuggestionsList(data);
+            const suggestionResponse = await sendData(`${API_URL}${AI_SUGGESTIONS_ENDPOINT}`, { review: reviewText });
+            const suggestionData = await suggestionResponse.json();
+
+            const semanticsResponse = await sendData(`${API_URL}${AI_SEMANTICS_ENDPOINT}`, { review: reviewText });
+            const semanticsData = await semanticsResponse.json();
+
+            if (suggestionResponse.ok && Array.isArray(suggestionData)) {
+                setSuggestionsList(suggestionData);
+                setSemanticsList(semanticsData)
             } else {
-                console.error("Suggestions are not an array:", data);
+                console.error("Suggestions are not an array:", suggestionData + semanticsData);
             }
         } catch (error) {
             console.error("Error fetching suggestions:", error);
@@ -287,11 +299,16 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, openMod
                             <Box sx={semanticsBoxStyles}>
                                 <Typography variant="h6" sx={{ textAlign: 'center' }} mb={2}>Semantics Analysis</Typography>
                                 <Box sx={suggestionListStyles}>
-                                    {['Positive', 'Detailed', 'Personal'].map((semantic, idx) => (
-                                        <Box key={idx} sx={suggestionItemStyles}>
-                                            {semantic}
-                                        </Box>
-                                    ))}
+                                    {suggestionsList.length > 0 ? (
+                                        semanticsList.map((semantic, idx) => (
+                                            <Box key={idx} sx={suggestionItemStyles}>
+                                                {semantic}
+                                            </Box>
+                                        ))
+                                    ) : (<Typography variant="body2" color="gray">
+                                        Type at least 15 words to get review semantic analysis...
+                                    </Typography>
+                                    )}
                                 </Box>
                             </Box>
                             <Box sx={ideasBoxStyles}>
@@ -306,16 +323,37 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, openMod
                             </Box>
                         </Box>
                         <Box sx={suggestionBoxStyles}>
-                            <Typography variant="h6" mb={2}>Suggestions</Typography>
+                            <Typography variant="h6" sx={{ justifyContent: 'center', display: 'flex' }} mb={2}>Suggestions</Typography>
                             <Box sx={suggestionListStyles}>
                                 {suggestionsList.length > 0 ? (
-                                    suggestionsList.map((suggestion, idx) => (
-                                        <Box key={idx} sx={suggestionItemStyles}>
-                                            {suggestion}
-                                        </Box>
-                                    ))
+                                    <AnimatePresence >
+                                        {suggestionsList.map((suggestion, idx) => (
+                                            <motion.div
+                                                key={idx}
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                transition={{ duration: 0.3, ease: 'easeOut' }}
+                                            >
+                                                <Box sx={{ ...suggestionItemStyles, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                    <Typography variant="body2">{suggestion}</Typography>
+                                                    <IconButton
+                                                        size="small"
+                                                        onClick={() => handleRemoveSuggestion(idx)}
+                                                        sx={{ marginLeft: '8px', color: 'gray' }}
+                                                        aria-label="Remove suggestion"
+                                                    >
+                                                        <CloseIcon fontSize="small" />
+                                                    </IconButton>
+                                                </Box>
+
+                                            </motion.div>
+                                        ))}
+                                    </AnimatePresence>
                                 ) : (
-                                    <Typography variant="body2" color="gray">Type your review to get suggestions...</Typography>
+                                    <Typography variant="body2" color="gray">
+                                        Type at least 15 words to get review suggestions...
+                                    </Typography>
                                 )}
                             </Box>
                         </Box>
@@ -540,7 +578,7 @@ const editorContainerStyles = {
 };
 const suggestionBoxStyles = {
     background: 'linear-gradient(135deg, rgba(0,150,255,0.08), rgba(0,150,255,0.02))',
-    width: '60%',
+    width: '50%',
     border: '1px solid rgba(255,255,255,0.12)',
     borderRadius: '15px',
     padding: '20px',

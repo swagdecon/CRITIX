@@ -24,4 +24,15 @@ public class AIController {
                 }
                 return null;
         }
+
+        @PostMapping("/semantics")
+        public List<String> semanticAnalysis(@RequestBody Map<String, String> review) {
+                try {
+                        String reviewText = review.get("review");
+                        return aiService.reviewSemanticAnalysis(reviewText);
+                } catch (Exception e) {
+                        System.out.println(e);
+                }
+                return null;
+        }
 }

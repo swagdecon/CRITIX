@@ -26,7 +26,7 @@
     "dayjs": "^1.11.13",
     "dompurify": "^3.2.4",
     "font-awesome": "^4.7.0",
-    "framer-motion": "^12.6.2",
+    "framer-motion": "^12.10.0",
     "frontend": "file:",
     "html-react-parser": "^5.1.12",
     "iso-3166-1": "^2.1.1",
