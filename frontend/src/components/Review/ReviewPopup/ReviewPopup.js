@@ -165,6 +165,7 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, openMod
                     movieTitle,
                     author: firstName,
                     rating: reviewRating,
+                    spoiler: containsSpoilers,
                     content: reviewContent,
                 }, {
                     headers: {

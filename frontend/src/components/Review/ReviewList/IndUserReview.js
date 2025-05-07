@@ -1,5 +1,5 @@
+import React, { useState } from "react";
 import TimeAgo from 'react-timeago'
-import React from "react";
 import PropTypes from "prop-types";
 import UserReviewStyle from "./UserReview.module.css"
 
@@ -15,8 +15,10 @@ function getColourClassName(rating) {
     }
 }
 // Both author and movieTitle should not be both passed, one or the other depending on the page (userProfile or indMovie)
-export default function IndUserReview({ avatar, author, movieTitle, createdDate, content, rating, tier, tags = [] }) {
+export default function IndUserReview({ avatar, author, movieTitle, createdDate, content, containsSpoiler, rating, tier, tags = [] }) {
+    const [spoilerRevealed, setSpoilerRevealed] = useState(false);
     const colourRating = getColourClassName(rating);
+
     return (
         <div className={`${UserReviewStyle.IndUserReviews} ${tier === 'CritixUltimate' ? UserReviewStyle.UltimateUser : ''}`}>
             <div className={UserReviewStyle.ContentWrapper}>
@@ -52,7 +54,18 @@ export default function IndUserReview({ avatar, author, movieTitle, createdDate,
                                     )}
                                 </div>
                             </div>
-                            <div className={UserReviewStyle.ReviewContent}>{content}</div>
+                            {containsSpoiler && !spoilerRevealed && (
+                                <div className={UserReviewStyle.SpoilerOverlay}>
+                                    <div className={UserReviewStyle.SpoilerWarningText}>⚠️ Contains Spoilers</div>
+                                    <button className={UserReviewStyle.RevealSpoilerButton} onClick={() => setSpoilerRevealed(true)}>Reveal</button>
+                                </div>
+                            )}
+                            <div
+                                className={UserReviewStyle.ReviewContent}
+                                style={{ filter: containsSpoiler && !spoilerRevealed ? 'blur(12px)' : 'none' }}
+                            >
+                                {content}
+                            </div>
                             {tags.length > 0 && (
                                 <div className={UserReviewStyle.HighlightTags}>
                                     {tags.map((tag, idx) => (
@@ -64,14 +77,16 @@ export default function IndUserReview({ avatar, author, movieTitle, createdDate,
                     </div>
                 </div>
             </div>
-        </div >
-    )
+        </div>
+    );
 }
+
 IndUserReview.propTypes = {
     avatar: PropTypes.string,
     author: PropTypes.string,
     movieTitle: PropTypes.string,
     createdDate: PropTypes.string,
+    containsSpoiler: PropTypes.bool,
     content: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     rating: PropTypes.number,
     tier: PropTypes.oneOf(["CritixPro", "CritixUltimate"]),

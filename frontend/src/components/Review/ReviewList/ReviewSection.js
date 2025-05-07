@@ -25,6 +25,7 @@ export default function ReviewSection({ reviews }) {
             author: "Critix Ultimate",
             movieTitle: "The Godfather",
             createdDate: new Date().toISOString(),
+            containsSpoiler: true,
             content: "A cinematic masterpiece. Every frame and line is iconic. Timeless and powerful.",
             rating: 98,
             tier: "CritixUltimate",
@@ -54,6 +55,7 @@ export default function ReviewSection({ reviews }) {
                     movieTitle={review.movieTitle}
                     createdDate={review.createdDate}
                     content={parse(review.content)}
+                    containsSpoiler={review.containsSpoiler}
                     rating={review.rating}
                     tier={review.tier}
                     tags={review.tags}

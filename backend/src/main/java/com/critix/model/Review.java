@@ -24,6 +24,7 @@ public class Review {
     private String author;
     private String avatar;
     private String rating;
+    private Boolean containsSpoiler;
     private String createdDate;
     private String updatedDate;
     private String content;

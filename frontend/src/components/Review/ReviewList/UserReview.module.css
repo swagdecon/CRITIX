@@ -200,3 +200,49 @@
   .ReviewContent::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(135deg, #0096ff, #0096ff);
   }
+  .SpoilerOverlay {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(20,20,20,0.7));
+    border-radius: 16px;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+    backdrop-filter: brightness(0.5);
+    pointer-events: all;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.3);
+}
+
+.SpoilerWarningText {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    background: linear-gradient(90deg, #ff4e00, #ec9f05);
+    padding: 8px 16px;
+    border-radius: 999px;
+    box-shadow: 0 0 10px rgba(255, 128, 0, 0.4);
+    margin-bottom: 16px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.RevealSpoilerButton {
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(0, 242, 254, 0.3);
+}
+
+.RevealSpoilerButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 242, 254, 0.4);
+}

@@ -27,7 +27,7 @@ public class ReviewService {
 
     public void createNewMovieReview(Integer movieId, String author, String userId, String movieTitle,
             String reviewRating,
-            String reviewContent, String createdAt) {
+            String reviewContent, Boolean containsSpoiler, String createdAt) {
         String reviewId = UUID.randomUUID().toString();
         Review review = new Review();
         review.setReviewId(reviewId);
@@ -37,6 +37,7 @@ public class ReviewService {
         review.setAvatar(userRepository.findById(userId).get().getAvatar());
         review.setAuthor(author);
         review.setRating(reviewRating);
+        review.setContainsSpoiler(containsSpoiler);
         review.setContent(reviewContent);
         review.setCreatedDate(createdAt);
         reviewRepository.save(review);
