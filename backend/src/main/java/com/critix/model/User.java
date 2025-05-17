@@ -31,6 +31,8 @@ public class User implements UserDetails {
     private String avatar;
     private String bannerPicture;
     private Boolean accountActive;
+    private Boolean isProUser;
+    private Boolean isUltimateUser;
     private LoginEvents loginEvents;
     private UserAuth userAuth;
     private List<MovieCard> watchList;

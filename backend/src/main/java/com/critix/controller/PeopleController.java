@@ -1,7 +1,6 @@
 package com.critix.controller;
 
 import java.io.IOException;
-import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +21,8 @@ public class PeopleController {
     PersonService PersonService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Person>> singlePerson(@PathVariable Integer id)
+    public ResponseEntity<Person> singlePerson(@PathVariable Integer id)
             throws IOException, InterruptedException, TmdbException {
-        return new ResponseEntity<Optional<Person>>(PersonService.singlePerson(id), HttpStatus.OK);
+        return new ResponseEntity<Person>(PersonService.singlePerson(id), HttpStatus.OK);
     }
 }

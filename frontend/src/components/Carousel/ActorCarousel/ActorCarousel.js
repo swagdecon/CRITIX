@@ -4,13 +4,13 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import PropTypes from "prop-types"
 import ActorStyle from "./ActorCarousel.module.css";
-// import Title from "../title.module.scss";
+import { Link } from "react-router-dom";
 const DEFAULT_ACTOR_IMAGE = process.env.REACT_APP_DEFAULT_ACTOR_IMAGE;
 const DEFAULT_TMDB_IMAGE = process.env.REACT_APP_DEFAULT_TMDB_IMAGE_PREFIX;
 const defaultImage = `url(${DEFAULT_ACTOR_IMAGE}) center center no-repeat`;
 
 export default function MovieActors({ actors }) {
-
+  console.log(actors)
   const settings = {
     dots: false,
     infinite: true,
@@ -94,18 +94,16 @@ export default function MovieActors({ actors }) {
     background: defaultImage,
   };
   return (
-    <>
-      {/* <h3 className={`${Title["movie-title"]} ${Title["ind-movie-actors"]}`}>cast members:</h3> */}
-      <div className={ActorStyle.Wrapper}>
-        <Slider {...settings} className={ActorStyle.Slider}>
-          {actors.map((actor, i) => {
-            const image = actor.profilePath
-            const actorImage = image ? `url(${DEFAULT_TMDB_IMAGE}${image})` : defaultImage;
-            const style = image ? { background: actorImage, backgroundSize: "300px" } : defaultStyle;
-            return (
+    <div className={ActorStyle.Wrapper}>
+      <Slider {...settings} className={ActorStyle.Slider}>
+        {actors.map((actor, i) => {
+          const image = actor.profilePath
+          const actorImage = image ? `url(${DEFAULT_TMDB_IMAGE}${image})` : defaultImage;
+          const style = image ? { background: actorImage, backgroundSize: "300px" } : defaultStyle;
+          return (
+            <Link to={`/person/${actor.id}`} className={ActorStyle.Img} style={style} key={i}>
               <div className={ActorStyle.card} key={i}>
                 <div className={ActorStyle.Img} style={style} >
-
                   <div className={ActorStyle.border}>
                     <h3 className={ActorStyle["profile-person"]}>
                       {actor.name}
@@ -118,11 +116,11 @@ export default function MovieActors({ actors }) {
                   </div>
                 </div>
               </div>
-            );
-          })}
-        </Slider >
-      </div>
-    </>
+            </Link>
+          );
+        })}
+      </Slider >
+    </div>
   )
 }
 

@@ -29,10 +29,22 @@ public class Person {
     private Double popularity;
     private String imdbId;
     private String job;
-    private List<String> imdbPersonImages;
-    private List<String> imdbPersonJobs;
-    private Integer imdbPersonFilmAppearances;
-    private Integer imdbFilmsProduced;
-    private Integer imdbAwardNominations;
+    private String wikidataId;
+    private List<String> occupations;
+    private List<String> awards;
+    private List<String> education;
+    private List<String> notableWorks;
+    private String officialWebsite;
+    private String twitterHandle;
+    private String instagramHandle;
+    private String youtubeChannel;
+    private String backgroundImageUrl;
+    private String shortDescription;
+
+    // private List<String> imdbPersonImages;
+    // private List<String> imdbPersonJobs;
+    // private Integer imdbPersonFilmAppearances;
+    // private Integer imdbFilmsProduced;
+    // private Integer imdbAwardNominations;
 
 }

@@ -21,6 +21,7 @@ import { fetchData, sendData } from "../security/Data.js";
 import isTokenExpired from "../security/IsTokenExpired.js";
 import WatchListBtn from "../components/Other/btn/WatchListBtn/WatchListBtn.js";
 import FavouriteBtn from "../components/Other/btn/FavouriteBtn/FavouriteBtn.js";
+// import ARBtn from "../components/Other/btn/ARBtn/ARBtn.js"
 const recommendedEndpoint = process.env.REACT_APP_RECOMMENDED_ENDPOINT;
 const getReviewEndpoint = process.env.REACT_APP_GET_REVIEW_ENDPOINT
 const API_URL = process.env.REACT_APP_BACKEND_API_URL
@@ -95,6 +96,9 @@ export default function IndMovie() {
                 <div className={IndMovieStyle["btn-wrapper-el"]}>
                   <FavouriteBtn movieData={movie} outline={true} />
                 </div>
+                {/* <div className={IndMovieStyle["btn-wrapper-el"]}>
+                  <ARBtn movieName={movie.title} />
+                </div> */}
               </div>
             </div>
           </div>

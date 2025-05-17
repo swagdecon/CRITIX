@@ -34,6 +34,7 @@ public class ReviewController {
                 String movieTitle = request.getMovieTitle();
                 String reviewRating = request.getRating();
                 String reviewContent = request.getContent();
+                Boolean containsSpoiler = request.getContainsSpoiler();
                 String createdAt = request.getCreatedDate();
 
                 if (reviewService.doesUserIdExistForMovie(movieId, userId)) {
@@ -42,6 +43,7 @@ public class ReviewController {
                 } else {
                         reviewService.createNewMovieReview(movieId, username, userId, movieTitle, reviewRating,
                                         reviewContent,
+                                        containsSpoiler,
                                         createdAt);
                 }
                 return null;

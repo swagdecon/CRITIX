@@ -3,7 +3,10 @@
   height: 100vh;
 
 }
-
+.ind-recommendation-page-wrapper {
+  height: 100vh;
+  overflow-y: hidden;
+}
 .ind-movie-page-wrapper::-webkit-scrollbar {
   display: none;
 }

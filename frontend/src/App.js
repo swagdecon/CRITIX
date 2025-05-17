@@ -25,7 +25,7 @@ import PricingPage from "./views/Premium.js"
 import Recommendations from "./components/Recommendations/Recommendations.js";
 import DiscoverMovies from "./views/Discover.js";
 import CritixHomepage from "./views/CritixHomepage.js"
-
+import MovieSceneViewer from "./components/AR/MovieSceneViewer.js"
 export default function App() {
   return (
     <Router>
@@ -69,6 +69,7 @@ export default function App() {
           element={<DiscoverMovies />}>
         </Route>
         <Route path="/movies/:endpoint/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
+        <Route path="/ar/:movieName" element={<PrivateRoute><MovieSceneViewer /></PrivateRoute>} />
         <Route path="/profile" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
         <Route path="/movies/movie/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
         <Route path="/person/:id" element={<PrivateRoute><IndPerson /></PrivateRoute>} />

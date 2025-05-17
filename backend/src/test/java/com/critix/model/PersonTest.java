@@ -28,15 +28,15 @@ class PersonTest {
         person.setImdbId("nm1234567");
         person.setJob("Actor");
 
-        List<String> imdbPersonImages = Arrays.asList("/image1.jpg", "/image2.jpg");
-        person.setImdbPersonImages(imdbPersonImages);
+        // List<String> imdbPersonImages = Arrays.asList("/image1.jpg", "/image2.jpg");
+        // person.setImdbPersonImages(imdbPersonImages);
 
-        List<String> imdbPersonJobs = Arrays.asList("Actor", "Producer");
-        person.setImdbPersonJobs(imdbPersonJobs);
+        // List<String> imdbPersonJobs = Arrays.asList("Actor", "Producer");
+        // person.setImdbPersonJobs(imdbPersonJobs);
 
-        person.setImdbPersonFilmAppearances(50);
-        person.setImdbFilmsProduced(10);
-        person.setImdbAwardNominations(3);
+        // person.setImdbPersonFilmAppearances(50);
+        // person.setImdbFilmsProduced(10);
+        // person.setImdbAwardNominations(3);
 
         // Perform assertions
         assertEquals(1, person.getId());
@@ -51,10 +51,10 @@ class PersonTest {
         assertEquals(7.5f, person.getPopularity());
         assertEquals("nm1234567", person.getImdbId());
         assertEquals("Actor", person.getJob());
-        assertEquals(imdbPersonImages, person.getImdbPersonImages());
-        assertEquals(imdbPersonJobs, person.getImdbPersonJobs());
-        assertEquals(50, person.getImdbPersonFilmAppearances());
-        assertEquals(10, person.getImdbFilmsProduced());
-        assertEquals(3, person.getImdbAwardNominations());
+        // assertEquals(imdbPersonImages, person.getImdbPersonImages());
+        // assertEquals(imdbPersonJobs, person.getImdbPersonJobs());
+        // assertEquals(50, person.getImdbPersonFilmAppearances());
+        // assertEquals(10, person.getImdbFilmsProduced());
+        // assertEquals(3, person.getImdbAwardNominations());
     }
 }

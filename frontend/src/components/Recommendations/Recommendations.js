@@ -85,7 +85,7 @@ export default function recommendationsCarousel() {
     }
 
     return (
-        <div className={IndMovieStyle["ind-movie-page-wrapper"]}>
+        <div className={IndMovieStyle["ind-recommendation-page-wrapper"]}>
             <NavBar />
             <div className={IndMovieStyle.sliderWrapper}>
                 <RecommendedSlider {...settings}>
@@ -96,7 +96,7 @@ export default function recommendationsCarousel() {
                                 className={IndMovieStyle.background}
                                 style={{
                                     backgroundImage: `url(${movie.backdropUrl})`,
-                                    backgroundSize: "cover",
+                                    backgroundSize: "contain",
                                     backgroundPosition: "center",
                                     height: "100vh",
                                 }}
