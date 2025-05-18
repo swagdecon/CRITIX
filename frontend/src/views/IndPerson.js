@@ -54,18 +54,6 @@ export default function IndPerson() {
             src={person.backdropPath}
             alt="Backdrop"
             className={IndPersonStyle.backgroundImg}
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "110%",
-              height: "110%",
-              objectFit: "cover",
-              opacity: 0.25,
-              transform: "scale(1.1)",
-              filter: "brightness(0.75)",
-              zIndex: 0,
-            }}
           />
         )}
 
