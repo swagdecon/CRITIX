@@ -9,13 +9,16 @@
   color: white;
   overflow: hidden;
 }
-
-.overlay {
+.backgroundImg {
   position: absolute;
-  background: rgba(0,0,0,0.6);
-  z-index: 1;
+  top: 0;
+  left: 0;
+  object-fit:cover;
+  opacity: 0.25;
+  transform: scale(1.1);
+  filter:brightness(0.75);
+  z-index: 0;
 }
-
 .ind-person-content {
   position: relative; 
   z-index: 2;

@@ -10,6 +10,8 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,7 @@ public class PersonService {
     Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
     private EnvLoader envLoader = new EnvLoader();
     private String TMDB_ACCESS_TOKEN = envLoader.getEnv("TMDB_ACCESS_TOKEN", dotenv);
+    private String TMDB_IMAGE_PREFIX = envLoader.getEnv("TMDB_IMAGE_PREFIX", dotenv);
     private final TmdbApi tmdbApi = new TmdbApi(TMDB_ACCESS_TOKEN);
 
     // WebClient for Wikipedia and Wikidata
@@ -59,21 +62,52 @@ public class PersonService {
             person.setPlaceOfBirth(personDb.getPlaceOfBirth());
             person.setProfilePath(personDb.getProfilePath());
             person.setImdbId(personDb.getImdbId());
-
-            // Get combined credits cast list
-            List<Cast> castList = castCredits.getCast();
-
+            getPersonBackdrop(castCredits.getCast(), person);
             // Set Wikidata ID using IMDb ID
             String imdbId = personDb.getImdbId();
             String wikidataId = getWikidataEntity(imdbId);
             person.setWikidataId(wikidataId);
             enrichPersonFromWikidata(person);
 
-        } catch (Exception e) {
+        } catch (
+
+        Exception e) {
             e.printStackTrace();
         }
 
         return person;
+    }
+
+    public void getPersonBackdrop(List<Cast> castList, Person person) {
+        LocalDate latestDate = null;
+        String latestBackdropPath = null;
+        Pattern backdropPattern = Pattern.compile("backdropPath=(.*?)(,|\\))");
+        Pattern datePattern = Pattern.compile("releaseDate=(\\d{4}-\\d{2}-\\d{2})");
+
+        for (Cast cast : castList) {
+            String castString = cast.toString();
+
+            Matcher backdropMatcher = backdropPattern.matcher(castString);
+            Matcher dateMatcher = datePattern.matcher(castString);
+
+            if (backdropMatcher.find() && dateMatcher.find()) {
+                String backdropPath = backdropMatcher.group(1);
+                String releaseDateStr = dateMatcher.group(1);
+
+                try {
+                    LocalDate releaseDate = LocalDate.parse(releaseDateStr);
+
+                    if (latestDate == null || releaseDate.isAfter(latestDate)) {
+                        latestDate = releaseDate;
+                        latestBackdropPath = backdropPath;
+                    }
+                    String backdropUrl = TMDB_IMAGE_PREFIX + backdropPath;
+                    person.setBackdropPath(backdropUrl);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        }
     }
 
     public String getWikidataEntity(String imdbId) {

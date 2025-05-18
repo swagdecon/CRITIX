@@ -25,6 +25,7 @@ public class Person {
     private String knownForDepartment;
     private Gender gender;
     private String profilePath;
+    private String backdropPath;
     private String deathday;
     private Double popularity;
     private String imdbId;
@@ -38,7 +39,6 @@ public class Person {
     private String twitterHandle;
     private String instagramHandle;
     private String youtubeChannel;
-    private String backgroundImageUrl;
     private String shortDescription;
 
     // private List<String> imdbPersonImages;

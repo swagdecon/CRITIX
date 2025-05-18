@@ -42,16 +42,33 @@ export default function IndPerson() {
 
   const personPosterPath = person.profilePath
     ? `${PERSON_POSTER_URL}${person.profilePath}`
-    : "";
+    : null;
 
-
+  console.log(person.backdropPath);
   return (
     <div>
       <NavBar />
-      <section
-        className={IndPersonStyle["ind-person-wrapper"]}
-        style={person.backgroundImage ? { backgroundImage: person.backgroundImage } : null}
-      >
+      <section className={IndPersonStyle["ind-person-wrapper"]} style={{ position: "relative", overflow: "hidden" }}>
+        {person.backdropPath && (
+          <img
+            src={person.backdropPath}
+            alt="Backdrop"
+            className={IndPersonStyle.backgroundImg}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "110%",
+              height: "110%",
+              objectFit: "cover",
+              opacity: 0.25,
+              transform: "scale(1.1)",
+              filter: "brightness(0.75)",
+              zIndex: 0,
+            }}
+          />
+        )}
+
         <div className={IndPersonStyle["overlay"]} />
 
         <div className={IndPersonStyle["ind-person-content"]}>
