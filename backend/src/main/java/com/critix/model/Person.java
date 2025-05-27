@@ -26,6 +26,8 @@ public class Person {
     private Gender gender;
     private String profilePath;
     private String backdropPath;
+    private List<String> producedFilms;
+    private List<String> filmsActedIn;
     private String deathday;
     private Double popularity;
     private String imdbId;

@@ -102,17 +102,20 @@ export default function IndMovie() {
               </div>
             </div>
           </div>
-          {movie.posterUrl ?
-            <img
-              className={IndMovieStyle["hero-poster"]}
-              src={movie.posterUrl}
-              alt="Movie Poster"
-            />
-            : <img
-              className={IndMovieStyle["hero-poster"]}
-              src={backupPoster}
-              alt="fallback poster"
-            />}
+          <div className={IndMovieStyle["poster-wrapper"]}>
+            {movie.posterUrl ?
+              <img
+                className={IndMovieStyle["hero-poster"]}
+                src={movie.posterUrl}
+                alt="Movie Poster"
+              />
+              : <img
+                className={IndMovieStyle["hero-poster"]}
+                src={backupPoster}
+                alt="fallback poster"
+              />
+            }
+          </div>
         </section>
         <section className={containerClass}>
           <MovieReviews

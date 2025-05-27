@@ -63,7 +63,6 @@ public class PersonService {
             person.setProfilePath(personDb.getProfilePath());
             person.setImdbId(personDb.getImdbId());
             getPersonBackdrop(castCredits.getCast(), person);
-            // Set Wikidata ID using IMDb ID
             String imdbId = personDb.getImdbId();
             String wikidataId = getWikidataEntity(imdbId);
             person.setWikidataId(wikidataId);
@@ -81,7 +80,8 @@ public class PersonService {
     public void getPersonBackdrop(List<Cast> castList, Person person) {
         LocalDate latestDate = null;
         String latestBackdropPath = null;
-        Pattern backdropPattern = Pattern.compile("backdropPath=(.*?)(,|\\))");
+
+        Pattern backdropPattern = Pattern.compile("backdropPath=([^,\\)]+)");
         Pattern datePattern = Pattern.compile("releaseDate=(\\d{4}-\\d{2}-\\d{2})");
 
         for (Cast cast : castList) {
@@ -94,19 +94,22 @@ public class PersonService {
                 String backdropPath = backdropMatcher.group(1);
                 String releaseDateStr = dateMatcher.group(1);
 
-                try {
-                    LocalDate releaseDate = LocalDate.parse(releaseDateStr);
-
-                    if (latestDate == null || releaseDate.isAfter(latestDate)) {
-                        latestDate = releaseDate;
-                        latestBackdropPath = backdropPath;
+                if (!"null".equals(backdropPath)) {
+                    try {
+                        LocalDate releaseDate = LocalDate.parse(releaseDateStr);
+                        if (latestDate == null || releaseDate.isAfter(latestDate)) {
+                            latestDate = releaseDate;
+                            latestBackdropPath = backdropPath;
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Date parse error: " + e.getMessage());
                     }
-                    String backdropUrl = TMDB_IMAGE_PREFIX + backdropPath;
-                    person.setBackdropPath(backdropUrl);
-                } catch (Exception e) {
-                    System.out.println(e);
                 }
             }
+        }
+
+        if (latestBackdropPath != null) {
+            person.setBackdropPath(TMDB_IMAGE_PREFIX + latestBackdropPath);
         }
     }
 
@@ -144,48 +147,45 @@ public class PersonService {
             if (wikidataId == null)
                 return;
 
-            String sparql = String.format(
+            ObjectMapper mapper = new ObjectMapper();
+
+            // --- Basic Info Query ---
+            String basicInfoSparql = String.format(
                     """
-                            SELECT ?occupationLabel ?awardLabel ?educationLabel ?notableWorkLabel ?website ?twitter ?instagram ?youtube ?description ?image WHERE {
+                            SELECT ?occupationLabel ?awardLabel ?educationLabel ?notableWorkLabel WHERE {
                               OPTIONAL { wd:%s wdt:P106 ?occupation. }
                               OPTIONAL { wd:%s wdt:P166 ?award. }
                               OPTIONAL { wd:%s wdt:P69 ?education. }
                               OPTIONAL { wd:%s wdt:P800 ?notableWork. }
-
                               SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
                             }
                             """,
-                    wikidataId, wikidataId, wikidataId, wikidataId, wikidataId,
-                    wikidataId, wikidataId, wikidataId, wikidataId, wikidataId);
+                    wikidataId, wikidataId, wikidataId, wikidataId);
 
-            String response = wikidataClient.post()
+            String basicInfoResponse = wikidataClient.post()
                     .uri(URI.create("https://query.wikidata.org/sparql"))
                     .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                     .accept(MediaType.APPLICATION_JSON)
-                    .body(BodyInserters.fromFormData("query", sparql).with("format", "json"))
+                    .body(BodyInserters.fromFormData("query", basicInfoSparql).with("format", "json"))
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();
 
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode root = mapper.readTree(response);
-            JsonNode bindings = root.path("results").path("bindings");
+            JsonNode basicRoot = mapper.readTree(basicInfoResponse);
+            JsonNode basicBindings = basicRoot.path("results").path("bindings");
 
             List<String> occupations = new ArrayList<>();
             List<String> awards = new ArrayList<>();
             List<String> education = new ArrayList<>();
             List<String> notableWorks = new ArrayList<>();
 
-            for (JsonNode binding : bindings) {
+            for (JsonNode binding : basicBindings) {
                 if (binding.has("occupationLabel"))
                     occupations.add(binding.get("occupationLabel").get("value").asText());
-
                 if (binding.has("awardLabel"))
                     awards.add(binding.get("awardLabel").get("value").asText());
-
                 if (binding.has("educationLabel"))
                     education.add(binding.get("educationLabel").get("value").asText());
-
                 if (binding.has("notableWorkLabel"))
                     notableWorks.add(binding.get("notableWorkLabel").get("value").asText());
             }
@@ -194,6 +194,42 @@ public class PersonService {
             person.setAwards(new ArrayList<>(new HashSet<>(awards)));
             person.setEducation(new ArrayList<>(new HashSet<>(education)));
             person.setNotableWorks(new ArrayList<>(new HashSet<>(notableWorks)));
+
+            // --- Film Credits Query ---
+            String filmCreditsSparql = String.format(
+                    """
+                            SELECT ?producedFilmLabel ?actedInFilmLabel WHERE {
+                              OPTIONAL { ?producedFilm wdt:P162 wd:%s. }
+                              OPTIONAL { ?actedInFilm wdt:P161 wd:%s. }
+                              SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+                            }
+                            """,
+                    wikidataId, wikidataId);
+
+            String filmCreditsResponse = wikidataClient.post()
+                    .uri(URI.create("https://query.wikidata.org/sparql"))
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .body(BodyInserters.fromFormData("query", filmCreditsSparql).with("format", "json"))
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+
+            JsonNode filmCreditsRoot = mapper.readTree(filmCreditsResponse);
+            JsonNode filmBindings = filmCreditsRoot.path("results").path("bindings");
+
+            List<String> producedFilms = new ArrayList<>();
+            List<String> actedInFilms = new ArrayList<>();
+
+            for (JsonNode binding : filmBindings) {
+                if (binding.has("producedFilmLabel"))
+                    producedFilms.add(binding.get("producedFilmLabel").get("value").asText());
+                if (binding.has("actedInFilmLabel"))
+                    actedInFilms.add(binding.get("actedInFilmLabel").get("value").asText());
+            }
+
+            person.setProducedFilms(new ArrayList<>(new HashSet<>(producedFilms)));
+            person.setFilmsActedIn(new ArrayList<>(new HashSet<>(actedInFilms)));
 
         } catch (Exception e) {
             e.printStackTrace();

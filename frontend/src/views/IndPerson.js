@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import IndPersonStyle from "../components/IndPerson/ind_person.module.css";
+import IndPersonStyle from "../components/IndPerson/IndPerson.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import NavBar from "../components/NavBar/NavBar.js";
 import "typeface-ibm-plex-sans";
 import { fetchData } from "../security/Data.js";
 import {
   PersonTitle,
-  // PersonJobs,
-  // PersonRoles,
+  PersonJobs,
+  PersonRoles,
 } from "../components/IndPerson/PersonComponents.js";
 import LoadingPage from "./Loading.js";
 
@@ -34,7 +34,7 @@ export default function IndPerson() {
     };
     loadPerson();
   }, [id]);
-  console.log(person)
+
   if (loading || !person) {
     return <LoadingPage />;
   }
@@ -44,7 +44,7 @@ export default function IndPerson() {
     ? `${PERSON_POSTER_URL}${person.profilePath}`
     : null;
 
-  console.log(person.backdropPath);
+  console.log(person);
   return (
     <div>
       <NavBar />
@@ -61,22 +61,16 @@ export default function IndPerson() {
 
         <div className={IndPersonStyle["ind-person-content"]}>
           <div className={IndPersonStyle["person-info"]}>
-            <div className={IndPersonStyle.person_job_wrapper}>
-              {/* <PersonJobs jobs={person.imdbPersonJobs} /> */}
-            </div>
             <h2 className={IndPersonStyle.person__title}>
               <PersonTitle name={person.name} />
             </h2>
             <div className={IndPersonStyle.person__year}>
               {person.birthYear ? `Born: ${person.birthYear}` : ""}
             </div>
-            {/* <PersonRoles
-              personFilmAppearances={person.imdbPersonFilmAppearances}
-              personFilmsProduced={person.imdbFilmsProduced}
-              personAwardNominations={person.imdbAwardNominations}
-            /> */}
+            <PersonRoles
+              personAwardNominations={person.awards.length}
+            />
           </div>
-
           <div className={IndPersonStyle["hero-poster"]}>
             <img src={personPosterPath} alt={person.name} />
           </div>
@@ -84,11 +78,46 @@ export default function IndPerson() {
       </section>
       <section className={IndPersonStyle["person-details-section"]}>
         <div className={IndPersonStyle["person-details-content"]}>
+          <div className={IndPersonStyle.person_job_wrapper}>
+            <PersonJobs jobs={person.occupations} />
+          </div>
+
           <h3 className={IndPersonStyle["section-heading"]}>Biography</h3>
           <p className={IndPersonStyle["biography"]}>
             {person.biography?.replace(/\\n/g, "\n") || "No biography available."}
           </p>
+          {person.filmsActedIn?.length > 0 && (
+            <>
+              <h3 className={IndPersonStyle["section-heading"]}>Films Acted In</h3>
+              <div className={IndPersonStyle["film-card-row"]}>
+                {person.filmsActedIn.map((film, index) => (
+                  <div key={index} className={IndPersonStyle["film-card"]}>
+                    <div className={IndPersonStyle["film-reel-edge"]}></div>
+                    <span className={IndPersonStyle["film-title"]}>{film}</span>
+                    <div className={IndPersonStyle["film-reel-edge"]}></div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
 
+          <div className={IndPersonStyle["personal-info-section"]}>
+            <h3 className={IndPersonStyle["section-heading"]}>Personal Info</h3>
+            <div className={IndPersonStyle["personal-info-grid"]}>
+              <div className={IndPersonStyle["personal-info-item"]}>
+                <span className={IndPersonStyle["info-label"]}>Birthday</span>
+                <span className={IndPersonStyle["info-value"]}>{person.birthday || "—"}</span>
+              </div>
+              <div className={IndPersonStyle["personal-info-item"]}>
+                <span className={IndPersonStyle["info-label"]}>Education</span>
+                <span className={IndPersonStyle["info-value"]}>{person.education || "—"}</span>
+              </div>
+              <div className={IndPersonStyle["personal-info-item"]}>
+                <span className={IndPersonStyle["info-label"]}>Place of Birth</span>
+                <span className={IndPersonStyle["info-value"]}>{person.placeOfBirth || "—"}</span>
+              </div>
+            </div>
+          </div>
           <div className={IndPersonStyle["person-stats"]}>
             <div className={IndPersonStyle["stat-box"]}>
               <span className={IndPersonStyle["stat-label"]}>Born</span>

@@ -67,13 +67,14 @@ display: flex;
 
 .hero-poster {
   display: flex;
-  flex-shrink: 1;
-  width: fit-content;
-  max-height: 87vh;
-  justify-content: center;
-  align-self: center;
+ max-height: 80vh;
+  width: auto;
+  object-fit: contain; 
 }
-
+.poster-wrapper {
+  display: flex;
+  align-items: center;
+}
 .movie__title {
   font-size: 4.5rem;
   display: flex;
