@@ -167,7 +167,7 @@ export default function IndPerson() {
                 {person.placeOfBirth || "—"}
               </span>
             </div>
-
+            {/* 
             <div className={IndPersonStyle["stat-box"]}>
               <span className={IndPersonStyle["stat-label"]}>IMDb</span>
               <span className={IndPersonStyle["stat-value"]}>
@@ -179,7 +179,7 @@ export default function IndPerson() {
                   {person.imdbId}
                 </a>
               </span>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>

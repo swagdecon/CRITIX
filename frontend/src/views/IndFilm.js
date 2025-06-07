@@ -134,8 +134,11 @@ export default function IndMovie() {
             movieStatus={movie.movieStatus}
             releaseDate={movie.releaseDate}
           />
-          <EmbeddedMovieTrailer trailer={movie.trailer} />
-          {movie.actors && movie.actors.length > 0 ?
+          <>
+            {movie.trailer ?
+              <EmbeddedMovieTrailer trailer={movie.trailer} /> : null}
+          </>
+          {movie.actors.length > 1 ?
             <MovieActors actors={movie.actors} />
             : null}
         </section>

@@ -61,6 +61,7 @@
   color: #0096ff;
   opacity: 0; 
   transition: opacity 0.8s; 
+  margin: 5%;
 }
 
 .border:hover {
