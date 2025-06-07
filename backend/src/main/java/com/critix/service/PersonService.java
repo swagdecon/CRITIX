@@ -4,32 +4,24 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-
 import com.critix.config.EnvLoader;
 import com.critix.model.Person;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.model.people.PersonDb;
 import info.movito.themoviedbapi.model.people.credits.Cast;
 import info.movito.themoviedbapi.model.people.credits.CombinedPersonCredits;
-import info.movito.themoviedbapi.model.people.credits.MovieCast;
 import info.movito.themoviedbapi.tools.TmdbException;
-
 import io.github.cdimascio.dotenv.Dotenv;
 
 @Service

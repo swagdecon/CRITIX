@@ -197,22 +197,15 @@
   color: white;
   font-weight: 700;
 }
-.film-card-row {
-  display: flex;
-  overflow-x: auto;
-  gap: 1.25rem;
-  padding: 1rem 0;
-  scrollbar-width: thin;
-  scrollbar-color: #444 #111;
-}
 
-.film-card-row {
+.film-cards {
   display: flex;
-  overflow-x: auto;
+  flex-wrap: wrap;    
   gap: 1rem;
   padding: 1rem 0;
-  scrollbar-width: thin;
-  scrollbar-color: #444 #111;
+  overflow: visible;      
+  justify-content: center; 
+  cursor: pointer;
 }
 
 .film-card {

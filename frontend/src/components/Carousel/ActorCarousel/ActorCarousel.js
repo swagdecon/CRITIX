@@ -10,7 +10,6 @@ const DEFAULT_TMDB_IMAGE = process.env.REACT_APP_DEFAULT_TMDB_IMAGE_PREFIX;
 const defaultImage = `url(${DEFAULT_ACTOR_IMAGE}) center center no-repeat`;
 
 export default function MovieActors({ actors }) {
-  console.log(actors)
   const settings = {
     dots: false,
     infinite: true,

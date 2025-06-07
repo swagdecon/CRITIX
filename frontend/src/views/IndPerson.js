@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import IndPersonStyle from "../components/IndPerson/IndPerson.module.css";
 import "font-awesome/css/font-awesome.min.css";
 import NavBar from "../components/NavBar/NavBar.js";
@@ -11,15 +11,29 @@ import {
   PersonRoles,
 } from "../components/IndPerson/PersonComponents.js";
 import LoadingPage from "./Loading.js";
-
 const API_URL = process.env.REACT_APP_BACKEND_API_URL;
 const PERSON_POSTER_URL = process.env.REACT_APP_PERSON_POSTER_URL;
 const PERSON_ENDPOINT = process.env.REACT_APP_PERSON_ENDPOINT;
+const searchEndpoint = process.env.REACT_APP_SEARCH_ENDPOINT;
+const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
 
 export default function IndPerson() {
   const { id } = useParams();
   const [person, setPerson] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate()
+
+  async function handleActorMovie(filmName) {
+    try {
+      const formattedQuery = filmName.includes(' ') ? filmName.trim().split(' ').join('+') : filmName.trim();
+      const endpoint = `${API_URL}${searchEndpoint}${formattedQuery}`;
+
+      const search = await fetchData(endpoint);
+      navigate(`${indMovieEndpoint}${search[0].id}`);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
 
   useEffect(() => {
     const loadPerson = async () => {
@@ -39,12 +53,10 @@ export default function IndPerson() {
     return <LoadingPage />;
   }
 
-
   const personPosterPath = person.profilePath
     ? `${PERSON_POSTER_URL}${person.profilePath}`
     : null;
 
-  console.log(person);
   return (
     <div>
       <NavBar />
@@ -89,9 +101,10 @@ export default function IndPerson() {
           {person.filmsActedIn?.length > 0 && (
             <>
               <h3 className={IndPersonStyle["section-heading"]}>Films Acted In</h3>
-              <div className={IndPersonStyle["film-card-row"]}>
+              <div className={IndPersonStyle["film-cards"]}>
                 {person.filmsActedIn.map((film, index) => (
-                  <div key={index} className={IndPersonStyle["film-card"]}>
+                  <div key={index} className={IndPersonStyle["film-card"]} onClick={() => handleActorMovie(film)}
+                  >
                     <div className={IndPersonStyle["film-reel-edge"]}></div>
                     <span className={IndPersonStyle["film-title"]}>{film}</span>
                     <div className={IndPersonStyle["film-reel-edge"]}></div>
@@ -106,11 +119,17 @@ export default function IndPerson() {
             <div className={IndPersonStyle["personal-info-grid"]}>
               <div className={IndPersonStyle["personal-info-item"]}>
                 <span className={IndPersonStyle["info-label"]}>Birthday</span>
-                <span className={IndPersonStyle["info-value"]}>{person.birthday || "—"}</span>
+                <span className={IndPersonStyle["info-value"]}>  {person.birthday ? new Date(person.birthday).toLocaleDateString("en-GB", { day: "numeric", month: "numeric", year: "numeric" }) : "—"}
+                </span>
               </div>
               <div className={IndPersonStyle["personal-info-item"]}>
                 <span className={IndPersonStyle["info-label"]}>Education</span>
-                <span className={IndPersonStyle["info-value"]}>{person.education || "—"}</span>
+                <span className={IndPersonStyle["info-value"]}>   {Array.isArray(person.education)
+                  ? person.education.map((item, index) => (
+                    <div key={index}>{item}</div>
+                  ))
+                  : person.education || "—"}
+                </span>
               </div>
               <div className={IndPersonStyle["personal-info-item"]}>
                 <span className={IndPersonStyle["info-label"]}>Place of Birth</span>
