@@ -29,7 +29,7 @@ export default function MovieReviews({ reviews, movieId, movieTitle, movieTaglin
                     setOpenModal={setOpenModal}
                 />
             </div>
-            {reviews && reviews.length >= 2 && (
+            {reviews && reviews.length >= 0 && (
                 <div className={IndReview.IndReviewWrapper}>
                     <ReviewSection reviews={reviews} movieId={movieId} openModal={openModal} setOpenModal={setOpenModal} />
                 </div>

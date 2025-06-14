@@ -50,25 +50,33 @@ export default function Navigation() {
           },
         }}
       >
-        <MenuItem onClick={handleClose}><Link to="/now_playing/">
-          IN THEATRES
-        </Link></MenuItem>
-        <MenuItem onClick={handleClose}>  <Link to="/upcoming/">
-          UPCOMING
-        </Link></MenuItem>
-        <MenuItem onClick={handleClose}> <Link to="/popular/">
-          MOST POPULAR
+        <Link to="/now_playing/" onClick={handleClose} style={{ textDecoration: "none" }}>
+          <MenuItem>IN THEATRES</MenuItem>
         </Link>
-        </MenuItem>
-        <MenuItem onClick={handleClose}> <Link to="/watchlist">
-          WATCHLIST
-        </Link></MenuItem>
+        <Link to="/upcoming/" onClick={handleClose} style={{ textDecoration: "none" }}>
+          <MenuItem>UPCOMING</MenuItem>
+        </Link>
+        <Link to="/popular/" onClick={handleClose} style={{ textDecoration: "none" }}>
+          <MenuItem>MOST POPULAR</MenuItem>
+        </Link>
+        <Link to="/watchlist" onClick={handleClose} style={{ textDecoration: "none" }}>
+          <MenuItem>WATCHLIST</MenuItem>
+        </Link>
+        <Link to="/recommendations" onClick={handleClose} style={{ textDecoration: "none" }}>
+          <MenuItem>
+            <img src={PremiumIcon} alt="Premium" style={{ width: '20px', marginRight: '8px' }} />
+            RECOMMENDED
+          </MenuItem>
+        </Link>
         <MenuItem onClick={handleClose}> <Link to="/recommendations">
           <img src={PremiumIcon} alt="Premium" style={{ width: '20px', marginRight: '8px' }} /> RECOMMENDED
         </Link></MenuItem>
-        <MenuItem onClick={handleClose}> <Link to="/discover-movies">
-          <img src={PremiumIcon} alt="Premium" style={{ width: '20px', marginRight: '8px' }} /> DISCOVER
-        </Link></MenuItem>
+        <Link to="/discover-movies" onClick={handleClose} style={{ textDecoration: "none" }}>
+          <MenuItem>
+            <img src={PremiumIcon} alt="Premium" style={{ width: '20px', marginRight: '8px' }} />
+            DISCOVER
+          </MenuItem>
+        </Link>
       </Menu>
     </div>
   );

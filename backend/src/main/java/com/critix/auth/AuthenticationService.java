@@ -129,55 +129,49 @@ public class AuthenticationService {
                                 .orElseThrow(() -> new UsernameNotFoundException("Email or Password Not Found"));
 
                 if (user.getAccountActive()) {
-                        try {
+                        Date loginTime = new Date();
+                        user.setLoggedIn(true);
+                        user.getUserAuth().setLastLoginTime(loginTime);
 
-                                Date loginTime = new Date();
-                                user.setLoggedIn(true);
-                                user.getUserAuth().setLastLoginTime(loginTime);
+                        LoginEvents loginEvents = user.getLoginEvents();
 
-                                LoginEvents loginEvents = user.getLoginEvents();
-
-                                if (loginEvents == null) {
-                                        loginEvents = new LoginEvents();
-                                        user.setLoginEvents(loginEvents);
-                                }
-
-                                List<Date> timestamps = loginEvents.getTimestamps();
-
-                                if (timestamps == null) {
-                                        timestamps = new ArrayList<>();
-                                }
-
-                                timestamps.add(loginTime);
-                                loginEvents.setTimestamps(timestamps);
-
-                                userService.updateLoginCounts(loginEvents, loginTime);
-
-                                userRepository.save(user);
-                                String firstName = user.getFirstName();
-                                var extraClaims = new HashMap<String, Object>();
-                                extraClaims.put("firstName", firstName);
-                                extraClaims.put("userId", user.getId());
-
-                                authenticationManager.authenticate(
-                                                new UsernamePasswordAuthenticationToken(
-                                                                request.getEmail(),
-                                                                request.getPassword()));
-
-                                var accessToken = jwtService.generateToken(extraClaims, user);
-                                var refreshToken = jwtService.generateRefreshToken(user,
-                                                user.getUserAuth().getLastLoginTime());
-                                revokeAllUserTokens(user);
-                                saveAccessToken(user, accessToken);
-                                saveRefreshToken(user, refreshToken);
-                                return AuthenticationResponse.builder()
-                                                .accessToken(accessToken)
-                                                .refreshToken(refreshToken)
-                                                .build();
-                        } catch (Exception e) {
-                                System.out.println(e);
-                                return null;
+                        if (loginEvents == null) {
+                                loginEvents = new LoginEvents();
+                                user.setLoginEvents(loginEvents);
                         }
+
+                        List<Date> timestamps = loginEvents.getTimestamps();
+
+                        if (timestamps == null) {
+                                timestamps = new ArrayList<>();
+                        }
+
+                        timestamps.add(loginTime);
+                        loginEvents.setTimestamps(timestamps);
+
+                        userService.updateLoginCounts(loginEvents, loginTime);
+
+                        userRepository.save(user);
+                        String firstName = user.getFirstName();
+                        var extraClaims = new HashMap<String, Object>();
+                        extraClaims.put("firstName", firstName);
+                        extraClaims.put("userId", user.getId());
+
+                        authenticationManager.authenticate(
+                                        new UsernamePasswordAuthenticationToken(
+                                                        request.getEmail(),
+                                                        request.getPassword()));
+
+                        var accessToken = jwtService.generateToken(extraClaims, user);
+                        var refreshToken = jwtService.generateRefreshToken(user,
+                                        user.getUserAuth().getLastLoginTime());
+                        revokeAllUserTokens(user);
+                        saveAccessToken(user, accessToken);
+                        saveRefreshToken(user, refreshToken);
+                        return AuthenticationResponse.builder()
+                                        .accessToken(accessToken)
+                                        .refreshToken(refreshToken)
+                                        .build();
                 } else {
                         throw new UserEmailNotAuthenticated("Please check your email to verify your account");
                 }

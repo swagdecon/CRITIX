@@ -264,7 +264,7 @@
     width: 30%;
     padding: 2%;
   }
-  
+
   /* Grid Form */
   .GridContainer {
     display: grid;
@@ -293,7 +293,7 @@
   .SubmitInfoErr { background: red; }
   
   /* Other UI */
-  .RedirectResetPwd {
+  .RedirectResetPwd, .BtnWrapper {
     padding-top: 5%;
     width: 100%;
     text-align: center;

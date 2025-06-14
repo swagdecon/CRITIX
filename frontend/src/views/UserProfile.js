@@ -17,6 +17,7 @@ import MovieCard from "../components/MovieCard/MovieCard.js";
 import { jwtDecode } from "jwt-decode";
 import CookieManager from "../security/CookieManager.js";
 import EditableBio from "../components/UserProfile/Other/BioText.js";
+import parse from 'html-react-parser';
 
 const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
@@ -128,7 +129,7 @@ export default function UserProfile() {
                                 <h2 className={UserStyle.Title}>Recent review</h2>
                                 <div className={UserStyle.AllUserReviews}>
                                     {recentUserReview ?
-                                        <IndUserReview key={recentUserReview.movieId} avatar={avatar} movieTitle={recentUserReview.movieTitle} createdDate={recentUserReview.createdDate} content={recentUserReview.content} rating={recentUserReview.rating} />
+                                        <IndUserReview key={recentUserReview.movieId} placement={"userProfile"} avatar={avatar} movieTitle={recentUserReview.movieTitle} createdDate={recentUserReview.createdDate} content={parse(recentUserReview.content)} rating={recentUserReview.rating} />
                                         : <div className={UserStyle.NoContent}>
                                             Start posting reviews to fill this spot with your insights.
                                         </div>}
@@ -139,7 +140,7 @@ export default function UserProfile() {
                                 <div className={UserStyle.AllUserReviews}>
                                     {reviewsToDisplay.length > 0 ?
                                         reviewsToDisplay.map((review) => (
-                                            <IndUserReview key={review.movieId} avatar={avatar} movieTitle={review.movieTitle} createdDate={review.createdDate} content={review.content} rating={review.rating} />
+                                            <IndUserReview key={review.movieId} placement={"userProfile"} avatar={avatar} movieTitle={review.movieTitle} createdDate={review.createdDate} content={parse(review.content)} rating={review.rating} />
                                         ))
                                         : <div className={UserStyle.NoContent}>
                                             Start posting reviews to fill this spot with your insights.
@@ -176,7 +177,7 @@ export default function UserProfile() {
                                     <div className={UserStyle.ShortFavouriteMovieList}>
                                         {favouriteMovies.map((movie, i) => (
                                             <div className={UserStyle.ShortFavouriteMovieList} key={i}>
-                                                <Link to={`${indMovieEndpoint}/${movie.id || movie.movieId}`}>
+                                                <Link to={`${indMovieEndpoint}${movie.id || movie.movieId}`}>
                                                     <MovieCard
                                                         movieId={movie.id || movie.movieId}
                                                         title={movie.title}

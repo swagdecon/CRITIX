@@ -44,12 +44,12 @@ export default function ReviewSection({ reviews }) {
         const endIdx = startIdx + commentsPerPage;
         return allReviews.slice(startIdx, endIdx);
     }, [currentPage, allReviews]);
-
     return (
         <>
             {displayReviews.map((review, index) => (
                 <IndUserReview
                     key={`${review.author}-${index}`}
+                    placement={"indMovie"}
                     avatar={review.avatar}
                     author={review.author}
                     movieTitle={review.movieTitle}

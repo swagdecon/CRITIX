@@ -33,15 +33,15 @@ export default function InfoUpdate() {
                 ) : fieldMsg ? (
                     <div className={UserStyle.SubmitInfo}>{fieldMsg}</div>
                 ) : null}
-                <form className={UserStyle.UpdateInfoForm}>
+                <div className={UserStyle.UpdateInfoForm}>
                     <div className={UserStyle.BtnWrapper}>
-                        <Button fullWidth sx={{ width: "50%" }} onClick={SubmitEmailChange} variant="contained">Reset Email</Button>
+                        <Button fullWidth sx={{ width: "100%" }} onClick={SubmitEmailChange} variant="contained">Reset Email</Button>
                     </div>
-                </form >
-                <div className={UserStyle.RedirectResetPwd}>
-                    <Button fullWidth sx={{ width: "50%" }} onClick={handleResetPassword} variant="contained" >Reset Password</Button>
+                    <div className={UserStyle.RedirectResetPwd}>
+                        <Button fullWidth sx={{ width: "100%" }} onClick={handleResetPassword} variant="contained" >Reset Password</Button>
+                    </div >
                 </div >
-            </div >
+            </div>
         </div>
     )
 }

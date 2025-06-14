@@ -28,7 +28,6 @@ import CookieManager from "../../../security/CookieManager";
 import { motion, AnimatePresence } from 'framer-motion'
 import { format } from "date-fns";
 import Filter from "bad-words";
-import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import CloseIcon from '@mui/icons-material/Close';
 import { Extension } from "@tiptap/react";
@@ -133,45 +132,37 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, openMod
     const isSubmitDisabled = useMemo(() =>
         plainText.length === 0 ||
         reviewRating === 0 ||
-        wordCount < 40 ||
+        wordCount < 15 ||
         !recaptchaResult,
         [plainText, reviewRating, recaptchaResult]
     );
 
     async function onChangeCaptcha(token) {
         try {
-            const res = await axios.post(`${API_URL}${RECAPTCHA_ENDPOINT}`, {
+            const res = await sendData(`${API_URL}${RECAPTCHA_ENDPOINT}`, {
                 recaptchaValue: token
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
             });
-            setRecaptchaResult(res.data.success);
+            setRecaptchaResult(res.ok);
         } catch (e) {
             console.error(e);
         }
     }
 
-    const handleSubmit = useCallback(() => {
+    const handleSubmit = useCallback(async () => {
         if (!hasReviewProfanity && editor) {
+            console.log(firstName)
             const currentDate = new Date();
             const formattedDate = format(currentDate, 'MM-dd-yyyy HH:mm');
 
-            axios
-                .post(`${API_URL}${CREATE_REVIEW_ENDPOINT}${movieId}`, {
-                    createdDate: formattedDate,
-                    movieId,
-                    movieTitle,
-                    author: firstName,
-                    rating: reviewRating,
-                    spoiler: containsSpoilers,
-                    content: reviewContent,
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                })
+            await sendData(`${API_URL}${CREATE_REVIEW_ENDPOINT}${movieId}`, {
+                createdDate: formattedDate,
+                movieId,
+                movieTitle,
+                author: firstName,
+                rating: reviewRating,
+                spoiler: containsSpoilers,
+                content: reviewContent,
+            })
                 .then(() => {
                     setReviewRating(0);
                     editor.commands.clearContent();
@@ -436,25 +427,32 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, openMod
                     )}
 
                     <div style={{ marginTop: "20px", textAlign: "center" }}>
-                        <Button
-                            variant="contained"
-                            disabled={isSubmitDisabled}
+                        <button
                             onClick={handleSubmit}
-                            sx={{
-                                bgcolor: isSubmitDisabled ? "#d3d3d3" : "#0096ff",
-                                color: isSubmitDisabled ? "#a0a0a0" : "#fff",
-                                border: '1px solid',
-                                borderColor: isSubmitDisabled ? "#b0b0b0" : "#0096ff",
-                                '&:hover': {
-                                    bgcolor: isSubmitDisabled ? "#d3d3d3" : "#007acc",
-                                    cursor: isSubmitDisabled ? 'not-allowed' : 'pointer',
-                                },
-                                opacity: isSubmitDisabled ? 0.6 : 1,
-                                transition: 'all 0.3s ease',
+                            disabled={isSubmitDisabled}
+                            style={{
+                                backgroundColor: isSubmitDisabled ? "#d3d3d3" : "#0096ff",
+                                color: isSubmitDisabled ? "black" : "white",
+                                border: "none",
+                                padding: "10px 20px",
+                                fontSize: "16px",
+                                borderRadius: "4px",
+                                cursor: isSubmitDisabled ? "not-allowed" : "pointer",
+                                transition: "background-color 0.3s ease",
+                            }}
+                            onMouseOver={(e) => {
+                                if (!isSubmitDisabled) {
+                                    e.currentTarget.style.backgroundColor = "#007acc";
+                                }
+                            }}
+                            onMouseOut={(e) => {
+                                if (!isSubmitDisabled) {
+                                    e.currentTarget.style.backgroundColor = "#0096ff";
+                                }
                             }}
                         >
                             Submit Review
-                        </Button>
+                        </button>
                     </div>
                 </Box>
             </Fade>

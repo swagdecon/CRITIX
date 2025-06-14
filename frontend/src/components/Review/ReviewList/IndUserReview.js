@@ -14,8 +14,8 @@ function getColourClassName(rating) {
         return "red"
     }
 }
-// Both author and movieTitle should not be both passed, one or the other depending on the page (userProfile or indMovie)
-export default function IndUserReview({ avatar, author, movieTitle, createdDate, content, containsSpoiler, rating, tier, tags = [] }) {
+// Both author and movieTitle should not be both passed, one or the other depending on the page (userProfile or indMovie, compared using placement variable)
+export default function IndUserReview({ placement, avatar, author, movieTitle, createdDate, content, containsSpoiler, rating, tier, tags = [] }) {
     const [spoilerRevealed, setSpoilerRevealed] = useState(false);
     const colourRating = getColourClassName(rating);
 
@@ -39,7 +39,7 @@ export default function IndUserReview({ avatar, author, movieTitle, createdDate,
                         <div className={UserReviewStyle.Review}>
                             <div className={UserReviewStyle.ReviewHeader}>
                                 <div className={UserReviewStyle.ReviewHeaderLeft}>
-                                    {movieTitle ? (
+                                    {placement === 'userProfile' ? (
                                         <div className={UserReviewStyle.MovieTitle}>{movieTitle}</div>
                                     ) : (
                                         author && <div className={UserReviewStyle.Author}>{author}</div>
@@ -82,6 +82,7 @@ export default function IndUserReview({ avatar, author, movieTitle, createdDate,
 }
 
 IndUserReview.propTypes = {
+    placement: PropTypes.string,
     avatar: PropTypes.string,
     author: PropTypes.string,
     movieTitle: PropTypes.string,
