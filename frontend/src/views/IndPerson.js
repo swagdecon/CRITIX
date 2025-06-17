@@ -100,7 +100,7 @@ export default function IndPerson() {
           </p>
           {person.filmsActedIn?.length > 0 && (
             <>
-              <h3 className={IndPersonStyle["section-heading"]}>Films Acted In</h3>
+              <h3 className={IndPersonStyle["section-heading"]}>Acting Credits</h3>
               <div className={IndPersonStyle["film-cards"]}>
                 {person.filmsActedIn.map((film, index) => (
                   <div key={index} className={IndPersonStyle["film-card"]} onClick={() => handleActorMovie(film)}
@@ -167,19 +167,6 @@ export default function IndPerson() {
                 {person.placeOfBirth || "—"}
               </span>
             </div>
-            {/* 
-            <div className={IndPersonStyle["stat-box"]}>
-              <span className={IndPersonStyle["stat-label"]}>IMDb</span>
-              <span className={IndPersonStyle["stat-value"]}>
-                <a
-                  href={`https://www.imdb.com/name/${person.imdbId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {person.imdbId}
-                </a>
-              </span>
-            </div> */}
           </div>
         </div>
       </section>

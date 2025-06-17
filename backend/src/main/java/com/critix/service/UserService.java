@@ -5,17 +5,23 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.critix.model.LoginEvents;
 import com.critix.model.User;
+import com.critix.repository.ReviewRepository;
 import com.critix.repository.UserRepository;
+
+import info.movito.themoviedbapi.model.core.Review;
 
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     public void updateUserProfilePic(String profilePic, String userId) {
         Optional<User> userOptional = userRepository.findById(userId);
@@ -45,6 +51,30 @@ public class UserService {
             User user = userOptional.get();
             user.setBio(bioText);
             userRepository.save(user);
+        } else {
+            throw new IllegalArgumentException("User not found with id: " + userId);
+        }
+    }
+
+    public Integer getAverageUserRating(String userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            List<com.critix.model.Review> reviews = reviewRepository.findByUserId(userId);
+            if (reviews.isEmpty()) {
+                return 0;
+            }
+            double average = reviews.stream()
+                    .mapToDouble(review -> {
+                        try {
+                            return Double.parseDouble(review.getRating());
+                        } catch (NumberFormatException e) {
+                            return 0.0;
+                        }
+                    })
+                    .average()
+                    .orElse(0.0);
+
+            return (int) Math.round(average);
         } else {
             throw new IllegalArgumentException("User not found with id: " + userId);
         }

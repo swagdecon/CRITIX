@@ -143,4 +143,16 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/average-rating")
+    public ResponseEntity<Integer> getAverageRating(@RequestHeader("Authorization") String accessToken)
+            throws Exception {
+        String userId = authenticationService.getUserDetails(accessToken).getId();
+
+        if (userId != null) {
+            return new ResponseEntity<>(userService.getAverageUserRating(userId), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

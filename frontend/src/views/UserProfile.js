@@ -18,11 +18,13 @@ import { jwtDecode } from "jwt-decode";
 import CookieManager from "../security/CookieManager.js";
 import EditableBio from "../components/UserProfile/Other/BioText.js";
 import parse from 'html-react-parser';
+import UserAverageRating from "../components/UserProfile/Other/UserAverageRating.js";
 
 const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
 const getBannerEndpoint = process.env.REACT_APP_GET_USER_BANNER
 const getBioEndpoint = process.env.REACT_APP_GET_USER_BIO
+const getAverageRatingEndpont = process.env.REACT_APP_USER_AVERAGE_RATING
 const getUserFavouriteMoviesEndpoint = process.env.REACT_APP_GET_FAVOURITE_MOVIES_ENDPOINT
 const getLoginInfoEndpoint = process.env.REACT_APP_GET_LOGIN_INFO_ENDPOINT
 const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
@@ -37,7 +39,7 @@ export default function UserProfile() {
     const [avatar, setAvatar] = useState(null);
     const [banner, setBanner] = useState(null);
     const [bio, setBio] = useState(null);
-
+    const [rating, setRating] = useState(null)
     const [isLoading, setIsLoading] = useState(true);
     const [renderUserSettings, setRenderUserSettings] = useState(false);
     const [renderUserHome, setRenderUserHome] = useState(true);
@@ -62,14 +64,14 @@ export default function UserProfile() {
 
         try {
             await isTokenExpired();
-            const [loginInfo, favouriteMovies, allUserReviews, avatarPic, bannerPic, bio] = await Promise.all([
+            const [loginInfo, favouriteMovies, allUserReviews, avatarPic, bannerPic, bio, averageRating] = await Promise.all([
                 fetchData(`${API_URL}${getLoginInfoEndpoint}`),
                 fetchData(`${API_URL}${getUserFavouriteMoviesEndpoint}`),
                 fetchData(`${API_URL}${allUserReviewsEndpoint}`),
                 fetchData(`${API_URL}${getAvatarEndpoint}`),
                 fetchData(`${API_URL}${getBannerEndpoint}`),
                 fetchData(`${API_URL}${getBioEndpoint}`),
-
+                fetchData(`${API_URL}${getAverageRatingEndpont}`)
             ]);
             setLoginInfo(loginInfo)
             setFavouriteMovies(favouriteMovies)
@@ -78,6 +80,7 @@ export default function UserProfile() {
             setRecentUserReview(allUserReviews[0]);
             setBanner(bannerPic);
             setBio(bio)
+            setRating(averageRating)
         } catch (error) {
             console.error("Error fetching data:", error);
         } finally {
@@ -96,6 +99,7 @@ export default function UserProfile() {
         setRenderUserHome(true)
         setRenderUserSettings(false)
     }
+
     return isLoading ? (
         <LoadingPage />
     ) : (
@@ -150,19 +154,23 @@ export default function UserProfile() {
                                     <div className={UserStyle.PaginationWrapper}>
                                         <Pagination
                                             size="large"
-                                            color="primary"
                                             count={totalPages}
                                             page={currentPage}
                                             onChange={handlePageChange}
                                             sx={{
-                                                "& .MuiPaginationItem-root": {
-                                                    color: "#ffffff",
-                                                },
+                                                justifyContent: "center",
+                                                display: 'flex',
+                                                marginBottom: "10px"
                                             }}
                                         />
                                     </div>
                                     : null}
                             </section>
+                            {rating ?
+                                <section className={UserStyle.AverageRating}>
+                                    <UserAverageRating averageRating={rating} />
+                                </section>
+                                : null}
                             <section className={UserStyle.FavouriteMovies}>
 
                                 <h2 className={UserStyle.Title}>Your Favourite Movies</h2>

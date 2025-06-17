@@ -3,7 +3,7 @@ import TimeAgo from 'react-timeago'
 import PropTypes from "prop-types";
 import UserReviewStyle from "./UserReview.module.css"
 
-function getColourClassName(rating) {
+export function getColourClassName(rating) {
     if (rating >= 80) {
         return "blue"
     } else if (rating >= 60) {
