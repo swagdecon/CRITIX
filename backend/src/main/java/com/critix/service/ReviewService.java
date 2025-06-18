@@ -26,6 +26,7 @@ public class ReviewService {
     private MongoTemplate mongoTemplate;
 
     public void createNewMovieReview(Integer movieId, String author, String userId, String movieTitle,
+            List<String> movieGenres,
             String reviewRating,
             String reviewContent, Boolean containsSpoiler, String createdAt) {
         String reviewId = UUID.randomUUID().toString();
@@ -33,6 +34,7 @@ public class ReviewService {
         review.setReviewId(reviewId);
         review.setMovieId(movieId);
         review.setMovieTitle(movieTitle);
+        review.setMovieGenres(movieGenres);
         review.setUserId(userId);
         review.setAvatar(userRepository.findById(userId).get().getAvatar());
         review.setAuthor(author);

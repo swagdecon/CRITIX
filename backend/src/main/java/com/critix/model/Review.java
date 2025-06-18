@@ -1,5 +1,6 @@
 package com.critix.model;
 
+import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -24,6 +25,7 @@ public class Review {
     private String author;
     private String avatar;
     private String rating;
+    private List<String> movieGenres;
     private Boolean containsSpoiler;
     private String createdDate;
     private String updatedDate;

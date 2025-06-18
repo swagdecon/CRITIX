@@ -19,6 +19,7 @@ import CookieManager from "../security/CookieManager.js";
 import EditableBio from "../components/UserProfile/Other/BioText.js";
 import parse from 'html-react-parser';
 import UserAverageRating from "../components/UserProfile/Other/UserAverageRating.js";
+import MostReviewedGenres from "../components/UserProfile/Other/MostReviewedGenres.js";
 
 const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
@@ -29,8 +30,10 @@ const getUserFavouriteMoviesEndpoint = process.env.REACT_APP_GET_FAVOURITE_MOVIE
 const getLoginInfoEndpoint = process.env.REACT_APP_GET_LOGIN_INFO_ENDPOINT
 const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
 const API_URL = process.env.REACT_APP_BACKEND_API_URL
+const getMostReviewedGenres = process.env.REACT_APP_USER_MOST_REVIEWED_GENRES
 
 export default function UserProfile() {
+
     const reviewsPerPage = 2;
     const [favouriteMovies, setFavouriteMovies] = useState(null);
     const [loginInfo, setLoginInfo] = useState(null);
@@ -40,6 +43,7 @@ export default function UserProfile() {
     const [banner, setBanner] = useState(null);
     const [bio, setBio] = useState(null);
     const [rating, setRating] = useState(null)
+    const [mostReviewedGenres, setMostReviewedGenres] = useState(null)
     const [isLoading, setIsLoading] = useState(true);
     const [renderUserSettings, setRenderUserSettings] = useState(false);
     const [renderUserHome, setRenderUserHome] = useState(true);
@@ -64,14 +68,15 @@ export default function UserProfile() {
 
         try {
             await isTokenExpired();
-            const [loginInfo, favouriteMovies, allUserReviews, avatarPic, bannerPic, bio, averageRating] = await Promise.all([
+            const [loginInfo, favouriteMovies, allUserReviews, avatarPic, bannerPic, bio, averageRating, mostReviewedGenres] = await Promise.all([
                 fetchData(`${API_URL}${getLoginInfoEndpoint}`),
                 fetchData(`${API_URL}${getUserFavouriteMoviesEndpoint}`),
                 fetchData(`${API_URL}${allUserReviewsEndpoint}`),
                 fetchData(`${API_URL}${getAvatarEndpoint}`),
                 fetchData(`${API_URL}${getBannerEndpoint}`),
                 fetchData(`${API_URL}${getBioEndpoint}`),
-                fetchData(`${API_URL}${getAverageRatingEndpont}`)
+                fetchData(`${API_URL}${getAverageRatingEndpont}`),
+                fetchData(`${API_URL}${getMostReviewedGenres}`)
             ]);
             setLoginInfo(loginInfo)
             setFavouriteMovies(favouriteMovies)
@@ -81,6 +86,7 @@ export default function UserProfile() {
             setBanner(bannerPic);
             setBio(bio)
             setRating(averageRating)
+            setMostReviewedGenres(mostReviewedGenres)
         } catch (error) {
             console.error("Error fetching data:", error);
         } finally {
@@ -166,8 +172,17 @@ export default function UserProfile() {
                                     </div>
                                     : null}
                             </section>
+                            {mostReviewedGenres ?
+                                <section className={UserStyle.MostReviewedGenres}>
+                                    <h2 className={UserStyle.Title}>Most Reviewed Genres</h2>
+                                    <br />
+                                    <MostReviewedGenres reviewedGenres={mostReviewedGenres} />
+                                </section>
+                                : null}
                             {rating ?
                                 <section className={UserStyle.AverageRating}>
+                                    <h2 className={UserStyle.Title}>average review rating</h2>
+                                    <br />
                                     <UserAverageRating averageRating={rating} />
                                 </section>
                                 : null}

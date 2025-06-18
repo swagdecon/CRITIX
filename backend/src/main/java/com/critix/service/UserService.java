@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,6 +79,23 @@ public class UserService {
         } else {
             throw new IllegalArgumentException("User not found with id: " + userId);
         }
+    }
+
+    public Map<String, Integer> getMostReviewedGenres(String userId) {
+        List<com.critix.model.Review> userReviews = reviewRepository.findByUserId(userId);
+
+        Map<String, Integer> mostReviewedGenres = new HashMap<>();
+
+        for (com.critix.model.Review review : userReviews) {
+            List<String> genres = review.getMovieGenres();
+            if (genres != null) {
+                for (String genre : genres) {
+                    mostReviewedGenres.put(genre, mostReviewedGenres.getOrDefault(genre, 0) + 1);
+                }
+            }
+        }
+
+        return mostReviewedGenres;
     }
 
     public LoginEvents retrieveLoginInfo(String userId) {

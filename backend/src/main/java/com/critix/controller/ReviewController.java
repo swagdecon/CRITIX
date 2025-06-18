@@ -1,6 +1,7 @@
 package com.critix.controller;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,23 +29,28 @@ public class ReviewController {
         @PostMapping("/create/{movieId}")
         public ResponseEntity<String> createMovieReview(@PathVariable Integer movieId, @RequestBody Review request,
                         @RequestHeader("Authorization") String accessToken) throws Exception {
+                try {
+                        String username = request.getAuthor();
+                        String userId = authenticationService.getUserDetails(accessToken).getId();
+                        String movieTitle = request.getMovieTitle();
+                        List<String> movieGenres = request.getMovieGenres();
+                        String reviewRating = request.getRating();
+                        String reviewContent = request.getContent();
+                        Boolean containsSpoiler = request.getContainsSpoiler();
+                        String createdAt = request.getCreatedDate();
 
-                String username = request.getAuthor();
-                String userId = authenticationService.getUserDetails(accessToken).getId();
-                String movieTitle = request.getMovieTitle();
-                String reviewRating = request.getRating();
-                String reviewContent = request.getContent();
-                Boolean containsSpoiler = request.getContainsSpoiler();
-                String createdAt = request.getCreatedDate();
-
-                if (reviewService.doesUserIdExistForMovie(movieId, userId)) {
-                        String errorMessage = "User already submitted a review for this movie.";
-                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
-                } else {
-                        reviewService.createNewMovieReview(movieId, username, userId, movieTitle, reviewRating,
-                                        reviewContent,
-                                        containsSpoiler,
-                                        createdAt);
+                        if (reviewService.doesUserIdExistForMovie(movieId, userId)) {
+                                String errorMessage = "User already submitted a review for this movie.";
+                                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+                        } else {
+                                reviewService.createNewMovieReview(movieId, username, userId, movieTitle, movieGenres,
+                                                reviewRating,
+                                                reviewContent,
+                                                containsSpoiler,
+                                                createdAt);
+                        }
+                } catch (Exception e) {
+                        System.out.println(e);
                 }
                 return null;
         }

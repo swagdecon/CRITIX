@@ -186,19 +186,34 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     will-change: transform, opacity;
   }
-.AverageRating {
-  grid-column: 2; 
-  grid-row: 3;    
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: var(--primary-color);
-  font-size: 1.5rem;
-  text-align: center;
-  justify-content: center;
-}
+
+  .AverageRating {
+    display: flex;
+    flex-direction: column;
+    grid-column: 2;
+    grid-row: 3;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    text-align: center;
+    align-items: center;
+  }
+  
+  .MostReviewedGenres {
+    grid-column: 1; 
+    grid-row: 3;    
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    text-align: center;
+    justify-content: center;
+  }
 
 
   .ActivityInfo {

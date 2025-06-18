@@ -1,5 +1,6 @@
 package com.critix.controller;
 
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import com.critix.model.LoginEvents;
 import com.critix.model.User;
 import com.critix.service.UserService;
 import io.github.cdimascio.dotenv.Dotenv;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping("/user")
 @RestController
@@ -151,6 +153,20 @@ public class UserController {
 
         if (userId != null) {
             return new ResponseEntity<>(userService.getAverageUserRating(userId), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/most-reviewed-genres")
+    public ResponseEntity<Map<String, Integer>> getMostReviewedGenres(
+            @RequestHeader("Authorization") String accessToken)
+            throws Exception {
+        String userId = authenticationService.getUserDetails(accessToken).getId();
+
+        if (userId != null) {
+            Map<String, Integer> genreCounts = userService.getMostReviewedGenres(userId);
+            return ResponseEntity.ok(genreCounts);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

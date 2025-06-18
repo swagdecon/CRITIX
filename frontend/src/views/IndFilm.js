@@ -55,6 +55,7 @@ export default function IndMovie() {
     }
     fetchBackendData();
   }, [id]);
+
   const containerClass = movie && movie.trailer
     ? IndMovieStyle.mainContainer
     : `${IndMovieStyle.mainContainer} ${IndMovieStyle.NoTrailerContainer}`;
@@ -122,6 +123,7 @@ export default function IndMovie() {
             movieId={movie.id}
             movieTitle={movie.title}
             movieTagline={movie.tagline}
+            movieGenres={movie.genres}
             reviews={reviews}
           />
           <MovieDetails

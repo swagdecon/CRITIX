@@ -7,9 +7,8 @@ import ReviewPopup from "./ReviewPopup/ReviewPopup";
 import IndReview from "./Review.module.css";
 
 
-export default function MovieReviews({ reviews, movieId, movieTitle, movieTagline }) {
+export default function MovieReviews({ reviews, movieId, movieTitle, movieTagline, movieGenres }) {
     const [openModal, setOpenModal] = useState(false);
-
     return (
         <div className={IndReview["ind-review-wrapper"]}>
             <div className={IndReview["user-review-wrapper"]}>
@@ -25,6 +24,7 @@ export default function MovieReviews({ reviews, movieId, movieTitle, movieTaglin
                     movieId={movieId}
                     movieTitle={movieTitle}
                     movieTagline={movieTagline}
+                    movieGenres={movieGenres}
                     openModal={openModal}
                     setOpenModal={setOpenModal}
                 />
@@ -42,6 +42,7 @@ MovieReviews.propTypes = {
     voteAverage: PropTypes.number,
     movieTitle: PropTypes.string,
     movieTagline: PropTypes.string,
+    movieGenres: PropTypes.array,
     reviews: PropTypes.array,
     movieId: PropTypes.number,
 };

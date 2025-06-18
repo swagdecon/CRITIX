@@ -63,7 +63,7 @@ const ideaSuggestions = [
     "Was there a message or theme you noticed?"
 ];
 
-export default function ReviewPopup({ movieId, movieTitle, movieTagline, openModal, setOpenModal }) {
+export default function ReviewPopup({ movieId, movieTitle, movieTagline, movieGenres, openModal, setOpenModal }) {
     const [randomIdea, setRandomIdea] = useState('');
     const [containsSpoilers, setContainsSpoilers] = useState(false);
     const token = CookieManager.decryptCookie('accessToken');
@@ -150,7 +150,6 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, openMod
 
     const handleSubmit = useCallback(async () => {
         if (!hasReviewProfanity && editor) {
-            console.log(firstName)
             const currentDate = new Date();
             const formattedDate = format(currentDate, 'MM-dd-yyyy HH:mm');
 
@@ -158,6 +157,7 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, openMod
                 createdDate: formattedDate,
                 movieId,
                 movieTitle,
+                movieGenres,
                 author: firstName,
                 rating: reviewRating,
                 spoiler: containsSpoilers,
@@ -466,6 +466,7 @@ ReviewPopup.propTypes = {
     movieId: PropTypes.number.isRequired,
     movieTitle: PropTypes.string.isRequired,
     movieTagline: PropTypes.string.isRequired,
+    movieGenres: PropTypes.array
 };
 
 const modalStyles = {
@@ -505,8 +506,7 @@ const toolbarButtonStyles = {
 };
 
 const editorWrapperStyles = {
-    minHeight: '200px',
-    maxHeight: '300px',
+    height: "15vh",
     padding: '15px',
     backgroundColor: 'rgba(255,255,255,0.06)',
     borderRadius: '15px',
