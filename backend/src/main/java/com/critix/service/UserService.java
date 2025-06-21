@@ -1,13 +1,17 @@
 package com.critix.service;
 
 import java.text.SimpleDateFormat;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.critix.model.LoginEvents;
@@ -96,6 +100,21 @@ public class UserService {
         }
 
         return mostReviewedGenres;
+    }
+
+    public Map<String, Integer> getTopRatedMovies(String userId) {
+        List<com.critix.model.Review> userReviews = reviewRepository.findByUserId(userId);
+
+        return userReviews.stream()
+                .filter(review -> review.getRating() != null)
+                .sorted((r1, r2) -> Integer.compare(
+                        Integer.parseInt(r2.getRating()), Integer.parseInt(r1.getRating())))
+                .limit(15)
+                .collect(Collectors.toMap(
+                        com.critix.model.Review::getMovieTitle,
+                        review -> Integer.parseInt(review.getRating()),
+                        (existing, replacement) -> existing,
+                        LinkedHashMap::new));
     }
 
     public LoginEvents retrieveLoginInfo(String userId) {

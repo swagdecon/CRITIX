@@ -2,6 +2,8 @@ package com.critix.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -167,6 +169,20 @@ public class UserController {
         if (userId != null) {
             Map<String, Integer> genreCounts = userService.getMostReviewedGenres(userId);
             return ResponseEntity.ok(genreCounts);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/get-top-rated-movies")
+    public ResponseEntity<Map<String, Integer>> getUserTopRatedMovies(
+            @RequestHeader("Authorization") String accessToken)
+            throws Exception {
+        String userId = authenticationService.getUserDetails(accessToken).getId();
+
+        if (userId != null) {
+            Map<String, Integer> userTopRatedMovies = userService.getTopRatedMovies(userId);
+            return ResponseEntity.ok(userTopRatedMovies);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
