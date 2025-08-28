@@ -27,8 +27,20 @@ export default function MostReviewedGenres({ reviewedGenres }) {
     return (
         <RadarChart
             height={300}
-            series={[{ data }]}
+            series={[{ data, color: "#0096ff" }]}
             radar={{ metrics }}
+            slotProps={{
+                tooltip: {
+                    sx: {
+                        '& .MuiTypography-root': {
+                            color: 'white',
+                        },
+                        '& .MuiTooltip-tooltip': {
+                            backgroundColor: 'black',
+                        },
+                    },
+                },
+            }}
         />
     );
 }

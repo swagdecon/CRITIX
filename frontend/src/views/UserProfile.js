@@ -185,7 +185,7 @@ export default function UserProfile() {
                                 : null}
                             {rating ?
                                 <section className={UserStyle.AverageRating}>
-                                    <h2 className={UserStyle.Title}>average review rating</h2>
+                                    <h2 className={UserStyle.Title}>average movie rating</h2>
                                     <br />
                                     <UserAverageRating averageRating={rating} />
                                 </section>

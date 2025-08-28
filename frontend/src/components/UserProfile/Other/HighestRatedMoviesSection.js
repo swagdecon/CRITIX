@@ -12,11 +12,25 @@ export default function HighestRatedMoviesSection({ userTopRatedMovies }) {
             series={[
                 {
                     data: ratings,
-                    color: ' #4346d0',
+                    color: ' #0096ff',
                 }
             ]}
             height={300}
             barLabel="value"
+            slotProps={{
+                tooltip: {
+                    sx: {
+                        backgroundColor: 'black',
+                        color: 'white',
+                        '& .MuiTypography-root': {
+                            color: 'white',
+                        },
+                        '& .MuiTooltip-tooltip': {
+                            backgroundColor: 'black',
+                        },
+                    },
+                },
+            }}
         />
     )
 }
