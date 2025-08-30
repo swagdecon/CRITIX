@@ -1,7 +1,7 @@
 import { React } from "react";
 import PropTypes from "prop-types";
 import IndMovieStyle from "../IndFilm/IndMovie.module.css";
-import ReactPlayer from "react-player";
+// import ReactPlayer from "react-player";
 import "../Carousel/MovieCarousel/MovieCarousel.module.css";
 import GlassCard from "./GlassCard";
 import MovieCardStyle from "../MovieCard/moviecard.module.scss"
@@ -105,24 +105,6 @@ function ParseNumber(num) {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-
-function EmbeddedMovieTrailer({ trailer }) {
-  if (!trailer) {
-    return null;
-  }
-  return (
-    <ReactPlayer
-      url={trailer}
-      controls={true}
-      playing={false}
-    />
-  );
-}
-
-EmbeddedMovieTrailer.propTypes = {
-  trailer: PropTypes.string,
-};
-
 function MovieDetails({
   runtime,
   revenue,
@@ -199,7 +181,7 @@ export {
   OpenLinkInNewTab,
   WatchMovieNow,
   MovieAverage,
-  EmbeddedMovieTrailer,
+  // EmbeddedMovieTrailer,
   MovieGenres,
   MovieDetails,
 };

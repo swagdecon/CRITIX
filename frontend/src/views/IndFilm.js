@@ -10,7 +10,6 @@ import {
   WatchMovieNow,
   MovieAverage,
   ParseYear,
-  EmbeddedMovieTrailer,
   MovieDetails,
 } from "../components/IndFilm/MovieComponents.js";
 import RecommendedCarousel from "../components/Carousel/RecommendedCarousel/RecommendedCarousel.js";
@@ -21,6 +20,7 @@ import { fetchData, sendData } from "../security/Data.js";
 import isTokenExpired from "../security/IsTokenExpired.js";
 import WatchListBtn from "../components/Other/btn/WatchListBtn/WatchListBtn.js";
 import FavouriteBtn from "../components/Other/btn/FavouriteBtn/FavouriteBtn.js";
+import MovieTrailerBtn from "../components/Other/btn/MovieTrailerBtn/MovieTrailerBtn.js";
 // import ARBtn from "../components/Other/btn/ARBtn/ARBtn.js"
 const recommendedEndpoint = process.env.REACT_APP_RECOMMENDED_ENDPOINT;
 const getReviewEndpoint = process.env.REACT_APP_GET_REVIEW_ENDPOINT
@@ -55,7 +55,6 @@ export default function IndMovie() {
     }
     fetchBackendData();
   }, [id]);
-
   const containerClass = movie && movie.trailer
     ? IndMovieStyle.mainContainer
     : `${IndMovieStyle.mainContainer} ${IndMovieStyle.NoTrailerContainer}`;
@@ -91,6 +90,9 @@ export default function IndMovie() {
                 onClick={handleWatchNowClick}
               />
               <div className={IndMovieStyle.BtnResponsive}>
+                <div className={IndMovieStyle["btn-wrapper-el"]}>
+                  <MovieTrailerBtn movieTrailer={movie.trailer} />
+                </div>
                 <div className={IndMovieStyle["btn-wrapper-el"]}>
                   <WatchListBtn movieData={movie} outline={true} />
                 </div>
@@ -136,10 +138,6 @@ export default function IndMovie() {
             movieStatus={movie.movieStatus}
             releaseDate={movie.releaseDate}
           />
-          <>
-            {movie.trailer ?
-              <EmbeddedMovieTrailer trailer={movie.trailer} /> : null}
-          </>
           {movie.actors.length > 1 ?
             <MovieActors actors={movie.actors} />
             : null}
