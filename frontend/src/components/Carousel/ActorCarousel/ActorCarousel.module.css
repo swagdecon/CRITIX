@@ -1,12 +1,14 @@
 
 .Wrapper {
+  min-width: 0;
   display: flex;
-  /* justify-content: center; */
+  width: 100vw;
+  justify-content: center;
+  padding-bottom: 3ch;
 }
 .Slider {
-  width: 100vw;
+  width: 90vw;
   display: flex;
-  padding: 0 70px;
 }
 
 .card {
@@ -81,3 +83,12 @@
   overflow: hidden;
 }
 
+:global(.slick-dots li button) {
+  background: white;
+  border-radius: 50%;
+}
+
+:global(.slick-dots li.slick-active button) {
+  background: white;
+  opacity: 1;
+}

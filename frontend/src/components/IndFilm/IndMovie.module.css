@@ -185,16 +185,6 @@ display: flex;
   overflow: hidden;
 }
 
-@media (max-width: 2535px) {
-
-  .mainContainer {
-    grid-template-columns: 1fr;
-    padding: 0 10px;
-    margin: 0;
-    padding: 0;
-  }
-}
-
 @media (max-width: 1695px) {
   .hero-content {
     padding-top: 7%;

@@ -55,9 +55,6 @@ export default function IndMovie() {
     }
     fetchBackendData();
   }, [id]);
-  const containerClass = movie && movie.trailer
-    ? IndMovieStyle.mainContainer
-    : `${IndMovieStyle.mainContainer} ${IndMovieStyle.NoTrailerContainer}`;
 
   return isLoading || !movie ? (
     <LoadingPage />
@@ -120,7 +117,7 @@ export default function IndMovie() {
             }
           </div>
         </section>
-        <section className={containerClass}>
+        <section className={IndMovieStyle.mainContainer}>
           <MovieReviews
             movieId={movie.id}
             movieTitle={movie.title}
