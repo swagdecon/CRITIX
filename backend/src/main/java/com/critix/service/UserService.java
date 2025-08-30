@@ -155,4 +155,12 @@ public class UserService {
             e.printStackTrace();
         }
     }
+
+    public long getNumberOfUserReviews(String userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new IllegalArgumentException("User not found with id: " + userId);
+        }
+        return reviewRepository.countByUserId(userId);
+    }
+
 }

@@ -1,9 +1,6 @@
 package com.critix.controller;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +16,6 @@ import com.critix.model.LoginEvents;
 import com.critix.model.User;
 import com.critix.service.UserService;
 import io.github.cdimascio.dotenv.Dotenv;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping("/user")
 @RestController
@@ -183,6 +179,20 @@ public class UserController {
         if (userId != null) {
             Map<String, Integer> userTopRatedMovies = userService.getTopRatedMovies(userId);
             return ResponseEntity.ok(userTopRatedMovies);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/get-number-of-user-reviews")
+    public ResponseEntity<Long> getNumberOfUserReviews(
+            @RequestHeader("Authorization") String accessToken)
+            throws Exception {
+        String userId = authenticationService.getUserDetails(accessToken).getId();
+
+        if (userId != null) {
+            long numberOfUserReviews = userService.getNumberOfUserReviews(userId);
+            return ResponseEntity.ok(numberOfUserReviews);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

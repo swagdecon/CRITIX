@@ -1,10 +1,11 @@
 import React from "react";
 import { RadarChart } from '@mui/x-charts';
 import PropTypes from "prop-types";
+import UserStyle from "../UserProfile.module.css"
 
 export default function MostReviewedGenres({ reviewedGenres }) {
     if (!reviewedGenres) {
-        return <div>No data to display</div>;
+        return <div className={UserStyle.NoContent}>No data to display</div>;
     }
 
     const sortedGenres = Object.entries(reviewedGenres)
@@ -12,7 +13,7 @@ export default function MostReviewedGenres({ reviewedGenres }) {
         .slice(0, 7);
 
     if (sortedGenres.length < 3) {
-        return <div>Not enough data to display chart</div>;
+        return <div className={UserStyle.NoContent}>Not enough data to display chart</div>;
     }
 
     const maxCount = Math.max(...sortedGenres.map(([, count]) => count));

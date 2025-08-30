@@ -21,6 +21,7 @@ import parse from 'html-react-parser';
 import UserAverageRating from "../components/UserProfile/Other/UserAverageRating.js";
 import MostReviewedGenres from "../components/UserProfile/Other/MostReviewedGenres.js";
 import HighestRatedMoviesSection from "../components/UserProfile/Other/HighestRatedMoviesSection.js";
+import NumberOfReviewsWritten from "../components/UserProfile/Other/NumberOfReviewsWritten.js";
 
 const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
@@ -33,6 +34,7 @@ const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
 const API_URL = process.env.REACT_APP_BACKEND_API_URL
 const getMostReviewedGenres = process.env.REACT_APP_USER_MOST_REVIEWED_GENRES
 const getUserTopRatedMovies = process.env.REACT_APP_USER_TOP_RATED_MOVIES
+const getNumberOfUserReviews = process.env.REACT_APP_NUMBER_OF_USER_REVIEWS
 
 export default function UserProfile() {
 
@@ -42,6 +44,7 @@ export default function UserProfile() {
     const [userReviews, setUserReviews] = useState(null)
     const [recentUserReview, setRecentUserReview] = useState(null)
     const [userTopRatedMovies, setUserTopRatedMovies] = useState(null);
+    const [numberOfReviewsWritten, setNumberOfReviewsWritten] = useState(null);
     const [avatar, setAvatar] = useState(null);
     const [banner, setBanner] = useState(null);
     const [bio, setBio] = useState(null);
@@ -71,7 +74,7 @@ export default function UserProfile() {
 
         try {
             await isTokenExpired();
-            const [loginInfo, favouriteMovies, allUserReviews, avatarPic, bannerPic, bio, averageRating, mostReviewedGenres, userTopRatedMovies] = await Promise.all([
+            const [loginInfo, favouriteMovies, allUserReviews, avatarPic, bannerPic, bio, averageRating, mostReviewedGenres, userTopRatedMovies, numberOfReviewsWritten] = await Promise.all([
                 fetchData(`${API_URL}${getLoginInfoEndpoint}`),
                 fetchData(`${API_URL}${getUserFavouriteMoviesEndpoint}`),
                 fetchData(`${API_URL}${allUserReviewsEndpoint}`),
@@ -80,7 +83,8 @@ export default function UserProfile() {
                 fetchData(`${API_URL}${getBioEndpoint}`),
                 fetchData(`${API_URL}${getAverageRatingEndpont}`),
                 fetchData(`${API_URL}${getMostReviewedGenres}`),
-                fetchData(`${API_URL}${getUserTopRatedMovies}`)
+                fetchData(`${API_URL}${getUserTopRatedMovies}`),
+                fetchData(`${API_URL}${getNumberOfUserReviews}`)
             ]);
             setLoginInfo(loginInfo)
             setFavouriteMovies(favouriteMovies)
@@ -92,6 +96,8 @@ export default function UserProfile() {
             setRating(averageRating)
             setMostReviewedGenres(mostReviewedGenres)
             setUserTopRatedMovies(userTopRatedMovies)
+            setNumberOfReviewsWritten(numberOfReviewsWritten)
+            console.log(numberOfReviewsWritten)
         } catch (error) {
             console.error("Error fetching data:", error);
         } finally {
@@ -110,6 +116,7 @@ export default function UserProfile() {
         setRenderUserHome(true)
         setRenderUserSettings(false)
     }
+
     return isLoading ? (
         <LoadingPage />
     ) : (
@@ -176,20 +183,21 @@ export default function UserProfile() {
                                     </div>
                                     : null}
                             </section>
-                            {mostReviewedGenres ?
-                                <section className={UserStyle.MostReviewedGenres}>
-                                    <h2 className={UserStyle.Title}>Most Reviewed Genres</h2>
-                                    <br />
-                                    <MostReviewedGenres reviewedGenres={mostReviewedGenres} />
-                                </section>
-                                : null}
-                            {rating ?
-                                <section className={UserStyle.AverageRating}>
-                                    <h2 className={UserStyle.Title}>average movie rating</h2>
-                                    <br />
-                                    <UserAverageRating averageRating={rating} />
-                                </section>
-                                : null}
+                            <section className={UserStyle.MostReviewedGenres}>
+                                <h2 className={UserStyle.Title}>Most Reviewed Genres</h2>
+                                <br />
+                                <MostReviewedGenres reviewedGenres={mostReviewedGenres} />
+                            </section>
+                            <section className={UserStyle.AverageRating}>
+                                <h2 className={UserStyle.Title}>average movie rating</h2>
+                                <br />
+                                <UserAverageRating averageRating={rating} />
+                            </section>
+                            <section className={UserStyle.numberOfReviews}>
+                                <h2 className={UserStyle.Title}>Number of Reviews</h2>
+                                <NumberOfReviewsWritten numberOfReviewsWritten={numberOfReviewsWritten} />
+                            </section>
+
                             <section className={UserStyle.FavouriteMovies}>
                                 <h2 className={UserStyle.Title}>Your Favourite Movies</h2>
                                 {/* The carousel styling makes cards look strange below 5 cards, therefore we will show just a simple loop through the cards in the else statement */}
@@ -227,7 +235,7 @@ export default function UserProfile() {
                                 )}
                             </section>
                             <section className={UserStyle.HighestRatedMovies}>
-                                <h2 className={UserStyle.Title}>Your Highest Rated Movies</h2>
+                                <h2 className={UserStyle.Title}>highest rated movies</h2>
                                 <HighestRatedMoviesSection userTopRatedMovies={userTopRatedMovies} />
                             </section>
                         </div>

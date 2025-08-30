@@ -10,8 +10,12 @@ export default function PremiumBtn() {
             <Link to="/premium" className={PremiumBtnStyles.link}>
                 <Button
                     startIcon={<MovieFilterIcon />}
-                    variant="contained"
-                    className={PremiumBtnStyles.coolButton}
+                    sx={{
+                        backgroundColor: "#0096ff",
+                        "&:hover": {
+                            backgroundColor: "#0096ff", // darker on hover
+                        },
+                    }}
                 >
                     PREMIUM
                 </Button>
