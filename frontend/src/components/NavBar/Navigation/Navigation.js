@@ -6,6 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from '@mui/icons-material/Menu';
 import PremiumIcon from "../../Other/crown.webp"
 import NavStyle from './Navigation.module.css'
+
 export default function Navigation() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);

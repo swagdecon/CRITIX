@@ -36,7 +36,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route
           path="/ultimate"
-          element={<PricingPage />}></Route>
+          element={<PrivateRoute><PricingPage /></PrivateRoute>}></Route>
         <Route
           path="/home"
           element={

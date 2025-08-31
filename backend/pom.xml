@@ -21,6 +21,7 @@
 		<jackson-datatype.version>2.15.2</jackson-datatype.version>
 		<jjwt.version>0.11.5</jjwt.version>
 		<jvm-openai.version>0.11.0</jvm-openai.version>
+		<stripe.version>29.5.0</stripe.version>
 	</properties>
 		<dependencies>
 			<dependency>
@@ -79,6 +80,11 @@
 				<groupId>uk.co.conoregan</groupId>
 				<artifactId>themoviedbapi</artifactId>
 				<version>${moviedbapi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.stripe</groupId>
+				<artifactId>stripe-java</artifactId>
+				<version>${stripe.version}</version> 
 			</dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.datatype</groupId>

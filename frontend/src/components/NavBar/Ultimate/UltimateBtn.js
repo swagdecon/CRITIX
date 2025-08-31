@@ -2,22 +2,23 @@ import React from "react"
 import { Button } from "@mui/material";
 import MovieFilterIcon from "@mui/icons-material/MovieFilter";
 import { Link } from "react-router-dom";
-import PremiumBtnStyles from "./PremiumBtn.module.css";
+import UltimateBtnStyles from "./UltimateBtn.module.css";
 
-export default function PremiumBtn() {
+export default function UltimateBtn() {
+
     return (
-        <div className={PremiumBtnStyles.PremiumBtn}>
-            <Link to="/ultimate" className={PremiumBtnStyles.link}>
+        <div className={UltimateBtnStyles.UltimateBtn}>
+            <Link to="/ultimate" className={UltimateBtnStyles.link}>
                 <Button
                     startIcon={<MovieFilterIcon />}
                     sx={{
                         backgroundColor: "#0096ff",
                         "&:hover": {
-                            backgroundColor: "#0096ff", // darker on hover
+                            backgroundColor: "#0096ff",
                         },
                     }}
                 >
-                    PREMIUM
+                    CRITIX ULTIMATE
                 </Button>
             </Link>
         </div>

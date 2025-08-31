@@ -11,7 +11,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-
+import { Link } from 'react-router-dom';
 const tiers = [
   {
     title: 'Free',
@@ -184,6 +184,8 @@ export default function Pricing() {
               <CardActions>
                 <Button
                   fullWidth
+                  component={Link}
+                  to="/signup"
                   variant={tier.buttonVariant}
                   color={tier.buttonColor}
                 >

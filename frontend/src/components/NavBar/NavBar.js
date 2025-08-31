@@ -9,7 +9,7 @@ import { useState, useMemo } from "react"
 import { fetchData } from '../../security/Data';
 import isTokenExpired from "../../security/IsTokenExpired.js";
 import MobileSearchBar from "./Search/MobileSearch.js";
-import PremiumBtn from "./Premium/PremiumBtn.js";
+import PremiumBtn from "./Ultimate/UltimateBtn.js";
 const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
 const API_URL = process.env.REACT_APP_BACKEND_API_URL
 
