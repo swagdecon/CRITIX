@@ -27,9 +27,9 @@ const tiers = [
     buttonColor: 'primary',
   },
   {
-    title: 'CRITIX PRO',
+    title: 'CRITIX ULTIMATE',
     subheader: 'Recommended',
-    price: '8',
+    price: '10',
     description: [
       'Priority Review Placement',
       'Advanced Search Filters',
@@ -42,21 +42,6 @@ const tiers = [
     buttonText: 'Start now',
     buttonVariant: 'contained',
     buttonColor: 'secondary',
-  },
-  {
-    title: 'CRITIX ULTIMATE',
-    price: '20',
-    description: [
-      'Early Access Content',
-      'Featured Reviewer Status',
-      'Detailed Analytics',
-      'Personalized Recommendations',
-      'Editorial Influence',
-      'Exclusive Perks'
-    ],
-    buttonText: 'Contact us',
-    buttonVariant: 'outlined',
-    buttonColor: 'primary',
   },
 ];
 
@@ -163,7 +148,7 @@ export default function Pricing() {
                     £{tier.price}
                   </Typography>
                   <Typography component="h3" variant="h6">
-                    &nbsp; per month
+                    &nbsp; per year
                   </Typography>
                 </Box>
                 <Divider sx={{ my: 2, opacity: 0.8, borderColor: 'divider' }} />

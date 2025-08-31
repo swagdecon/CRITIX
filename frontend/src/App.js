@@ -21,11 +21,12 @@ import ResetPassword from "./views/ResetPassword.js";
 import AccountVerification from "./views/AccountVerification.js"
 import WatchList from "./views/Watchlist.js";
 import ResetEmail from "./views/ResetEmail.js"
-import PricingPage from "./views/Premium.js"
+import PricingPage from "./views/CritixUltimate.js"
 import Recommendations from "./components/Recommendations/Recommendations.js";
 import DiscoverMovies from "./views/Discover.js";
 import CritixHomepage from "./views/CritixHomepage.js"
 import MovieSceneViewer from "./components/AR/MovieSceneViewer.js"
+
 export default function App() {
   return (
     <Router>
@@ -34,7 +35,7 @@ export default function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route
-          path="/premium"
+          path="/ultimate"
           element={<PricingPage />}></Route>
         <Route
           path="/home"

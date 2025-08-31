@@ -21,6 +21,8 @@ import isTokenExpired from "../security/IsTokenExpired.js";
 import WatchListBtn from "../components/Other/btn/WatchListBtn/WatchListBtn.js";
 import FavouriteBtn from "../components/Other/btn/FavouriteBtn/FavouriteBtn.js";
 import MovieTrailerBtn from "../components/Other/btn/MovieTrailerBtn/MovieTrailerBtn.js";
+// import AdSense from 'react-adsense';
+
 // import ARBtn from "../components/Other/btn/ARBtn/ARBtn.js"
 const recommendedEndpoint = process.env.REACT_APP_RECOMMENDED_ENDPOINT;
 const getReviewEndpoint = process.env.REACT_APP_GET_REVIEW_ENDPOINT

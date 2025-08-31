@@ -31,7 +31,6 @@ public class User implements UserDetails {
     private String avatar;
     private String bannerPicture;
     private Boolean accountActive;
-    private Boolean isProUser;
     private Boolean isUltimateUser;
     private LoginEvents loginEvents;
     private UserAuth userAuth;
@@ -39,7 +38,6 @@ public class User implements UserDetails {
     private List<MovieCard> favouriteMoviesList;
     private List<MovieCard> recommendedMoviesList;
     private String bio;
-    private Boolean isPro;
     private Boolean isUltimate;
 
     @Enumerated(EnumType.STRING)

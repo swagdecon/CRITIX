@@ -7,7 +7,7 @@ import PremiumBtnStyles from "./PremiumBtn.module.css";
 export default function PremiumBtn() {
     return (
         <div className={PremiumBtnStyles.PremiumBtn}>
-            <Link to="/premium" className={PremiumBtnStyles.link}>
+            <Link to="/ultimate" className={PremiumBtnStyles.link}>
                 <Button
                     startIcon={<MovieFilterIcon />}
                     sx={{
