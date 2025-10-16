@@ -13,7 +13,7 @@
     --title-size: 28px;
     --subtitle: 24px;
   }
-  
+
   .profile-card {
     width: 100vw;
     min-height: 100vh;
@@ -34,21 +34,30 @@
     max-height: 40ch;
     object-fit: cover;
   }
-  
+
   .main-profile {
     display: flex;
     align-items: center;
     position: absolute;
     inset: calc(100% - 100px) auto auto 35px;
     will-change: transform;
+    gap: 18px;
   }
-  
+  .mainBody {
+    margin-top: 20ch;  
+    display: grid;
+    grid-template-columns: 280px auto;
+    gap: 28px;
+    width: 100%;
+    grid-column: 1 / -1;
+  }
   .profile-image {
     width: 150px;
     height: 150px;
     background-size: cover;
     border-radius: 50%;
-    border: 10px solid var(--primary-bg);
+    border: 6px solid rgba(255,255,255,0.12);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.45), 0 0 0 8px rgba(0,0,0,0.35) inset;
   }
   
   .img-container {
@@ -60,6 +69,7 @@
     position: relative;
     overflow: hidden;
     border-radius: 50%;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.45);
 }
 .NoContent {
     border-radius: 10px;
@@ -69,6 +79,14 @@
     font-size: 16px;
     color: white;
 }
+  .username {
+    font-size: var(--username-size);
+    line-height: 1.1;
+    letter-spacing: 0.5px;
+    margin: 0;
+    color: #fff;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+  }
   .custom-file-upload {
     position: absolute;
     bottom: 0;
@@ -77,22 +95,45 @@
     z-index: 2;
     width: 40px;
     height: 40px;
-    background-color: #fff;
+    background-color: #0f172a;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.18);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+    transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .custom-file-upload:hover {
+    background-color: #111827;
+    transform: translate(-40%, -30%) scale(1.06);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.45);
+  }
+
+  .BannerAddBtnWrapper {
+    position: absolute;
+    bottom: 12px;
+    right: 18px;
+  }
+
+  .AvatarAddBtnWrapper {
+    position: absolute;
+    bottom: -6px;
+    right: -6px;
   }
   
   .profile-names {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: black;
-    padding: 2px 30px;
-    border-radius: 0 50px 50px 0;
-    transform: translateX(-10px);
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.92) 0%, rgba(17, 24, 39, 0.75) 100%);
+    padding: 8px 26px;
+    border-radius: 12px;
+    transform: translateX(0);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.35);
   }
   
   .page-title {
@@ -101,13 +142,10 @@
   
   .profile-body {
     display: grid;
-    grid-template-columns: 150px auto;
-    gap: 70px;
-    padding: 70px;
-    margin-top: 15ch;
-    background: radial-gradient(circle at top left, #3a0ca3 0%, #000428 40%, #1a1a2e 100%);
-    box-shadow: inset 0 0 60px rgba(90, 60, 255, 0.3),
-                inset 0 0 120px rgba(0, 150, 255, 0.2);
+    grid-template-columns: 280px auto;
+    gap: 28px;
+    padding: 28px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.0) 100%);
     border-radius: 20px;
   }
   
@@ -125,8 +163,8 @@
     text-align: center;
     border-radius: 10px;
     height: 6ch;
-    background: transparent;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    background: linear-gradient(180deg, rgba(0,150,255,0.2) 0%, rgba(0,150,255,0.1) 100%);
+    transition: background-color 0.25s ease, color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
     will-change: background-color, color;
   }
   
@@ -137,6 +175,8 @@
   .profile-actions button:hover {
     background-color: var(--accent-bg);
     color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0,150,255,0.25);
   }
   
   .bio {
@@ -147,6 +187,8 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
   }
   
   .bio-header {
@@ -174,12 +216,31 @@
   .RecentReviews,
   .AllReviews,
   .FavouriteMovies,
-  .UserSettingsBox {
-    background: rgba(255, 255, 255, 0.06);
+  .UserSettingsBox,
+  .AverageRating,
+  .MostReviewedGenres,
+  .HighestRatedMovies,
+  .numberOfReviews {
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.85) 0%, rgba(17, 24, 39, 0.85) 100%);
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    will-change: transform, opacity;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    will-change: transform, opacity, border-color;
+    transition: transform 0.2s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .ActivityInfo:hover,
+  .RecentReviews:hover,
+  .AllReviews:hover,
+  .FavouriteMovies:hover,
+  .UserSettingsBox:hover,
+  .AverageRating:hover,
+  .MostReviewedGenres:hover,
+  .HighestRatedMovies:hover,
+  .numberOfReviews:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0,150,255,0.35);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
   }
 
   .AverageRating {
@@ -188,10 +249,10 @@
     grid-column: 2;
     grid-row: 3;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.06);
+    background: linear-gradient(180deg, rgba(30,41,59,0.85) 0%, rgba(17,24,39,0.85) 100%);
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     color: var(--primary-color);
     font-size: 1.5rem;
     text-align: center;
@@ -202,10 +263,10 @@
     grid-column: 1; 
     grid-row: 3;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.06);
+    background: linear-gradient(180deg, rgba(30,41,59,0.85) 0%, rgba(17,24,39,0.85) 100%);
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     color: var(--primary-color);
     font-size: 1.5rem;
     text-align: center;
@@ -216,10 +277,10 @@
     grid-column: 1; 
     grid-row: 4;    
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.06);
+    background: linear-gradient(180deg, rgba(30,41,59,0.85) 0%, rgba(17,24,39,0.85) 100%);
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     color: var(--primary-color);
     font-size: 1.5rem;
     text-align: center;
@@ -232,10 +293,10 @@
       justify-content: center; 
       align-items: center;
       padding: 1rem;
-      background: rgba(255, 255, 255, 0.06);
+      background: linear-gradient(180deg, rgba(30,41,59,0.85) 0%, rgba(17,24,39,0.85) 100%);
       border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       color: var(--primary-color);
       text-align: center;
       position: relative;
@@ -266,6 +327,7 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     justify-content: center;
     align-items: center;
+    border: 2px solid rgba(255,255,255,0.2);
   }
 
   .label {
@@ -312,6 +374,13 @@
     gap: 16px;
     padding: 16px;
   }
+
+  .PaginationWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 0 4px 0;
+  }
   
   .bio-input {
     background: var(--secondary-bg);
@@ -340,6 +409,7 @@
     justify-content: center;
     align-items: center;
     margin-top: 2%;
+    letter-spacing: 1px;
   }
   
   .UserSettings,
@@ -402,6 +472,12 @@
       grid-template-columns: 1fr;
       padding: 4%;
       margin-top: 0;
+    }
+    .mainBody {
+      margin-top: 12ch;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      grid-column: 1 / -1;
     }
   
     .profile-names {

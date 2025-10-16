@@ -223,11 +223,13 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, movieGe
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                backgroundColor: 'rgba(0,150,255,0.1)',
-                                padding: '10px 20px',
-                                borderRadius: '10px',
-                                marginBottom: '50px',
+                                background: 'linear-gradient(180deg, rgba(30,41,59,0.6) 0%, rgba(17,24,39,0.6) 100%)',
+                                padding: '12px 18px',
+                                borderRadius: '12px',
+                                marginBottom: '36px',
                                 color: 'white',
+                                border: '1px solid rgba(255,255,255,0.12)',
+                                boxShadow: '0 10px 26px rgba(0,0,0,0.35)'
                             }}
                         >
                             <FormatQuoteIcon sx={{ fontSize: '28px', marginRight: '10px', color: '#00e676', transform: 'scaleX(-1)' }} />
@@ -431,23 +433,28 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, movieGe
                             onClick={handleSubmit}
                             disabled={isSubmitDisabled}
                             style={{
-                                backgroundColor: isSubmitDisabled ? "#d3d3d3" : "#0096ff",
-                                color: isSubmitDisabled ? "black" : "white",
-                                border: "none",
-                                padding: "10px 20px",
-                                fontSize: "16px",
-                                borderRadius: "4px",
-                                cursor: isSubmitDisabled ? "not-allowed" : "pointer",
-                                transition: "background-color 0.3s ease",
+                                background: isSubmitDisabled
+                                    ? 'linear-gradient(180deg, #3a3a3a 0%, #2c2c2c 100%)'
+                                    : 'linear-gradient(180deg, rgba(0,150,255,0.95) 0%, rgba(0,120,220,0.95) 100%)',
+                                color: isSubmitDisabled ? 'rgba(255,255,255,0.7)' : '#fff',
+                                border: '1px solid ' + (isSubmitDisabled ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.18)'),
+                                padding: '12px 22px',
+                                fontSize: '16px',
+                                borderRadius: '12px',
+                                cursor: isSubmitDisabled ? 'not-allowed' : 'pointer',
+                                transition: 'transform 0.2s ease, box-shadow 0.25s ease, filter 0.25s ease',
+                                boxShadow: isSubmitDisabled ? 'none' : '0 10px 24px rgba(0,150,255,0.25)'
                             }}
                             onMouseOver={(e) => {
                                 if (!isSubmitDisabled) {
-                                    e.currentTarget.style.backgroundColor = "#007acc";
+                                    e.currentTarget.style.filter = 'brightness(1.05)';
+                                    e.currentTarget.style.boxShadow = '0 14px 34px rgba(0,150,255,0.35)';
                                 }
                             }}
                             onMouseOut={(e) => {
                                 if (!isSubmitDisabled) {
-                                    e.currentTarget.style.backgroundColor = "#0096ff";
+                                    e.currentTarget.style.filter = 'none';
+                                    e.currentTarget.style.boxShadow = '0 10px 24px rgba(0,150,255,0.25)';
                                 }
                             }}
                         >
@@ -475,10 +482,10 @@ const modalStyles = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: { xs: '95%', sm: '900px', md: '1000px' },
-    bgcolor: 'rgba(30, 30, 30, 0.97)',
-    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
-    borderRadius: '20px',
-    border: '1px solid rgba(255, 255, 255, 0.18)',
+    bgcolor: 'rgba(15, 18, 24, 0.98)',
+    boxShadow: '0 16px 48px rgba(0,0,0,0.45)',
+    borderRadius: '18px',
+    border: '1px solid rgba(255, 255, 255, 0.12)',
     color: 'white',
     p: 4,
     outline: 'none',
@@ -492,31 +499,34 @@ const centeredContentStyles = {
 const toolbarStyles = {
     display: 'flex',
     gap: '8px',
-    marginBottom: '10px',
+    marginBottom: '12px',
     justifyContent: 'center',
     flexWrap: 'wrap',
 };
 
 const toolbarButtonStyles = {
-    backgroundColor: 'rgba(0, 150, 255, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.06)',
     color: 'white',
+    border: '1px solid rgba(255,255,255,0.12)',
+    borderRadius: '10px',
     "&:hover": {
-        backgroundColor: 'rgba(0, 150, 255, 0.4)',
+        backgroundColor: 'rgba(255, 255, 255, 0.12)',
+        boxShadow: '0 6px 18px rgba(0,0,0,0.35)'
     },
 };
 
 const editorWrapperStyles = {
-    height: "15vh",
-    padding: '15px',
-    backgroundColor: 'rgba(255,255,255,0.06)',
-    borderRadius: '15px',
-    border: '1px solid rgba(255,255,255,0.1)',
+    height: "18vh",
+    padding: '16px',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: '14px',
+    border: '1px solid rgba(255,255,255,0.12)',
     marginBottom: '20px',
     overflowY: 'auto',
     overflowX: 'hidden',
     color: 'white',
     fontSize: '16px',
-    transition: 'background 0.3s ease',
+    transition: 'background 0.25s ease, box-shadow 0.25s ease',
     zIndex: 1,
     '& [contenteditable="true"]:focus': {
         outline: 'none',
@@ -528,30 +538,30 @@ const editorWrapperStyles = {
 const ideasBoxStyles = {
     mt: 3,
     p: 2,
-    background: 'rgba(255, 255, 255, 0.06)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '15px',
+    background: 'rgba(255, 255, 255, 0.05)',
+    border: '1px solid rgba(255, 255, 255, 0.12)',
+    borderRadius: '12px',
     textAlign: 'center',
     color: 'white',
-    transition: 'all 0.3s ease',
+    transition: 'all 0.25s ease',
     '&:hover': {
-        background: 'rgba(255, 255, 255, 0.12)',
-        boxShadow: '0px 0px 15px rgba(0, 150, 255, 0.2)',
+        background: 'rgba(255, 255, 255, 0.1)',
+        boxShadow: '0px 12px 28px rgba(0, 0, 0, 0.35)',
     },
 };
 const profanityBoxStyles = {
-    backgroundColor: 'rgba(255, 0, 0, 0.9)',
-    padding: '15px',
-    borderRadius: '10px',
+    backgroundColor: 'rgba(255, 77, 79, 0.15)',
+    padding: '12px',
+    borderRadius: '12px',
     marginBottom: '10px',
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: '1.2rem',
-    border: '2px solid #ff0000',
+    color: '#ffb3b3',
+    fontWeight: 600,
+    fontSize: '0.95rem',
+    border: '1px solid rgba(255, 77, 79, 0.6)',
 };
 const editorAndSuggestionsWrapperStyles = {
     display: 'flex',
-    gap: '20px',
+    gap: '16px',
     marginBottom: '20px',
     flexWrap: 'wrap',
 };
@@ -559,48 +569,50 @@ const editorAndSuggestionsWrapperStyles = {
 const editorContainerStyles = {
     flex: 2,
     minHeight: '400px',
-    padding: '15px',
-    background: 'linear-gradient(135deg, rgba(0,150,255,0.08), rgba(0,150,255,0.02))',
-    borderRadius: '15px',
+    padding: '14px',
+    background: 'linear-gradient(180deg, rgba(30,41,59,0.5) 0%, rgba(17,24,39,0.5) 100%)',
+    borderRadius: '12px',
     border: '1px solid rgba(255,255,255,0.12)',
-    boxShadow: '0 4px 30px rgba(0,0,0,0.2)',
+    boxShadow: '0 10px 28px rgba(0,0,0,0.35)',
     overflowY: 'auto',
     color: 'white',
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
-    transition: 'background 0.3s ease, box-shadow 0.3s ease',
+    transition: 'background 0.25s ease, box-shadow 0.25s ease',
     '&:hover': {
-        background: 'linear-gradient(135deg, rgba(0,150,255,0.15), rgba(0,150,255,0.05))',
-        boxShadow: '0 6px 40px rgba(0,0,0,0.3)',
+        background: 'linear-gradient(180deg, rgba(30,41,59,0.65) 0%, rgba(17,24,39,0.65) 100%)',
+        boxShadow: '0 14px 34px rgba(0,0,0,0.45)',
     }
 };
 const suggestionBoxStyles = {
-    background: 'linear-gradient(135deg, rgba(0,150,255,0.08), rgba(0,150,255,0.02))',
+    background: 'linear-gradient(180deg, rgba(30,41,59,0.5) 0%, rgba(17,24,39,0.5) 100%)',
     width: '50%',
     border: '1px solid rgba(255,255,255,0.12)',
-    borderRadius: '15px',
-    padding: '20px',
+    borderRadius: '12px',
+    padding: '18px',
     marginTop: '20px',
-    transition: 'all 0.3s ease',
+    transition: 'all 0.25s ease',
     color: 'white',
     '&:hover': {
-        background: 'linear-gradient(135deg, rgba(0,150,255,0.15), rgba(0,150,255,0.05))',
-        boxShadow: '0px 0px 15px rgba(0,150,255,0.2)',
+        background: 'linear-gradient(180deg, rgba(30,41,59,0.65) 0%, rgba(17,24,39,0.65) 100%)',
+        boxShadow: '0 14px 34px rgba(0,0,0,0.45)',
     },
 };
 
 const suggestionItemStyles = {
-    background: 'linear-gradient(135deg, rgba(0,150,255,0.3), rgba(0,150,255,0.1))',
-    padding: '8px 12px',
+    background: 'rgba(255,255,255,0.06)',
+    padding: '10px 12px',
     borderRadius: '10px',
     fontSize: '14px',
     color: '#ffffff',
     cursor: 'pointer',
-    transition: 'all 0.2s ease-in-out',
+    border: '1px solid rgba(255,255,255,0.12)',
+    transition: 'transform 0.2s ease, box-shadow 0.25s ease, background 0.25s ease',
     '&:hover': {
-        transform: 'scale(1.05)',
-        background: 'linear-gradient(135deg, rgba(0,150,255,0.5), rgba(0,150,255,0.2))',
+        transform: 'translateY(-2px)',
+        background: 'rgba(0,150,255,0.25)',
+        boxShadow: '0 10px 22px rgba(0,0,0,0.35)',
     },
 };
 

@@ -4,7 +4,7 @@
   border-radius: 1.2rem;
   padding: 30px 25px;
   width: 95%;
-  max-width: 900px;
+  max-width: 1400px;
   display: flex;
   margin-top: 2vh;
   flex-direction: column;
@@ -12,6 +12,10 @@
   box-shadow: inset 0 0 0.5px rgba(255, 255, 255, 0.1), 0 8px 24px rgba(0, 150, 255, 0.35);
   transition: all 0.3s ease;
   color: white;
+}
+
+.ind-review-wrapper:hover {
+  box-shadow: inset 0 0 0.5px rgba(255, 255, 255, 0.12), 0 14px 32px rgba(0, 150, 255, 0.45);
 }
 
 .user-review-wrapper {
@@ -29,6 +33,15 @@
   background: rgba(0, 150, 255, 0.12);
   border-color: #00c0ff;
 }
+
+.IndReviewWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+  gap: 16px;
+}
 .IndReviewWrapper {
   display: flex;
   flex-direction: column;
@@ -39,18 +52,18 @@
 
 @media screen and (max-width: 2535px) {
   .ind-review-wrapper{
-  width: 60vw;
+  width: 80vw;
   margin-right:0px;
   }
 }
 
 @media screen and (max-width: 1350px) {
   .ind-review-wrapper{
-  width: 51em;
+  width: 85vw;
   }
 }
 @media screen and (max-width: 830px) {
   .ind-review-wrapper{
-  width: 90vw;
+  width: 95vw;
   }
 }

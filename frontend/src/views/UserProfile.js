@@ -133,115 +133,117 @@ export default function UserProfile() {
                     </div>
                 </div>
                 <div className={UserStyle["profile-body"]}>
-                    <div className={UserStyle["profile-actions"]}>
-                        <button className={UserStyle.settings} onClick={renderUserHome ? showUserSettings : showUserHome}>{renderUserHome ? "Settings" : "Home"}</button>
-                        <section className={UserStyle.bio}>
-                            <div className={UserStyle["bio-header"]}>
-                                <i className="fa fa-info-circle"></i>
-                                Bio
-                            </div>
-                            <EditableBio bioText={bio} />
-                        </section>
-                    </div>
-                    {renderUserHome && !renderUserSettings ?
-                        <div className={UserStyle.MainInfoPanel}>
-                            <LoginInfo data={loginInfo} />
-                            <section className={UserStyle.RecentReviews}>
-                                <h2 className={UserStyle.Title}>Recent review</h2>
-                                <div className={UserStyle.AllUserReviews}>
-                                    {recentUserReview ?
-                                        <IndUserReview key={recentUserReview.movieId} placement={"userProfile"} avatar={avatar} movieTitle={recentUserReview.movieTitle} createdDate={recentUserReview.createdDate} content={parse(recentUserReview.content)} rating={recentUserReview.rating} />
-                                        : <div className={UserStyle.NoContent}>
-                                            Start posting reviews to fill this spot with your insights.
-                                        </div>}
+                    <div className={UserStyle.mainBody}>
+                        <div className={UserStyle["profile-actions"]}>
+                            <button className={UserStyle.settings} onClick={renderUserHome ? showUserSettings : showUserHome}>{renderUserHome ? "Settings" : "Home"}</button>
+                            <section className={UserStyle.bio}>
+                                <div className={UserStyle["bio-header"]}>
+                                    <i className="fa fa-info-circle"></i>
+                                    Bio
                                 </div>
-                            </section>
-                            <section className={UserStyle.AllReviews}>
-                                <h2 className={UserStyle.Title}>all reviews</h2>
-                                <div className={UserStyle.AllUserReviews}>
-                                    {reviewsToDisplay.length > 0 ?
-                                        reviewsToDisplay.map((review) => (
-                                            <IndUserReview key={review.movieId} placement={"userProfile"} avatar={avatar} movieTitle={review.movieTitle} createdDate={review.createdDate} content={parse(review.content)} rating={review.rating} />
-                                        ))
-                                        : <div className={UserStyle.NoContent}>
-                                            Start posting reviews to fill this spot with your insights.
-                                        </div>}
-                                </div>
-                                {reviewsToDisplay.length > 0 ?
-                                    <div className={UserStyle.PaginationWrapper}>
-                                        <Pagination
-                                            size="large"
-                                            count={totalPages}
-                                            page={currentPage}
-                                            onChange={handlePageChange}
-                                            sx={{
-                                                justifyContent: "center",
-                                                display: 'flex',
-                                                marginBottom: "10px"
-                                            }}
-                                        />
-                                    </div>
-                                    : null}
-                            </section>
-                            <section className={UserStyle.MostReviewedGenres}>
-                                <h2 className={UserStyle.Title}>Most Reviewed Genres</h2>
-                                <br />
-                                <MostReviewedGenres reviewedGenres={mostReviewedGenres} />
-                            </section>
-                            <section className={UserStyle.AverageRating}>
-                                <h2 className={UserStyle.Title}>average movie rating</h2>
-                                <br />
-                                <UserAverageRating averageRating={rating} />
-                            </section>
-                            <section className={UserStyle.numberOfReviews}>
-                                <h2 className={UserStyle.Title}>Number of Reviews</h2>
-                                <NumberOfReviewsWritten numberOfReviewsWritten={numberOfReviewsWritten} />
-                            </section>
-
-                            <section className={UserStyle.FavouriteMovies}>
-                                <h2 className={UserStyle.Title}>Your Favourite Movies</h2>
-                                {/* The carousel styling makes cards look strange below 5 cards, therefore we will show just a simple loop through the cards in the else statement */}
-                                {favouriteMovies.length > 5 ? (
-                                    <MovieCarousel
-                                        movies={favouriteMovies}
-                                        endpoint={`${API_URL}${indMovieEndpoint}`}
-                                        breakpoints={favouriteMovieBreakpoints()}
-                                    />
-                                ) : favouriteMovies.length > 0 ? (
-                                    <div className={UserStyle.ShortFavouriteMovieList}>
-                                        {favouriteMovies.map((movie, i) => (
-                                            <div className={UserStyle.ShortFavouriteMovieList} key={i}>
-                                                <Link to={`${indMovieEndpoint}${movie.id || movie.movieId}`}>
-                                                    <MovieCard
-                                                        movieId={movie.id || movie.movieId}
-                                                        title={movie.title}
-                                                        posterUrl={movie.posterUrl}
-                                                        voteAverage={movie.voteAverage}
-                                                        genres={movie.genres}
-                                                        overview={movie.overview}
-                                                        actors={movie.actors}
-                                                        isSavedToWatchlist={movie.isSavedToWatchlist}
-                                                        isSavedToFavouriteMoviesList={movie.isSavedToFavouriteMoviesList}
-                                                        shareUrl={`${indMovieEndpoint}/${movie.id}`}
-                                                    />
-                                                </Link>
-                                            </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className={UserStyle.NoContent}>
-                                        Your favorite films deserve the spotlight. Start adding them here.
-                                    </div>
-                                )}
-                            </section>
-                            <section className={UserStyle.HighestRatedMovies}>
-                                <h2 className={UserStyle.Title}>highest rated movies</h2>
-                                <HighestRatedMoviesSection userTopRatedMovies={userTopRatedMovies} />
+                                <EditableBio bioText={bio} />
                             </section>
                         </div>
-                        :
-                        <InfoUpdate />
-                    }
+                        {renderUserHome && !renderUserSettings ?
+                            <div className={UserStyle.MainInfoPanel}>
+                                <LoginInfo data={loginInfo} />
+                                <section className={UserStyle.RecentReviews}>
+                                    <h2 className={UserStyle.Title}>Recent review</h2>
+                                    <div className={UserStyle.AllUserReviews}>
+                                        {recentUserReview ?
+                                            <IndUserReview key={recentUserReview.movieId} placement={"userProfile"} avatar={avatar} movieTitle={recentUserReview.movieTitle} createdDate={recentUserReview.createdDate} content={parse(recentUserReview.content)} rating={recentUserReview.rating} />
+                                            : <div className={UserStyle.NoContent}>
+                                                Start posting reviews to fill this spot with your insights.
+                                            </div>}
+                                    </div>
+                                </section>
+                                <section className={UserStyle.AllReviews}>
+                                    <h2 className={UserStyle.Title}>all reviews</h2>
+                                    <div className={UserStyle.AllUserReviews}>
+                                        {reviewsToDisplay.length > 0 ?
+                                            reviewsToDisplay.map((review) => (
+                                                <IndUserReview key={review.movieId} placement={"userProfile"} avatar={avatar} movieTitle={review.movieTitle} createdDate={review.createdDate} content={parse(review.content)} rating={review.rating} />
+                                            ))
+                                            : <div className={UserStyle.NoContent}>
+                                                Start posting reviews to fill this spot with your insights.
+                                            </div>}
+                                    </div>
+                                    {reviewsToDisplay.length > 0 ?
+                                        <div className={UserStyle.PaginationWrapper}>
+                                            <Pagination
+                                                size="large"
+                                                count={totalPages}
+                                                page={currentPage}
+                                                onChange={handlePageChange}
+                                                sx={{
+                                                    justifyContent: "center",
+                                                    display: 'flex',
+                                                    marginBottom: "10px"
+                                                }}
+                                            />
+                                        </div>
+                                        : null}
+                                </section>
+                                <section className={UserStyle.MostReviewedGenres}>
+                                    <h2 className={UserStyle.Title}>Most Reviewed Genres</h2>
+                                    <br />
+                                    <MostReviewedGenres reviewedGenres={mostReviewedGenres} />
+                                </section>
+                                <section className={UserStyle.AverageRating}>
+                                    <h2 className={UserStyle.Title}>average movie rating</h2>
+                                    <br />
+                                    <UserAverageRating averageRating={rating} />
+                                </section>
+                                <section className={UserStyle.numberOfReviews}>
+                                    <h2 className={UserStyle.Title}>Number of Reviews</h2>
+                                    <NumberOfReviewsWritten numberOfReviewsWritten={numberOfReviewsWritten} />
+                                </section>
+
+                                <section className={UserStyle.FavouriteMovies}>
+                                    <h2 className={UserStyle.Title}>Your Favourite Movies</h2>
+                                    {/* The carousel styling makes cards look strange below 5 cards, therefore we will show just a simple loop through the cards in the else statement */}
+                                    {favouriteMovies.length > 5 ? (
+                                        <MovieCarousel
+                                            movies={favouriteMovies}
+                                            endpoint={`${API_URL}${indMovieEndpoint}`}
+                                            breakpoints={favouriteMovieBreakpoints()}
+                                        />
+                                    ) : favouriteMovies.length > 0 ? (
+                                        <div className={UserStyle.ShortFavouriteMovieList}>
+                                            {favouriteMovies.map((movie, i) => (
+                                                <div className={UserStyle.ShortFavouriteMovieList} key={i}>
+                                                    <Link to={`${indMovieEndpoint}${movie.id || movie.movieId}`}>
+                                                        <MovieCard
+                                                            movieId={movie.id || movie.movieId}
+                                                            title={movie.title}
+                                                            posterUrl={movie.posterUrl}
+                                                            voteAverage={movie.voteAverage}
+                                                            genres={movie.genres}
+                                                            overview={movie.overview}
+                                                            actors={movie.actors}
+                                                            isSavedToWatchlist={movie.isSavedToWatchlist}
+                                                            isSavedToFavouriteMoviesList={movie.isSavedToFavouriteMoviesList}
+                                                            shareUrl={`${indMovieEndpoint}/${movie.id}`}
+                                                        />
+                                                    </Link>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className={UserStyle.NoContent}>
+                                            Your favorite films deserve the spotlight. Start adding them here.
+                                        </div>
+                                    )}
+                                </section>
+                                <section className={UserStyle.HighestRatedMovies}>
+                                    <h2 className={UserStyle.Title}>highest rated movies</h2>
+                                    <HighestRatedMoviesSection userTopRatedMovies={userTopRatedMovies} />
+                                </section>
+                            </div>
+                            :
+                            <InfoUpdate />
+                        }
+                    </div>
                 </div>
             </div>
         </div >
