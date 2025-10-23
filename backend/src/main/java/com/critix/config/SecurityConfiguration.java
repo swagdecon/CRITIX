@@ -34,6 +34,7 @@ public class SecurityConfiguration {
                                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                                 .authorizeHttpRequests(authorize -> authorize
                                                 .requestMatchers("/v1/auth/**").permitAll()
+                                                .requestMatchers("/api/stripe/**").permitAll()
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -57,7 +58,7 @@ public class SecurityConfiguration {
                                 "https://backend-production-51a7.up.railway.app"));
                 configuration.addAllowedOriginPattern("https://*.ngrok-free.app");
                 configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
-                configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+                configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Stripe-Signature"));
 
                 UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
                 source.registerCorsConfiguration("/**", configuration);
