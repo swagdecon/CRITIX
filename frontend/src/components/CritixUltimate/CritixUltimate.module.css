@@ -1,0 +1,242 @@
+/* -------------------------
+   Ultimate Section & Background
+------------------------- */
+.ultimateSection {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 1.5rem;
+  color: white;
+  text-align: center;
+}
+
+/* Movie collage gradient background */
+.movieBackdrop {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #1b0044, #090979, #007cf0);
+  background-size: 300% 300%;
+  animation: gradientShift 10s ease infinite;
+  z-index: 0;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Optional movie collage image instead of gradient */
+/*
+.movieBackdrop {
+  background-image: url("/assets/movie-collage.jpg");
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.35);
+}
+*/
+
+/* Overlay for cinematic depth */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.8));
+  z-index: 1;
+}
+
+/* Floating film-strip grid animation */
+.movieBackdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 120px 120px;
+  animation: panGrid 40s linear infinite;
+}
+
+@keyframes panGrid {
+  from { background-position: 0 0; }
+  to { background-position: 300px 300px; }
+}
+
+/* -------------------------
+   Foreground Content
+------------------------- */
+.content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+}
+
+.title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #a47aff, #66aaff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto 3rem auto;
+}
+
+/* -------------------------
+   Pricing Container
+------------------------- */
+.pricingContainer {
+  background: linear-gradient(145deg, rgba(20, 10, 50, 0.95), rgba(35, 0, 120, 0.88));
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 3rem;
+  box-shadow: 0 0 60px rgba(50, 80, 180, 0.45),
+              inset 0 0 20px rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Neon accent border */
+.pricingContainer::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 32px;
+  background: linear-gradient(135deg, #5d3aff, #0096ff);
+  opacity: 0.4;
+  z-index: -1;
+  box-shadow: 0 0 20px rgba(93, 58, 255, 0.4);
+}
+
+/* -------------------------
+   Plan Title & Price
+------------------------- */
+.planTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.planPrice {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #66b3ff;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.planPrice span {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+/* -------------------------
+   Feature List
+------------------------- */
+.featureList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 0;
+  margin: 0 0 2.5rem 0;
+}
+
+.featureList li {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 4px solid #66b3ff;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  transition: transform 0.3s ease, background 0.3s ease;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #e6e6e6;
+  gap: 0.6rem;
+}
+
+/* Hover effect */
+.featureList li:hover {
+  transform: translateX(5px);
+  background: rgba(102, 179, 255, 0.12);
+  color: #a8d0ff;
+}
+
+/* Checkmark icon */
+.featureList li::before {
+  content: "✔";
+  color: #66b3ff;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Slide-in animation */
+.featureList li {
+  opacity: 0;
+  transform: translateY(6px);
+  animation: slideFadeIn 0.5s forwards;
+}
+
+.featureList li:nth-child(1) { animation-delay: 0.1s; }
+.featureList li:nth-child(2) { animation-delay: 0.2s; }
+.featureList li:nth-child(3) { animation-delay: 0.3s; }
+.featureList li:nth-child(4) { animation-delay: 0.4s; }
+.featureList li:nth-child(5) { animation-delay: 0.5s; }
+.featureList li:nth-child(6) { animation-delay: 0.6s; }
+.featureList li:nth-child(7) { animation-delay: 0.7s; }
+
+@keyframes slideFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* -------------------------
+   CTA Button
+------------------------- */
+.ctaButton {
+  background: linear-gradient(135deg, #5d3aff, #0096ff);
+  border: none;
+  color: white;
+  font-weight: 700;
+  font-size: 1.2rem;
+  padding: 1rem 2.8rem;
+  border-radius: 60px;
+  cursor: pointer;
+  box-shadow: 0 0 25px rgba(0, 150, 255, 0.5);
+  transition: all 0.35s ease;
+  display: block;
+  margin: 0 auto;
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+.ctaButton:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 45px rgba(0, 180, 255, 0.7);
+  background: linear-gradient(135deg, #7a3aff, #00b3ff);
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 160, 255, 0.45); }
+  50% { box-shadow: 0 0 35px rgba(0, 180, 255, 0.6); }
+}
+
+/* Small note below CTA */
+.smallNote {
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  opacity: 0.75;
+  color: #ccc;
+  text-align: center;
+}

@@ -12,33 +12,12 @@ import NavBar from "../components/NavBar/NavBar.js";
 const GET_WATCHLIST_ENDPOINT = process.env.REACT_APP_GET_WATCHLIST_ENDPOINT;
 const API_URL = process.env.REACT_APP_BACKEND_API_URL
 const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
-
 import Footer from "../components/Footer/Footer.js";
+
 export default function WatchList() {
 
     const [movies, setMovies] = useState(null);
     const [dataLoaded, setDataLoaded] = useState(false)
-
-    // const handleSortByChange = useCallback((selectedValue) => {
-    //     let sortedMovies;
-    //     switch (selectedValue) {
-    //         case "A-Z":
-    //             sortedMovies = [...movies].sort((a, b) => a.title.localeCompare(b.title));
-    //             break;
-    //         case "Z-A":
-    //             sortedMovies = [...movies].sort((a, b) => b.title.localeCompare(a.title));
-    //             break;
-    //         case "Vote Average Asc.":
-    //             sortedMovies = [...movies].sort((a, b) => a.voteAverage - b.voteAverage);
-    //             break;
-    //         case "Vote Average Desc.":
-    //             sortedMovies = [...movies].sort((a, b) => b.voteAverage - a.voteAverage);
-    //             break;
-    //         default:
-    //             sortedMovies = [...movies];
-    //     }
-    //     setMovies(sortedMovies);
-    // }, [movies]);
 
     async function fetchBackendData() {
         try {
@@ -77,20 +56,10 @@ export default function WatchList() {
                 <div className={WatchListStyle.titleWrapper}>
                     <div className={WatchListStyle["title-container"]}>
                         <h3 className={Title["movie-title"]}>YOUR WATCHLIST</h3>
-                        {/* {movies.length !== 0 ?
-                            <div className={WatchListStyle["sort-by-btn"]}>
-                                <Dropdown onSelectSortBy={handleSortByChange} dropdownItems={[
-                                    "A-Z",
-                                    "Z-A",
-                                    "Vote Average Desc.",
-                                    "Vote Average Asc."]} />
-                            </div>
-                            : null} */}
                     </div>
                 </div>
                 <div className={WatchListStyle["watchlist-container"]}>
                     {movies.length !== 0 ? movies.map((movie) => (
-
                         < div key={movie.movieId} >
                             <Link to={`${indMovieEndpoint}${movie.movieId}`}>
                                 <MovieCard
@@ -108,9 +77,7 @@ export default function WatchList() {
                             </Link>
                         </div>
                     )) :
-
-                        <div className={WatchListStyle.emptyList}> Include films in your watchlist to have them displayed here!
-                        </div>
+                        <div className={WatchListStyle.emptyList}> Include films in your watchlist to have them displayed here!</div>
                     }
                 </div>
             </div>

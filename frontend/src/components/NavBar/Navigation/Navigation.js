@@ -63,12 +63,6 @@ export default function Navigation() {
         <Link to="/watchlist" onClick={handleClose} style={{ textDecoration: "none" }}>
           <MenuItem>WATCHLIST</MenuItem>
         </Link>
-        <Link to="/recommendations" onClick={handleClose} style={{ textDecoration: "none" }}>
-          <MenuItem>
-            <img src={PremiumIcon} alt="Premium" style={{ width: '20px', marginRight: '8px' }} />
-            RECOMMENDED
-          </MenuItem>
-        </Link>
         <MenuItem onClick={handleClose}> <Link to="/recommendations">
           <img src={PremiumIcon} alt="Premium" style={{ width: '20px', marginRight: '8px' }} /> RECOMMENDED
         </Link></MenuItem>

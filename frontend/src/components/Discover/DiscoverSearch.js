@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useMemo } from "react";
 import debounce from "lodash.debounce";
 import PropTypes from "prop-types";
 import {
@@ -9,7 +9,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from "dayjs";
 import * as ISO3166 from 'iso-3166-1';
 import { languageMap, gbCertifications, allFilters } from "./FilterDropdownOptions";
-
+import CookieManager from "../../security/CookieManager.js";
+import { jwtDecode } from "jwt-decode";
 
 const languageOptions = Object.entries(languageMap).map(([value, label]) => ({
     value,
@@ -46,7 +47,10 @@ export default function DiscoverSearch({ onSubmit }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [activeFilter, setActiveFilter] = useState(null);
     const [filters, setFilters] = useState({ includeAdult: false });
-
+    const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
+    const decodedToken = useMemo(() => jwtDecode(token), [token]);
+    const isUltimateUser = decodedToken.isUltimateUser
+    console.log(decodedToken)
     const debouncedSearch = useRef(debounce((updatedFilters) => {
         const { page, ...rest } = updatedFilters;
         const pageNumber = Number(page);
@@ -363,20 +367,32 @@ export default function DiscoverSearch({ onSubmit }) {
                             ? options.filter(opt => (value || "").split(',').includes(opt.value))
                             : [];
                     return (
-                        <FormControl fullWidth>
-                            <InputLabel>{filter.label}</InputLabel>
-                            <Autocomplete
-                                multiple
-                                options={filter.options}
-                                getOptionLabel={(option) => option.label}
-                                isOptionEqualToValue={(o, v) => o.value === v.value}
-                                value={getSelectedOptions(filter.options, value)}
-                                onChange={(_, newVals) =>
-                                    handleChange(filter.key, newVals.map(val => val.value).join(','))
-                                }
-                                renderInput={(params) => <TextField {...params} label={filter.label} fullWidth />}
-                            />
-                        </FormControl>
+                        <Autocomplete
+                            multiple
+                            options={filter.options}
+                            getOptionLabel={(option) => option.label}
+                            isOptionEqualToValue={(o, v) => o.value === v.value}
+                            value={getSelectedOptions(filter.options, value)}
+                            onChange={(_, newVals) =>
+                                handleChange(filter.key, newVals.map(val => val.value).join(','))
+                            }
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label={filter.label}
+                                    fullWidth
+                                    InputLabelProps={{ shrink: true }}
+                                    sx={{
+                                        "& .MuiInputBase-root": {
+                                            height: 40,
+                                        },
+                                        "& .MuiInputLabel-root": {
+                                            top: -6,
+                                        },
+                                    }}
+                                />
+                            )}
+                        />
                     );
                 } else {
                     return commonTextField();
@@ -394,7 +410,15 @@ export default function DiscoverSearch({ onSubmit }) {
         handleSearch(resetFilters);
     }, [handleSearch]);
     return (
-        <Box sx={{ height: "30vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", p: 4, color: "white" }}>
+        <Box sx={{
+            minHeight: "45vh",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            px: 4,
+            color: "white",
+        }}>
             <Box
                 sx={{
                     marginTop: "2rem",
@@ -404,80 +428,297 @@ export default function DiscoverSearch({ onSubmit }) {
                     justifyContent: "center",
                 }}
             ></Box>
-            <Box sx={{ mt: 4, display: "flex", flexWrap: "wrap", gap: 1, justifyContent: "center" }}>
-                {allFilters.map((filter) => {
-                    const isActive = (
-                        filter.key === "includeAdult"
-                            ? filters[filter.key] === true
-                            : filters[filter.key] !== undefined && filters[filter.key] !== "" && filters[filter.key] !== null);
-                    return (
-                        <Box
-                            key={filter.key}
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                bgcolor: isActive ? "rgba(0,150,255,0.2)" : "rgba(255,255,255,0.1)",
-                                borderRadius: 2,
-                                pl: 1,
-                                pr: 0.5,
-                                py: 0.5,
-                            }}
-                        >
-                            <Button
-                                onClick={(e) => openPopover(e, filter.key)}
-                                sx={{
-                                    color: "#fff",
-                                    fontWeight: "bold",
-                                    textTransform: "none",
-                                    p: 0,
-                                    minWidth: 0,
-                                    mr: 1,
-                                }}
-                            >
-                                {filter.label}
-                            </Button>
-                            {isActive && (
+            <Box
+                sx={{
+                    height: "auto",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    p: 4,
+                    color: "white",
+                }}
+            >
+                {/* --- Always Visible Filters (first 5) --- */}
+                <Box sx={{ mt: 4, display: "flex", flexDirection: "column", alignItems: "center", gap: 2, width: "100%" }}>
+                    {/* Top Row: Always available filters */}
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: 1,
+                            justifyContent: "center",
+                        }}
+                    >
+                        {allFilters.slice(0, 5).map((filter) => {
+                            const isActive =
+                                filter.key === "includeAdult"
+                                    ? filters[filter.key] === true
+                                    : filters[filter.key] !== undefined && filters[filter.key] !== "" && filters[filter.key] !== null;
+                            return (
                                 <Box
-                                    onClick={() => handleChange(filter.key, "")}
+                                    key={filter.key}
                                     sx={{
-                                        cursor: "pointer",
-                                        color: "#fff",
-                                        backgroundColor: "#f44",
-                                        borderRadius: "50%",
-                                        width: 20,
-                                        height: 20,
                                         display: "flex",
                                         alignItems: "center",
-                                        justifyContent: "center",
-                                        fontSize: "0.8rem",
-                                        fontWeight: "bold",
-                                        lineHeight: 1,
+                                        bgcolor: isActive ? "rgba(0,150,255,0.2)" : "rgba(255,255,255,0.1)",
+                                        borderRadius: 2,
+                                        pl: 1,
+                                        pr: 0.5,
+                                        py: 0.5,
+                                        transition: "background-color 0.2s ease",
+                                        cursor: "pointer",
+                                        "&:hover": {
+                                            bgcolor: isActive ? "rgba(0,150,255,0.35)" : "rgba(255,255,255,0.2)",
+                                        },
                                     }}
+                                    onClick={(e) => openPopover(e, filter.key)}
                                 >
-                                    ×
+                                    <Button
+                                        sx={{
+                                            color: "#fff",
+                                            fontWeight: "bold",
+                                            textTransform: "none",
+                                            p: 0,
+                                            minWidth: 0,
+                                            mr: 1,
+                                        }}
+                                    >
+                                        {filter.label}
+                                    </Button>
+                                    {isActive && (
+                                        <Box
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleChange(filter.key, "");
+                                            }}
+                                            sx={{
+                                                cursor: "pointer",
+                                                color: "#fff",
+                                                backgroundColor: "#f44",
+                                                borderRadius: "50%",
+                                                width: 20,
+                                                height: 20,
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                fontSize: "0.8rem",
+                                                fontWeight: "bold",
+                                                lineHeight: 1,
+                                            }}
+                                        >
+                                            ×
+                                        </Box>
+                                    )}
                                 </Box>
-                            )}
+                            );
+                        })}
+                    </Box>
+
+                    {/* Ultimate-only section */}
+                    {isUltimateUser ? (
+                        <Box
+                            sx={{
+                                mt: 3,
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: 1,
+                                justifyContent: "center",
+                                width: "100%",
+                            }}
+                        >
+                            {allFilters.slice(5).map((filter) => {
+                                const isActive =
+                                    filter.key === "includeAdult"
+                                        ? filters[filter.key] === true
+                                        : filters[filter.key] !== undefined &&
+                                        filters[filter.key] !== "" &&
+                                        filters[filter.key] !== null;
+
+                                return (
+                                    <Box
+                                        key={filter.key}
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            bgcolor: isActive
+                                                ? "rgba(0,150,255,0.2)" // or adjust active gradient
+                                                : "linear-gradient(160deg, rgba(60, 11, 102, 0.95) 0%, rgba(88, 28, 135, 0.9) 40%, rgba(124, 58, 237, 0.85) 100%)",
+                                            border: "1px solid rgba(216, 180, 254, 0.25)",
+                                            borderRadius: "12px",
+                                            pl: 1,
+                                            pr: 0.5,
+                                            py: 0.5,
+                                            transition: "all 0.2s ease",
+                                            cursor: "pointer",
+                                            boxShadow:
+                                                "inset 0 1px 2px rgba(255, 255, 255, 0.08), 0 12px 28px rgba(88, 28, 135, 0.45), 0 4px 12px rgba(0, 0, 0, 0.4)",
+                                            backdropFilter: "blur(4px)",
+                                            "&:hover": {
+                                                filter: "brightness(1.1)",
+                                            },
+                                            "& .MuiButton-root": {
+                                                background: "transparent",
+                                                color: "#fff",
+                                                minWidth: 0,
+                                                p: 0,
+                                                textTransform: "none",
+                                                fontWeight: "bold",
+                                                "&:hover": {
+                                                    background: "transparent",
+                                                },
+                                            },
+                                        }}
+                                        onClick={(e) => openPopover(e, filter.key)}
+                                    >
+                                        <Button
+                                            sx={{
+                                                color: "#fff",
+                                                fontWeight: "bold",
+                                                textTransform: "none",
+                                                p: 0,
+                                                minWidth: 0,
+                                                mr: 1,
+                                            }}
+                                        >
+                                            {filter.label}
+                                        </Button>
+                                        {isActive && (
+                                            <Box
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleChange(filter.key, "");
+                                                }}
+                                                sx={{
+                                                    cursor: "pointer",
+                                                    color: "#fff",
+                                                    backgroundColor: "#f44",
+                                                    borderRadius: "50%",
+                                                    width: 20,
+                                                    height: 20,
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    fontSize: "0.8rem",
+                                                    fontWeight: "bold",
+                                                    lineHeight: 1,
+                                                }}
+                                            >
+                                                ×
+                                            </Box>
+                                        )}
+                                    </Box>
+                                );
+                            })}
                         </Box>
-                    );
-                })}
+                    ) : (
+                        <Box
+                            sx={{
+                                mt: 3,
+                                position: "relative",
+                                width: "90%",
+                                maxWidth: 900,
+                                borderRadius: "20px",
+                                background: "linear-gradient(145deg, #141414, #1e1e1e)",
+                                boxShadow: "6px 6px 12px #0f0f0f, -6px -6px 12px #2a2a2a",
+                                p: 3,
+                                textAlign: "center",
+                                color: "white",
+                                zIndex: 5,
+                            }}
+                        >
+                            <Box sx={{ mb: 1, fontSize: "1.1rem", fontWeight: 600 }}>
+                                🔒 Unlock More Filters with{" "}
+                                <span style={{ color: "#00c2ff" }}>Ultimate Critix</span>
+                            </Box>
+
+                            <Box sx={{ fontSize: "0.9rem", opacity: 0.8, mb: 2 }}>
+                                Access advanced discovery filters like certifications, monetization types,
+                                and provider exclusions.
+                            </Box>
+
+                            <Button
+                                variant="contained"
+                                sx={{
+                                    background: "linear-gradient(90deg, #00b7ff, #0072ff)",
+                                    borderRadius: "25px",
+                                    textTransform: "none",
+                                    fontWeight: "bold",
+                                    px: 3,
+                                    py: 1,
+                                    "&:hover": {
+                                        background: "linear-gradient(90deg, #0094ff, #0059ff)",
+                                    },
+                                }}
+                                href="/upgrade"
+                            >
+                                Upgrade to Ultimate
+                            </Button>
+
+                            {/* Dimmed preview of locked filters */}
+                            <Box
+                                sx={{
+                                    mt: 2,
+                                    filter: "blur(2px) brightness(0.6)",
+                                    pointerEvents: "none",
+                                    userSelect: "none",
+                                    opacity: 0.4,
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    gap: 1,
+                                    justifyContent: "center",
+                                    maxHeight: "80px",
+                                    overflow: "hidden",
+                                }}
+                            >
+                                {allFilters.slice(5).map((filter) => (
+                                    <Box
+                                        key={filter.key}
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            bgcolor: "rgba(255,255,255,0.1)",
+                                            borderRadius: 2,
+                                            pl: 1,
+                                            pr: 0.5,
+                                            py: 0.5,
+                                        }}
+                                    >
+                                        <Button
+                                            sx={{
+                                                color: "#ccc",
+                                                textTransform: "none",
+                                                p: 0,
+                                                minWidth: 0,
+                                                mr: 1,
+                                                fontSize: "0.85rem",
+                                            }}
+                                        >
+                                            {filter.label}
+                                        </Button>
+                                    </Box>
+                                ))}
+                            </Box>
+                        </Box>
+                    )}
+                    <Popover
+                        open={Boolean(anchorEl)}
+                        anchorEl={anchorEl}
+                        onClose={closePopover}
+                        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                        transformOrigin={{ vertical: "top", horizontal: "center" }}
+                        PaperProps={{ sx: { p: 2, minWidth: 250 } }}
+                    >
+                        {activeFilter && renderField(allFilters.find((f) => f.key === activeFilter))}
+                    </Popover>
+
+                    <Button onClick={clearAllFilters} variant="outlined" sx={{ marginTop: "2vh" }}>
+                        Clear All Filters
+                    </Button>
+                </Box>
             </Box>
-
-            <Popover
-                open={Boolean(anchorEl)}
-                anchorEl={anchorEl}
-                onClose={closePopover}
-                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                transformOrigin={{ vertical: "top", horizontal: "center" }}
-                PaperProps={{ sx: { p: 2, minWidth: 250 } }}
-            >
-                {activeFilter && renderField(allFilters.find(f => f.key === activeFilter))}
-            </Popover>
-            <Button onClick={clearAllFilters} variant="outlined" sx={{ marginTop: "1vh" }}>
-                Clear All Filters
-            </Button>
-        </Box>
-
-    );
+        </Box >
+    )
 }
 
 DiscoverSearch.propTypes = {

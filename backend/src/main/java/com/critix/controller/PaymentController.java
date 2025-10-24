@@ -164,45 +164,6 @@ public class PaymentController {
         }
     }
 
-    @Transactional
-    private void handleInvoicePaymentSucceeded(Event event) {
-        logger.info("Processing invoice.payment_succeeded event");
-
-        try {
-            // Deserialize the invoice object
-            com.stripe.model.Invoice invoice = event.getDataObjectDeserializer()
-                    .getObject()
-                    .map(obj -> (com.stripe.model.Invoice) obj)
-                    .orElse(null);
-
-            if (invoice == null) {
-                logger.warn("Failed to extract invoice from invoice.payment_succeeded event");
-                return;
-            }
-
-            // The customer or subscription can link back to your user
-            String customerId = invoice.getCustomer();
-            logger.info("Invoice paid for customer: {}", customerId);
-
-            // Option 1: You saved customerId <-> userId mapping when creating the checkout
-            // session
-            // Option 2: You can use metadata set on the customer or invoice
-            String userId = invoice.getClientReferenceId();
-            logger.info("HERE IS METADATA", invoice.getMetadata());
-            if (userId == null || userId.trim().isEmpty()) {
-                logger.warn("No userId metadata found in invoice");
-                return;
-            }
-
-            logger.info("Upgrading user {} due to paid invoice", userId);
-            upgradeUserToUltimate(userId);
-
-        } catch (Exception e) {
-            logger.error("Error processing invoice.payment_succeeded event", e);
-            throw new RuntimeException("Failed to process invoice.payment_succeeded", e);
-        }
-    }
-
     /**
      * Processes the verified webhook event based on its type.
      * 

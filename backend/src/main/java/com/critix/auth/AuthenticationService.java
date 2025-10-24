@@ -153,10 +153,11 @@ public class AuthenticationService {
 
                         userRepository.save(user);
                         String firstName = user.getFirstName();
+                        boolean isUltimateUser = user.getIsUltimateUser();
                         var extraClaims = new HashMap<String, Object>();
                         extraClaims.put("firstName", firstName);
                         extraClaims.put("userId", user.getId());
-
+                        extraClaims.put("isUltimateUser", isUltimateUser);
                         authenticationManager.authenticate(
                                         new UsernamePasswordAuthenticationToken(
                                                         request.getEmail(),

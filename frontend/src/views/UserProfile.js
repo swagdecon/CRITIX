@@ -59,7 +59,7 @@ export default function UserProfile() {
     const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
     const decodedToken = useMemo(() => jwtDecode(token), [token]);
     const firstName = decodedToken.firstName
-
+    const isUltimateUser = decodedToken.isUltimateUser
     const reviewsToDisplay = useMemo(() => {
         if (!userReviews) return [];
         const startIdx = (currentPage - 1) * reviewsPerPage;
@@ -127,7 +127,7 @@ export default function UserProfile() {
                     <BannerImg bannerPic={banner} refetchBanner={fetchBackendData} />
                     <div className={UserStyle["main-profile"]}>
                         <ProfilePicture avatar={avatar} />
-                        <div className={UserStyle["profile-names"]}>
+                        <div className={isUltimateUser ? UserStyle["profile-names-premium"] : UserStyle["profile-names"]}>
                             <h1 className={UserStyle.username}>{firstName}</h1>
                         </div>
                     </div>

@@ -59,7 +59,6 @@ display: flex;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
   min-width: 25%;
   max-width: 25%;
   padding-right: 4%;
@@ -68,8 +67,14 @@ display: flex;
 .hero-poster {
   display: flex;
  max-height: 80vh;
+ justify-content: center;
   width: auto;
   object-fit: contain; 
+}
+.RecommendationsPoster {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .poster-wrapper {
   display: flex;

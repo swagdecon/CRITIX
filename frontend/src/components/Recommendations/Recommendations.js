@@ -130,19 +130,21 @@ export default function recommendationsCarousel() {
                                             </div>
                                         </div>
                                     </div>
-                                    {movie.posterUrl ? (
-                                        <img
-                                            className={IndMovieStyle["hero-poster"]}
-                                            src={movie.posterUrl}
-                                            alt={movie.title}
-                                        />
-                                    ) : (
-                                        <img
-                                            className={IndMovieStyle["hero-poster"]}
-                                            src={backupPoster}
-                                            alt="fallback poster"
-                                        />
-                                    )}
+                                    <div className={IndMovieStyle.RecommendationsPoster}>
+                                        {movie.posterUrl ? (
+                                            <img
+                                                className={IndMovieStyle["hero-poster"]}
+                                                src={movie.posterUrl}
+                                                alt={movie.title}
+                                            />
+                                        ) : (
+                                            <img
+                                                className={IndMovieStyle["hero-poster"]}
+                                                src={backupPoster}
+                                                alt="fallback poster"
+                                            />
+                                        )}
+                                    </div>
                                 </section>
                             </div>
                         </div>
