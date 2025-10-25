@@ -21,7 +21,7 @@
 		<jackson-datatype.version>2.15.2</jackson-datatype.version>
 		<jjwt.version>0.11.5</jjwt.version>
 		<jvm-openai.version>0.11.0</jvm-openai.version>
-		<stripe.version>29.5.0</stripe.version>
+		<stripe.version>30.0.0</stripe.version>
 	</properties>
 		<dependencies>
 			<dependency>

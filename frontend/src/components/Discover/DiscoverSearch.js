@@ -411,7 +411,7 @@ export default function DiscoverSearch({ onSubmit }) {
     }, [handleSearch]);
     return (
         <Box sx={{
-            minHeight: "45vh",
+            minHeight: "35vh",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -439,9 +439,7 @@ export default function DiscoverSearch({ onSubmit }) {
                     color: "white",
                 }}
             >
-                {/* --- Always Visible Filters (first 5) --- */}
                 <Box sx={{ mt: 4, display: "flex", flexDirection: "column", alignItems: "center", gap: 2, width: "100%" }}>
-                    {/* Top Row: Always available filters */}
                     <Box
                         sx={{
                             display: "flex",
@@ -515,102 +513,158 @@ export default function DiscoverSearch({ onSubmit }) {
                         })}
                     </Box>
 
-                    {/* Ultimate-only section */}
                     {isUltimateUser ? (
-                        <Box
-                            sx={{
-                                mt: 3,
-                                display: "flex",
-                                flexWrap: "wrap",
-                                gap: 1,
-                                justifyContent: "center",
-                                width: "100%",
-                            }}
-                        >
-                            {allFilters.slice(5).map((filter) => {
-                                const isActive =
-                                    filter.key === "includeAdult"
-                                        ? filters[filter.key] === true
-                                        : filters[filter.key] !== undefined &&
-                                        filters[filter.key] !== "" &&
-                                        filters[filter.key] !== null;
+                        <>
+                            <Box
+                                sx={{
+                                    mt: 3,
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    gap: 1.5,
+                                    justifyContent: "center",
+                                    width: "100%",
+                                }}
+                            >
+                                {allFilters.slice(5).map((filter, index) => {
+                                    const isActive =
+                                        filter.key === "includeAdult"
+                                            ? filters[filter.key] === true
+                                            : filters[filter.key] !== undefined &&
+                                            filters[filter.key] !== "" &&
+                                            filters[filter.key] !== null;
 
-                                return (
-                                    <Box
-                                        key={filter.key}
-                                        sx={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            bgcolor: isActive
-                                                ? "rgba(0,150,255,0.2)" // or adjust active gradient
-                                                : "linear-gradient(160deg, rgba(60, 11, 102, 0.95) 0%, rgba(88, 28, 135, 0.9) 40%, rgba(124, 58, 237, 0.85) 100%)",
-                                            border: "1px solid rgba(216, 180, 254, 0.25)",
-                                            borderRadius: "12px",
-                                            pl: 1,
-                                            pr: 0.5,
-                                            py: 0.5,
-                                            transition: "all 0.2s ease",
-                                            cursor: "pointer",
-                                            boxShadow:
-                                                "inset 0 1px 2px rgba(255, 255, 255, 0.08), 0 12px 28px rgba(88, 28, 135, 0.45), 0 4px 12px rgba(0, 0, 0, 0.4)",
-                                            backdropFilter: "blur(4px)",
-                                            "&:hover": {
-                                                filter: "brightness(1.1)",
-                                            },
-                                            "& .MuiButton-root": {
-                                                background: "transparent",
-                                                color: "#fff",
-                                                minWidth: 0,
-                                                p: 0,
-                                                textTransform: "none",
-                                                fontWeight: "bold",
-                                                "&:hover": {
-                                                    background: "transparent",
-                                                },
-                                            },
-                                        }}
-                                        onClick={(e) => openPopover(e, filter.key)}
-                                    >
-                                        <Button
+                                    return (
+                                        <Box
+                                            key={filter.key}
                                             sx={{
-                                                color: "#fff",
-                                                fontWeight: "bold",
-                                                textTransform: "none",
-                                                p: 0,
-                                                minWidth: 0,
-                                                mr: 1,
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: 0.8,
+                                                position: 'relative',
+                                                background: isActive
+                                                    ? 'linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(147, 51, 234, 0.3) 100%)'
+                                                    : 'linear-gradient(135deg, rgba(88, 28, 135, 0.6) 0%, rgba(124, 58, 237, 0.5) 100%)',
+                                                border: isActive
+                                                    ? '2px solid rgba(216, 180, 254, 0.6)'
+                                                    : '1px solid rgba(216, 180, 254, 0.3)',
+                                                borderRadius: "12px",
+                                                px: 1.5,
+                                                py: 0.7,
+                                                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                                                cursor: "pointer",
+                                                boxShadow: isActive
+                                                    ? 'inset 0 1px 2px rgba(255, 255, 255, 0.1), 0 4px 16px rgba(168, 85, 247, 0.4), 0 2px 8px rgba(0, 0, 0, 0.5)'
+                                                    : 'inset 0 1px 2px rgba(255, 255, 255, 0.08), 0 4px 12px rgba(88, 28, 135, 0.3), 0 2px 6px rgba(0, 0, 0, 0.4)',
+                                                overflow: 'hidden',
+                                                animation: `fadeInUp 0.5s ease-out ${index * 0.05}s backwards`,
+                                                '@keyframes fadeInUp': {
+                                                    from: {
+                                                        opacity: 0,
+                                                        transform: 'translateY(20px)'
+                                                    },
+                                                    to: {
+                                                        opacity: 1,
+                                                        transform: 'translateY(0)'
+                                                    }
+                                                },
+                                                "&::before": {
+                                                    content: '""',
+                                                    position: 'absolute',
+                                                    top: 0,
+                                                    left: 0,
+                                                    right: 0,
+                                                    height: '2px',
+                                                    background: 'linear-gradient(90deg, transparent, rgba(216, 180, 254, 0.8), transparent)',
+                                                    opacity: isActive ? 1 : 0,
+                                                    transition: 'opacity 0.3s ease'
+                                                },
+                                                "&:hover": {
+                                                    transform: "translateY(-3px) scale(1.02)",
+                                                    border: '2px solid rgba(216, 180, 254, 0.6)',
+                                                    background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.4) 0%, rgba(147, 51, 234, 0.4) 100%)',
+                                                    boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.12), 0 6px 20px rgba(168, 85, 247, 0.5), 0 3px 10px rgba(0, 0, 0, 0.6)',
+                                                },
+                                                "&:hover::before": {
+                                                    opacity: 1
+                                                }
                                             }}
+                                            onClick={(e) => openPopover(e, filter.key)}
                                         >
-                                            {filter.label}
-                                        </Button>
-                                        {isActive && (
-                                            <Box
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleChange(filter.key, "");
-                                                }}
+                                            {/* Sparkle icon */}
+                                            <Box sx={{
+                                                fontSize: '0.85rem',
+                                                filter: 'drop-shadow(0 0 4px rgba(216, 180, 254, 0.8))',
+                                                animation: 'pulse 2s ease-in-out infinite',
+                                                '@keyframes pulse': {
+                                                    '0%, 100%': {
+                                                        opacity: 0.8,
+                                                        transform: 'scale(1)'
+                                                    },
+                                                    '50%': {
+                                                        opacity: 1,
+                                                        transform: 'scale(1.1)'
+                                                    }
+                                                }
+                                            }}>
+                                                ✦
+                                            </Box>
+
+                                            <Button
                                                 sx={{
-                                                    cursor: "pointer",
                                                     color: "#fff",
-                                                    backgroundColor: "#f44",
-                                                    borderRadius: "50%",
-                                                    width: 20,
-                                                    height: 20,
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    justifyContent: "center",
-                                                    fontSize: "0.8rem",
-                                                    fontWeight: "bold",
-                                                    lineHeight: 1,
+                                                    fontWeight: 700,
+                                                    textTransform: "none",
+                                                    p: 0,
+                                                    minWidth: 0,
+                                                    mr: 0,
+                                                    fontSize: '0.85rem',
+                                                    letterSpacing: '0.3px',
+                                                    textShadow: '0 1px 4px rgba(0,0,0,0.4)',
+                                                    background: 'transparent',
+                                                    '&:hover': {
+                                                        background: 'transparent'
+                                                    }
                                                 }}
                                             >
-                                                ×
-                                            </Box>
-                                        )}
-                                    </Box>
-                                );
-                            })}
-                        </Box>
+                                                {filter.label}
+                                            </Button>
+
+                                            {isActive && (
+                                                <Box
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleChange(filter.key, "");
+                                                    }}
+                                                    sx={{
+                                                        cursor: "pointer",
+                                                        color: "#fff",
+                                                        background: "linear-gradient(135deg, #ec4899, #be185d)",
+                                                        borderRadius: "50%",
+                                                        width: 20,
+                                                        height: 20,
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center",
+                                                        fontSize: "0.9rem",
+                                                        fontWeight: "bold",
+                                                        lineHeight: 1,
+                                                        boxShadow: '0 1px 4px rgba(236, 72, 153, 0.4)',
+                                                        transition: 'all 0.2s ease',
+                                                        "&:hover": {
+                                                            transform: "scale(1.15) rotate(90deg)",
+                                                            background: "linear-gradient(135deg, #f472b6, #ec4899)",
+                                                            boxShadow: '0 2px 6px rgba(236, 72, 153, 0.6)',
+                                                        }
+                                                    }}
+                                                >
+                                                    ×
+                                                </Box>
+                                            )}
+                                        </Box>
+                                    );
+                                })}
+                            </Box>
+                        </>
                     ) : (
                         <Box
                             sx={{
@@ -712,7 +766,7 @@ export default function DiscoverSearch({ onSubmit }) {
                         {activeFilter && renderField(allFilters.find((f) => f.key === activeFilter))}
                     </Popover>
 
-                    <Button onClick={clearAllFilters} variant="outlined" sx={{ marginTop: "2vh" }}>
+                    <Button onClick={clearAllFilters} variant="outlined">
                         Clear All Filters
                     </Button>
                 </Box>

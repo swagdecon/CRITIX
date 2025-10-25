@@ -49,7 +49,7 @@ export default function IndUserReview({ placement, avatar, author, movieTitle, c
                                     </div>
                                     {tier && (
                                         <div className={`${UserReviewStyle.Badge} ${UserReviewStyle[tier]}`}>
-                                            {tier === "CritixUltimate" ? "Critix Ultimate" : "Critix Pro"}
+                                            {tier === "CritixUltimate" ? "Critix Ultimate" : null}
                                         </div>
                                     )}
                                 </div>

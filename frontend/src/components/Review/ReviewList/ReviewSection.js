@@ -11,16 +11,6 @@ export default function ReviewSection({ reviews }) {
     // Template subscription reviews
     const templateReviews = [
         {
-            avatar: "/pro_avatar.png",
-            author: "Critix Pro Reviewer",
-            movieTitle: "Inception",
-            createdDate: new Date().toISOString(),
-            content: "Mind-bending, visually stunning, and thought-provoking. A must-watch for sci-fi lovers.",
-            rating: 90,
-            tier: "CritixPro",
-            tags: ["mind-blowing", "visual feast", "smart"]
-        },
-        {
             avatar: "/ultimate_avatar.png",
             author: "Critix Ultimate",
             movieTitle: "The Godfather",
