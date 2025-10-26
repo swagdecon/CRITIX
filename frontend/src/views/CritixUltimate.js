@@ -25,7 +25,7 @@ export default function PricingPage() {
                         <div className={UltimateStyles.pricingInner}>
                             <h2 className={UltimateStyles.planTitle}>CRITIX ULTIMATE</h2>
                             <p className={UltimateStyles.planPrice}>
-                                £10<span>/year</span>
+                                £5<span>/month</span>
                             </p>
 
                             <ul className={UltimateStyles.featureList}>
@@ -39,7 +39,7 @@ export default function PricingPage() {
                             </ul>
 
                             <a
-                                href="https://buy.stripe.com/test_7sY8wR6Mk8FO4MsgDU7AI00"
+                                href="https://buy.stripe.com/test_4gMeVfdaI09ia6M5Zg7AI01"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className={UltimateStyles.ctaButton}

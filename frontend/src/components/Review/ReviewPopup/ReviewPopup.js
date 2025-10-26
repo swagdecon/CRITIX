@@ -72,6 +72,7 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, movieGe
     const token = CookieManager.decryptCookie('accessToken');
     const decodedToken = jwtDecode(token);
     const firstName = decodedToken.firstName;
+    const isUltimateUser = decodedToken.isUltimateUser
     const filter = useMemo(() => new Filter(), []);
     const [lineLimitReached, setLineLimitReached] = useState(false)
     const [reviewRating, setReviewRating] = useState(0);
@@ -79,9 +80,14 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, movieGe
     const lastWordCheckpointRef = useRef(0);
     const [suggestionsList, setSuggestionsList] = useState([]);
     const [semanticsList, setSemanticsList] = useState([]);
-
     const handleRemoveSuggestion = (indexToRemove) => {
         setSuggestionsList(prev => prev.filter((_, index) => index !== indexToRemove));
+    };
+
+    const handlePremiumFeatureClick = () => {
+        if (!isUltimateUser) {
+            window.location.href = 'http://localhost:3000/ultimate';
+        }
     };
 
     const handleGetIdea = () => {
@@ -189,6 +195,9 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, movieGe
     }, [openModal, editor]);
 
     const fetchSuggestions = async (reviewText) => {
+        // Only fetch AI suggestions for premium users
+        if (!isUltimateUser) return;
+
         try {
             const suggestionResponse = await sendData(`${API_URL}${AI_SUGGESTIONS_ENDPOINT}`, { review: reviewText });
             const suggestionData = await suggestionResponse.json();
@@ -358,35 +367,55 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, movieGe
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: 0.3 }}
                             >
-                                <Box sx={ideasBoxStyles}>
-                                    <LightbulbIcon sx={{ color: '#ffd54f', fontSize: 28, mb: 1 }} />
+                                <Box
+                                    sx={isUltimateUser ? ideasBoxStyles : premiumLockedBoxStyles}
+                                    onClick={handlePremiumFeatureClick}
+                                >
+                                    {!isUltimateUser && (
+                                        <Box sx={premiumBadgeStyles}>
+                                            <Typography variant="caption" sx={{ fontWeight: 700, fontSize: '11px' }}>
+                                                ⭐ ULTIMATE ONLY
+                                            </Typography>
+                                        </Box>
+                                    )}
+                                    <LightbulbIcon sx={{ color: isUltimateUser ? '#ffd54f' : 'rgba(255,213,79,0.3)', fontSize: 28, mb: 1 }} />
                                     <Typography variant="subtitle2" sx={cardTitleStyles}>
                                         Need Inspiration?
                                     </Typography>
-                                    <Button
-                                        variant="contained"
-                                        onClick={handleGetIdea}
-                                        sx={ideaButtonStyles}
-                                        fullWidth
-                                    >
-                                        Get Writing Prompt
-                                    </Button>
-                                    <AnimatePresence mode="wait">
-                                        {randomIdea && (
-                                            <motion.div
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, y: -10 }}
-                                                transition={{ duration: 0.3 }}
+                                    {isUltimateUser ? (
+                                        <>
+                                            <Button
+                                                variant="contained"
+                                                onClick={handleGetIdea}
+                                                sx={ideaButtonStyles}
+                                                fullWidth
                                             >
-                                                <Box sx={randomIdeaBoxStyles}>
-                                                    <Typography variant="body2">
-                                                        💡 {randomIdea}
-                                                    </Typography>
-                                                </Box>
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
+                                                Get Writing Prompt
+                                            </Button>
+                                            <AnimatePresence mode="wait">
+                                                {randomIdea && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, y: 10 }}
+                                                        animate={{ opacity: 1, y: 0 }}
+                                                        exit={{ opacity: 0, y: -10 }}
+                                                        transition={{ duration: 0.3 }}
+                                                    >
+                                                        <Box sx={randomIdeaBoxStyles}>
+                                                            <Typography variant="body2">
+                                                                💡 {randomIdea}
+                                                            </Typography>
+                                                        </Box>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </>
+                                    ) : (
+                                        <Box sx={premiumMessageStyles}>
+                                            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', lineHeight: 1.6 }}>
+                                                Get AI-powered writing prompts to inspire your reviews
+                                            </Typography>
+                                        </Box>
+                                    )}
                                 </Box>
                             </motion.div>
 
@@ -396,35 +425,53 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, movieGe
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: 0.4 }}
                             >
-                                <Box sx={semanticsBoxStyles}>
-                                    <AutoAwesomeIcon sx={{ color: '#64b5f6', fontSize: 24, mb: 1 }} />
+                                <Box
+                                    sx={isUltimateUser ? semanticsBoxStyles : premiumLockedBoxStyles}
+                                    onClick={handlePremiumFeatureClick}
+                                >
+                                    {!isUltimateUser && (
+                                        <Box sx={premiumBadgeStyles}>
+                                            <Typography variant="caption" sx={{ fontWeight: 700, fontSize: '11px' }}>
+                                                ⭐ ULTIMATE ONLY
+                                            </Typography>
+                                        </Box>
+                                    )}
+                                    <AutoAwesomeIcon sx={{ color: isUltimateUser ? '#64b5f6' : 'rgba(100,181,246,0.3)', fontSize: 24, mb: 1 }} />
                                     <Typography variant="subtitle2" sx={cardTitleStyles}>
                                         Sentiment Analysis
                                     </Typography>
-                                    <Box sx={semanticsListStyles}>
-                                        {semanticsList.length > 0 ? (
-                                            <AnimatePresence>
-                                                {semanticsList.map((semantic, idx) => (
-                                                    <motion.div
-                                                        key={idx}
-                                                        initial={{ opacity: 0, scale: 0.8 }}
-                                                        animate={{ opacity: 1, scale: 1 }}
-                                                        exit={{ opacity: 0, scale: 0.8 }}
-                                                        transition={{ delay: idx * 0.1 }}
-                                                    >
-                                                        <Chip
-                                                            label={semantic}
-                                                            sx={semanticChipStyles}
-                                                        />
-                                                    </motion.div>
-                                                ))}
-                                            </AnimatePresence>
-                                        ) : (
-                                            <Typography variant="caption" sx={emptyStateStyles}>
-                                                Write at least 15 words to see sentiment analysis
+                                    {isUltimateUser ? (
+                                        <Box sx={semanticsListStyles}>
+                                            {semanticsList.length > 0 ? (
+                                                <AnimatePresence>
+                                                    {semanticsList.map((semantic, idx) => (
+                                                        <motion.div
+                                                            key={idx}
+                                                            initial={{ opacity: 0, scale: 0.8 }}
+                                                            animate={{ opacity: 1, scale: 1 }}
+                                                            exit={{ opacity: 0, scale: 0.8 }}
+                                                            transition={{ delay: idx * 0.1 }}
+                                                        >
+                                                            <Chip
+                                                                label={semantic}
+                                                                sx={semanticChipStyles}
+                                                            />
+                                                        </motion.div>
+                                                    ))}
+                                                </AnimatePresence>
+                                            ) : (
+                                                <Typography variant="caption" sx={emptyStateStyles}>
+                                                    Write at least 15 words to see sentiment analysis
+                                                </Typography>
+                                            )}
+                                        </Box>
+                                    ) : (
+                                        <Box sx={premiumMessageStyles}>
+                                            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', lineHeight: 1.6 }}>
+                                                AI analyzes the emotional tone and sentiment of your writing
                                             </Typography>
-                                        )}
-                                    </Box>
+                                        </Box>
+                                    )}
                                 </Box>
                             </motion.div>
                         </Box>
@@ -436,51 +483,73 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, movieGe
                             transition={{ delay: 0.5 }}
                             style={{ flex: 1 }}
                         >
-                            <Box sx={suggestionBoxStyles}>
+                            <Box
+                                sx={isUltimateUser ? suggestionBoxStyles : premiumLockedBoxStyles}
+                                onClick={handlePremiumFeatureClick}
+                            >
+                                {!isUltimateUser && (
+                                    <Box sx={premiumBadgeStyles}>
+                                        <Typography variant="caption" sx={{ fontWeight: 700, fontSize: '11px' }}>
+                                            ⭐ ULTIMATE ONLY
+                                        </Typography>
+                                    </Box>
+                                )}
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                                    <AutoAwesomeIcon sx={{ color: '#7c4dff', fontSize: 24 }} />
+                                    <AutoAwesomeIcon sx={{ color: isUltimateUser ? '#7c4dff' : 'rgba(124,77,255,0.3)', fontSize: 24 }} />
                                     <Typography variant="h6" sx={cardTitleStyles}>
                                         AI Suggestions
                                     </Typography>
                                 </Box>
-                                <Box sx={suggestionListStyles}>
-                                    {suggestionsList.length > 0 ? (
-                                        <AnimatePresence>
-                                            {suggestionsList.map((suggestion, idx) => (
-                                                <motion.div
-                                                    key={idx}
-                                                    initial={{ opacity: 0, y: 10 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    exit={{ opacity: 0, x: -20 }}
-                                                    transition={{ duration: 0.3, delay: idx * 0.05 }}
-                                                >
-                                                    <Box sx={suggestionItemStyles}>
-                                                        <Typography variant="body2" sx={{ flex: 1, lineHeight: 1.6 }}>
-                                                            {suggestion}
-                                                        </Typography>
-                                                        <IconButton
-                                                            size="small"
-                                                            onClick={() => handleRemoveSuggestion(idx)}
-                                                            sx={removeButtonStyles}
-                                                        >
-                                                            <CloseIcon fontSize="small" />
-                                                        </IconButton>
-                                                    </Box>
-                                                </motion.div>
-                                            ))}
-                                        </AnimatePresence>
-                                    ) : (
-                                        <Box sx={emptyStateContainerStyles}>
-                                            <AutoAwesomeIcon sx={{ fontSize: 48, color: 'rgba(255,255,255,0.2)', mb: 2 }} />
-                                            <Typography variant="body2" sx={emptyStateStyles}>
-                                                AI-powered suggestions will appear here as you write
-                                            </Typography>
-                                            <Typography variant="caption" sx={{ ...emptyStateStyles, mt: 1 }}>
-                                                Write at least 15 words to get started
-                                            </Typography>
-                                        </Box>
-                                    )}
-                                </Box>
+                                {isUltimateUser ? (
+                                    <Box sx={suggestionListStyles}>
+                                        {suggestionsList.length > 0 ? (
+                                            <AnimatePresence>
+                                                {suggestionsList.map((suggestion, idx) => (
+                                                    <motion.div
+                                                        key={idx}
+                                                        initial={{ opacity: 0, y: 10 }}
+                                                        animate={{ opacity: 1, y: 0 }}
+                                                        exit={{ opacity: 0, x: -20 }}
+                                                        transition={{ duration: 0.3, delay: idx * 0.05 }}
+                                                    >
+                                                        <Box sx={suggestionItemStyles}>
+                                                            <Typography variant="body2" sx={{ flex: 1, lineHeight: 1.6 }}>
+                                                                {suggestion}
+                                                            </Typography>
+                                                            <IconButton
+                                                                size="small"
+                                                                onClick={() => handleRemoveSuggestion(idx)}
+                                                                sx={removeButtonStyles}
+                                                            >
+                                                                <CloseIcon fontSize="small" />
+                                                            </IconButton>
+                                                        </Box>
+                                                    </motion.div>
+                                                ))}
+                                            </AnimatePresence>
+                                        ) : (
+                                            <Box sx={emptyStateContainerStyles}>
+                                                <AutoAwesomeIcon sx={{ fontSize: 48, color: 'rgba(255,255,255,0.2)', mb: 2 }} />
+                                                <Typography variant="body2" sx={emptyStateStyles}>
+                                                    AI-powered suggestions will appear here as you write
+                                                </Typography>
+                                                <Typography variant="caption" sx={{ ...emptyStateStyles, mt: 1 }}>
+                                                    Write at least 15 words to get started
+                                                </Typography>
+                                            </Box>
+                                        )}
+                                    </Box>
+                                ) : (
+                                    <Box sx={{ ...emptyStateContainerStyles, minHeight: '320px' }}>
+                                        <AutoAwesomeIcon sx={{ fontSize: 64, color: 'rgba(124,77,255,0.2)', mb: 3 }} />
+                                        <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 600, mb: 1 }}>
+                                            Smart Writing Assistant
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', lineHeight: 1.6, textAlign: 'center', maxWidth: '280px' }}>
+                                            Get real-time AI suggestions to enhance your reviews as you write. Available with Ultimate subscription.
+                                        </Typography>
+                                    </Box>
+                                )}
                             </Box>
                         </motion.div>
                     </Box>
@@ -911,6 +980,42 @@ const suggestionItemStyles = {
         borderColor: 'rgba(124, 77, 255, 0.4)',
         boxShadow: '0 8px 20px rgba(124, 77, 255, 0.2)',
     },
+};
+
+const premiumLockedBoxStyles = {
+    p: 3,
+    background: 'linear-gradient(135deg, rgba(50, 50, 55, 0.4) 0%, rgba(30, 30, 35, 0.4) 100%)',
+    border: '2px dashed rgba(255, 215, 0, 0.3)',
+    borderRadius: '16px',
+    textAlign: 'center',
+    position: 'relative',
+    transition: 'all 0.3s ease',
+    opacity: 0.7,
+    '&:hover': {
+        opacity: 0.85,
+        borderColor: 'rgba(255, 215, 0, 0.5)',
+        boxShadow: '0 8px 24px rgba(255, 215, 0, 0.15)',
+    },
+};
+
+const premiumBadgeStyles = {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    background: 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)',
+    color: '#000',
+    padding: '4px 12px',
+    borderRadius: '20px',
+    boxShadow: '0 2px 8px rgba(255, 215, 0, 0.4)',
+    zIndex: 1,
+};
+
+const premiumMessageStyles = {
+    mt: 2,
+    p: 2,
+    background: 'rgba(255,255,255,0.03)',
+    borderRadius: '10px',
+    border: '1px solid rgba(255,255,255,0.05)',
 };
 
 const removeButtonStyles = {

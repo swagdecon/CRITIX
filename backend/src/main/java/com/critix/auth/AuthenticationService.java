@@ -92,6 +92,7 @@ public class AuthenticationService {
                                         .lastName(request.getLastName())
                                         .email(request.getEmail())
                                         .userAuth(userAuth)
+                                        .isUltimateUser(false)
                                         .password(passwordEncoder.encode(request.getPassword()))
                                         .accountActive(false)
                                         .avatar(DEFAULT_AVATAR_URL)
@@ -101,6 +102,7 @@ public class AuthenticationService {
                         var extraClaims = new HashMap<String, Object>();
                         extraClaims.put("firstName", request.getFirstName());
                         extraClaims.put("userId", user.getId());
+                        extraClaims.put("isUltimateUser", user.getIsUltimateUser());
 
                         var savedUser = userRepository.save(user);
                         var jwtToken = jwtService.generateToken(extraClaims, user);
