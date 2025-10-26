@@ -12,8 +12,9 @@
     box-shadow: inset 0 0 0 1000px rgba(255, 255, 255, 0.01), 0 8px 40px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .UltimateUser {
-     box-shadow:
+    box-shadow:
         0 12px 36px #3c0b6680,  
         0 6px 18px rgba(0, 0, 0, 0.4);
     border: 2px solid #3c0b6680;
@@ -22,6 +23,7 @@
 .IndUserReviews:hover {
     transform: translateY(-8px);
 }
+
 .TopBar {
     display: flex;
     justify-content: flex-end;
@@ -32,10 +34,12 @@
     gap: 24px;
     align-items: flex-start;
 }
+
 .TopWrapper {
     display: inline-flex;
     justify-content: space-between;
 }
+
 .ProfilePic {
     width: 80px;
     height: 80px;
@@ -66,13 +70,13 @@
     align-items: flex-start;
     margin-bottom: 14px;
     gap: 16px;
-  }
-  
-  .ReviewHeaderLeft {
+}
+
+.ReviewHeaderLeft {
     display: flex;
     flex-direction: column;
     gap: 4px;
-  }
+}
 
 .ReviewHeaderCol {
     display: flex;
@@ -93,12 +97,14 @@
     color: #cccccc;
     font-family: 'Roboto Mono', monospace;
 }
+
 .ReviewRatingWrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+
 .ReviewRating {
     padding: 10px 20px;
     border-radius: 999px;
@@ -112,6 +118,7 @@
     width: 50px;
     height: 50px;
 }
+
 .AverageRating {
     padding: 10px 20px;
     border-radius: 999px;
@@ -125,6 +132,7 @@
     width: 10ch;
     height: 10ch;
 }
+
 .title {
     text-transform: uppercase;
     font-size: large;
@@ -142,6 +150,10 @@
 .AverageRating.yellow { background: linear-gradient(135deg, #ffbb33, #ff8800); }
 .AverageRating.red { background: linear-gradient(135deg, #ff4444, #cc0000); }
 
+.Review {
+    position: relative;
+}
+
 .ReviewContent {
     margin-top: 20px;
     font-size: 1rem;
@@ -155,6 +167,7 @@
     text-align: justify;
     max-height: 35vh;
     overflow-y: auto;
+    transition: filter 0.4s ease;
 }
 
 .HighlightTags {
@@ -194,11 +207,10 @@
     border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
-
 .CritixUltimate {
-     background: linear-gradient(
+    background: linear-gradient(
         160deg,
-        rgba(40, 5, 80, 0.95) 0%,   /* very dark purple */
+        rgba(40, 5, 80, 0.95) 0%,
         rgba(60, 11, 102, 0.9) 40%,
         rgba(88, 28, 135, 0.85) 100%
     );
@@ -210,65 +222,108 @@
 
 .ReviewContent::-webkit-scrollbar {
     width: 10px;
-  }
-  
-  .ReviewContent::-webkit-scrollbar-track {
+}
+
+.ReviewContent::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
-  }
-  
-  .ReviewContent::-webkit-scrollbar-thumb {
+}
+
+.ReviewContent::-webkit-scrollbar-thumb {
     background: linear-gradient(135deg, #0096ff, #0096ff);
     border-radius: 10px;
     border: 2px solid rgba(0, 0, 0, 0.2);
-  }
-  
-  .ReviewContent::-webkit-scrollbar-thumb:hover {
+}
+
+.ReviewContent::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(135deg, #0096ff, #0096ff);
-  }
-  .SpoilerOverlay {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(20,20,20,0.7));
+}
+
+/* Elegant Professional Spoiler Overlay */
+.SpoilerOverlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(18, 18, 22, 0.97) 0%,
+        rgba(22, 22, 28, 0.98) 50%,
+        rgba(18, 18, 22, 0.97) 100%
+    );
     border-radius: 16px;
-    z-index: 3;
+    z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    gap: 24px;
+    padding: 40px;
     text-align: center;
-    backdrop-filter: brightness(0.5);
+    backdrop-filter: blur(12px) saturate(100%);
+    -webkit-backdrop-filter: blur(12px) saturate(100%);
     pointer-events: all;
-    box-shadow: inset 0 0 40px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .SpoilerWarningText {
-    color: #fff;
-    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 600;
     font-size: 1.1rem;
-    background: linear-gradient(90deg, #ff4e00, #ec9f05);
-    padding: 8px 16px;
-    border-radius: 999px;
-    box-shadow: 0 0 10px rgba(255, 128, 0, 0.4);
-    margin-bottom: 16px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    padding: 14px 28px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    letter-spacing: 0.3px;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.SpoilerWarningText::before {
+    font-size: 1.4rem;
+    color: rgba(255, 180, 100, 0.9);
+    filter: drop-shadow(0 0 8px rgba(255, 180, 100, 0.3));
 }
 
 .RevealSpoilerButton {
-    background: linear-gradient(90deg, #4facfe, #00f2fe);
-    color: #000;
-    border: none;
-    border-radius: 12px;
-    padding: 10px 20px;
-    font-weight: 700;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 12px 32px;
+    font-weight: 600;
     font-size: 0.95rem;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 14px rgba(0, 242, 254, 0.3);
+    transition: all 0.25s ease;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .RevealSpoilerButton:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 242, 254, 0.4);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.18);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.RevealSpoilerButton:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
