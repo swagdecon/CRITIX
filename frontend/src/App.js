@@ -26,7 +26,7 @@ import Recommendations from "./components/Recommendations/Recommendations.js";
 import DiscoverMovies from "./views/Discover.js";
 import CritixHomepage from "./views/CritixHomepage.js"
 import MovieSceneViewer from "./components/AR/MovieSceneViewer.js"
-
+import Subscription from "./views/Subscription.js"
 export default function App() {
   return (
     <Router>
@@ -74,6 +74,7 @@ export default function App() {
         <Route path="/profile" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
         <Route path="/movies/movie/:id" element={<PrivateRoute><IndMovie /></PrivateRoute>} />
         <Route path="/person/:id" element={<PrivateRoute><IndPerson /></PrivateRoute>} />
+        <Route path="/subscription/" element={<PrivateRoute><Subscription /></PrivateRoute>} />
         <Route path="/forgot-password" element={<ConfirmEmailForPwdReset />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/reset-email/:id" element={<ResetEmail />} />

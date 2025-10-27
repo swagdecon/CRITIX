@@ -1,14 +1,8 @@
 import React from "react";
 import Footer from "../components/Footer/Footer.js";
-// import { jwtDecode } from "jwt-decode";
-// import CookieManager from "../security/CookieManager.js";
 import UltimateStyles from "../components/CritixUltimate/CritixUltimate.module.css";
 
 export default function PricingPage() {
-    //   const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
-    //   const decodedToken = useMemo(() => jwtDecode(token), [token]);
-    //   const userId = decodedToken.userId;
-
     return (
         <>
             <section className={UltimateStyles.ultimateSection}>
