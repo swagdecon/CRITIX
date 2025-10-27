@@ -50,7 +50,7 @@ export default function DiscoverSearch({ onSubmit }) {
     const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
     const decodedToken = useMemo(() => jwtDecode(token), [token]);
     const isUltimateUser = decodedToken.isUltimateUser
-    console.log(decodedToken)
+
     const debouncedSearch = useRef(debounce((updatedFilters) => {
         const { page, ...rest } = updatedFilters;
         const pageNumber = Number(page);
@@ -678,7 +678,7 @@ export default function DiscoverSearch({ onSubmit }) {
                                 p: 3,
                                 textAlign: "center",
                                 color: "white",
-                                zIndex: 5,
+                                zIndex: 1,
                             }}
                         >
                             <Box sx={{ mb: 1, fontSize: "1.1rem", fontWeight: 600 }}>
@@ -704,7 +704,7 @@ export default function DiscoverSearch({ onSubmit }) {
                                         background: "linear-gradient(90deg, #0094ff, #0059ff)",
                                     },
                                 }}
-                                href="/upgrade"
+                                href="/ultimate"
                             >
                                 Upgrade to Ultimate
                             </Button>

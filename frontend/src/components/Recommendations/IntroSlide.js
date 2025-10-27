@@ -1,7 +1,14 @@
 import React from "react"
+import PropTypes from "prop-types"
+import { useNavigate } from "react-router-dom"
 
-export default function IntroSlide() {
+export default function IntroSlide({ isUltimateUser = true, shownCount = 0, totalCount = 0 }) {
+    const navigate = useNavigate();
     const themeColor = "#0096ff";
+
+    const handleUpgradeClick = () => {
+        navigate('/ultimate');
+    };
 
     return (
         <div style={{ position: 'relative', height: '100vh', overflow: 'hidden' }}>
@@ -82,7 +89,7 @@ export default function IntroSlide() {
                 <p style={{
                     fontSize: 'clamp(1rem, 2vw, 1.4rem)',
                     color: '#b8b8b8',
-                    marginBottom: '3rem',
+                    marginBottom: !isUltimateUser ? '2rem' : '3rem',
                     maxWidth: '700px',
                     lineHeight: '1.6',
                     animation: 'fadeInUp 0.8s ease-out 0.2s backwards',
@@ -91,7 +98,74 @@ export default function IntroSlide() {
                     Curated using advanced algorithms that learn your taste. Sit back and enjoy personalized picks, every day.
                 </p>
 
-                {/* Feature cards */}
+                {!isUltimateUser && (
+                    <div onClick={handleUpgradeClick} style={{
+                        background: 'linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 152, 0, 0.15) 100%)',
+                        border: '2px solid rgba(255, 193, 7, 0.5)',
+                        borderRadius: '20px',
+                        padding: '2rem 3rem',
+                        marginBottom: '2.5rem',
+                        maxWidth: '750px',
+                        width: '90%',
+                        backdropFilter: 'blur(10px)',
+                        animation: 'fadeInUp 0.8s ease-out 0.3s backwards, pulse 2s ease-in-out infinite',
+                        boxShadow: '0 8px 32px rgba(255, 193, 7, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+                        cursor: 'pointer'
+                    }}>
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '1rem',
+                            marginBottom: '1rem'
+                        }}>
+                            <span className="material-icons" style={{
+                                color: '#ffc107',
+                                fontSize: '2.5rem',
+                                filter: 'drop-shadow(0 0 12px rgba(255, 193, 7, 0.8))',
+                                animation: 'glow 2s ease-in-out infinite'
+                            }}>
+                                workspace_premium
+                            </span>
+                            <h3 style={{
+                                color: '#ffc107',
+                                fontSize: 'clamp(1.3rem, 2.5vw, 1.6rem)',
+                                fontWeight: '800',
+                                margin: 0,
+                                letterSpacing: '0.03em',
+                                textShadow: '0 2px 10px rgba(255, 193, 7, 0.3)'
+                            }}>
+                                Limited to 5 Daily Picks
+                            </h3>
+                        </div>
+                        <p style={{
+                            color: '#f0f0f0',
+                            fontSize: 'clamp(1rem, 1.8vw, 1.15rem)',
+                            margin: '0 0 1.25rem 0',
+                            lineHeight: '1.6',
+                            fontWeight: '400'
+                        }}>
+                            Youre currently viewing <strong style={{ color: '#fff', fontWeight: '700' }}>{shownCount} of {totalCount}</strong> personalized recommendations.
+                        </p>
+                        <div style={{
+                            background: 'rgba(0, 0, 0, 0.3)',
+                            borderRadius: '12px',
+                            padding: '1.25rem 1.5rem',
+                            border: '1px solid rgba(255, 193, 7, 0.3)'
+                        }}>
+                            <p style={{
+                                color: '#fff',
+                                fontSize: 'clamp(0.95rem, 1.6vw, 1.1rem)',
+                                margin: 0,
+                                lineHeight: '1.5',
+                                fontWeight: '500'
+                            }}>
+                                <span style={{ color: '#ffc107', fontWeight: '700' }}>✨ Upgrade to Premium</span> to unlock all {totalCount} daily recommendations and discover movies perfectly matched to your taste!
+                            </p>
+                        </div>
+                    </div>
+                )}
+
                 <div style={{
                     display: 'flex',
                     justifyContent: 'center',
@@ -168,35 +242,6 @@ export default function IntroSlide() {
                         </div>
                     ))}
                 </div>
-
-                {/* Scroll indicator */}
-                <div style={{
-                    position: 'absolute',
-                    bottom: '3rem',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    animation: 'bounce 2s ease-in-out infinite'
-                }}>
-                    <div style={{
-                        width: '30px',
-                        height: '50px',
-                        border: `2px solid ${themeColor}60`,
-                        borderRadius: '15px',
-                        position: 'relative'
-                    }}>
-                        <div style={{
-                            width: '6px',
-                            height: '10px',
-                            background: themeColor,
-                            borderRadius: '3px',
-                            position: 'absolute',
-                            top: '8px',
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            animation: 'scrollDown 2s ease-in-out infinite'
-                        }} />
-                    </div>
-                </div>
             </div>
 
             <style>{`
@@ -259,3 +304,9 @@ export default function IntroSlide() {
         </div>
     );
 }
+
+IntroSlide.propTypes = {
+    isUltimateUser: PropTypes.bool,
+    shownCount: PropTypes.number,
+    totalCount: PropTypes.number
+};

@@ -97,7 +97,6 @@ export default function UserProfile() {
             setMostReviewedGenres(mostReviewedGenres)
             setUserTopRatedMovies(userTopRatedMovies)
             setNumberOfReviewsWritten(numberOfReviewsWritten)
-            console.log(numberOfReviewsWritten)
         } catch (error) {
             console.error("Error fetching data:", error);
         } finally {

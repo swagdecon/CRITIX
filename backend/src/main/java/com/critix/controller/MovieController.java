@@ -216,7 +216,6 @@ public class MovieController {
     public ResponseEntity<List<MovieCard>> getrecommendations(@RequestHeader("Authorization") String accessToken)
             throws Exception {
         String userId = authenticationService.getUserDetails(accessToken).getId();
-
         try {
             return new ResponseEntity<>(movieService.getRecommendationsForUser(userId), HttpStatus.OK);
         } catch (Exception e) {

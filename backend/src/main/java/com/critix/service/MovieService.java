@@ -515,7 +515,6 @@ public class MovieService {
 
           movieList.add(movieCard);
         });
-
     return movieList;
   }
 
@@ -631,9 +630,7 @@ public class MovieService {
           break;
         }
       }
-
       userRepository.save(user);
-
     } catch (Exception e) {
       System.out.println("Error updating recommendations: " + e.getMessage());
     }
@@ -715,6 +712,7 @@ public class MovieService {
         favouriteMovieList.add(movieCard);
         user.setFavouriteMoviesList(favouriteMovieList);
         userRepository.save(user);
+        updateUserRecommendations(user);
       } else {
         throw new Exception("User already has movie in favourite movie list, returning...");
       }

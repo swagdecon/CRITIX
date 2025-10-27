@@ -35,7 +35,7 @@ export default function PricingPage() {
                                 <li>🤖 Smart Review Assistance – AI-powered suggestions while writing</li>
                                 <li>💬 Threaded Comments – Full access to discussion threads</li>
                                 <li>🚫 Ad-Free Experience – Browse without interruptions</li>
-                                <li>🌟 Editorial Picks Access – Monthly editor selections</li>
+                                <li>🌟 Unlock All Daily Recommendations</li>
                             </ul>
 
                             <a

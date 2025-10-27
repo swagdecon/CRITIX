@@ -14,12 +14,18 @@ import styled from "styled-components";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import IntroSlide from "./IntroSlide.js";
+import CookieManager from "../../security/CookieManager.js";
+import { jwtDecode } from "jwt-decode";
 
 const API_URL = process.env.REACT_APP_BACKEND_API_URL;
 const userRecommendedMovies = process.env.REACT_APP_GET_USER_RECOMMENDED_MOVIES;
+
 export default function recommendationsCarousel() {
     const [recommendedMovies, setRecommendedMovies] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const token = CookieManager.decryptCookie('accessToken');
+    const decodedToken = jwtDecode(token);
+    const isUltimateUser = decodedToken.isUltimateUser;
 
     const handleWatchNowClick = (movie) => WatchMovieNow(movie.providerResults);
 
@@ -38,6 +44,7 @@ export default function recommendationsCarousel() {
         }
         fetchBackendData();
     }, []);
+
     const settings = {
         dots: true,
         infinite: true,
@@ -51,105 +58,120 @@ export default function recommendationsCarousel() {
     };
 
     const RecommendedSlider = styled(Slider)`
-    .slick-prev,
-    .slick-next {
-        z-index: 1;
-        width: 3rem;
-        height: 3rem;
-        display: flex !important;
-        justify-content: center;
-        align-items: center;
-        background-color: rgba(0, 0, 0, 0.4);
-        border-radius: 50%;
-        transition: background 0.3s ease;
-    }
+        .slick-prev,
+        .slick-next {
+            z-index: 1;
+            width: 3rem;
+            height: 3rem;
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
 
-    .slick-prev {
-        left: 0.25vw;
-    }
+        .slick-prev {
+            left: 0.25vw;
+        }
 
-    .slick-next {
-        right: 0.25vw;
-    }
+        .slick-next {
+            right: 0.25vw;
+        }
 
-    .slick-prev::before,
-    .slick-next::before {
-        font-size: 2rem; 
-        color: white;
-    }
-`;
+        .slick-prev::before,
+        .slick-next::before {
+            font-size: 2rem; 
+            color: white;
+        }
+    `;
 
-
-    if (isLoading || !recommendedMovies) {
+    if (isLoading) {
         return <LoadingPage />;
     }
+
+    const hasRecommendations =
+        Array.isArray(recommendedMovies) && recommendedMovies.length > 0;
+
+    // Limit recommendations to 5 for non-ultimate users
+    const displayedMovies = hasRecommendations
+        ? isUltimateUser
+            ? recommendedMovies
+            : recommendedMovies.slice(0, 5)
+        : [];
+
+    const totalRecommendations = hasRecommendations ? recommendedMovies.length : 0;
 
     return (
         <div className={IndMovieStyle["ind-recommendation-page-wrapper"]}>
             <NavBar />
             <div className={IndMovieStyle.sliderWrapper}>
-                <RecommendedSlider {...settings}>
-                    <IntroSlide />
-                    {recommendedMovies.map((movie, i) => (
-                        <div key={i} className={IndMovieStyle.fullPageSlide}>
-                            <div
-                                className={IndMovieStyle.background}
-                                style={{
-                                    backgroundImage: `url(${movie.backdropUrl})`,
-                                    backgroundSize: "contain",
-                                    backgroundPosition: "center",
-                                    height: "100vh",
-                                }}
-                            />
-                            <div className={IndMovieStyle["content-wrapper"]}>
-                                <section className={IndMovieStyle["hero-content"]}>
-                                    <div className={IndMovieStyle.movie_hero_info_container}>
-                                        <div className={IndMovieStyle.rating}>
-                                            <MovieAverage voteAverage={movie.voteAverage} />
-                                        </div>
-                                        <h2 className={IndMovieStyle.movie__title}>{movie.title}</h2>
-                                        <div className={IndMovieStyle.movie__year}>
-                                            <ParseYear date={movie.releaseDate} />
-                                        </div>
-                                        <MovieGenres genres={movie.genres} />
-                                        <div className={IndMovieStyle.movie__description}>
-                                            {movie.overview}
-                                        </div>
-                                        <div className={IndMovieStyle["btn-wrapper"]}>
-                                            <MovieButton
-                                                innerIcon="watchNow"
-                                                onClick={() => handleWatchNowClick(movie)}
-                                            />
-                                            <div className={IndMovieStyle.BtnResponsive}>
-                                                <div className={IndMovieStyle["btn-wrapper-el"]}>
-                                                    <WatchListBtn movieData={movie} outline={true} />
-                                                </div>
-                                                <div className={IndMovieStyle["btn-wrapper-el"]}>
-                                                    <FavouriteBtn movieData={movie} outline={true} />
+                {hasRecommendations ? (
+                    <RecommendedSlider {...settings}>
+                        <IntroSlide
+                            isUltimateUser={isUltimateUser}
+                            shownCount={displayedMovies.length}
+                            totalCount={totalRecommendations}
+                        />
+                        {displayedMovies.map((movie, i) => (
+                            <div key={i} className={IndMovieStyle.fullPageSlide}>
+                                <div
+                                    className={IndMovieStyle.background}
+                                    style={{
+                                        backgroundImage: `url(${movie.backdropUrl})`,
+                                        backgroundSize: "contain",
+                                        backgroundPosition: "center",
+                                        height: "100vh",
+                                    }}
+                                />
+                                <div className={IndMovieStyle["content-wrapper"]}>
+                                    <section className={IndMovieStyle["hero-content"]}>
+                                        <div className={IndMovieStyle.movie_hero_info_container}>
+                                            <div className={IndMovieStyle.rating}>
+                                                <MovieAverage voteAverage={movie.voteAverage} />
+                                            </div>
+                                            <h2 className={IndMovieStyle.movie__title}>{movie.title}</h2>
+                                            <div className={IndMovieStyle.movie__year}>
+                                                <ParseYear date={movie.releaseDate} />
+                                            </div>
+                                            <MovieGenres genres={movie.genres} />
+                                            <div className={IndMovieStyle.movie__description}>
+                                                {movie.overview}
+                                            </div>
+                                            <div className={IndMovieStyle["btn-wrapper"]}>
+                                                <MovieButton
+                                                    innerIcon="watchNow"
+                                                    onClick={() => handleWatchNowClick(movie)}
+                                                />
+                                                <div className={IndMovieStyle.BtnResponsive}>
+                                                    <div className={IndMovieStyle["btn-wrapper-el"]}>
+                                                        <WatchListBtn movieData={movie} outline={true} />
+                                                    </div>
+                                                    <div className={IndMovieStyle["btn-wrapper-el"]}>
+                                                        <FavouriteBtn movieData={movie} outline={true} />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className={IndMovieStyle.RecommendationsPoster}>
-                                        {movie.posterUrl ? (
+                                        <div className={IndMovieStyle.RecommendationsPoster}>
                                             <img
                                                 className={IndMovieStyle["hero-poster"]}
-                                                src={movie.posterUrl}
-                                                alt={movie.title}
+                                                src={movie.posterUrl || backupPoster}
+                                                alt={movie.title || "fallback poster"}
                                             />
-                                        ) : (
-                                            <img
-                                                className={IndMovieStyle["hero-poster"]}
-                                                src={backupPoster}
-                                                alt="fallback poster"
-                                            />
-                                        )}
-                                    </div>
-                                </section>
+                                        </div>
+                                    </section>
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </RecommendedSlider>
+                        ))}
+                    </RecommendedSlider>
+                ) : (
+                    <IntroSlide
+                        isUltimateUser={isUltimateUser}
+                        shownCount={0}
+                        totalCount={0}
+                    />
+                )}
             </div>
         </div>
     );
