@@ -4,22 +4,47 @@ import NavBar from "../components/NavBar/NavBar";
 import SubscriptionStyles from "../components/CritixUltimate/UserSubscription.module.css";
 import CookieManager from "../security/CookieManager.js";
 import { jwtDecode } from "jwt-decode";
+import { sendData } from "../security/Data.js";
+const cancelSubscriptionEndpoint = process.env.REACT_APP_CANCEL_SUBSCRIPTION_ENDPOINT
+const REACT_APP_BACKEND_API_URL = process.env.REACT_APP_BACKEND_API_URL
 
 export default function SubscriptionPage() {
     const token = CookieManager.decryptCookie('accessToken');
     const decodedToken = jwtDecode(token);
     const isUltimateUser = decodedToken.isUltimateUser;
+    const userId = decodedToken.userId
     const [showCancelModal, setShowCancelModal] = useState(false);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
 
     const handleCancelSubscription = () => {
         setShowCancelModal(true);
     };
 
-    const confirmCancel = async () => {
-        // Add your cancellation API call here
-        console.log("Subscription cancelled");
-        setShowCancelModal(false);
-    };
+    async function confirmCancel() {
+        setIsProcessing(true);
+
+        try {
+            const response = await sendData(`${REACT_APP_BACKEND_API_URL}${cancelSubscriptionEndpoint}`, { userId: userId });
+
+            if (response && response.ok) {
+                setShowCancelModal(false);
+                setShowSuccessModal(true);
+
+                // Redirect after 3 seconds
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            } else {
+                alert('Failed to cancel subscription. Please try again.');
+                setIsProcessing(false);
+            }
+        } catch (error) {
+            console.error('Error cancelling subscription:', error);
+            alert('An error occurred. Please try again.');
+            setIsProcessing(false);
+        }
+    }
 
     return (
         <>
@@ -53,7 +78,7 @@ export default function SubscriptionPage() {
                         {/* Left: Benefits Showcase */}
                         <div className={SubscriptionStyles.benefitsCard}>
                             <h2 className={SubscriptionStyles.cardTitle}>
-                                {isUltimateUser ? "Your Active Benefits" : "What You'll Get"}
+                                {isUltimateUser ? "Your Active Benefits" : "What You&apos;ll Get"}
                             </h2>
 
                             <div className={SubscriptionStyles.benefitsList}>
@@ -160,12 +185,13 @@ export default function SubscriptionPage() {
                                     </div>
 
                                     <div className={SubscriptionStyles.valueStatement}>
-                                        <p>💡 Youre saving time and discovering better films with AI-powered recommendations worth far more than £5/month</p>
+                                        <p>💡 You&apos;re saving time and discovering better films with AI-powered recommendations worth far more than £5/month</p>
                                     </div>
 
                                     <button
                                         onClick={handleCancelSubscription}
                                         className={SubscriptionStyles.cancelButton}
+                                        disabled={isProcessing}
                                     >
                                         Cancel Subscription
                                     </button>
@@ -206,7 +232,7 @@ export default function SubscriptionPage() {
                         <div className={SubscriptionStyles.currentAccessSection}>
                             <h2 className={SubscriptionStyles.currentAccessTitle}>Your Current Access</h2>
                             <p className={SubscriptionStyles.currentAccessSubtitle}>
-                                Youre currently enjoying CRITIX with our free plan. Heres what you have access to:
+                                What you have access to:
                             </p>
 
                             <div className={SubscriptionStyles.currentAccessGrid}>
@@ -277,28 +303,54 @@ export default function SubscriptionPage() {
 
             {/* Cancel Confirmation Modal */}
             {showCancelModal && (
-                <div className={SubscriptionStyles.modalOverlay} onClick={() => setShowCancelModal(false)}>
+                <div className={SubscriptionStyles.modalOverlay} onClick={() => !isProcessing && setShowCancelModal(false)}>
                     <div className={SubscriptionStyles.modalContent} onClick={(e) => e.stopPropagation()}>
                         <div className={SubscriptionStyles.modalIcon}>😢</div>
-                        <h2>Were Sorry to See You Go</h2>
+                        <h2>We&apos;re Sorry to See You Go</h2>
                         <p>
-                            Are you sure you want to cancel? Youll lose access to personalized recommendations,
+                            Are you sure you want to cancel? You&apos;ll lose access to personalized recommendations,
                             advanced search, and all premium features at the end of your billing period.
                         </p>
                         <div className={SubscriptionStyles.modalButtons}>
                             <button
                                 onClick={() => setShowCancelModal(false)}
                                 className={SubscriptionStyles.modalKeepButton}
+                                disabled={isProcessing}
                             >
                                 Keep My Benefits
                             </button>
                             <button
                                 onClick={confirmCancel}
                                 className={SubscriptionStyles.modalCancelButton}
+                                disabled={isProcessing}
                             >
-                                Continue Cancellation
+                                {isProcessing ? 'Processing...' : 'Continue Cancellation'}
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Success Modal */}
+            {showSuccessModal && (
+                <div className={SubscriptionStyles.modalOverlay}>
+                    <div className={SubscriptionStyles.modalContent}>
+                        <div className={SubscriptionStyles.modalIcon}>✅</div>
+                        <h2>Subscription Cancelled</h2>
+                        <p>
+                            Your subscription has been successfully cancelled. You&apos;ll continue to have access
+                            to all premium features until the end of your current billing period.
+                        </p>
+                        <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#666' }}>
+                            We hope to see you again soon!
+                        </p>
+                        <button
+                            onClick={() => window.location.reload()}
+                            className={SubscriptionStyles.modalKeepButton}
+                            style={{ marginTop: '1.5rem', width: '100%' }}
+                        >
+                            Close
+                        </button>
                     </div>
                 </div>
             )}
