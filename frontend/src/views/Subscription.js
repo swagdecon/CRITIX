@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Footer from "../components/Footer/Footer.js";
 import NavBar from "../components/NavBar/NavBar";
 import SubscriptionStyles from "../components/CritixUltimate/UserSubscription.module.css";
 import CookieManager from "../security/CookieManager.js";
 import { jwtDecode } from "jwt-decode";
-import { sendData } from "../security/Data.js";
+import { sendData, fetchData } from "../security/Data.js";
 const cancelSubscriptionEndpoint = process.env.REACT_APP_CANCEL_SUBSCRIPTION_ENDPOINT
+const nextBillingDateEndpoint = process.env.REACT_APP_GET_DAYS_UNTIL_SUBSCRIPTION_DUE
 const REACT_APP_BACKEND_API_URL = process.env.REACT_APP_BACKEND_API_URL
 
 export default function SubscriptionPage() {
@@ -15,26 +16,49 @@ export default function SubscriptionPage() {
     const userId = decodedToken.userId
     const [showCancelModal, setShowCancelModal] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [daysUntilSubscriptionDue, setDaysUntilSubscriptionDue] = useState(false)
     const [isProcessing, setIsProcessing] = useState(false);
 
     const handleCancelSubscription = () => {
         setShowCancelModal(true);
     };
+    useEffect(() => {
+        if (isUltimateUser) {
+            const fetchBillingDate = async () => {
+                try {
+                    const response = await fetchData(`${REACT_APP_BACKEND_API_URL}${nextBillingDateEndpoint}`);
+                    console.log(response)
 
+                    const date = new Date(response);
+                    const formattedDate = date.toLocaleDateString('en-GB', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+
+                    setDaysUntilSubscriptionDue(formattedDate);
+                } catch (error) {
+                    console.error('Error fetching billing date:', error);
+                }
+            };
+
+            fetchBillingDate();
+        }
+    }, [isUltimateUser]);
     async function confirmCancel() {
         setIsProcessing(true);
 
         try {
-            const response = await sendData(`${REACT_APP_BACKEND_API_URL}${cancelSubscriptionEndpoint}`, { userId: userId });
+            const response = await sendData(`${REACT_APP_BACKEND_API_URL}${cancelSubscriptionEndpoint}`);
 
             if (response && response.ok) {
                 setShowCancelModal(false);
                 setShowSuccessModal(true);
 
-                // Redirect after 3 seconds
+                // Redirect after 10 seconds
                 setTimeout(() => {
                     window.location.reload();
-                }, 3000);
+                }, 10000);
             } else {
                 alert('Failed to cancel subscription. Please try again.');
                 setIsProcessing(false);
@@ -180,7 +204,7 @@ export default function SubscriptionPage() {
                                         </div>
                                         <div className={SubscriptionStyles.infoRow}>
                                             <span className={SubscriptionStyles.infoLabel}>Next Billing</span>
-                                            <span className={SubscriptionStyles.infoValue}>In 24 days</span>
+                                            <span className={SubscriptionStyles.infoValue}>{daysUntilSubscriptionDue}</span>
                                         </div>
                                     </div>
 
@@ -202,7 +226,7 @@ export default function SubscriptionPage() {
                             ) : (
                                 <div className={SubscriptionStyles.upgradeSection}>
                                     <a
-                                        href="https://buy.stripe.com/test_4gMeVfdaI09ia6M5Zg7AI01"
+                                        href={`https://buy.stripe.com/test_4gMeVfdaI09ia6M5Zg7AI01?client_reference_id=${userId}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className={SubscriptionStyles.upgradeButton}

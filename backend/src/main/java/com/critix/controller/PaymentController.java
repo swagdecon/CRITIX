@@ -1,79 +1,74 @@
 package com.critix.controller;
 
-import com.stripe.model.checkout.Session;
 import com.stripe.model.Event;
+import com.stripe.model.Subscription;
 import com.stripe.net.Webhook;
+import com.stripe.Stripe;
 import com.stripe.exception.SignatureVerificationException;
-
+import com.stripe.exception.StripeException;
+import com.critix.auth.AuthenticationService;
 import com.critix.config.EnvLoader;
 import com.critix.repository.UserRepository;
 import com.critix.model.User;
-
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import io.github.cdimascio.dotenv.Dotenv;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
-
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Scanner;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Controller for handling Stripe payment webhooks and processing payment
- * events.
- * This controller specifically handles the checkout.session.completed event to
- * upgrade
- * users to ultimate status upon successful payment.
- */
 @RestController
 @RequestMapping("/api/stripe")
 public class PaymentController {
 
     private static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
-
-    // Stripe webhook event types
     private static final String CHECKOUT_SESSION_COMPLETED = "checkout.session.completed";
+    private static final String SUBSCRIPTION_DELETED = "customer.subscription.deleted";
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private AuthenticationService authenticationService;
 
     private final EnvLoader envLoader;
     private final String stripeWebhookSecret;
+    private final String stripeApiKey;
 
-    /**
-     * Constructor initializes environment configuration and webhook secret.
-     * Throws RuntimeException if required environment variables are missing.
-     */
     public PaymentController() {
         this.envLoader = new EnvLoader();
         Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
 
         try {
             this.stripeWebhookSecret = envLoader.getEnv("STRIPE_CREATE_SUBSCRIPTION_SECRET", dotenv);
-            logger.info("PaymentController initialized successfully with webhook secret configured");
+            this.stripeApiKey = envLoader.getEnv("STRIPE_SECRET_KEY", dotenv);
+            logger.info("PaymentController initialized successfully");
         } catch (RuntimeException e) {
             logger.error("Failed to initialize PaymentController: Missing required environment variable", e);
             throw e;
         }
     }
 
-    /**
-     * Handles Stripe webhook events, specifically processing successful checkout
-     * sessions
-     * to upgrade users to ultimate status.
-     * 
-     * @param request HTTP request containing the webhook payload and signature
-     * @return ResponseEntity with success/error status
-     */
+    @PostConstruct
+    public void init() {
+        Stripe.apiKey = stripeApiKey;
+        logger.info("Stripe API key configured");
+    }
+
     @PostMapping("/create-ultimate-subscription")
     public ResponseEntity<String> handleStripeWebhook(HttpServletRequest request) {
         logger.info("=== WEBHOOK RECEIVED ===");
@@ -129,6 +124,43 @@ public class PaymentController {
         }
     }
 
+    @GetMapping("/get-subscription-days-until-due")
+    public ResponseEntity<?> handleSubscriptionDate(@RequestHeader("Authorization") String accessToken) {
+        try {
+            String subscriptionId = authenticationService.getUserDetails(accessToken).getStripeSubscriptionId();
+
+            if (subscriptionId == null || subscriptionId.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No active subscription found");
+            }
+
+            Subscription subscription = Subscription.retrieve(subscriptionId);
+
+            // Get current_period_end from the first subscription item
+            Long currentPeriodEnd = subscription.getItems().getData().get(0).getCurrentPeriodEnd();
+
+            if (currentPeriodEnd == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Subscription renewal date not available");
+            }
+
+            LocalDateTime renewalDate = LocalDateTime.ofInstant(
+                    Instant.ofEpochSecond(currentPeriodEnd),
+                    ZoneId.systemDefault());
+
+            return ResponseEntity.ok(renewalDate);
+
+        } catch (StripeException e) {
+            logger.error("Stripe error: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                    .body("Unable to retrieve subscription");
+        } catch (Exception e) {
+            logger.error("Error retrieving subscription date", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred");
+        }
+    }
+
     /**
      * Extracts the raw payload from the HTTP request.
      * 
@@ -177,6 +209,9 @@ public class PaymentController {
             case CHECKOUT_SESSION_COMPLETED:
                 handleCheckoutSessionCompleted(event);
                 break;
+            case SUBSCRIPTION_DELETED:
+                handleSubscriptionDeleted(event);
+                break;
             default:
                 logger.info("Unhandled webhook event type: {}", eventType);
                 break;
@@ -194,25 +229,42 @@ public class PaymentController {
         logger.info("Processing checkout session completed event");
 
         try {
-            // Extract session data from event
-            Session session = extractSessionFromEvent(event);
-            if (session == null) {
-                logger.warn("Failed to extract session from checkout.session.completed event");
-                return;
+            // Parse the event's raw JSON to extract client_reference_id and subscription
+            String eventJson = event.toJson();
+
+            JsonObject json = JsonParser.parseString(eventJson).getAsJsonObject();
+            JsonObject session = json.getAsJsonObject("data").getAsJsonObject("object");
+            String clientReferenceId = null;
+
+            if (session.has("client_reference_id") && !session.get("client_reference_id").isJsonNull()) {
+                clientReferenceId = session.get("client_reference_id").getAsString();
             }
 
-            // Get user ID from client reference
-            String clientReferenceId = session.getClientReferenceId();
+            String subscriptionId = null;
+            if (session.has("subscription") && !session.get("subscription").isJsonNull()) {
+                subscriptionId = session.get("subscription").getAsString();
+            }
 
             if (clientReferenceId == null || clientReferenceId.trim().isEmpty()) {
                 logger.warn("No client reference ID found in checkout session");
                 return;
             }
 
-            logger.info("Processing ultimate upgrade for user: {}", clientReferenceId);
+            if (subscriptionId == null || subscriptionId.trim().isEmpty()) {
+                logger.warn("No subscription ID found in checkout session");
+                return;
+            }
 
-            // Update user to ultimate status
-            upgradeUserToUltimate(clientReferenceId);
+            // Get subscription details from Stripe to retrieve the start date
+            Subscription subscription = Subscription.retrieve(subscriptionId);
+            Long startTimestamp = subscription.getStartDate();
+            LocalDateTime subscriptionStartDate = LocalDateTime.ofInstant(
+                    Instant.ofEpochSecond(startTimestamp),
+                    ZoneId.systemDefault());
+            logger.info(
+                    "Processing ultimate upgrade for user: {} with subscription: {} starting at {}, next billing: {}",
+                    clientReferenceId, subscriptionId, subscriptionStartDate);
+            upgradeUserToUltimate(clientReferenceId, subscriptionId, subscriptionStartDate);
 
         } catch (Exception e) {
             logger.error("Error processing checkout session completed event", e);
@@ -221,29 +273,15 @@ public class PaymentController {
     }
 
     /**
-     * Extracts Session object from the Stripe event.
+     * Upgrades a user to ultimate status in the database and saves their
+     * subscription ID, start date, and next billing date.
      * 
-     * @param event Stripe event
-     * @return Session object or null if extraction fails
+     * @param clientReferenceId     ID of the user to upgrade
+     * @param subscriptionId        Stripe subscription ID
+     * @param subscriptionStartDate The date when the subscription started
      */
-    private Session extractSessionFromEvent(Event event) {
-        try {
-            return event.getDataObjectDeserializer()
-                    .getObject()
-                    .map(obj -> (Session) obj)
-                    .orElse(null);
-        } catch (Exception e) {
-            logger.error("Failed to extract session from event", e);
-            return null;
-        }
-    }
-
-    /**
-     * Upgrades a user to ultimate status in the database.
-     * 
-     * @param userId ID of the user to upgrade
-     */
-    private void upgradeUserToUltimate(String clientReferenceId) {
+    private void upgradeUserToUltimate(String clientReferenceId, String subscriptionId,
+            LocalDateTime subscriptionStartDate) {
         try {
             Optional<User> userOptional = userRepository.findById(clientReferenceId);
 
@@ -260,12 +298,14 @@ public class PaymentController {
                 return;
             }
 
-            // Update user to ultimate status
             user.setIsUltimateUser(true);
-            user.setClientReferenceId(clientReferenceId);
+            user.setStripeSubscriptionId(subscriptionId);
+            user.setSubscriptionStartDate(subscriptionStartDate);
             userRepository.save(user);
 
-            logger.info("Successfully upgraded user {} to ultimate status", clientReferenceId);
+            logger.info(
+                    "Successfully upgraded user {} to ultimate status with subscription {} starting at {}, next billing: {}",
+                    clientReferenceId, subscriptionId, subscriptionStartDate);
 
         } catch (Exception e) {
             logger.error("Failed to upgrade user {} to ultimate status", clientReferenceId, e);
@@ -274,139 +314,9 @@ public class PaymentController {
     }
 
     /**
-     * Health check endpoint to verify the webhook endpoint is accessible.
-     * 
-     * @return ResponseEntity with health status
-     */
-    @GetMapping("/health")
-    public ResponseEntity<String> healthCheck() {
-        logger.info("Health check requested for PaymentController");
-        return ResponseEntity.ok("PaymentController is healthy");
-    }
-
-    /**
-     * Test endpoint to verify webhook endpoint accessibility and configuration.
-     * This endpoint can be used to test if the webhook URL is reachable.
-     * 
-     * @return ResponseEntity with test status and configuration info
-     */
-    @GetMapping("/test")
-    public ResponseEntity<String> testWebhookEndpoint() {
-        logger.info("Webhook test endpoint accessed");
-
-        StringBuilder response = new StringBuilder();
-        response.append("Webhook Endpoint Test\n");
-        response.append("====================\n");
-        response.append("Status: OK\n");
-        response.append("Webhook Secret Configured: ")
-                .append(stripeWebhookSecret != null && !stripeWebhookSecret.isEmpty()).append("\n");
-        response.append("UserRepository Available: ").append(userRepository != null).append("\n");
-        response.append("Timestamp: ").append(System.currentTimeMillis()).append("\n");
-
-        return ResponseEntity.ok(response.toString());
-    }
-
-    /**
-     * Simple POST test endpoint to verify POST requests work.
-     * 
-     * @param request HTTP request
-     * @return ResponseEntity with test status
-     */
-    @PostMapping("/test-post")
-    public ResponseEntity<String> testPostEndpoint(HttpServletRequest request) {
-        logger.info("POST test endpoint accessed");
-        logger.info("Request method: {}", request.getMethod());
-        logger.info("Content-Type: {}", request.getContentType());
-
-        return ResponseEntity.ok("POST endpoint is working - webhook should be accessible");
-    }
-
-    /**
-     * Handles Stripe webhook events for subscription cancellations and endings.
-     * Processes events to downgrade users from ultimate status when subscriptions
-     * end.
-     * 
-     * @param request HTTP request containing the webhook payload and signature
-     * @return ResponseEntity with success/error status
-     */
-    @PostMapping("/ultimate-subscription-ended")
-    public ResponseEntity<String> handleSubscriptionEnded(HttpServletRequest request) {
-        logger.info("=== SUBSCRIPTION ENDED WEBHOOK RECEIVED ===");
-        logger.info("Request method: {}", request.getMethod());
-        logger.info("Request URI: {}", request.getRequestURI());
-        logger.info("Content-Type: {}", request.getContentType());
-        logger.info("Stripe-Signature header present: {}", request.getHeader("Stripe-Signature") != null);
-
-        try {
-            // Extract and validate payload
-            String payload = extractPayload(request);
-            logger.info("Payload length: {}", payload != null ? payload.length() : 0);
-
-            if (payload == null || payload.isEmpty()) {
-                logger.warn("Received empty webhook payload");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Empty payload");
-            }
-
-            // Extract and validate signature
-            String signature = request.getHeader("Stripe-Signature");
-            if (signature == null || signature.isEmpty()) {
-                logger.warn("Missing Stripe-Signature header");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing signature");
-            }
-
-            // Verify webhook signature and construct event
-            Event event = verifyAndConstructEvent(payload, signature);
-            logger.info("Successfully verified webhook signature for event type: {}", event.getType());
-            logger.info("Event ID: {}", event.getId());
-
-            // Process subscription ended events
-            processSubscriptionEndedEvent(event);
-
-            logger.info("=== SUBSCRIPTION ENDED WEBHOOK PROCESSED SUCCESSFULLY ===");
-            return ResponseEntity.ok("Subscription ended webhook processed successfully");
-
-        } catch (SignatureVerificationException e) {
-            logger.error("Webhook signature verification failed", e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid signature");
-        } catch (IllegalArgumentException e) {
-            logger.error("Invalid webhook payload", e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid payload");
-        } catch (Exception e) {
-            logger.error("Unexpected error processing subscription ended webhook", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
-        }
-    }
-
-    /**
-     * Processes subscription ended webhook events based on their type.
-     * Handles customer.subscription.deleted event for subscription termination.
-     * 
-     * @param event Verified Stripe event
-     */
-    private void processSubscriptionEndedEvent(Event event) {
-        String eventType = event.getType();
-        logger.info("Processing subscription ended event: {}", eventType);
-
-        try {
-            switch (eventType) {
-                case "customer.subscription.deleted":
-                    handleSubscriptionDeleted(event);
-                    break;
-                default:
-                    logger.info("Unhandled subscription event type: {}", eventType);
-                    break;
-            }
-        } catch (Exception e) {
-            logger.error("Error processing subscription ended event type: {}", eventType, e);
-            throw new RuntimeException("Failed to process subscription event", e);
-        }
-    }
-
-    /**
-     * Handles the customer.subscription.deleted event to downgrade user from
-     * ultimate status.
-     * This event fires when a subscription is cancelled or expires.
-     * Uses clientReferenceId to identify the user.
+     * Handles the customer.subscription.deleted event to remove ultimate status.
+     * This is triggered when a subscription is cancelled and reaches the end of its
+     * billing period.
      * 
      * @param event Stripe subscription deleted event
      */
@@ -415,98 +325,94 @@ public class PaymentController {
         logger.info("Processing subscription deleted event");
 
         try {
-            // Extract subscription from event
-            com.stripe.model.Subscription subscription = extractSubscriptionFromEvent(event);
-            if (subscription == null) {
-                logger.error("Failed to extract subscription from deleted event");
-                throw new IllegalStateException("Could not extract subscription from event");
+            // Parse the event's raw JSON to extract subscription ID
+            String eventJson = event.toJson();
+
+            JsonObject json = JsonParser.parseString(eventJson).getAsJsonObject();
+            JsonObject subscription = json.getAsJsonObject("data").getAsJsonObject("object");
+
+            String subscriptionId = null;
+            if (subscription.has("id") && !subscription.get("id").isJsonNull()) {
+                subscriptionId = subscription.get("id").getAsString();
             }
 
-            logger.info("Subscription ID: {}", subscription.getId());
-            logger.info("Subscription status: {}", subscription.getStatus());
-
-            // Get clientReferenceId from subscription metadata
-            String clientReferenceId = subscription.getMetadata().get("client_reference_id");
-            if (clientReferenceId == null || clientReferenceId.trim().isEmpty()) {
-                logger.error("No client_reference_id found in subscription metadata");
-                throw new IllegalStateException("Missing client_reference_id in subscription metadata");
-            }
-
-            logger.info("Processing subscription cancellation for clientReferenceId: {}", clientReferenceId);
-
-            // Find user by clientReferenceId and downgrade
-            downgradeUserByClientReferenceId(clientReferenceId, "Subscription deleted");
-
-            logger.info("Successfully processed subscription deletion for clientReferenceId: {}", clientReferenceId);
-
-        } catch (IllegalStateException e) {
-            logger.error("Invalid state while processing subscription deleted event", e);
-            throw new RuntimeException("Failed to process subscription deletion", e);
-        } catch (Exception e) {
-            logger.error("Unexpected error processing subscription deleted event", e);
-            throw new RuntimeException("Failed to process subscription deletion", e);
-        }
-    }
-
-    /**
-     * Extracts Subscription object from the Stripe event.
-     * 
-     * @param event Stripe event
-     * @return Subscription object or null if extraction fails
-     */
-    private com.stripe.model.Subscription extractSubscriptionFromEvent(Event event) {
-        try {
-            return event.getDataObjectDeserializer()
-                    .getObject()
-                    .map(obj -> (com.stripe.model.Subscription) obj)
-                    .orElse(null);
-        } catch (ClassCastException e) {
-            logger.error("Failed to cast event object to Subscription", e);
-            return null;
-        } catch (Exception e) {
-            logger.error("Failed to extract subscription from event", e);
-            return null;
-        }
-    }
-
-    /**
-     * Finds a user by clientReferenceId and downgrades them from ultimate status.
-     * 
-     * @param clientReferenceId Client reference ID to find the user
-     * @param reason            Reason for downgrade (for logging)
-     */
-    private void downgradeUserByClientReferenceId(String clientReferenceId, String reason) {
-        try {
-            Optional<User> userOptional = userRepository.findById(clientReferenceId);
-
-            // Find user by clientReferenceId
-            User user = userOptional.get();
-
-            if (userOptional.isEmpty()) {
-                logger.error("User not found for clientReferenceId: {}", clientReferenceId);
-                throw new IllegalStateException("User not found for clientReferenceId: " + clientReferenceId);
-            }
-
-            logger.info("Found user with ID: {} for clientReferenceId: {}", user.getId(), clientReferenceId);
-
-            // Check if user is currently ultimate
-            if (Boolean.FALSE.equals(user.getIsUltimateUser())) {
-                logger.info("User {} is already not an ultimate user", user.getId());
+            if (subscriptionId == null || subscriptionId.trim().isEmpty()) {
+                logger.warn("No subscription ID found in subscription deleted event");
                 return;
             }
 
+            logger.info("Processing subscription deletion for subscription: {}", subscriptionId);
+            removeUltimateStatus(subscriptionId);
+
+        } catch (Exception e) {
+            logger.error("Error processing subscription deleted event", e);
+            throw new RuntimeException("Failed to process subscription deletion", e);
+        }
+    }
+
+    /**
+     * Removes ultimate status from a user based on their subscription ID.
+     * 
+     * @param subscriptionId Stripe subscription ID
+     */
+    private void removeUltimateStatus(String subscriptionId) {
+        try {
+            Optional<User> userOptional = userRepository.findByStripeSubscriptionId(subscriptionId);
+
+            if (userOptional.isEmpty()) {
+                logger.warn("No user found with subscription ID: {}", subscriptionId);
+                return;
+            }
+
+            User user = userOptional.get();
+
             // Update user to remove ultimate status
             user.setIsUltimateUser(false);
+            user.setStripeSubscriptionId(null);
+            user.setSubscriptionStartDate(null);
             userRepository.save(user);
 
-            logger.info("Successfully downgraded user {} from ultimate status. Reason: {}", user.getId(), reason);
+            logger.info("Successfully removed ultimate status from user {} (subscription: {})",
+                    user.getId(), subscriptionId);
 
-        } catch (IllegalStateException e) {
-            logger.error("Failed to find user with clientReferenceId: {}", clientReferenceId, e);
-            throw e;
         } catch (Exception e) {
-            logger.error("Failed to downgrade user with clientReferenceId: {}", clientReferenceId, e);
+            logger.error("Failed to remove ultimate status for subscription {}", subscriptionId, e);
             throw new RuntimeException("Database update failed", e);
+        }
+    }
+
+    @PostMapping("/ultimate-subscription-ended")
+    public ResponseEntity<String> handleSubscriptionEnded(@RequestHeader("Authorization") String accessToken) {
+        logger.info("=== SUBSCRIPTION ENDED REQUEST RECEIVED ===");
+
+        try {
+            String userId = authenticationService.getUserDetails(accessToken).getId();
+            Optional<User> userOptional = userRepository.findById(userId);
+
+            if (userOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            }
+
+            User user = userOptional.get();
+            String subscriptionId = user.getStripeSubscriptionId();
+
+            if (subscriptionId == null || subscriptionId.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No active subscription");
+            }
+
+            // Cancel subscription at period end in Stripe
+            Subscription subscription = Subscription.retrieve(subscriptionId);
+            Map<String, Object> params = new HashMap<>();
+            params.put("cancel_at_period_end", true);
+            subscription.update(params);
+
+            logger.info("Subscription {} scheduled for cancellation at period end", subscriptionId);
+            logger.info("=== SUBSCRIPTION CANCELLATION SCHEDULED ===");
+            return ResponseEntity.ok("Subscription will be cancelled at the end of the billing period");
+
+        } catch (Exception e) {
+            logger.error("Error cancelling subscription", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error cancelling subscription");
         }
     }
 }

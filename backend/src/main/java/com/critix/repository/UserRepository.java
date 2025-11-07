@@ -12,6 +12,8 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     Optional<User> findById(String id);
 
+    Optional<User> findByStripeSubscriptionId(String stripeSubscriptionId);
+
     @Query(value = "{'_id': ?0, 'watchList.movieId': ?1 }", exists = true)
     Boolean doesWatchlistMovieExist(String userId, Integer movieId);
 

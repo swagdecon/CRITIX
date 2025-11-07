@@ -1,5 +1,6 @@
 package com.critix.controller;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import com.critix.auth.AuthenticationService;
 import com.critix.config.EnvLoader;
 import com.critix.model.LoginEvents;
 import com.critix.model.User;
+import com.critix.repository.UserRepository;
 import com.critix.service.UserService;
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -22,9 +24,12 @@ import io.github.cdimascio.dotenv.Dotenv;
 public class UserController {
     @Autowired
     private AuthenticationService authenticationService;
-    @Autowired
 
+    @Autowired
     private UserService userService;
+
+    @Autowired
+    UserRepository userRepository;
 
     private EnvLoader envLoader = new EnvLoader();
     Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
@@ -193,6 +198,20 @@ public class UserController {
         if (userId != null) {
             long numberOfUserReviews = userService.getNumberOfUserReviews(userId);
             return ResponseEntity.ok(numberOfUserReviews);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/get-next-billing-date")
+    public ResponseEntity<LocalDateTime> getNextBillingDate(
+            @RequestHeader("Authorization") String accessToken)
+            throws Exception {
+        String userId = authenticationService.getUserDetails(accessToken).getId();
+
+        if (userId != null) {
+            LocalDateTime subscriptionStartDate = userRepository.findById(userId).get().getSubscriptionStartDate();
+            return ResponseEntity.ok(subscriptionStartDate);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

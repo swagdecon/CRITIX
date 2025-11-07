@@ -1,5 +1,6 @@
 package com.critix.model;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.data.annotation.Id;
@@ -32,6 +33,8 @@ public class User implements UserDetails {
     private String bannerPicture;
     private Boolean accountActive;
     private String clientReferenceId;
+    private String stripeSubscriptionId;
+    private LocalDateTime subscriptionStartDate;
     private Boolean isUltimateUser;
     private LoginEvents loginEvents;
     private UserAuth userAuth;
