@@ -7,19 +7,18 @@ import MuiChip from '@mui/material/Chip';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-
 import DevicesRoundedIcon from '@mui/icons-material/DevicesRounded';
 import EdgesensorHighRoundedIcon from '@mui/icons-material/EdgesensorHighRounded';
 import ViewQuiltRoundedIcon from '@mui/icons-material/ViewQuiltRounded';
-
+import reviewPic from "../../Other/Photos/review.png"
 const items = [
   {
     icon: <ViewQuiltRoundedIcon />,
     title: 'Dynamic Review System',
     description:
       'Move beyond basic star ratings. Our interactive review format lets you rate emotions, plot twists, performances, soundtracks, and more — creating deeper, more meaningful reviews.',
-    imageLight: `url("${process.env.TEMPLATE_IMAGE_URL || 'https://mui.com'}/static/images/templates/templates-images/dash-light.png")`,
-    imageDark: `url("${process.env.TEMPLATE_IMAGE_URL || 'https://mui.com'}/static/images/templates/templates-images/dash-dark.png")`,
+    imageLight: `url(${reviewPic})`,
+    imageDark: `url(${reviewPic})`,
   },
   {
     icon: <EdgesensorHighRoundedIcon />,

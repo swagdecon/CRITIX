@@ -670,49 +670,26 @@ export default function DiscoverSearch({ onSubmit }) {
                             sx={{
                                 mt: 3,
                                 position: "relative",
-                                width: "90%",
-                                maxWidth: 900,
+                                width: "95%",
+                                maxWidth: 1200,
                                 borderRadius: "20px",
                                 background: "linear-gradient(145deg, #141414, #1e1e1e)",
                                 boxShadow: "6px 6px 12px #0f0f0f, -6px -6px 12px #2a2a2a",
-                                p: 3,
+                                p: 2.5,
                                 textAlign: "center",
                                 color: "white",
                                 zIndex: 1,
+                                overflow: "hidden",
                             }}
                         >
-                            <Box sx={{ mb: 1, fontSize: "1.1rem", fontWeight: 600 }}>
-                                🔒 Unlock More Filters with{" "}
-                                <span style={{ color: "#00c2ff" }}>Ultimate Critix</span>
-                            </Box>
-
-                            <Box sx={{ fontSize: "0.9rem", opacity: 0.8, mb: 2 }}>
-                                Access advanced discovery filters like certifications, monetization types,
-                                and provider exclusions.
-                            </Box>
-
-                            <Button
-                                variant="contained"
-                                sx={{
-                                    background: "linear-gradient(90deg, #00b7ff, #0072ff)",
-                                    borderRadius: "25px",
-                                    textTransform: "none",
-                                    fontWeight: "bold",
-                                    px: 3,
-                                    py: 1,
-                                    "&:hover": {
-                                        background: "linear-gradient(90deg, #0094ff, #0059ff)",
-                                    },
-                                }}
-                                href="/ultimate"
-                            >
-                                Upgrade to Ultimate
-                            </Button>
-
-                            {/* Dimmed preview of locked filters */}
+                            {/* Dimmed preview of locked filters - positioned behind */}
                             <Box
                                 sx={{
-                                    mt: 2,
+                                    position: "absolute",
+                                    top: "50%",
+                                    left: "50%",
+                                    transform: "translate(-50%, -50%)",
+                                    width: "100%",
                                     filter: "blur(2px) brightness(0.6)",
                                     pointerEvents: "none",
                                     userSelect: "none",
@@ -721,8 +698,9 @@ export default function DiscoverSearch({ onSubmit }) {
                                     flexWrap: "wrap",
                                     gap: 1,
                                     justifyContent: "center",
-                                    maxHeight: "80px",
+                                    maxHeight: "100%",
                                     overflow: "hidden",
+                                    zIndex: 0,
                                 }}
                             >
                                 {allFilters.slice(5).map((filter) => (
@@ -753,22 +731,57 @@ export default function DiscoverSearch({ onSubmit }) {
                                     </Box>
                                 ))}
                             </Box>
+
+                            {/* Content on top */}
+                            <Box sx={{ position: "relative", zIndex: 1 }}>
+                                <Box sx={{ mb: 0.5, fontSize: "1.1rem", fontWeight: 600 }}>
+                                    🔒 Unlock More Filters with{" "}
+                                    <span style={{ color: "#00c2ff" }}>Ultimate Critix</span>
+                                </Box>
+
+                                <Box sx={{ fontSize: "0.9rem", opacity: 0.8, mb: 1.5 }}>
+                                    Access advanced discovery filters like certifications, monetization types,
+                                    and provider exclusions.
+                                </Box>
+
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        background: "linear-gradient(90deg, #00b7ff, #0072ff)",
+                                        borderRadius: "25px",
+                                        textTransform: "none",
+                                        fontWeight: "bold",
+                                        px: 3,
+                                        py: 1,
+                                        "&:hover": {
+                                            background: "linear-gradient(90deg, #0094ff, #0059ff)",
+                                        },
+                                    }}
+                                    href="/ultimate"
+                                >
+                                    Upgrade to Ultimate
+                                </Button>
+                            </Box>
                         </Box>
                     )}
-                    <Popover
-                        open={Boolean(anchorEl)}
-                        anchorEl={anchorEl}
-                        onClose={closePopover}
-                        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                        transformOrigin={{ vertical: "top", horizontal: "center" }}
-                        PaperProps={{ sx: { p: 2, minWidth: 250 } }}
-                    >
-                        {activeFilter && renderField(allFilters.find((f) => f.key === activeFilter))}
-                    </Popover>
+                    {isUltimateUser ?
+                        <>
+                            <Popover
+                                open={Boolean(anchorEl)}
+                                anchorEl={anchorEl}
+                                onClose={closePopover}
+                                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                                transformOrigin={{ vertical: "top", horizontal: "center" }}
+                                PaperProps={{ sx: { p: 2, minWidth: 250 } }}
+                            >
+                                {activeFilter && renderField(allFilters.find((f) => f.key === activeFilter))}
+                            </Popover>
 
-                    <Button onClick={clearAllFilters} variant="outlined">
-                        Clear All Filters
-                    </Button>
+                            <Button onClick={clearAllFilters} variant="outlined">
+                                Clear All Filters
+                            </Button>
+                        </>
+                        : null}
                 </Box>
             </Box>
         </Box >
