@@ -15,12 +15,12 @@ export function getColourClassName(rating) {
     }
 }
 // Both author and movieTitle should not be both passed, one or the other depending on the page (userProfile or indMovie, compared using placement variable)
-export default function IndUserReview({ placement, avatar, author, movieTitle, createdDate, content, containsSpoiler, rating, tier, tags = [] }) {
+export default function IndUserReview({ placement, avatar, author, movieTitle, createdDate, content, containsSpoiler, rating, isUltimateUser, tags = [] }) {
     const [spoilerRevealed, setSpoilerRevealed] = useState(false);
     const colourRating = getColourClassName(rating);
 
     return (
-        <div className={`${UserReviewStyle.IndUserReviews} ${tier === 'CritixUltimate' ? UserReviewStyle.UltimateUser : ''}`}>
+        <div className={`${UserReviewStyle.IndUserReviews} ${isUltimateUser ? UserReviewStyle.UltimateUser : ''}`}>
             <div className={UserReviewStyle.ContentWrapper}>
                 <div className={UserReviewStyle.ReviewInfoWrapper}>
                     <div className={UserReviewStyle.ReviewInfo}>
@@ -47,9 +47,9 @@ export default function IndUserReview({ placement, avatar, author, movieTitle, c
                                     <div className={UserReviewStyle.TimeAgo}>
                                         <TimeAgo date={new Date(createdDate)} />
                                     </div>
-                                    {tier && (
-                                        <div className={`${UserReviewStyle.Badge} ${UserReviewStyle[tier]}`}>
-                                            {tier === "CritixUltimate" ? "Critix Ultimate" : null}
+                                    {isUltimateUser && (
+                                        <div className={`${UserReviewStyle.Badge} ${UserReviewStyle.CritixUltimate}`}>
+                                            Ultimate User
                                         </div>
                                     )}
                                 </div>
@@ -90,6 +90,6 @@ IndUserReview.propTypes = {
     containsSpoiler: PropTypes.bool,
     content: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     rating: PropTypes.number,
-    tier: PropTypes.oneOf(["CritixPro", "CritixUltimate"]),
+    isUltimateUser: PropTypes.bool,
     tags: PropTypes.arrayOf(PropTypes.string),
 };

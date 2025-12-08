@@ -3,6 +3,8 @@ package com.critix.controller;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.critix.auth.AuthenticationService;
 import com.critix.model.Review;
+import com.critix.model.User;
+import com.critix.repository.UserRepository;
 import com.critix.service.ReviewService;
 
 @RestController
@@ -25,6 +29,8 @@ public class ReviewController {
         private ReviewService reviewService;
         @Autowired
         private AuthenticationService authenticationService;
+        @Autowired
+        private UserRepository userRepository;
 
         @PostMapping("/create/{movieId}")
         public ResponseEntity<String> createMovieReview(@PathVariable Integer movieId, @RequestBody Review request,
@@ -38,7 +44,8 @@ public class ReviewController {
                         String reviewContent = request.getContent();
                         Boolean containsSpoiler = request.getContainsSpoiler();
                         String createdAt = request.getCreatedDate();
-
+                        Boolean isUltimateUser = userRepository.findById(userId).get().getIsUltimateUser();
+                        System.out.println("HERE IS ANSWER" + isUltimateUser);
                         if (reviewService.doesUserIdExistForMovie(movieId, userId)) {
                                 String errorMessage = "User already submitted a review for this movie.";
                                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
@@ -47,7 +54,7 @@ public class ReviewController {
                                                 reviewRating,
                                                 reviewContent,
                                                 containsSpoiler,
-                                                createdAt);
+                                                createdAt, isUltimateUser);
                         }
                 } catch (Exception e) {
                         System.out.println(e);

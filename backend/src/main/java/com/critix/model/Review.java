@@ -30,4 +30,5 @@ public class Review {
     private String createdDate;
     private String updatedDate;
     private String content;
+    private Boolean isUltimateUser;
 }

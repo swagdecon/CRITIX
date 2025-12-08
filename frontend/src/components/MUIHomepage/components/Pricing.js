@@ -28,7 +28,7 @@ const tiers = [
   {
     title: 'CRITIX ULTIMATE',
     subheader: 'Recommended',
-    price: '10',
+    price: '5',
     description: [
       'Priority Review Placement',
       'Advanced Search Filters',
@@ -94,7 +94,7 @@ export default function Pricing() {
                     £{tier.price}
                   </Typography>
                   <Typography component="h3" variant="h6">
-                    &nbsp; per year
+                    &nbsp; per month
                   </Typography>
                 </Box>
 

@@ -27,6 +27,7 @@
   transition: all 0.4s ease;
   text-transform: uppercase;
   box-shadow: 0 0 14px rgba(90, 50, 255, 0.3);
+  white-space: nowrap;
 }
 
 /* Gentle gradient motion shimmer */
@@ -87,4 +88,73 @@
 
 .coolButton:hover .icon {
   transform: rotate(-8deg) scale(1.1);
+}
+
+/* Responsive breakpoints */
+@media screen and (max-width: 1200px) {
+  .coolButton {
+    padding: 0.7rem 1.5rem !important;
+    font-size: 0.95rem !important;
+    gap: 0.5rem !important;
+  }
+  
+  .icon {
+    font-size: 1.15rem !important;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .coolButton {
+    padding: 0.6rem 1.2rem !important;
+    font-size: 0.85rem !important;
+    gap: 0.4rem !important;
+    letter-spacing: 0.5px !important;
+  }
+  
+  .icon {
+    font-size: 1.1rem !important;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .coolButton {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.75rem !important;
+    gap: 0.3rem !important;
+  }
+  
+  .icon {
+    font-size: 1rem !important;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .coolButton span {
+    display: none !important;
+  }
+  
+  .coolButton {
+    padding: 0.6rem !important;
+    border-radius: 50% !important;
+    width: 44px !important;
+    height: 44px !important;
+    justify-content: center !important;
+    gap: 0 !important;
+  }
+  
+  .icon {
+    font-size: 1.3rem !important;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .coolButton {
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0.5rem !important;
+  }
+  
+  .icon {
+    font-size: 1.2rem !important;
+  }
 }
