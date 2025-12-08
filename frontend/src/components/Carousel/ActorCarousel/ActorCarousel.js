@@ -1,8 +1,5 @@
 import React from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import PropTypes from "prop-types"
+import PropTypes from "prop-types";
 import ActorStyle from "./ActorCarousel.module.css";
 import { Link } from "react-router-dom";
 
@@ -11,102 +8,24 @@ const DEFAULT_TMDB_IMAGE = process.env.REACT_APP_DEFAULT_TMDB_IMAGE_PREFIX;
 const defaultImage = `url(${DEFAULT_ACTOR_IMAGE}) center center no-repeat`;
 
 export default function MovieActors({ actors }) {
-  const settings = {
-    dots: true,
-    infinite: true,
-    slidesToShow: 5,
-    slidesToScroll: 5,
-    arrows: false,
-    responsive: [
-      {
-        breakpoint: 800,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          dots: false,
-        }
-      },
-      {
-        breakpoint: 1040,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          dots: false,
-        }
-      },
-      {
-        breakpoint: 1370,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3
-        }
-      },
-      {
-        breakpoint: 1700,
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 4
-        }
-      },
-      {
-        breakpoint: 2050,
-        settings: {
-          slidesToShow: 5,
-          slidesToScroll: 5
-        }
-      },
-      {
-        breakpoint: 2400,
-        settings: {
-          slidesToShow: 6,
-          slidesToScroll: 6
-        }
-      },
-      {
-        breakpoint: 2535,
-        settings: {
-          slidesToShow: 7,
-          slidesToScroll: 7
-        }
-      },
-      {
-        breakpoint: 2860,
-        settings: {
-          slidesToShow: 7,
-          slidesToScroll: 5,
-        }
-      },
-      {
-        breakpoint: 3380,
-        settings: {
-          slidesToShow: 6,
-          slidesToScroll: 6
-        }
-      },
-      {
-        breakpoint: 4000,
-        settings: {
-          slidesToShow: 10,
-          slidesToScroll: 10
-        }
-      }
-    ]
-  };
-
   const defaultStyle = {
     background: defaultImage,
   };
+
   return (
     <div className={ActorStyle.Wrapper}>
-      <Slider {...settings} className={ActorStyle.Slider}>
+      <div className={ActorStyle.responsiveGrid}>
         {actors.map((actor, i) => {
-          const image = actor.profilePath
+          const image = actor.profilePath;
           const actorImage = image ? `url(${DEFAULT_TMDB_IMAGE}${image})` : defaultImage;
-          const style = image ? { background: actorImage, backgroundSize: "300px" } : defaultStyle;
+          const style = image
+            ? { background: actorImage, backgroundSize: "cover", backgroundPosition: "center" }
+            : defaultStyle;
+
           return (
             <Link to={`/person/${actor.id}`} className={ActorStyle.Img} style={style} key={i}>
-              <div className={ActorStyle.card} key={i}>
-                <div className={ActorStyle.Img} style={style} >
+              <div className={ActorStyle.card}>
+                <div className={ActorStyle.Img} style={style}>
                   <div className={ActorStyle.border}>
                     <h3 className={ActorStyle["profile-person"]}>
                       {actor.name}
@@ -122,9 +41,9 @@ export default function MovieActors({ actors }) {
             </Link>
           );
         })}
-      </Slider >
+      </div>
     </div>
-  )
+  );
 }
 
 MovieActors.propTypes = {

@@ -1,32 +1,129 @@
-
 .Wrapper {
   min-width: 0;
   display: flex;
   width: 100vw;
   justify-content: center;
   padding-bottom: 3ch;
+  overflow: hidden;
 }
-.Slider {
+
+.responsiveGrid {
   width: 90vw;
-  display: flex;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(250px, 1fr);
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  padding-bottom: 1rem;
+}
+
+/* Webkit scrollbar styling */
+.responsiveGrid::-webkit-scrollbar {
+  height: 8px;
+}
+
+.responsiveGrid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.responsiveGrid::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.responsiveGrid::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Adjust card size at different breakpoints */
+@media (max-width: 1400px) {
+  .responsiveGrid {
+    grid-auto-columns: minmax(220px, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .responsiveGrid {
+    grid-auto-columns: minmax(200px, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .responsiveGrid {
+    grid-auto-columns: minmax(45%, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsiveGrid {
+    grid-auto-columns: minmax(70%, 1fr);
+    gap: 0.5rem;
+  }
 }
 
 .card {
   height: 379px;
+  min-width: 200px;
   max-width: 300px;
+  width: 100%;
+  margin: 0 auto;
   border-radius: 10px;
   overflow: hidden;
   background: black;
   box-shadow: 0 70px 63px -60px #000000;
   position: relative;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 768px) {
+  .card {
+    height: 280px;
+    min-width: 180px;
+  }
+  
+  .border {
+    height: 280px;
+  }
+  
+  .profile-person {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    height: 240px;
+    min-width: 150px;
+  }
+  
+  .border {
+    height: 240px;
+  }
+  
+  .profile-person {
+    font-size: 18px;
+  }
+  
+  .icons {
+    height: 20vh;
+    gap: 10px;
+  }
 }
 
 .Img {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  display: block;
   background-repeat: no-repeat;
   background-position: center; 
   background-size: cover; 
+  text-decoration: none;
 }
 
 .Img:hover .border {
@@ -41,6 +138,7 @@
 .border {
   height: 379px;
   max-width: 300px;
+  width: 100%;
   opacity: 0; 
   background: transparent;
   border-radius: 10px;
@@ -66,6 +164,10 @@
   margin: 5%;
 }
 
+.iconEl {
+  font-size: 1.2rem;
+}
+
 .border:hover {
   border: 1px solid #fff;
   opacity: 1;
@@ -74,21 +176,11 @@
 .profile-person {
   font-size: 30px;
   font-weight: bold;
-}
-
-.Img:hover .profile-person .icons  {
-  opacity: 1;
-  color: #0096ff;
+  color: #fff;
+  margin: 5%;
   font-family: "CoreCircus", sans-serif;
-  overflow: hidden;
 }
 
-:global(.slick-dots li button) {
-  background: white;
-  border-radius: 50%;
-}
-
-:global(.slick-dots li.slick-active button) {
-  background: white;
-  opacity: 1;
+.Img:hover .profile-person {
+  color: #0096ff;
 }
