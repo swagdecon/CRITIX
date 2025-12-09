@@ -6,6 +6,7 @@
   width: 100%;
   padding: 0.5rem;
   z-index: 2;
+  top: 0;
 }
 
 .group__1 {
@@ -19,6 +20,8 @@
 .left, .right {
   display: flex;
   align-items: center;
+  flex: 1;
+  min-width: 0;
 }
 
 .left {
@@ -38,7 +41,15 @@
   align-items: center;
 }
 
+.SearchBar > * {
+  pointer-events: auto;
+}
+
 .MobileSearchBar {
+  display: none;
+}
+
+.mobileSearchWrapper {
   display: none;
 }
 
@@ -48,14 +59,92 @@
   justify-content: flex-end;
 }
 
-@media screen and (max-width: 650px) {
-  .MobileSearchBar  {
-    display: inline;
-    justify-content: center;
-    align-items: center;
-    display: flex;
+/* Bottom navigation - hidden on desktop */
+.bottomNav {
+  display: none;
+}
+
+/* Tablet screens */
+@media screen and (max-width: 1024px) {
+  .SearchBar {
+    max-width: 400px;
+    padding: 0 0.5rem;
   }
+  
+  .left {
+    gap: 0.5rem;
+  }
+}
+
+/* Mobile - Netflix style */
+@media screen and (max-width: 1340px) {
+  .NavBar {
+    background-color: var(--blackblack);
+    background-image: none;
+    padding: 0.5rem 1rem;
+  }
+
+  .group__1 {
+    justify-content: center;
+  }
+
+  /* Hide everything on top except logo */
+  .left > *:not(:first-child) {
+    display: none;
+  }
+
+  /* Center the logo */
+  .left {
+    justify-content: center;
+    flex: 0;
+  }
+
+  .right {
+    display: none;
+  }
+
   .SearchBar {
     display: none;
+  }
+
+  /* Show bottom navigation */
+  .bottomNav {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgb(0, 0, 0);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.75rem 1rem;
+    z-index: 3;
+  }
+
+  .bottomNavContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 100%;
+  }
+
+  .bottomNavContent > * {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .mobileSearchWrapper {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* Extra small screens */
+@media screen and (max-width: 650px) {
+  .bottomNavContent {
+    gap: 0.5rem;
   }
 }

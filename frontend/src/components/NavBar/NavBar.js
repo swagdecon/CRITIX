@@ -26,7 +26,6 @@ export default function NavBar(props) {
         await isTokenExpired();
         const [avatarPic] = await Promise.all([
           fetchData(`${API_URL}${getAvatarEndpoint}`),
-
         ]);
         setAvatar(avatarPic)
       } catch (error) {
@@ -36,28 +35,39 @@ export default function NavBar(props) {
 
     fetchBackendData();
   }, []);
+
   return (
-    <div className={NavBarStyle.NavBar}>
-      <div className={NavBarStyle.group__1}>
-        <div className={NavBarStyle.left}>
-          <Logo placement="navbar" />
+    <>
+      <div className={NavBarStyle.NavBar}>
+        <div className={NavBarStyle.group__1}>
+          <div className={NavBarStyle.left}>
+            <Logo placement="navbar" />
+            <Navigation />
+            {!isUltimateUser ? <PremiumBtn /> : null}
+          </div>
+          <div className={NavBarStyle.SearchBar}>
+            <Search onSubmit={props.onSubmit} />
+          </div>
+          <div className={NavBarStyle.right}>
+            <HeaderUser avatar={avatar} />
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile bottom navigation */}
+      <div className={NavBarStyle.bottomNav}>
+        <div className={NavBarStyle.bottomNavContent}>
           <Navigation />
+          <div className={NavBarStyle.mobileSearchWrapper}>
+            <MobileSearchBar onSubmit={props.onSubmit} />
+          </div>
           {!isUltimateUser ? <PremiumBtn /> : null}
-        </div>
-        <div className={NavBarStyle.MobileSearchBar}>
-          <MobileSearchBar onSubmit={props.onSubmit} />
-        </div>
-        <div className={NavBarStyle.SearchBar}>
-          <Search onSubmit={props.onSubmit} />
-        </div>
-        <div className={NavBarStyle.right}>
           <HeaderUser avatar={avatar} />
         </div>
       </div>
-    </div >
+    </>
   )
 }
 NavBar.propTypes = {
   onSubmit: PropTypes.func,
 };
-
