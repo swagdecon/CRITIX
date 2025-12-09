@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useCallback } from "react";
 import Pagination from "@mui/material/Pagination";
 import PropTypes from "prop-types";
-import parse from 'html-react-parser';
 import IndUserReview from "./IndUserReview";
 
 export default function ReviewSection({ reviews }) {
@@ -18,7 +17,7 @@ export default function ReviewSection({ reviews }) {
         const endIdx = startIdx + commentsPerPage;
         return reviews.slice(startIdx, endIdx);
     }, [currentPage, reviews]);
-    console.log(reviews)
+
     return (
         <>
             {displayReviews.map((review, index) => (
@@ -29,7 +28,7 @@ export default function ReviewSection({ reviews }) {
                     author={review.author}
                     movieTitle={review.movieTitle}
                     createdDate={review.createdDate}
-                    content={parse(review.content)}
+                    content={review.content}
                     containsSpoiler={review.containsSpoiler}
                     rating={review.rating}
                     isUltimateUser={review.isUltimateUser}

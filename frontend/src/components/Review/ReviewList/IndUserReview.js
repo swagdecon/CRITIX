@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import TimeAgo from 'react-timeago'
 import PropTypes from "prop-types";
 import UserReviewStyle from "./UserReview.module.css"
+import parse from 'html-react-parser';
 
 export function getColourClassName(rating) {
     if (rating >= 80) {
@@ -14,10 +15,19 @@ export function getColourClassName(rating) {
         return "red"
     }
 }
+
 // Both author and movieTitle should not be both passed, one or the other depending on the page (userProfile or indMovie, compared using placement variable)
 export default function IndUserReview({ placement, avatar, author, movieTitle, createdDate, content, containsSpoiler, rating, isUltimateUser, tags = [] }) {
     const [spoilerRevealed, setSpoilerRevealed] = useState(false);
     const colourRating = getColourClassName(rating);
+
+    // Convert newlines to HTML breaks if content is a string
+    const formatContent = (content) => {
+        if (typeof content === 'string') {
+            return content.replace(/\r\n|\r|\n/g, '<br>');
+        }
+        return content;
+    };
 
     return (
         <div className={`${UserReviewStyle.IndUserReviews} ${isUltimateUser ? UserReviewStyle.UltimateUser : ''}`}>
@@ -64,7 +74,7 @@ export default function IndUserReview({ placement, avatar, author, movieTitle, c
                                 className={UserReviewStyle.ReviewContent}
                                 style={{ filter: containsSpoiler && !spoilerRevealed ? 'blur(12px)' : 'none' }}
                             >
-                                {content}
+                                {typeof content === 'string' ? parse(formatContent(content)) : content}
                             </div>
                             {tags.length > 0 && (
                                 <div className={UserReviewStyle.HighlightTags}>
@@ -89,7 +99,7 @@ IndUserReview.propTypes = {
     createdDate: PropTypes.string,
     containsSpoiler: PropTypes.bool,
     content: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-    rating: PropTypes.number,
+    rating: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     isUltimateUser: PropTypes.bool,
     tags: PropTypes.arrayOf(PropTypes.string),
 };

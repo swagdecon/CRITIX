@@ -27,7 +27,6 @@ export default function SubscriptionPage() {
             const fetchBillingDate = async () => {
                 try {
                     const response = await fetchData(`${REACT_APP_BACKEND_API_URL}${nextBillingDateEndpoint}`);
-                    console.log(response)
 
                     const date = new Date(response);
                     const formattedDate = date.toLocaleDateString('en-GB', {
