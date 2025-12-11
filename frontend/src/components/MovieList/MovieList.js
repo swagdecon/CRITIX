@@ -13,7 +13,6 @@ import { fetchData } from "../../security/Data";
 const movieListEndpoint = process.env.REACT_APP_MOVIE_LIST_ENDPOINT
 const API_URL = process.env.REACT_APP_BACKEND_API_URL
 const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
-
 const theme = createTheme({
   palette: {
     primary: {
@@ -22,7 +21,6 @@ const theme = createTheme({
   },
 });
 async function fetchBackendData(endpointName, page) {
-
   try {
     await isTokenExpired();
     const response = await Promise.all([
