@@ -1,4 +1,5 @@
 // const MillionLint = require('@million/lint').default;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   // plugins: [MillionLint.craco()],
@@ -16,6 +17,12 @@ module.exports = {
           fullySpecified: false,
         },
       });
+
+      webpackConfig.plugins.push(
+        new BundleAnalyzerPlugin({
+          analyzerMode: 'disabled',
+        })
+      );
 
       return webpackConfig;
     }
