@@ -1,23 +1,23 @@
-
-// import { createTheme } from '@mui/material/styles';
 import isTokenExpired from "../security/IsTokenExpired.js";
 import { fetchData } from "../security/Data.js";
 import WatchListStyle from "../components/MovieList/MovieList.module.css"
 import { React, useMemo, useState } from "react";
 import LoadingPage from "./Loading.js";
 import Title from "../components/Carousel/title.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MovieCard from "../components/MovieCard/MovieCard.js";
 import NavBar from "../components/NavBar/NavBar.js";
+import Footer from "../components/Footer/Footer.js";
+import { Film, Plus } from 'lucide-react';
+
 const GET_WATCHLIST_ENDPOINT = process.env.REACT_APP_GET_WATCHLIST_ENDPOINT;
 const API_URL = process.env.REACT_APP_BACKEND_API_URL
 const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
-import Footer from "../components/Footer/Footer.js";
 
 export default function WatchList() {
-
     const [movies, setMovies] = useState(null);
-    const [dataLoaded, setDataLoaded] = useState(false)
+    const [dataLoaded, setDataLoaded] = useState(false);
+    const navigate = useNavigate();
 
     async function fetchBackendData() {
         try {
@@ -30,6 +30,7 @@ export default function WatchList() {
             console.error("Error fetching data:", error);
         }
     }
+
     useMemo(() => {
         function getDetailedMovieData() {
             fetchBackendData()
@@ -49,6 +50,36 @@ export default function WatchList() {
         return <LoadingPage />;
     }
 
+    // Empty state component
+    const EmptyWatchlist = () => (
+        <div className={WatchListStyle["empty-state-wrapper"]}>
+            <div className={WatchListStyle["empty-state-container"]}>
+                <div className={WatchListStyle["empty-state-card"]}>
+                    <div className={WatchListStyle["icon-container"]}>
+                        <div className={WatchListStyle["icon-wrapper"]}>
+                            <Film size={64} strokeWidth={1.5} />
+                        </div>
+                    </div>
+
+                    <div className={WatchListStyle["empty-state-text"]}>
+                        <h2>Your Watchlist is Empty</h2>
+                        <p>
+                            Start building your personal collection of must-watch films.
+                            Discover, save, and never forget another movie you want to see.
+                        </p>
+                    </div>
+                    <button
+                        className={WatchListStyle["discover-btn"]}
+                        onClick={() => navigate('/discover-movies')}
+                    >
+                        <Plus size={24} />
+                        Discover Movies
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+
     return (
         <div>
             <NavBar />
@@ -60,7 +91,7 @@ export default function WatchList() {
                 </div>
                 <div className={WatchListStyle["watchlist-container"]}>
                     {movies.length !== 0 ? movies.map((movie) => (
-                        < div key={movie.movieId} >
+                        <div key={movie.movieId}>
                             <Link to={`${indMovieEndpoint}${movie.movieId}`}>
                                 <MovieCard
                                     movieId={movie.movieId}
@@ -76,12 +107,10 @@ export default function WatchList() {
                                 />
                             </Link>
                         </div>
-                    )) :
-                        <div className={WatchListStyle.emptyList}> Include films in your watchlist to have them displayed here!</div>
-                    }
+                    )) : <EmptyWatchlist />}
                 </div>
             </div>
             <Footer />
-        </div >
+        </div>
     );
 }
