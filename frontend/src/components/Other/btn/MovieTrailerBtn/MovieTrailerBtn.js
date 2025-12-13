@@ -14,7 +14,7 @@ export default function MovieTrailerBtn({ movieTrailer }) {
             className={MovieTrailerBtnStyle["circle-container"]}
         >
             <div className={MovieTrailerBtnStyle["action-btn"]}>
-                <TheatersIcon sx={{ fontSize: 30, color: 'var(--accent-color)' }} />
+                <TheatersIcon sx={{ fontSize: 30, color: 'white' }} />
             </div>
         </a>
     );

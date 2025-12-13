@@ -8,9 +8,9 @@ import {
 import "./index.js";
 import PrivateRoute from "./security/SecuredRoutes.js";
 
-// Lazy load all your routes
-const Login = lazy(() => import("./views/Login.js"));
-const SignUp = lazy(() => import("./views/Signup.js"));
+import Login from "./views/Login.js";
+import SignUp from "./views/Signup.js";
+
 const UserProfile = lazy(() => import("./views/UserProfile.js"));
 const Homepage = lazy(() => import("./views/Home.js"));
 const Error403 = lazy(() => import("./views/errorMessages/403/403error.js"));
@@ -33,7 +33,13 @@ const Subscription = lazy(() => import("./views/Subscription.js"));
 export default function App() {
   return (
     <Router>
-      <Suspense>
+      <Suspense fallback={
+        <div style={{
+          width: '100vw',
+          height: '100vh',
+          backgroundColor: '#000'
+        }} />
+      }>
         <Routes>
           <Route path='/' element={<CritixHomepage />} />
           <Route path="/signup" element={<SignUp />} />

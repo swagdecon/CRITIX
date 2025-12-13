@@ -12,7 +12,7 @@ import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import Logo from '../../Logo/Logo'
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import PropTypes from "prop-types"
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
@@ -34,10 +34,10 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 export default function HomepageNav() {
   const [open, setOpen] = useState(false);
 
-  const navigate = useNavigate()
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
+
   const handleClick = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -46,6 +46,7 @@ export default function HomepageNav() {
       console.warn(`${sectionId} section not found`);
     }
   };
+
   return (
     <AppBar
       position="fixed"
@@ -89,16 +90,26 @@ export default function HomepageNav() {
               alignItems: 'center',
             }}
           >
-            <Button color="primary" variant="text" size="small" onClick={() => navigate('/login')}>
+            <Button
+              color="primary"
+              variant="text"
+              size="small"
+              component={Link}
+              to="/login"
+            >
               Sign in
             </Button>
-            <Button color="primary" variant="contained" size="small" onClick={() => navigate('/signup')}>
+            <Button
+              color="primary"
+              variant="contained"
+              size="small"
+              component={Link}
+              to="/signup"
+            >
               Sign up
             </Button>
-            {/* <ColorModeIconDropdown /> */}
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
-            {/* <ColorModeIconDropdown size="medium" /> */}
             <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
               <MenuIcon />
             </IconButton>
@@ -124,24 +135,34 @@ export default function HomepageNav() {
                   </IconButton>
                 </Box>
 
-                <MenuItem>Features</MenuItem>
-                <MenuItem>Testimonials</MenuItem>
-                <MenuItem>Highlights</MenuItem>
-                <MenuItem>Pricing</MenuItem>
-                <MenuItem>FAQ</MenuItem>
-                <MenuItem>Blog</MenuItem>
+                <MenuItem onClick={() => handleClick('features')}>Features</MenuItem>
+                <MenuItem onClick={() => handleClick('testimonials')}>Testimonials</MenuItem>
+                <MenuItem onClick={() => handleClick('highlights')}>Highlights</MenuItem>
+                <MenuItem onClick={() => handleClick('pricing')}>Pricing</MenuItem>
+                <MenuItem onClick={() => handleClick('faq')}>FAQ</MenuItem>
+                <MenuItem onClick={() => handleClick('blog')}>Blog</MenuItem>
                 <Divider sx={{ my: 3 }} />
                 <MenuItem>
-                  <MenuItem>
-                    <Button color="primary" variant="contained" fullWidth onClick={() => navigate('/signup')}>
-                      Sign up
-                    </Button>
-                  </MenuItem>
-                  <MenuItem>
-                    <Button color="primary" variant="outlined" fullWidth onClick={() => navigate('/login')}>
-                      Sign in
-                    </Button>
-                  </MenuItem>
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    fullWidth
+                    component={Link}
+                    to="/signup"
+                  >
+                    Sign up
+                  </Button>
+                </MenuItem>
+                <MenuItem>
+                  <Button
+                    color="primary"
+                    variant="outlined"
+                    fullWidth
+                    component={Link}
+                    to="/login"
+                  >
+                    Sign in
+                  </Button>
                 </MenuItem>
               </Box>
             </Drawer>
@@ -151,6 +172,7 @@ export default function HomepageNav() {
     </AppBar>
   );
 }
+
 HomepageNav.propTypes = {
   sectionRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
 };

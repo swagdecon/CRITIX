@@ -6,7 +6,10 @@
   display: flex;
   align-items: center;
 }
-
+.button {
+  border: none;
+  background-color: transparent;
+}
 .User .image {
   border-radius: 44px;
   margin-left: 10px;

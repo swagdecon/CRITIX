@@ -28,9 +28,9 @@ export default function Login() {
         <div id={LoginStyles.signin}>
           <Logo placement="login" />
           <LoginFunctionality />
-          <div className={LoginStyles["reset-pwd"]}>
-            <Link to="/forgot-password">Forgot Password</Link>
-          </div>
+          <Link to="/forgot-password" className={LoginStyles["reset-pwd"]}>
+            Forgot Password
+          </Link>
           <div className={LoginStyles.or}>
             <hr className={LoginStyles.bar} />
             <span>OR</span>

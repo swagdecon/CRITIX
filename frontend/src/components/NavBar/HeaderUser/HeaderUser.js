@@ -33,7 +33,7 @@ const HeaderUser = ({ avatar }) => {
     <div className={userStyle.UserProfile}>
       <div className={userStyle.User}>
         < div className={userStyle.name}>{firstName}</div >
-        <button className={userStyle.logout} aria-haspopup="true" onClick={handleClick}>
+        <button className={userStyle.button} aria-haspopup="true" onClick={handleClick}>
           <div className={userStyle.image}>
             <img src={avatar} alt="user-profile-image" />
           </div>
