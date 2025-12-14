@@ -294,7 +294,7 @@ public class AuthenticationService {
                         }
                 } catch (Exception e) {
                         System.out.println(e);
-                        throw new Exception("There was an error sending your account activation email.");
+                        throw new Exception("There was an error sending your account activation email." + e);
                 }
         }
 
