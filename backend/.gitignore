@@ -36,5 +36,4 @@ build/
 
 ### ENV Files ###
 .env
-
-application.properties
+application-dev.yml
