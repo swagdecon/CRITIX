@@ -285,6 +285,11 @@ public class AuthenticationService {
                                                                 + "</html>",
                                                 FRONTEND_API_URL, encryptedEmailToken);
 
+                                System.out.println("=== EMAIL DEBUG INFO ===");
+                                System.out.println("Sending to: " + email);
+                                System.out.println("FRONTEND_API_URL: " + FRONTEND_API_URL);
+                                System.out.println("========================");
+
                                 emailService.sendEmail(email, "Activate your account", emailContent);
                                 emailCount += 1;
                                 user.getUserAuth().setAccountAuthRequestDate(new Date());
@@ -293,8 +298,18 @@ public class AuthenticationService {
                                 throw new TooManyRequestsException("Too many requests, please try again later.");
                         }
                 } catch (Exception e) {
-                        System.out.println(e);
-                        throw new Exception("There was an error sending your account activation email." + e);
+                        System.err.println("=== EMAIL ERROR DETAILS ===");
+                        System.err.println("Error message: " + e.getMessage());
+                        System.err.println("Error class: " + e.getClass().getName());
+                        e.printStackTrace();
+                        if (e.getCause() != null) {
+                                System.err.println("Root cause: " + e.getCause().getMessage());
+                                e.getCause().printStackTrace();
+                        }
+                        System.err.println("===========================");
+                        throw new Exception(
+                                        "There was an error sending your account activation email: " + e.getMessage(),
+                                        e);
                 }
         }
 

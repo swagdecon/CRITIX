@@ -43,7 +43,8 @@ public class EmailService {
 
             javaMailSender.send(message);
         } catch (Exception e) {
-            throw new Exception("Something went wrong while sending email.");
+            throw new Exception("Something went wrong while sending email: " + e.getMessage(), e);
+
         }
     }
 }
