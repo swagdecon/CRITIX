@@ -41,7 +41,7 @@ export default function Login() {
           </Link>
         </div>
         <footer id={LoginStyles["main-footer"]}>
-          <p>&copy; 2023, All Rights Reserved By CRITIX</p>
+          <p>&copy; 2025, All Rights Reserved By CRITIX</p>
           <div>
             <Link to="#">Terms of Use</Link> |{" "}
             <Link to="#">Privacy Policy</Link>

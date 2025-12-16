@@ -37,7 +37,7 @@ export default function Signup() {
           </Link>
         </div>
         <footer id={SignUpStyles["main-footer"]}>
-          <p>&copy; 2023 CRITIX, All Rights Reserved</p>
+          <p>&copy; 2025 CRITIX, All Rights Reserved</p>
           <div>
             <Link to="#">Terms of Use</Link> |{" "}
             <Link to="#">Privacy Policy</Link>

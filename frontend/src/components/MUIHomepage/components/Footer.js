@@ -98,9 +98,6 @@ export default function Footer() {
             gap: 1,
           }}
         >
-          <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-            Product
-          </Typography>
           <Link color="text.secondary" variant="body2" href="#">
             Features
           </Link>
