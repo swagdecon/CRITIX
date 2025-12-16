@@ -55,7 +55,8 @@ public class SecurityConfiguration {
                 CorsConfiguration configuration = new CorsConfiguration();
                 configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000",
                                 "https://frontend-production-9727.up.railway.app",
-                                "https://backend-production-51a7.up.railway.app"));
+                                "https://backend-production-51a7.up.railway.app", "https://critix.app/*",
+                                "https://www.critix.app/*"));
                 configuration.addAllowedOriginPattern("https://*.ngrok-free.app");
                 configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
                 configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Stripe-Signature"));
