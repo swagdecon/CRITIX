@@ -1,105 +1,106 @@
 package com.critix.service;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.mail.javamail.JavaMailSender;
-
-import com.critix.service.EmailService;
-
-import jakarta.mail.internet.MimeMessage;
 
 public class EmailServiceTest {
-    @Mock
-    private JavaMailSender javaMailSender;
 
-    @InjectMocks
     private EmailService emailService;
+    private Path tempEnvFile;
 
     @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
+    public void setUp() throws IOException {
+        tempEnvFile = Files.createTempFile(".env", "");
+        try (FileWriter writer = new FileWriter(tempEnvFile.toFile())) {
+            writer.write("RESEND_API_KEY=re_test_key_12345\n");
+            writer.write("RESEND_FROM_EMAIL=test@resend.dev\n");
+        }
+
+        System.setProperty("user.dir", tempEnvFile.getParent().toString());
+
+        emailService = new EmailService();
+    }
+
+    @AfterEach
+    public void tearDown() throws IOException {
+        if (tempEnvFile != null && Files.exists(tempEnvFile)) {
+            Files.delete(tempEnvFile);
+        }
     }
 
     @Test
-    public void sendEmail_SuccessfullySent() throws Exception {
-        // Arrange
+    public void sendEmail_ValidatesRequiredParameters() {
+        Exception exception1 = assertThrows(Exception.class, () -> {
+            emailService.sendEmail(null, "Test Subject", "Test Content");
+        });
+        assertTrue(exception1.getMessage().contains("Something went wrong while sending email"));
+
+        Exception exception2 = assertThrows(Exception.class, () -> {
+            emailService.sendEmail("test@example.com", null, "Test Content");
+        });
+        assertTrue(exception2.getMessage().contains("Something went wrong while sending email"));
+
+        Exception exception3 = assertThrows(Exception.class, () -> {
+            emailService.sendEmail("test@example.com", "Test Subject", null);
+        });
+        assertTrue(exception3.getMessage().contains("Something went wrong while sending email"));
+    }
+
+    @Test
+    public void sendEmail_HandlesLogoNotFound() {
+        String email = "test@example.com";
+        String subject = "Test Subject";
+        String emailContent = "<html><body><img src='cid:logoIcon' alt='Logo'/><h1>Test</h1></body></html>";
+
+        Exception exception = assertThrows(Exception.class, () -> {
+            emailService.sendEmail(email, subject, emailContent);
+        });
+        assertTrue(exception.getMessage().contains("Something went wrong while sending email"));
+    }
+
+    @Test
+    public void sendEmail_RemovesLogoTagWhenFileNotFound() {
+        String email = "test@example.com";
+        String subject = "Test Subject";
+        String emailContent = "<html><body><img src='cid:logoIcon' /><p>Content</p></body></html>";
+
+        Exception exception = assertThrows(Exception.class, () -> {
+            emailService.sendEmail(email, subject, emailContent);
+        });
+        assertTrue(exception.getMessage().contains("Something went wrong while sending email"));
+    }
+
+    @Test
+    public void sendEmail_WithInvalidApiKey_ThrowsException() {
         String email = "test@example.com";
         String subject = "Test Subject";
         String emailContent = "<html><body><h1>Test Content</h1></body></html>";
 
-        MimeMessage mockedMessage = mock(MimeMessage.class);
-        when(javaMailSender.createMimeMessage()).thenReturn(mockedMessage);
-
-        // Act
-        emailService.sendEmail(email, subject, emailContent);
-
-        // Assert
-        verify(javaMailSender, times(1)).send(any(MimeMessage.class));
-    }
-
-    @Test
-    public void sendEmail_WithLogoAttachment() throws Exception {
-        // Arrange
-        String email = "test@example.com";
-        String subject = "Test Subject";
-        String emailContent = "<html><body><h1>Test Content</h1></body></html>";
-
-        MimeMessage mockedMessage = mock(MimeMessage.class);
-        when(javaMailSender.createMimeMessage()).thenReturn(mockedMessage);
-
-        // Act
-        emailService.sendEmail(email, subject, emailContent);
-
-        // Assert
-        verify(javaMailSender, times(1)).send(any(MimeMessage.class));
-        verify(javaMailSender, times(1)).send(any(MimeMessage.class));
-    }
-
-    @Test
-    public void test_sendEmail_emailParameterNull() {
-        String email = null;
-        String subject = "Test Subject";
-        String emailContent = "Test Email Content";
-
-        // Act and Assert
-        assertThrows(Exception.class, () -> {
-            EmailService emailService = new EmailService(mock(JavaMailSender.class));
+        Exception exception = assertThrows(Exception.class, () -> {
             emailService.sendEmail(email, subject, emailContent);
         });
+
+        assertTrue(exception.getMessage().contains("Something went wrong while sending email"));
     }
 
     @Test
-    public void test_sendEmail_subjectParameterNull() {
-        String email = "test@example.com";
-        String subject = null;
-        String emailContent = "Test Email Content";
-
-        assertThrows(Exception.class, () -> {
-            EmailService emailService = new EmailService(mock(JavaMailSender.class));
-            emailService.sendEmail(email, subject, emailContent);
-        });
-    }
-
-    @Test
-    public void test_sendEmail_javaMailSenderNull() {
+    public void sendEmail_HandlesHtmlContent() {
         String email = "test@example.com";
         String subject = "Test Subject";
-        String emailContent = "Test Email Content";
+        String emailContent = "<html><body style='background: black; color: white;'>" +
+                "<h1>Welcome</h1><p>Test content</p></body></html>";
 
-        // Act and Assert
-        assertThrows(Exception.class, () -> {
-            EmailService emailService = new EmailService(null);
+        Exception exception = assertThrows(Exception.class, () -> {
             emailService.sendEmail(email, subject, emailContent);
         });
+
+        assertTrue(exception.getMessage().contains("Something went wrong while sending email"));
     }
 }

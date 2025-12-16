@@ -277,7 +277,7 @@ public class AuthenticationService {
                                                                 + "<img src='cid:logoIcon' alt='Critix Logo' style='max-width: 200px;' />"
                                                                 + "<h1>Activate Your Account</h1>"
                                                                 + "<p>Dear user,</p>"
-                                                                + "<p>To authenticate your account, click <a href='%s/activate-account/%s' style='color: white;'>here</a>.</p>"
+                                                                + "<p>To authenticate your account, click <a href='%s/activate-account/%s' style='color: #60A5FA; text-decoration: underline;'>here</a>.</p>"
                                                                 + "<p>If you didn't authorize this request, kindly ignore this email.</p>"
                                                                 + "<p>Thanks for your support!<br/>The CRITIX team</p>"
                                                                 + "</div>"
