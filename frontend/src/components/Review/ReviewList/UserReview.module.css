@@ -176,6 +176,32 @@
     max-width: 100%;
 }
 
+@media screen and (max-width: 768px) {
+    .ReviewContent {
+        max-height: min(50vh, 500px);
+        width: 100%;
+        padding: 16px 20px;
+    }
+    
+    .IndUserReviews {
+        padding: 24px;
+        width: 98%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .ReviewContent {
+        max-height: min(60vh, 600px);
+        width: 100%;
+        padding: 14px 16px;
+    }
+    
+    .IndUserReviews {
+        padding: 20px;
+        width: 98%;
+    }
+}
+
 .HighlightTags {
     display: flex;
     flex-wrap: wrap;

@@ -12,6 +12,7 @@ import AlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import PsychologyIcon from '@mui/icons-material/Psychology';
 import { LinearProgress, Chip, Tooltip } from '@mui/material';
 import { useEditor, EditorContent } from "@tiptap/react";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -263,7 +264,7 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, movieGe
                     {/* Rating Section */}
                     <Box sx={ratingContainerStyles}>
                         <Typography variant="h6" sx={sectionTitleStyles}>
-                            ⭐ Your Rating
+                            Your Rating
                         </Typography>
                         <InputSlider onSliderChange={setReviewRating} />
                     </Box>
@@ -436,7 +437,7 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, movieGe
                                             </Typography>
                                         </Box>
                                     )}
-                                    <AutoAwesomeIcon sx={{ color: isUltimateUser ? '#64b5f6' : 'rgba(100,181,246,0.3)', fontSize: 24, mb: 1 }} />
+                                    <PsychologyIcon sx={{ color: isUltimateUser ? '#64b5f6' : 'rgba(100,181,246,0.3)', fontSize: 24, mb: 1 }} />
                                     <Typography variant="subtitle2" sx={cardTitleStyles}>
                                         Sentiment Analysis
                                     </Typography>
@@ -494,55 +495,56 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, movieGe
                                         </Typography>
                                     </Box>
                                 )}
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                                    <AutoAwesomeIcon sx={{ color: isUltimateUser ? '#7c4dff' : 'rgba(124,77,255,0.3)', fontSize: 24 }} />
-                                    <Typography variant="h6" sx={cardTitleStyles}>
-                                        AI Suggestions
-                                    </Typography>
-                                </Box>
                                 {isUltimateUser ? (
-                                    <Box sx={suggestionListStyles}>
-                                        {suggestionsList.length > 0 ? (
-                                            <AnimatePresence>
-                                                {suggestionsList.map((suggestion, idx) => (
-                                                    <motion.div
-                                                        key={idx}
-                                                        initial={{ opacity: 0, y: 10 }}
-                                                        animate={{ opacity: 1, y: 0 }}
-                                                        exit={{ opacity: 0, x: -20 }}
-                                                        transition={{ duration: 0.3, delay: idx * 0.05 }}
-                                                    >
-                                                        <Box sx={suggestionItemStyles}>
-                                                            <Typography variant="body2" sx={{ flex: 1, lineHeight: 1.6 }}>
-                                                                {suggestion}
-                                                            </Typography>
-                                                            <IconButton
-                                                                size="small"
-                                                                onClick={() => handleRemoveSuggestion(idx)}
-                                                                sx={removeButtonStyles}
-                                                            >
-                                                                <CloseIcon fontSize="small" />
-                                                            </IconButton>
-                                                        </Box>
-                                                    </motion.div>
-                                                ))}
-                                            </AnimatePresence>
-                                        ) : (
-                                            <Box sx={emptyStateContainerStyles}>
-                                                <AutoAwesomeIcon sx={{ fontSize: 48, color: 'rgba(255,255,255,0.2)', mb: 2 }} />
-                                                <Typography variant="body2" sx={emptyStateStyles}>
-                                                    AI-powered suggestions will appear here as you write
-                                                </Typography>
-                                                <Typography variant="caption" sx={{ ...emptyStateStyles, mt: 1 }}>
-                                                    Write at least 15 words to get started
-                                                </Typography>
-                                            </Box>
-                                        )}
-                                    </Box>
+                                    <>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                                            <AutoAwesomeIcon sx={{ color: '#7c4dff', fontSize: 24 }} />
+                                            <Typography variant="h6" sx={cardTitleStyles}>
+                                                AI Suggestions
+                                            </Typography>
+                                        </Box>
+                                        <Box sx={suggestionListStyles}>
+                                            {suggestionsList.length > 0 ? (
+                                                <AnimatePresence>
+                                                    {suggestionsList.map((suggestion, idx) => (
+                                                        <motion.div
+                                                            key={idx}
+                                                            initial={{ opacity: 0, y: 10 }}
+                                                            animate={{ opacity: 1, y: 0 }}
+                                                            exit={{ opacity: 0, x: -20 }}
+                                                            transition={{ duration: 0.3, delay: idx * 0.05 }}
+                                                        >
+                                                            <Box sx={suggestionItemStyles}>
+                                                                <Typography variant="body2" sx={{ flex: 1, lineHeight: 1.6 }}>
+                                                                    {suggestion}
+                                                                </Typography>
+                                                                <IconButton
+                                                                    size="small"
+                                                                    onClick={() => handleRemoveSuggestion(idx)}
+                                                                    sx={removeButtonStyles}
+                                                                >
+                                                                    <CloseIcon fontSize="small" />
+                                                                </IconButton>
+                                                            </Box>
+                                                        </motion.div>
+                                                    ))}
+                                                </AnimatePresence>
+                                            ) : (
+                                                <Box sx={emptyStateContainerStyles}>
+                                                    <Typography variant="body2" sx={emptyStateStyles}>
+                                                        AI-powered suggestions will appear here as you write
+                                                    </Typography>
+                                                    <Typography variant="caption" sx={{ ...emptyStateStyles, mt: 1 }}>
+                                                        Write at least 15 words to get started
+                                                    </Typography>
+                                                </Box>
+                                            )}
+                                        </Box>
+                                    </>
                                 ) : (
                                     <Box sx={{ ...emptyStateContainerStyles, minHeight: '320px' }}>
                                         <AutoAwesomeIcon sx={{ fontSize: 64, color: 'rgba(124,77,255,0.2)', mb: 3 }} />
-                                        <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 600, mb: 1 }}>
+                                        <Typography variant="h6" sx={{ ...cardTitleStyles, mb: 2 }}>
                                             Smart Writing Assistant
                                         </Typography>
                                         <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', lineHeight: 1.6, textAlign: 'center', maxWidth: '280px' }}>
@@ -660,11 +662,12 @@ const modalStyles = {
     },
     '&::-webkit-scrollbar-track': {
         background: 'rgba(255,255,255,0.05)',
-        borderRadius: '4px',
+        borderRadius: '24px',
+        margin: '24px 0',
     },
     '&::-webkit-scrollbar-thumb': {
         background: 'rgba(124, 77, 255, 0.5)',
-        borderRadius: '4px',
+        borderRadius: '24px',
         '&:hover': {
             background: 'rgba(124, 77, 255, 0.7)',
         },
@@ -674,6 +677,9 @@ const modalStyles = {
 const headerContainerStyles = {
     position: 'relative',
     mb: 4,
+    '@media (max-width: 600px)': {
+        pt: 5,
+    },
 };
 
 const closeButtonStyles = {
@@ -734,6 +740,9 @@ const ratingContainerStyles = {
     background: 'rgba(255,255,255,0.03)',
     borderRadius: '16px',
     border: '1px solid rgba(255,255,255,0.08)',
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'column'
 };
 
 const sectionTitleStyles = {
@@ -741,6 +750,10 @@ const sectionTitleStyles = {
     mb: 2,
     color: 'rgba(255,255,255,0.95)',
     fontSize: '16px',
+    '@media (max-width: 600px)': {
+        textAlign: 'center',
+        mb: 4,
+    },
 };
 
 const toolbarContainerStyles = {
@@ -1008,6 +1021,12 @@ const premiumBadgeStyles = {
     borderRadius: '20px',
     boxShadow: '0 2px 8px rgba(255, 215, 0, 0.4)',
     zIndex: 1,
+    '@media (max-width: 600px)': {
+        top: 8,
+        right: 8,
+        padding: '3px 8px',
+        fontSize: '9px',
+    },
 };
 
 const premiumMessageStyles = {
