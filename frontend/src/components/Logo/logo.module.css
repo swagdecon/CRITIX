@@ -1,16 +1,25 @@
 /* Logo */
-.Logo {
-  width: 15ch;
-  height: 4ch;
+
+.NavbarLogo {
+  width: 150px;
+  height: auto;
   transition: margin 0.125s ease;
   display: flex;
-  z-index: 999;
+  align-items: flex-start;
 }
-
-.Logo:hover {
-  cursor: pointer;
-  margin-top: 2px;
-  filter: grayscale(100%) brightness(150%);
+.HomepageLogo {
+  width: 120px;
+  height: 60px;
+  transition: margin 0.125s ease;
+  display: flex;
+  align-items: flex-start;
+}
+.LoginLogo {
+  width: 200px;
+  height: 100px;
+  transition: margin 0.125s ease;
+  display: flex;
+  align-items: flex-start;
 }
 @media screen and (max-width: 832px) {
   .Logo {

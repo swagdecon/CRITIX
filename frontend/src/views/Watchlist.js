@@ -1,56 +1,36 @@
-
-// import { createTheme } from '@mui/material/styles';
 import isTokenExpired from "../security/IsTokenExpired.js";
 import { fetchData } from "../security/Data.js";
 import WatchListStyle from "../components/MovieList/MovieList.module.css"
 import { React, useMemo, useState } from "react";
-import jwt_decode from "jwt-decode";
-import CookieManager from "../security/CookieManager.js";
-import LoadingPage from "./LoadingPage.js";
+import LoadingPage from "./Loading.js";
 import Title from "../components/Carousel/title.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MovieCard from "../components/MovieCard/MovieCard.js";
 import NavBar from "../components/NavBar/NavBar.js";
+import Footer from "../components/Footer/Footer.js";
+import { Film, Plus } from 'lucide-react';
+
 const GET_WATCHLIST_ENDPOINT = process.env.REACT_APP_GET_WATCHLIST_ENDPOINT;
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
+const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
 
 export default function WatchList() {
-    const token = jwt_decode(CookieManager.decryptCookie("accessToken"))
-    const userId = token.userId;
     const [movies, setMovies] = useState(null);
-    const [dataLoaded, setDataLoaded] = useState(false)
-
-    // const handleSortByChange = useCallback((selectedValue) => {
-    //     let sortedMovies;
-    //     switch (selectedValue) {
-    //         case "A-Z":
-    //             sortedMovies = [...movies].sort((a, b) => a.title.localeCompare(b.title));
-    //             break;
-    //         case "Z-A":
-    //             sortedMovies = [...movies].sort((a, b) => b.title.localeCompare(a.title));
-    //             break;
-    //         case "Vote Average Asc.":
-    //             sortedMovies = [...movies].sort((a, b) => a.voteAverage - b.voteAverage);
-    //             break;
-    //         case "Vote Average Desc.":
-    //             sortedMovies = [...movies].sort((a, b) => b.voteAverage - a.voteAverage);
-    //             break;
-    //         default:
-    //             sortedMovies = [...movies];
-    //     }
-    //     setMovies(sortedMovies);
-    // }, [movies]);
+    const [dataLoaded, setDataLoaded] = useState(false);
+    const navigate = useNavigate();
 
     async function fetchBackendData() {
         try {
             await isTokenExpired();
             const response = await Promise.all([
-                fetchData(`${GET_WATCHLIST_ENDPOINT}/${userId}`),
+                fetchData(`${API_URL}${GET_WATCHLIST_ENDPOINT}`),
             ]);
             return response[0]
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     }
+
     useMemo(() => {
         function getDetailedMovieData() {
             fetchBackendData()
@@ -66,10 +46,39 @@ export default function WatchList() {
         getDetailedMovieData();
     }, []);
 
-
     if (!dataLoaded || movies === null) {
         return <LoadingPage />;
     }
+
+    // Empty state component
+    const EmptyWatchlist = () => (
+        <div className={WatchListStyle["empty-state-wrapper"]}>
+            <div className={WatchListStyle["empty-state-container"]}>
+                <div className={WatchListStyle["empty-state-card"]}>
+                    <div className={WatchListStyle["icon-container"]}>
+                        <div className={WatchListStyle["icon-wrapper"]}>
+                            <Film size={64} strokeWidth={1.5} />
+                        </div>
+                    </div>
+
+                    <div className={WatchListStyle["empty-state-text"]}>
+                        <h2>Your Watchlist is Empty</h2>
+                        <p>
+                            Start building your personal collection of must-watch films.
+                            Discover, save, and never forget another movie you want to see.
+                        </p>
+                    </div>
+                    <button
+                        className={WatchListStyle["discover-btn"]}
+                        onClick={() => navigate('/discover-movies')}
+                    >
+                        <Plus size={24} />
+                        Discover Movies
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
 
     return (
         <div>
@@ -78,22 +87,12 @@ export default function WatchList() {
                 <div className={WatchListStyle.titleWrapper}>
                     <div className={WatchListStyle["title-container"]}>
                         <h3 className={Title["movie-title"]}>YOUR WATCHLIST</h3>
-                        {/* {movies.length !== 0 ?
-                            <div className={WatchListStyle["sort-by-btn"]}>
-                                <Dropdown onSelectSortBy={handleSortByChange} dropdownItems={[
-                                    "A-Z",
-                                    "Z-A",
-                                    "Vote Average Desc.",
-                                    "Vote Average Asc."]} />
-                            </div>
-                            : null} */}
                     </div>
                 </div>
                 <div className={WatchListStyle["watchlist-container"]}>
                     {movies.length !== 0 ? movies.map((movie) => (
-
-                        < div key={movie.movieId} >
-                            <Link to={`/movies/movie/${movie.movieId}`}>
+                        <div key={movie.movieId}>
+                            <Link to={`${indMovieEndpoint}${movie.movieId}`}>
                                 <MovieCard
                                     movieId={movie.movieId}
                                     posterUrl={movie.posterUrl}
@@ -103,18 +102,15 @@ export default function WatchList() {
                                     overview={movie.overview}
                                     actors={movie.actors}
                                     video={movie.video}
+                                    isSavedToFavouriteMoviesList={movie.isSavedToFavouriteMoviesList}
                                     isSavedToWatchlist={movie.isSavedToWatchlist}
                                 />
                             </Link>
                         </div>
-                    )) :
-
-                        <div className={WatchListStyle.emptyList}> Include films in your watchlist to have them displayed here!
-                        </div>
-
-                    }
+                    )) : <EmptyWatchlist />}
                 </div>
             </div>
-        </div >
+            <Footer />
+        </div>
     );
 }

@@ -1,0 +1,81 @@
+import React, { useState } from "react";
+import HeroCarousel from "../components/Carousel/HeroCarousel/HeroCarousel.js";
+import MovieCarousel from "../components/Carousel/MovieCarousel/MovieCarousel.js";
+import NavBar from "../components/NavBar/NavBar.js";
+import LoadingPage from "./Loading.js";
+import HomePage from "../misc/HomePage.module.css";
+import { fetchData } from "../security/Data.js";
+import isTokenExpired from "../security/IsTokenExpired.js";
+import { homepageBreakpoints } from "../components/Carousel/Other/General.js";
+import Footer from "../components/Footer/Footer.js";
+const popularMovieEndpoint = process.env.REACT_APP_POPULAR_MOVIES_ENDPOINT;
+const topRatedMovieEndpoint = process.env.REACT_APP_TOP_RATED_MOVIES_ENDPOINT;
+const upcomingMovieEndpoint = process.env.REACT_APP_UPCOMING_MOVIES_ENDPOINT;
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
+
+function Homepage() {
+  const [isLoading, setIsLoading] = useState(true);
+  // const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [moviesData, setMoviesData] = useState(null);
+
+  // useEffect(() => {
+  //   window.addEventListener("resize", setWindowWidth(window.innerWidth));
+  //   return () => {
+  //     window.removeEventListener("resize", setWindowWidth(window.innerWidth));
+  //   };
+  // }, []);
+  async function fetchBackendData() {
+    try {
+      await isTokenExpired();
+      const [trendingMovies, topRatedMovies, upcomingMovies] = await Promise.all([
+        fetchData(`${API_URL}${popularMovieEndpoint}`),
+        fetchData(`${API_URL}${topRatedMovieEndpoint}`),
+        fetchData(`${API_URL}${upcomingMovieEndpoint}`),
+      ]);
+      setMoviesData({
+        trendingMovies,
+        topRatedMovies,
+        upcomingMovies,
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  fetchBackendData();
+
+  return isLoading || !moviesData ? (
+    <LoadingPage />
+  ) : (
+    <div>
+      <NavBar />
+      <HeroCarousel />
+      <div className={HomePage.movie_carousel_wrapper}>
+        <MovieCarousel
+          title="Trending movies"
+          movies={moviesData.trendingMovies}
+          endpoint={popularMovieEndpoint}
+          breakpoints={homepageBreakpoints()}
+        />
+
+        <MovieCarousel
+          title="Top Rated"
+          movies={moviesData.topRatedMovies}
+          endpoint={topRatedMovieEndpoint}
+          breakpoints={homepageBreakpoints()}
+        />
+        <MovieCarousel
+          title="Releasing Soon"
+          movies={moviesData.upcomingMovies}
+          endpoint={upcomingMovieEndpoint}
+          breakpoints={homepageBreakpoints()}
+        />
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+export default Homepage;

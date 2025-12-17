@@ -19,31 +19,26 @@ $outline: rgba(#fff, 0.4);
   .movie-title {
     zoom: 0.75
   }
-
 }
 
 .movie-title {
   display: flex;
   font-family: "CoreCircus", sans-serif;
   line-height: 2;
-  font-size: 50px;
+  font-size: clamp(34px, 8vw, 50px); // Larger min and more aggressive scaling
   color: $h3;
   text-align: center;
-  @media screen and (max-width: 400px) {
-      zoom: 0.5
-  }
-  @media screen and (max-width: 500px) {
-      zoom: 0.59
-  }
+  justify-content: center;
+  width: 100%;
+  
   @media (max-width: 1695px) {
     // For ind movie actor title
       justify-content: center;
   }
 }  
+
 .ind-movie-actors {
-  @media screen and (max-width: 2300px) {
     justify-content: center;
-}
 }
 
 /*

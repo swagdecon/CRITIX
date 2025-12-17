@@ -1,13 +1,13 @@
 import ReviewStyle from "./OtherReviews.module.css";
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-const deleteUserReviewEndpoint = process.env.REACT_APP_DELETE_USER_REVIEW_ENDPOINT;
 import { sendData } from "../../../security/Data";
-
-export default function DeleteReviewPopup({ movieId, userId, onSuccess }) {
+const deleteUserReviewEndpoint = process.env.REACT_APP_DELETE_USER_REVIEW_ENDPOINT;
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
+export default function DeleteReviewPopup({ movieId, onSuccess }) {
     const [message, setMessage] = useState(null)
     async function handleDeleteReview() {
-        const response = await sendData(`${deleteUserReviewEndpoint}${movieId}/${userId}`);
+        const response = await sendData(`${API_URL}${deleteUserReviewEndpoint}${movieId}`);
         response.ok ? onSuccess(false) : setMessage("Something went wrong")
     }
     return (
@@ -26,5 +26,4 @@ export default function DeleteReviewPopup({ movieId, userId, onSuccess }) {
 DeleteReviewPopup.propTypes = {
     onSuccess: PropTypes.func,
     movieId: PropTypes.int,
-    userId: PropTypes.string
 };

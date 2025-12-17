@@ -1,0 +1,251 @@
+.ind-movie-page-wrapper {
+  overflow-y: auto;
+  height: 100vh;
+
+}
+.ind-recommendation-page-wrapper {
+  height: 100vh;
+  overflow-y: hidden;
+}
+.ind-movie-page-wrapper::-webkit-scrollbar {
+  display: none;
+}
+.rating {
+  color: #0096ff;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 22px;
+}
+
+.content-wrapper {
+display: flex; 
+ font-family: "Open Sans", sans-serif;
+ flex-direction: column;
+}
+
+.background {
+  position: absolute;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  filter: blur(10px) brightness(0.35);
+}
+.vertical-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.btn-wrapper {
+  padding-top: 3%;
+  display: inline-flex;
+  align-self: start;
+}
+.btn-wrapper-el {
+  margin-left: 15px
+}
+
+.hero-content {
+  display: flex;
+  z-index: 1;
+  flex: 1;
+  justify-content: center;
+  transform: translateX(5%);
+  min-height: 100vh;
+}
+
+.movie_hero_info_container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 25%;
+  max-width: 25%;
+  padding-right: 4%;
+}
+
+.hero-poster {
+  display: flex;
+ max-height: 80vh;
+ justify-content: center;
+  width: auto;
+  object-fit: contain; 
+}
+.RecommendationsPoster {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.poster-wrapper {
+  display: flex;
+  align-items: center;
+}
+.movie__title {
+  font-size: 4.5rem;
+  display: flex;
+  margin: 0;
+}
+
+.movie__score {
+  color: #0096ff;
+  font-size: 1.3rem;
+}
+
+.movie__year {
+  font-size: 4.5rem;
+  display: flex;
+  color: #979596;
+}
+
+.movie__description {
+  display: flex;
+  flex-wrap: wrap;
+  color: #ffffff;
+  font-size: 1.1rem;
+  padding-top: 3rem;
+  line-height: 2rem;
+  max-width: 100%;
+}
+.BtnResponsive {
+  display: flex;
+  flex-direction: row;
+}
+.review__description {
+  margin: 0 0;
+  display: flex;
+  color: #ffffff;
+  font-size: 1.1rem;
+  line-height: 2.1rem;
+  text-align: start;
+}
+.review__description::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+}
+
+.review__description::-webkit-scrollbar
+{
+	width: 12px;
+  background-color: rgb(73, 73, 73);
+  border-radius: 10px;
+
+}
+
+.review__description::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #0096ff;
+}
+.header__review__wrapper {
+ margin-bottom: 40px;
+}
+.review__wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.ind_movie_review {
+  display: flex;
+  padding-top: 3rem;
+}
+
+.ind_review_title {
+  padding-bottom: 3vh;
+  font-size: 1rem;
+  color: #979596;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+}
+
+.no-reviews {
+  padding-top: 1vh;
+}
+
+/* Scrolling css */
+.mainContainer {
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+  height: auto;
+  gap: 2rem;
+  max-width: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
+  padding-bottom: 1%;
+  overflow: hidden;
+}
+
+
+@media (min-width: 3000px) {
+  .hero-poster {
+    display: flex;
+    max-width: 49em;
+  }
+}
+.recommended-carousel-wrapper {
+  overflow: hidden;
+}
+
+@media (max-width: 1695px) {
+  .hero-content {
+    padding-top: 7%;
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(0)
+
+  }
+
+  .hero-poster {
+    margin-bottom: 2rem; 
+  }
+  .movie_hero_info_container {
+    margin: 0;
+    padding: 0;
+    min-width: 90%;
+  }
+  
+  .btn-wrapper, .review__description, .movie__description, .ind_review_title, .movie__title, .movie__year, .rating  {
+    align-self: center;
+    text-align: center;
+  }
+  .btn-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+  .BtnResponsive {
+    padding: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+ 
+  .movie_hero_info_container {
+    order: 2; 
+  }
+}
+@media (max-width: 1100px) {
+  .hero-content {
+    padding-top: 10vh;
+   }
+ }
+@media (max-width: 1000px) {
+ .hero-poster {
+    max-width: 70vw;
+  }
+  .ind_movie_review_title {
+    justify-content: center;
+   }
+   .movie__year {
+    font-size: 3rem;
+   }
+}
+@media (max-width: 500px) {
+  .movie__title {
+    font-size: 50px
+   }
+ }
+ 

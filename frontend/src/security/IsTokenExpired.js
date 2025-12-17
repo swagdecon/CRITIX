@@ -1,8 +1,10 @@
-import jwt_decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import CookieManager from "./CookieManager";
 import Logout from "./Logout";
 let refreshPromise = null;
-const refreshTokenEndpoint = process.env.REACT_APP_REFRESH_TOKEN_ENDPOINT
+const REFRESH_TOKEN_ENDPOINT = process.env.REACT_APP_REFRESH_TOKEN_ENDPOINT
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
+
 export default function isTokenExpired() {
   return new Promise((resolve, reject) => {
     const token = CookieManager.decryptCookie("accessToken");
@@ -11,7 +13,7 @@ export default function isTokenExpired() {
     const refreshTokenLogic = async () => {
       try {
         const refreshResponse = await fetch(
-          refreshTokenEndpoint,
+          `${API_URL}${REFRESH_TOKEN_ENDPOINT}`,
           {
             method: "POST",
             headers: {
@@ -39,7 +41,7 @@ export default function isTokenExpired() {
       return reject("No token found"); // Reject immediately if no token is found
     }
 
-    const decodedToken = jwt_decode(token);
+    const decodedToken = jwtDecode(token);
     const currentTime = Date.now() / 1000;
 
     if (decodedToken.exp >= currentTime) {

@@ -5,23 +5,25 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.0</version>
+		<version>3.3.10</version>
 		<relativePath/> 
 	</parent>
-	<groupId>com.popflix</groupId>
-	<artifactId>popflix</artifactId>
+	<groupId>com.critix</groupId>
+	<artifactId>critix</artifactId>
 	<version>0.0.1</version>
-	<name>popflix</name>
+	<name>critix</name>
 	<description>Application where users can find, rate and review their favourite movies</description>
 
 	<properties>
-		<java.version>19</java.version>
 		<javax.version>1.1.4</javax.version>
 		<dotenv.version>5.2.2</dotenv.version>
-		<moviedbapi.version>1.15.1</moviedbapi.version>
+		<moviedbapi.version>2.1.2</moviedbapi.version>
 		<jackson-datatype.version>2.15.2</jackson-datatype.version>
 		<jjwt.version>0.11.5</jjwt.version>
-		<okhttp.version>4.11.0</okhttp.version>
+		<jvm-openai.version>0.11.0</jvm-openai.version>
+		<stripe.version>30.0.0</stripe.version>
+		<gson.version>2.13.2</gson.version>
+		<okhttp.version>4.12.0</okhttp.version>
 	</properties>
 		<dependencies>
 			<dependency>
@@ -29,9 +31,28 @@
 				<artifactId>jakarta.persistence-api</artifactId>
 			</dependency>
 			<dependency>
+				<groupId>io.github.stefanbratanov</groupId>
+				<artifactId>jvm-openai</artifactId>
+				<version>${jvm-openai.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>javax.json</groupId>
 				<artifactId>javax.json-api</artifactId>
 				<version>${javax.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>${gson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.squareup.okhttp3</groupId>
+				<artifactId>okhttp</artifactId>
+				<version>${okhttp.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-devtools</artifactId>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
@@ -40,13 +61,19 @@
 			<dependency>
 				<groupId>org.junit.jupiter</groupId>
 				<artifactId>junit-jupiter-api</artifactId>
-				<version>5.10.1</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-mail</artifactId>
-				<version>3.2.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-webflux</artifactId>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
@@ -67,9 +94,13 @@
 				<version>${moviedbapi.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.stripe</groupId>
+				<artifactId>stripe-java</artifactId>
+				<version>${stripe.version}</version> 
+			</dependency>
+			<dependency>
 				<groupId>com.fasterxml.jackson.datatype</groupId>
 				<artifactId>jackson-datatype-json-org</artifactId>
-				<version>${jackson-datatype.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.projectlombok</groupId>

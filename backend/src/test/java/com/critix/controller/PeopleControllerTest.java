@@ -1,0 +1,38 @@
+package com.critix.controller;
+
+import java.io.IOException;
+import java.util.Optional;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import com.critix.controller.PeopleController;
+import com.critix.model.Person;
+import com.critix.service.PersonService;
+
+import info.movito.themoviedbapi.tools.TmdbException;
+
+class PeopleControllerTest {
+
+    @Test
+    void testSinglePerson() throws IOException, InterruptedException, TmdbException {
+        // Create a mock PersonService
+        PersonService personService = mock(PersonService.class);
+        Person person = new Person(); // create a dummy Person object
+        when(personService.singlePerson(1)).thenReturn(person);
+        // Create a PeopleController instance and inject the mocked PersonService
+        PeopleController peopleController = new PeopleController();
+
+        peopleController.PersonService = personService;
+
+        // Call the singlePerson method
+        ResponseEntity<Person> response = peopleController.singlePerson(1);
+
+        // Assert the response
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(person, response.getBody());
+    }
+}

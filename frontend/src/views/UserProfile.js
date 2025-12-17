@@ -1,0 +1,250 @@
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { fetchData } from "../security/Data";
+import MovieCarousel from "../components/Carousel/MovieCarousel/MovieCarousel.js";
+import isTokenExpired from "../security/IsTokenExpired.js";
+import UserStyle from "../components/UserProfile/UserProfile.module.css"
+import ProfilePicture from "../components/UserProfile/ProfileImage.js"
+import NavBar from "../components/NavBar/NavBar.js";
+import BannerImg from "../components/UserProfile/BannerImage.js";
+import LoadingPage from "./Loading.js";
+import Pagination from "@mui/material/Pagination";
+import IndUserReview from "../components/Review/ReviewList/IndUserReview.js";
+import InfoUpdate from "../components/UserProfile/InfoUpdate/InfoUpdate.js";
+import LoginInfo from "../components/UserProfile/LoginInfo.js";
+import { Link } from "react-router-dom";
+import { favouriteMovieBreakpoints } from "../components/Carousel/Other/General.js";
+import MovieCard from "../components/MovieCard/MovieCard.js";
+import { jwtDecode } from "jwt-decode";
+import CookieManager from "../security/CookieManager.js";
+import EditableBio from "../components/UserProfile/Other/BioText.js";
+import parse from 'html-react-parser';
+import UserAverageRating from "../components/UserProfile/Other/UserAverageRating.js";
+import MostReviewedGenres from "../components/UserProfile/Other/MostReviewedGenres.js";
+import HighestRatedMoviesSection from "../components/UserProfile/Other/HighestRatedMoviesSection.js";
+import NumberOfReviewsWritten from "../components/UserProfile/Other/NumberOfReviewsWritten.js";
+
+const allUserReviewsEndpoint = process.env.REACT_APP_USER_REVIEWS_ENDPOINT
+const getAvatarEndpoint = process.env.REACT_APP_GET_USER_AVATAR
+const getBannerEndpoint = process.env.REACT_APP_GET_USER_BANNER
+const getBioEndpoint = process.env.REACT_APP_GET_USER_BIO
+const getAverageRatingEndpont = process.env.REACT_APP_USER_AVERAGE_RATING
+const getUserFavouriteMoviesEndpoint = process.env.REACT_APP_GET_FAVOURITE_MOVIES_ENDPOINT
+const getLoginInfoEndpoint = process.env.REACT_APP_GET_LOGIN_INFO_ENDPOINT
+const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
+const getMostReviewedGenres = process.env.REACT_APP_USER_MOST_REVIEWED_GENRES
+const getUserTopRatedMovies = process.env.REACT_APP_USER_TOP_RATED_MOVIES
+const getNumberOfUserReviews = process.env.REACT_APP_NUMBER_OF_USER_REVIEWS
+
+export default function UserProfile() {
+
+    const reviewsPerPage = 2;
+    const [favouriteMovies, setFavouriteMovies] = useState(null);
+    const [loginInfo, setLoginInfo] = useState(null);
+    const [userReviews, setUserReviews] = useState(null)
+    const [recentUserReview, setRecentUserReview] = useState(null)
+    const [userTopRatedMovies, setUserTopRatedMovies] = useState(null);
+    const [numberOfReviewsWritten, setNumberOfReviewsWritten] = useState(null);
+    const [avatar, setAvatar] = useState(null);
+    const [banner, setBanner] = useState(null);
+    const [bio, setBio] = useState(null);
+    const [rating, setRating] = useState(null)
+    const [mostReviewedGenres, setMostReviewedGenres] = useState(null)
+    const [isLoading, setIsLoading] = useState(true);
+    const [renderUserSettings, setRenderUserSettings] = useState(false);
+    const [renderUserHome, setRenderUserHome] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const handlePageChange = useCallback((event, page) => setCurrentPage(page));
+
+    const token = useMemo(() => CookieManager.decryptCookie("accessToken"), []);
+    const decodedToken = useMemo(() => jwtDecode(token), [token]);
+    const firstName = decodedToken.firstName
+    const isUltimateUser = decodedToken.isUltimateUser
+    const reviewsToDisplay = useMemo(() => {
+        if (!userReviews) return [];
+        const startIdx = (currentPage - 1) * reviewsPerPage;
+        return userReviews.slice(startIdx, startIdx + reviewsPerPage);
+    }, [userReviews, currentPage]);
+
+
+
+    const totalPages = userReviews ? Math.ceil(userReviews.length / reviewsPerPage) : 1;
+
+    const fetchBackendData = useCallback(async () => {
+
+        try {
+            await isTokenExpired();
+            const [loginInfo, favouriteMovies, allUserReviews, avatarPic, bannerPic, bio, averageRating, mostReviewedGenres, userTopRatedMovies, numberOfReviewsWritten] = await Promise.all([
+                fetchData(`${API_URL}${getLoginInfoEndpoint}`),
+                fetchData(`${API_URL}${getUserFavouriteMoviesEndpoint}`),
+                fetchData(`${API_URL}${allUserReviewsEndpoint}`),
+                fetchData(`${API_URL}${getAvatarEndpoint}`),
+                fetchData(`${API_URL}${getBannerEndpoint}`),
+                fetchData(`${API_URL}${getBioEndpoint}`),
+                fetchData(`${API_URL}${getAverageRatingEndpont}`),
+                fetchData(`${API_URL}${getMostReviewedGenres}`),
+                fetchData(`${API_URL}${getUserTopRatedMovies}`),
+                fetchData(`${API_URL}${getNumberOfUserReviews}`)
+            ]);
+            setLoginInfo(loginInfo)
+            setFavouriteMovies(favouriteMovies)
+            setUserReviews(allUserReviews);
+            setAvatar(avatarPic);
+            setRecentUserReview(allUserReviews[0]);
+            setBanner(bannerPic);
+            setBio(bio)
+            setRating(averageRating)
+            setMostReviewedGenres(mostReviewedGenres)
+            setUserTopRatedMovies(userTopRatedMovies)
+            setNumberOfReviewsWritten(numberOfReviewsWritten)
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, []);
+    useEffect(() => {
+        fetchBackendData();
+    }, [fetchBackendData]);
+
+    function showUserSettings() {
+        setRenderUserHome(false)
+        setRenderUserSettings(true)
+    }
+    function showUserHome() {
+        setRenderUserHome(true)
+        setRenderUserSettings(false)
+    }
+
+    return isLoading ? (
+        <LoadingPage />
+    ) : (
+        <div className={UserStyle.container}>
+            <NavBar />
+            <div className={UserStyle["profile-card"]}>
+                <div className={UserStyle["profile-header"]}>
+                    <BannerImg bannerPic={banner} refetchBanner={fetchBackendData} />
+                    <div className={UserStyle["main-profile"]}>
+                        <ProfilePicture avatar={avatar} />
+                        <div className={isUltimateUser ? UserStyle["profile-names-premium"] : UserStyle["profile-names"]}>
+                            <h1 className={UserStyle.username}>{firstName}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div className={UserStyle["profile-body"]}>
+                    <div className={UserStyle.mainBody}>
+                        <div className={UserStyle["profile-actions"]}>
+                            <button className={UserStyle.settings} onClick={renderUserHome ? showUserSettings : showUserHome}>{renderUserHome ? "Settings" : "Home"}</button>
+                            <section className={UserStyle.bio}>
+                                <div className={UserStyle["bio-header"]}>
+                                    <i className="fa fa-info-circle"></i>
+                                    Bio
+                                </div>
+                                <EditableBio bioText={bio} />
+                            </section>
+                        </div>
+                        {renderUserHome && !renderUserSettings ?
+                            <div className={UserStyle.MainInfoPanel}>
+                                <LoginInfo data={loginInfo} />
+                                <section className={UserStyle.RecentReviews}>
+                                    <h2 className={UserStyle.Title}>Recent review</h2>
+                                    <div className={UserStyle.AllUserReviews}>
+                                        {recentUserReview ?
+                                            <IndUserReview key={recentUserReview.movieId} placement={"userProfile"} avatar={avatar} movieTitle={recentUserReview.movieTitle} createdDate={recentUserReview.createdDate} content={parse(recentUserReview.content)} rating={recentUserReview.rating} />
+                                            : <div className={UserStyle.NoContent}>
+                                                Start posting reviews to fill this spot with your insights.
+                                            </div>}
+                                    </div>
+                                </section>
+                                <section className={UserStyle.AllReviews}>
+                                    <h2 className={UserStyle.Title}>all reviews</h2>
+                                    <div className={UserStyle.AllUserReviews}>
+                                        {reviewsToDisplay.length > 0 ?
+                                            reviewsToDisplay.map((review) => (
+                                                <IndUserReview key={review.movieId} placement={"userProfile"} avatar={avatar} movieTitle={review.movieTitle} createdDate={review.createdDate} content={parse(review.content)} rating={review.rating} />
+                                            ))
+                                            : <div className={UserStyle.NoContent}>
+                                                Start posting reviews to fill this spot with your insights.
+                                            </div>}
+                                    </div>
+                                    {reviewsToDisplay.length > 0 ?
+                                        <div className={UserStyle.PaginationWrapper}>
+                                            <Pagination
+                                                size="large"
+                                                count={totalPages}
+                                                page={currentPage}
+                                                onChange={handlePageChange}
+                                                sx={{
+                                                    justifyContent: "center",
+                                                    display: 'flex',
+                                                    marginBottom: "10px"
+                                                }}
+                                            />
+                                        </div>
+                                        : null}
+                                </section>
+                                <section className={UserStyle.MostReviewedGenres}>
+                                    <h2 className={UserStyle.Title}>Most Reviewed Genres</h2>
+                                    <br />
+                                    <MostReviewedGenres reviewedGenres={mostReviewedGenres} />
+                                </section>
+                                <section className={UserStyle.AverageRating}>
+                                    <h2 className={UserStyle.Title}>average movie rating</h2>
+                                    <br />
+                                    <UserAverageRating averageRating={rating} />
+                                </section>
+                                <section className={UserStyle.numberOfReviews}>
+                                    <h2 className={UserStyle.Title}>Number of Reviews</h2>
+                                    <NumberOfReviewsWritten numberOfReviewsWritten={numberOfReviewsWritten} />
+                                </section>
+
+                                <section className={UserStyle.FavouriteMovies}>
+                                    <h2 className={UserStyle.Title}>Your Favourite Movies</h2>
+                                    {/* The carousel styling makes cards look strange below 5 cards, therefore we will show just a simple loop through the cards in the else statement */}
+                                    {favouriteMovies.length > 5 ? (
+                                        <MovieCarousel
+                                            movies={favouriteMovies}
+                                            endpoint={`${API_URL}${indMovieEndpoint}`}
+                                            breakpoints={favouriteMovieBreakpoints()}
+                                        />
+                                    ) : favouriteMovies.length > 0 ? (
+                                        <div className={UserStyle.ShortFavouriteMovieList}>
+                                            {favouriteMovies.map((movie, i) => (
+                                                <div className={UserStyle.ShortFavouriteMovieList} key={i}>
+                                                    <Link to={`${indMovieEndpoint}${movie.id || movie.movieId}`}>
+                                                        <MovieCard
+                                                            movieId={movie.id || movie.movieId}
+                                                            title={movie.title}
+                                                            posterUrl={movie.posterUrl}
+                                                            voteAverage={movie.voteAverage}
+                                                            genres={movie.genres}
+                                                            overview={movie.overview}
+                                                            actors={movie.actors}
+                                                            isSavedToWatchlist={movie.isSavedToWatchlist}
+                                                            isSavedToFavouriteMoviesList={movie.isSavedToFavouriteMoviesList}
+                                                            shareUrl={`${indMovieEndpoint}/${movie.id}`}
+                                                        />
+                                                    </Link>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className={UserStyle.NoContent}>
+                                            Your favorite films deserve the spotlight. Start adding them here.
+                                        </div>
+                                    )}
+                                </section>
+                                <section className={UserStyle.HighestRatedMovies}>
+                                    <h2 className={UserStyle.Title}>highest rated movies</h2>
+                                    <HighestRatedMoviesSection userTopRatedMovies={userTopRatedMovies} />
+                                </section>
+                            </div>
+                            :
+                            <InfoUpdate />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div >
+    )
+}

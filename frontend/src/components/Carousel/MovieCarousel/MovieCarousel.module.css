@@ -1,18 +1,15 @@
+.carousel-parent {
+  width: 100%;
+  justify-content: center;
+}
+
 .carousel-wrapper {
-  transform: translateY(5%);
   text-align: center;
+  width: 100%;
 }
-.carousel-movie {
-  margin-bottom: 70px;
-}
-
-
-@media screen and (min-width: 3340px) {
-  .carousel-control-prev {
-    justify-content: flex-end;
-  }
-  
-  .carousel-control-next {
-    justify-content: flex-start;
-  }
+.ShortList {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
 }

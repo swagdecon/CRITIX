@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from "react"
-import resetPwdStyles from "../misc/ResetPassword.module.css"
+import resetPwdStyles from "../misc/ResetDetails.module.css"
 import LoginStyles from "../components/Login/login.module.css"
 const SEND_RESET_PWD_ENDPOINT = process.env.REACT_APP_SEND_PWD_RESET_ENDPOINT;
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
 
 export default function ConfirmEmailForPwdReset() {
     const [email, setEmail] = useState("");
@@ -13,7 +14,7 @@ export default function ConfirmEmailForPwdReset() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(SEND_RESET_PWD_ENDPOINT, {
+            const response = await fetch(`${API_URL}${SEND_RESET_PWD_ENDPOINT}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: email

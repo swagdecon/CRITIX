@@ -1,0 +1,67 @@
+# ============================================
+# Common Configuration (All Profiles)
+# ============================================
+spring:
+  profiles:
+    default: dev
+  data:
+    mongodb:
+      auto-index-creation: true
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+logging:
+  level:
+    com.critix.controller.PaymentController: INFO
+    root: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+---
+# ============================================
+# Development Profile (Local)
+# ============================================
+spring:
+  config:
+    activate:
+      on-profile: dev
+  data:
+    mongodb:
+      uri: ${MONGO_URI}
+  mail:
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+
+debug: true
+
+---
+# ============================================
+# Production Profile (Railway)
+# ============================================
+spring:
+  config:
+    activate:
+      on-profile: prod
+  data:
+    mongodb:
+      uri: mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_CLUSTER}/${MONGO_DATABASE}?retryWrites=true&w=majority
+  mail:
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+
+debug: true

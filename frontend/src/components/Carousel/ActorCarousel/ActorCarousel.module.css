@@ -1,54 +1,186 @@
-/* CAST MEMBERS */
-.CastMembers {
-  position: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.profile-container {
+.Wrapper {
+  min-width: 0;
   display: flex;
-  align-items: center;
-  justify-content: space-around;
-  flex: 1;
+  width: 100vw;
+  justify-content: center;
+  padding-bottom: 3ch;
+  overflow: hidden;
+}
+
+.responsiveGrid {
+  width: 90vw;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(250px, 1fr);
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  padding-bottom: 1rem;
+}
+
+/* Webkit scrollbar styling */
+.responsiveGrid::-webkit-scrollbar {
+  height: 8px;
+}
+
+.responsiveGrid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.responsiveGrid::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.responsiveGrid::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Adjust card size at different breakpoints */
+@media (max-width: 1400px) {
+  .responsiveGrid {
+    grid-auto-columns: minmax(220px, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .responsiveGrid {
+    grid-auto-columns: minmax(200px, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .responsiveGrid {
+    grid-auto-columns: minmax(45%, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsiveGrid {
+    grid-auto-columns: minmax(70%, 1fr);
+    gap: 0.5rem;
+  }
 }
 
 .card {
-  margin: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: grey;
+  height: 379px;
+  min-width: 200px;
+  max-width: 300px;
+  width: 100%;
+  margin: 0 auto;
   border-radius: 10px;
-  transition: background 0.8s;
   overflow: hidden;
   background: black;
   box-shadow: 0 70px 63px -60px #000000;
+  position: relative;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 768px) {
+  .card {
+    height: 280px;
+    min-width: 180px;
+  }
+  
+  .border {
+    height: 280px;
+  }
+  
+  .profile-person {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    height: 240px;
+    min-width: 150px;
+  }
+  
+  .border {
+    height: 240px;
+  }
+  
+  .profile-person {
+    font-size: 18px;
+  }
+  
+  .icons {
+    height: 20vh;
+    gap: 10px;
+  }
+}
+
+.Img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-repeat: no-repeat;
+  background-position: center; 
+  background-size: cover; 
+  text-decoration: none;
+}
+
+.Img:hover .border {
+  border: 1px solid #fff;
+  opacity: 1;
+}
+
+.Img:hover .border .icons {
+  opacity: 1;
 }
 
 .border {
-  height: 400px;
-  width: 295px;
-  opacity: 0;
+  height: 379px;
+  max-width: 300px;
+  width: 100%;
+  opacity: 0; 
   background: transparent;
   border-radius: 10px;
-  transition: border 1s;
-  position: relative;
+  transition: opacity 0.8s, border 0.8s; 
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-start;
 }
+
+.icons {
+  fill: #fff;
+  color: #fff;
+  height: 26vh;
+  width: 50px;
+  justify-content: flex-end;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  color: #0096ff;
+  opacity: 0; 
+  transition: opacity 0.8s; 
+  margin: 5%;
+}
+
+.iconEl {
+  font-size: 1.2rem;
+}
+
 .border:hover {
   border: 1px solid #fff;
   opacity: 1;
 }
-.border h3 {
-  transition: opacity 1s;
-}
-.card1:hover .profile-person,
-.fa {
-  opacity: 1;
-  color: #0096ff;
-  font-family: "CoreCircus", sans-serif;
+
+.profile-person {
   font-size: 30px;
+  font-weight: bold;
+  color: #fff;
+  margin: 5%;
+  font-family: "CoreCircus", sans-serif;
 }
 
-.carousel-actors {
-  margin-bottom: 70px;
+.Img:hover .profile-person {
+  color: #0096ff;
 }

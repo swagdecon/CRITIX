@@ -4,14 +4,15 @@ import MovieCard from "../../components/MovieCard/MovieCard";
 import { Link } from "react-router-dom";
 import Title from "../Carousel/title.module.scss";
 import PropTypes from "prop-types";
-import LoadingPage from "../../views/LoadingPage";
+import LoadingPage from "../../views/Loading";
 import Dropdown from "../Other/Dropdown/SortByDropdown";
 import Pagination from '@mui/material/Pagination';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import isTokenExpired from "../../security/IsTokenExpired";
 import { fetchData } from "../../security/Data";
 const movieListEndpoint = process.env.REACT_APP_MOVIE_LIST_ENDPOINT
-
+const API_URL = process.env.REACT_APP_BACKEND_API_URL
+const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
 const theme = createTheme({
   palette: {
     primary: {
@@ -20,11 +21,10 @@ const theme = createTheme({
   },
 });
 async function fetchBackendData(endpointName, page) {
-
   try {
     await isTokenExpired();
     const response = await Promise.all([
-      fetchData(`${movieListEndpoint}${endpointName}?page=${page}`),
+      fetchData(`${API_URL}${movieListEndpoint}${endpointName}?page=${page}`),
     ]);
     return response[0]
   } catch (error) {
@@ -54,10 +54,10 @@ export default function MovieList({ endpoint }) {
         sortedMovies = [...movies].sort((a, b) => b.popularity - a.popularity);
         break;
       case "Vote Average Asc.":
-        sortedMovies = [...movies].sort((a, b) => a.vote_average - b.vote_average);
+        sortedMovies = [...movies].sort((a, b) => a.voteAverage - b.voteAverage);
         break;
       case "Vote Average Desc.":
-        sortedMovies = [...movies].sort((a, b) => b.vote_average - a.vote_average);
+        sortedMovies = [...movies].sort((a, b) => b.voteAverage - a.voteAverage);
         break;
       default:
         sortedMovies = [...movies];
@@ -127,7 +127,7 @@ export default function MovieList({ endpoint }) {
     return <LoadingPage />;
   }
   return (
-    <div className={MovieListStyle["page-wrapper"]}>
+    <>
       <div className={MovieListStyle.titleWrapper}>
         <div className={MovieListStyle["title-container"]}>
           <h3 className={Title["movie-title"]}>{title}</h3>
@@ -142,10 +142,10 @@ export default function MovieList({ endpoint }) {
           </div>
         </div>
       </div>
-      <div className={MovieListStyle["container"]}>
+      <div className={MovieListStyle.Container}>
         {movies.map((movie) => (
           <div key={movie.movieId}>
-            <Link to={`/movies/movie/${movie.movieId}`}>
+            <Link to={`${indMovieEndpoint}${movie.movieId}`}>
               <MovieCard
                 movieId={movie.movieId}
                 posterUrl={movie.posterUrl}
@@ -155,6 +155,8 @@ export default function MovieList({ endpoint }) {
                 overview={movie.overview}
                 actors={movie.actors}
                 video={movie.video}
+                isSavedToFavouriteMoviesList={movie.isSavedToFavouriteMoviesList}
+                isSavedToWatchlist={movie.isSavedToWatchlist}
               />
             </Link>
           </div>
@@ -178,7 +180,7 @@ export default function MovieList({ endpoint }) {
           />
         </ThemeProvider>
       </div>
-    </div>
+    </>
   );
 }
 

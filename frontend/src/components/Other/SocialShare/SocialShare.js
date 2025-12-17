@@ -25,8 +25,8 @@ import {
 } from "react-share";
 
 export default function SharePagePopup({ shareUrl }) {
-    const title = "Check out this movie on Popflix!"
-    const totalUrl = "https://popflix.netlify.app" + shareUrl
+    const title = "Check out this movie on CRITIX!"
+    const totalUrl = "https://critix.netlify.app" + shareUrl
     return (
         <div>
             <div className={socialShareStyle.title}>
