@@ -10,7 +10,7 @@ export default function NumberOfReviewsWritten({ numberOfReviewsWritten }) {
                     {numberOfReviewsWritten}
                 </div>
             ) : (
-                <div className={UserStyle.noContent}>
+                <div className={UserStyle.NoContent}>
                     Start reviewing movies to gain insights here
                 </div>
             )}

@@ -714,6 +714,16 @@
   @media screen and (max-width: 1000px) {
     .profile-card {
       height: fit-content;
+      min-height: 100vh;
+      grid-template-rows: auto auto;
+      padding-bottom: 80px;
+    }
+
+    .profile-header {
+      height: auto;
+      min-height: 250px;
+      position: relative;
+      padding-bottom: 80px;
     }
   
     .profile-body {
@@ -723,39 +733,67 @@
     }
 
     .mainBody {
-      margin-top: 12ch;
+      margin-top: 6rem;
       grid-template-columns: 1fr;
       gap: 16px;
       grid-column: 1 / -1;
+      padding: 0 1rem;
     }
   
     .profile-names,
     .profile-names-premium {
-      width: 100vw;
+      width: calc(100vw - 2rem);
+      max-width: 500px;
       transform: none;
       border-radius: 16px;
       align-items: center;
+      margin: 0 1rem;
     }
   
     .main-profile {
-      inset: calc(100% - 100px) auto auto 50%;
+      position: absolute;
+      inset: auto auto auto 50%;
+      bottom: -60px;
       transform: translateX(-50%);
       flex-direction: column;
       text-align: center;
+      gap: 12px;
     }
   
     .profile-actions {
       flex-direction: column;
       justify-content: flex-start;
-      padding-top: 16rem;
+      padding-top: 1rem;
+      margin-top: 0;
+      gap: 12px;
+    }
+
+    .MainInfoPanel {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      gap: 16px;
     }
   
     .ActivityInfo,
     .RecentReviews,
-    .AllReviews {
-      grid-column: 1 / -1;
+    .AllReviews,
+    .MostReviewedGenres,
+    .AverageRating,
+    .numberOfReviews,
+    .HighestRatedMovies,
+    .FavouriteMovies {
+      grid-column: 1 / -1 !important;
+      grid-row: auto !important;
       height: auto;
       min-height: auto;
+    }
+
+    .Title {
+      font-size: 20px;
+      text-align: center;
+      margin-top: 0;
+      word-wrap: break-word;
+      padding: 0 0.5rem;
     }
   
     .UserSettingsBox {
@@ -767,8 +805,37 @@
       width: 100%;
       padding: 10px;
     }
-  
-    .Title {
-      text-align: center;
+
+    .profile-image {
+      width: 120px;
+      height: 120px;
+    }
+
+    .custom-file-upload {
+      width: 35px;
+      height: 35px;
+    }
+
+    .BannerAddBtnWrapper {
+      bottom: 90px;
+      right: 18px;
+    }
+
+    .username {
+      font-size: 24px;
+    }
+
+    .AllUserReviews {
+      padding: 0;
+    }
+
+    .FavouriteMovies,
+    .HighestRatedMovies {
+      padding-bottom: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .bio {
+      margin-bottom: 1rem;
     }
   }
