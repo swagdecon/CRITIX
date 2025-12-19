@@ -8,6 +8,7 @@ import { sendData, fetchData } from "../security/Data.js";
 const cancelSubscriptionEndpoint = process.env.REACT_APP_CANCEL_SUBSCRIPTION_ENDPOINT
 const nextBillingDateEndpoint = process.env.REACT_APP_GET_DAYS_UNTIL_SUBSCRIPTION_DUE
 const REACT_APP_BACKEND_API_URL = process.env.REACT_APP_BACKEND_API_URL
+const stripeLink = process.env.REACT_APP_STRIPE_LINK;
 
 export default function SubscriptionPage() {
     const token = CookieManager.decryptCookie('accessToken');
@@ -225,7 +226,7 @@ export default function SubscriptionPage() {
                             ) : (
                                 <div className={SubscriptionStyles.upgradeSection}>
                                     <a
-                                        href={`https://buy.stripe.com/test_4gMeVfdaI09ia6M5Zg7AI01?client_reference_id=${userId}`}
+                                        href={`${stripeLink}${userId}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className={SubscriptionStyles.upgradeButton}

@@ -3,6 +3,7 @@ import Footer from "../components/Footer/Footer.js";
 import UltimateStyles from "../components/CritixUltimate/CritixUltimate.module.css";
 import CookieManager from "../security/CookieManager.js";
 import { jwtDecode } from "jwt-decode";
+const stripeLink = process.env.REACT_APP_STRIPE_LINK;
 
 export default function PricingPage() {
     const token = CookieManager.decryptCookie('accessToken');
@@ -38,7 +39,7 @@ export default function PricingPage() {
                             </ul>
 
                             <a
-                                href={`https://buy.stripe.com/test_4gMeVfdaI09ia6M5Zg7AI01?client_reference_id=${userId}`}
+                                href={`${stripeLink}${userId}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className={UltimateStyles.ctaButton}
