@@ -75,10 +75,10 @@ export default function Highlights() {
         <Box
           sx={{
             width: { sm: '100%', md: '60%' },
-            textAlign: { sm: 'left', md: 'center' },
+            textAlign: { xs: 'center', md: 'center' },
           }}
         >
-          <Typography component="h2" variant="h4" gutterBottom sx={{ textAlign: 'center' }}>
+          <Typography component="h2" variant="h4" gutterBottom>
             Highlights
           </Typography>
           <Typography variant="body1" sx={{ color: 'grey.400' }}>
@@ -100,6 +100,8 @@ export default function Highlights() {
                   height: '100%',
                   borderColor: 'hsla(220, 25%, 25%, 0.3)',
                   backgroundColor: 'grey.800',
+                  alignItems: { xs: 'center', sm: 'flex-start' },
+                  textAlign: { xs: 'center', sm: 'left' },
                 }}
               >
                 <Box sx={{ opacity: 0.5 }}>{item.icon}</Box>

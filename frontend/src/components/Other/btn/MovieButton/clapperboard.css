@@ -73,7 +73,6 @@ clapperboard-div::after {
   transform-origin: 10% calc(8vmin + 0.8vh);
 }
 
-/* hover state */
 clapperboard-div:hover {
   transform:translateY(-1vh)  rotate(0deg) scale(0.06, 0.06);
 }

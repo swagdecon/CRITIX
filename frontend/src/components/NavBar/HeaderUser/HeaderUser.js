@@ -66,10 +66,10 @@ const HeaderUser = ({ avatar }) => {
             My Subscription
           </Link>
           </MenuItem>
-          <MenuItem onClick={handleClose}>  <Link to="/settings">
+          {/* <MenuItem onClick={handleClose}>  <Link to="/settings">
             Settings
           </Link>
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem onClick={handleSubmit}>
             Logout
           </MenuItem>

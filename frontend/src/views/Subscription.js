@@ -102,7 +102,7 @@ export default function SubscriptionPage() {
                         {/* Left: Benefits Showcase */}
                         <div className={SubscriptionStyles.benefitsCard}>
                             <h2 className={SubscriptionStyles.cardTitle}>
-                                {isUltimateUser ? "Your Active Benefits" : "What You&apos;ll Get"}
+                                {isUltimateUser ? "Your Active Benefits :" : "What You'll Get :"}
                             </h2>
 
                             <div className={SubscriptionStyles.benefitsList}>

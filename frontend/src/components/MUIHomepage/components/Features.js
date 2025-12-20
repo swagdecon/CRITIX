@@ -146,18 +146,27 @@ const Features = forwardRef(function Features(props, ref) {
   return (
     <div ref={ref}>
       <Container id="features" sx={{ py: { xs: 8, sm: 16 } }}>
-        <Box sx={{ width: { sm: '100%', md: '60%' } }}>
+        <Box sx={{
+          width: { sm: '100%', md: '60%' },
+          mx: 'auto',
+          textAlign: 'center'
+        }}>
           <Typography
             component="h2"
             variant="h4"
             gutterBottom
-            sx={{ color: 'text.primary' }}
+            sx={{
+              color: 'text.primary',
+            }}
           >
             Product features
           </Typography>
           <Typography
             variant="body1"
-            sx={{ color: 'text.secondary', mb: { xs: 2, sm: 4 } }}
+            sx={{
+              color: 'text.secondary',
+              mb: { xs: 2, sm: 4 },
+            }}
           >
             Critix enhances your movie discovery with customizable filters, a comprehensive review system, personalized recommendations, and key movie statistics.
           </Typography>
