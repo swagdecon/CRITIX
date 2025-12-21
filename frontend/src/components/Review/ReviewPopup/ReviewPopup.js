@@ -35,6 +35,7 @@ import { jwtDecode } from "jwt-decode";
 import CloseIcon from '@mui/icons-material/Close';
 import { Extension } from "@tiptap/react";
 import { sendData } from "../../../security/Data";
+import PopcornRainAnimation from "../ReviewPopup/PopcornRainAnimation";
 
 const RECAPTCHA_ENDPOINT = process.env.REACT_APP_RECAPTCHA_ENDPOINT;
 const CREATE_REVIEW_ENDPOINT = process.env.REACT_APP_CREATE_REVIEW_ENDPOINT;
@@ -81,13 +82,16 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, movieGe
     const lastWordCheckpointRef = useRef(0);
     const [suggestionsList, setSuggestionsList] = useState([]);
     const [semanticsList, setSemanticsList] = useState([]);
+    const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
+
+
     const handleRemoveSuggestion = (indexToRemove) => {
         setSuggestionsList(prev => prev.filter((_, index) => index !== indexToRemove));
     };
 
     const handlePremiumFeatureClick = () => {
         if (!isUltimateUser) {
-            window.location.href = 'http://localhost:3000/ultimate';
+            window.location.href = '/ultimate';
         }
     };
 
@@ -179,7 +183,12 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, movieGe
                 .then(() => {
                     setReviewRating(0);
                     editor.commands.clearContent();
+                    setShowSuccessAnimation(true);
                     setOpenModal(false);
+
+                    setTimeout(() => {
+                        setShowSuccessAnimation(false);
+                    }, 4500);
                 })
                 .catch((error) => {
                     if (error.response?.status === 400 && error.response?.data === "User already submitted a review for this movie.") {
@@ -188,6 +197,7 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, movieGe
                 });
         }
     }, [movieId, reviewRating, reviewContent, hasReviewProfanity, editor, firstName, movieTitle, movieGenres, containsSpoilers, setOpenModal]);
+
 
     useEffect(() => {
         if (openModal && editor) {
@@ -218,158 +228,275 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, movieGe
     };
 
     return (
-        <Modal open={openModal} onClose={() => setOpenModal(false)} closeAfterTransition>
-            <Fade in={openModal}>
-                <Box sx={modalStyles}>
-                    {/* Header Section */}
-                    <Box sx={headerContainerStyles}>
-                        <IconButton
-                            aria-label="close"
-                            onClick={() => setOpenModal(false)}
-                            sx={closeButtonStyles}
-                        >
-                            <CloseIcon />
-                        </IconButton>
-
-                        <motion.div
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5 }}
-                        >
-                            <Typography variant="h4" sx={titleStyles}>
-                                ✍️ Write Your Review
-                            </Typography>
-                            <Typography variant="body2" sx={subtitleStyles}>
-                                Share your thoughts on &ldquo;{movieTitle}&rdquo;
-                            </Typography>
-                        </motion.div>
-
-                        {movieTagline && (
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: 0.2, duration: 0.4 }}
+        <>
+            <Modal open={openModal} onClose={() => setOpenModal(false)} closeAfterTransition>
+                <Fade in={openModal}>
+                    <Box sx={modalStyles}>
+                        {/* Header Section */}
+                        <Box sx={headerContainerStyles}>
+                            <IconButton
+                                aria-label="close"
+                                onClick={() => setOpenModal(false)}
+                                sx={closeButtonStyles}
                             >
-                                <Box sx={taglineBoxStyles}>
-                                    <FormatQuoteIcon sx={{ ...quoteIconStyles, transform: 'scaleX(-1)' }} />
-                                    <Typography variant="body1" sx={{ fontStyle: 'italic', flex: 1, textAlign: 'center' }}>
-                                        {movieTagline}
-                                    </Typography>
-                                    <FormatQuoteIcon sx={quoteIconStyles} />
-                                </Box>
+                                <CloseIcon />
+                            </IconButton>
+
+                            <motion.div
+                                initial={{ opacity: 0, y: -20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5 }}
+                            >
+                                <Typography variant="h4" sx={titleStyles}>
+                                    ✍️ Write Your Review
+                                </Typography>
+                                <Typography variant="body2" sx={subtitleStyles}>
+                                    Share your thoughts on &ldquo;{movieTitle}&rdquo;
+                                </Typography>
                             </motion.div>
-                        )}
-                    </Box>
 
-                    {/* Rating Section */}
-                    <Box sx={ratingContainerStyles}>
-                        <Typography variant="h6" sx={sectionTitleStyles}>
-                            Your Rating
-                        </Typography>
-                        <InputSlider onSliderChange={setReviewRating} />
-                    </Box>
-
-                    {/* Toolbar */}
-                    <Box sx={toolbarContainerStyles}>
-                        <Box sx={toolbarStyles}>
-                            <Tooltip title="Bold" arrow>
-                                <IconButton onClick={() => editor.chain().focus().toggleBold().run()} sx={toolbarButtonStyles}>
-                                    <FormatBoldIcon fontSize="small" />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Italic" arrow>
-                                <IconButton onClick={() => editor.chain().focus().toggleItalic().run()} sx={toolbarButtonStyles}>
-                                    <FormatItalicIcon fontSize="small" />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Bullet List" arrow>
-                                <IconButton onClick={() => editor.chain().focus().toggleBulletList().run()} sx={toolbarButtonStyles}>
-                                    <FormatListBulletedIcon fontSize="small" />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Blockquote" arrow>
-                                <IconButton onClick={() => editor.chain().focus().toggleBlockquote().run()} sx={toolbarButtonStyles}>
-                                    <FormatQuoteIcon fontSize="small" />
-                                </IconButton>
-                            </Tooltip>
-                            <Box sx={toolbarDividerStyles} />
-                            <Tooltip title="Undo" arrow>
-                                <IconButton onClick={() => editor.chain().focus().undo().run()} sx={toolbarButtonStyles}>
-                                    <UndoIcon fontSize="small" />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Redo" arrow>
-                                <IconButton onClick={() => editor.chain().focus().redo().run()} sx={toolbarButtonStyles}>
-                                    <RedoIcon fontSize="small" />
-                                </IconButton>
-                            </Tooltip>
-                            <Box sx={toolbarDividerStyles} />
-                            <Tooltip title="Align Left" arrow>
-                                <IconButton onClick={() => editor.chain().focus().setTextAlign('left').run()} sx={toolbarButtonStyles}>
-                                    <AlignLeftIcon fontSize="small" />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Align Center" arrow>
-                                <IconButton onClick={() => editor.chain().focus().setTextAlign('center').run()} sx={toolbarButtonStyles}>
-                                    <AlignCenterIcon fontSize="small" />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Align Right" arrow>
-                                <IconButton onClick={() => editor.chain().focus().setTextAlign('right').run()} sx={toolbarButtonStyles}>
-                                    <AlignRightIcon fontSize="small" />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Justify" arrow>
-                                <IconButton onClick={() => editor.chain().focus().setTextAlign('justify').run()} sx={toolbarButtonStyles}>
-                                    <AlignJustifyIcon fontSize="small" />
-                                </IconButton>
-                            </Tooltip>
-                        </Box>
-                    </Box>
-
-                    {/* Editor */}
-                    <Box sx={editorWrapperStyles}>
-                        <EditorContent editor={editor} />
-                    </Box>
-
-                    {/* Progress Bar */}
-                    <Box sx={progressContainerStyles}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                            <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>
-                                Word Count: {wordCount}/15 minimum
-                            </Typography>
-                            {wordCount >= 15 && (
-                                <Chip
-                                    label="✓ Ready to submit"
-                                    size="small"
-                                    sx={{
-                                        background: 'linear-gradient(135deg, #00e676 0%, #00c853 100%)',
-                                        color: 'white',
-                                        fontWeight: 600,
-                                        fontSize: '11px'
-                                    }}
-                                />
+                            {movieTagline && (
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ delay: 0.2, duration: 0.4 }}
+                                >
+                                    <Box sx={taglineBoxStyles}>
+                                        <FormatQuoteIcon sx={{ ...quoteIconStyles, transform: 'scaleX(-1)' }} />
+                                        <Typography variant="body1" sx={{ fontStyle: 'italic', flex: 1, textAlign: 'center' }}>
+                                            {movieTagline}
+                                        </Typography>
+                                        <FormatQuoteIcon sx={quoteIconStyles} />
+                                    </Box>
+                                </motion.div>
                             )}
                         </Box>
-                        <LinearProgress
-                            variant="determinate"
-                            value={Math.min((wordCount / 15) * 100, 100)}
-                            sx={progressBarStyles}
-                        />
-                    </Box>
 
-                    {/* Main Content Grid */}
-                    <Box sx={mainGridStyles}>
-                        {/* Left Column - Ideas & Semantics */}
-                        <Box sx={leftColumnStyles}>
-                            {/* Ideas Section */}
+                        {/* Rating Section */}
+                        <Box sx={ratingContainerStyles}>
+                            <Typography variant="h6" sx={sectionTitleStyles}>
+                                Your Rating
+                            </Typography>
+                            <InputSlider onSliderChange={setReviewRating} />
+                        </Box>
+
+                        {/* Toolbar */}
+                        <Box sx={toolbarContainerStyles}>
+                            <Box sx={toolbarStyles}>
+                                <Tooltip title="Bold" arrow>
+                                    <IconButton onClick={() => editor.chain().focus().toggleBold().run()} sx={toolbarButtonStyles}>
+                                        <FormatBoldIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Italic" arrow>
+                                    <IconButton onClick={() => editor.chain().focus().toggleItalic().run()} sx={toolbarButtonStyles}>
+                                        <FormatItalicIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Bullet List" arrow>
+                                    <IconButton onClick={() => editor.chain().focus().toggleBulletList().run()} sx={toolbarButtonStyles}>
+                                        <FormatListBulletedIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Blockquote" arrow>
+                                    <IconButton onClick={() => editor.chain().focus().toggleBlockquote().run()} sx={toolbarButtonStyles}>
+                                        <FormatQuoteIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Box sx={toolbarDividerStyles} />
+                                <Tooltip title="Undo" arrow>
+                                    <IconButton onClick={() => editor.chain().focus().undo().run()} sx={toolbarButtonStyles}>
+                                        <UndoIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Redo" arrow>
+                                    <IconButton onClick={() => editor.chain().focus().redo().run()} sx={toolbarButtonStyles}>
+                                        <RedoIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Box sx={toolbarDividerStyles} />
+                                <Tooltip title="Align Left" arrow>
+                                    <IconButton onClick={() => editor.chain().focus().setTextAlign('left').run()} sx={toolbarButtonStyles}>
+                                        <AlignLeftIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Align Center" arrow>
+                                    <IconButton onClick={() => editor.chain().focus().setTextAlign('center').run()} sx={toolbarButtonStyles}>
+                                        <AlignCenterIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Align Right" arrow>
+                                    <IconButton onClick={() => editor.chain().focus().setTextAlign('right').run()} sx={toolbarButtonStyles}>
+                                        <AlignRightIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Justify" arrow>
+                                    <IconButton onClick={() => editor.chain().focus().setTextAlign('justify').run()} sx={toolbarButtonStyles}>
+                                        <AlignJustifyIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
+                            </Box>
+                        </Box>
+
+                        {/* Editor */}
+                        <Box sx={editorWrapperStyles}>
+                            <EditorContent editor={editor} />
+                        </Box>
+
+                        {/* Progress Bar */}
+                        <Box sx={progressContainerStyles}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                                <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>
+                                    Word Count: {wordCount}/15 minimum
+                                </Typography>
+                                {wordCount >= 15 && (
+                                    <Chip
+                                        label="✓ Ready to submit"
+                                        size="small"
+                                        sx={{
+                                            background: 'linear-gradient(135deg, #00e676 0%, #00c853 100%)',
+                                            color: 'white',
+                                            fontWeight: 600,
+                                            fontSize: '11px'
+                                        }}
+                                    />
+                                )}
+                            </Box>
+                            <LinearProgress
+                                variant="determinate"
+                                value={Math.min((wordCount / 15) * 100, 100)}
+                                sx={progressBarStyles}
+                            />
+                        </Box>
+
+                        {/* Main Content Grid */}
+                        <Box sx={mainGridStyles}>
+                            {/* Left Column - Ideas & Semantics */}
+                            <Box sx={leftColumnStyles}>
+                                {/* Ideas Section */}
+                                <motion.div
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 0.3 }}
+                                >
+                                    <Box
+                                        sx={isUltimateUser ? ideasBoxStyles : premiumLockedBoxStyles}
+                                        onClick={handlePremiumFeatureClick}
+                                    >
+                                        {!isUltimateUser && (
+                                            <Box sx={premiumBadgeStyles}>
+                                                <Typography variant="caption" sx={{ fontWeight: 700, fontSize: '11px' }}>
+                                                    ⭐ ULTIMATE ONLY
+                                                </Typography>
+                                            </Box>
+                                        )}
+                                        <LightbulbIcon sx={{ color: isUltimateUser ? '#ffd54f' : 'rgba(255,213,79,0.3)', fontSize: 28, mb: 1 }} />
+                                        <Typography variant="subtitle2" sx={cardTitleStyles}>
+                                            Need Inspiration?
+                                        </Typography>
+                                        {isUltimateUser ? (
+                                            <>
+                                                <Button
+                                                    variant="contained"
+                                                    onClick={handleGetIdea}
+                                                    sx={ideaButtonStyles}
+                                                    fullWidth
+                                                >
+                                                    Get Writing Prompt
+                                                </Button>
+                                                <AnimatePresence mode="wait">
+                                                    {randomIdea && (
+                                                        <motion.div
+                                                            initial={{ opacity: 0, y: 10 }}
+                                                            animate={{ opacity: 1, y: 0 }}
+                                                            exit={{ opacity: 0, y: -10 }}
+                                                            transition={{ duration: 0.3 }}
+                                                        >
+                                                            <Box sx={randomIdeaBoxStyles}>
+                                                                <Typography variant="body2">
+                                                                    💡 {randomIdea}
+                                                                </Typography>
+                                                            </Box>
+                                                        </motion.div>
+                                                    )}
+                                                </AnimatePresence>
+                                            </>
+                                        ) : (
+                                            <Box sx={premiumMessageStyles}>
+                                                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', lineHeight: 1.6 }}>
+                                                    Get AI-powered writing prompts to inspire your reviews
+                                                </Typography>
+                                            </Box>
+                                        )}
+                                    </Box>
+                                </motion.div>
+
+                                {/* Semantics Section */}
+                                <motion.div
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 0.4 }}
+                                >
+                                    <Box
+                                        sx={isUltimateUser ? semanticsBoxStyles : premiumLockedBoxStyles}
+                                        onClick={handlePremiumFeatureClick}
+                                    >
+                                        {!isUltimateUser && (
+                                            <Box sx={premiumBadgeStyles}>
+                                                <Typography variant="caption" sx={{ fontWeight: 700, fontSize: '11px' }}>
+                                                    ⭐ ULTIMATE ONLY
+                                                </Typography>
+                                            </Box>
+                                        )}
+                                        <PsychologyIcon sx={{ color: isUltimateUser ? '#64b5f6' : 'rgba(100,181,246,0.3)', fontSize: 24, mb: 1 }} />
+                                        <Typography variant="subtitle2" sx={cardTitleStyles}>
+                                            Sentiment Analysis
+                                        </Typography>
+                                        {isUltimateUser ? (
+                                            <Box sx={semanticsListStyles}>
+                                                {semanticsList.length > 0 ? (
+                                                    <AnimatePresence>
+                                                        {semanticsList.map((semantic, idx) => (
+                                                            <motion.div
+                                                                key={idx}
+                                                                initial={{ opacity: 0, scale: 0.8 }}
+                                                                animate={{ opacity: 1, scale: 1 }}
+                                                                exit={{ opacity: 0, scale: 0.8 }}
+                                                                transition={{ delay: idx * 0.1 }}
+                                                            >
+                                                                <Chip
+                                                                    label={semantic}
+                                                                    sx={semanticChipStyles}
+                                                                />
+                                                            </motion.div>
+                                                        ))}
+                                                    </AnimatePresence>
+                                                ) : (
+                                                    <Typography variant="caption" sx={emptyStateStyles}>
+                                                        Write at least 15 words to see sentiment analysis
+                                                    </Typography>
+                                                )}
+                                            </Box>
+                                        ) : (
+                                            <Box sx={premiumMessageStyles}>
+                                                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', lineHeight: 1.6 }}>
+                                                    AI analyzes the emotional tone and sentiment of your writing
+                                                </Typography>
+                                            </Box>
+                                        )}
+                                    </Box>
+                                </motion.div>
+                            </Box>
+
+                            {/* Right Column - AI Suggestions */}
                             <motion.div
-                                initial={{ opacity: 0, x: -20 }}
+                                initial={{ opacity: 0, x: 20 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.3 }}
+                                transition={{ delay: 0.5 }}
+                                style={{ flex: 1 }}
                             >
                                 <Box
-                                    sx={isUltimateUser ? ideasBoxStyles : premiumLockedBoxStyles}
+                                    sx={isUltimateUser ? suggestionBoxStyles : premiumLockedBoxStyles}
                                     onClick={handlePremiumFeatureClick}
                                 >
                                     {!isUltimateUser && (
@@ -379,97 +506,60 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, movieGe
                                             </Typography>
                                         </Box>
                                     )}
-                                    <LightbulbIcon sx={{ color: isUltimateUser ? '#ffd54f' : 'rgba(255,213,79,0.3)', fontSize: 28, mb: 1 }} />
-                                    <Typography variant="subtitle2" sx={cardTitleStyles}>
-                                        Need Inspiration?
-                                    </Typography>
                                     {isUltimateUser ? (
                                         <>
-                                            <Button
-                                                variant="contained"
-                                                onClick={handleGetIdea}
-                                                sx={ideaButtonStyles}
-                                                fullWidth
-                                            >
-                                                Get Writing Prompt
-                                            </Button>
-                                            <AnimatePresence mode="wait">
-                                                {randomIdea && (
-                                                    <motion.div
-                                                        initial={{ opacity: 0, y: 10 }}
-                                                        animate={{ opacity: 1, y: 0 }}
-                                                        exit={{ opacity: 0, y: -10 }}
-                                                        transition={{ duration: 0.3 }}
-                                                    >
-                                                        <Box sx={randomIdeaBoxStyles}>
-                                                            <Typography variant="body2">
-                                                                💡 {randomIdea}
-                                                            </Typography>
-                                                        </Box>
-                                                    </motion.div>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                                                <AutoAwesomeIcon sx={{ color: '#7c4dff', fontSize: 24 }} />
+                                                <Typography variant="h6" sx={cardTitleStyles}>
+                                                    AI Suggestions
+                                                </Typography>
+                                            </Box>
+                                            <Box sx={suggestionListStyles}>
+                                                {suggestionsList.length > 0 ? (
+                                                    <AnimatePresence>
+                                                        {suggestionsList.map((suggestion, idx) => (
+                                                            <motion.div
+                                                                key={idx}
+                                                                initial={{ opacity: 0, y: 10 }}
+                                                                animate={{ opacity: 1, y: 0 }}
+                                                                exit={{ opacity: 0, x: -20 }}
+                                                                transition={{ duration: 0.3, delay: idx * 0.05 }}
+                                                            >
+                                                                <Box sx={suggestionItemStyles}>
+                                                                    <Typography variant="body2" sx={{ flex: 1, lineHeight: 1.6 }}>
+                                                                        {suggestion}
+                                                                    </Typography>
+                                                                    <IconButton
+                                                                        size="small"
+                                                                        onClick={() => handleRemoveSuggestion(idx)}
+                                                                        sx={removeButtonStyles}
+                                                                    >
+                                                                        <CloseIcon fontSize="small" />
+                                                                    </IconButton>
+                                                                </Box>
+                                                            </motion.div>
+                                                        ))}
+                                                    </AnimatePresence>
+                                                ) : (
+                                                    <Box sx={emptyStateContainerStyles}>
+                                                        <Typography variant="body2" sx={emptyStateStyles}>
+                                                            AI-powered suggestions will appear here as you write
+                                                        </Typography>
+                                                        <Typography variant="caption" sx={{ ...emptyStateStyles, mt: 1 }}>
+                                                            Write at least 15 words to get started
+                                                        </Typography>
+                                                    </Box>
                                                 )}
-                                            </AnimatePresence>
+                                            </Box>
                                         </>
                                     ) : (
-                                        <Box sx={premiumMessageStyles}>
-                                            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', lineHeight: 1.6 }}>
-                                                Get AI-powered writing prompts to inspire your reviews
+                                        <Box sx={{ ...emptyStateContainerStyles, minHeight: '320px' }}>
+                                            <AutoAwesomeIcon sx={{ fontSize: 64, color: 'rgba(124,77,255,0.2)', mb: 3 }} />
+                                            <Typography variant="h6" sx={{ ...cardTitleStyles, mb: 2 }}>
+                                                Smart Writing Assistant
                                             </Typography>
-                                        </Box>
-                                    )}
-                                </Box>
-                            </motion.div>
-
-                            {/* Semantics Section */}
-                            <motion.div
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.4 }}
-                            >
-                                <Box
-                                    sx={isUltimateUser ? semanticsBoxStyles : premiumLockedBoxStyles}
-                                    onClick={handlePremiumFeatureClick}
-                                >
-                                    {!isUltimateUser && (
-                                        <Box sx={premiumBadgeStyles}>
-                                            <Typography variant="caption" sx={{ fontWeight: 700, fontSize: '11px' }}>
-                                                ⭐ ULTIMATE ONLY
-                                            </Typography>
-                                        </Box>
-                                    )}
-                                    <PsychologyIcon sx={{ color: isUltimateUser ? '#64b5f6' : 'rgba(100,181,246,0.3)', fontSize: 24, mb: 1 }} />
-                                    <Typography variant="subtitle2" sx={cardTitleStyles}>
-                                        Sentiment Analysis
-                                    </Typography>
-                                    {isUltimateUser ? (
-                                        <Box sx={semanticsListStyles}>
-                                            {semanticsList.length > 0 ? (
-                                                <AnimatePresence>
-                                                    {semanticsList.map((semantic, idx) => (
-                                                        <motion.div
-                                                            key={idx}
-                                                            initial={{ opacity: 0, scale: 0.8 }}
-                                                            animate={{ opacity: 1, scale: 1 }}
-                                                            exit={{ opacity: 0, scale: 0.8 }}
-                                                            transition={{ delay: idx * 0.1 }}
-                                                        >
-                                                            <Chip
-                                                                label={semantic}
-                                                                sx={semanticChipStyles}
-                                                            />
-                                                        </motion.div>
-                                                    ))}
-                                                </AnimatePresence>
-                                            ) : (
-                                                <Typography variant="caption" sx={emptyStateStyles}>
-                                                    Write at least 15 words to see sentiment analysis
-                                                </Typography>
-                                            )}
-                                        </Box>
-                                    ) : (
-                                        <Box sx={premiumMessageStyles}>
-                                            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', lineHeight: 1.6 }}>
-                                                AI analyzes the emotional tone and sentiment of your writing
+                                            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', lineHeight: 1.6, textAlign: 'center', maxWidth: '280px' }}>
+                                                Get real-time AI suggestions to enhance your reviews as you write. Available with Ultimate subscription.
                                             </Typography>
                                         </Box>
                                     )}
@@ -477,159 +567,82 @@ export default function ReviewPopup({ movieId, movieTitle, movieTagline, movieGe
                             </motion.div>
                         </Box>
 
-                        {/* Right Column - AI Suggestions */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.5 }}
-                            style={{ flex: 1 }}
-                        >
-                            <Box
-                                sx={isUltimateUser ? suggestionBoxStyles : premiumLockedBoxStyles}
-                                onClick={handlePremiumFeatureClick}
-                            >
-                                {!isUltimateUser && (
-                                    <Box sx={premiumBadgeStyles}>
-                                        <Typography variant="caption" sx={{ fontWeight: 700, fontSize: '11px' }}>
-                                            ⭐ ULTIMATE ONLY
+                        {/* Warnings */}
+                        <AnimatePresence>
+                            {hasReviewProfanity && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                >
+                                    <Box sx={warningBoxStyles}>
+                                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                                            ⚠️ Please remove profanity from your review
                                         </Typography>
                                     </Box>
-                                )}
-                                {isUltimateUser ? (
-                                    <>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                                            <AutoAwesomeIcon sx={{ color: '#7c4dff', fontSize: 24 }} />
-                                            <Typography variant="h6" sx={cardTitleStyles}>
-                                                AI Suggestions
-                                            </Typography>
-                                        </Box>
-                                        <Box sx={suggestionListStyles}>
-                                            {suggestionsList.length > 0 ? (
-                                                <AnimatePresence>
-                                                    {suggestionsList.map((suggestion, idx) => (
-                                                        <motion.div
-                                                            key={idx}
-                                                            initial={{ opacity: 0, y: 10 }}
-                                                            animate={{ opacity: 1, y: 0 }}
-                                                            exit={{ opacity: 0, x: -20 }}
-                                                            transition={{ duration: 0.3, delay: idx * 0.05 }}
-                                                        >
-                                                            <Box sx={suggestionItemStyles}>
-                                                                <Typography variant="body2" sx={{ flex: 1, lineHeight: 1.6 }}>
-                                                                    {suggestion}
-                                                                </Typography>
-                                                                <IconButton
-                                                                    size="small"
-                                                                    onClick={() => handleRemoveSuggestion(idx)}
-                                                                    sx={removeButtonStyles}
-                                                                >
-                                                                    <CloseIcon fontSize="small" />
-                                                                </IconButton>
-                                                            </Box>
-                                                        </motion.div>
-                                                    ))}
-                                                </AnimatePresence>
-                                            ) : (
-                                                <Box sx={emptyStateContainerStyles}>
-                                                    <Typography variant="body2" sx={emptyStateStyles}>
-                                                        AI-powered suggestions will appear here as you write
-                                                    </Typography>
-                                                    <Typography variant="caption" sx={{ ...emptyStateStyles, mt: 1 }}>
-                                                        Write at least 15 words to get started
-                                                    </Typography>
-                                                </Box>
-                                            )}
-                                        </Box>
-                                    </>
-                                ) : (
-                                    <Box sx={{ ...emptyStateContainerStyles, minHeight: '320px' }}>
-                                        <AutoAwesomeIcon sx={{ fontSize: 64, color: 'rgba(124,77,255,0.2)', mb: 3 }} />
-                                        <Typography variant="h6" sx={{ ...cardTitleStyles, mb: 2 }}>
-                                            Smart Writing Assistant
-                                        </Typography>
-                                        <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', lineHeight: 1.6, textAlign: 'center', maxWidth: '280px' }}>
-                                            Get real-time AI suggestions to enhance your reviews as you write. Available with Ultimate subscription.
+                                </motion.div>
+                            )}
+                            {lineLimitReached && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                >
+                                    <Box sx={warningBoxStyles}>
+                                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                                            ✋ Maximum number of lines reached
                                         </Typography>
                                     </Box>
-                                )}
-                            </Box>
-                        </motion.div>
-                    </Box>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
 
-                    {/* Warnings */}
-                    <AnimatePresence>
-                        {hasReviewProfanity && (
-                            <motion.div
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                            >
-                                <Box sx={warningBoxStyles}>
-                                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                                        ⚠️ Please remove profanity from your review
-                                    </Typography>
-                                </Box>
-                            </motion.div>
-                        )}
-                        {lineLimitReached && (
-                            <motion.div
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                            >
-                                <Box sx={warningBoxStyles}>
-                                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                                        ✋ Maximum number of lines reached
-                                    </Typography>
-                                </Box>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-
-                    {/* Spoiler Toggle */}
-                    <Box sx={spoilerToggleStyles}>
-                        <input
-                            type="checkbox"
-                            id="spoilerToggle"
-                            checked={containsSpoilers}
-                            onChange={() => setContainsSpoilers(!containsSpoilers)}
-                            style={checkboxStyles}
-                        />
-                        <label htmlFor="spoilerToggle" style={{ fontSize: '15px', cursor: 'pointer', userSelect: 'none' }}>
-                            ⚠️ This review contains spoilers
-                        </label>
-                    </Box>
-
-                    {/* Recaptcha */}
-                    {isRecaptchaVisible && (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            style={{ marginTop: "20px", display: 'flex', justifyContent: 'center' }}
-                        >
-                            <ReCAPTCHA
-                                sitekey={RECAPTCHA_KEY}
-                                onChange={onChangeCaptcha}
+                        {/* Spoiler Toggle */}
+                        <Box sx={spoilerToggleStyles}>
+                            <input
+                                type="checkbox"
+                                id="spoilerToggle"
+                                checked={containsSpoilers}
+                                onChange={() => setContainsSpoilers(!containsSpoilers)}
+                                style={checkboxStyles}
                             />
-                        </motion.div>
-                    )}
+                            <label htmlFor="spoilerToggle" style={{ fontSize: '15px', cursor: 'pointer', userSelect: 'none' }}>
+                                ⚠️ This review contains spoilers
+                            </label>
+                        </Box>
 
-                    {/* Submit Button */}
-                    <Box sx={{ marginTop: "24px", textAlign: "center" }}>
-                        <Button
-                            onClick={handleSubmit}
-                            disabled={isSubmitDisabled}
-                            variant="contained"
-                            size="large"
-                            sx={submitButtonStyles(isSubmitDisabled)}
-                        >
-                            {isSubmitDisabled ? 'Complete All Fields' : 'Submit Review'}
-                        </Button>
+                        {/* Recaptcha */}
+                        {isRecaptchaVisible && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                style={{ marginTop: "20px", display: 'flex', justifyContent: 'center' }}
+                            >
+                                <ReCAPTCHA
+                                    sitekey={RECAPTCHA_KEY}
+                                    onChange={onChangeCaptcha}
+                                />
+                            </motion.div>
+                        )}
+
+                        {/* Submit Button */}
+                        <Box sx={{ marginTop: "24px", textAlign: "center" }}>
+                            <Button
+                                onClick={handleSubmit}
+                                disabled={isSubmitDisabled}
+                                variant="contained"
+                                size="large"
+                                sx={submitButtonStyles(isSubmitDisabled)}
+                            >
+                                {isSubmitDisabled ? 'Complete All Fields' : 'Submit Review'}
+                            </Button>
+                        </Box>
                     </Box>
-                </Box>
-            </Fade>
-        </Modal>
-    )
+                </Fade>
+            </Modal>
+            {showSuccessAnimation && <PopcornRainAnimation />}
+        </>
+    );
 }
 
 ReviewPopup.propTypes = {

@@ -252,6 +252,3 @@ export default function InputSlider({ onSliderChange }) {
 InputSlider.propTypes = {
     onSliderChange: PropTypes.func,
 };
-InputSlider.propTypes = {
-    onSliderChange: PropTypes.func,
-};
