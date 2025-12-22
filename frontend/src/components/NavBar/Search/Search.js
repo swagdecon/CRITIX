@@ -4,6 +4,8 @@ import { ParseYear } from "../../IndFilm/MovieComponents";
 import { TypeAnimation } from 'react-type-animation';
 import isTokenExpired from "../../../security/IsTokenExpired";
 import { fetchData } from "../../../security/Data";
+import { getColourClassName } from "../../Review/ReviewList/IndUserReview";
+
 const searchEndpoint = process.env.REACT_APP_SEARCH_ENDPOINT;
 const miniPosterUrl = process.env.REACT_APP_MINI_POSTER_URL;
 const API_URL = process.env.REACT_APP_BACKEND_API_URL
@@ -156,7 +158,9 @@ export default function Search() {
                         <ParseYear date={movie.release_date} />
                       </div>
                     </div>
-                    <div className={SearchStyle["result-rating"]}>
+                    <div
+                      className={`${SearchStyle.ResultRating} ${SearchStyle[getColourClassName(movie.vote_average)]}`}
+                    >
                       {movie.vote_average}
                     </div>
                   </div>

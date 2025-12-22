@@ -189,24 +189,20 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.result-rating {
+.ResultRating {
   position: absolute;
   top: 12px;
   right: 12px;
-  background: linear-gradient(135deg, #0096ff, #0077cc);
   color: #fff;
   font-weight: 700;
   font-size: 0.95em;
   padding: 8px 14px;
   border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 150, 255, 0.4);
   transition: all 0.3s ease;
   border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
-.ind-search-result:hover .result-rating {
-  background: linear-gradient(135deg, #00aaff, #0088dd);
-  box-shadow: 0 6px 25px rgba(0, 150, 255, 0.6);
+.ind-search-result:hover .ResultRating {
   transform: scale(1.08);
 }
 
@@ -311,6 +307,11 @@ a:hover {
 .searchInput::placeholder {
   color: rgba(255, 255, 255, 0.5);
 }
+
+.ResultRating.blue { background: linear-gradient(135deg, #3a8bfd, #005bff); }
+.ResultRating.green { background: linear-gradient(135deg, #00c851, #007e33); }
+.ResultRating.yellow { background: linear-gradient(135deg, #ffbb33, #ff8800); }
+.ResultRating.red { background: linear-gradient(135deg, #ff4444, #cc0000); }
 
 .closeButton {
   background: transparent;
@@ -483,7 +484,7 @@ a:hover {
     font-size: 1em;
   }
   
-  .result-rating {
+  .ResultRating {
     padding: 8px 12px;
     font-size: 0.9em;
   }
