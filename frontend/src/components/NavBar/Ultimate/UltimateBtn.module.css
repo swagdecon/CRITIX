@@ -90,7 +90,6 @@
   transform: rotate(-8deg) scale(1.1);
 }
 
-/* Responsive breakpoints */
 @media screen and (max-width: 1200px) {
   .coolButton {
     padding: 0.7rem 1.5rem !important;

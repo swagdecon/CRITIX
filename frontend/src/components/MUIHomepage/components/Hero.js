@@ -2,12 +2,9 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import InputLabel from '@mui/material/InputLabel';
-import Link from '@mui/material/Link';
+import { Link } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import visuallyHidden from '@mui/utils/visuallyHidden';
 import { styled } from '@mui/material/styles';
 import profilePagePhoto from "../../Other/Photos/CritixUserProfilePagePhoto.png"
 const StyledBox = styled('div')(({ theme }) => ({
@@ -56,7 +53,6 @@ export default function Hero() {
           flexDirection: 'column',
           alignItems: 'center',
           pt: { xs: 14, sm: 20 },
-          pb: { xs: 8, sm: 12 },
         }}
       >
         <Stack
@@ -70,10 +66,11 @@ export default function Hero() {
               display: 'flex',
               flexDirection: { xs: 'column', sm: 'row' },
               alignItems: 'center',
+              textAlign: 'center',
               fontSize: 'clamp(3rem, 10vw, 3.5rem)',
             }}
           >
-            Next-Gen&nbsp;Movie&nbsp;
+            Next Gen&nbsp;Movie&nbsp;
             <Typography
               component="span"
               variant="h1"
@@ -101,42 +98,17 @@ export default function Hero() {
             direction={{ xs: 'column', sm: 'row' }}
             spacing={1}
             useFlexGap
-            sx={{ pt: 2, width: { xs: '100%', sm: '350px' } }}
+            sx={{ pt: 2, width: { xs: '100%', sm: '350px' }, alignItems: 'center' }}
           >
-            <InputLabel htmlFor="email-hero" sx={visuallyHidden}>
-              Email
-            </InputLabel>
-            <TextField
-              id="email-hero"
-              hiddenLabel
-              size="small"
-              variant="outlined"
-              aria-label="Enter your email address"
-              placeholder="Your email address"
-              fullWidth
-              slotprops={{
-                htmlInput: {
-                  autoComplete: 'off',
-                  'aria-label': 'Enter your email address',
-                },
-              }}
-              sx={{
-                input: {
-                  color: 'white',
-                  '&::placeholder': {
-                    color: 'white',
-                    opacity: 1,
-                  },
-                },
-              }}
-            />
             <Button
-              variant="contained"
               color="primary"
+              variant="contained"
               size="small"
-              sx={{ minWidth: 'fit-content' }}
+              component={Link}
+              to="/signup"
+              fullWidth
             >
-              Register Interest
+              Sign up
             </Button>
           </Stack>
           <Typography
@@ -144,7 +116,7 @@ export default function Hero() {
             color="text.secondary"
             sx={{ textAlign: 'center' }}
           >
-            By clicking &quot;Start now&quot; you agree to our&nbsp;
+            By clicking &quot;Sign up&quot; you agree to our&nbsp;
             <Link href="#" color="primary">
               Terms & Conditions
             </Link>

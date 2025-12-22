@@ -214,7 +214,7 @@ export default function LoginMobile() {
                     </Divider>
 
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                        <Button
+                        {/* <Button
                             fullWidth
                             variant="outlined"
                             onClick={() => alert('Sign up with Google')}
@@ -227,7 +227,7 @@ export default function LoginMobile() {
                             onClick={() => alert('Sign up with Facebook')}
                         >
                             Sign up with Facebook
-                        </Button>
+                        </Button> */}
                         <Typography sx={{ textAlign: 'center' }}>
                             Don&apos;t have an account?{' '}
                             <Link href="/signup" variant="body2">

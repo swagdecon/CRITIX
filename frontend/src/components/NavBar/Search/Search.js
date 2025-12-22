@@ -1,19 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
 import SearchStyle from "./Search.module.css";
-import PropTypes from "prop-types";
 import { ParseYear } from "../../IndFilm/MovieComponents";
 import { TypeAnimation } from 'react-type-animation';
 import isTokenExpired from "../../../security/IsTokenExpired";
 import { fetchData } from "../../../security/Data";
+import { getColourClassName } from "../../Review/ReviewList/IndUserReview";
+
 const searchEndpoint = process.env.REACT_APP_SEARCH_ENDPOINT;
 const miniPosterUrl = process.env.REACT_APP_MINI_POSTER_URL;
 const API_URL = process.env.REACT_APP_BACKEND_API_URL
 const indMovieEndpoint = process.env.REACT_APP_IND_MOVIE_ENDPOINT
 
-export default function Search(props) {
+export default function Search() {
   const [query, setQuery] = useState("");
   const [movieResults, setMovieResults] = useState([]);
+  const [isFocused, setIsFocused] = useState(false);
   const searchRef = useRef();
+  const inputRef = useRef();
 
   const placeholders = [
     'Discover cinematic brilliance',
@@ -28,6 +31,7 @@ export default function Search(props) {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         setMovieResults([]);
+        setIsFocused(false);
       }
     };
     document.addEventListener("click", handleClickOutside);
@@ -64,76 +68,109 @@ export default function Search(props) {
     }
   }
 
-  return (
-    <form onSubmit={props.onSubmit} className={SearchStyle.Search} ref={searchRef}>
-      <div style={{ position: "relative", display: "inline-block" }}>
-        {query === "" && (
-          <TypeAnimation
-            sequence={placeholders}
-            speed={20}
-            style={{
-              position: "absolute",
-              color: "gray",
-              pointerEvents: "none",
-              left: "10px",
-              top: "50%",
-              transform: "translateY(-50%)",
-            }}
-            repeat={Infinity}
-          />
-        )}
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Prevent form submission
+  }
 
-        {/* Search Input */}
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder=""
-          style={{
-            width: "300px",
-            padding: "10px",
-            fontSize: "1em",
-            border: "1px solid #ccc",
-            borderRadius: "5px",
-            outline: "none",
-          }}
-        />
-      </div>
-      <div className={SearchStyle["search-results-list"]}>
-        {movieResults.map((movie) => {
-          if (movie.poster_path && movie.vote_average) {
-            return (
-              <a
-                href={`${indMovieEndpoint}${movie.id}`}
-                key={movie.id}
-                onClick={() => setMovieResults([])}
-              >
-                <li className={SearchStyle["ind-search-result"]}>
-                  <img
-                    src={`${miniPosterUrl}${movie.poster_path}`}
-                    alt={movie.title}
-                  />
-                  <div className={SearchStyle["result-title-data"]}>
-                    <div className={SearchStyle["result-title"]}>
-                      {movie.title}
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      // Prevent Enter key action
+    }
+  }
+
+  const handleClose = () => {
+    setMovieResults([]);
+    setQuery("");
+    setIsFocused(false);
+  }
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  }
+
+  const handleBlur = (e) => {
+    // Only blur if clicking outside the search component
+    if (!searchRef.current?.contains(e.relatedTarget)) {
+      setIsFocused(false);
+    }
+  }
+
+  return (
+    <>
+      {/* Backdrop overlay */}
+      {movieResults.length > 0 && (
+        <div className={SearchStyle.searchBackdrop} onClick={handleClose} />
+      )}
+
+      <form onSubmit={handleSubmit} className={SearchStyle.Search} ref={searchRef}>
+        <div style={{ position: "relative", display: "inline-block" }}>
+          {query === "" && !isFocused && (
+            <TypeAnimation
+              sequence={placeholders}
+              speed={20}
+              style={{
+                position: "absolute",
+                color: "gray",
+                pointerEvents: "none",
+                left: "10px",
+                top: "50%",
+                transform: "translateY(-50%)",
+              }}
+              repeat={Infinity}
+            />
+          )}
+
+          {/* Search Input */}
+          <input
+            ref={inputRef}
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            placeholder=""
+            className={isFocused ? SearchStyle.focused : ""}
+          />
+        </div>
+        <div className={SearchStyle["search-results-list"]}>
+          {movieResults.map((movie) => {
+            if (movie.poster_path && movie.vote_average) {
+              return (
+                <a
+                  href={`${indMovieEndpoint}${movie.id}`}
+                  key={movie.id}
+                  onClick={handleClose}
+                  className={SearchStyle["result-link"]}
+                >
+                  <div className={SearchStyle["ind-search-result"]}>
+                    <img
+                      src={`${miniPosterUrl}${movie.poster_path}`}
+                      alt={movie.title}
+                    />
+                    <div className={SearchStyle["result-title-data"]}>
+                      <div className={SearchStyle["result-title"]}>
+                        {movie.title}
+                      </div>
                       <div className={SearchStyle["result-release-date"]}>
-                        <span>({<ParseYear date={movie.release_date} />})</span>
+                        <ParseYear date={movie.release_date} />
                       </div>
                     </div>
+                    <div
+                      className={`${SearchStyle.ResultRating} ${SearchStyle[getColourClassName(movie.vote_average)]}`}
+                    >
+                      {movie.vote_average}
+                    </div>
                   </div>
-                  <div className={SearchStyle["result-rating"]}>
-                    {movie.vote_average}
-                  </div>
-                </li>
-              </a>
-            );
-          }
-        })}
-      </div>
-    </form>
+                </a>
+              );
+            }
+            return null;
+          })}
+        </div>
+      </form>
+    </>
   );
 }
-
-Search.propTypes = {
-  onSubmit: PropTypes.func,
-};
