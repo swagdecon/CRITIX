@@ -409,6 +409,7 @@ export default function DiscoverSearch({ onSubmit }) {
         setFilters(resetFilters);
         handleSearch(resetFilters);
     }, [handleSearch]);
+
     return (
         <Box sx={{
             minHeight: "35vh",
@@ -512,6 +513,26 @@ export default function DiscoverSearch({ onSubmit }) {
                             );
                         })}
                     </Box>
+
+                    {/* Popover for free tier filters - moved outside the conditional */}
+                    <Popover
+                        open={Boolean(anchorEl)}
+                        anchorEl={anchorEl}
+                        onClose={closePopover}
+                        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                        transformOrigin={{ vertical: "top", horizontal: "center" }}
+                        slotProps={{
+                            paper: {
+                                sx: {
+                                    p: 2,
+                                    minWidth: 250,
+                                    zIndex: 99999,
+                                }
+                            }
+                        }}
+                    >
+                        {activeFilter && renderField(allFilters.find((f) => f.key === activeFilter))}
+                    </Popover>
 
                     {isUltimateUser ? (
                         <>
@@ -664,6 +685,9 @@ export default function DiscoverSearch({ onSubmit }) {
                                     );
                                 })}
                             </Box>
+                            <Button onClick={clearAllFilters} variant="outlined">
+                                Clear All Filters
+                            </Button>
                         </>
                     ) : (
                         <Box
@@ -772,11 +796,17 @@ export default function DiscoverSearch({ onSubmit }) {
                                 onClose={closePopover}
                                 anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                                 transformOrigin={{ vertical: "top", horizontal: "center" }}
-                                PaperProps={{ sx: { p: 2, minWidth: 250 } }}
-                            >
+                                slotProps={{
+                                    paper: {
+                                        sx: {
+                                            p: 2,
+                                            minWidth: 250,
+                                            zIndex: 99999,
+                                        }
+                                    }
+                                }}                            >
                                 {activeFilter && renderField(allFilters.find((f) => f.key === activeFilter))}
                             </Popover>
-
                             <Button onClick={clearAllFilters} variant="outlined">
                                 Clear All Filters
                             </Button>

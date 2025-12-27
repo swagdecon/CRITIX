@@ -33,6 +33,7 @@ public class EmailService {
     }
 
     private String apiKey = getEnv("RESEND_API_KEY");
+    private String resendUrl = getEnv("RESEND_URL");
     private String fromEmail = getEnv("RESEND_FROM_EMAIL") != null
             ? getEnv("RESEND_FROM_EMAIL")
             : "onboarding@resend.dev";
@@ -70,7 +71,7 @@ public class EmailService {
                     MediaType.parse("application/json"));
 
             Request request = new Request.Builder()
-                    .url("https://api.resend.com/emails")
+                    .url(resendUrl)
                     .addHeader("Authorization", "Bearer " + apiKey)
                     .addHeader("Content-Type", "application/json")
                     .post(body)
