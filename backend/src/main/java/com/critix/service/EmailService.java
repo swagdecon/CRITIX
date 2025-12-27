@@ -1,11 +1,11 @@
 package com.critix.service;
 
-import java.io.File;
-import java.nio.file.Files;
+import java.io.InputStream;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -33,54 +33,45 @@ public class EmailService {
     }
 
     private String apiKey = getEnv("RESEND_API_KEY");
+    private String resendUrl = getEnv("RESEND_URL");
     private String fromEmail = getEnv("RESEND_FROM_EMAIL") != null
             ? getEnv("RESEND_FROM_EMAIL")
             : "onboarding@resend.dev";
 
     public void sendEmail(String email, String subject, String emailContent) throws Exception {
         try {
-            System.out.println("=== RESEND EMAIL DEBUG ===");
-            System.out.println("To: " + email);
-            System.out.println("From: " + fromEmail);
-            System.out.println("Subject: " + subject);
-            System.out.println("API Key present: " + (apiKey != null && !apiKey.isEmpty()));
-            System.out.println("=========================");
-
             Map<String, Object> emailData = new HashMap<>();
             emailData.put("from", "CRITIX <" + fromEmail + ">");
             emailData.put("to", new String[] { email });
             emailData.put("subject", subject);
+            emailData.put("html", emailContent);
 
-            String finalEmailContent = emailContent;
-            File logoFile = new File("src/main/resources/CRITIX_LOGO_OFFICIAL.png");
+            // Add inline attachment with CID
+            try {
+                ClassPathResource logoResource = new ClassPathResource("CRITIX_LOGO_OFFICIAL.png");
+                if (logoResource.exists()) {
+                    try (InputStream logoStream = logoResource.getInputStream()) {
+                        byte[] logoBytes = logoStream.readAllBytes();
+                        String base64Logo = Base64.getEncoder().encodeToString(logoBytes);
 
-            if (logoFile.exists()) {
-                try {
-                    byte[] logoBytes = Files.readAllBytes(logoFile.toPath());
-                    String base64Logo = Base64.getEncoder().encodeToString(logoBytes);
-
-                    finalEmailContent = emailContent.replace(
-                            "src='cid:logoIcon'",
-                            "src='data:image/png;base64," + base64Logo + "'");
-
-                    System.out.println("Logo embedded successfully");
-                } catch (Exception logoError) {
-                    System.err.println("Warning: Could not embed logo: " + logoError.getMessage());
-                    finalEmailContent = emailContent.replaceAll("<img[^>]*cid:logoIcon[^>]*>", "");
+                        Map<String, Object> attachment = new HashMap<>();
+                        attachment.put("filename", "logo.png");
+                        attachment.put("content", base64Logo);
+                        attachment.put("content_id", "logoIcon");
+                        emailData.put("attachments", new Object[] { attachment });
+                        System.out.println("Logo attached inline with CID");
+                    }
                 }
-            } else {
-                System.out.println("Logo file not found at: " + logoFile.getAbsolutePath());
-                finalEmailContent = emailContent.replaceAll("<img[^>]*cid:logoIcon[^>]*>", "");
+            } catch (Exception logoError) {
+                System.err.println("Warning: Could not attach logo: " + logoError.getMessage());
             }
-
-            emailData.put("html", finalEmailContent);
 
             RequestBody body = RequestBody.create(
                     gson.toJson(emailData),
                     MediaType.parse("application/json"));
 
             Request request = new Request.Builder()
-                    .url("https://api.resend.com/emails")
+                    .url(resendUrl)
                     .addHeader("Authorization", "Bearer " + apiKey)
                     .addHeader("Content-Type", "application/json")
                     .post(body)
@@ -88,9 +79,6 @@ public class EmailService {
 
             try (Response response = client.newCall(request).execute()) {
                 String responseBody = response.body() != null ? response.body().string() : "No response body";
-
-                System.out.println("Resend API response code: " + response.code());
-                System.out.println("Resend API response: " + responseBody);
 
                 if (!response.isSuccessful()) {
                     throw new Exception("Resend API error (HTTP " + response.code() + "): " + responseBody);

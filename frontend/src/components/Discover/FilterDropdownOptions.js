@@ -171,7 +171,6 @@ export const allFilters = [
     { label: "Certification", key: "certification", type: "certification" },
     { label: "Include Adult Content", key: "includeAdult", type: "boolean" },
     { label: "Include Videos", key: "includeVideo", type: "boolean" },
-    { label: "Page", key: "page", type: "int" },
     { label: "Release Year", key: "primaryReleaseYear", type: "int" },
     { label: "Release Date From", key: "releaseDateGte", type: "date" },
     { label: "Release Date To", key: "releaseDateLte", type: "date" },
